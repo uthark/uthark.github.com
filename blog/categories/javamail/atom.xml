@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: javamail | Блог о разработке ПО]]></title>
+  <link href="http://uthark.github.com/blog/categories/javamail/atom.xml" rel="self"/>
+  <link href="http://uthark.github.com/"/>
+  <updated>2012-07-18T19:40:27+07:00</updated>
+  <id>http://uthark.github.com/</id>
+  <author>
+    <name><![CDATA[Oleg Atamanenko]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Преобразуем строку в дату]]></title>
+    <link href="http://uthark.github.com/blog/2012/04/20/blog-post/"/>
+    <updated>2012-04-20T15:25:00+07:00</updated>
+    <id>http://uthark.github.com/blog/2012/04/20/blog-post</id>
+    <content type="html"><![CDATA[<div class='post'>
+Казалось бы, есть простейшая задача - преобразовать строковое представление даты в объект класса <tt>java.util.Date</tt>.
+
+Как оказалось, иногда использование DateFormat не помогает. В случае, если строка - это заголовок <tt>Date</tt> из письма, то нам нужно использовать <tt><a href="http://docs.oracle.com/javaee/5/api/javax/mail/internet/MailDateFormat.html">javax.mail.internet.MailDateFormat</a></tt> для преобразования такой строки.
+
+<pre class="brush:java">
+String dateStr = ...
+Date parsedDate = new MailDateFormat().parse(dateStr);
+</pre></div>
+
+]]></content>
+  </entry>
+  
+</feed>

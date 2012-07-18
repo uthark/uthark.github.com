@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: книги | Блог о разработке ПО]]></title>
+  <link href="http://uthark.github.com/blog/categories/книги/atom.xml" rel="self"/>
+  <link href="http://uthark.github.com/"/>
+  <updated>2012-07-18T19:40:27+07:00</updated>
+  <id>http://uthark.github.com/</id>
+  <author>
+    <name><![CDATA[Oleg Atamanenko]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[]]></title>
+    <link href="http://uthark.github.com/blog/2009/03/20/blog-post_20/"/>
+    <updated>2009-03-20T01:44:00+06:00</updated>
+    <id>http://uthark.github.com/blog/2009/03/20/blog-post_20</id>
+    <content type="html"><![CDATA[<div class='post'>
+Кнут Гамсун
+<p>Кнут Гамсун хорош. Очень понравился его "Голод".</p></div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Таинственное пламя царицы Лоаны]]></title>
+    <link href="http://uthark.github.com/blog/2008/09/22/blog-post/"/>
+    <updated>2008-09-22T10:19:00+07:00</updated>
+    <id>http://uthark.github.com/blog/2008/09/22/blog-post</id>
+    <content type="html"><![CDATA[<div class='post'>
+Новый роман Умберто прекрасен!</div>
+
+]]></content>
+  </entry>
+  
+</feed>
