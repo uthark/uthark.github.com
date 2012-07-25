@@ -1,0 +1,15 @@
+---
+layout: post
+title: "Дайджест ссылок в RSS-ленте"
+date: 2009-12-07T19:25:00+06:00
+categories:
+ - rss
+---
+
+<div class='post'>
+Решил убрать дайджест ссылок из RSS-ленты.<br />
+<br />
+Те, кому это нужно могут сделать следующее:<br />
+<br />
+1. Добавить в свой RSS-аггрегатор ленту <tt><a href="http://feeds.delicious.com/v2/rss/dark.schakal?count=15">http://feeds.delicious.com/v2/rss/dark.schakal?count=15</a></tt><br />
+2. Если вы используете сервис Delicious, то можете меня добавить меня в свою сеть по ссылке: <a href="http://delicious.com/settings/networkadd?networkadd=dark.schakal">http://delicious.com/settings/networkadd?networkadd=dark.schakal</a></div>

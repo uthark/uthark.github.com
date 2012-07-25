@@ -1,0 +1,43 @@
+---
+layout: post
+title: "RSS лента блога и дайджест ссылок за предыдущий день"
+date: 2009-12-06T01:32:00+06:00
+---
+
+<div class='post'>
+Как вы уже могли заметить, RSS теперь содержит дайджест интересных мне ссылок, которые я нашёл в сети за последнее время.<br />
+<br />
+Отпишитесь в комментариях стоит ли это оставить, или убрать дайджест ссылок из ленты?</div>
+<h2>Comments</h2>
+<div class='comments'>
+<div class='comment'>
+<div class='author'>uthark</div>
+<div class='content'>
+@karry<br /><br />http://delicious.com/dark.schakal</div>
+</div>
+<div class='comment'>
+<div class='author'>karri</div>
+<div class='content'>
+А какой у вас там ник? Поиск мне выдает вот такой результат:<br />uthark runa<br />uthark nightside of the runes<br />utharkhand<br />uthark and futhark<br />thomas karlsson uthark<br />uthark magick</div>
+</div>
+<div class='comment'>
+<div class='author'>uthark</div>
+<div class='content'>
+@karri <br />Могу просто блок на сайте добавить. Кстати, вы можете меня добавить в свою сеть на delicious.</div>
+</div>
+<div class='comment'>
+<div class='author'>karri</div>
+<div class='content'>
+Мне кажется стоит оставить.</div>
+</div>
+<div class='comment'>
+<div class='author'>uthark</div>
+<div class='content'>
+@Andrey, хорошо, приму во внимание.</div>
+</div>
+<div class='comment'>
+<div class='author'>Andrey</div>
+<div class='content'>
+можно, но реже. недавно подписался, а тут через день пошли ссылки, ссылки..</div>
+</div>
+</div>
