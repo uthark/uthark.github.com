@@ -1,0 +1,12 @@
+---
+layout: post
+title: "OpenID"
+date: 2009-01-06T21:36:00+06:00
+categories:
+ - openid
+---
+
+<div class='post'>
+Завёл себе отдельный OpenID аккаунт. Так что теперь буду везде пользоваться им вместо аккаунта с блоггера.
+
+Для любопытных: <a href="http://uthark.myopenid.com/">http://uthark.myopenid.com/</a></div>

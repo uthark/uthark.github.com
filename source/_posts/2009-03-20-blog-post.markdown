@@ -1,0 +1,9 @@
+---
+layout: post
+title: ""
+date: 2009-03-20T01:02:00+06:00
+---
+
+<div class='post'>
+Завёл аккаунт на иденти.ке
+<a href="http://identi.ca/uthark">identi.ca</a></div>

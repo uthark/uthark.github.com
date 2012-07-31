@@ -1,0 +1,25 @@
+---
+layout: post
+title: "Удаление различных диакритических символов из строки"
+date: 2010-05-22T00:52:00+07:00
+categories:
+ - java
+ - разработка
+---
+
+<div class='post'>
+<p>Возникла проблема - каким образом заменить в строке символы из национальных кодировок на соответствующие им из латиницы.</p><p>Например, из строки explicación получить explicacion.</p><pre class="brush: java">
+package com.blogspot.atamanenko;
+
+import java.text.Normalizer;
+import java.text.Normalizer.Form;
+
+public class StringNormalizer {
+
+    public static String normalize(String string) {
+        return Normalizer.normalize(string, Form.NFD)
+            .replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+    }
+}
+
+</pre><p>Вызов <a href='http://java.sun.com/javase/6/docs/api/java/text/Normalizer.html#normalize%28java.lang.CharSequence,%20java.text.Normalizer.Form%29'>Normalizer.normalize</a> проводит <a href='http://www.unicode.org/reports/tr15/tr15-23.html'>нормализацию</a> входной строки. Последующий вызов регулярного выражения удаляет все диакритические знаки, полученные после нормализации.</p></div>

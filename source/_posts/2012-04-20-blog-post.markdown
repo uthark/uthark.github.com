@@ -1,0 +1,19 @@
+---
+layout: post
+title: "Преобразуем строку в дату"
+date: 2012-04-20T15:25:00+07:00
+categories:
+ - java
+ - разработка
+ - javamail
+---
+
+<div class='post'>
+Казалось бы, есть простейшая задача - преобразовать строковое представление даты в объект класса <tt>java.util.Date</tt>.
+
+Как оказалось, иногда использование DateFormat не помогает. В случае, если строка - это заголовок <tt>Date</tt> из письма, то нам нужно использовать <tt><a href="http://docs.oracle.com/javaee/5/api/javax/mail/internet/MailDateFormat.html">javax.mail.internet.MailDateFormat</a></tt> для преобразования такой строки.
+
+<pre class="brush:java">
+String dateStr = ...
+Date parsedDate = new MailDateFormat().parse(dateStr);
+</pre></div>
