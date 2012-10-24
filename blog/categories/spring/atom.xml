@@ -4,7 +4,7 @@
   <title><![CDATA[Category: spring | Блог о разработке ПО]]></title>
   <link href="http://uthark.github.com/blog/categories/spring/atom.xml" rel="self"/>
   <link href="http://uthark.github.com/"/>
-  <updated>2012-08-10T13:49:38+07:00</updated>
+  <updated>2012-10-24T18:09:56-04:00</updated>
   <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Использование BeanPostProcessor на примере журналирования]]></title>
     <link href="http://uthark.github.com/blog/2012/04/20/beanpostprocessor/"/>
-    <updated>2012-04-20T15:51:00+07:00</updated>
+    <updated>2012-04-20T04:51:00-04:00</updated>
     <id>http://uthark.github.com/blog/2012/04/20/beanpostprocessor</id>
     <content type="html"><![CDATA[<div class='post'>
 Сегодня я хочу рассказать, как можно сделать инициализацию логгера в классе с использованием аннотаций и <a href="http://static.springsource.org/spring/docs/current/javadoc-api/org/springframework/beans/factory/config/BeanPostProcessor.html">BeanPostProcessor</a>
@@ -119,9 +119,9 @@ public class LoggerPostProcessor implements BeanPostProcessor {
   
   <entry>
     <title type="html"><![CDATA[Упрощаем работу с JPA при помощи Spring Data JPA]]></title>
-    <link href="http://uthark.github.com/blog/2012/02/23/jpa-spring-data-jpa/"/>
-    <updated>2012-02-23T02:17:00+07:00</updated>
-    <id>http://uthark.github.com/blog/2012/02/23/jpa-spring-data-jpa</id>
+    <link href="http://uthark.github.com/blog/2012/02/22/jpa-spring-data-jpa/"/>
+    <updated>2012-02-22T14:17:00-05:00</updated>
+    <id>http://uthark.github.com/blog/2012/02/22/jpa-spring-data-jpa</id>
     <content type="html"><![CDATA[<div class='post'>
 <h3>Введение</h3>
 <p>Уже прошло несколько лет с тех пор, как появился JPA. Работа с <a href="http://docs.oracle.com/javaee/5/api/javax/persistence/EntityManager.html">EntityManager</a> увлекательна, но разработчики пишут красивый API, а подробности работы с базой данных скрывают. При этом частая проблема - дублирование имплементации, когда из одного DAO в другой у нас плавно перекочёвывает один и тот же код, в лучшем случае этот код переносится в абстрактный базовый DAO. <a href="http://www.springsource.org/spring-data/jpa">Spring Data</a>  коренным образом решает проблему - при  его использовании остаётся только API на уровне интерфейсов, вся имплементация создаётся автоматически с использованием <a href="http://en.wikipedia.org/wiki/Aspect-oriented_programming">AOP</a>.</p>

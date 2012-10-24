@@ -4,7 +4,7 @@
   <title><![CDATA[Category: logging | Блог о разработке ПО]]></title>
   <link href="http://uthark.github.com/blog/categories/logging/atom.xml" rel="self"/>
   <link href="http://uthark.github.com/"/>
-  <updated>2012-08-10T13:49:38+07:00</updated>
+  <updated>2012-10-24T18:09:56-04:00</updated>
   <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Использование BeanPostProcessor на примере журналирования]]></title>
     <link href="http://uthark.github.com/blog/2012/04/20/beanpostprocessor/"/>
-    <updated>2012-04-20T15:51:00+07:00</updated>
+    <updated>2012-04-20T04:51:00-04:00</updated>
     <id>http://uthark.github.com/blog/2012/04/20/beanpostprocessor</id>
     <content type="html"><![CDATA[<div class='post'>
 Сегодня я хочу рассказать, как можно сделать инициализацию логгера в классе с использованием аннотаций и <a href="http://static.springsource.org/spring/docs/current/javadoc-api/org/springframework/beans/factory/config/BeanPostProcessor.html">BeanPostProcessor</a>

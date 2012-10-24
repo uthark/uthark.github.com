@@ -4,7 +4,7 @@
   <title><![CDATA[Category: best practices | Блог о разработке ПО]]></title>
   <link href="http://uthark.github.com/blog/categories/best-practices/atom.xml" rel="self"/>
   <link href="http://uthark.github.com/"/>
-  <updated>2012-08-10T13:49:38+07:00</updated>
+  <updated>2012-10-24T18:09:56-04:00</updated>
   <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Несколько слов о GORM]]></title>
     <link href="http://uthark.github.com/blog/2010/04/11/gorm/"/>
-    <updated>2010-04-11T11:45:00+07:00</updated>
+    <updated>2010-04-11T00:45:00-04:00</updated>
     <id>http://uthark.github.com/blog/2010/04/11/gorm</id>
     <content type="html"><![CDATA[<div class='post'>
 <p>В данной заметке хочу поделиться некоторыми моментами использования GORM.</p>

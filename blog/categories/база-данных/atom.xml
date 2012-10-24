@@ -4,7 +4,7 @@
   <title><![CDATA[Category: база данных | Блог о разработке ПО]]></title>
   <link href="http://uthark.github.com/blog/categories/база-данных/atom.xml" rel="self"/>
   <link href="http://uthark.github.com/"/>
-  <updated>2012-08-10T13:49:38+07:00</updated>
+  <updated>2012-10-24T18:09:56-04:00</updated>
   <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Список для проверки при оптимизации Grails приложений]]></title>
     <link href="http://uthark.github.com/blog/2010/02/06/grails/"/>
-    <updated>2010-02-06T23:31:00+06:00</updated>
+    <updated>2010-02-06T12:31:00-05:00</updated>
     <id>http://uthark.github.com/blog/2010/02/06/grails</id>
     <content type="html"><![CDATA[<div class='post'>
 Выкладываю ниже список задач, которые нужно/можно выполнить для оптимизации приложения, написанного на Grails, может кому пригодится.<br />
@@ -121,9 +121,9 @@ a. http://msdn.microsoft.com/en-us/library/ms998577.aspx<br />
   
   <entry>
     <title type="html"><![CDATA[Вложенные транзакции в базах данных]]></title>
-    <link href="http://uthark.github.com/blog/2010/02/05/blog-post/"/>
-    <updated>2010-02-05T01:20:00+06:00</updated>
-    <id>http://uthark.github.com/blog/2010/02/05/blog-post</id>
+    <link href="http://uthark.github.com/blog/2010/02/04/blog-post/"/>
+    <updated>2010-02-04T14:20:00-05:00</updated>
+    <id>http://uthark.github.com/blog/2010/02/04/blog-post</id>
     <content type="html"><![CDATA[<div class='post'>
 Summary: Некоторые особенности вложенных транзакций.<br />
 <br />
@@ -233,7 +233,7 @@ This comment has been removed by the author.</div>
   <entry>
     <title type="html"><![CDATA[Двунаправленная ссылочная целостность]]></title>
     <link href="http://uthark.github.com/blog/2009/07/07/blog-post/"/>
-    <updated>2009-07-07T22:11:00+07:00</updated>
+    <updated>2009-07-07T11:11:00-04:00</updated>
     <id>http://uthark.github.com/blog/2009/07/07/blog-post</id>
     <content type="html"><![CDATA[<div class='post'>
 Здравствуйте.<br />
@@ -360,7 +360,7 @@ SET foreign_key_checks = 1;
   <entry>
     <title type="html"><![CDATA[Транзакции в реляционных базах данных]]></title>
     <link href="http://uthark.github.com/blog/2009/04/24/blog-post_24/"/>
-    <updated>2009-04-24T21:49:00+07:00</updated>
+    <updated>2009-04-24T10:49:00-04:00</updated>
     <id>http://uthark.github.com/blog/2009/04/24/blog-post_24</id>
     <content type="html"><![CDATA[<div class='post'>
 <style type="text/css">.nobr br { display: none }</style>

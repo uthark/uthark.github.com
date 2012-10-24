@@ -4,7 +4,7 @@
   <title><![CDATA[Category: bitly | Блог о разработке ПО]]></title>
   <link href="http://uthark.github.com/blog/categories/bitly/atom.xml" rel="self"/>
   <link href="http://uthark.github.com/"/>
-  <updated>2012-08-10T13:49:38+07:00</updated>
+  <updated>2012-10-24T18:09:56-04:00</updated>
   <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Сокращаем ссылки на андроиде]]></title>
     <link href="http://uthark.github.com/blog/2010/12/06/blog-post/"/>
-    <updated>2010-12-06T23:11:00+06:00</updated>
+    <updated>2010-12-06T12:11:00-05:00</updated>
     <id>http://uthark.github.com/blog/2010/12/06/blog-post</id>
     <content type="html"><![CDATA[<div class='post'>
 <h5>Вступление</h5>Встала передо мной задача - сокращать ссылки перед тем, как отправлять их в Twitter. Для решения этой задачи я решил использовать <a href="http://bit.ly">bit.ly</a>, благо, их API внятный и простой.  <h5>Программируем!</h5>Решение нарисовалось в виде следующего класса:  <br />

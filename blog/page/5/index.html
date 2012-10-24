@@ -9,7 +9,7 @@
   <meta name="author" content="Oleg Atamanenko">
 
   
-  <meta name="description" content="Блокировка - в реляционных базах данных это установка метки на запись, что запись заблокирована для изменений. Существует два вида блокировок - &hellip;">
+  <meta name="description" content=".nobr br { display: none } При работе в многопользовательском окружении может возникнуть ситуация, когда разные пользователи или системы обновляют &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -82,6 +82,123 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2009/04/24/blog-post_24/">Транзакции в реляционных базах данных</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-04-24T10:49:00-04:00" pubdate data-updated="true">Apr 24<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+<style type="text/css">.nobr br { display: none }</style>
+
+При работе в многопользовательском окружении может возникнуть ситуация, когда разные пользователи или системы обновляют одни и те же данные. Это может привести к ситуации, когда один из пользователей изменит данные, которые уже изменял другой пользователь и приведёт либо к потере данных, либо к переводу данных в неконсистентное состояние.
+Для решения этой проблемы были придуманы транзакции. Целью транзакции является создание абстракции того, что каждый пользователь - единственный в системе.
+
+<h3>Характеристики транзакций</h3>
+В конце 1970-х <a href="http://en.wikipedia.org/wiki/Jim_Gray_%28computer_scientist%29">Джим Грей</a> выделил следующие характеристики транзакций:
+<ul><li>Атомарность (<span style="font-weight: bold;">A</span>tomicity)
+</li><li>Непротиворечивость (<span style="font-weight: bold;">C</span>onsistency)
+</li><li>Изолированность (<span style="font-weight: bold;">I</span>solation)
+</li><li>Долговечность (<span style="font-weight: bold;">D</span>urability)
+</li></ul><span style="font-weight: bold;">Атомарность </span>означает, что все действия, производимые в рамках одной транзакции атомарны. Если транзакция заканчивается не успешно, то все изменения, сделанный в рамках этой транзакции откатываются назад. Если транзакция заканчивается успешно, то все её изменения сохраняются.
+
+<span style="font-weight: bold;">Непротиворечивость </span>означает, что транзакция переводит базу данных из одного непротиворечивого состояния в другое непротиворечивое состояние. При этом, внутри транзакции база данных <span style="font-style: italic;">может</span> находиться в противоречивом состоянии.
+
+<span style="font-weight: bold;">Изолированность</span> означает, что во время работы одной транзакции ей <a href="http://www.blogger.com/post-edit.g?blogID=8483146613266894707&amp;postID=831038356059470359#transaction_isolation_levels">недоступны изменения</a>, происходящие в другой транзакции.
+
+Под <span style="font-weight: bold;">долговечностью</span> подразумевают, что после окончания транзакции все изменения, сделанные транзакцией фиксируется навсегда, то есть, если происходит программно-аппаратный сбой, то после восстановления системы в рабочее состояние нет потерянных изменений.
+
+<a name="transaction_isolation_levels">
+<h3>Уровни изоляции транзакций</h3></a>
+При параллельном выполнении нескольких транзакций могут возникнуть следующие проблемы:
+<ul><li>Потерянное обновление</li><li>&#8220;Грязное&#8221; чтение</li><li>Неповторяющееся чтение</li><li>Фантомная вставка</li></ul><span style="font-weight: bold;">Потерянное обновление</span> может возникнуть в ситуации, когда две транзакции обновляют одни и те же данные.
+
+<span style="font-weight: bold;">&#8220;Грязное&#8221; чтение</span> возникает, когда одна транзакция видит несохранённые изменения, сделанные другой транзакцией.
+
+<span style="font-weight: bold;">Неповторяющееся чтение</span> - это ситуация, когда в рамках одной транзакции один и тот же запрос на выборку возвращает разные результаты.
+
+<span style="font-weight: bold;">Фантомная вставка</span> - ситуация, похожая на неповторяющее чтение - заключается в том, что результаты одной и той же выборки в рамках одной транзакции имеют разное количество возвращаемых строк.
+
+<a href="http://www.contrib.andrew.cmu.edu/%7Eshadow/sql/sql1992.txt">Стандарт SQL-92</a> определяет следующие уровни изоляции транзакции:
+<ol><li>READ_UNCOMMITED</li><li>READ_COMMITED</li><li>REPEATABLE_READ</li><li>SERIALIZABLE
+</li></ol><span style="font-weight: bold;">READ_UNCOMMITED</span> - позволяет другим транзакциям видеть несохранённые изменения
+
+<span style="font-weight: bold;">READ_COMMITED</span> - транзакция во время выполенения видит только зафиксированные изменения. В большинстве баз данных это уровень изоляции по умолчанию.
+
+<span style="font-weight: bold;">REPEATABLE_READ</span> - данный уровень изоляции решает проблему неповторяющего чтения.
+
+<span style="font-weight: bold;">SERIALIZABLE</span> - данный уровень изоляции выполняет все транзакции последовательно. Это самый надёжный уровень изоляции, но, при этом, и наименее производительный.
+
+Каждый уровень решает часть вышеперечисленных проблем.
+
+<div class="nobr">
+<table>
+<tbody><tr>
+<th>Проблема
+
+ Уровень изоляции</th>
+<th>Потерянное обновление</th>
+<th>Грязное чтение</th>
+<th>Неповторяющееся чтение</th>
+<th>Фантомная вставка</th>
+</tr><tr>
+<td>READ_UNCOMMITED</td>
+<td>невозможно</td>
+<td>возможно</td>
+<td>возможно</td>
+<td>возможна</td>
+</tr><tr>
+<td>READ_COMMITED</td>
+<td>невозможно</td>
+<td>невозможно</td>
+<td>возможно</td>
+<td>возможна</td>
+</tr>
+<tr>
+<td>REPEATABLE_READ</td>
+<td>невозможно</td>
+<td>невозможно</td>
+<td>невозможно</td>
+<td>возможна</td>
+</tr>
+<tr>
+<td>SERIALIZABLE</td>
+<td>невозможно</td>
+<td>невозможно</td>
+<td>невозможно</td>
+<td>невозможна</td>
+</tr></tbody></table>
+</div></div>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2009/04/22/blog-post_22/">Кратко о блокировках</a></h1>
     
     
@@ -98,7 +215,7 @@
   
 
 
-<time datetime="2009-04-22T23:58:00+07:00" pubdate data-updated="true">Apr 22<span>nd</span>, 2009</time>
+<time datetime="2009-04-22T12:58:00-04:00" pubdate data-updated="true">Apr 22<span>nd</span>, 2009</time>
         
       </p>
     
@@ -139,7 +256,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/04/22/2/">Практический опыт использования фолксономии в условиях неограниченной свободы расстановки меток (часть 2)</a></h1>
+      <h1 class="entry-title"><a href="/blog/2009/04/21/2/">Практический опыт использования фолксономии в условиях неограниченной свободы расстановки меток (часть 2)</a></h1>
     
     
       <p class="meta">
@@ -155,7 +272,7 @@
   
 
 
-<time datetime="2009-04-22T00:14:00+07:00" pubdate data-updated="true">Apr 22<span>nd</span>, 2009</time>
+<time datetime="2009-04-21T13:14:00-04:00" pubdate data-updated="true">Apr 21<span>st</span>, 2009</time>
         
       </p>
     
@@ -209,7 +326,7 @@
   
 
 
-<time datetime="2009-04-19T12:48:00+07:00" pubdate data-updated="true">Apr 19<span>th</span>, 2009</time>
+<time datetime="2009-04-19T01:48:00-04:00" pubdate data-updated="true">Apr 19<span>th</span>, 2009</time>
         
       </p>
     
@@ -268,7 +385,7 @@
   
 
 
-<time datetime="2009-03-26T23:14:00+06:00" pubdate data-updated="true">Mar 26<span>th</span>, 2009</time>
+<time datetime="2009-03-26T13:14:00-04:00" pubdate data-updated="true">Mar 26<span>th</span>, 2009</time>
         
       </p>
     
@@ -307,7 +424,7 @@
   
 
 
-<time datetime="2009-03-23T11:14:00+06:00" pubdate data-updated="true">Mar 23<span>rd</span>, 2009</time>
+<time datetime="2009-03-23T01:14:00-04:00" pubdate data-updated="true">Mar 23<span>rd</span>, 2009</time>
         
       </p>
     
@@ -337,7 +454,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/03/20/blog-post_20/"></a></h1>
+      <h1 class="entry-title"><a href="/blog/2009/03/19/blog-post_20/"></a></h1>
     
     
       <p class="meta">
@@ -353,7 +470,7 @@
   
 
 
-<time datetime="2009-03-20T01:44:00+06:00" pubdate data-updated="true">Mar 20<span>th</span>, 2009</time>
+<time datetime="2009-03-19T15:44:00-04:00" pubdate data-updated="true">Mar 19<span>th</span>, 2009</time>
         
       </p>
     
@@ -376,7 +493,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/03/20/blog-post/"></a></h1>
+      <h1 class="entry-title"><a href="/blog/2009/03/19/blog-post/"></a></h1>
     
     
       <p class="meta">
@@ -392,7 +509,7 @@
   
 
 
-<time datetime="2009-03-20T01:02:00+06:00" pubdate data-updated="true">Mar 20<span>th</span>, 2009</time>
+<time datetime="2009-03-19T15:02:00-04:00" pubdate data-updated="true">Mar 19<span>th</span>, 2009</time>
         
       </p>
     
@@ -431,7 +548,7 @@
   
 
 
-<time datetime="2009-01-17T23:40:00+06:00" pubdate data-updated="true">Jan 17<span>th</span>, 2009</time>
+<time datetime="2009-01-17T12:40:00-05:00" pubdate data-updated="true">Jan 17<span>th</span>, 2009</time>
         
       </p>
     
@@ -469,7 +586,7 @@
   
 
 
-<time datetime="2009-01-06T21:36:00+06:00" pubdate data-updated="true">Jan 6<span>th</span>, 2009</time>
+<time datetime="2009-01-06T10:36:00-05:00" pubdate data-updated="true">Jan 6<span>th</span>, 2009</time>
         
       </p>
     
@@ -480,49 +597,6 @@
 Завёл себе отдельный OpenID аккаунт. Так что теперь буду везде пользоваться им вместо аккаунта с блоггера.
 
 Для любопытных: <a href="http://uthark.myopenid.com/">http://uthark.myopenid.com/</a></div>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/12/27/blog-post/">Тренажёр для рук</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-12-27T22:15:00+06:00" pubdate data-updated="true">Dec 27<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div class='post'>
-Купили сегодня вещицу под названием <a href="http://powerball.ru">Powerball</a>.
-После первого получаса тренировок уже получается раскрутить на 8500 оборотов в минуту.
-
-Приятная истома в сухожилиях после, немного трясущиеся руки и желание раскручивать снова и снова.
-
-Мне довольно.</div>
 
 </div>
   
@@ -548,6 +622,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/10/24/vagrant/">Автоматизируем работу с виртуальными машинами с помощью Vagrant</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/04/28/spring-data-jpa_28/">Собственная реализация методов в Spring Data JPA</a>
       </li>
     
@@ -561,10 +639,6 @@
     
       <li class="post">
         <a href="/blog/2012/04/20/blog-post/">Преобразуем строку в дату</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/02/23/jpa-spring-data-jpa/">Упрощаем работу с JPA при помощи Spring Data JPA</a>
       </li>
     
   </ul>

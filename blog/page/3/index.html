@@ -9,7 +9,7 @@
   <meta name="author" content="Oleg Atamanenko">
 
   
-  <meta name="description" content="Решил убрать дайджест ссылок из RSS-ленты. Те, кому это нужно могут сделать следующее: 1. Добавить в свой RSS-аггрегатор ленту http://feeds. &hellip;">
+  <meta name="description" content="Есть такой замечательный сервис - Dropbox. Этот сервис является онлайн-хранилищем ваших данных. Работает очень просто: 1. Вы регистрируетесь в &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -82,6 +82,109 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2009/12/08/dropbox/">Использование Dropbox для хранения конфигурационных файлов</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-08T12:17:00-05:00" pubdate data-updated="true">Dec 8<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+Есть такой замечательный сервис - <a href="https://www.getdropbox.com/">Dropbox</a>. <br />
+<br />
+Этот сервис является онлайн-хранилищем ваших данных. Работает очень просто:<br />
+<br />
+1. Вы регистрируетесь в сервисе.<br />
+2. Устанавливаете клиент<br />
+3. Пользуетесь.<br />
+<br />
+Недавно я понял, что этот сервис можно легко и непринуждённо использовать не только для хранения различных документов и фотографий, а также и конфигурационных файлов приложений, что существенно упрощает жизнь, когда у вас несколько рабочих машин (например, у меня домашний компьютер, ноутбук, а также ещё и рабочий) - необходимо каким-то образом синхронизовать конфиги при изменении их на одной из машине с другими.<br />
+<br />
+Итак, что я сделал.<br />
+<br />
+Нижеприведённые действия я делал на одной машине:<br />
+1. Создал каталог <tt>ConfigFiles</tt><br />
+2. Переместил в него свои конфигурационные файлы (<tt>~/.zshrc</tt>, <tt>~/.zsh</tt>, <tt>~/.vimrc</tt>, <tt>~/.vim</tt>)<br />
+3. Из каталога Dropbox сделал соответствующие симлинки в домашнем каталоге.<br />
+<br />
+<div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/_y8p0_dtMJ38/Sx6K22h5KKI/AAAAAAAAAuU/DRIi7hO5oFw/s1600-h/Screenshot-Dropbox+-+administrilo+de+dosieroj.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/_y8p0_dtMJ38/Sx6K22h5KKI/AAAAAAAAAuU/DRIi7hO5oFw/s320/Screenshot-Dropbox+-+administrilo+de+dosieroj.png" /></a><br />
+</div><br />
+На каждой из машин<br />
+1. Удалил существовавшие конфигурационные файлы<br />
+2. Сделал симлинки файлов из Dropbox на соответствующие конфигурационные файлы.<br />
+<br />
+В случае с <a href="http://www.zsh.org/">ZSH</a> (впрочем, для любого другого шелла это тоже реализуется) есть ещё один приятный лайфхак - если на разных машинах должны быть немного разные конфиги (например, другая переменная PATH, CDPATH, то это тоже реализуется просто: <br />
+<br />
+Внесите в свой <tt>~/.zshrc</tt> следующий код.<br />
+<pre class="brush:bash;">LOCAL_ENVIRONMENT=~/.environment_`hostname`
+if [[ -a $LOCAL_ENVIRONMENT ]]
+then
+    source $LOCAL_ENVIRONMENT
+fi
+
+</pre><br />
+Теперь нужно создать в домашнем каталоге файл с локальной конфигурацией:<br />
+<pre class="brush:bash;">touch ~/.environment_`hostname`
+
+</pre><br />
+И внести в него конфигурацию, локальную для машины.<br />
+<br />
+Да, этот файл тоже может быть симлинком на файл из dropbox.<br />
+<br />
+P.S. Если вас заинтересовал сервис, то прошу вас регистироваться по <a href="https://www.dropbox.com/referrals/NTI4MDgzMjc5">реферальной ссылке</a>, тогда и вам и мне добавят +250 мегабайт бесплатно.<br />
+<br />
+P.P.S. Да, ещё забыл сказать, что сервис достаточно умный и отправляет дельты файлов во время синхронизации. Подробнее - <a href="https://www.dropbox.com/help/8">в официальной документации</a>.</div>
+
+
+<h2>Comments</h2>
+
+
+<div class='comments'>
+<div class='comment'>
+<div class='author'>kmmbvnr</div>
+<div class='content'>
+Да именно так и пользуюсь Dropbox&#39;ом, для хранения конфигов :)</div>
+</div>
+<div class='comment'>
+<div class='author'>uthark</div>
+<div class='content'>
+@karri Да, сложно вам. С другой стороны, в некоторых компаниях политика безопасности вообще запрещает подобные сервисы.</div>
+</div>
+<div class='comment'>
+<div class='author'>karri</div>
+<div class='content'>
+А у нас на работе тестерам не положен инет :&#39;(</div>
+</div>
+</div>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2009/12/07/rss_07/">Дайджест ссылок в RSS-ленте</a></h1>
     
     
@@ -98,7 +201,7 @@
   
 
 
-<time datetime="2009-12-07T19:25:00+06:00" pubdate data-updated="true">Dec 7<span>th</span>, 2009</time>
+<time datetime="2009-12-07T08:25:00-05:00" pubdate data-updated="true">Dec 7<span>th</span>, 2009</time>
         
       </p>
     
@@ -125,7 +228,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/12/06/rss/">RSS лента блога и дайджест ссылок за предыдущий день</a></h1>
+      <h1 class="entry-title"><a href="/blog/2009/12/05/rss/">RSS лента блога и дайджест ссылок за предыдущий день</a></h1>
     
     
       <p class="meta">
@@ -141,7 +244,7 @@
   
 
 
-<time datetime="2009-12-06T01:32:00+06:00" pubdate data-updated="true">Dec 6<span>th</span>, 2009</time>
+<time datetime="2009-12-05T14:32:00-05:00" pubdate data-updated="true">Dec 5<span>th</span>, 2009</time>
         
       </p>
     
@@ -202,7 +305,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/12/06/nautilus-subversion/">RabbitVCS - расширение для Nautilus для работы с Subversion</a></h1>
+      <h1 class="entry-title"><a href="/blog/2009/12/05/nautilus-subversion/">RabbitVCS - расширение для Nautilus для работы с Subversion</a></h1>
     
     
       <p class="meta">
@@ -218,7 +321,7 @@
   
 
 
-<time datetime="2009-12-06T01:03:00+06:00" pubdate data-updated="true">Dec 6<span>th</span>, 2009</time>
+<time datetime="2009-12-05T14:03:00-05:00" pubdate data-updated="true">Dec 5<span>th</span>, 2009</time>
         
       </p>
     
@@ -286,7 +389,7 @@
   
 
 
-<time datetime="2009-11-25T23:16:00+06:00" pubdate data-updated="true">Nov 25<span>th</span>, 2009</time>
+<time datetime="2009-11-25T12:16:00-05:00" pubdate data-updated="true">Nov 25<span>th</span>, 2009</time>
         
       </p>
     
@@ -332,7 +435,7 @@ P.P.S. У расширения появилась своя страничка в
   
 
 
-<time datetime="2009-11-24T23:09:00+06:00" pubdate data-updated="true">Nov 24<span>th</span>, 2009</time>
+<time datetime="2009-11-24T12:09:00-05:00" pubdate data-updated="true">Nov 24<span>th</span>, 2009</time>
         
       </p>
     
@@ -455,7 +558,7 @@ P.P.S. У расширения появилась своя страничка в
   
 
 
-<time datetime="2009-11-14T22:34:00+06:00" pubdate data-updated="true">Nov 14<span>th</span>, 2009</time>
+<time datetime="2009-11-14T11:34:00-05:00" pubdate data-updated="true">Nov 14<span>th</span>, 2009</time>
         
       </p>
     
@@ -762,7 +865,7 @@ selection : description
   
 
 
-<time datetime="2009-11-02T23:26:00+06:00" pubdate data-updated="true">Nov 2<span>nd</span>, 2009</time>
+<time datetime="2009-11-02T12:26:00-05:00" pubdate data-updated="true">Nov 2<span>nd</span>, 2009</time>
         
       </p>
     
@@ -869,7 +972,7 @@ vmorarian@gmail.com</div>
   
 
 
-<time datetime="2009-07-07T22:11:00+07:00" pubdate data-updated="true">Jul 7<span>th</span>, 2009</time>
+<time datetime="2009-07-07T11:11:00-04:00" pubdate data-updated="true">Jul 7<span>th</span>, 2009</time>
         
       </p>
     
@@ -1007,7 +1110,7 @@ SET foreign_key_checks = 1;
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/07/04/opera-delicious/">Opera и del.icio.us</a></h1>
+      <h1 class="entry-title"><a href="/blog/2009/07/03/opera-delicious/">Opera и del.icio.us</a></h1>
     
     
       <p class="meta">
@@ -1023,7 +1126,7 @@ SET foreign_key_checks = 1;
   
 
 
-<time datetime="2009-07-04T01:13:00+07:00" pubdate data-updated="true">Jul 4<span>th</span>, 2009</time>
+<time datetime="2009-07-03T14:13:00-04:00" pubdate data-updated="true">Jul 3<span>rd</span>, 2009</time>
         
       </p>
     
@@ -1066,310 +1169,6 @@ javascript:(function(){f='http://delicious.com/save?url='+encodeURIComponent(win
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/06/06/spring-roo-2/">Spring Roo (часть 2)</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-06-06T22:19:00+07:00" pubdate data-updated="true">Jun 6<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div class='post'>
-<h1>Архитектура сгенерированного приложения</h1>
-Spring Roo активно использует аспекты. В качестве реализации аспектов была взята библиотека <a href="http://www.eclipse.org/aspectj/">aspectj</a>.
-Большая часть сгенерированного кода попадает в отдельные файлы-аспекты.
-Создадим простой класс:
-<pre class="brush: java">
-new persistent class jpa -name ~.domain.Action -testAutomatically
-add field string name -notNull -sizeMin 1 -sizeMax 80
-add field string description -sizeMax 1024
-</pre>
-Spring Roo создаст нам следующие файлы:
-
-<ul><li><span style="font-weight: bold;">Action.java</span>
-Класс содержит только полезную с точки зрения назначения класса информацию. По сути, то, что вводит разработчик в консоль Roo аккумулируется здесь. Весь дополнительный код разносится по другим классам.
-<pre class="brush: java">
-@Entity //1
-@RooJavaBean //2
-@RooToString //3
-@RooEntity(finders = { "findActionsByName" }) //4
-public class Action {
-
-@NotNull
-@Size(min = 1, max = 80)
-private String name;
-
-
-@Size(max = 1024)
-private String description;
-}
-</pre>
-1) Класс является JPA-сущностью.
-2) Аннотация @RooJavaBean говорит, что этот класс - обычный Java-бин.
-3) Аннотация @RooToString говорит, что у этого класса есть перегруженный метод toString().
-4) Аннотация @RooEntity говорит что класс является JPA-сущностью.
-</li><li><span style="font-weight: bold;">Action_Roo_Configurable.aj</span>
-Данный аспект говорит, что класс Action является конфигурируемым через Spring.
-<pre class="brush: java">
-privileged aspect Action_Roo_Configurable {
-declare @type: Action: @org.springframework.beans.factory.annotation.Configurable;
-}
-</pre></li><li><span style="font-weight: bold;">Action_Roo_Entity.aj</span>
-В данном классе собраны все методы DAO для работы с классом Action.
-<pre class="brush: java">
-package org.academ.uthark.research.roo.domain;
-
-privileged aspect Action_Roo_Entity {
-
-@javax.persistence.PersistenceContext
-transient javax.persistence.EntityManager Action.entityManager;
-
-@javax.persistence.Id
-@javax.persistence.GeneratedValue(strategy = javax.persistence.GenerationType.AUTO)
-@javax.persistence.Column(name = "id")
-private java.lang.Long Action.id;
-
-@javax.persistence.Version
-@javax.persistence.Column(name = "version")
-private java.lang.Integer Action.version;
-
-public java.lang.Long Action.getId() {
-return this.id;
-}
-
-public void Action.setId(java.lang.Long id) {
-this.id = id;
-}
-
-public java.lang.Integer Action.getVersion() {
-return this.version;
-}
-
-public void Action.setVersion(java.lang.Integer version) {
-this.version = version;
-}
-
-@org.springframework.transaction.annotation.Transactional
-public void Action.persist() {
-if (this.entityManager == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
-this.entityManager.persist(this);
-}
-
-@org.springframework.transaction.annotation.Transactional
-public void Action.remove() {
-if (this.entityManager == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
-this.entityManager.remove(this);
-}
-
-@org.springframework.transaction.annotation.Transactional
-public void Action.flush() {
-if (this.entityManager == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
-this.entityManager.flush();
-}
-
-@org.springframework.transaction.annotation.Transactional
-public void Action.merge() {
-if (this.entityManager == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
-Action merged = this.entityManager.merge(this);
-this.entityManager.flush();
-this.id = merged.getId();
-}
-
-public static long Action.countActions() {
-return (Long) new Action().entityManager.createQuery("select count(o) from Action o").getSingleResult();
-}
-
-public static java.util.List<org.academ.uthark.research.roo.domain.action> Action.findAllActions() {
-return new Action().entityManager.createQuery("select o from Action o").getResultList();
-}
-
-public static org.academ.uthark.research.roo.domain.Action Action.findAction(java.lang.Long id) {
-if (id == null) throw new IllegalArgumentException("An identifier is required to retrieve an instance of Action");
-return new Action().entityManager.find(Action.class, id);
-}
-
-public static java.util.List<org.academ.uthark.research.roo.domain.action> Action.findActionEntries(int firstResult, int maxResults) {
-return new Action().entityManager.createQuery("select o from Action o").setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
-}
-
-}
-</org.academ.uthark.research.roo.domain.action></org.academ.uthark.research.roo.domain.action></pre>
-Как легко видеть, этот аспект добавляет классу Action CRUD-методы, поля id и version.
-</li><li><span style="font-weight: bold;">Action_Roo_Finder.aj</span>
-Этот аспект аккумулирует все finder-методы, созданные через консоль Spring Roo.
-<pre class="brush: java">privileged aspect Action_Roo_Finder {
-
-public static javax.persistence.Query Action.findActionsByName(java.lang.String name) {
-if (name == null) throw new IllegalArgumentException("The name argument is required");
-javax.persistence.Query q = new Action().entityManager.createQuery("FROM Action AS action WHERE action.name = :name");
-q.setParameter("name", name);
-return q;
-}
-
-}
-</pre></li><li><span style="font-weight: bold;">Action_Roo_JavaBean.aj</span>
-Для уменьшения загромождения кода ненужными методами для доступа к полям Spring Roo выносит их в отдельный аспект.
-<pre class="brush: java">
-privileged aspect Action_Roo_JavaBean {
-
-public java.lang.String Action.getName() {
-return this.name;
-}
-
-public void Action.setName(java.lang.String name) {
-this.name = name;
-}
-
-public java.lang.String Action.getDescription() {
-return this.description;
-}
-
-public void Action.setDescription(java.lang.String description) {
-this.description = description;
-}
-
-}
-</pre></li><li>Action_Roo_Plural.aj
-В данном аспекте можно определить, как созданная сущность выглядит во множественном числе.
-<pre class="brush: java">
-package org.academ.uthark.research.roo.domain;
-
-privileged aspect Action_Roo_JavaBean {
-
-public java.lang.String Action.getName() {
-return this.name;
-}
-
-public void Action.setName(java.lang.String name) {
-this.name = name;
-}
-
-public java.lang.String Action.getDescription() {
-return this.description;
-}
-
-public void Action.setDescription(java.lang.String description) {
-this.description = description;
-}
-
-}
-
-</pre></li><li><span style="font-weight: bold;">Action_Roo_ToString.aj</span>
-Аспект, переопределяющий toString()
-<pre class="brush: java">
-privileged aspect Action_Roo_ToString {
-
-public java.lang.String Action.toString() {
-StringBuilder sb = new StringBuilder();
-sb.append("id: ").append(getId()).append(", ");
-sb.append("version: ").append(getVersion()).append(", ");
-sb.append("name: ").append(getName()).append(", ");
-sb.append("description: ").append(getDescription()).append(", ");
-return sb.toString();
-}
-
-}
-
-</pre></li><li><span style="font-weight: bold;">ActionEditor.java</span>
-Кроме того, при создании контроллеров для работы дополнительно создается ActionEditor
-<pre class="brush: java">
-import org.springframework.roo.addon.property.editor.RooEditor;
-
-@RooEditor(providePropertyEditorFor = Action.class)
-public class ActionEditor {
-}
-
-</pre></li><li><span style="font-weight: bold;">ActionEditor_Roo_Editor.aj</span>
-Аспект с реализацией.
-<pre class="brush: java">
-privileged aspect ActionEditor_Roo_Editor {
-
-declare parents: ActionEditor implements java.beans.PropertyEditorSupport;
-
-org.springframework.beans.SimpleTypeConverter ActionEditor.typeConverter = new org.springframework.beans.SimpleTypeConverter();
-
-public java.lang.String ActionEditor.getAsText() {
- Object obj = getValue(); 
- if (obj == null) { 
-     return null;     
- } 
- return (String) typeConverter.convertIfNecessary(((org.academ.uthark.research.roo.domain.Action) obj).getId() , String.class); 
-}
-
-public void ActionEditor.setAsText(java.lang.String text) {
- if (text == null || "".equals(text)) { 
-     setValue(null);     
-     return;     
- } 
-
- java.lang.Long identifier = (java.lang.Long) typeConverter.convertIfNecessary(text, java.lang.Long.class); 
- if (identifier == null) { 
-     setValue(null);     
-     return;     
- } 
-
- setValue(org.academ.uthark.research.roo.domain.Action.findAction(identifier)); 
-}
-
-}
-
-</pre></li></ul>
-
-<h3>А где же equals()/hashCode()?</h3>
-Легко заметить, что Spring Roo забыл ещё про один важный аспект - про реализацию методов equals() и hashCode(). К релизу, я думаю, эта недоработка будет исправлена.
-
-Как видно, код скрипта для генерации весьма и весьма лаконичен, а получающий java-код наглядно показывает всю многословность языка Java.
-
-<h3>Apache Maven integration</h3>
-Spring Roo при создании проекта создаёт pom.xml, хорошо знакомый всем работавшим с maven. Кроме того, консоль позволяет добавлять и удалять зависимости, не правя файл вручную.
-
-<h3>Расширения</h3>
-Spring Roo поддерживает расширения, что ещё больше даёт возможностей. На сегодняшний день написано уже как минимум одно расширение - <a href="http://jira.springframework.org/browse/ROO-41">Sitemesh Addon</a>.
-
-<h3>Критика</h3>
-В первую очередь критика относится к текущему релизу, а так как он ещё в глубокой альфе, то все может измениться к официальному релизу.
-<ol><li>Нет возможности подставлять свои JSP-шаблоны для сгенерированного CRUD</li><li>В сгенерированном коде есть ошибки, например, если заводим поле типа флоат, создаём контроллер, то при редактировании сущности возможна следующая ошибка: вводим достаточно большое число (1234567), сохраняем сущность, открываем на редактирование. В поле, хранящем флоат получаем 1.23456E7, и после этого невозможно сохранить сущность, так как получаем ошибку валидации.</li><li>Ещё одна ошибка связана с отношением один ко многим. Создаём пару сущностей с таким отношением. Запускаем, пробуем создать сущность. Roo умничает, если нет связанных сущностей в БД, то он даже не генерирует &lt;select&gt;
-</li></ol><h3>Вывод</h3>В целом, Spring Roo достойное начинание, но пользоваться им в Production можно будет ещё нескоро.</div>
-
-
-<h2>Comments</h2>
-
-
-<div class='comments'>
-<div class='comment'>
-<div class='author'>ziftech</div>
-<div class='content'>
-Фреймворк интересный, буду следить за развитием, по возможности применять.<br /><br />Вам спасибо за разъяснения))</div>
-</div>
-</div>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -1387,6 +1186,10 @@ Spring Roo поддерживает расширения, что ещё боль
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/10/24/vagrant/">Автоматизируем работу с виртуальными машинами с помощью Vagrant</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/04/28/spring-data-jpa_28/">Собственная реализация методов в Spring Data JPA</a>
       </li>
     
@@ -1400,10 +1203,6 @@ Spring Roo поддерживает расширения, что ещё боль
     
       <li class="post">
         <a href="/blog/2012/04/20/blog-post/">Преобразуем строку в дату</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/02/23/jpa-spring-data-jpa/">Упрощаем работу с JPA при помощи Spring Data JPA</a>
       </li>
     
   </ul>

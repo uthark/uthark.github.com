@@ -4,7 +4,7 @@
   <title><![CDATA[Category: дизайн | Блог о разработке ПО]]></title>
   <link href="http://uthark.github.com/blog/categories/дизайн/atom.xml" rel="self"/>
   <link href="http://uthark.github.com/"/>
-  <updated>2012-08-10T13:49:38+07:00</updated>
+  <updated>2012-10-24T18:09:56-04:00</updated>
   <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Использование модификатора protected на полях в базовом классе]]></title>
     <link href="http://uthark.github.com/blog/2009/05/30/protected/"/>
-    <updated>2009-05-30T23:45:00+07:00</updated>
+    <updated>2009-05-30T12:45:00-04:00</updated>
     <id>http://uthark.github.com/blog/2009/05/30/protected</id>
     <content type="html"><![CDATA[<div class='post'>
 Недавно задали мне вопрос - что я думаю об использовании модификатора protected для членов базового класса? Под этим вопросом кроются более серьёзные вещи.

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: plugin | Блог о разработке ПО]]></title>
   <link href="http://uthark.github.com/blog/categories/plugin/atom.xml" rel="self"/>
   <link href="http://uthark.github.com/"/>
-  <updated>2012-08-10T13:49:38+07:00</updated>
+  <updated>2012-10-24T18:09:56-04:00</updated>
   <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Eclipse и его расширения]]></title>
-    <link href="http://uthark.github.com/blog/2009/05/03/eclipse/"/>
-    <updated>2009-05-03T00:18:00+07:00</updated>
-    <id>http://uthark.github.com/blog/2009/05/03/eclipse</id>
+    <link href="http://uthark.github.com/blog/2009/05/02/eclipse/"/>
+    <updated>2009-05-02T13:18:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2009/05/02/eclipse</id>
     <content type="html"><![CDATA[<div class='post'>
 Многие ругают <a href="http://www.eclipse.org/">Eclipse</a> за то, что там нет многого из того, что есть в коробке у <a href="http://www.jetbrains.com/idea/">Jetbrains Intellij IDEA</a>. Мне всегда казалось это не очень корректным, так как Eclipse в первую очередь платформа, а уже потом - среда для Java разработки.<br />
 Решил собрать воедино весь список используемых мною расширений для Eclipse.<br />

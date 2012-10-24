@@ -4,7 +4,7 @@
   <title><![CDATA[Category: jax-rs | Блог о разработке ПО]]></title>
   <link href="http://uthark.github.com/blog/categories/jax-rs/atom.xml" rel="self"/>
   <link href="http://uthark.github.com/"/>
-  <updated>2012-08-10T13:49:38+07:00</updated>
+  <updated>2012-10-24T18:09:56-04:00</updated>
   <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Разработка и тестирование Java REST веб-сервисов]]></title>
-    <link href="http://uthark.github.com/blog/2012/02/09/java-rest/"/>
-    <updated>2012-02-09T01:05:00+07:00</updated>
-    <id>http://uthark.github.com/blog/2012/02/09/java-rest</id>
+    <link href="http://uthark.github.com/blog/2012/02/08/java-rest/"/>
+    <updated>2012-02-08T13:05:00-05:00</updated>
+    <id>http://uthark.github.com/blog/2012/02/08/java-rest</id>
     <content type="html"><![CDATA[<div class='post'>
 <h4>Введение</h4>
 Для разработки <a href="http://restpatterns.org/">REST</a> веб-сервисов Java предлагает <a href="http://jcp.org/en/jsr/detail?id=311">JSR-311 - JAX-RS: The Java&trade; API for RESTful Web Services</a>

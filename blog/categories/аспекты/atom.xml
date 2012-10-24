@@ -4,7 +4,7 @@
   <title><![CDATA[Category: аспекты | Блог о разработке ПО]]></title>
   <link href="http://uthark.github.com/blog/categories/аспекты/atom.xml" rel="self"/>
   <link href="http://uthark.github.com/"/>
-  <updated>2012-08-10T13:49:38+07:00</updated>
+  <updated>2012-10-24T18:09:56-04:00</updated>
   <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Немножко магии от AspectJ]]></title>
-    <link href="http://uthark.github.com/blog/2012/01/28/aspectj/"/>
-    <updated>2012-01-28T02:43:00+07:00</updated>
-    <id>http://uthark.github.com/blog/2012/01/28/aspectj</id>
+    <link href="http://uthark.github.com/blog/2012/01/27/aspectj/"/>
+    <updated>2012-01-27T14:43:00-05:00</updated>
+    <id>http://uthark.github.com/blog/2012/01/27/aspectj</id>
     <content type="html"><![CDATA[<p>Наверно, вы уже сталкивались с таким понятием, как AOП - <a href="http://en.wikipedia.org/wiki/Aspect-oriented_programming">аспектно-ориентированное программирование</a>.<br /></p>
 
 <br />

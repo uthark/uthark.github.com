@@ -4,7 +4,7 @@
   <title><![CDATA[Category: delicious | Блог о разработке ПО]]></title>
   <link href="http://uthark.github.com/blog/categories/delicious/atom.xml" rel="self"/>
   <link href="http://uthark.github.com/"/>
-  <updated>2012-08-10T13:49:38+07:00</updated>
+  <updated>2012-10-24T18:09:56-04:00</updated>
   <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Расширение для работы с Delicious доступно на сайте расширений Google Chrome]]></title>
     <link href="http://uthark.github.com/blog/2009/12/08/delicious-google-chrome/"/>
-    <updated>2009-12-08T23:43:00+06:00</updated>
+    <updated>2009-12-08T12:43:00-05:00</updated>
     <id>http://uthark.github.com/blog/2009/12/08/delicious-google-chrome</id>
     <content type="html"><![CDATA[<div class='post'>
 Итак, <a href="code.google.com/p/chromium-delicious-extension/">расширение для работы с Delicious</a> доступно на <a href="https://chrome.google.com/extensions">сайте расширений Google Chrome</a>.<br />
@@ -31,7 +31,7 @@
   <entry>
     <title type="html"><![CDATA[Расширение Delicious Plugin идёт в массы]]></title>
     <link href="http://uthark.github.com/blog/2009/11/25/delicious-plugin/"/>
-    <updated>2009-11-25T23:16:00+06:00</updated>
+    <updated>2009-11-25T12:16:00-05:00</updated>
     <id>http://uthark.github.com/blog/2009/11/25/delicious-plugin</id>
     <content type="html"><![CDATA[<div class='post'>
 Google запустил сайт <a href="https://chrome.google.com/extensions/" target="_blank">Chrome Extensions</a>.<br />
@@ -50,7 +50,7 @@ P.P.S. У расширения появилась своя страничка в
   <entry>
     <title type="html"><![CDATA[Расширение Delicious Bookmarks для Google Chrome/Chromium]]></title>
     <link href="http://uthark.github.com/blog/2009/11/14/delicious-bookmarks-google/"/>
-    <updated>2009-11-14T22:34:00+06:00</updated>
+    <updated>2009-11-14T11:34:00-05:00</updated>
     <id>http://uthark.github.com/blog/2009/11/14/delicious-bookmarks-google</id>
     <content type="html"><![CDATA[<div class='post'>
 <h1>Введение</h1><br />
@@ -329,9 +329,9 @@ selection : description
   
   <entry>
     <title type="html"><![CDATA[Opera и del.icio.us]]></title>
-    <link href="http://uthark.github.com/blog/2009/07/04/opera-delicious/"/>
-    <updated>2009-07-04T01:13:00+07:00</updated>
-    <id>http://uthark.github.com/blog/2009/07/04/opera-delicious</id>
+    <link href="http://uthark.github.com/blog/2009/07/03/opera-delicious/"/>
+    <updated>2009-07-03T14:13:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2009/07/03/opera-delicious</id>
     <content type="html"><![CDATA[<div class='post'>
 Так получилось, что в последнее время я стал пользоваться небезызвестной <a href="http://www.opera.com">оперой</a>.
 

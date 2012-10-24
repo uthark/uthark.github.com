@@ -4,7 +4,7 @@
   <title><![CDATA[Category: linux | Блог о разработке ПО]]></title>
   <link href="http://uthark.github.com/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://uthark.github.com/"/>
-  <updated>2012-08-10T13:49:38+07:00</updated>
+  <updated>2012-10-24T18:09:56-04:00</updated>
   <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Настройка autofs для монтирования NFS-ресурсов]]></title>
     <link href="http://uthark.github.com/blog/2009/12/14/autofs-nfs/"/>
-    <updated>2009-12-14T23:14:00+06:00</updated>
+    <updated>2009-12-14T12:14:00-05:00</updated>
     <id>http://uthark.github.com/blog/2009/12/14/autofs-nfs</id>
     <content type="html"><![CDATA[<div class='post'>
 Summary: В данной заметке описана настройка autofs для доступа к сетевым ресурсам, доступным по NFS.<br />
@@ -54,9 +54,9 @@ Summary: В данной заметке описана настройка autofs
   
   <entry>
     <title type="html"><![CDATA[RabbitVCS - расширение для Nautilus для работы с Subversion]]></title>
-    <link href="http://uthark.github.com/blog/2009/12/06/nautilus-subversion/"/>
-    <updated>2009-12-06T01:03:00+06:00</updated>
-    <id>http://uthark.github.com/blog/2009/12/06/nautilus-subversion</id>
+    <link href="http://uthark.github.com/blog/2009/12/05/nautilus-subversion/"/>
+    <updated>2009-12-05T14:03:00-05:00</updated>
+    <id>http://uthark.github.com/blog/2009/12/05/nautilus-subversion</id>
     <content type="html"><![CDATA[<div class='post'>
 Раньше я использовал коллекцию скриптов <tt>nautilussvn</tt>, весьма неудобную в использовании.<br />
 <br />

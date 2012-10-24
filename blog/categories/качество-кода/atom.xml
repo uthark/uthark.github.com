@@ -4,7 +4,7 @@
   <title><![CDATA[Category: качество кода | Блог о разработке ПО]]></title>
   <link href="http://uthark.github.com/blog/categories/качество-кода/atom.xml" rel="self"/>
   <link href="http://uthark.github.com/"/>
-  <updated>2012-08-10T13:49:38+07:00</updated>
+  <updated>2012-10-24T18:09:56-04:00</updated>
   <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Сферический программист в вакууме и абстрактное понятие качества кода в условиях Fixed-Price проектов (часть 2)]]></title>
-    <link href="http://uthark.github.com/blog/2009/05/27/fixed-price-2/"/>
-    <updated>2009-05-27T01:26:00+07:00</updated>
-    <id>http://uthark.github.com/blog/2009/05/27/fixed-price-2</id>
+    <link href="http://uthark.github.com/blog/2009/05/26/fixed-price-2/"/>
+    <updated>2009-05-26T14:26:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2009/05/26/fixed-price-2</id>
     <content type="html"><![CDATA[<div class='post'>
 Причин для написания плохого кода может быть несколько. Некоторые из них лежат на поверхности:
 
@@ -52,9 +52,9 @@
   
   <entry>
     <title type="html"><![CDATA[Сферический программист в вакууме и абстрактное понятие качества кода в условиях Fixed-Price проектов (часть 1)]]></title>
-    <link href="http://uthark.github.com/blog/2009/05/27/fixed-price-1/"/>
-    <updated>2009-05-27T00:36:00+07:00</updated>
-    <id>http://uthark.github.com/blog/2009/05/27/fixed-price-1</id>
+    <link href="http://uthark.github.com/blog/2009/05/26/fixed-price-1/"/>
+    <updated>2009-05-26T13:36:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2009/05/26/fixed-price-1</id>
     <content type="html"><![CDATA[<div class='post'>
 В последнее время всё чаще задумываюсь о том, почему разработчики пишут плохой и некачественный код. Под кодом я подразумеваю не только сам код, но и, в том числе, архитектуру и дизайн.
 

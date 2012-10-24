@@ -4,7 +4,7 @@
   <title><![CDATA[Category: tiddlywiki | Блог о разработке ПО]]></title>
   <link href="http://uthark.github.com/blog/categories/tiddlywiki/atom.xml" rel="self"/>
   <link href="http://uthark.github.com/"/>
-  <updated>2012-08-10T13:49:38+07:00</updated>
+  <updated>2012-10-24T18:09:56-04:00</updated>
   <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Разработка макроса для TiddlyWiki]]></title>
     <link href="http://uthark.github.com/blog/2010/03/21/tiddlywiki/"/>
-    <updated>2010-03-21T20:54:00+06:00</updated>
+    <updated>2010-03-21T10:54:00-04:00</updated>
     <id>http://uthark.github.com/blog/2010/03/21/tiddlywiki</id>
     <content type="html"><![CDATA[<div class='post'>
 <p><b>Summary</b>: Пример разработки плагина для TiddlyWiki</p>
@@ -42,7 +42,7 @@ config.macros.faviconLink.handler = function(place, macroName,  params, wikifier
 
   var args = paramString.parseParams(&quot;list&quot;,null,true);
   var link = getParam(args, &quot;link&quot;, 'false');
-  
+
   if (link != 'false'){
     urlParts = link.split('/');
     imgLink = urlParts[0] + &quot;//&quot; + urlParts[2] + &quot;/favicon.ico&quot;;
@@ -92,7 +92,7 @@ config.macros.faviconLink.handler = function(place, macroName,  params, wikifier
   text-align: center;
   font-weight: bold;
   font-size: 1.5em;
-  font-family: &quot;Gill Sans MT&quot;, &quot;Candara&quot;, &quot;Arial&quot;; 
+  font-family: &quot;Gill Sans MT&quot;, &quot;Candara&quot;, &quot;Arial&quot;;
   border: 2px solid [[ColorPalette::SecondaryLight]];
   background-color: [[ColorPalette::SecondaryPale]];
 }

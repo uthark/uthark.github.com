@@ -4,7 +4,7 @@
   <title><![CDATA[Category: java | Блог о разработке ПО]]></title>
   <link href="http://uthark.github.com/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://uthark.github.com/"/>
-  <updated>2012-08-10T13:49:38+07:00</updated>
+  <updated>2012-10-24T18:09:56-04:00</updated>
   <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Собственная реализация методов в Spring Data JPA]]></title>
     <link href="http://uthark.github.com/blog/2012/04/28/spring-data-jpa_28/"/>
-    <updated>2012-04-28T15:03:00+07:00</updated>
+    <updated>2012-04-28T04:03:00-04:00</updated>
     <id>http://uthark.github.com/blog/2012/04/28/spring-data-jpa_28</id>
     <content type="html"><![CDATA[<p>Очевидно, что мы не всегда можем воспользоваться автоматической генерацией кода, предоставляемой <a href="http://www.springsource.org/spring-data/jpa">Spring Data JPA</a>. Например, у нас слишком сложный запрос, или нам необходимо вызвать процедуру в базе данных, либо у нас сложная бизнес-логика.</p>
 
@@ -155,7 +155,7 @@
   <entry>
     <title type="html"><![CDATA[Использование BeanPostProcessor на примере журналирования]]></title>
     <link href="http://uthark.github.com/blog/2012/04/20/beanpostprocessor/"/>
-    <updated>2012-04-20T15:51:00+07:00</updated>
+    <updated>2012-04-20T04:51:00-04:00</updated>
     <id>http://uthark.github.com/blog/2012/04/20/beanpostprocessor</id>
     <content type="html"><![CDATA[<div class='post'>
 Сегодня я хочу рассказать, как можно сделать инициализацию логгера в классе с использованием аннотаций и <a href="http://static.springsource.org/spring/docs/current/javadoc-api/org/springframework/beans/factory/config/BeanPostProcessor.html">BeanPostProcessor</a>
@@ -259,7 +259,7 @@ public class LoggerPostProcessor implements BeanPostProcessor {
   <entry>
     <title type="html"><![CDATA[Преобразуем строку в дату]]></title>
     <link href="http://uthark.github.com/blog/2012/04/20/blog-post/"/>
-    <updated>2012-04-20T15:25:00+07:00</updated>
+    <updated>2012-04-20T04:25:00-04:00</updated>
     <id>http://uthark.github.com/blog/2012/04/20/blog-post</id>
     <content type="html"><![CDATA[<p>Казалось бы, есть простейшая задача - преобразовать строковое представление даты в объект класса <tt>java.util.Date</tt>.</p>
 
@@ -276,7 +276,7 @@ public class LoggerPostProcessor implements BeanPostProcessor {
   <entry>
     <title type="html"><![CDATA[Немного о виртуальных методах в Java]]></title>
     <link href="http://uthark.github.com/blog/2011/07/21/java/"/>
-    <updated>2011-07-21T12:06:00+07:00</updated>
+    <updated>2011-07-21T01:06:00-04:00</updated>
     <id>http://uthark.github.com/blog/2011/07/21/java</id>
     <content type="html"><![CDATA[<div class='post'>
 Сегодня я хочу рассмотреть некоторые особенности переопределения методов в Java.  В java нельзя переопределить:   <br />
@@ -334,9 +334,9 @@ System.out.println(a.getI());
   
   <entry>
     <title type="html"><![CDATA[Удаление различных диакритических символов из строки]]></title>
-    <link href="http://uthark.github.com/blog/2010/05/22/blog-post/"/>
-    <updated>2010-05-22T00:52:00+07:00</updated>
-    <id>http://uthark.github.com/blog/2010/05/22/blog-post</id>
+    <link href="http://uthark.github.com/blog/2010/05/21/blog-post/"/>
+    <updated>2010-05-21T13:52:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2010/05/21/blog-post</id>
     <content type="html"><![CDATA[<div class='post'>
 <p>Возникла проблема - каким образом заменить в строке символы из национальных кодировок на соответствующие им из латиницы.</p><p>Например, из строки explicación получить explicacion.</p><pre class="brush: java">
 package com.blogspot.atamanenko;

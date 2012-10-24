@@ -4,7 +4,7 @@
   <title><![CDATA[Category: spring roo | Блог о разработке ПО]]></title>
   <link href="http://uthark.github.com/blog/categories/spring-roo/atom.xml" rel="self"/>
   <link href="http://uthark.github.com/"/>
-  <updated>2012-08-10T13:49:38+07:00</updated>
+  <updated>2012-10-24T18:09:56-04:00</updated>
   <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Spring Roo (часть 2)]]></title>
     <link href="http://uthark.github.com/blog/2009/06/06/spring-roo-2/"/>
-    <updated>2009-06-06T22:19:00+07:00</updated>
+    <updated>2009-06-06T11:19:00-04:00</updated>
     <id>http://uthark.github.com/blog/2009/06/06/spring-roo-2</id>
     <content type="html"><![CDATA[<div class='post'>
 <h1>Архитектура сгенерированного приложения</h1>
@@ -292,9 +292,9 @@ Spring Roo поддерживает расширения, что ещё боль
   
   <entry>
     <title type="html"><![CDATA[Введение в Spring Roo]]></title>
-    <link href="http://uthark.github.com/blog/2009/06/03/spring-roo/"/>
-    <updated>2009-06-03T00:06:00+07:00</updated>
-    <id>http://uthark.github.com/blog/2009/06/03/spring-roo</id>
+    <link href="http://uthark.github.com/blog/2009/06/02/spring-roo/"/>
+    <updated>2009-06-02T13:06:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2009/06/02/spring-roo</id>
     <content type="html"><![CDATA[<div class='post'>
 <a href="http://blog.springsource.com/2009/05/01/roo-part-1/">Недавно</a> компания <a href="http://springsource.com/">Spring Source</a> презентовала новый продукт - <a href="http://www.springsource.org/roo">Spring Roo</a>. <a href="http://jira.springframework.org/browse/ROO-1">Цель проекта</a> - повысить продуктивность Java-разработчиков. <a href="http://stsmedia.net/introducing-spring-roo/">Почитав</a> <a href="http://stsmedia.net/introducing-spring-roo-part-2-security-jms-email-support/">обзоры</a>, а также <a href="http://blog.springsource.com/2009/05/27/roo-part-2/">потрогав его руками</a> можно сделать вывод о том, что это, в некотором виде, альтернатива <a href="http://appfuse.org/">AppFuse</a> и <a href="http://grails.codehaus.org/">Grails</a>.
 

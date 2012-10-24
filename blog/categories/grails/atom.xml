@@ -4,7 +4,7 @@
   <title><![CDATA[Category: grails | Блог о разработке ПО]]></title>
   <link href="http://uthark.github.com/blog/categories/grails/atom.xml" rel="self"/>
   <link href="http://uthark.github.com/"/>
-  <updated>2012-08-10T13:49:38+07:00</updated>
+  <updated>2012-10-24T18:09:56-04:00</updated>
   <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Несколько слов о GORM]]></title>
     <link href="http://uthark.github.com/blog/2010/04/11/gorm/"/>
-    <updated>2010-04-11T11:45:00+07:00</updated>
+    <updated>2010-04-11T00:45:00-04:00</updated>
     <id>http://uthark.github.com/blog/2010/04/11/gorm</id>
     <content type="html"><![CDATA[<div class='post'>
 <p>В данной заметке хочу поделиться некоторыми моментами использования GORM.</p>
@@ -81,7 +81,7 @@ class CreditCardPayment extends Payment {
   <entry>
     <title type="html"><![CDATA[Список для проверки при оптимизации Grails приложений]]></title>
     <link href="http://uthark.github.com/blog/2010/02/06/grails/"/>
-    <updated>2010-02-06T23:31:00+06:00</updated>
+    <updated>2010-02-06T12:31:00-05:00</updated>
     <id>http://uthark.github.com/blog/2010/02/06/grails</id>
     <content type="html"><![CDATA[<div class='post'>
 Выкладываю ниже список задач, которые нужно/можно выполнить для оптимизации приложения, написанного на Grails, может кому пригодится.<br />

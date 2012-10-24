@@ -97,7 +97,7 @@ TiddlyWiki - это вики-движок, полностью написанны
   
 
 
-<time datetime="2010-03-21T20:54:00+06:00" pubdate data-updated="true">Mar 21<span>st</span>, 2010</time>
+<time datetime="2010-03-21T10:54:00-04:00" pubdate data-updated="true">Mar 21<span>st</span>, 2010</time>
         
       </p>
     
@@ -128,7 +128,7 @@ config.macros.faviconLink.handler = function(place, macroName,  params, wikifier
 
   var args = paramString.parseParams(&quot;list&quot;,null,true);
   var link = getParam(args, &quot;link&quot;, 'false');
-  
+
   if (link != 'false'){
     urlParts = link.split('/');
     imgLink = urlParts[0] + &quot;//&quot; + urlParts[2] + &quot;/favicon.ico&quot;;
@@ -178,7 +178,7 @@ config.macros.faviconLink.handler = function(place, macroName,  params, wikifier
   text-align: center;
   font-weight: bold;
   font-size: 1.5em;
-  font-family: &quot;Gill Sans MT&quot;, &quot;Candara&quot;, &quot;Arial&quot;; 
+  font-family: &quot;Gill Sans MT&quot;, &quot;Candara&quot;, &quot;Arial&quot;;
   border: 2px solid [[ColorPalette::SecondaryLight]];
   background-color: [[ColorPalette::SecondaryPale]];
 }
@@ -250,7 +250,7 @@ config.macros.faviconLink.handler = function(place, macroName,  params, wikifier
   
 
 
-<time datetime="2010-03-21T20:54:00+06:00" pubdate data-updated="true">Mar 21<span>st</span>, 2010</time>
+<time datetime="2010-03-21T10:54:00-04:00" pubdate data-updated="true">Mar 21<span>st</span>, 2010</time>
       
 
 <span class="categories">
@@ -293,6 +293,10 @@ config.macros.faviconLink.handler = function(place, macroName,  params, wikifier
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/10/24/vagrant/">Автоматизируем работу с виртуальными машинами с помощью Vagrant</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/04/28/spring-data-jpa_28/">Собственная реализация методов в Spring Data JPA</a>
       </li>
     
@@ -306,10 +310,6 @@ config.macros.faviconLink.handler = function(place, macroName,  params, wikifier
     
       <li class="post">
         <a href="/blog/2012/04/20/blog-post/">Преобразуем строку в дату</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/02/23/jpa-spring-data-jpa/">Упрощаем работу с JPA при помощи Spring Data JPA</a>
       </li>
     
   </ul>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: testing | Блог о разработке ПО]]></title>
   <link href="http://uthark.github.com/blog/categories/testing/atom.xml" rel="self"/>
   <link href="http://uthark.github.com/"/>
-  <updated>2012-08-10T13:49:38+07:00</updated>
+  <updated>2012-10-24T18:09:56-04:00</updated>
   <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Создание больших объёмов тестовых данных с помощью Databene Benerator]]></title>
-    <link href="http://uthark.github.com/blog/2010/05/22/databene-benerator/"/>
-    <updated>2010-05-22T00:26:00+07:00</updated>
-    <id>http://uthark.github.com/blog/2010/05/22/databene-benerator</id>
+    <link href="http://uthark.github.com/blog/2010/05/21/databene-benerator/"/>
+    <updated>2010-05-21T13:26:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2010/05/21/databene-benerator</id>
     <content type="html"><![CDATA[<div class='post'>
 <p>Периодически необходимо решать задачу создания больших ( и не очень) объёмов тестовых данных для проведения различных видов тестирования - функционального, нагрузочного (тестирование стабильности и производительности). При этом часто получается так, что система на тестовых данных ведёт себя совсем иначе, чем на реальных данных. Причина кроется в том, что создать правдоподобные тестовые данные всегда достаточно сложно.</p>
 <p>Изучая данный вопрос я наткнулся на замечательный фреймворк - <a href="http://databene.org/databene-benerator">Databene Benerator</a>, основной целью создания которого как раз и является создание правдоподобных тестовых данных для проведения различных видов тестирования.</p>

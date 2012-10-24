@@ -4,7 +4,7 @@
   <title><![CDATA[Category: jpa | Блог о разработке ПО]]></title>
   <link href="http://uthark.github.com/blog/categories/jpa/atom.xml" rel="self"/>
   <link href="http://uthark.github.com/"/>
-  <updated>2012-08-10T13:49:38+07:00</updated>
+  <updated>2012-10-24T18:09:56-04:00</updated>
   <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Собственная реализация методов в Spring Data JPA]]></title>
     <link href="http://uthark.github.com/blog/2012/04/28/spring-data-jpa_28/"/>
-    <updated>2012-04-28T15:03:00+07:00</updated>
+    <updated>2012-04-28T04:03:00-04:00</updated>
     <id>http://uthark.github.com/blog/2012/04/28/spring-data-jpa_28</id>
     <content type="html"><![CDATA[<p>Очевидно, что мы не всегда можем воспользоваться автоматической генерацией кода, предоставляемой <a href="http://www.springsource.org/spring-data/jpa">Spring Data JPA</a>. Например, у нас слишком сложный запрос, или нам необходимо вызвать процедуру в базе данных, либо у нас сложная бизнес-логика.</p>
 

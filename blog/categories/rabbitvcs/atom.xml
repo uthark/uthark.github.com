@@ -4,7 +4,7 @@
   <title><![CDATA[Category: rabbitvcs | Блог о разработке ПО]]></title>
   <link href="http://uthark.github.com/blog/categories/rabbitvcs/atom.xml" rel="self"/>
   <link href="http://uthark.github.com/"/>
-  <updated>2012-08-10T13:49:38+07:00</updated>
+  <updated>2012-10-24T18:09:56-04:00</updated>
   <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[RabbitVCS - расширение для Nautilus для работы с Subversion]]></title>
-    <link href="http://uthark.github.com/blog/2009/12/06/nautilus-subversion/"/>
-    <updated>2009-12-06T01:03:00+06:00</updated>
-    <id>http://uthark.github.com/blog/2009/12/06/nautilus-subversion</id>
+    <link href="http://uthark.github.com/blog/2009/12/05/nautilus-subversion/"/>
+    <updated>2009-12-05T14:03:00-05:00</updated>
+    <id>http://uthark.github.com/blog/2009/12/05/nautilus-subversion</id>
     <content type="html"><![CDATA[<div class='post'>
 Раньше я использовал коллекцию скриптов <tt>nautilussvn</tt>, весьма неудобную в использовании.<br />
 <br />

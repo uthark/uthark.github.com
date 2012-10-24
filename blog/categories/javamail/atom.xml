@@ -4,7 +4,7 @@
   <title><![CDATA[Category: javamail | Блог о разработке ПО]]></title>
   <link href="http://uthark.github.com/blog/categories/javamail/atom.xml" rel="self"/>
   <link href="http://uthark.github.com/"/>
-  <updated>2012-08-10T13:49:38+07:00</updated>
+  <updated>2012-10-24T18:09:56-04:00</updated>
   <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Преобразуем строку в дату]]></title>
     <link href="http://uthark.github.com/blog/2012/04/20/blog-post/"/>
-    <updated>2012-04-20T15:25:00+07:00</updated>
+    <updated>2012-04-20T04:25:00-04:00</updated>
     <id>http://uthark.github.com/blog/2012/04/20/blog-post</id>
     <content type="html"><![CDATA[<p>Казалось бы, есть простейшая задача - преобразовать строковое представление даты в объект класса <tt>java.util.Date</tt>.</p>
 
