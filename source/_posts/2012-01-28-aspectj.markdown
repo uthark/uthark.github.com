@@ -7,7 +7,7 @@ categories:
  - разработка
 ---
 
-<div class='post'>
+
 Наверно, вы уже сталкивались с таким понятием, как AOП - <a href="http://en.wikipedia.org/wiki/Aspect-oriented_programming">аспектно-ориентированное программирование</a>.<br />
 <br />
 Обычно, про него вспоминают, когда говорят про <a href="http://static.springsource.org/spring/docs/current/reference/html/transaction.html#transaction-declarative-applying-more-than-just-tx-advice">декларативное использование транзакций</a>,  про <a href="https://docs.jboss.com/aop/1.0/aspect-library/reference/annotation15_security.html">проверку прав доступа</a>, либо про <a href="http://static.springsource.org/spring/docs/3.0.x/javadoc-api/org/springframework/aop/interceptor/CustomizableTraceInterceptor.html">реализацию журналирования</a>.<br />
@@ -179,5 +179,4 @@ public @interface SuppressExceptions {
 <div class='author'>Anonymous</div>
 <div class='content'>
 Добрый день, прочитал Вашу статью - интересно! =) На данный момент пытаюсь вникнуть в АОП в БД, но не совсем понимаю как можно реализовать аспекты при работе с БД (именно с точки зрения системы - код, компиляция и пр. т.к. теоретически все прозрачно и ясно). Не подскажите - где можно найти, для наглядности, простенькую БД с реализованным аспектами и хоть какое-то пояснение по реализованному &quot;проекту&quot; - на чем писали, как внедряли аспекты и пр. Мэйл для связи - utopia2005@yandex.ru</div>
-</div>
 </div>

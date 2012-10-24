@@ -9,14 +9,13 @@ categories:
  - spring data
 ---
 
-<div class='post'>
-Очевидно, что мы не всегда можем воспользоваться автоматической генерацией кода, предоставляемой Spring Data JPA. Например, у нас слишком сложный запрос, или нам необходимо вызвать процедуру в базе данных, либо у нас сложная бизнес-логика.
+Очевидно, что мы не всегда можем воспользоваться автоматической генерацией кода, предоставляемой [Spring Data JPA](http://www.springsource.org/spring-data/jpa). Например, у нас слишком сложный запрос, или нам необходимо вызвать процедуру в базе данных, либо у нас сложная бизнес-логика.
 
 Рассмотрим следующий пример - например, нам нужна функциональность уникального счётчика, который мы решили реализовать с помощью последовательности (sequence).
 
 Сначала определим интерфейс, в котором опишем все методы, которые мы будем реализовывать самостоятельно. В нашем случае, это будет только один метод:
 
-<pre class="brush:java">
+{% codeblock lang:java %}
 public interface UserRepositoryCustom {
     /**
      * Returns next unique id.
@@ -26,21 +25,21 @@ public interface UserRepositoryCustom {
     Integer getNextUniqueId();
 }
 
-</pre>
+{% endcodeblock %}
 
 Затем обновим объявление репозитория, чтобы он унаследовал новый интерфейс <tt>UserRepositoryCustom</tt>
 
-<pre class="brush:java">
+{% codeblock lang:java %}
 
-public interface UserRepository extends JpaRepository&lt;User, Integer&gt;, UserRepositoryCustom {
+public interface UserRepository extends JpaRepository<User, Integer>, UserRepositoryCustom {
    ...
 }
 
-</pre>
+{% endcodeblock %}
 
 Теперь напишем реализацию метода:
 
-<pre class="brush:java">
+{% codeblock lang:java %}
 public class UserRepositoryImpl implements UserRepositoryCustom {
 
     @PersistenceContext
@@ -52,7 +51,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         // When using Hibernate via JPA native queries fails with mapping exception, so just use Hibernate directly:
         Session session = (Session) entityManager.getDelegate();
         SQLQuery nativeQuery = session.createSQLQuery("SELECT \"nextval\"('unique_id_seq') ");
-        List&lt;BigInteger&gt; list = nativeQuery.list();
+        List<BigInteger> list = nativeQuery.list();
         if (list.isEmpty()) {
             throw new IncorrectResultSizeDataAccessException(1);
         }
@@ -62,18 +61,18 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         return result.intValue();
     }
 }
-</pre>
+{% endcodeblock %}
 
 И, наконец, укажем Spring Data JPA, чтобы в качестве класса для прокси использовался наш класс с реализацией собственных методов. Для этого нам нужна ещё одна секция <tt>repositories</tt> в конфигурационном файле:
 
-<pre class="brush:xml">
-    &lt;repositories base-package="[base.repository.package]"/&gt;
+{% codeblock lang:xml %}
+    <repositories base-package="[base.repository.package]"/>
 
-    &lt;repositories base-package="[base.repository.package]"&gt;
-        &lt;repository id="userRepository" custom-impl-ref="userRepositoryImpl"/&gt;
-    &lt;/repositories&gt;
+    <repositories base-package="[base.repository.package]">
+        <repository id="userRepository" custom-impl-ref="userRepositoryImpl"/>
+    </repositories>
 
-    &lt;beans:bean id="userRepositoryImpl" class="...UserRepositoryImpl"/&gt;
-</pre>
+    <beans:bean id="userRepositoryImpl" class="...UserRepositoryImpl"/>
+{% endcodeblock %}
 
-Вот и всё.</div>
+Вот и всё.

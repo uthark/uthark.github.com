@@ -32,7 +32,7 @@ config.macros.faviconLink.handler = function(place, macroName,  params, wikifier
 
   var args = paramString.parseParams(&quot;list&quot;,null,true);
   var link = getParam(args, &quot;link&quot;, 'false');
-  
+
   if (link != 'false'){
     urlParts = link.split('/');
     imgLink = urlParts[0] + &quot;//&quot; + urlParts[2] + &quot;/favicon.ico&quot;;
@@ -82,7 +82,7 @@ config.macros.faviconLink.handler = function(place, macroName,  params, wikifier
   text-align: center;
   font-weight: bold;
   font-size: 1.5em;
-  font-family: &quot;Gill Sans MT&quot;, &quot;Candara&quot;, &quot;Arial&quot;; 
+  font-family: &quot;Gill Sans MT&quot;, &quot;Candara&quot;, &quot;Arial&quot;;
   border: 2px solid [[ColorPalette::SecondaryLight]];
   background-color: [[ColorPalette::SecondaryPale]];
 }

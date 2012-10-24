@@ -4,7 +4,6 @@ title: "Ищем с помощью Spring Data JPA"
 date: 2012-04-24T14:04:00+07:00
 ---
 
-<div class='post'>
 Рассмотрим подробнее одну из наиболее полезных вещей в Spring Data JPA - генерация JPQL-запросов на основе имени метода.
 
 
@@ -12,9 +11,9 @@ Spring Data JPA умеет автоматически генерировать �
 
 Например, метод User.findByLoginAndPassword сгенерирует примерно следующий код:
 
-<pre class="brush:sql">
-    FROM User u where u.login = :login and password = :password
-</pre>
+{% codeblock lang:sql %}
+FROM User u where u.login = :login and password = :password
+{% endcodeblock %}
 
 Вообще Spring Data JPA пытается быть умным, поэтому реализация <tt>findBy{...}</tt> методов ищется следующим образом:
 
@@ -32,10 +31,10 @@ Spring Data JPA умеет автоматически генерировать �
 
 Очевидно, что при использовании запросов нам необходимо каким-то образом указывать параметры для запросов. Для этого есть аннотация <a href="http://static.springsource.org/spring-data/data-commons/docs/current/api/org/springframework/data/repository/query/Param.html">@Param</a>:
 
-<pre class="brush:java">
-    @Query("select u from User u where u.login = :login and u.password = :password")
-    Page&lt;User&gt; findByLoginAndPassword(@Param("login") String login, @Param("password") String password);
-</pre>
+{% codeblock lang:java %}
+@Query("select u from User u where u.login = :login and u.password = :password")
+Page<User> findByLoginAndPassword(@Param("login") String login, @Param("password") String password);
+{% endcodeblock %}
 
 Кроме того, Spring Data JPA поддерживает отличную <a href="http://www.martinfowler.com/apsupp/spec.pdf">концепцию спецификаций</a>.
 
@@ -43,53 +42,51 @@ Spring Data JPA умеет автоматически генерировать �
 
 Для поддержки спецификаций необходимо объявить метод в репозитории:
 
-<pre class="brush:java">
-    Page&lt;User&gt; findAll(Specification&lt;User&gt; spec, Pageable pageable);
-</pre>
+{% codeblock lang:java %}
+Page<User> findAll(Specification<User> spec, Pageable pageable);
+{% endcodeblock %}
 
 Спецификация по сути является фильтром и позволяет комбинирование фильтров, что даёт мощный инструмент для построения запросов.
 
 Пример использования спецификаций:
 
 Объявляем наши спецификации:
-<pre class="brush:java">
-        public static Specification&lt;User&gt; firstNameOrLastNameOrLoginLike(final String search) {
-            return new Specification&lt;User&gt;() {
-                @Override
-                public Predicate toPredicate(Root&lt;User&gt; root, CriteriaQuery&lt;?&gt; query, CriteriaBuilder builder) {
+{% codeblock lang:java %}
+public static Specification<User> firstNameOrLastNameOrLoginLike(final String search) {
+    return new Specification<User>() {
+        @Override
+        public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
 
-                    Predicate loginPredicate = builder.like(root.get(User_.login), search);
-                    Predicate firstnamePredicate = builder.like(root.get(User_.firstname), search);
-                    Predicate lastnamePredicate = builder.like(root.get(User_.lastname), search);
+            Predicate loginPredicate = builder.like(root.get(User_.login), search);
+            Predicate firstnamePredicate = builder.like(root.get(User_.firstname), search);
+            Predicate lastnamePredicate = builder.like(root.get(User_.lastname), search);
 
-                    return builder.or(loginPredicate, firstnamePredicate, lastnamePredicate);
-                }
-            };
+            return builder.or(loginPredicate, firstnamePredicate, lastnamePredicate);
         }
+    };
+}
 
-        public static Specification&lt;User&gt; hasRole(final Role role) {
-            return new Specification&lt;User&gt;() {
-                @Override
-                public Predicate toPredicate(Root&lt;User&gt; root, CriteriaQuery&lt;?&gt; query, CriteriaBuilder builder) {
-                    return builder.equal(root.get(User_.role), role);
-                }
-            };
+public static Specification<User> hasRole(final Role role) {
+    return new Specification<User>() {
+        @Override
+        public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
+            return builder.equal(root.get(User_.role), role);
         }
-</pre>
+    };
+}
+{% endcodeblock %}
 
 И в нашем сервисе комбинируем их:
 
-<pre class="brush:java">
+{% codeblock lang:java %}
+public Page<User> searchUser(Role role, String search, Pageable pageable) {
+    Specifications<User> mainSpec = where(hasRole(role));
 
-        public Page&lt;User&gt; searchUser(Role role, String search, Pageable pageable) {
-            Specifications&lt;User&gt; mainSpec = where(hasRole(role));
+    // уточняем запрос, если была передана строка для поиска
+    if (StringUtils.isNotBlank(search)) {
+        mainSpec = mainSpec.and(firstNameOrLastNameOrLoginLike(search));
+    } 
 
-            // уточняем запрос, если была передана строка для поиска
-            if (StringUtils.isNotBlank(search)) {
-                mainSpec = mainSpec.and(firstNameOrLastNameOrLoginLike(search));
-            } 
-
-            return userRepository.findAll(mainSpec, pageable);
-        }
-
-</pre></div>
+    return userRepository.findAll(mainSpec, pageable);
+}
+{% endcodeblock %}
