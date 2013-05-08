@@ -23,7 +23,7 @@ categories:
 <h4>Исходный код плагина</h4>
 <p>После длительного использования tiddlywiki в качестве домашней страницы я понял, что мне хочется, чтобы с каждой ссылкой была иконка сайта. Вручную вставлять картинки мне не хотелось, поэтому было решено написать собственный плагин.</p>
 <pre class="brush: jscript">
-/*{{{*/
+/*{&nbsp;{&nbsp;{*/
 version.extensions.faviconLinkMacro = {major: 0, minor: 1, revision: 0, date: new Date(2010,3,21)};
 // Author: Oleg Atamanenko
 config.macros.faviconLink = {}
@@ -53,7 +53,7 @@ config.macros.faviconLink.handler = function(place, macroName,  params, wikifier
   }
 }
 
-/*}}}*/
+/*}&nbsp;}&nbsp;}*/
 </pre>
 <h4> Установка плагина</h4>
 <ol><li>Создаём новый тиддлер, называем его faviconLinkMacro</li>
@@ -102,7 +102,7 @@ config.macros.faviconLink.handler = function(place, macroName,  params, wikifier
 <p> Данный CSS необходимо добавить в тиддлер с именем StyleSheet</p>
 <h4>Пример тиддлера со ссылками</h4>
 <pre class="brush: html">
-{{links{
+{&nbsp;{links{
 &lt;&lt;faviconLink link:'http://delicious.com/dark.schakal/2read' title:'2read'&gt;&gt; &lt;&lt;faviconLink link:'https://mail.google.com/mail' title:'mail'&gt;&gt; &lt;&lt;faviconLink link:'http://www.google.com/reader/view' title:'rss'&gt;&gt; &lt;&lt;faviconLink link:'http://atamanenko.blogspot.com/' title:'blog'&gt;&gt; &lt;&lt;faviconLink link:'http://feedburner.google.com/fb/a/myfeeds' title:'feedburner'&gt;&gt; &lt;&lt;faviconLink link:'https://www.google.com/analytics/settings/' title:'analytics'&gt;&gt; &lt;&lt;faviconLink link:'http://wave.google.com' title:'wave'&gt;&gt; &lt;&lt;faviconLink link:'http://www.blogger.com/home' title:'blogger'&gt;&gt; &lt;&lt;faviconLink link:'http://twitter.com/' title:'twitter'&gt;&gt; &lt;&lt;faviconLink link:'https://www.dropbox.com/home#/' title:'dropbox'&gt;&gt; &lt;&lt;faviconLink link:'http://translate.google.com/toolkit/' title:'translator'&gt;&gt; &lt;&lt;faviconLink link:'http://sibir.megafon.ru/sendsms/' title:'SendSMS'&gt;&gt;
 }}}
 </pre>
