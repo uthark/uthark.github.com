@@ -4,7 +4,7 @@
   <title><![CDATA[Category: automatization | Блог о разработке ПО]]></title>
   <link href="http://uthark.github.com/blog/categories/automatization/atom.xml" rel="self"/>
   <link href="http://uthark.github.com/"/>
-  <updated>2012-10-24T18:12:24-04:00</updated>
+  <updated>2013-05-07T23:30:16-04:00</updated>
   <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
@@ -20,7 +20,7 @@
     <id>http://uthark.github.com/blog/2012/10/24/vagrant</id>
     <content type="html"><![CDATA[<p>Современные enterprise проекты очень часто имеют очень сложную инфраструктуру для развёртывания. Кроме того, во время разработки часто используются виртуальные машины. Например, может использоваться несколько виртуальных машин, на которых развёрнуты различные конфигурации софта.</p>
 
-<p><a href="http://vagrantup.com/">Vagrant</a> - это средство для управления виртуальными машинами на базе <a href="https://www.virtualbox.org/">Virtualbox</a>.</p>
+<p><a href="http://vagrantup.com/">Vagrant</a> &ndash; это средство для управления виртуальными машинами на базе <a href="https://www.virtualbox.org/">Virtualbox</a>.</p>
 
 <h2>Возможности</h2>
 
@@ -210,21 +210,21 @@
 <span class='line-number'>104</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sr">/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="sr">&lt;h1&gt;-&lt;em&gt;- mode: ruby -&lt;/em</span><span class="o">&gt;-&lt;</span><span class="sr">/h1&gt;</span>
+</span><span class='line'><span class="sr">&lt;h1&gt;&amp;ndash;&lt;em&gt;&amp;ndash; mode: ruby &amp;ndash;&lt;/em</span><span class="o">&gt;&amp;</span><span class="n">ndash</span><span class="p">;</span><span class="o">&lt;</span><span class="sr">/h1&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="sr">&lt;h1&gt;vi: set ft=ruby :&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="no">Vagrant</span><span class="o">::</span><span class="no">Config</span><span class="o">.</span><span class="n">run</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="ss">Vagrant</span><span class="p">:</span><span class="ss">:Config</span><span class="o">.</span><span class="n">run</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
 </span><span class='line'>  <span class="c1"># All Vagrant configuration is done here. The most common configuration</span>
 </span><span class='line'>  <span class="c1"># options are documented and commented below. For a complete reference,</span>
 </span><span class='line'>  <span class="c1"># please see the online documentation at vagrantup.com.&lt;/p&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="c1"># Every Vagrant virtual environment requires a box to build off of.</span>
-</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span> <span class="o">=</span> <span class="s2">&quot;base&quot;</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">base</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;  # The url from where the &#39;config.vm.box&#39; box will be fetched if it</span>
-</span><span class='line'><span class="sr">  # doesn&#39;t already exist on the user&#39;s system.</span>
-</span><span class='line'><span class="sr">  # config.vm.box_url = &quot;http:/</span><span class="o">/</span><span class="n">domain</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">above</span><span class="o">.</span><span class="n">box</span><span class="s2">&quot;&lt;/p&gt;</span>
+</span><span class='line'><span class="sr">&lt;p&gt;  # The url from where the &amp;lsquo;config.vm.box&amp;rsquo; box will be fetched if it</span>
+</span><span class='line'><span class="sr">  # doesn&amp;rsquo;t already exist on the user&amp;rsquo;s system.</span>
+</span><span class='line'><span class="sr">  # config.vm.box_url = &amp;ldquo;&lt;a href=&quot;http:/</span><span class="o">/</span><span class="n">domain</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">above</span><span class="o">.</span><span class="n">box</span><span class="s2">&quot;&gt;http://domain.com/path/to/above.box&lt;/a&gt;&amp;rdquo;&lt;/p&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="s2">&lt;p&gt;  # Boot with a GUI so you can see the screen. (Default is headless)</span>
 </span><span class='line'><span class="s2">  # config.vm.boot_mode = :gui&lt;/p&gt;</span>
@@ -233,10 +233,10 @@
 </span><span class='line'><span class="s2">  # via the IP. Host-only networks can talk to the host machine as well as</span>
 </span><span class='line'><span class="s2">  # any other machines on the same network, but cannot be accessed (through this</span>
 </span><span class='line'><span class="s2">  # network interface) by any external networks.</span>
-</span><span class='line'><span class="s2">  # config.vm.network :hostonly, &quot;</span><span class="mi">192</span><span class="o">.</span><span class="mi">168</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">10</span><span class="s2">&quot;&lt;/p&gt;</span>
+</span><span class='line'><span class="s2">  # config.vm.network :hostonly, &amp;ldquo;192.168.33.10&amp;rdquo;&lt;/p&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="s2">&lt;p&gt;  # Assign this VM to a bridged network, allowing you to connect directly to a</span>
-</span><span class='line'><span class="s2">  # network using the host&#39;s network device. This makes the VM appear as another</span>
+</span><span class='line'><span class="s2">  # network using the host&amp;rsquo;s network device. This makes the VM appear as another</span>
 </span><span class='line'><span class="s2">  # physical device on your network.</span>
 </span><span class='line'><span class="s2">  # config.vm.network :bridged&lt;/p&gt;</span>
 </span><span class='line'>
@@ -247,7 +247,7 @@
 </span><span class='line'><span class="s2">&lt;p&gt;  # Share an additional folder to the guest VM. The first argument is</span>
 </span><span class='line'><span class="s2">  # an identifier, the second is the path on the guest to mount the</span>
 </span><span class='line'><span class="s2">  # folder, and the third is the path on the host to the actual folder.</span>
-</span><span class='line'><span class="s2">  # config.vm.share_folder &quot;</span><span class="n">v</span><span class="o">-</span><span class="n">data</span><span class="s2">&quot;, &quot;</span><span class="o">/</span><span class="n">vagrant_data</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">.</span><span class="o">/</span><span class="n">data</span><span class="s2">&quot;&lt;/p&gt;</span>
+</span><span class='line'><span class="s2">  # config.vm.share_folder &amp;ldquo;v-data&amp;rdquo;, &amp;ldquo;/vagrant_data&amp;rdquo;, &amp;ldquo;../data&amp;rdquo;&lt;/p&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="s2">&lt;p&gt;  # Enable provisioning with Puppet stand alone.  Puppet manifests</span>
 </span><span class='line'><span class="s2">  # are contained in a directory path relative to this Vagrantfile.</span>
@@ -256,62 +256,62 @@
 </span><span class='line'><span class="s2">  #</span>
 </span><span class='line'><span class="s2">  # An example Puppet manifest to provision the message of the day:</span>
 </span><span class='line'><span class="s2">  #</span>
-</span><span class='line'><span class="s2">  # # group { &quot;</span><span class="n">puppet</span><span class="s2">&quot;:</span>
-</span><span class='line'><span class="s2">  # #   ensure =&gt; &quot;</span><span class="n">present</span><span class="s2">&quot;,</span>
+</span><span class='line'><span class="s2">  # # group { &amp;ldquo;puppet&amp;rdquo;:</span>
+</span><span class='line'><span class="s2">  # #   ensure =&gt; &amp;ldquo;present&amp;rdquo;,</span>
 </span><span class='line'><span class="s2">  # # }</span>
 </span><span class='line'><span class="s2">  # #</span>
 </span><span class='line'><span class="s2">  # # File { owner =&gt; 0, group =&gt; 0, mode =&gt; 0644 }</span>
 </span><span class='line'><span class="s2">  # #</span>
-</span><span class='line'><span class="s2">  # # file { &#39;/etc/motd&#39;:</span>
-</span><span class='line'><span class="s2">  # #   content =&gt; &quot;</span><span class="no">Welcome</span> <span class="n">to</span> <span class="n">your</span> <span class="no">Vagrant</span><span class="o">-</span><span class="n">built</span> <span class="n">virtual</span> <span class="n">machine!</span>
-</span><span class='line'>  <span class="c1"># #               Managed by Puppet.\n&quot;</span>
-</span><span class='line'>  <span class="c1"># # }</span>
-</span><span class='line'>  <span class="c1">#</span>
-</span><span class='line'>  <span class="c1"># config.vm.provision :puppet do |puppet|</span>
-</span><span class='line'>  <span class="c1">#   puppet.manifests_path = &quot;manifests&quot;</span>
-</span><span class='line'>  <span class="c1">#   puppet.manifest_file  = &quot;base.pp&quot;</span>
-</span><span class='line'>  <span class="c1"># end&lt;/p&gt;</span>
+</span><span class='line'><span class="s2">  # # file { &amp;lsquo;/etc/motd&amp;rsquo;:</span>
+</span><span class='line'><span class="s2">  # #   content =&gt; &amp;ldquo;Welcome to your Vagrant-built virtual machine!</span>
+</span><span class='line'><span class="s2">  # #               Managed by Puppet.</span><span class="se">\n</span><span class="s2">&amp;rdquo;</span>
+</span><span class='line'><span class="s2">  # # }</span>
+</span><span class='line'><span class="s2">  #</span>
+</span><span class='line'><span class="s2">  # config.vm.provision :puppet do |puppet|</span>
+</span><span class='line'><span class="s2">  #   puppet.manifests_path = &amp;ldquo;manifests&amp;rdquo;</span>
+</span><span class='line'><span class="s2">  #   puppet.manifest_file  = &amp;ldquo;base.pp&amp;rdquo;</span>
+</span><span class='line'><span class="s2">  # end&lt;/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="c1"># Enable provisioning with chef solo, specifying a cookbooks path, roles</span>
-</span><span class='line'>  <span class="c1"># path, and data_bags path (all relative to this Vagrantfile), and adding</span>
-</span><span class='line'>  <span class="c1"># some recipes and/or roles.</span>
-</span><span class='line'>  <span class="c1">#</span>
-</span><span class='line'>  <span class="c1"># config.vm.provision :chef_solo do |chef|</span>
-</span><span class='line'>  <span class="c1">#   chef.cookbooks_path = &quot;../my-recipes/cookbooks&quot;</span>
-</span><span class='line'>  <span class="c1">#   chef.roles_path = &quot;../my-recipes/roles&quot;</span>
-</span><span class='line'>  <span class="c1">#   chef.data_bags_path = &quot;../my-recipes/data_bags&quot;</span>
-</span><span class='line'>  <span class="c1">#   chef.add_recipe &quot;mysql&quot;</span>
-</span><span class='line'>  <span class="c1">#   chef.add_role &quot;web&quot;</span>
-</span><span class='line'>  <span class="c1">#</span>
-</span><span class='line'>  <span class="c1">#   # You may also specify custom JSON attributes:</span>
-</span><span class='line'>  <span class="c1">#   chef.json = { :mysql_password =&gt; &quot;foo&quot; }</span>
-</span><span class='line'>  <span class="c1"># end&lt;/p&gt;</span>
+</span><span class='line'><span class="s2">&lt;p&gt;  # Enable provisioning with chef solo, specifying a cookbooks path, roles</span>
+</span><span class='line'><span class="s2">  # path, and data_bags path (all relative to this Vagrantfile), and adding</span>
+</span><span class='line'><span class="s2">  # some recipes and/or roles.</span>
+</span><span class='line'><span class="s2">  #</span>
+</span><span class='line'><span class="s2">  # config.vm.provision :chef_solo do |chef|</span>
+</span><span class='line'><span class="s2">  #   chef.cookbooks_path = &amp;ldquo;../my-recipes/cookbooks&amp;rdquo;</span>
+</span><span class='line'><span class="s2">  #   chef.roles_path = &amp;ldquo;../my-recipes/roles&amp;rdquo;</span>
+</span><span class='line'><span class="s2">  #   chef.data_bags_path = &amp;ldquo;../my-recipes/data_bags&amp;rdquo;</span>
+</span><span class='line'><span class="s2">  #   chef.add_recipe &amp;ldquo;mysql&amp;rdquo;</span>
+</span><span class='line'><span class="s2">  #   chef.add_role &amp;ldquo;web&amp;rdquo;</span>
+</span><span class='line'><span class="s2">  #</span>
+</span><span class='line'><span class="s2">  #   # You may also specify custom JSON attributes:</span>
+</span><span class='line'><span class="s2">  #   chef.json = { :mysql_password =&gt; &amp;ldquo;foo&amp;rdquo; }</span>
+</span><span class='line'><span class="s2">  # end&lt;/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="c1"># Enable provisioning with chef server, specifying the chef server URL,</span>
-</span><span class='line'>  <span class="c1"># and the path to the validation key (relative to this Vagrantfile).</span>
-</span><span class='line'>  <span class="c1">#</span>
-</span><span class='line'>  <span class="c1"># The Opscode Platform uses HTTPS. Substitute your organization for</span>
-</span><span class='line'>  <span class="c1"># ORGNAME in the URL and validation key.</span>
-</span><span class='line'>  <span class="c1">#</span>
-</span><span class='line'>  <span class="c1"># If you have your own Chef Server, use the appropriate URL, which may be</span>
-</span><span class='line'>  <span class="c1"># HTTP instead of HTTPS depending on your configuration. Also change the</span>
-</span><span class='line'>  <span class="c1"># validation key to validation.pem.</span>
-</span><span class='line'>  <span class="c1">#</span>
-</span><span class='line'>  <span class="c1"># config.vm.provision :chef_client do |chef|</span>
-</span><span class='line'>  <span class="c1">#   chef.chef_server_url = &quot;https://api.opscode.com/organizations/ORGNAME&quot;</span>
-</span><span class='line'>  <span class="c1">#   chef.validation_key_path = &quot;ORGNAME-validator.pem&quot;</span>
-</span><span class='line'>  <span class="c1"># end</span>
-</span><span class='line'>  <span class="c1">#</span>
-</span><span class='line'>  <span class="c1"># If you&#39;re using the Opscode platform, your validator client is</span>
-</span><span class='line'>  <span class="c1"># ORGNAME-validator, replacing ORGNAME with your organization name.</span>
-</span><span class='line'>  <span class="c1">#</span>
-</span><span class='line'>  <span class="c1"># IF you have your own Chef Server, the default validation client name is</span>
-</span><span class='line'>  <span class="c1"># chef-validator, unless you changed the configuration.</span>
-</span><span class='line'>  <span class="c1">#</span>
-</span><span class='line'>  <span class="c1">#   chef.validation_client_name = &quot;ORGNAME-validator&quot;</span>
-</span><span class='line'><span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'><span class="s2">&lt;p&gt;  # Enable provisioning with chef server, specifying the chef server URL,</span>
+</span><span class='line'><span class="s2">  # and the path to the validation key (relative to this Vagrantfile).</span>
+</span><span class='line'><span class="s2">  #</span>
+</span><span class='line'><span class="s2">  # The Opscode Platform uses HTTPS. Substitute your organization for</span>
+</span><span class='line'><span class="s2">  # ORGNAME in the URL and validation key.</span>
+</span><span class='line'><span class="s2">  #</span>
+</span><span class='line'><span class="s2">  # If you have your own Chef Server, use the appropriate URL, which may be</span>
+</span><span class='line'><span class="s2">  # HTTP instead of HTTPS depending on your configuration. Also change the</span>
+</span><span class='line'><span class="s2">  # validation key to validation.pem.</span>
+</span><span class='line'><span class="s2">  #</span>
+</span><span class='line'><span class="s2">  # config.vm.provision :chef_client do |chef|</span>
+</span><span class='line'><span class="s2">  #   chef.chef_server_url = &amp;ldquo;&lt;a href=&quot;</span><span class="ss">https</span><span class="p">:</span><span class="sr">//</span><span class="n">api</span><span class="o">.</span><span class="n">opscode</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">organizations</span><span class="o">/</span><span class="no">ORGNAME</span><span class="s2">&quot;&gt;https://api.opscode.com/organizations/ORGNAME&lt;/a&gt;&amp;rdquo;</span>
+</span><span class='line'><span class="s2">  #   chef.validation_key_path = &amp;ldquo;ORGNAME-validator.pem&amp;rdquo;</span>
+</span><span class='line'><span class="s2">  # end</span>
+</span><span class='line'><span class="s2">  #</span>
+</span><span class='line'><span class="s2">  # If you&amp;rsquo;re using the Opscode platform, your validator client is</span>
+</span><span class='line'><span class="s2">  # ORGNAME-validator, replacing ORGNAME with your organization name.</span>
+</span><span class='line'><span class="s2">  #</span>
+</span><span class='line'><span class="s2">  # IF you have your own Chef Server, the default validation client name is</span>
+</span><span class='line'><span class="s2">  # chef-validator, unless you changed the configuration.</span>
+</span><span class='line'><span class="s2">  #</span>
+</span><span class='line'><span class="s2">  #   chef.validation_client_name = &amp;ldquo;ORGNAME-validator&amp;rdquo;</span>
+</span><span class='line'><span class="s2">end&lt;/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;</span>
+</span><span class='line'><span class="s2">&lt;p&gt;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Подробнее о том, что этот файл может содержать можно почитать в <a href="http://vagrantup.com/v1/docs/vagrantfile.html">документации</a></p>
@@ -372,11 +372,11 @@
 <p>Список наиболее часто используемых действий:</p>
 
 <ul>
-<li><code>up</code> - поднимает виртуальную машину. Если она не была создана, то создаёт её, используя информацию из файла <code>Vagrantfile</code>.</li>
-<li><code>halt</code> - останавливает виртуальную машину.</li>
-<li><code>provision</code> - обновляет конфигурацию софта на виртуальной машине.</li>
-<li><code>reload</code> - перезагружает виртуальную машину.</li>
-<li><code>ssh</code> - запускает SSH-соединение к машине.</li>
+<li><code>up</code> &ndash; поднимает виртуальную машину. Если она не была создана, то создаёт её, используя информацию из файла <code>Vagrantfile</code>.</li>
+<li><code>halt</code> &ndash; останавливает виртуальную машину.</li>
+<li><code>provision</code> &ndash; обновляет конфигурацию софта на виртуальной машине.</li>
+<li><code>reload</code> &ndash; перезагружает виртуальную машину.</li>
+<li><code>ssh</code> &ndash; запускает SSH-соединение к машине.</li>
 </ul>
 
 

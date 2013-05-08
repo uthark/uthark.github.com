@@ -28,6 +28,7 @@
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link rel="author" href="https://plus.google.com/112372998073079463630/?rel=author" />
 
   
   <script type="text/javascript">
@@ -107,7 +108,7 @@
 
   <div class="entry-content"><p>Современные enterprise проекты очень часто имеют очень сложную инфраструктуру для развёртывания. Кроме того, во время разработки часто используются виртуальные машины. Например, может использоваться несколько виртуальных машин, на которых развёрнуты различные конфигурации софта.</p>
 
-<p><a href="http://vagrantup.com/">Vagrant</a> - это средство для управления виртуальными машинами на базе <a href="https://www.virtualbox.org/">Virtualbox</a>.</p>
+<p><a href="http://vagrantup.com/">Vagrant</a> &ndash; это средство для управления виртуальными машинами на базе <a href="https://www.virtualbox.org/">Virtualbox</a>.</p>
 
 <h2>Возможности</h2>
 
@@ -407,11 +408,11 @@
 <p>Список наиболее часто используемых действий:</p>
 
 <ul>
-<li><code>up</code> - поднимает виртуальную машину. Если она не была создана, то создаёт её, используя информацию из файла <code>Vagrantfile</code>.</li>
-<li><code>halt</code> - останавливает виртуальную машину.</li>
-<li><code>provision</code> - обновляет конфигурацию софта на виртуальной машине.</li>
-<li><code>reload</code> - перезагружает виртуальную машину.</li>
-<li><code>ssh</code> - запускает SSH-соединение к машине.</li>
+<li><code>up</code> &ndash; поднимает виртуальную машину. Если она не была создана, то создаёт её, используя информацию из файла <code>Vagrantfile</code>.</li>
+<li><code>halt</code> &ndash; останавливает виртуальную машину.</li>
+<li><code>provision</code> &ndash; обновляет конфигурацию софта на виртуальной машине.</li>
+<li><code>reload</code> &ndash; перезагружает виртуальную машину.</li>
+<li><code>ssh</code> &ndash; запускает SSH-соединение к машине.</li>
 </ul>
 
 
@@ -460,7 +461,7 @@
 
   <div class="entry-content"><p>Очевидно, что мы не всегда можем воспользоваться автоматической генерацией кода, предоставляемой <a href="http://www.springsource.org/spring-data/jpa">Spring Data JPA</a>. Например, у нас слишком сложный запрос, или нам необходимо вызвать процедуру в базе данных, либо у нас сложная бизнес-логика.</p>
 
-<p>Рассмотрим следующий пример - например, нам нужна функциональность уникального счётчика, который мы решили реализовать с помощью последовательности (sequence).</p>
+<p>Рассмотрим следующий пример &ndash; например, нам нужна функциональность уникального счётчика, который мы решили реализовать с помощью последовательности (sequence).</p>
 
 <p>Сначала определим интерфейс, в котором опишем все методы, которые мы будем реализовывать самостоятельно. В нашем случае, это будет только один метод:</p>
 
@@ -596,7 +597,7 @@
   </header>
 
 
-  <div class="entry-content"><p>Рассмотрим подробнее одну из наиболее полезных вещей в Spring Data JPA - генерация JPQL-запросов на основе имени метода.</p>
+  <div class="entry-content"><p>Рассмотрим подробнее одну из наиболее полезных вещей в Spring Data JPA &ndash; генерация JPQL-запросов на основе имени метода.</p>
 
 <p>Spring Data JPA умеет автоматически генерировать запросы используя для подсказки название метода.</p>
 
@@ -607,7 +608,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Вообще Spring Data JPA пытается быть умным, поэтому реализация <tt>findBy{&#8230;}</tt> методов ищется следующим образом:</p>
+<p>Вообще Spring Data JPA пытается быть умным, поэтому реализация <tt>findBy{&hellip;}</tt> методов ищется следующим образом:</p>
 
 <ol>
 <li>Сначала смотрится аннотация <a href="http://static.springsource.org/spring-data/data-jpa/docs/current/api/org/springframework/data/jpa/repository/Query.html">@Query</a> на объявлении метода, если она есть, то используется.</li>
@@ -889,9 +890,9 @@ public class LoggerPostProcessor implements BeanPostProcessor {
   </header>
 
 
-  <div class="entry-content"><p>Казалось бы, есть простейшая задача - преобразовать строковое представление даты в объект класса <tt>java.util.Date</tt>.</p>
+  <div class="entry-content"><p>Казалось бы, есть простейшая задача &ndash; преобразовать строковое представление даты в объект класса <tt>java.util.Date</tt>.</p>
 
-<p>Как оказалось, иногда использование DateFormat не помогает. В случае, если строка - это заголовок <tt>Date</tt> из письма, то нам нужно использовать <tt><a href="http://docs.oracle.com/javaee/5/api/javax/mail/internet/MailDateFormat.html">javax.mail.internet.MailDateFormat</a></tt> для преобразования такой строки.</p>
+<p>Как оказалось, иногда использование DateFormat не помогает. В случае, если строка &ndash; это заголовок <tt>Date</tt> из письма, то нам нужно использовать <tt><a href="http://docs.oracle.com/javaee/5/api/javax/mail/internet/MailDateFormat.html">javax.mail.internet.MailDateFormat</a></tt> для преобразования такой строки.</p>
 
 <figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -1521,7 +1522,7 @@ public class TestEntityServiceRest {
   </header>
 
 
-  <div class="entry-content"><p>Наверно, вы уже сталкивались с таким понятием, как AOП - <a href="http://en.wikipedia.org/wiki/Aspect-oriented_programming">аспектно-ориентированное программирование</a>.<br /></p>
+  <div class="entry-content"><p>Наверно, вы уже сталкивались с таким понятием, как AOП &ndash; <a href="http://en.wikipedia.org/wiki/Aspect-oriented_programming">аспектно-ориентированное программирование</a>.<br /></p>
 
 <br />
 
@@ -1553,7 +1554,7 @@ public class TestEntityServiceRest {
 <h4>Модификация исходного кода для реализации дополнительных возможностей</h4>
 
 
-<p>Предположим, что у нас есть модуль в приложении, который предоставляет нужную нам функциональность. С модулем всё в порядке, кроме одного - все его методы могут выбрасывать проверяемые исключения, что ведёт к ухудшению читаемости кода, так как вместо простого вызова метода:<br /></p>
+<p>Предположим, что у нас есть модуль в приложении, который предоставляет нужную нам функциональность. С модулем всё в порядке, кроме одного &ndash; все его методы могут выбрасывать проверяемые исключения, что ведёт к ухудшению читаемости кода, так как вместо простого вызова метода:<br /></p>
 
 <br />
 
@@ -1591,12 +1592,12 @@ public class TestEntityServiceRest {
 <h5>Вариант решения проблемы с использованием AOP</h5>
 
 
-<p>Решение данной проблемы было таким - а что, если используя возможности AOP трансформировать проверяемое исключение в непроверяемое? Таким образом, мы сможем избавиться от скучной проверки на исключения в нашем коде, а для обработки исключения (ведь мы всегда его будем обрабатывать одинаково) достаточно будет использовать обработку исключения на верхнем уровне абстракции.<br /></p>
+<p>Решение данной проблемы было таким &ndash; а что, если используя возможности AOP трансформировать проверяемое исключение в непроверяемое? Таким образом, мы сможем избавиться от скучной проверки на исключения в нашем коде, а для обработки исключения (ведь мы всегда его будем обрабатывать одинаково) достаточно будет использовать обработку исключения на верхнем уровне абстракции.<br /></p>
 
 <br />
 
 
-<p>Для более элегантного решения проблемы было решено добавить собственную аннотацию, которой нужно помечать метод, который использует сервис из &#8220;плохого&#8221; модуля.<br /></p>
+<p>Для более элегантного решения проблемы было решено добавить собственную аннотацию, которой нужно помечать метод, который использует сервис из &ldquo;плохого&rdquo; модуля.<br /></p>
 
 <br />
 
@@ -1638,7 +1639,7 @@ public @interface SuppressExceptions {
 <br />
 
 
-<p>Данный аспект делает в точности следующее: &#8220;Смягчает&#8221; исключение <tt>ServiceException</tt> для метода, который помечен аннотацией <tt>@SuppressExceptions</tt>.<br /></p>
+<p>Данный аспект делает в точности следующее: &ldquo;Смягчает&rdquo; исключение <tt>ServiceException</tt> для метода, который помечен аннотацией <tt>@SuppressExceptions</tt>.<br /></p>
 
 <br />
 
@@ -1765,16 +1766,16 @@ public @interface SuppressExceptions {
 <h2>Comments</h2>
 
 
-<div class='comments'>
+<p><div class='comments'>
 <div class='comment'>
 <div class='author'>Oleg Atamanenko</div>
 <div class='content'>
-Можно же купить электронную версию книги для Amazon Kindle - http://www.amazon.com/Awais-Rashid/e/B001HCXO76/ref=ntt_athr_dp_pel_pop_1</div>
+Можно же купить электронную версию книги для Amazon Kindle &ndash; <a href="http://www.amazon.com/Awais-Rashid/e/B001HCXO76/ref=ntt_athr_dp_pel_pop_1">http://www.amazon.com/Awais-Rashid/e/B001HCXO76/ref=ntt_athr_dp_pel_pop_1</a></div>
 </div>
 <div class='comment'>
 <div class='author'>Anonymous</div>
 <div class='content'>
-к сожалению не получается заказать книжку, везде один и тот же ответ - можно сделать на заказ, но скорее всего не получится и никто заморачиваться не хочет =(<br />может быть еще какие-то книжки посоветуете? пжжллааллууйййссттаааа! =)</div>
+к сожалению не получается заказать книжку, везде один и тот же ответ &ndash; можно сделать на заказ, но скорее всего не получится и никто заморачиваться не хочет =(<br />может быть еще какие-то книжки посоветуете? пжжллааллууйййссттаааа! =)</div>
 </div>
 <div class='comment'>
 <div class='author'>Oleg Atamanenko</div>
@@ -1789,29 +1790,28 @@ public @interface SuppressExceptions {
 <div class='comment'>
 <div class='author'>Anonymous</div>
 <div class='content'>
-Спасибо за ссылку, книжка именно то, что нужно, кое чего правда нет, но для начала самое то =) Если есть еще какие-то ссылки или книги, пожалуйста скиньте ссылки, ну или сами пособия, здесь или на почту (см. первый пост). А причина использования АОП - по данной тематике в дальнейшем предполагается написание научных работ и в случае, если данная методология применительно к БД действительно актуальна, то дальнейшее ее продвижение!</div>
+Спасибо за ссылку, книжка именно то, что нужно, кое чего правда нет, но для начала самое то =) Если есть еще какие-то ссылки или книги, пожалуйста скиньте ссылки, ну или сами пособия, здесь или на почту (см. первый пост). А причина использования АОП &ndash; по данной тематике в дальнейшем предполагается написание научных работ и в случае, если данная методология применительно к БД действительно актуальна, то дальнейшее ее продвижение!</div>
 </div>
 <div class='comment'>
 <div class='author'>Oleg Atamanenko</div>
 <div class='content'>
-Информации в сети достаточно, нужно лишь уметь искать. Навскидку - http://www.springer.com/computer/database+management+%26+information+retrieval/book/978-3-540-00948-1<br /><br />А вообще вопрос - для чего вам в БД АОП? Мне кажется, что у вас должны быть веские основания для этого. Ведь всё вышеперечисленное (журналирование, проверка прав доступа, защита информации) решается штатными средствами базы данных.</div>
+Информации в сети достаточно, нужно лишь уметь искать. Навскидку &ndash; <a href="http://www.springer.com/computer/database+management+%26+information+retrieval/book/978-3-540-00948-1">http://www.springer.com/computer/database+management+%26+information+retrieval/book/978-3-540-00948-1</a><br /><br />А вообще вопрос &ndash; для чего вам в БД АОП? Мне кажется, что у вас должны быть веские основания для этого. Ведь всё вышеперечисленное (журналирование, проверка прав доступа, защита информации) решается штатными средствами базы данных.</div>
 </div>
 <div class='comment'>
 <div class='author'>Anonymous</div>
 <div class='content'>
-интересует - журнализация, проверка прав доступа, защита информации. Если где-то, в самом простом виде, смогу найти пример, то будет ясно - как вообще реализовывать. Материалов, как русскоязычных, так и англоязычных, очень мало по данной тематике. Компиляторов и методов реализации/внедрения аспектов в БД вообще не смог найти. Теперь вот пытаюсь найти людей кто хоть как-то занимался данной проблемой и найти примеры/литературу.</div>
+интересует &ndash; журнализация, проверка прав доступа, защита информации. Если где-то, в самом простом виде, смогу найти пример, то будет ясно &ndash; как вообще реализовывать. Материалов, как русскоязычных, так и англоязычных, очень мало по данной тематике. Компиляторов и методов реализации/внедрения аспектов в БД вообще не смог найти. Теперь вот пытаюсь найти людей кто хоть как-то занимался данной проблемой и найти примеры/литературу.</div>
 </div>
 <div class='comment'>
 <div class='author'>Oleg Atamanenko</div>
 <div class='content'>
-Тут всё зависит от того, какие именно аспекты вас интересуют. Я, к сожалению, не могу показать вам готовое решение по причине NDA. Но могу сказать, что для полезные аспекты для БД - журналирование запросов, обработка исключений, мониторинг производительности и проверка прав доступа. Впрочем, тут тоже ничего нового.</div>
+Тут всё зависит от того, какие именно аспекты вас интересуют. Я, к сожалению, не могу показать вам готовое решение по причине NDA. Но могу сказать, что для полезные аспекты для БД &ndash; журналирование запросов, обработка исключений, мониторинг производительности и проверка прав доступа. Впрочем, тут тоже ничего нового.</div>
 </div>
 <div class='comment'>
 <div class='author'>Anonymous</div>
 <div class='content'>
-Добрый день, прочитал Вашу статью - интересно! =) На данный момент пытаюсь вникнуть в АОП в БД, но не совсем понимаю как можно реализовать аспекты при работе с БД (именно с точки зрения системы - код, компиляция и пр. т.к. теоретически все прозрачно и ясно). Не подскажите - где можно найти, для наглядности, простенькую БД с реализованным аспектами и хоть какое-то пояснение по реализованному &quot;проекту&quot; - на чем писали, как внедряли аспекты и пр. Мэйл для связи - utopia2005@yandex.ru</div>
-</div>
-
+Добрый день, прочитал Вашу статью &ndash; интересно! =) На данный момент пытаюсь вникнуть в АОП в БД, но не совсем понимаю как можно реализовать аспекты при работе с БД (именно с точки зрения системы &ndash; код, компиляция и пр. т.к. теоретически все прозрачно и ясно). Не подскажите &ndash; где можно найти, для наглядности, простенькую БД с реализованным аспектами и хоть какое-то пояснение по реализованному &quot;проекту&quot; &ndash; на чем писали, как внедряли аспекты и пр. Мэйл для связи &ndash; <a href="&#109;&#97;&#x69;&#108;&#x74;&#111;&#x3a;&#117;&#116;&#x6f;&#x70;&#x69;&#97;&#x32;&#x30;&#x30;&#53;&#64;&#x79;&#97;&#x6e;&#100;&#101;&#x78;&#x2e;&#x72;&#117;">&#117;&#116;&#x6f;&#112;&#105;&#97;&#50;&#48;&#x30;&#53;&#x40;&#x79;&#97;&#x6e;&#100;&#x65;&#x78;&#x2e;&#114;&#x75;</a></div>
+</div></p>
 </div>
   
   
@@ -2083,53 +2083,16 @@ String shortLink = bitly.shorten(link);
   </ul>
 </section>
 
-<section>
-  <h1>GitHub Repos</h1>
-  <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
-  </ul>
-  
-  <a href="https://github.com/uthark">@uthark</a> on GitHub
-  
-  <script type="text/javascript">
-    $.domReady(function(){
-        if (!window.jXHR){
-            var jxhr = document.createElement('script');
-            jxhr.type = 'text/javascript';
-            jxhr.src = '/javascripts/libs/jXHR.js';
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(jxhr, s);
-        }
 
-        github.showRepos({
-            user: 'uthark',
-            count: 0,
-            skip_forks: true,
-            target: '#gh_repos'
-        });
-    });
-  </script>
-  <script src="/javascripts/github.js" type="text/javascript"> </script>
+
+<section class="googleplus googleplus-hidden">
+  <h1>
+    <a href="https://plus.google.com/112372998073079463630?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
 </section>
-
-
-<section>
-  <h1>Latest Tweets</h1>
-  <ul id="tweets">
-    <li class="loading">Status updating&#8230;</li>
-  </ul>
-  <script type="text/javascript">
-    $.domReady(function(){
-      getTwitterFeed("uthark", 4, false);
-    });
-  </script>
-  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
-  
-    <a href="http://twitter.com/uthark" class="twitter-follow-button" data-show-count="false">Follow @uthark</a>
-  
-</section>
-
-
 
 
 
@@ -2139,7 +2102,7 @@ String shortLink = bitly.shorten(link);
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2012 - Oleg Atamanenko -
+  Copyright &copy; 2013 - Oleg Atamanenko -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
@@ -2147,6 +2110,15 @@ String shortLink = bitly.shorten(link);
   
 
 
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 
 
 

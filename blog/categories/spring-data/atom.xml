@@ -4,7 +4,7 @@
   <title><![CDATA[Category: spring data | Блог о разработке ПО]]></title>
   <link href="http://uthark.github.com/blog/categories/spring-data/atom.xml" rel="self"/>
   <link href="http://uthark.github.com/"/>
-  <updated>2012-10-24T18:12:24-04:00</updated>
+  <updated>2013-05-07T23:30:16-04:00</updated>
   <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
@@ -20,7 +20,7 @@
     <id>http://uthark.github.com/blog/2012/04/28/spring-data-jpa_28</id>
     <content type="html"><![CDATA[<p>Очевидно, что мы не всегда можем воспользоваться автоматической генерацией кода, предоставляемой <a href="http://www.springsource.org/spring-data/jpa">Spring Data JPA</a>. Например, у нас слишком сложный запрос, или нам необходимо вызвать процедуру в базе данных, либо у нас сложная бизнес-логика.</p>
 
-<p>Рассмотрим следующий пример - например, нам нужна функциональность уникального счётчика, который мы решили реализовать с помощью последовательности (sequence).</p>
+<p>Рассмотрим следующий пример &ndash; например, нам нужна функциональность уникального счётчика, который мы решили реализовать с помощью последовательности (sequence).</p>
 
 <p>Сначала определим интерфейс, в котором опишем все методы, которые мы будем реализовывать самостоятельно. В нашем случае, это будет только один метод:</p>
 
@@ -64,7 +64,7 @@
 </pre></td><td class='code'><pre><code class='java'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UserRepository</span> <span class="kd">extends</span> <span class="n">JpaRepository</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">User</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;,</span> <span class="n">UserRepositoryCustom</span> <span class="o">{</span>
-</span><span class='line'>   <span class="o">...</span>
+</span><span class='line'>   <span class="o">&amp;</span><span class="n">hellip</span><span class="o">;</span>
 </span><span class='line'><span class="o">}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
