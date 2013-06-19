@@ -9,7 +9,7 @@
   <meta name="author" content="Oleg Atamanenko">
 
   
-  <meta name="description" content="Сегодня была оказана помощь лягушкам, которых инстинкт гонит в озеро для размножения. Прогулка с ведром и фонарём, булькание лягушек в озере и их &hellip;">
+  <meta name="description" content="Так как использование блокировок по-разному влияет на производительность, необходимо выбирать, в каких случаях какой вид блокировок лучше &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -77,6 +77,94 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/04/26/blog-post_26/">Критерии выбора блокировок</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-04-26T04:30:00-04:00" pubdate data-updated="true">Apr 26<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+Так как использование блокировок по-разному влияет на производительность, необходимо выбирать, в каких случаях какой вид блокировок лучше использовать.
+
+<style type="text/css">.nobr br { display: none }</style>
+<div class="nobr">
+<table>
+
+<tbody><tr>
+<th>Условие</th>
+<th>Пессимистичная</th>
+<th>Оптимистичная</th>
+<th>Сверх-оптимистичная</th>
+</tr>
+<tr>
+<td>Конфликты часты
+</td>
+<td>+
+</td>
+<td>−
+</td>
+<td>−
+</td>
+</tr>
+<tr>
+<td>Конфликты редки
+</td>
+<td>−
+</td>
+<td>+
+</td>
+<td>−
+</td>
+</tr>
+<tr>
+<td>Данные только добавляются (например, журнал)
+</td>
+<td>−
+</td>
+<td>−
+</td>
+<td>+
+</td>
+</tr>
+<tr>
+<td>Данные только читаются (справочники)</td>
+<td>−</td>
+<td>−</td>
+<td>+</td>
+</tr></tbody>
+<caption>Критерии выбора блокировок</caption>
+</table>
+</div></div>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -566,44 +654,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/01/17/blog-post/">Велосезон открыт</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-01-17T12:40:00-05:00" pubdate data-updated="true">Jan 17<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div class='post'>
-Не дождался тепла и открыл велосезон в начале января. Прогулки на велосипеде по заснеженным тропкам - это незабываемый экстрим и повышение уровня адреналина в крови.</div>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/6/">&larr; Older</a>
@@ -621,6 +671,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/06/19/custom-bean-validator/">Пишем собственный валидатор для Bean Validation API</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/06/19/validation/">Валидация входных параметров с использованием Spring</a>
       </li>
     
@@ -634,10 +688,6 @@
     
       <li class="post">
         <a href="/blog/2012/04/24/spring-data-jpa/">Ищем с помощью Spring Data JPA</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/04/20/beanpostprocessor/">Использование BeanPostProcessor на примере журналирования</a>
       </li>
     
   </ul>

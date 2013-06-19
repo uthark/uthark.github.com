@@ -9,7 +9,8 @@
   <meta name="author" content="Oleg Atamanenko">
 
   
-  <meta name="description" content="ВступлениеВстала передо мной задача - сокращать ссылки перед тем, как отправлять их в Twitter. Для решения этой задачи я решил использовать bit.ly, &hellip;">
+  <meta name="description" content="Сегодня я хочу рассмотреть некоторые особенности переопределения методов в Java. В java нельзя переопределить: поля класса
+конструкторы, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -77,6 +78,92 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/07/21/java/">Немного о виртуальных методах в Java</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-07-21T01:06:00-04:00" pubdate data-updated="true">Jul 21<span>st</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+Сегодня я хочу рассмотреть некоторые особенности переопределения методов в Java.  В java нельзя переопределить:   <br />
+<ul><li>поля класса</li>
+<li>конструкторы, инициализаторы класса</li>
+<li>статические методы</li>
+<li>статические поля</li>
+</ul><br />
+Подробнее об этом можно прочитать в <a href="http://java.sun.com/docs/books/jls/third_edition/html/classes.html#228745">Java Language Specification, §8.4.8</a><br />
+<br />
+Итак, в java все нестатические неприватные (то есть, <tt>protected</tt>, <tt>package</tt> и <tt>public</tt>) методы являются виртуальными. Ключевое слово <tt>final</tt> запрещает возможность дальнейшего переопределения метода в подклассах.  Рассмотрим следующий пример:  <br />
+<br />
+<pre class="brush: java">public class A {
+     int i = 3;
+     int getI() {return i;}
+}
+
+public class B extends A{
+     int i = 5;
+     int getI() {return i;}
+}
+
+A a = new B();
+System.out.println(a.i);
+System.out.println(a.getI());
+
+</pre><br />
+Вопрос: что выведет данный код?<br />
+Ответ: <br />
+1. Так как поля класса не наследуются, то у класса A своё поле i и у класса B тоже своё поле i. Так как для полей полиморфизм не действует, то при обращении a.i мы обращаемся к классу A, поэтому на экран будет выведено 3.<br />
+2. При вызове метода a.getI() у нас в дело вступает полиморфизм, поэтому будет вызван метод от класса, инстанс которого был создан. Соответственно, мы получим на выходе 5.<br />
+<br />
+<br />
+Другой пример:<br />
+<br />
+<pre class="brush: java">public class A {
+     static int i = 3;
+     static int getI() {return i;} 
+}
+
+public class B extends A{
+     static int i = 5;
+     static int getI() {return i;}
+}
+
+A a = new B();
+System.out.println(a.i);
+System.out.println(a.getI());
+
+</pre><br />
+Статические поля и методы виртуальными не являются, поэтому оба вызова выведут нам 3.</div>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1198,72 +1285,6 @@ This comment has been removed by the author.</div>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/14/autofs-nfs/">Настройка Autofs для монтирования NFS-ресурсов</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-14T12:14:00-05:00" pubdate data-updated="true">Dec 14<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div class='post'>
-Summary: В данной заметке описана настройка autofs для доступа к сетевым ресурсам, доступным по NFS.<br />
-<br />
-Последние несколько лет (с тех пор, как количество компьютеров дома стало больше одного) возникла проблема беспрепятственного доступа к данным, хранящимся на одном компьютере с другого.<br />
-<br />
-Было найдено самое простое решение - <a href="http://en.wikipedia.org/wiki/Network_File_System_(protocol)">NFS</a>.<br />
-<br />
-Как выяснилось позже это было не самое удачное решение - ноутбук не всегда находился дома, а, значит, домашние сетевые ресурсы не всегда доступны. Соответственно, при загрузке операционной системы происходили задержки из-за поиска компьютера с сетевыми ресурсами. Не очень удобно, но жить можно.<br />
-<br />
-Решил окончательно разобраться с этим и начал искать решение. Оно оказалось на поверхности и затронуло только клиента ресурсов, то есть ноутбук. Решение называется <tt><a href="http://www.autofs.org/">autofs</a></tt>.<br />
-<br />
-1. Устанавливаем <tt>autofs</tt>.<br />
-<pre class="brush: bash">sudo aptitude install autofs5 nfs-common
-</pre><br />
-2. Производим настройку.<br />
-Редактируем файл <tt>/etc/auto.master</tt>. Расскомментируем строку, содержащую строки <tt>/net -hosts</tt>:<br />
-<pre class="brush: bash">/net -hosts
-+auto.master
-</pre><br />
-3. В файл <tt><a href="http://en.wikipedia.org/wiki/Hosts_file">/etc/hosts</a></tt> можно внести адреса серверов с NFS-ресурсами (для того, чтобы избежать <a href="http://en.wikipedia.org/wiki/Domain_Name_System">DNS</a>-запросов). В моём случае:<br />
-<pre class="brush: plain">192.168.18.1 server
-</pre><br />
-4. Перезапускаем сервис <tt>autofs</tt><br />
-<pre class="brush: plain">sudo service autofs restart
-</pre><br />
-5. Теперь открываем в файловом браузер адрес <tt>/net/server</tt> и видим его сетевые ресурсы, доступные для данного клиента.<br />
-<br />
-<div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/_y8p0_dtMJ38/SyZxDikTDxI/AAAAAAAAAvk/LTr3KsGATGk/s1600-h/Screenshot-media+-+administrilo+de+dosieroj.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/_y8p0_dtMJ38/SyZxDikTDxI/AAAAAAAAAvk/LTr3KsGATGk/s320/Screenshot-media+-+administrilo+de+dosieroj.png" /></a><br />
-</div><br />
-6. Пользуемся.</div>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -1281,6 +1302,10 @@ Summary: В данной заметке описана настройка autofs
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/06/19/custom-bean-validator/">Пишем собственный валидатор для Bean Validation API</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/06/19/validation/">Валидация входных параметров с использованием Spring</a>
       </li>
     
@@ -1294,10 +1319,6 @@ Summary: В данной заметке описана настройка autofs
     
       <li class="post">
         <a href="/blog/2012/04/24/spring-data-jpa/">Ищем с помощью Spring Data JPA</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/04/20/beanpostprocessor/">Использование BeanPostProcessor на примере журналирования</a>
       </li>
     
   </ul>
