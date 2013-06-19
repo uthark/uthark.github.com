@@ -4,7 +4,7 @@
   <title><![CDATA[Блог о разработке ПО]]></title>
   <link href="http://uthark.github.com/atom.xml" rel="self"/>
   <link href="http://uthark.github.com/"/>
-  <updated>2013-05-07T23:30:16-04:00</updated>
+  <updated>2013-06-19T00:24:09-04:00</updated>
   <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
@@ -12,6 +12,168 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Валидация входных параметров с использованием Spring]]></title>
+    <link href="http://uthark.github.com/blog/2013/06/19/validation/"/>
+    <updated>2013-06-19T07:00:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2013/06/19/validation</id>
+    <content type="html"><![CDATA[<p>Очень часто возникает задача проверки входных параметров в сервис на корректность с точки зрения бизнес логики.</p>
+
+<p>Эту задачу можно решить в лоб, написав вручную код валидации в каждом из методов сервиса, например, вот так:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'>  <span class="kd">public</span> <span class="n">User</span> <span class="nf">save</span><span class="o">(</span><span class="n">User</span> <span class="n">user</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">if</span><span class="o">(</span><span class="n">user</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">(</span><span class="s">&quot;User is null&quot;</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>    <span class="c1">// other checks</span>
+</span><span class='line'>    <span class="c1">//...</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// business logic starts here...</span>
+</span><span class='line'>    <span class="c1">//...</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">savedUser</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Очевидно, что если в каждом методе делать такие проверки, то код бизнес-логики загрязняется проверками, что ухудшает читаемость кода. Решить эту проблему можно следующим образом:</p>
+
+<ol>
+<li>Добавляем аннотации для валидации входных параметров.</li>
+</ol>
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'>  <span class="kd">public</span> <span class="nd">@NotNull</span> <span class="n">User</span> <span class="n">save</span><span class="o">(</span><span class="nd">@NotNull</span> <span class="n">User</span> <span class="n">user</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="c1">// business logic starts here...</span>
+</span><span class='line'>    <span class="c1">//...</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">savedUser</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Чтобы заставить этот код работать, мы будем использовать возможности Spring Validation.</p>
+
+<ol>
+<li>Spring предоставляет аннотацию <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/validation/annotation/Validated.html">@Validated</a>, которая в отличие от <a href="http://docs.oracle.com/javaee/7/api/javax/validation/Valid.html">@javax.validation.Valid</a> позволяет определять группу валидации.</li>
+<li>Этой аннотацией необходимо проаннотировать бин, методы которого необходимо валидировать.</li>
+</ol>
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'>    <span class="nd">@Validated</span>
+</span><span class='line'>    <span class="nd">@Service</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserService</span> <span class="o">{</span>
+</span><span class='line'>        <span class="kd">public</span> <span class="nd">@NotNull</span> <span class="n">User</span> <span class="n">save</span><span class="o">(</span><span class="nd">@NotNull</span> <span class="n">User</span> <span class="n">user</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="c1">// business logic starts here...</span>
+</span><span class='line'>            <span class="c1">//...</span>
+</span><span class='line'>            <span class="k">return</span> <span class="n">savedUser</span><span class="o">;</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>    <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>Для реализации самой валидации нам необходим валидатор. В качестве реализации <a href="http://jcp.org/en/jsr/detail?id=303">JSR-303</a> можно использовать, например, <a href="http://www.hibernate.org/subprojects/validator.html">Hibernate Validator</a>. Для этого в <code>pom.xml</code> необходимо добавить требуемые зависимости:</li>
+</ol>
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'>    <span class="nt">&lt;dependency&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;groupId&gt;</span>javax.validation<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;artifactId&gt;</span>validation-api<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;version&gt;</span>1.0.0.GA<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/dependency&gt;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nt">&lt;dependency&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;groupId&gt;</span>org.hibernate<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;artifactId&gt;</span>hibernate-validator<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;version&gt;</span>4.3.1.Final<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/dependency&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Обращаю внимание, что текущей на данный момент является <a href="http://beanvalidation.org/1.1/spec">спецификация</a> <a href="http://jcp.org/en/jsr/detail?id=349">JSR-349 Bean Validation 1.1</a>, которая поддерживает валидацию методов из коробки, но текущая версия Spring 3.2 &ndash; не поддерживает новый API, поэтому необходимо использовать старую версию API, и, соответственно, реализацию. Релевантный баг в Spring <a href="https://jira.springsource.org/browse/SPR-8199">SPR-8199</a>, поддержка нового API ожидается в Spring Framework 4.0.</p>
+
+<ol>
+<li>Необходимо объявить необходимые бины в конфигурации Spring:</li>
+</ol>
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'>    <span class="nd">@Bean</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="n">LocalValidatorFactoryBean</span> <span class="nf">validatorFactory</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">LocalValidatorFactoryBean</span> <span class="n">factoryBean</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LocalValidatorFactoryBean</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">factoryBean</span><span class="o">.</span><span class="na">afterPropertiesSet</span><span class="o">();</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">factoryBean</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Bean</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="n">Validator</span> <span class="nf">validator</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nf">validatorFactory</span><span class="o">().</span><span class="na">getValidator</span><span class="o">();</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Bean</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="n">MethodValidationPostProcessor</span> <span class="nf">methodValidationPostProcessor</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="k">new</span> <span class="nf">MethodValidationPostProcessor</span><span class="o">();</span>
+</span><span class='line'>    <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>На этом всё. Как видно, декларативная валидация входных параметров реализуется очень просто.</li>
+</ol>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Автоматизируем работу с виртуальными машинами с помощью Vagrant]]></title>
@@ -1533,7 +1695,7 @@ public @interface SuppressExceptions {
 <div class='comment'>
 <div class='author'>Anonymous</div>
 <div class='content'>
-Добрый день, прочитал Вашу статью &ndash; интересно! =) На данный момент пытаюсь вникнуть в АОП в БД, но не совсем понимаю как можно реализовать аспекты при работе с БД (именно с точки зрения системы &ndash; код, компиляция и пр. т.к. теоретически все прозрачно и ясно). Не подскажите &ndash; где можно найти, для наглядности, простенькую БД с реализованным аспектами и хоть какое-то пояснение по реализованному &quot;проекту&quot; &ndash; на чем писали, как внедряли аспекты и пр. Мэйл для связи &ndash; <a href="&#109;&#97;&#x69;&#108;&#x74;&#111;&#x3a;&#117;&#116;&#x6f;&#x70;&#x69;&#97;&#x32;&#x30;&#x30;&#53;&#64;&#x79;&#97;&#x6e;&#100;&#101;&#x78;&#x2e;&#x72;&#117;">&#117;&#116;&#x6f;&#112;&#105;&#97;&#50;&#48;&#x30;&#53;&#x40;&#x79;&#97;&#x6e;&#100;&#x65;&#x78;&#x2e;&#114;&#x75;</a></div>
+Добрый день, прочитал Вашу статью &ndash; интересно! =) На данный момент пытаюсь вникнуть в АОП в БД, но не совсем понимаю как можно реализовать аспекты при работе с БД (именно с точки зрения системы &ndash; код, компиляция и пр. т.к. теоретически все прозрачно и ясно). Не подскажите &ndash; где можно найти, для наглядности, простенькую БД с реализованным аспектами и хоть какое-то пояснение по реализованному &quot;проекту&quot; &ndash; на чем писали, как внедряли аспекты и пр. Мэйл для связи &ndash; <a href="&#109;&#97;&#105;&#x6c;&#116;&#111;&#58;&#117;&#116;&#111;&#x70;&#105;&#97;&#x32;&#x30;&#48;&#x35;&#64;&#121;&#97;&#110;&#100;&#x65;&#120;&#x2e;&#x72;&#117;">&#x75;&#116;&#111;&#112;&#x69;&#97;&#50;&#48;&#48;&#53;&#x40;&#121;&#x61;&#x6e;&#100;&#x65;&#120;&#x2e;&#114;&#117;</a></div>
 </div></p>
 ]]></content>
   </entry>
@@ -2509,21 +2671,6 @@ Summary: В данной заметке описана настройка autofs
 <div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/_y8p0_dtMJ38/SyZxDikTDxI/AAAAAAAAAvk/LTr3KsGATGk/s1600-h/Screenshot-media+-+administrilo+de+dosieroj.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/_y8p0_dtMJ38/SyZxDikTDxI/AAAAAAAAAvk/LTr3KsGATGk/s320/Screenshot-media+-+administrilo+de+dosieroj.png" /></a><br />
 </div><br />
 6. Пользуемся.</div>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Расширение для работы с Delicious доступно на сайте расширений Google Chrome]]></title>
-    <link href="http://uthark.github.com/blog/2009/12/08/delicious-google-chrome/"/>
-    <updated>2009-12-08T12:43:00-05:00</updated>
-    <id>http://uthark.github.com/blog/2009/12/08/delicious-google-chrome</id>
-    <content type="html"><![CDATA[<div class='post'>
-Итак, <a href="code.google.com/p/chromium-delicious-extension/">расширение для работы с Delicious</a> доступно на <a href="https://chrome.google.com/extensions">сайте расширений Google Chrome</a>.<br />
-<br />
-<a href="https://chrome.google.com/extensions/detail/anlkjppofaicbdanhhpbbogknfodfhfm/">Посмотреть и установить</a><br />
-<br />
-Новые версии расширения буду закачить на этот сайт.</div>
 
 ]]></content>
   </entry>

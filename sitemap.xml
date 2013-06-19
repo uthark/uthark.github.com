@@ -198,7 +198,7 @@
     </url>
     <url>
         <loc>http://uthark.github.com/blog/2012/01/27/aspectj/</loc>
-        <lastmod>2013-05-07T23:26:51-04:00</lastmod>
+        <lastmod>2013-06-19T00:25:12-04:00</lastmod>
     </url>
     <url>
         <loc>http://uthark.github.com/blog/2012/02/08/java-rest/</loc>
@@ -229,11 +229,15 @@
         <lastmod>2013-05-07T23:26:51-04:00</lastmod>
     </url>
     <url>
+        <loc>http://uthark.github.com/blog/2013/06/19/validation/</loc>
+        <lastmod>2013-06-19T00:24:04-04:00</lastmod>
+    </url>
+    <url>
         <loc>http://uthark.github.com/blog/archives/</loc>
-        <lastmod>2013-05-07T23:28:59-04:00</lastmod>
+        <lastmod>2013-06-19T00:25:12-04:00</lastmod>
     </url>
     <url>
         <loc>http://uthark.github.com/</loc>
-        <lastmod>2013-05-07T23:18:08-04:00</lastmod>
+        <lastmod>2013-06-19T00:25:12-04:00</lastmod>
     </url>
 </urlset>

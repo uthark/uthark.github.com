@@ -9,7 +9,7 @@
   <meta name="author" content="Oleg Atamanenko">
 
   
-  <meta name="description" content="Возникла проблема - каким образом заменить в строке символы из национальных кодировок на соответствующие им из латиницы.Например, из строки &hellip;">
+  <meta name="description" content="ВступлениеВстала передо мной задача - сокращать ссылки перед тем, как отправлять их в Twitter. Для решения этой задачи я решил использовать bit.ly, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -77,6 +77,147 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/12/06/blog-post/">Сокращаем ссылки на андроиде</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-12-06T12:11:00-05:00" pubdate data-updated="true">Dec 6<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+<h5>Вступление</h5>Встала передо мной задача - сокращать ссылки перед тем, как отправлять их в Twitter. Для решения этой задачи я решил использовать <a href="http://bit.ly">bit.ly</a>, благо, их API внятный и простой.  <h5>Программируем!</h5>Решение нарисовалось в виде следующего класса:  <br />
+<pre class="brush: java">
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URIUtils;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.util.Log;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+
+
+/**
+ * Helper class to work with bitly.
+ *
+ * @author Oleg Atamanenko
+ * @since 06-Dec-2010 12:49:36
+ */
+public class Bitly {
+
+    private static final String TAG = "Bitly";
+
+    private static final String SHORTEN = "/v3/shorten";
+    private static final String API_URL = "api.bit.ly";
+    private static final String RESPONSE_FORMAT = "json";
+
+    private String username;
+    private String apiKey;
+
+
+    public Bitly(String username, String apiKey) {
+        this.username = username;
+        this.apiKey = apiKey;
+    }
+
+    public String shorten(String longUrl) throws BitlyException {
+        DefaultHttpClient httpClient = new DefaultHttpClient();
+
+        try {
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            params.add(new BasicNameValuePair("login", username));
+            params.add(new BasicNameValuePair("apiKey", apiKey));
+            params.add(new BasicNameValuePair("longUrl", longUrl));
+            params.add(new BasicNameValuePair("format", RESPONSE_FORMAT));
+
+
+            URI uri = URIUtils.createURI("http", API_URL, -1, SHORTEN, URLEncodedUtils.format(params, "UTF-8"), null);
+            HttpGet request = new HttpGet(uri);
+
+            Log.d(TAG, "Sending request: " + request.getURI());
+
+            HttpResponse httpResponse = httpClient.execute(request);
+
+            HttpEntity httpEntity = httpResponse.getEntity();
+            String response = EntityUtils.toString(httpEntity);
+            Log.i(TAG, "Bitly response is: " + response);
+            httpResponse.getEntity().consumeContent();
+
+            JSONObject jsonResponse = new JSONObject(response);
+
+            checkForExceptions(jsonResponse);
+
+            JSONObject data = jsonResponse.getJSONObject("data");
+            return data.getString("url");
+
+        } catch (ClientProtocolException e) {
+            throw new BitlyException(e);
+        } catch (IOException e) {
+            throw new BitlyException(e);
+        } catch (JSONException e) {
+            throw new BitlyException(e);
+        } catch (URISyntaxException e) {
+            throw new BitlyException(e);
+        }
+    }
+
+    private void checkForExceptions(JSONObject jsonResponse) throws JSONException, BitlyException {
+        int statusCode = jsonResponse.getInt("status_code");
+        if (statusCode != 200) {
+            String message = jsonResponse.getString("status_txt");
+            throw new BitlyException(message);
+        }
+    }
+
+}
+</pre>  Конструктор класс принимает на вход следующие параметры: <ul><li><code>userName</code> - имя пользователя bit.ly.</li>
+<li><code>apiKey</code> - Ключ для доступа к API, его можно узнать на <a href="https://bit.ly/a/your_api_key">специальной страничке</a></li>
+</ul><a href="https://code.google.com/p/bitly-api/wiki/ApiDocumentation">Полная документация к Bit.ly API</a> расположена на отдельном проекте в Google Code  <h5>Использование</h5>Единственный метод, реализованный сейчас - это метод <code>shorten()</code>. На вход требуется подать полную ссылку <code>longUrl</code>, на выходе получается укороченная версия ссылки, либо кидается исключение с сообщением от bit.ly API.   <h6>Пример вызова</h6><pre class="brush: java">
+Bitly bitly = new Bitly(BITLY_USERNAME, BITLY_API_KEY);
+String shortLink = bitly.shorten(link);
+</pre><br />
+  <h6>Дальнейшие улучшения</h6>Если перед вами стоит задача быстренько сократить ссылку - то вышеприведённого кода достаточно. Но если вам нужно полноценное решение, со всеми возможностями bit.ly - то посмотрите в сторону <a href="https://code.google.com/p/bitlyj/">bitlyj</a>. Правда, я не уверен, что оно взведётся под андроидом.</div>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1123,48 +1264,6 @@ Summary: В данной заметке описана настройка autofs
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/08/delicious-google-chrome/">Расширение для работы с Delicious доступно на сайте расширений Google Chrome</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-08T12:43:00-05:00" pubdate data-updated="true">Dec 8<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div class='post'>
-Итак, <a href="code.google.com/p/chromium-delicious-extension/">расширение для работы с Delicious</a> доступно на <a href="https://chrome.google.com/extensions">сайте расширений Google Chrome</a>.<br />
-<br />
-<a href="https://chrome.google.com/extensions/detail/anlkjppofaicbdanhhpbbogknfodfhfm/">Посмотреть и установить</a><br />
-<br />
-Новые версии расширения буду закачить на этот сайт.</div>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -1182,6 +1281,10 @@ Summary: В данной заметке описана настройка autofs
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/06/19/validation/">Валидация входных параметров с использованием Spring</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/10/24/vagrant/">Автоматизируем работу с виртуальными машинами с помощью Vagrant</a>
       </li>
     
@@ -1195,10 +1298,6 @@ Summary: В данной заметке описана настройка autofs
     
       <li class="post">
         <a href="/blog/2012/04/20/beanpostprocessor/">Использование BeanPostProcessor на примере журналирования</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/04/20/blog-post/">Преобразуем строку в дату</a>
       </li>
     
   </ul>

@@ -9,7 +9,7 @@
   <meta name="author" content="Oleg Atamanenko">
 
   
-  <meta name="description" content="Современные enterprise проекты очень часто имеют очень сложную инфраструктуру для развёртывания. Кроме того, во время разработки часто используются &hellip;">
+  <meta name="description" content="Очень часто возникает задача проверки входных параметров в сервис на корректность с точки зрения бизнес логики. Эту задачу можно решить в лоб, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -77,6 +77,195 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/06/19/validation/">Валидация входных параметров с использованием Spring</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-19T07:00:00-04:00" pubdate data-updated="true">Jun 19<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Очень часто возникает задача проверки входных параметров в сервис на корректность с точки зрения бизнес логики.</p>
+
+<p>Эту задачу можно решить в лоб, написав вручную код валидации в каждом из методов сервиса, например, вот так:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'>  <span class="kd">public</span> <span class="n">User</span> <span class="nf">save</span><span class="o">(</span><span class="n">User</span> <span class="n">user</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">if</span><span class="o">(</span><span class="n">user</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">(</span><span class="s">&quot;User is null&quot;</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>    <span class="c1">// other checks</span>
+</span><span class='line'>    <span class="c1">//...</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// business logic starts here...</span>
+</span><span class='line'>    <span class="c1">//...</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">savedUser</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Очевидно, что если в каждом методе делать такие проверки, то код бизнес-логики загрязняется проверками, что ухудшает читаемость кода. Решить эту проблему можно следующим образом:</p>
+
+<ol>
+<li>Добавляем аннотации для валидации входных параметров.</li>
+</ol>
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'>  <span class="kd">public</span> <span class="nd">@NotNull</span> <span class="n">User</span> <span class="n">save</span><span class="o">(</span><span class="nd">@NotNull</span> <span class="n">User</span> <span class="n">user</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="c1">// business logic starts here...</span>
+</span><span class='line'>    <span class="c1">//...</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">savedUser</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Чтобы заставить этот код работать, мы будем использовать возможности Spring Validation.</p>
+
+<ol>
+<li>Spring предоставляет аннотацию <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/validation/annotation/Validated.html">@Validated</a>, которая в отличие от <a href="http://docs.oracle.com/javaee/7/api/javax/validation/Valid.html">@javax.validation.Valid</a> позволяет определять группу валидации.</li>
+<li>Этой аннотацией необходимо проаннотировать бин, методы которого необходимо валидировать.</li>
+</ol>
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'>    <span class="nd">@Validated</span>
+</span><span class='line'>    <span class="nd">@Service</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserService</span> <span class="o">{</span>
+</span><span class='line'>        <span class="kd">public</span> <span class="nd">@NotNull</span> <span class="n">User</span> <span class="n">save</span><span class="o">(</span><span class="nd">@NotNull</span> <span class="n">User</span> <span class="n">user</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="c1">// business logic starts here...</span>
+</span><span class='line'>            <span class="c1">//...</span>
+</span><span class='line'>            <span class="k">return</span> <span class="n">savedUser</span><span class="o">;</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>    <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>Для реализации самой валидации нам необходим валидатор. В качестве реализации <a href="http://jcp.org/en/jsr/detail?id=303">JSR-303</a> можно использовать, например, <a href="http://www.hibernate.org/subprojects/validator.html">Hibernate Validator</a>. Для этого в <code>pom.xml</code> необходимо добавить требуемые зависимости:</li>
+</ol>
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'>    <span class="nt">&lt;dependency&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;groupId&gt;</span>javax.validation<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;artifactId&gt;</span>validation-api<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;version&gt;</span>1.0.0.GA<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/dependency&gt;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nt">&lt;dependency&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;groupId&gt;</span>org.hibernate<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;artifactId&gt;</span>hibernate-validator<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;version&gt;</span>4.3.1.Final<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/dependency&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Обращаю внимание, что текущей на данный момент является <a href="http://beanvalidation.org/1.1/spec">спецификация</a> <a href="http://jcp.org/en/jsr/detail?id=349">JSR-349 Bean Validation 1.1</a>, которая поддерживает валидацию методов из коробки, но текущая версия Spring 3.2 &ndash; не поддерживает новый API, поэтому необходимо использовать старую версию API, и, соответственно, реализацию. Релевантный баг в Spring <a href="https://jira.springsource.org/browse/SPR-8199">SPR-8199</a>, поддержка нового API ожидается в Spring Framework 4.0.</p>
+
+<ol>
+<li>Необходимо объявить необходимые бины в конфигурации Spring:</li>
+</ol>
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'>    <span class="nd">@Bean</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="n">LocalValidatorFactoryBean</span> <span class="nf">validatorFactory</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">LocalValidatorFactoryBean</span> <span class="n">factoryBean</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LocalValidatorFactoryBean</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">factoryBean</span><span class="o">.</span><span class="na">afterPropertiesSet</span><span class="o">();</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">factoryBean</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Bean</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="n">Validator</span> <span class="nf">validator</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nf">validatorFactory</span><span class="o">().</span><span class="na">getValidator</span><span class="o">();</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Bean</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="n">MethodValidationPostProcessor</span> <span class="nf">methodValidationPostProcessor</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="k">new</span> <span class="nf">MethodValidationPostProcessor</span><span class="o">();</span>
+</span><span class='line'>    <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>На этом всё. Как видно, декларативная валидация входных параметров реализуется очень просто.</li>
+</ol>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1810,7 +1999,7 @@ public @interface SuppressExceptions {
 <div class='comment'>
 <div class='author'>Anonymous</div>
 <div class='content'>
-Добрый день, прочитал Вашу статью &ndash; интересно! =) На данный момент пытаюсь вникнуть в АОП в БД, но не совсем понимаю как можно реализовать аспекты при работе с БД (именно с точки зрения системы &ndash; код, компиляция и пр. т.к. теоретически все прозрачно и ясно). Не подскажите &ndash; где можно найти, для наглядности, простенькую БД с реализованным аспектами и хоть какое-то пояснение по реализованному &quot;проекту&quot; &ndash; на чем писали, как внедряли аспекты и пр. Мэйл для связи &ndash; <a href="&#109;&#97;&#x69;&#108;&#x74;&#111;&#x3a;&#117;&#116;&#x6f;&#x70;&#x69;&#97;&#x32;&#x30;&#x30;&#53;&#64;&#x79;&#97;&#x6e;&#100;&#101;&#x78;&#x2e;&#x72;&#117;">&#117;&#116;&#x6f;&#112;&#105;&#97;&#50;&#48;&#x30;&#53;&#x40;&#x79;&#97;&#x6e;&#100;&#x65;&#x78;&#x2e;&#114;&#x75;</a></div>
+Добрый день, прочитал Вашу статью &ndash; интересно! =) На данный момент пытаюсь вникнуть в АОП в БД, но не совсем понимаю как можно реализовать аспекты при работе с БД (именно с точки зрения системы &ndash; код, компиляция и пр. т.к. теоретически все прозрачно и ясно). Не подскажите &ndash; где можно найти, для наглядности, простенькую БД с реализованным аспектами и хоть какое-то пояснение по реализованному &quot;проекту&quot; &ndash; на чем писали, как внедряли аспекты и пр. Мэйл для связи &ndash; <a href="&#109;&#97;&#105;&#x6c;&#116;&#111;&#58;&#117;&#116;&#111;&#x70;&#105;&#97;&#x32;&#x30;&#48;&#x35;&#64;&#121;&#97;&#110;&#100;&#x65;&#120;&#x2e;&#x72;&#117;">&#x75;&#116;&#111;&#112;&#x69;&#97;&#50;&#48;&#48;&#53;&#x40;&#121;&#x61;&#x6e;&#100;&#x65;&#120;&#x2e;&#114;&#117;</a></div>
 </div></p>
 </div>
   
@@ -1905,147 +2094,6 @@ System.out.println(a.getI());
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/12/06/blog-post/">Сокращаем ссылки на андроиде</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-12-06T12:11:00-05:00" pubdate data-updated="true">Dec 6<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div class='post'>
-<h5>Вступление</h5>Встала передо мной задача - сокращать ссылки перед тем, как отправлять их в Twitter. Для решения этой задачи я решил использовать <a href="http://bit.ly">bit.ly</a>, благо, их API внятный и простой.  <h5>Программируем!</h5>Решение нарисовалось в виде следующего класса:  <br />
-<pre class="brush: java">
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.utils.URIUtils;
-import org.apache.http.client.utils.URLEncodedUtils;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.util.Log;
-
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-
-
-/**
- * Helper class to work with bitly.
- *
- * @author Oleg Atamanenko
- * @since 06-Dec-2010 12:49:36
- */
-public class Bitly {
-
-    private static final String TAG = "Bitly";
-
-    private static final String SHORTEN = "/v3/shorten";
-    private static final String API_URL = "api.bit.ly";
-    private static final String RESPONSE_FORMAT = "json";
-
-    private String username;
-    private String apiKey;
-
-
-    public Bitly(String username, String apiKey) {
-        this.username = username;
-        this.apiKey = apiKey;
-    }
-
-    public String shorten(String longUrl) throws BitlyException {
-        DefaultHttpClient httpClient = new DefaultHttpClient();
-
-        try {
-            List<NameValuePair> params = new ArrayList<NameValuePair>();
-            params.add(new BasicNameValuePair("login", username));
-            params.add(new BasicNameValuePair("apiKey", apiKey));
-            params.add(new BasicNameValuePair("longUrl", longUrl));
-            params.add(new BasicNameValuePair("format", RESPONSE_FORMAT));
-
-
-            URI uri = URIUtils.createURI("http", API_URL, -1, SHORTEN, URLEncodedUtils.format(params, "UTF-8"), null);
-            HttpGet request = new HttpGet(uri);
-
-            Log.d(TAG, "Sending request: " + request.getURI());
-
-            HttpResponse httpResponse = httpClient.execute(request);
-
-            HttpEntity httpEntity = httpResponse.getEntity();
-            String response = EntityUtils.toString(httpEntity);
-            Log.i(TAG, "Bitly response is: " + response);
-            httpResponse.getEntity().consumeContent();
-
-            JSONObject jsonResponse = new JSONObject(response);
-
-            checkForExceptions(jsonResponse);
-
-            JSONObject data = jsonResponse.getJSONObject("data");
-            return data.getString("url");
-
-        } catch (ClientProtocolException e) {
-            throw new BitlyException(e);
-        } catch (IOException e) {
-            throw new BitlyException(e);
-        } catch (JSONException e) {
-            throw new BitlyException(e);
-        } catch (URISyntaxException e) {
-            throw new BitlyException(e);
-        }
-    }
-
-    private void checkForExceptions(JSONObject jsonResponse) throws JSONException, BitlyException {
-        int statusCode = jsonResponse.getInt("status_code");
-        if (statusCode != 200) {
-            String message = jsonResponse.getString("status_txt");
-            throw new BitlyException(message);
-        }
-    }
-
-}
-</pre>  Конструктор класс принимает на вход следующие параметры: <ul><li><code>userName</code> - имя пользователя bit.ly.</li>
-<li><code>apiKey</code> - Ключ для доступа к API, его можно узнать на <a href="https://bit.ly/a/your_api_key">специальной страничке</a></li>
-</ul><a href="https://code.google.com/p/bitly-api/wiki/ApiDocumentation">Полная документация к Bit.ly API</a> расположена на отдельном проекте в Google Code  <h5>Использование</h5>Единственный метод, реализованный сейчас - это метод <code>shorten()</code>. На вход требуется подать полную ссылку <code>longUrl</code>, на выходе получается укороченная версия ссылки, либо кидается исключение с сообщением от bit.ly API.   <h6>Пример вызова</h6><pre class="brush: java">
-Bitly bitly = new Bitly(BITLY_USERNAME, BITLY_API_KEY);
-String shortLink = bitly.shorten(link);
-</pre><br />
-  <h6>Дальнейшие улучшения</h6>Если перед вами стоит задача быстренько сократить ссылку - то вышеприведённого кода достаточно. Но если вам нужно полноценное решение, со всеми возможностями bit.ly - то посмотрите в сторону <a href="https://code.google.com/p/bitlyj/">bitlyj</a>. Правда, я не уверен, что оно взведётся под андроидом.</div>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -2061,6 +2109,10 @@ String shortLink = bitly.shorten(link);
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/06/19/validation/">Валидация входных параметров с использованием Spring</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/10/24/vagrant/">Автоматизируем работу с виртуальными машинами с помощью Vagrant</a>
       </li>
     
@@ -2074,10 +2126,6 @@ String shortLink = bitly.shorten(link);
     
       <li class="post">
         <a href="/blog/2012/04/20/beanpostprocessor/">Использование BeanPostProcessor на примере журналирования</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/04/20/blog-post/">Преобразуем строку в дату</a>
       </li>
     
   </ul>
