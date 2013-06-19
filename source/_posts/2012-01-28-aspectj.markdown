@@ -53,7 +53,7 @@ import java.lang.annotation.RetentionPolicy;
 @Inherited
 public @interface SuppressExceptions {
 }
-    
+
 </pre><br />
 А также аспект, который бы делал всю нужную нам функциональность:<br />
 <br />
