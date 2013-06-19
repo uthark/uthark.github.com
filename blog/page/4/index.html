@@ -9,7 +9,8 @@
   <meta name="author" content="Oleg Atamanenko">
 
   
-  <meta name="description" content="Кому нужны инвайты на Google Wave, отписываемся в комментариях - поделюсь. UPD. Инвайты закончились, всем спасибо. Comments uthark @interceptor said &hellip;">
+  <meta name="description" content="Введение
+Решил научиться писать собственные расширения для Google Chrome/Chromium. За идею взял официальное расширение от Yahoo! для Firefox - &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +79,313 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/11/14/delicious-bookmarks-google/">Расширение Delicious Bookmarks для Google Chrome/Chromium</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-11-14T11:34:00-05:00" pubdate data-updated="true">Nov 14<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+<h1>Введение</h1><br />
+Решил научиться писать собственные расширения для <a href="http://www.google.com/chrome">Google Chrome</a>/<a href="http://www.chromium.org/">Chromium</a>.<br />
+<br />
+За идею взял официальное расширение от <a href="http://m.www.yahoo.com/">Yahoo!</a> для <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a> - <a href="https://addons.mozilla.org/en-US/firefox/addon/3615">Delicious Bookmarks</a>.<br />
+<br />
+<h1>Структура расширения</h1><br />
+Расширение - файл с расширением <tt>.crx</tt>. На самом деле это просто <tt>ZIP</tt>-архив с файлом манифеста внутри.<br />
+<br />
+<h1>Файл манифеста</h1><pre class="brush:js; highlight: [2, 3, 4, 5, 10, 16, 23]">{
+"name": "Delicious plugin", // 1
+"version": "0.2", // 2
+"background_page": "background.html", // 3
+"permissions": [ // 4
+"bookmarks",
+"tabs"
+],
+
+"browser_action": { // 5
+"name": "Save bookmark to delicious.com",
+"default_title": "Save bookmark to delicious.com",
+"default_icon": "delicious.20.gif" // optional
+},
+
+"content_scripts": [ // 6
+{
+"matches": ["http://*/*", "https://*/*"],
+"js": ["getDocumentSelection.js"]
+}
+],
+
+"options_page": "options.html" // 7
+}
+</pre><br />
+Манифест - файл в формате <a href="http://json.org/">JSON</a>.<br />
+<br />
+Манифест состоит из следующих частей:<br />
+<br />
+1. <span style="font-weight:bold;"><tt>name</tt></span> - Имя расширения<br />
+2. <span style="font-weight:bold;"><tt>version</tt></span> - Версия расширения<br />
+3. <span style="font-weight:bold;"><tt>background_page</tt></span> - основной файл с расширением. Это обычный HTML-файл с разметкой.<br />
+4. <span style="font-weight:bold;"><tt>permissions</tt></span> - разрешения для расширения. Указываем, что нам нужен доступ к вкладкам (tabs) и закладкам (bookmarks).<br />
+5. <span style="font-weight:bold;"><tt>browser_action</tt></span> - указываем, что нужно отобразить на панели инструментов браузера.<br />
+6. <span style="font-weight:bold;"><tt>content_scripts</tt></span> - Для доступа к DOM отображаемой страницы необходимы content scripts, данный блок регистрирует скрипт <tt>getDocumentSelection.js</tt> для всех <tt>http</tt> и <tt>https</tt> страниц.<br />
+7. <span style="font-weight:bold;"><tt>options_page</tt></span> - страница с настройками.<br />
+<br />
+Подробное описание файла манифеста есть <a href="http://code.google.com/chrome/extensions/manifest.html">на официальном сайте</a>. <br />
+<br />
+<h1>Описание работы расширения</h1><br />
+<br />
+Расширение работает следующим образом:<br />
+1. При клике на значок расширения вызывается обработчик <tt>addBookmark</tt><br />
+2. Обработчик открывает коммуникационный порт и отправляет сообщение скрипту содержимого.<br />
+3. Скрипт содержимого забирает выделенный текст и отправляет назад расширению выделенный текст.<br />
+4. Расширение забирает выделенный текст, определяет настройки сохранения (Private/Public) и вызывает окно сохранения <span style="font-style:italic;">Delicious</span>.<br />
+<br />
+<h1>Реализация расширения</h1><br />
+<br />
+<span style="font-weight:bold;">background.html</span>:<br />
+<pre class="brush:js; html-script: true">&lt;html&gt;
+&lt;head&gt;
+&lt;script&nbsp;type=&quot;text/javascript&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;function&nbsp;saveBookmark()&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Send&nbsp;our&nbsp;password&nbsp;to&nbsp;the&nbsp;current&nbsp;tab&nbsp;when&nbsp;clicked.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;chrome.tabs.getSelected(null,&nbsp;function(tab)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;port&nbsp;=&nbsp;chrome.tabs.connect(tab.id,&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;:&nbsp;&quot;deliciousBookmark&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;port.postMessage(&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;action&nbsp;:&nbsp;'getSelection'
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});
+&nbsp;&nbsp;&nbsp;&nbsp;}
+
+&nbsp;&nbsp;&nbsp;&nbsp;function&nbsp;addBookmark(id,&nbsp;bookmark)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(&quot;added&nbsp;bookmark:&nbsp;&nbsp;&quot;&nbsp;+&nbsp;bookmark);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;saveBookmark();
+&nbsp;&nbsp;&nbsp;&nbsp;}
+
+&nbsp;&nbsp;&nbsp;&nbsp;chrome.bookmarks.onCreated.addListener(addBookmark);
+&nbsp;&nbsp;&nbsp;&nbsp;console.log(&quot;Registered&nbsp;listener&quot;);
+
+&nbsp;&nbsp;&nbsp;&nbsp;function&nbsp;getShareStatus()&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;markPrivate&nbsp;=&nbsp;localStorage[&quot;markPrivate&quot;];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;share&nbsp;=&nbsp;&quot;yes&quot;;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(markPrivate&nbsp;==&nbsp;&quot;true&quot;)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;share&nbsp;=&nbsp;&quot;no&quot;;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;share;
+&nbsp;&nbsp;&nbsp;&nbsp;}
+
+&nbsp;&nbsp;&nbsp;&nbsp;chrome.extension.onConnect.addListener(function(port)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.assert(port.name&nbsp;==&nbsp;&quot;deliciousBookmark&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;port.onMessage.addListener(function(msg)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;selection&nbsp;=&nbsp;msg.selection;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;chrome.tabs.getSelected(null,&nbsp;function(tab)&nbsp;{
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;url&nbsp;=&nbsp;encodeURIComponent(tab.url);
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(!url&nbsp;||&nbsp;url&nbsp;===&nbsp;&quot;&quot;)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;title&nbsp;=&nbsp;encodeURIComponent(tab.title);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;description&nbsp;=&nbsp;encodeURIComponent(selection);
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;share&nbsp;=&nbsp;getShareStatus();
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;f&nbsp;=&nbsp;'http://delicious.com/save?url='&nbsp;+&nbsp;url&nbsp;+&nbsp;'&amp;title='&nbsp;+&nbsp;title&nbsp;+&nbsp;'&amp;notes='&nbsp;+&nbsp;description
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+&nbsp;'&amp;share='&nbsp;+&nbsp;share&nbsp;+&nbsp;'&amp;v=5&amp;';
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window.open(f&nbsp;+&nbsp;'noui=1&amp;jump=doclose',&nbsp;'deliciousuiv5',
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'location=yes,links=no,scrollbars=no,toolbar=no,width=550,height=550');
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});
+&nbsp;&nbsp;&nbsp;&nbsp;});
+
+&nbsp;&nbsp;&nbsp;&nbsp;chrome.browserAction.onClicked.addListener(saveBookmark);
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;/html&gt;
+
+</pre><br />
+<br />
+<span style="font-weight:bold;">getDocumentSelection.js</span><br />
+<br />
+<pre class="brush:js">var port = chrome.extension.connect( {
+name : "deliciousBookmark"
+});
+
+// Also listen for new channels from the extension for when the button is
+// pressed.
+chrome.extension.onConnect.addListener(function(port) {
+console.assert(port.name == "deliciousBookmark");
+port.onMessage.addListener(function(msg) {
+if (msg.action == 'getSelection') {
+var responsePort = chrome.extension.connect( {
+name : "deliciousBookmark"
+});
+var description = document.getSelection() ? '' + document.getSelection() : '';
+responsePort.postMessage( {
+selection : description
+});
+}
+});
+});
+
+
+</pre><br />
+<br />
+<span style="font-weight:bold;">options.html</span><br />
+<br />
+<pre class="brush:js; html-script: true">&lt;html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Delicious Bookmarks Options&lt;/title&gt;
+&lt;/head&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+    // Saves options to localStorage.
+    function saveOptions() {
+        var share = document.getElementById(&quot;share&quot;);
+        localStorage[&quot;markPrivate&quot;] = share.checked;
+
+        // Update status to let user know options were saved.
+        var status = document.getElementById(&quot;status&quot;);
+        status.innerHTML = &quot;Options Saved.&quot;;
+        setTimeout(function() {
+            status.innerHTML = &quot;&quot;;
+        }, 1500);
+    }
+
+    // Restores select box state to saved value from localStorage.
+    function restoreOptions() {
+        var share = localStorage[&quot;markPrivate&quot;];
+
+        if (!share) {
+            return;
+        }
+        var shareCheckbox = document.getElementById(&quot;share&quot;);
+
+        shareCheckbox.checked = share;
+        
+    }
+&lt;/script&gt;
+
+&lt;body onload=&quot;restoreOptions()&quot;&gt;
+
+&lt;label for=&quot;share&quot;&gt;Mark as Private&lt;/label&gt;
+&lt;input type=&quot;checkbox&quot; class=&quot;checkbox&quot; name=&quot;share&quot; id=&quot;share&quot; /&gt;
+
+
+&lt;br&gt;
+&lt;button onclick=&quot;saveOptions();&quot;&gt;Save&lt;/button&gt;
+&lt;div id=&quot;status&quot;&gt;&amp;nbsp;&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre><br />
+<br />
+<h1>Сборка расширения</h1><br />
+В Chromium есть возможность собрать расширение.<br />
+1. Открываем адрес <tt>chrome://extensions/</tt><br />
+2. В правом верхнем углу нажимаем Developer Mode.<br />
+3. На появившейся панели инструментов кликаем Pack Extension<br />
+4. Выбираем каталог, в котором находится расширение<br />
+5. Chromium автоматически собирает расширение в каталоге с исходниками расширения.<br />
+<br />
+<h1>Заключение</h1><br />
+Писать расширения для Google Chrome не просто, а очень просто. <br />
+<br />
+Готовое и собранное расширение можно <a href="http://bit.ly/2KYnr8">скачать здесь</a>.<br />
+<br />
+<h1>Дополнительная информация</h1><br />
+<ol><li><a href="http://code.google.com/chrome/extensions/devguide.html">Google Chrome Extensions Developer&#8217;s Guide</a></li>
+<li><a href="http://code.google.com/chrome/extensions/manifest.html">Manifest file description</a></li>
+<li><a href="http://code.google.com/chrome/extensions/api_index.html">Chrome Extensions API</a></li>
+<li><a href="http://code.google.com/chrome/extensions/packaging.html">Extension Packaging</a></li>
+</ol><br />
+<br />
+В следующей заметке опишу работу messaging для коммуникации расширения со скриптами содержимого.</div>
+
+
+<h2>Comments</h2>
+
+
+<div class='comments'>
+<div class='comment'>
+<div class='author'>Juev</div>
+<div class='content'>
+Очень много расширений уже реализуют добавление закладок в социальные закладки, но пока не встретил ни одного, которое реализует синхронизацию локальных закладок с сервером&#8230; Как это делает например расширение делисиоус для огнелиса. Если сумеете реализовать, цены расширению не будет!</div>
+</div>
+<div class='comment'>
+<div class='author'>uthark</div>
+<div class='content'>
+@karri<br />Подпишитесь :). Правда, пишу я нерегулярно.</div>
+</div>
+<div class='comment'>
+<div class='author'>karri</div>
+<div class='content'>
+А у вас тут интересно, хоть я и неважный ITтишник =) Пожалуй, подпишусь на вас! =)</div>
+</div>
+<div class='comment'>
+<div class='author'>uthark</div>
+<div class='content'>
+@karri Надеюсь, больше вам этого не придётся делать и расширение сослужит для вас хорошую службу. В следующей версии расширения будет возможность получить быстрый доступ к своему аккаунту на delicious, а также возможность быстрого доступа к закладкам с определённой меткой. Для чего это может быть полезно - читайте  <a href="http://atamanenko.blogspot.com/2009/04/blog-post.html" rel="nofollow">этот</a> и <a href="http://atamanenko.blogspot.com/2009/04/2.html" rel="nofollow">этот</a> посты.</div>
+</div>
+<div class='comment'>
+<div class='author'>karri</div>
+<div class='content'>
+Спасибо! =) Все-таки вчера не дождалась ответа и руками подабовляла в delicious на delicious.com =)</div>
+</div>
+<div class='comment'>
+<div class='author'>uthark</div>
+<div class='content'>
+Достаточно обновить страницу, которую вы хотите сохранить.<br /><br />Кроме того, нужна версия браузера выше 4.0.227.0</div>
+</div>
+<div class='comment'>
+<div class='author'>karri</div>
+<div class='content'>
+А браузер нужно перезапускать? Сорри за такой глупый вопрос, у меня тут дилема: куча нужных вкладок открыто, а Chrome, как FF не спрашивает сохранить ли их при закрытии :( По крайней мере что-то не нашла такой галочки :( Сижу думаю, что делать, delicious не вызывается и закрывать не хоцца &#8230;</div>
+</div>
+<div class='comment'>
+<div class='author'>uthark</div>
+<div class='content'>
+@Denis <br />На здоровье. О найденных ошибках и своих предложениях можешь сообщать в комментариях к этому посту.</div>
+</div>
+<div class='comment'>
+<div class='author'>Denis</div>
+<div class='content'>
+Спасибо. Статья очень понравилась а расширением уже пользуюсь ;)</div>
+</div>
+</div>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -986,74 +1294,6 @@ package com.x.y.z;
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/05/23/google-application-engine/">Google Application Engine</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-05-23T12:00:00-04:00" pubdate data-updated="true">May 23<span>rd</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div class='post'>
-Посмотрел на <a href="http://code.google.com/appengine/">Google App Engine </a>(GAE).
-
-При своей цене (= бесплатно) это очень хороший сервис.
-
-GAE - это <a href="http://code.google.com/appengine/docs/whatisgoogleappengine.html">инфраструктура для запуска веб-приложений на серверах Google</a>. То, что сейчас модно называть <a href="http://en.wikipedia.org/wiki/Cloud_computing">cloud computing</a>.
-
-На <a href="http://www.google.com/intl/en/press/annc/20080407_app_engine.html">презентации платформы в 2008 году</a> Google объявил только о поддержке Python. <a href="http://googleappengine.blogspot.com/2009/04/seriously-this-time-new-language-on-app.html">Год спустя, в апреле 2009 года Google заявил о поддержке Java</a>, правда <a href="http://code.google.com/appengine/docs/java/jrewhitelist.html">с ограничениями</a>.
-Собственно, <a href="http://code.google.com/appengine/docs/java/overview.html">поддержка Java</a> и была тем самым толчком, что я решил поближе посмотреть на платформу.
-
-<h2>Возможности</h2>
-Google App Engine предоставляет <a href="http://code.google.com/appengine/whyappengine.html">следующие возможности</a> как платформа:
-<ul><li>масштабируемость</li><li>кластеризация</li><li>он-лайн мониторинг</li><li>балансировку нагрузки</li><li>безопасность</li><li>горизонтальное масштабирование базы данных</li><li>отказоустойчивость</li></ul>
-
-<h2>Ограничения</h2>Как и любое бесплатное решение у платформы есть ограничения. На данный момент эти ограничения следующие:
-<ul><li>Ограниченный набор Java API</li><li>Нереляционное хранилище данных</li><li>Ограничение доступа к другим компьютерам</li><li>Из доступных языков: Python, Java и JVM-based</li><li>Ограничения на используемые ресурсы
-</li></ul><h2>Технологии</h2><h2><a href="http://code.google.com/appengine/docs/java/apis.html">App Engine Services</a></h2><ul><li><a href="http://code.google.com/appengine/docs/java/urlfetch/">URL Fetch</a></li><li><a href="http://code.google.com/appengine/docs/java/mail/">Mail</a></li><li><a href="http://code.google.com/appengine/docs/java/memcache/">Memcache</a></li><li><a href="http://code.google.com/appengine/docs/java/images/">Image Manipulation</a></li><li><a href="http://code.google.com/appengine/docs/java/config/cron.html">Scheduled Tasks (Cron Jobs)</a></li><li>Secure Data Connector</li><li><a href="http://code.google.com/appengine/docs/java/users/">User Service API</a></li></ul><h3>База данных</h3>Это <a href="http://en.wikipedia.org/wiki/BigTable">небезызвестный</a> <a href="http://labs.google.com/papers/bigtable.html">BigTable</a>. Для работы с ним используется <a href="http://code.google.com/appengine/docs/python/datastore/gqlreference.html">GQL</a>. Для Java-реализации используется <a href="http://code.google.com/appengine/docs/java/datastore/usingjdo.html">JDO</a> с ограниченной поддержкой JPA.
-
-
-
-<h2>Применение</h2>
-Уже сейчас существует много приложений, которые размещены на серверах Google. Многие из них доступны в <a href="http://appgallery.appspot.com/">галерее приложений App Engine</a>
-На мой взгляд, использование нереляционной модели данных накладывает свои ограничения на тип проектируемых приложений, так как не всегда возможна полная денормализация данных.
-
-<h2>Впечатления от использования SDK</h2>Обзор не был бы полным, если бы я не попробовал написать простенькое приложение для платформы. Для этого необходимо зарегистрироваться на App Engine и запросить поддержку Java. Google объявил, что попробовать платформу можно только первым 10000 разработчикам. Судя по всему, ещё можно успеть, так как я получил доступ в течении 15 минут (приходит ключ по SMS). Подтверждение на поддержку Java пришло в течении суток.
-
-Google предоставляе SDK для работы с платформой. В SDK входят скрипты для создания приложения, загрузки их на сервера Google и API для доступа к вышеперечисленным сервисам платформы. Кроме того, при разработке используются заглушки для сервисов (например, для User Service API), которые позволяют локально писать и отлаживать приложение.
-
-Компания SpringSource объявила о <a href="http://blog.springsource.com/2009/05/14/grails-111-released-with-google-appengine-support/">поддержке Grails</a> на платформе Google App Engine. Это не может не радовать, но первые впечатления были смазаны, так как <a href="http://grails.org/plugin/app-engine">плагин appengine для Grails</a> ещё нужно дорабатывать. Например, кодогенератор заточен для gorm, который сделан поверх hibernate, но так как appengine не поддерживает hibernate, для генерации CRUD приходится делать следующие пассы: включать hibernate плагин, генерировать CRUD, отключать hibernate плагин. Надеюсь, в следующей версии appengine плагина эта проблема будет решена. Остальные проблемы можно почитать как в комментариях к анонсу, так и в <a href="http://jira.codehaus.org/secure/IssueNavigator.jspa?reset=true&amp;&amp;query=appengine&amp;summary=true&amp;description=true&amp;body=true">джире проекта</a>.
-
-<h2>Альтернативные платформы</h2>Самым известным, наверно, является <a href="http://aws.amazon.com/ec2/">Amazon EC2</a>, а замыкает тройку Microsoft с их <a href="http://www.microsoft.com/azure/windowsazure.mspx">Windows Azure</a>.
-Amazon не предоставляет бесплатной дозы, в отличии от Microsoft и Google. При этом Amazon предоставляет shell-доступ к серверам. Сравнивать в целом платформы не имеет смысла, поэтому не буду.</div>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -1071,6 +1311,10 @@ Amazon не предоставляет бесплатной дозы, в отл�
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/06/19/autowiring-factorybean/">@Autowiring EJBs with Spring</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/06/19/spring-caching/">Использование memcached в качестве backend для Spring Caching Abstraction</a>
       </li>
     
@@ -1084,10 +1328,6 @@ Amazon не предоставляет бесплатной дозы, в отл�
     
       <li class="post">
         <a href="/blog/2012/10/24/vagrant/">Автоматизируем работу с виртуальными машинами с помощью Vagrant</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/04/28/spring-data-jpa_28/">Собственная реализация методов в Spring Data JPA</a>
       </li>
     
   </ul>

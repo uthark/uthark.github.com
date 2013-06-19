@@ -4,7 +4,7 @@
   <title><![CDATA[Category: cache | Блог о разработке ПО]]></title>
   <link href="http://uthark.github.com/blog/categories/cache/atom.xml" rel="self"/>
   <link href="http://uthark.github.com/"/>
-  <updated>2013-06-19T15:15:54-04:00</updated>
+  <updated>2013-06-19T15:40:40-04:00</updated>
   <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
@@ -40,22 +40,22 @@
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="o">&lt;</span><span class="n">dependency</span><span class="o">&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;dependency&gt;&lt;/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">groupId</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span><span class="n">com</span><span class="o">.</span><span class="na">google</span><span class="o">.</span><span class="na">code</span><span class="o">.</span><span class="na">simple</span><span class="o">-</span><span class="n">spring</span><span class="o">-</span><span class="n">memcached</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;/</span><span class="n">groupId</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span>
-</span><span class='line'><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">artifactId</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span><span class="n">spymemcached</span><span class="o">-</span><span class="n">provider</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;/</span><span class="n">artifactId</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span>
-</span><span class='line'><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">version</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span><span class="mf">3.1</span><span class="o">.</span><span class="mi">0</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;/</span><span class="n">version</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'><span class="nt">&lt;pre&gt;&lt;code&gt;</span><span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>com.google.code.simple-spring-memcached<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>spymemcached-provider<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>3.1.0<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="nt">&lt;/code&gt;&lt;/pre&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&lt;/</span><span class="n">dependency</span><span class="o">&gt;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">dependency</span><span class="o">&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'><span class="nt">&lt;p&gt;&lt;/dependency&gt;</span>
+</span><span class='line'><span class="nt">&lt;dependency&gt;&lt;/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">groupId</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span><span class="n">com</span><span class="o">.</span><span class="na">google</span><span class="o">.</span><span class="na">code</span><span class="o">.</span><span class="na">simple</span><span class="o">-</span><span class="n">spring</span><span class="o">-</span><span class="n">memcached</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;/</span><span class="n">groupId</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span>
-</span><span class='line'><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">artifactId</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span><span class="n">spring</span><span class="o">-</span><span class="n">cache</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;/</span><span class="n">artifactId</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span>
-</span><span class='line'><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">version</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span><span class="mf">3.1</span><span class="o">.</span><span class="mi">0</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;/</span><span class="n">version</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'><span class="nt">&lt;pre&gt;&lt;code&gt;</span><span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>com.google.code.simple-spring-memcached<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>spring-cache<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>3.1.0<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="nt">&lt;/code&gt;&lt;/pre&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&lt;/</span><span class="n">dependency</span><span class="o">&gt;</span>
+</span><span class='line'><span class="nt">&lt;p&gt;&lt;/dependency&gt;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p><code>spymemcached-provider</code> &ndash; это библиотечка для работы с <code>memcached</code> из Java, а <code>spring-cache</code> &ndash; модуль интеграции со Spring.</p>

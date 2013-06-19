@@ -9,7 +9,7 @@
   <meta name="author" content="Oleg Atamanenko">
 
   
-  <meta name="description" content="В Spring 3.1 появился замечательный модуль &ndash; Spring Cache, который является абстракцией над кэшированием, что позволяет декларативно &hellip;">
+  <meta name="description" content="Предположим, что у нас есть проект на Spring, в котором необходимо использовать внешние EJB. Для получения бинов необходимо создавать InitialContext &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -84,6 +84,150 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2013/06/19/autowiring-factorybean/">@Autowiring EJBs With Spring</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-19T20:00:00-04:00" pubdate data-updated="true">Jun 19<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Предположим, что у нас есть проект на Spring, в котором необходимо использовать внешние EJB. Для получения бинов необходимо создавать <a href="http://docs.oracle.com/javase/6/docs/api/javax/naming/InitialContext.html">InitialContext</a> и делать <code>lookup()</code> нужных ejb. Но эту задачу можно автоматизировать и пользоваться <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/beans/factory/annotation/Autowired.html">@Autowired</a>, то есть код будет выглядеть вот так:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Service</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserService</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nd">@Autowired</span>
+</span><span class='line'>  <span class="kd">private</span> <span class="n">UserRemoteBean</span> <span class="n">userRemoteBean</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Для этого в Spring существует <a href="http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/htmlsingle/#beans-factory-extension-factorybean">FactoryBean</a> &ndash; класс, который знает, как создавать бины нужного типа. Собственно, нам необходимо написать такой класс:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="nd">@Component</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">UserRemoteBeanFactoryBean</span><span class="o">[</span><span class="kt">UserRemoteBean</span><span class="o">]</span> <span class="nc">extends</span> <span class="nc">FactoryBean</span><span class="o">[</span><span class="kt">UserRemoteBean</span><span class="o">]</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">ACCESS_BEAN_REMOTE_NAME</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">&quot;our ejb name.&quot;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">private</span> <span class="k">val</span> <span class="n">log</span><span class="k">:</span> <span class="kt">Logger</span> <span class="o">=</span> <span class="nc">LoggerFactory</span><span class="o">.</span><span class="n">getLogger</span><span class="o">(</span><span class="n">getObjectType</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">var</span> <span class="n">ctx</span><span class="k">:</span> <span class="kt">Context</span> <span class="o">=</span> <span class="kc">null</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="n">getObject</span><span class="k">:</span> <span class="kt">T</span> <span class="o">=</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="o">(</span><span class="s">&quot;Requesting new instance of {}&quot;</span><span class="o">,</span> <span class="n">getObjectType</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">try</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">ctx</span><span class="o">.</span><span class="n">lookup</span><span class="o">(</span><span class="nc">ACCESS_BEAN_REMOTE_NAME</span><span class="o">).</span><span class="n">asInstanceOf</span><span class="o">[</span><span class="kt">T</span><span class="o">]</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>    <span class="k">catch</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">case</span> <span class="n">e</span><span class="k">:</span> <span class="kt">NamingException</span> <span class="o">=&gt;</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="o">(</span><span class="s">&quot;Unable to get ejb: {}&quot;</span><span class="o">,</span> <span class="nc">Array</span><span class="o">[</span><span class="kt">AnyRef</span><span class="o">](</span><span class="n">e</span><span class="o">.</span><span class="n">getMessage</span><span class="o">,</span> <span class="n">e</span><span class="o">)</span><span class="k">:</span> <span class="k">_</span><span class="kt">*</span><span class="o">)</span>
+</span><span class='line'>        <span class="k">throw</span> <span class="k">new</span> <span class="nc">RuntimeException</span><span class="o">(</span><span class="s">&quot;Unable to get UserRemoteBean bean &quot;</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="n">getMessage</span><span class="o">,</span> <span class="n">e</span><span class="o">)</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nd">@PostConstruct</span>
+</span><span class='line'>  <span class="k">protected</span> <span class="k">def</span> <span class="n">init</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">val</span> <span class="n">jndiProperties</span><span class="k">:</span> <span class="kt">Hashtable</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Object</span><span class="o">]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Hashtable</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Object</span><span class="o">]</span>
+</span><span class='line'>    <span class="n">jndiProperties</span><span class="o">.</span><span class="n">put</span><span class="o">(</span><span class="nc">Context</span><span class="o">.</span><span class="nc">URL_PKG_PREFIXES</span><span class="o">,</span> <span class="s">&quot;org.jboss.ejb.client.naming&quot;</span><span class="o">)</span>
+</span><span class='line'>    <span class="n">jndiProperties</span><span class="o">.</span><span class="n">put</span><span class="o">(</span><span class="s">&quot;jboss.naming.client.ejb.context&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="n">java</span><span class="o">.</span><span class="n">lang</span><span class="o">.</span><span class="nc">Boolean</span><span class="o">(</span><span class="kc">true</span><span class="o">))</span>
+</span><span class='line'>    <span class="k">try</span>
+</span><span class='line'>      <span class="n">ctx</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">InitialContext</span><span class="o">(</span><span class="n">jndiProperties</span><span class="o">)</span>
+</span><span class='line'>    <span class="k">catch</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">case</span> <span class="n">e</span><span class="k">:</span> <span class="kt">NamingException</span> <span class="o">=&gt;</span> <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="o">(</span><span class="s">&quot;Unable to create JNDI Context: {}&quot;</span><span class="o">,</span> <span class="nc">Array</span><span class="o">[</span><span class="kt">AnyRef</span><span class="o">](</span><span class="n">e</span><span class="o">.</span><span class="n">getMessage</span><span class="o">,</span> <span class="n">e</span><span class="o">)</span><span class="k">:</span> <span class="k">_</span><span class="kt">*</span><span class="o">)</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="n">isSingleton</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kc">false</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="n">getObjectType</span><span class="k">:</span> <span class="kt">Class</span><span class="o">[</span><span class="k">_</span><span class="o">]</span> <span class="k">=</span> <span class="n">classOf</span><span class="o">[</span><span class="kt">UserRemoteBean</span><span class="o">]</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2013/06/19/spring-caching/">Использование Memcached в качестве Backend для Spring Caching Abstraction</a></h1>
     
     
@@ -123,16 +267,16 @@
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="o">&lt;</span><span class="n">dependency</span><span class="o">&gt;</span>
-</span><span class='line'>    <span class="o">&lt;</span><span class="n">groupId</span><span class="o">&gt;</span><span class="n">com</span><span class="o">.</span><span class="na">google</span><span class="o">.</span><span class="na">code</span><span class="o">.</span><span class="na">simple</span><span class="o">-</span><span class="n">spring</span><span class="o">-</span><span class="n">memcached</span><span class="o">&lt;/</span><span class="n">groupId</span><span class="o">&gt;</span>
-</span><span class='line'>    <span class="o">&lt;</span><span class="n">artifactId</span><span class="o">&gt;</span><span class="n">spymemcached</span><span class="o">-</span><span class="n">provider</span><span class="o">&lt;/</span><span class="n">artifactId</span><span class="o">&gt;</span>
-</span><span class='line'>    <span class="o">&lt;</span><span class="n">version</span><span class="o">&gt;</span><span class="mf">3.1</span><span class="o">.</span><span class="mi">0</span><span class="o">&lt;/</span><span class="n">version</span><span class="o">&gt;</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">dependency</span><span class="o">&gt;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">dependency</span><span class="o">&gt;</span>
-</span><span class='line'>    <span class="o">&lt;</span><span class="n">groupId</span><span class="o">&gt;</span><span class="n">com</span><span class="o">.</span><span class="na">google</span><span class="o">.</span><span class="na">code</span><span class="o">.</span><span class="na">simple</span><span class="o">-</span><span class="n">spring</span><span class="o">-</span><span class="n">memcached</span><span class="o">&lt;/</span><span class="n">groupId</span><span class="o">&gt;</span>
-</span><span class='line'>    <span class="o">&lt;</span><span class="n">artifactId</span><span class="o">&gt;</span><span class="n">spring</span><span class="o">-</span><span class="n">cache</span><span class="o">&lt;/</span><span class="n">artifactId</span><span class="o">&gt;</span>
-</span><span class='line'>    <span class="o">&lt;</span><span class="n">version</span><span class="o">&gt;</span><span class="mf">3.1</span><span class="o">.</span><span class="mi">0</span><span class="o">&lt;/</span><span class="n">version</span><span class="o">&gt;</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">dependency</span><span class="o">&gt;</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;dependency&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;groupId&gt;</span>com.google.code.simple-spring-memcached<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;artifactId&gt;</span>spymemcached-provider<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;version&gt;</span>3.1.0<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'><span class="nt">&lt;/dependency&gt;</span>
+</span><span class='line'><span class="nt">&lt;dependency&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;groupId&gt;</span>com.google.code.simple-spring-memcached<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;artifactId&gt;</span>spring-cache<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;version&gt;</span>3.1.0<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'><span class="nt">&lt;/dependency&gt;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -1668,368 +1812,6 @@ Spring Data значительно упрощает жизнь при испол
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/02/08/java-rest/">Разработка и тестирование Java REST веб-сервисов</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-02-08T13:05:00-05:00" pubdate data-updated="true">Feb 8<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div class='post'>
-<h4>Введение</h4>
-Для разработки <a href="http://restpatterns.org/">REST</a> веб-сервисов Java предлагает <a href="http://jcp.org/en/jsr/detail?id=311">JSR-311 - JAX-RS: The Java&trade; API for RESTful Web Services</a>
-Как это обычно бывает в мире Enterprise Java, существует несколько реализаций данной спецификации:
-<ul>
-<li><a href="http://jersey.java.net/">Jersey</a> - это эталонная реализация спецификации от компании <strike>Sun</strike> Oracle</li>
-<li><a href="http://cxf.apache.org/">Apache CXF</a></li>
-<li><a href="http://www.jboss.org/resteasy">JBoss RESTEasy</a></li>
-</ul>
-На примере последней реализации, я и расскажу, каким образом можно написать REST-сервис.
-
-<h4>Пишем REST-сервис</h4>
-
-<pre class="brush:java">
-
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-
-@Path("/service/entity")
-@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-public interface EntityRestService {
-
- @GET
- @Path("/all")
- EntityList listAll();
-
- @GET
- @Path("/{id}")
- Entity findById(@PathParam("id") Integer id);
-
-
-}
-</pre>
-
-Создаём интерфейс, в котором расставляем JAX-RS аннотации. Аннотация <a href="http://jsr311.java.net/nonav/releases/1.1/javax/ws/rs/Path.html">@Path</a> указывает путь, по которому будет доступен наш сервис. Аннотация <a href="http://jsr311.java.net/nonav/releases/1.1/javax/ws/rs/GET.html">@GET</a> определяет, какой HTTP-запрос будет обрабатываться данным методом. Аннотация <a href="http://jsr311.java.net/nonav/releases/1.1/javax/ws/rs/Produces.html">@Produces</a> позволяет указать, в каком формате данный сервис предоставляет результаты.
-
-<h4>Конфигурация JBoss RESTEasy</h4>
-
-Конфигурация очень проста, во-первых, нам нужно добавить обновить <tt>pom.xml</tt> и добавить необходимые зависимости:
-
-<h5>Обновляем <tt>pom.xml</tt></h5>
-
-Добавляем compile-time зависимость на JAX-RS API
-<pre class="brush:xml">
-&lt;dependency&gt;
-    &lt;groupId&gt;org.jboss.resteasy&lt;/groupId&gt;
-    &lt;artifactId&gt;jaxrs-api&lt;/artifactId&gt;
-&lt;/dependency&gt;
-</pre>
-
-и runtime зависимости на реализацию
-<pre class="brush:xml">
-&lt;dependency&gt;
-    &lt;groupId&gt;org.jboss.resteasy&lt;/groupId&gt;
-    &lt;artifactId&gt;resteasy-jaxrs&lt;/artifactId&gt;
-    &lt;version&gt;${resteasy-jaxrs.version}&lt;/version&gt;
-    &lt;scope&gt;runtime&lt;/scope&gt;
-&lt;/dependency&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;org.jboss.resteasy&lt;/groupId&gt;
-    &lt;artifactId&gt;resteasy-jackson-provider&lt;/artifactId&gt;
-    &lt;version&gt;${resteasy-jaxrs.version}&lt;/version&gt;
-    &lt;scope&gt;runtime&lt;/scope&gt;
-&lt;/dependency&gt;
-
-</pre>
-
-<h5>Обновляем конфигурацию веб-приложения в <tt>web.xml</tt></h5>
-Необходимо выполнить следующую модификацию <tt>web.xml</tt>
-<pre class="brush: xml">
- &lt;listener&gt;
-  &lt;listener-class&gt;org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap&lt;/listener-class&gt;
- &lt;/listener&gt;
-
- &lt;context-param&gt;
-  &lt;param-name&gt;resteasy.servlet.mapping.prefix&lt;/param-name&gt;
-  &lt;param-value&gt;/rest&lt;/param-value&gt;
- &lt;/context-param&gt;
- &lt;servlet&gt;
-  &lt;servlet-name&gt;REST Easy&lt;/servlet-name&gt;
-  &lt;servlet-class&gt;org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher&lt;/servlet-class&gt;
- &lt;/servlet&gt;
- &lt;servlet-mapping&gt;
-  &lt;servlet-name&gt;REST Easy&lt;/servlet-name&gt;
-  &lt;url-pattern&gt;/rest/*&lt;/url-pattern&gt;
- &lt;/servlet-mapping&gt;
-</pre>
-
-Данный код объявляет <a href="http://docs.jboss.org/resteasy/docs/2.3.1.GA/javadocs/org/jboss/resteasy/plugins/server/servlet/HttpServletDispatcher.html">сервлет HttpServletDispatcher</a>, который будет обрабатывать все запросы, которые приходят на <tt>/rest/*</tt>. Слушатель <tt><a href="http://docs.jboss.org/resteasy/docs/2.3.1.GA/javadocs/org/jboss/resteasy/plugins/server/servlet/ResteasyBootstrap.html">ResteasyBootstrap</a></tt> выполняет всю необходимую инициализацию JBoss RESTEasy.
-
-
-<h5>Поддержка Spring</h5>
-Для того, чтобы использовать <a href="http://www.springsource.org/spring-framework">Spring Framework</a>, нам необходимо сделать следующие изменения:
-
-1. Добавить зависимость в <tt>pom.xml</tt>
-<pre class="brush: xml">
-&lt;dependency&gt;
-    &lt;groupId&gt;org.jboss.resteasy&lt;/groupId&gt;
-    &lt;artifactId&gt;resteasy-spring&lt;/artifactId&gt;
-    &lt;version&gt;${resteasy-jaxrs.version}&lt;/version&gt;
-    &lt;scope&gt;runtime&lt;/scope&gt;
-&lt;/dependency&gt;
-</pre>
-
-
-2. Добавить Spring-ового слушателя в <tt>web.xml</tt>
-
-<pre class="brush: xml">
- &lt;listener&gt;
-  &lt;listener-class&gt;org.jboss.resteasy.plugins.spring.SpringContextLoaderListener&lt;/listener-class&gt;
- &lt;/listener&gt;
-
-</pre>
-
-После этих изменений JBoss RESTEasy будет в курсе про Spring, это позволит в реализации REST-сервисов полноценно использовать все возможности, предоставляемые Spring Framework.
-
-<h4>Пишем тесты</h4>
-Написание тестов - весьма полезная вещь, ниже я покажу пример теста для REST-сервиса.
-В рамках данного теста у нас будет подниматься <a href="http://docs.jboss.org/resteasy/docs/2.3.1.GA/javadocs/org/jboss/resteasy/plugins/server/tjws/TJWSEmbeddedJaxrsServer.html">встраиваемый веб-сервер TJWSEmbeddedJaxrsServer</a>, к которому мы будем обращаться для тестирования наших REST-сервисов.
-<pre class="brush: java">
-
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({"/applicationContext-test.xml"})
-@TestExecutionListeners({DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class})
-public class TestEntityServiceRest {
-
- private static final int PORT = 8081;
- private static final String BASE_URL = "http://localhost:" + PORT;
-
- @Autowired
- EntityService entityService;
-
- @Autowired
- ConfigurableApplicationContext applicationContext;
-
-
- protected HttpClient client;
- protected TJWSEmbeddedJaxrsServer server;
-
-
- @Before
- public void setUpClient() throws Exception {
-  client = new DefaultHttpClient();
- }
-
- @Before
- public void setUpServer() throws Exception {
-  server = new TJWSEmbeddedJaxrsServer();
-  server.setPort(PORT);
-  ResteasyDeployment deployment = server.getDeployment();
-
-  server.start();
-
-  Dispatcher dispatcher = deployment.getDispatcher();
-  SpringBeanProcessor processor = new SpringBeanProcessor(dispatcher, deployment.getRegistry(), deployment.getProviderFactory());
-  applicationContext.addBeanFactoryPostProcessor(processor);
-
-  SpringResourceFactory noDefaults = new SpringResourceFactory(
-    "entityServiceRestImpl", applicationContext, EntityRestServiceImpl.class);
-  dispatcher.getRegistry().addResourceFactory(noDefaults);
- }
-
- @After
- public void stop() {
-  server.stop();
- }
-
- @Test
- public void testListAll() throws Exception {
-
-  int i = 0;
-  final List&lt;Entity&gt; returnedList = new ArrayList&lt;Entity&gt;();
-  int EXPECTED_SIZE = 6;
-  while (i &lt; EXPECTED_SIZE) {
-   i++;
-   final Entity entity = new Entity();
-   entity.setId(i);
-   entity.setName("test" + i);
-   returnedList.add(entity);
-  }
-  when(entityService.findAll()).thenReturn(returnedList);
-
-
-  HttpGet get = new HttpGet(BASE_URL + "/service/entity/");
-
-  HttpResponse response = client.execute(get);
-  InputStream content = response.getEntity().getContent();
-
-  EntityList result = fromString(EntityList.class, content);
-  content.close();
-
-  Assert.assertNotNull(result);
-  Assert.assertEquals(EXPECTED_SIZE, result.getEntities().size());
- }
-
- @Test
- public void testFindById() throws Exception {
-
-  final Entity validEntity = getValidEntity();
-  validEntity.setId(2);
-
-  when(entityService.findById(validEntity.getId())).thenAnswer(new Answer&lt;Object&gt;() {
-   @Override
-   public Object answer(InvocationOnMock invocation) throws Throwable {
-    return validEntity;
-   }
-  });
-
-  HttpGet get = new HttpGet(BASE_URL + "/service/entity/2");
-
-  HttpResponse response = client.execute(get);
-  InputStream content = response.getEntity().getContent();
-
-  Entity result = fromString(Entity.class, content);
-  content.close();
-
-  Assert.assertNotNull(result);
-
-  deepAssertEquals(validEntity, result);
-
- }
-
- private void deepAssertEquals(Object expected, Object actual) throws IllegalAccessException, InvocationTargetException {
-  Assert.assertEquals(expected.getClass(), actual.getClass());
-  PropertyDescriptor[] propertyDescriptors = BeanUtils.getPropertyDescriptors(expected.getClass());
-  for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
-   Object expectedValue = propertyDescriptor.getReadMethod().invoke(expected);
-   Object actualValue = propertyDescriptor.getReadMethod().invoke(actual);
-   Assert.assertEquals(expectedValue, actualValue);
-  }
- }
-
-        public static &lt;T&gt; T fromString(Class&lt;T&gt; clazz, String input) throws JAXBException {
-  JAXBContext ctx = JAXBContext.newInstance(clazz);
-  Unmarshaller unmarshaller = ctx.createUnmarshaller();
-  @SuppressWarnings(&quot;unchecked&quot;)
-  T unmarshal = (T) unmarshaller.unmarshal(new StringReader(input));
-  return unmarshal;
- }
-
- public static &lt;T&gt; T fromString(Class&lt;T&gt; clazz, InputStream input) throws JAXBException {
-  JAXBContext ctx = JAXBContext.newInstance(clazz);
-  @SuppressWarnings(&quot;unchecked&quot;)
-  T unmarshal = (T) ctx.createUnmarshaller().unmarshal(input);
-  return unmarshal;
- }
-}
-
-
-</pre>
-
-<h4>Запуск тестов</h4>
-Половина дела сделана, теперь нам необходимо настроить инфраструктуру для тестирования наших свеженаписанных REST-сервисов.
-
-Для этого нам необходимо внести следующие модификации в <tt>pom.xml</tt>:
-
-<pre class="brush: xml">
-
-&lt;plugin&gt;
-    &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-    &lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;
-    &lt;version&gt;2.11&lt;/version&gt;
-
-    &lt;executions&gt;
-        &lt;execution&gt;
-     &lt;id&gt;Unit tests&lt;/id&gt;
-            &lt;phase&gt;test&lt;/phase&gt;
-            &lt;goals&gt;
-                &lt;goal&gt;test&lt;/goal&gt;
-            &lt;/goals&gt;
-            &lt;configuration&gt;
-                &lt;excludes&gt;
-                    &lt;exclude&gt;**/IT*.java&lt;/exclude&gt;
-                &lt;/excludes&gt;
-            &lt;/configuration&gt;
-        &lt;/execution&gt;
-        &lt;execution&gt;
-            &lt;id&gt;Integration tests&lt;/id&gt;
-            &lt;phase&gt;integration-test&lt;/phase&gt;
-            &lt;goals&gt;
-                &lt;goal&gt;test&lt;/goal&gt;
-            &lt;/goals&gt;
-            &lt;configuration&gt;
-                &lt;includes&gt;
-                    &lt;include&gt;**/IT*.java&lt;/include&gt;
-                &lt;/includes&gt;
-            &lt;/configuration&gt;
-        &lt;/execution&gt;
-    &lt;/executions&gt;
-&lt;/plugin&gt;
-
-&lt;dependency&gt;
-    &lt;groupId&gt;org.apache.httpcomponents&lt;/groupId&gt;
-    &lt;artifactId&gt;httpclient&lt;/artifactId&gt;
-    &lt;version&gt;4.1.2&lt;/version&gt;
-    &lt;scope&gt;test&lt;/scope&gt;
-&lt;/dependency&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;org.jboss.resteasy&lt;/groupId&gt;
-    &lt;artifactId&gt;resteasy-jaxrs&lt;/artifactId&gt;
-    &lt;scope&gt;test&lt;/scope&gt;
-&lt;/dependency&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;org.jboss.resteasy&lt;/groupId&gt;
-    &lt;artifactId&gt;resteasy-spring&lt;/artifactId&gt;
-    &lt;scope&gt;test&lt;/scope&gt;
-&lt;/dependency&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;org.jboss.resteasy&lt;/groupId&gt;
-    &lt;artifactId&gt;tjws&lt;/artifactId&gt;
-    &lt;version&gt;${resteasy-jaxrs.version}&lt;/version&gt;
-&lt;/dependency&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;javax.servlet&lt;/groupId&gt;
-    &lt;artifactId&gt;servlet-api&lt;/artifactId&gt;
-    &lt;scope&gt;test&lt;/scope&gt;
-&lt;/dependency&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;commons-io&lt;/groupId&gt;
-    &lt;artifactId&gt;commons-io&lt;/artifactId&gt;
-    &lt;scope&gt;test&lt;/scope&gt;
-&lt;/dependency&gt;
-</pre>
-
-<h4>Заключение</h4>
-В целом, ничего сложного, главное делать всё аккуратно. Хорошего вам кода!</div>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -2045,6 +1827,10 @@ public class TestEntityServiceRest {
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/06/19/autowiring-factorybean/">@Autowiring EJBs with Spring</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/06/19/spring-caching/">Использование memcached в качестве backend для Spring Caching Abstraction</a>
       </li>
     
@@ -2058,10 +1844,6 @@ public class TestEntityServiceRest {
     
       <li class="post">
         <a href="/blog/2012/10/24/vagrant/">Автоматизируем работу с виртуальными машинами с помощью Vagrant</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/04/28/spring-data-jpa_28/">Собственная реализация методов в Spring Data JPA</a>
       </li>
     
   </ul>

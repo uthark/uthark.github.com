@@ -9,7 +9,8 @@
   <meta name="author" content="Oleg Atamanenko">
 
   
-  <meta name="description" content="Summary: Некоторые особенности вложенных транзакций. Иногда бывает так, что при обработке запроса необходимо открыть ещё одну транзакцию в рамках &hellip;">
+  <meta name="description" content="Выкладываю ниже список задач, которые нужно/можно выполнить для оптимизации приложения, написанного на Grails, может кому пригодится.
+Тестирование &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +79,139 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/02/06/grails/">Список для проверки при оптимизации Grails приложений</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-02-06T12:31:00-05:00" pubdate data-updated="true">Feb 6<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+Выкладываю ниже список задач, которые нужно/можно выполнить для оптимизации приложения, написанного на Grails, может кому пригодится.<br />
+<h4>Тестирование проведённых оптимизаций </h4>Первым делом необходимо разработать критерии проверки, которые позволят оценить эффективность проведённых оптимизаций.<br />
+<ol><li>Установить <a href="http://code.google.com/p/javamelody/">Java Melody</a> <a href="http://www.grails.org/plugin/grails-melody">плагин</a> для Grails для проведения анализа. <br />
+</li>
+<li>Разработать скрипты для проведения нагрузочного тестирования.<br />
+</li>
+<li>Прогнать скрипты.<br />
+</li>
+<li>Проанализировать результаты Java Melody, выявить узкие места, произвести нужные оптимизации.</li>
+</ol><h4>Общие оптимизации </h4>Очень часто обновление до последней версии используемых библиотек попутно улучшает производительность.<br />
+<ol><li>Обновить Java до последней версии<br />
+</li>
+<li>Обновить Groovy до последней версии.<br />
+</li>
+<li>Обновить Grails до последней версии.<br />
+</li>
+<li>Обновить jQuery до последней версии.<br />
+</li>
+<li>Оптимизировать настройки виртуальной машины Java (например, -server -Xmx270m -Xms270m -XX:MaxPermSize=80m -Xverify:none -XX:+UseParallelGC -XX:+UseParallelOldGC -XX:+UseAdaptiveSizePolicy -XX:SurvivorRatio=4 -XX:TargetSurvivorRatio=90 -XX:MaxTenuringThreshold=31 -XX:+AggressiveOpts)<br />
+a. http://java.sun.com/javase/technologies/hotspot/gc/gc_tuning_6.html<br />
+Вообще, по оптимизации JVM написаны целые книги, так что не буду здесь останавливаться.<br />
+</li>
+</ol><h4>Оптимизация клиентской части </h4><ol><li>Настроить <a href="http://tomcat.apache.org/tomcat-5.5-doc/config/context.html">кэширование статических ресурсов</a> в Томкате.<br />
+</li>
+<li>Настроить <a href="http://tomcat.apache.org/tomcat-5.5-doc/config/http.html">сжатие статических ресурсов</a> в Томкате.<br />
+</li>
+<li>(поставить прокси на nginx для кэширования статических ресурсов ?)<br />
+</li>
+<li>Установить плагины для Firebug, которые оценят производительность клиентской части.<br />
+<ul><li><a href="http://code.google.com/speed/page-speed">PageSpeed</a> </li>
+<li><a href="http://developer.yahoo.com/yslow/">YSlow</a> </li>
+</ul></li>
+<li>Проанализировать страницы веб-сайта с их помощью<br />
+</li>
+<li>Провести предлагаемые оптимизации.<br />
+</li>
+</ol><h4>Оптимизация клиентской части приложений, написанных на Grails </h4><ol><li>Установить плагин <a href="http://www.grails.org/plugin/ui-performance">UI Performance</a><br />
+</li>
+<li>Провести оптимизацию с использованием плагина UI Performance <br />
+</li>
+</ol><h4>Оптимизация базы данных </h4><ol><li>Оптимизировать производительность сервера базы данных (SQL Server) <br />
+a. http://www.sql-server-performance.com/tips/all_main.aspx <br />
+a. http://msdn.microsoft.com/en-us/library/ms998577.aspx<br />
+</li>
+<li>Проверить наличие индексов в базе данных, добавить необходимые<br />
+</li>
+<li>Найти неоптимальные запросы в БД, оптимизировать</li>
+</ol><h4>Оптимизация работы с базой данных </h4><ol><li>Обновить версию JDBC-драйвера<br />
+</li>
+<li>Настроить кэширование в Hibernate.<br />
+Ресурсов в сети предостаточно, навскидку <a href="http://docs.jboss.org/hibernate/core/3.3/reference/en/html/performance.html">вот</a> <a href="http://www.devx.com/dbzone/Article/29685/1954"> парочка</a>.<br />
+</li>
+</ol><h4>Оптимизация серверной части приложения </h4><ol><li>Произвести профилирование приложения (использовать Visual VM, YJP Profiler), найти узкие места и оптимизировать их.</li>
+</ol><h4>Оптимизация серверной части приложения (опционально) </h4><ol><li>Установить плагин <a href="http://www.grails.org/plugin/perf4j">Perf4J</a> для грэйлза <br />
+</li>
+<li>Добавить необходимые счётчики в код<br />
+</li>
+<li>Прогнать нагрузочные тесты, найти узкие места, оптимизировать.</li>
+</ol><h4>Заключение</h4>В целом, в данном списке нет ничего нового, это всего лишь компиляция публично доступных материалов. Тем не менее, решил это опубликовать, чтобы сэкономить время другим.</div>
+
+
+<h2>Comments</h2>
+
+
+<div class='comments'>
+<div class='comment'>
+<div class='author'>uthark</div>
+<div class='content'>
+@serger По вашей ссылке достаточно странное сравнение.<br />Остались такие вопросы:<br />1. Какие были настройки JVM?<br />2. Почему не учитывается, что при работе на сервере поведение может изменяться (ограничения по количеству потоков, например)<br />3. Не сказано, сколько раз прогонялся каждый тест.<br />4. Сколько было памяти выделено тестам.<br /><br />У меня для groovy вот такой результат получился:<br />Using 100000 iterations.<br />7.531 sec. - +/- 0.1 секунды, прогонял 10 раз.<br /><br />Тесты гонял на домашней машинке (AMD64 4200, 4GB RAM, Java 1.6.0.16, Groovy 1.6.3. OS: Ubuntu 9.10).</div>
+</div>
+<div class='comment'>
+<div class='author'>serger</div>
+<div class='content'>
+и ещё:<br />http://blog.gramant.ru/2009/10/15/%D0%B0%D0%B1%D1%81%D0%BE%D0%BB%D1%8E%D1%82%D0%BD%D0%BE-%D0%B1%D0%B5%D1%81%D0%BF%D0%BE%D0%BB%D0%B5%D0%B7%D0%BD%D1%8B%D0%B9-%D1%82%D0%B5%D1%81%D1%82-%E2%84%961-php-vs-groovy/</div>
+</div>
+<div class='comment'>
+<div class='author'>uthark</div>
+<div class='content'>
+@serger Да, про груви++ я знаю. Но ведь это костыль. :)</div>
+</div>
+<div class='comment'>
+<div class='author'>serger</div>
+<div class='content'>
+Да, тяжко, но подвижки есть&#8230;<br />http://stronglytypedblog.blogspot.com/2010/02/java-vs-scala-vs-groovy-vs-groovy.html<br />http://stronglytypedblog.blogspot.com/2010/02/groovy-performance-now-were-talkin.html</div>
+</div>
+<div class='comment'>
+<div class='author'>uthark</div>
+<div class='content'>
+@serger Вообще сравнения производительности показывают, что groovy, на котором написан grails в десятки раз медленнее явы [1], [2]. Но зато добавляются бенефиты динамического языка. Вообще я за Roo, но его ещё рано пускать в production.<br /><br /> [1] http://www.codecommit.com/blog/java/groovys-performance-is-not-subjective<br /> [2] http://groovy.dzone.com/news/groovy-vs-java-performance-jav</div>
+</div>
+<div class='comment'>
+<div class='author'>serger</div>
+<div class='content'>
+А на сколько, по Вашему, медленнее Grails, чем допустим, spring MVC, (если знакомы Roo). И на чём конкретно падает производительность?</div>
+</div>
+</div>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -785,313 +919,6 @@ P.P.S. У расширения появилась своя страничка в
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/11/14/delicious-bookmarks-google/">Расширение Delicious Bookmarks для Google Chrome/Chromium</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-11-14T11:34:00-05:00" pubdate data-updated="true">Nov 14<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div class='post'>
-<h1>Введение</h1><br />
-Решил научиться писать собственные расширения для <a href="http://www.google.com/chrome">Google Chrome</a>/<a href="http://www.chromium.org/">Chromium</a>.<br />
-<br />
-За идею взял официальное расширение от <a href="http://m.www.yahoo.com/">Yahoo!</a> для <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a> - <a href="https://addons.mozilla.org/en-US/firefox/addon/3615">Delicious Bookmarks</a>.<br />
-<br />
-<h1>Структура расширения</h1><br />
-Расширение - файл с расширением <tt>.crx</tt>. На самом деле это просто <tt>ZIP</tt>-архив с файлом манифеста внутри.<br />
-<br />
-<h1>Файл манифеста</h1><pre class="brush:js; highlight: [2, 3, 4, 5, 10, 16, 23]">{
-"name": "Delicious plugin", // 1
-"version": "0.2", // 2
-"background_page": "background.html", // 3
-"permissions": [ // 4
-"bookmarks",
-"tabs"
-],
-
-"browser_action": { // 5
-"name": "Save bookmark to delicious.com",
-"default_title": "Save bookmark to delicious.com",
-"default_icon": "delicious.20.gif" // optional
-},
-
-"content_scripts": [ // 6
-{
-"matches": ["http://*/*", "https://*/*"],
-"js": ["getDocumentSelection.js"]
-}
-],
-
-"options_page": "options.html" // 7
-}
-</pre><br />
-Манифест - файл в формате <a href="http://json.org/">JSON</a>.<br />
-<br />
-Манифест состоит из следующих частей:<br />
-<br />
-1. <span style="font-weight:bold;"><tt>name</tt></span> - Имя расширения<br />
-2. <span style="font-weight:bold;"><tt>version</tt></span> - Версия расширения<br />
-3. <span style="font-weight:bold;"><tt>background_page</tt></span> - основной файл с расширением. Это обычный HTML-файл с разметкой.<br />
-4. <span style="font-weight:bold;"><tt>permissions</tt></span> - разрешения для расширения. Указываем, что нам нужен доступ к вкладкам (tabs) и закладкам (bookmarks).<br />
-5. <span style="font-weight:bold;"><tt>browser_action</tt></span> - указываем, что нужно отобразить на панели инструментов браузера.<br />
-6. <span style="font-weight:bold;"><tt>content_scripts</tt></span> - Для доступа к DOM отображаемой страницы необходимы content scripts, данный блок регистрирует скрипт <tt>getDocumentSelection.js</tt> для всех <tt>http</tt> и <tt>https</tt> страниц.<br />
-7. <span style="font-weight:bold;"><tt>options_page</tt></span> - страница с настройками.<br />
-<br />
-Подробное описание файла манифеста есть <a href="http://code.google.com/chrome/extensions/manifest.html">на официальном сайте</a>. <br />
-<br />
-<h1>Описание работы расширения</h1><br />
-<br />
-Расширение работает следующим образом:<br />
-1. При клике на значок расширения вызывается обработчик <tt>addBookmark</tt><br />
-2. Обработчик открывает коммуникационный порт и отправляет сообщение скрипту содержимого.<br />
-3. Скрипт содержимого забирает выделенный текст и отправляет назад расширению выделенный текст.<br />
-4. Расширение забирает выделенный текст, определяет настройки сохранения (Private/Public) и вызывает окно сохранения <span style="font-style:italic;">Delicious</span>.<br />
-<br />
-<h1>Реализация расширения</h1><br />
-<br />
-<span style="font-weight:bold;">background.html</span>:<br />
-<pre class="brush:js; html-script: true">&lt;html&gt;
-&lt;head&gt;
-&lt;script&nbsp;type=&quot;text/javascript&quot;&gt;
-&nbsp;&nbsp;&nbsp;&nbsp;function&nbsp;saveBookmark()&nbsp;{
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Send&nbsp;our&nbsp;password&nbsp;to&nbsp;the&nbsp;current&nbsp;tab&nbsp;when&nbsp;clicked.
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;chrome.tabs.getSelected(null,&nbsp;function(tab)&nbsp;{
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;port&nbsp;=&nbsp;chrome.tabs.connect(tab.id,&nbsp;{
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;:&nbsp;&quot;deliciousBookmark&quot;
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;port.postMessage(&nbsp;{
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;action&nbsp;:&nbsp;'getSelection'
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});
-&nbsp;&nbsp;&nbsp;&nbsp;}
-
-&nbsp;&nbsp;&nbsp;&nbsp;function&nbsp;addBookmark(id,&nbsp;bookmark)&nbsp;{
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(&quot;added&nbsp;bookmark:&nbsp;&nbsp;&quot;&nbsp;+&nbsp;bookmark);
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;saveBookmark();
-&nbsp;&nbsp;&nbsp;&nbsp;}
-
-&nbsp;&nbsp;&nbsp;&nbsp;chrome.bookmarks.onCreated.addListener(addBookmark);
-&nbsp;&nbsp;&nbsp;&nbsp;console.log(&quot;Registered&nbsp;listener&quot;);
-
-&nbsp;&nbsp;&nbsp;&nbsp;function&nbsp;getShareStatus()&nbsp;{
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;markPrivate&nbsp;=&nbsp;localStorage[&quot;markPrivate&quot;];
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;share&nbsp;=&nbsp;&quot;yes&quot;;
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(markPrivate&nbsp;==&nbsp;&quot;true&quot;)&nbsp;{
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;share&nbsp;=&nbsp;&quot;no&quot;;
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;share;
-&nbsp;&nbsp;&nbsp;&nbsp;}
-
-&nbsp;&nbsp;&nbsp;&nbsp;chrome.extension.onConnect.addListener(function(port)&nbsp;{
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.assert(port.name&nbsp;==&nbsp;&quot;deliciousBookmark&quot;);
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;port.onMessage.addListener(function(msg)&nbsp;{
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;selection&nbsp;=&nbsp;msg.selection;
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;chrome.tabs.getSelected(null,&nbsp;function(tab)&nbsp;{
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;url&nbsp;=&nbsp;encodeURIComponent(tab.url);
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(!url&nbsp;||&nbsp;url&nbsp;===&nbsp;&quot;&quot;)&nbsp;{
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;title&nbsp;=&nbsp;encodeURIComponent(tab.title);
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;description&nbsp;=&nbsp;encodeURIComponent(selection);
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;share&nbsp;=&nbsp;getShareStatus();
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;f&nbsp;=&nbsp;'http://delicious.com/save?url='&nbsp;+&nbsp;url&nbsp;+&nbsp;'&amp;title='&nbsp;+&nbsp;title&nbsp;+&nbsp;'&amp;notes='&nbsp;+&nbsp;description
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+&nbsp;'&amp;share='&nbsp;+&nbsp;share&nbsp;+&nbsp;'&amp;v=5&amp;';
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window.open(f&nbsp;+&nbsp;'noui=1&amp;jump=doclose',&nbsp;'deliciousuiv5',
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'location=yes,links=no,scrollbars=no,toolbar=no,width=550,height=550');
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});
-&nbsp;&nbsp;&nbsp;&nbsp;});
-
-&nbsp;&nbsp;&nbsp;&nbsp;chrome.browserAction.onClicked.addListener(saveBookmark);
-&lt;/script&gt;
-&lt;/head&gt;
-&lt;/html&gt;
-
-</pre><br />
-<br />
-<span style="font-weight:bold;">getDocumentSelection.js</span><br />
-<br />
-<pre class="brush:js">var port = chrome.extension.connect( {
-name : "deliciousBookmark"
-});
-
-// Also listen for new channels from the extension for when the button is
-// pressed.
-chrome.extension.onConnect.addListener(function(port) {
-console.assert(port.name == "deliciousBookmark");
-port.onMessage.addListener(function(msg) {
-if (msg.action == 'getSelection') {
-var responsePort = chrome.extension.connect( {
-name : "deliciousBookmark"
-});
-var description = document.getSelection() ? '' + document.getSelection() : '';
-responsePort.postMessage( {
-selection : description
-});
-}
-});
-});
-
-
-</pre><br />
-<br />
-<span style="font-weight:bold;">options.html</span><br />
-<br />
-<pre class="brush:js; html-script: true">&lt;html&gt;
-&lt;html&gt;
-&lt;head&gt;
-&lt;title&gt;Delicious Bookmarks Options&lt;/title&gt;
-&lt;/head&gt;
-&lt;script type=&quot;text/javascript&quot;&gt;
-    // Saves options to localStorage.
-    function saveOptions() {
-        var share = document.getElementById(&quot;share&quot;);
-        localStorage[&quot;markPrivate&quot;] = share.checked;
-
-        // Update status to let user know options were saved.
-        var status = document.getElementById(&quot;status&quot;);
-        status.innerHTML = &quot;Options Saved.&quot;;
-        setTimeout(function() {
-            status.innerHTML = &quot;&quot;;
-        }, 1500);
-    }
-
-    // Restores select box state to saved value from localStorage.
-    function restoreOptions() {
-        var share = localStorage[&quot;markPrivate&quot;];
-
-        if (!share) {
-            return;
-        }
-        var shareCheckbox = document.getElementById(&quot;share&quot;);
-
-        shareCheckbox.checked = share;
-        
-    }
-&lt;/script&gt;
-
-&lt;body onload=&quot;restoreOptions()&quot;&gt;
-
-&lt;label for=&quot;share&quot;&gt;Mark as Private&lt;/label&gt;
-&lt;input type=&quot;checkbox&quot; class=&quot;checkbox&quot; name=&quot;share&quot; id=&quot;share&quot; /&gt;
-
-
-&lt;br&gt;
-&lt;button onclick=&quot;saveOptions();&quot;&gt;Save&lt;/button&gt;
-&lt;div id=&quot;status&quot;&gt;&amp;nbsp;&lt;/div&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</pre><br />
-<br />
-<h1>Сборка расширения</h1><br />
-В Chromium есть возможность собрать расширение.<br />
-1. Открываем адрес <tt>chrome://extensions/</tt><br />
-2. В правом верхнем углу нажимаем Developer Mode.<br />
-3. На появившейся панели инструментов кликаем Pack Extension<br />
-4. Выбираем каталог, в котором находится расширение<br />
-5. Chromium автоматически собирает расширение в каталоге с исходниками расширения.<br />
-<br />
-<h1>Заключение</h1><br />
-Писать расширения для Google Chrome не просто, а очень просто. <br />
-<br />
-Готовое и собранное расширение можно <a href="http://bit.ly/2KYnr8">скачать здесь</a>.<br />
-<br />
-<h1>Дополнительная информация</h1><br />
-<ol><li><a href="http://code.google.com/chrome/extensions/devguide.html">Google Chrome Extensions Developer&#8217;s Guide</a></li>
-<li><a href="http://code.google.com/chrome/extensions/manifest.html">Manifest file description</a></li>
-<li><a href="http://code.google.com/chrome/extensions/api_index.html">Chrome Extensions API</a></li>
-<li><a href="http://code.google.com/chrome/extensions/packaging.html">Extension Packaging</a></li>
-</ol><br />
-<br />
-В следующей заметке опишу работу messaging для коммуникации расширения со скриптами содержимого.</div>
-
-
-<h2>Comments</h2>
-
-
-<div class='comments'>
-<div class='comment'>
-<div class='author'>Juev</div>
-<div class='content'>
-Очень много расширений уже реализуют добавление закладок в социальные закладки, но пока не встретил ни одного, которое реализует синхронизацию локальных закладок с сервером&#8230; Как это делает например расширение делисиоус для огнелиса. Если сумеете реализовать, цены расширению не будет!</div>
-</div>
-<div class='comment'>
-<div class='author'>uthark</div>
-<div class='content'>
-@karri<br />Подпишитесь :). Правда, пишу я нерегулярно.</div>
-</div>
-<div class='comment'>
-<div class='author'>karri</div>
-<div class='content'>
-А у вас тут интересно, хоть я и неважный ITтишник =) Пожалуй, подпишусь на вас! =)</div>
-</div>
-<div class='comment'>
-<div class='author'>uthark</div>
-<div class='content'>
-@karri Надеюсь, больше вам этого не придётся делать и расширение сослужит для вас хорошую службу. В следующей версии расширения будет возможность получить быстрый доступ к своему аккаунту на delicious, а также возможность быстрого доступа к закладкам с определённой меткой. Для чего это может быть полезно - читайте  <a href="http://atamanenko.blogspot.com/2009/04/blog-post.html" rel="nofollow">этот</a> и <a href="http://atamanenko.blogspot.com/2009/04/2.html" rel="nofollow">этот</a> посты.</div>
-</div>
-<div class='comment'>
-<div class='author'>karri</div>
-<div class='content'>
-Спасибо! =) Все-таки вчера не дождалась ответа и руками подабовляла в delicious на delicious.com =)</div>
-</div>
-<div class='comment'>
-<div class='author'>uthark</div>
-<div class='content'>
-Достаточно обновить страницу, которую вы хотите сохранить.<br /><br />Кроме того, нужна версия браузера выше 4.0.227.0</div>
-</div>
-<div class='comment'>
-<div class='author'>karri</div>
-<div class='content'>
-А браузер нужно перезапускать? Сорри за такой глупый вопрос, у меня тут дилема: куча нужных вкладок открыто, а Chrome, как FF не спрашивает сохранить ли их при закрытии :( По крайней мере что-то не нашла такой галочки :( Сижу думаю, что делать, delicious не вызывается и закрывать не хоцца &#8230;</div>
-</div>
-<div class='comment'>
-<div class='author'>uthark</div>
-<div class='content'>
-@Denis <br />На здоровье. О найденных ошибках и своих предложениях можешь сообщать в комментариях к этому посту.</div>
-</div>
-<div class='comment'>
-<div class='author'>Denis</div>
-<div class='content'>
-Спасибо. Статья очень понравилась а расширением уже пользуюсь ;)</div>
-</div>
-</div>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -1109,6 +936,10 @@ selection : description
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/06/19/autowiring-factorybean/">@Autowiring EJBs with Spring</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/06/19/spring-caching/">Использование memcached в качестве backend для Spring Caching Abstraction</a>
       </li>
     
@@ -1122,10 +953,6 @@ selection : description
     
       <li class="post">
         <a href="/blog/2012/10/24/vagrant/">Автоматизируем работу с виртуальными машинами с помощью Vagrant</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/04/28/spring-data-jpa_28/">Собственная реализация методов в Spring Data JPA</a>
       </li>
     
   </ul>

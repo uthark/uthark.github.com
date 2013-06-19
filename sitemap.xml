@@ -238,14 +238,18 @@
     </url>
     <url>
         <loc>http://uthark.github.com/blog/2013/06/19/spring-caching/</loc>
-        <lastmod>2013-06-19T15:15:53-04:00</lastmod>
+        <lastmod>2013-06-19T15:25:40-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://uthark.github.com/blog/2013/06/19/autowiring-factorybean/</loc>
+        <lastmod>2013-06-19T15:40:39-04:00</lastmod>
     </url>
     <url>
         <loc>http://uthark.github.com/blog/archives/</loc>
-        <lastmod>2013-06-19T15:15:53-04:00</lastmod>
+        <lastmod>2013-06-19T15:40:39-04:00</lastmod>
     </url>
     <url>
         <loc>http://uthark.github.com/</loc>
-        <lastmod>2013-06-19T15:15:53-04:00</lastmod>
+        <lastmod>2013-06-19T15:40:39-04:00</lastmod>
     </url>
 </urlset>
