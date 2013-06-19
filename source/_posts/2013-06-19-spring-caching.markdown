@@ -19,7 +19,7 @@ categories:
 
 ## Подключаем зависимости
 
-{% codeblock lang:java %}
+{% codeblock lang:xml %}
 <dependency>
     <groupId>com.google.code.simple-spring-memcached</groupId>
     <artifactId>spymemcached-provider</artifactId>
