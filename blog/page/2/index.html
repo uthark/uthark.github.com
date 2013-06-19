@@ -9,8 +9,7 @@
   <meta name="author" content="Oleg Atamanenko">
 
   
-  <meta name="description" content="Сегодня я хочу рассмотреть некоторые особенности переопределения методов в Java. В java нельзя переопределить: поля класса
-конструкторы, &hellip;">
+  <meta name="description" content="Наверно, вы уже сталкивались с таким понятием, как AOП &ndash; аспектно-ориентированное программирование. Обычно, про него вспоминают, когда говорят &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +78,331 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/01/27/aspectj/">Немножко магии от AspectJ</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-27T14:43:00-05:00" pubdate data-updated="true">Jan 27<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Наверно, вы уже сталкивались с таким понятием, как AOП &ndash; <a href="http://en.wikipedia.org/wiki/Aspect-oriented_programming">аспектно-ориентированное программирование</a>.<br /></p>
+
+<br />
+
+
+<p>Обычно, про него вспоминают, когда говорят про <a href="http://static.springsource.org/spring/docs/current/reference/html/transaction.html#transaction-declarative-applying-more-than-just-tx-advice">декларативное использование транзакций</a>,  про <a href="https://docs.jboss.com/aop/1.0/aspect-library/reference/annotation15_security.html">проверку прав доступа</a>, либо про <a href="http://static.springsource.org/spring/docs/3.0.x/javadoc-api/org/springframework/aop/interceptor/CustomizableTraceInterceptor.html">реализацию журналирования</a>.<br /></p>
+
+<br />
+
+
+<p>Но это не единственные области применения АОП.<br /></p>
+
+<br />
+
+
+<p>Я хочу показать ещё пару областей применения из реальных проектов:<br /></p>
+
+<br />
+
+
+<ol>
+<li>Модификация исходного кода для реализации дополнительных возможностей.<br /></li>
+<li>Принудительная проверка контракта между модулями.<br /></li>
+</ol>
+
+
+<br />
+
+
+<h4>Модификация исходного кода для реализации дополнительных возможностей</h4>
+
+
+<p>Предположим, что у нас есть модуль в приложении, который предоставляет нужную нам функциональность. С модулем всё в порядке, кроме одного &ndash; все его методы могут выбрасывать проверяемые исключения, что ведёт к ухудшению читаемости кода, так как вместо простого вызова метода:<br /></p>
+
+<br />
+
+
+<pre class="brush:java;">service.doUsefulThing();
+</pre>
+
+
+<br />
+
+
+<p>наш вызов превращается в <br /></p>
+
+<br />
+
+
+<pre class="brush:java;">try {
+        service.doUsefulThing();
+    } catch ( FirstServiceException e) {
+        processException(e);
+    } catch ( SecondServiceException e) {
+        processException(e);
+    }
+</pre>
+
+
+<br />
+
+
+<p>Дополнительная проблема в том, что у модуля количество модулей 10+, количество методов также велико, что приводит к тому, что блоки <tt>try/catch</tt> замусоривают код. Решение с использованием паттерна <tt><a href="https://en.wikipedia.org/wiki/Callback_(computer_programming)">Callback</a></tt> также приведёт к замусориванию кода.<br /></p>
+
+<br />
+
+
+<h5>Вариант решения проблемы с использованием AOP</h5>
+
+
+<p>Решение данной проблемы было таким &ndash; а что, если используя возможности AOP трансформировать проверяемое исключение в непроверяемое? Таким образом, мы сможем избавиться от скучной проверки на исключения в нашем коде, а для обработки исключения (ведь мы всегда его будем обрабатывать одинаково) достаточно будет использовать обработку исключения на верхнем уровне абстракции.<br /></p>
+
+<br />
+
+
+<p>Для более элегантного решения проблемы было решено добавить собственную аннотацию, которой нужно помечать метод, который использует сервис из &ldquo;плохого&rdquo; модуля.<br /></p>
+
+<br />
+
+
+<pre class="brush:java;">package com.blogger.atamanenko;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+import java.lang.annotation.RetentionPolicy;
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.METHOD})
+@Documented
+@Inherited
+public @interface SuppressExceptions {
+}
+
+</pre>
+
+
+<br />
+
+
+<p>А также аспект, который бы делал всю нужную нам функциональность:<br /></p>
+
+<br />
+
+
+<pre class="brush:java;">public aspect ExceptionSupressingAspect {
+
+        declare soft :ServiceException:  execution(@com.blogger.atamanenko.annotation.SuppressExceptions * *.*(..));
+
+}
+</pre>
+
+
+<br />
+
+
+<p>Данный аспект делает в точности следующее: &ldquo;Смягчает&rdquo; исключение <tt>ServiceException</tt> для метода, который помечен аннотацией <tt>@SuppressExceptions</tt>.<br /></p>
+
+<br />
+
+
+<p>Пример использования:<br /></p>
+
+<br />
+
+
+<pre class="brush:java;">@SuppressExceptions
+    protected Entity findEntity(final Identifiable id) {
+        return entityService.findById(id);
+    }
+</pre>
+
+
+<h4>Принудительная проверка контракта между модулями</h4>
+
+
+<p>Часто нам необходимо принудительно требовать выполнения каких-то архитектурных ограничений, например, контроллеры должны работать только с сервисами и им запрещено напрямую обращаться к базе данных.<br /></p>
+
+<br />
+
+
+<p>Для реализации таких проверок можно также использовать возможности AOP.<br /></p>
+
+<br />
+
+
+<p>Предположим, что в нашем приложении модуль сервиса выставляет наружу <a href="http://java.sun.com/blueprints/corej2eepatterns/Patterns/TransferObject.html">DTO</a> для работы, скрывая при этом классы модели. Для того, чтобы явно запретить доступ к классам и методам модели нам необходимо создать аспект, который бы вызывал ошибку компиляции при нарушении ограничения.<br /></p>
+
+<br />
+
+
+<pre class="brush:java;">aspect ForbidAccessToModelAspect {
+
+//      Full prohibition of access to model:
+        pointcut accessModel(): call(* com.blogger.atamanenko.app.model..*.*(..));
+        declare error: accessModel() : "Illegal call to model";
+
+}
+</pre>
+
+
+<br />
+
+
+<p>После объявления такого аспекта, мы получим ошибку компиляции, что, очевидным образом, приведёт к выполнению архитектурного ограничения.<br /></p>
+
+<br />
+
+
+<p>Если же нам необходимо разрешить доступ к одному пакету только из какого-то определённого другого, то мы можем модифицировать наш аспект следующим образом:<br /></p>
+
+<br />
+
+
+<pre class="brush:java;">aspect ForbidAccessToModelAspect2 {
+
+        pointcut accessModel(): call(* com.blogger.atamanenko.app.model.**.*(..));
+
+        // Allow access to model from specific package for methods and constructors
+        pointcut allowAccessModelFromSpecificPackage(): withincode(* com.blogger.atamanenko.app.allowedpackage..*.*(..));
+        pointcut allowAccessModelFromSpecificPackage2(): withincode(com.blogger.atamanenko.app.allowedpackage..*.new(..));
+
+        // forbid usage from any other methods.
+        declare error: accessModel() && !(allowAccessModelFromSpecificPackage() || allowAccessModelFromSpecificPackage()):"Illegal call to Model from forbidden package";
+
+}
+
+</pre>
+
+
+<br />
+
+
+<p>Такой аспект, созданный в нашем модуле запретит нам использовать классы модели из всех пакетов, кроме <tt>com.blogger.atamanenko.app.allowedpackage</tt><br /></p>
+
+<h4>Сборка приложения</h4>
+
+
+<p>Файл аспекта нужно положить в каталог <tt>src/main/aspect</tt>, а для сборки приложения необходимо использовать не стандартный Oracle <a href="http://docs.oracle.com/javase/6/docs/technotes/tools/solaris/javac.html">Java Compiler</a>, а <a href="http://eclipse.org/aspectj/downloads.php">AspectJ compiler</a>.<br /></p>
+
+<br />
+
+
+<p>Пример конфигурации для <a href="https://maven.apache.org/">Apache Maven</a>:<br /></p>
+
+<br />
+
+
+<pre class="brush:xml;">&lt;plugin&gt;
+    &lt;groupId&gt;org.codehaus.mojo&lt;/groupId&gt;
+    &lt;artifactId&gt;aspectj-maven-plugin&lt;/artifactId&gt;
+    &lt;version&gt;${aspectj-maven-plugin.version}&lt;/version&gt;
+    &lt;configuration&gt;
+        &lt;complianceLevel&gt;1.6&lt;/complianceLevel&gt;
+        &lt;aspectLibraries&gt;
+            &lt;aspectLibrary&gt;
+                &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+                &lt;artifactId&gt;spring-aspects&lt;/artifactId&gt;
+            &lt;/aspectLibrary&gt;
+        &lt;/aspectLibraries&gt;
+        &lt;verbose&gt;true&lt;/verbose&gt;
+    &lt;/configuration&gt;
+    &lt;executions&gt;
+        &lt;execution&gt;
+            &lt;phase&gt;process-sources&lt;/phase&gt;
+            &lt;goals&gt;
+                &lt;goal&gt;compile&lt;/goal&gt;
+                &lt;goal&gt;test-compile&lt;/goal&gt;
+            &lt;/goals&gt;
+        &lt;/execution&gt;
+    &lt;/executions&gt;
+&lt;/plugin&gt;
+</pre>
+
+
+<h4>Заключение</h4>
+
+
+<p>Вот в общем-то и всё. Я сознательно не стал описывать языковые конструкции аспектов, так как они подробно описаны в <a href="https://www.eclipse.org/aspectj/doc/next/progguide/index.html">руководстве AspectJ</a></div></p>
+
+<h2>Comments</h2>
+
+
+<p><div class='comments'>
+<div class='comment'>
+<div class='author'>Oleg Atamanenko</div>
+<div class='content'>
+Можно же купить электронную версию книги для Amazon Kindle &ndash; <a href="http://www.amazon.com/Awais-Rashid/e/B001HCXO76/ref=ntt_athr_dp_pel_pop_1">http://www.amazon.com/Awais-Rashid/e/B001HCXO76/ref=ntt_athr_dp_pel_pop_1</a></div>
+</div>
+<div class='comment'>
+<div class='author'>Anonymous</div>
+<div class='content'>
+к сожалению не получается заказать книжку, везде один и тот же ответ &ndash; можно сделать на заказ, но скорее всего не получится и никто заморачиваться не хочет =(<br />может быть еще какие-то книжки посоветуете? пжжллааллууйййссттаааа! =)</div>
+</div>
+<div class='comment'>
+<div class='author'>Oleg Atamanenko</div>
+<div class='content'>
+На амазоне можно заказать используя посреднические службы доставки.</div>
+</div>
+<div class='comment'>
+<div class='author'>Anonymous</div>
+<div class='content'>
+Да, и кстати, я так понял,что книга Awais Rashid в свободном доступе нет и купить можно только в Европе (не в России)???</div>
+</div>
+<div class='comment'>
+<div class='author'>Anonymous</div>
+<div class='content'>
+Спасибо за ссылку, книжка именно то, что нужно, кое чего правда нет, но для начала самое то =) Если есть еще какие-то ссылки или книги, пожалуйста скиньте ссылки, ну или сами пособия, здесь или на почту (см. первый пост). А причина использования АОП &ndash; по данной тематике в дальнейшем предполагается написание научных работ и в случае, если данная методология применительно к БД действительно актуальна, то дальнейшее ее продвижение!</div>
+</div>
+<div class='comment'>
+<div class='author'>Oleg Atamanenko</div>
+<div class='content'>
+Информации в сети достаточно, нужно лишь уметь искать. Навскидку &ndash; <a href="http://www.springer.com/computer/database+management+%26+information+retrieval/book/978-3-540-00948-1">http://www.springer.com/computer/database+management+%26+information+retrieval/book/978-3-540-00948-1</a><br /><br />А вообще вопрос &ndash; для чего вам в БД АОП? Мне кажется, что у вас должны быть веские основания для этого. Ведь всё вышеперечисленное (журналирование, проверка прав доступа, защита информации) решается штатными средствами базы данных.</div>
+</div>
+<div class='comment'>
+<div class='author'>Anonymous</div>
+<div class='content'>
+интересует &ndash; журнализация, проверка прав доступа, защита информации. Если где-то, в самом простом виде, смогу найти пример, то будет ясно &ndash; как вообще реализовывать. Материалов, как русскоязычных, так и англоязычных, очень мало по данной тематике. Компиляторов и методов реализации/внедрения аспектов в БД вообще не смог найти. Теперь вот пытаюсь найти людей кто хоть как-то занимался данной проблемой и найти примеры/литературу.</div>
+</div>
+<div class='comment'>
+<div class='author'>Oleg Atamanenko</div>
+<div class='content'>
+Тут всё зависит от того, какие именно аспекты вас интересуют. Я, к сожалению, не могу показать вам готовое решение по причине NDA. Но могу сказать, что для полезные аспекты для БД &ndash; журналирование запросов, обработка исключений, мониторинг производительности и проверка прав доступа. Впрочем, тут тоже ничего нового.</div>
+</div>
+<div class='comment'>
+<div class='author'>Anonymous</div>
+<div class='content'>
+Добрый день, прочитал Вашу статью &ndash; интересно! =) На данный момент пытаюсь вникнуть в АОП в БД, но не совсем понимаю как можно реализовать аспекты при работе с БД (именно с точки зрения системы &ndash; код, компиляция и пр. т.к. теоретически все прозрачно и ясно). Не подскажите &ndash; где можно найти, для наглядности, простенькую БД с реализованным аспектами и хоть какое-то пояснение по реализованному &quot;проекту&quot; &ndash; на чем писали, как внедряли аспекты и пр. Мэйл для связи &ndash; <a href="&#x6d;&#x61;&#x69;&#108;&#116;&#x6f;&#58;&#x75;&#x74;&#x6f;&#112;&#x69;&#97;&#50;&#48;&#x30;&#x35;&#64;&#x79;&#97;&#110;&#x64;&#x65;&#120;&#46;&#x72;&#x75;">&#x75;&#116;&#111;&#112;&#x69;&#x61;&#50;&#48;&#x30;&#x35;&#64;&#121;&#97;&#x6e;&#x64;&#101;&#x78;&#x2e;&#114;&#117;</a></div>
+</div></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1148,144 +1472,6 @@ a. http://msdn.microsoft.com/en-us/library/ms998577.aspx<br />
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/02/04/blog-post/">Вложенные транзакции в базах данных</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-02-04T14:20:00-05:00" pubdate data-updated="true">Feb 4<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div class='post'>
-Summary: Некоторые особенности вложенных транзакций.<br />
-<br />
-Иногда бывает так, что при обработке запроса необходимо открыть ещё одну транзакцию в рамках текущей транзакции. Это называется вложенной транзакцией. <br />
-<br />
-Очень многие базы данных не поддерживают вложенные транзакции вообще, например, MySQL и Oracle. А те, что поддерживают, делают это на минимальном уровне, например, Sybase поддерживает только псевдовложенные транзакции.<br />
-<br />
-Вложенные транзакции могут быть следующих видов:<br />
-<br />
-<ol><li>Псевдо-вложенные транзакции</li>
-<li>Вложенная субтранзакция</li>
-<li>Вложенная независимая транзакция</li>
-</ol><br />
-<h3>Псевдовложенные транзакции</h3><br />
-Этот тип транзакций поддерживается базой данных Sybase.<br />
-Псевдо-вложенные транзакции позволяют использовать транзакции одна внутри другой, при этом не реализуя механизм вложенных транзакций. Суть состоит в том, что имеется счётчик уровня вложенности транзакций, который увеличивается на 1 при каждом вызове <tt>BEGIN TRANSACTION</tt> и уменьшается на 1 при каждом вызове <tt>COMMIT</tt>. Когда счётчик становится равным 0 происходит коммит всех произведённых изменений.<br />
-<br />
-Если во время проведения транзакции происходит ошибка, то вызывается <tt>ROLLBACK</tt>, но здесь есть загвоздка - что делать с последующими вызовами <tt>BEGIN TRANSACTION</tt>  и <tt>COMMIT</tt>. Оптимальным решением является кидание исключения, но это необходимо отслеживать и учитывать на стадии проектирования и реализации, чтобы не возникло неприятных ситуаций при эксплуатации.<br />
-<br />
-Псевдовложенные транзакции являются самым простым способом реализации вложенных транзакций.<br />
-<br />
-Пример псевдотранзакции для базы данных Sybase:<br />
-<pre class="brush: sql">begin tran
-    select @@trancount
-    /* @@trancount = 1 */
-    begin tran
-        select @@trancount
-        /* @@trancount = 2 */
-        begin tran
-            select @@trancount
-            /* @@trancount = 3 */
-        commit tran
-    commit tran
-commit tran
-select @@trancount
-/* @@ trancount = 0 */
-</pre><br />
-<h3>Вложенная субтранзакция</h3><br />
-Данный вид вложенных транзакций решает проблему с обработкой ошибок при <tt>ROLLBACK</tt>. <br />
-При коммите вложенной транзакции происходит коммит, но он не обладает свойством <tt>Durability</tt> - окончательный результат зависит от результата внешней транзакции - если внешняя транзакция заканчивается успешно, то и результат внутренней транзакции также фиксируется. Если же при фиксации изменений внешней транзакции происходит ошибка, то внутренняя транзакция также откатывается. Кроме того, необходимо обратить внимание на то, что если внутренняя транзакция заканчивается неуспешно, то внешняя транзакция может закончиться успешно, если не выкинуть исключение наружу. Таким образом, для данного вида вложенных транзакций необходимо выкидывать исключение наружу, для того, чтобы прервать и откатить внешнюю транзакцию в случае ошибки.<br />
-<br />
-<h3>Вложенная независимая транзакция</h3>Особенность данного вида вложенных транзакций заключается в том, что после создания вложенной транзакции она является полностью независимой от транзакции, внутри которой она была создана. Её результаты фиксируются и откатываются независимо от внешней транзакции.<br />
-<br />
-<h3>Вложенные транзакции и принципы ACID</h3>Вложенные транзакции выглядят достаточно подозрительными в том смысле, что они могут нарушать принципы ACID: <br />
-1. Вложенная субтранзакция может нарушать принцип <tt>Durability</tt>, так как уже зафиксированные изменения могут откатиться в случае отката внешней транзакции.<br />
-2. Вложенная независимая транзакция может нарушать принципы <tt>Atomicity</tt> и <tt>Consistency</tt> при возникновении ошибок во внешней или вложенной транзакции.<br />
-<br />
-Подробнее о принципах <abbr title="Atomicity, Consistency, Isolation, Durability">ACID</abbr> можно прочитать в <a href="http://atamanenko.blogspot.com/2009/04/blog-post_24.html">этом посте</a>.<br />
-<br />
-<h3>Заключение</h3>Я считаю, что следует избегать ситуаций, когда нужны вложенные транзакции. Кроме того, спецификация Java EE <a href="http://java.sun.com/javaee/6/docs/api/javax/ejb/TransactionAttributeType.html">не поддерживает</a> вложенные транзакции.</div>
-
-
-<h2>Comments</h2>
-
-
-<div class='comments'>
-<div class='comment'>
-<div class='author'>uthark</div>
-<div class='content'>
-@karri На мой взгляд лучше всё же использовать официальную документацию в таких случаях. :) <a href="http://download.oracle.com/docs/html/B10813_01/toc.htm" rel="nofollow">Oracle® Database Quick Installation Guide 10g Release 1 (10.1) for Linux x86</a><br /><br />И ставить, всё же, лучше на поддерживаемый Ораклом дистрибутив, например на Redhat.</div>
-</div>
-<div class='comment'>
-<div class='author'>karri</div>
-<div class='content'>
-Вкратце о себе: в прошлом году окончила университет, пол года работаю тестировщиком (тестирую web-приложения и оракловые формсы для биллнговых систем сотовых операторов). Значения SQl начальные: пишу частые несложные запросы для выборки необходимых тестовых данных, заполняю/удаляю/обновляю данные. Иногда запускаю на низком уровне пакетные методы для проверки работоспособности api-методов. Понимаю более сложные запросы (но правда требуется время, чтобы подумать :)). <br /><br />Есть большое желания поставить, даже ни сколько поставить, а сколько грамотно настроить (!) СУБД Oracle под linux. Linux стоит (являюсь пользователем, не администрирую, к своему стыду), осталось Oracle поставить :) <br /><br />Понимаю, что задача для меня сложная, но оч хочется :) При поверхностном поиске наткнулась на статью http://www.interface.ru/home.asp?artId=17461<br />Что вы об этом думаете? С чего бы вы посоветовали мне начать?</div>
-</div>
-<div class='comment'>
-<div class='author'>uthark</div>
-<div class='content'>
-@karri Извините, я не нарочно. :)<br />С Oracle тоже работаю. Проконсультировать могу попробовать. :)</div>
-</div>
-<div class='comment'>
-<div class='author'>karri</div>
-<div class='content'>
-А почему karrY?<br /><br />А вы с Oracle работаете ? Проконсультироваться с вами можно?</div>
-</div>
-<div class='comment'>
-<div class='author'>karri</div>
-<div class='content'>
-This comment has been removed by the author.</div>
-</div>
-<div class='comment'>
-<div class='author'>uthark</div>
-<div class='content'>
-@karry Да, конечно. Интересно. )</div>
-</div>
-<div class='comment'>
-<div class='author'>karri</div>
-<div class='content'>
-Ух ты :) Класс! Нравится?</div>
-</div>
-<div class='comment'>
-<div class='author'>uthark</div>
-<div class='content'>
-@karry Начинал работу Java-разработчиком, сейчас архитектором работаю.</div>
-</div>
-<div class='comment'>
-<div class='author'>karri</div>
-<div class='content'>
-А вы на java пишете?</div>
-</div>
-</div>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -1303,6 +1489,10 @@ This comment has been removed by the author.</div>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/06/19/spring-caching/">Использование memcached в качестве backend для Spring Caching Abstraction</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/06/19/custom-bean-validator/">Пишем собственный валидатор для Bean Validation API</a>
       </li>
     
@@ -1316,10 +1506,6 @@ This comment has been removed by the author.</div>
     
       <li class="post">
         <a href="/blog/2012/04/28/spring-data-jpa_28/">Собственная реализация методов в Spring Data JPA</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/04/24/spring-data-jpa/">Ищем с помощью Spring Data JPA</a>
       </li>
     
   </ul>

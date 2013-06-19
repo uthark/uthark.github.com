@@ -9,7 +9,7 @@
   <meta name="author" content="Oleg Atamanenko">
 
   
-  <meta name="description" content="Summary: В данной заметке описана настройка autofs для доступа к сетевым ресурсам, доступным по NFS. Последние несколько лет (с тех пор, как &hellip;">
+  <meta name="description" content="Summary: Некоторые особенности вложенных транзакций. Иногда бывает так, что при обработке запроса необходимо открыть ещё одну транзакцию в рамках &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +78,144 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/02/04/blog-post/">Вложенные транзакции в базах данных</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-02-04T14:20:00-05:00" pubdate data-updated="true">Feb 4<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+Summary: Некоторые особенности вложенных транзакций.<br />
+<br />
+Иногда бывает так, что при обработке запроса необходимо открыть ещё одну транзакцию в рамках текущей транзакции. Это называется вложенной транзакцией. <br />
+<br />
+Очень многие базы данных не поддерживают вложенные транзакции вообще, например, MySQL и Oracle. А те, что поддерживают, делают это на минимальном уровне, например, Sybase поддерживает только псевдовложенные транзакции.<br />
+<br />
+Вложенные транзакции могут быть следующих видов:<br />
+<br />
+<ol><li>Псевдо-вложенные транзакции</li>
+<li>Вложенная субтранзакция</li>
+<li>Вложенная независимая транзакция</li>
+</ol><br />
+<h3>Псевдовложенные транзакции</h3><br />
+Этот тип транзакций поддерживается базой данных Sybase.<br />
+Псевдо-вложенные транзакции позволяют использовать транзакции одна внутри другой, при этом не реализуя механизм вложенных транзакций. Суть состоит в том, что имеется счётчик уровня вложенности транзакций, который увеличивается на 1 при каждом вызове <tt>BEGIN TRANSACTION</tt> и уменьшается на 1 при каждом вызове <tt>COMMIT</tt>. Когда счётчик становится равным 0 происходит коммит всех произведённых изменений.<br />
+<br />
+Если во время проведения транзакции происходит ошибка, то вызывается <tt>ROLLBACK</tt>, но здесь есть загвоздка - что делать с последующими вызовами <tt>BEGIN TRANSACTION</tt>  и <tt>COMMIT</tt>. Оптимальным решением является кидание исключения, но это необходимо отслеживать и учитывать на стадии проектирования и реализации, чтобы не возникло неприятных ситуаций при эксплуатации.<br />
+<br />
+Псевдовложенные транзакции являются самым простым способом реализации вложенных транзакций.<br />
+<br />
+Пример псевдотранзакции для базы данных Sybase:<br />
+<pre class="brush: sql">begin tran
+    select @@trancount
+    /* @@trancount = 1 */
+    begin tran
+        select @@trancount
+        /* @@trancount = 2 */
+        begin tran
+            select @@trancount
+            /* @@trancount = 3 */
+        commit tran
+    commit tran
+commit tran
+select @@trancount
+/* @@ trancount = 0 */
+</pre><br />
+<h3>Вложенная субтранзакция</h3><br />
+Данный вид вложенных транзакций решает проблему с обработкой ошибок при <tt>ROLLBACK</tt>. <br />
+При коммите вложенной транзакции происходит коммит, но он не обладает свойством <tt>Durability</tt> - окончательный результат зависит от результата внешней транзакции - если внешняя транзакция заканчивается успешно, то и результат внутренней транзакции также фиксируется. Если же при фиксации изменений внешней транзакции происходит ошибка, то внутренняя транзакция также откатывается. Кроме того, необходимо обратить внимание на то, что если внутренняя транзакция заканчивается неуспешно, то внешняя транзакция может закончиться успешно, если не выкинуть исключение наружу. Таким образом, для данного вида вложенных транзакций необходимо выкидывать исключение наружу, для того, чтобы прервать и откатить внешнюю транзакцию в случае ошибки.<br />
+<br />
+<h3>Вложенная независимая транзакция</h3>Особенность данного вида вложенных транзакций заключается в том, что после создания вложенной транзакции она является полностью независимой от транзакции, внутри которой она была создана. Её результаты фиксируются и откатываются независимо от внешней транзакции.<br />
+<br />
+<h3>Вложенные транзакции и принципы ACID</h3>Вложенные транзакции выглядят достаточно подозрительными в том смысле, что они могут нарушать принципы ACID: <br />
+1. Вложенная субтранзакция может нарушать принцип <tt>Durability</tt>, так как уже зафиксированные изменения могут откатиться в случае отката внешней транзакции.<br />
+2. Вложенная независимая транзакция может нарушать принципы <tt>Atomicity</tt> и <tt>Consistency</tt> при возникновении ошибок во внешней или вложенной транзакции.<br />
+<br />
+Подробнее о принципах <abbr title="Atomicity, Consistency, Isolation, Durability">ACID</abbr> можно прочитать в <a href="http://atamanenko.blogspot.com/2009/04/blog-post_24.html">этом посте</a>.<br />
+<br />
+<h3>Заключение</h3>Я считаю, что следует избегать ситуаций, когда нужны вложенные транзакции. Кроме того, спецификация Java EE <a href="http://java.sun.com/javaee/6/docs/api/javax/ejb/TransactionAttributeType.html">не поддерживает</a> вложенные транзакции.</div>
+
+
+<h2>Comments</h2>
+
+
+<div class='comments'>
+<div class='comment'>
+<div class='author'>uthark</div>
+<div class='content'>
+@karri На мой взгляд лучше всё же использовать официальную документацию в таких случаях. :) <a href="http://download.oracle.com/docs/html/B10813_01/toc.htm" rel="nofollow">Oracle® Database Quick Installation Guide 10g Release 1 (10.1) for Linux x86</a><br /><br />И ставить, всё же, лучше на поддерживаемый Ораклом дистрибутив, например на Redhat.</div>
+</div>
+<div class='comment'>
+<div class='author'>karri</div>
+<div class='content'>
+Вкратце о себе: в прошлом году окончила университет, пол года работаю тестировщиком (тестирую web-приложения и оракловые формсы для биллнговых систем сотовых операторов). Значения SQl начальные: пишу частые несложные запросы для выборки необходимых тестовых данных, заполняю/удаляю/обновляю данные. Иногда запускаю на низком уровне пакетные методы для проверки работоспособности api-методов. Понимаю более сложные запросы (но правда требуется время, чтобы подумать :)). <br /><br />Есть большое желания поставить, даже ни сколько поставить, а сколько грамотно настроить (!) СУБД Oracle под linux. Linux стоит (являюсь пользователем, не администрирую, к своему стыду), осталось Oracle поставить :) <br /><br />Понимаю, что задача для меня сложная, но оч хочется :) При поверхностном поиске наткнулась на статью http://www.interface.ru/home.asp?artId=17461<br />Что вы об этом думаете? С чего бы вы посоветовали мне начать?</div>
+</div>
+<div class='comment'>
+<div class='author'>uthark</div>
+<div class='content'>
+@karri Извините, я не нарочно. :)<br />С Oracle тоже работаю. Проконсультировать могу попробовать. :)</div>
+</div>
+<div class='comment'>
+<div class='author'>karri</div>
+<div class='content'>
+А почему karrY?<br /><br />А вы с Oracle работаете ? Проконсультироваться с вами можно?</div>
+</div>
+<div class='comment'>
+<div class='author'>karri</div>
+<div class='content'>
+This comment has been removed by the author.</div>
+</div>
+<div class='comment'>
+<div class='author'>uthark</div>
+<div class='content'>
+@karry Да, конечно. Интересно. )</div>
+</div>
+<div class='comment'>
+<div class='author'>karri</div>
+<div class='content'>
+Ух ты :) Класс! Нравится?</div>
+</div>
+<div class='comment'>
+<div class='author'>uthark</div>
+<div class='content'>
+@karry Начинал работу Java-разработчиком, сейчас архитектором работаю.</div>
+</div>
+<div class='comment'>
+<div class='author'>karri</div>
+<div class='content'>
+А вы на java пишете?</div>
+</div>
+</div>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -954,113 +1092,6 @@ selection : description
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/11/02/google-wave/">Инвайты на Google Wave</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-11-02T12:26:00-05:00" pubdate data-updated="true">Nov 2<span>nd</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div class='post'>
-Кому нужны инвайты на Google Wave, отписываемся в комментариях - поделюсь.
-
-<span style="font-weight:bold;">UPD</span>. Инвайты закончились, всем спасибо.</div>
-
-
-<h2>Comments</h2>
-
-
-<div class='comments'>
-<div class='comment'>
-<div class='author'>uthark</div>
-<div class='content'>
-@interceptor said&#8230;<br />@bodhiphone<br /><br />К сожалению, инвайты закончились.</div>
-</div>
-<div class='comment'>
-<div class='author'>bodhiphone</div>
-<div class='content'>
-bodhiphone at gmail com</div>
-</div>
-<div class='comment'>
-<div class='author'>Interceptor</div>
-<div class='content'>
-freeline66@gmail.com<br />Если есть, буду рад !!!</div>
-</div>
-<div class='comment'>
-<div class='author'>uthark</div>
-<div class='content'>
-@avv<br />@ziftech<br />@Роман<br />@samozvanka<br />@aleks<br /><br />Отправил инвайты.</div>
-</div>
-<div class='comment'>
-<div class='author'>aleks</div>
-<div class='content'>
-Очень надеюсь что инвайты еще есть&#8230; заранее спасибо.<br />aleksandr.komp@gmail.com</div>
-</div>
-<div class='comment'>
-<div class='author'>samozvanka</div>
-<div class='content'>
-o.samozvanka@gmail.com<br />и мне, плиз, если остались</div>
-</div>
-<div class='comment'>
-<div class='author'>Роман</div>
-<div class='content'>
-Можно мне? razh@rambler.ru</div>
-</div>
-<div class='comment'>
-<div class='author'>ziftech</div>
-<div class='content'>
-yakov.keranchuk@gmail.com</div>
-</div>
-<div class='comment'>
-<div class='author'>avv</div>
-<div class='content'>
-volkov.525@gmail.com<br /><br />Спасибо заранее!</div>
-</div>
-<div class='comment'>
-<div class='author'>uthark</div>
-<div class='content'>
-@vmorarian @Ivan<br /><br />Отправил.</div>
-</div>
-<div class='comment'>
-<div class='author'>Ivan</div>
-<div class='content'>
-я! мне! :)</div>
-</div>
-<div class='comment'>
-<div class='author'>vmorarian</div>
-<div class='content'>
-vmorarian@gmail.com</div>
-</div>
-</div>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -1078,6 +1109,10 @@ vmorarian@gmail.com</div>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/06/19/spring-caching/">Использование memcached в качестве backend для Spring Caching Abstraction</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/06/19/custom-bean-validator/">Пишем собственный валидатор для Bean Validation API</a>
       </li>
     
@@ -1091,10 +1126,6 @@ vmorarian@gmail.com</div>
     
       <li class="post">
         <a href="/blog/2012/04/28/spring-data-jpa_28/">Собственная реализация методов в Spring Data JPA</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/04/24/spring-data-jpa/">Ищем с помощью Spring Data JPA</a>
       </li>
     
   </ul>

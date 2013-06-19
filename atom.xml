@@ -4,7 +4,7 @@
   <title><![CDATA[Блог о разработке ПО]]></title>
   <link href="http://uthark.github.com/atom.xml" rel="self"/>
   <link href="http://uthark.github.com/"/>
-  <updated>2013-06-19T01:39:11-04:00</updated>
+  <updated>2013-06-19T15:15:54-04:00</updated>
   <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
@@ -12,6 +12,177 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Использование memcached в качестве backend для Spring Caching Abstraction]]></title>
+    <link href="http://uthark.github.com/blog/2013/06/19/spring-caching/"/>
+    <updated>2013-06-19T19:00:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2013/06/19/spring-caching</id>
+    <content type="html"><![CDATA[<p>В <a href="http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/html/new-in-3.1.html">Spring 3.1</a> появился замечательный модуль &ndash; <a href="http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/html/cache.html">Spring Cache</a>, который является абстракцией над кэшированием, что позволяет декларативно реализовывать кэширование в приложение.</p>
+
+<p>Я не буду вдаваться в подробности работы, их можно прочитать в документации, но опишу, каким образом можно настроить memcached в качестве бэкэнда для работы.</p>
+
+<h2>Подключаем зависимости</h2>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="o">&lt;</span><span class="n">dependency</span><span class="o">&gt;</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="n">groupId</span><span class="o">&gt;</span><span class="n">com</span><span class="o">.</span><span class="na">google</span><span class="o">.</span><span class="na">code</span><span class="o">.</span><span class="na">simple</span><span class="o">-</span><span class="n">spring</span><span class="o">-</span><span class="n">memcached</span><span class="o">&lt;/</span><span class="n">groupId</span><span class="o">&gt;</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="n">artifactId</span><span class="o">&gt;</span><span class="n">spymemcached</span><span class="o">-</span><span class="n">provider</span><span class="o">&lt;/</span><span class="n">artifactId</span><span class="o">&gt;</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="n">version</span><span class="o">&gt;</span><span class="mf">3.1</span><span class="o">.</span><span class="mi">0</span><span class="o">&lt;/</span><span class="n">version</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">dependency</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">dependency</span><span class="o">&gt;</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="n">groupId</span><span class="o">&gt;</span><span class="n">com</span><span class="o">.</span><span class="na">google</span><span class="o">.</span><span class="na">code</span><span class="o">.</span><span class="na">simple</span><span class="o">-</span><span class="n">spring</span><span class="o">-</span><span class="n">memcached</span><span class="o">&lt;/</span><span class="n">groupId</span><span class="o">&gt;</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="n">artifactId</span><span class="o">&gt;</span><span class="n">spring</span><span class="o">-</span><span class="n">cache</span><span class="o">&lt;/</span><span class="n">artifactId</span><span class="o">&gt;</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="n">version</span><span class="o">&gt;</span><span class="mf">3.1</span><span class="o">.</span><span class="mi">0</span><span class="o">&lt;/</span><span class="n">version</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">dependency</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>spymemcached-provider</code> &ndash; это библиотечка для работы с <code>memcached</code> из Java, а <code>spring-cache</code> &ndash; модуль интеграции со Spring.</p>
+
+<h2>Включаем кэширование</h2>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Configuration</span><span class="o">(</span><span class="s">&quot;serviceConfiguration&quot;</span><span class="o">)</span>
+</span><span class='line'><span class="nd">@EnableCaching</span><span class="o">(</span><span class="n">proxyTargetClass</span> <span class="o">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="n">AdviceMode</span><span class="o">.</span><span class="na">PROXY</span><span class="o">)</span>
+</span><span class='line'><span class="nd">@Import</span><span class="o">(</span><span class="n">CacheConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ServiceConfiguration</span> <span class="o">{</span>
+</span><span class='line'>  <span class="c1">// bean declarations goes here.</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Аннотация <code>@EnableCaching</code> включает кэширование. Конфигурацию бинов для кэширования мы выносим в отдельный класс, <code>CacheConfiguration</code>, чтобы не смешивать бины, отвечающие за кэширование с бинами, отвечающими за бизнес-логику.</p>
+
+<p>Объявляем необходимые для работы бины:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Configuration</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CacheConfiguration</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Value</span><span class="o">(</span><span class="s">&quot;${memcached.url}&quot;</span><span class="o">)</span>
+</span><span class='line'>    <span class="kd">private</span> <span class="n">String</span> <span class="n">memcachedUrl</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Bean</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="n">CacheManager</span> <span class="nf">cacheManager</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">SSMCacheManager</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SSMCacheManager</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">result</span><span class="o">.</span><span class="na">setCaches</span><span class="o">(</span><span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span>
+</span><span class='line'>                <span class="k">new</span> <span class="nf">SSMCache</span><span class="o">(</span><span class="n">defaultCacheFactory</span><span class="o">().</span><span class="na">getObject</span><span class="o">(),</span> <span class="mi">45</span><span class="o">)</span>
+</span><span class='line'>        <span class="o">));</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Bean</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="n">CacheFactory</span> <span class="nf">defaultCacheFactory</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">CacheFactory</span> <span class="n">factory</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CacheFactory</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">factory</span><span class="o">.</span><span class="na">setCacheName</span><span class="o">(</span><span class="s">&quot;defaultCache&quot;</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">factory</span><span class="o">.</span><span class="na">setAddressProvider</span><span class="o">(</span><span class="n">addressProvider</span><span class="o">());</span>
+</span><span class='line'>        <span class="n">factory</span><span class="o">.</span><span class="na">setCacheClientFactory</span><span class="o">(</span><span class="n">cacheClientFactory</span><span class="o">());</span>
+</span><span class='line'>        <span class="n">factory</span><span class="o">.</span><span class="na">setConfiguration</span><span class="o">(</span><span class="n">cacheConfiguration</span><span class="o">());</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">return</span> <span class="n">factory</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Bean</span>
+</span><span class='line'>    <span class="nd">@Scope</span><span class="o">(</span><span class="n">ConfigurableBeanFactory</span><span class="o">.</span><span class="na">SCOPE_PROTOTYPE</span><span class="o">)</span> <span class="n">CacheClientFactory</span> <span class="n">cacheClientFactory</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="k">new</span> <span class="nf">MemcacheClientFactoryImpl</span><span class="o">();</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Bean</span>
+</span><span class='line'>    <span class="n">AddressProvider</span> <span class="nf">addressProvider</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="k">new</span> <span class="nf">DefaultAddressProvider</span><span class="o">(</span><span class="n">memcachedUrl</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Bean</span>
+</span><span class='line'>    <span class="nd">@Scope</span><span class="o">(</span><span class="n">ConfigurableBeanFactory</span><span class="o">.</span><span class="na">SCOPE_PROTOTYPE</span><span class="o">)</span>
+</span><span class='line'>    <span class="n">com</span><span class="o">.</span><span class="na">google</span><span class="o">.</span><span class="na">code</span><span class="o">.</span><span class="na">ssm</span><span class="o">.</span><span class="na">providers</span><span class="o">.</span><span class="na">CacheConfiguration</span> <span class="nf">cacheConfiguration</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">com</span><span class="o">.</span><span class="na">google</span><span class="o">.</span><span class="na">code</span><span class="o">.</span><span class="na">ssm</span><span class="o">.</span><span class="na">providers</span><span class="o">.</span><span class="na">CacheConfiguration</span> <span class="n">configuration</span> <span class="o">=</span>
+</span><span class='line'>                <span class="k">new</span> <span class="n">com</span><span class="o">.</span><span class="na">google</span><span class="o">.</span><span class="na">code</span><span class="o">.</span><span class="na">ssm</span><span class="o">.</span><span class="na">providers</span><span class="o">.</span><span class="na">CacheConfiguration</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">configuration</span><span class="o">.</span><span class="na">setConsistentHashing</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">configuration</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Использование</h2>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Cacheable</span><span class="o">(</span><span class="s">&quot;defaultCache&quot;</span><span class="o">)</span>
+</span><span class='line'><span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">getUser</span><span class="o">(</span><span class="nd">@NotNull</span> <span class="n">String</span> <span class="n">username</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+</span><span class='line'>    <span class="c1">// ...</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Пишем собственный валидатор для Bean Validation API]]></title>
@@ -1816,7 +1987,7 @@ public @interface SuppressExceptions {
 <div class='comment'>
 <div class='author'>Anonymous</div>
 <div class='content'>
-Добрый день, прочитал Вашу статью &ndash; интересно! =) На данный момент пытаюсь вникнуть в АОП в БД, но не совсем понимаю как можно реализовать аспекты при работе с БД (именно с точки зрения системы &ndash; код, компиляция и пр. т.к. теоретически все прозрачно и ясно). Не подскажите &ndash; где можно найти, для наглядности, простенькую БД с реализованным аспектами и хоть какое-то пояснение по реализованному &quot;проекту&quot; &ndash; на чем писали, как внедряли аспекты и пр. Мэйл для связи &ndash; <a href="&#109;&#x61;&#105;&#x6c;&#116;&#111;&#x3a;&#117;&#x74;&#111;&#x70;&#x69;&#x61;&#50;&#48;&#x30;&#x35;&#x40;&#x79;&#97;&#110;&#x64;&#101;&#120;&#x2e;&#114;&#117;">&#117;&#x74;&#111;&#x70;&#x69;&#97;&#50;&#48;&#48;&#53;&#x40;&#121;&#x61;&#x6e;&#x64;&#101;&#120;&#46;&#114;&#117;</a></div>
+Добрый день, прочитал Вашу статью &ndash; интересно! =) На данный момент пытаюсь вникнуть в АОП в БД, но не совсем понимаю как можно реализовать аспекты при работе с БД (именно с точки зрения системы &ndash; код, компиляция и пр. т.к. теоретически все прозрачно и ясно). Не подскажите &ndash; где можно найти, для наглядности, простенькую БД с реализованным аспектами и хоть какое-то пояснение по реализованному &quot;проекту&quot; &ndash; на чем писали, как внедряли аспекты и пр. Мэйл для связи &ndash; <a href="&#x6d;&#x61;&#x69;&#108;&#116;&#x6f;&#58;&#x75;&#x74;&#x6f;&#112;&#x69;&#97;&#50;&#48;&#x30;&#x35;&#64;&#x79;&#97;&#110;&#x64;&#x65;&#120;&#46;&#x72;&#x75;">&#x75;&#116;&#111;&#112;&#x69;&#x61;&#50;&#48;&#x30;&#x35;&#64;&#121;&#97;&#x6e;&#x64;&#101;&#x78;&#x2e;&#114;&#117;</a></div>
 </div></p>
 ]]></content>
   </entry>
@@ -2640,117 +2811,6 @@ a. http://msdn.microsoft.com/en-us/library/ms998577.aspx<br />
 <div class='author'>serger</div>
 <div class='content'>
 А на сколько, по Вашему, медленнее Grails, чем допустим, spring MVC, (если знакомы Roo). И на чём конкретно падает производительность?</div>
-</div>
-</div>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Вложенные транзакции в базах данных]]></title>
-    <link href="http://uthark.github.com/blog/2010/02/04/blog-post/"/>
-    <updated>2010-02-04T14:20:00-05:00</updated>
-    <id>http://uthark.github.com/blog/2010/02/04/blog-post</id>
-    <content type="html"><![CDATA[<div class='post'>
-Summary: Некоторые особенности вложенных транзакций.<br />
-<br />
-Иногда бывает так, что при обработке запроса необходимо открыть ещё одну транзакцию в рамках текущей транзакции. Это называется вложенной транзакцией. <br />
-<br />
-Очень многие базы данных не поддерживают вложенные транзакции вообще, например, MySQL и Oracle. А те, что поддерживают, делают это на минимальном уровне, например, Sybase поддерживает только псевдовложенные транзакции.<br />
-<br />
-Вложенные транзакции могут быть следующих видов:<br />
-<br />
-<ol><li>Псевдо-вложенные транзакции</li>
-<li>Вложенная субтранзакция</li>
-<li>Вложенная независимая транзакция</li>
-</ol><br />
-<h3>Псевдовложенные транзакции</h3><br />
-Этот тип транзакций поддерживается базой данных Sybase.<br />
-Псевдо-вложенные транзакции позволяют использовать транзакции одна внутри другой, при этом не реализуя механизм вложенных транзакций. Суть состоит в том, что имеется счётчик уровня вложенности транзакций, который увеличивается на 1 при каждом вызове <tt>BEGIN TRANSACTION</tt> и уменьшается на 1 при каждом вызове <tt>COMMIT</tt>. Когда счётчик становится равным 0 происходит коммит всех произведённых изменений.<br />
-<br />
-Если во время проведения транзакции происходит ошибка, то вызывается <tt>ROLLBACK</tt>, но здесь есть загвоздка - что делать с последующими вызовами <tt>BEGIN TRANSACTION</tt>  и <tt>COMMIT</tt>. Оптимальным решением является кидание исключения, но это необходимо отслеживать и учитывать на стадии проектирования и реализации, чтобы не возникло неприятных ситуаций при эксплуатации.<br />
-<br />
-Псевдовложенные транзакции являются самым простым способом реализации вложенных транзакций.<br />
-<br />
-Пример псевдотранзакции для базы данных Sybase:<br />
-<pre class="brush: sql">begin tran
-    select @@trancount
-    /* @@trancount = 1 */
-    begin tran
-        select @@trancount
-        /* @@trancount = 2 */
-        begin tran
-            select @@trancount
-            /* @@trancount = 3 */
-        commit tran
-    commit tran
-commit tran
-select @@trancount
-/* @@ trancount = 0 */
-</pre><br />
-<h3>Вложенная субтранзакция</h3><br />
-Данный вид вложенных транзакций решает проблему с обработкой ошибок при <tt>ROLLBACK</tt>. <br />
-При коммите вложенной транзакции происходит коммит, но он не обладает свойством <tt>Durability</tt> - окончательный результат зависит от результата внешней транзакции - если внешняя транзакция заканчивается успешно, то и результат внутренней транзакции также фиксируется. Если же при фиксации изменений внешней транзакции происходит ошибка, то внутренняя транзакция также откатывается. Кроме того, необходимо обратить внимание на то, что если внутренняя транзакция заканчивается неуспешно, то внешняя транзакция может закончиться успешно, если не выкинуть исключение наружу. Таким образом, для данного вида вложенных транзакций необходимо выкидывать исключение наружу, для того, чтобы прервать и откатить внешнюю транзакцию в случае ошибки.<br />
-<br />
-<h3>Вложенная независимая транзакция</h3>Особенность данного вида вложенных транзакций заключается в том, что после создания вложенной транзакции она является полностью независимой от транзакции, внутри которой она была создана. Её результаты фиксируются и откатываются независимо от внешней транзакции.<br />
-<br />
-<h3>Вложенные транзакции и принципы ACID</h3>Вложенные транзакции выглядят достаточно подозрительными в том смысле, что они могут нарушать принципы ACID: <br />
-1. Вложенная субтранзакция может нарушать принцип <tt>Durability</tt>, так как уже зафиксированные изменения могут откатиться в случае отката внешней транзакции.<br />
-2. Вложенная независимая транзакция может нарушать принципы <tt>Atomicity</tt> и <tt>Consistency</tt> при возникновении ошибок во внешней или вложенной транзакции.<br />
-<br />
-Подробнее о принципах <abbr title="Atomicity, Consistency, Isolation, Durability">ACID</abbr> можно прочитать в <a href="http://atamanenko.blogspot.com/2009/04/blog-post_24.html">этом посте</a>.<br />
-<br />
-<h3>Заключение</h3>Я считаю, что следует избегать ситуаций, когда нужны вложенные транзакции. Кроме того, спецификация Java EE <a href="http://java.sun.com/javaee/6/docs/api/javax/ejb/TransactionAttributeType.html">не поддерживает</a> вложенные транзакции.</div>
-
-
-<h2>Comments</h2>
-
-
-<div class='comments'>
-<div class='comment'>
-<div class='author'>uthark</div>
-<div class='content'>
-@karri На мой взгляд лучше всё же использовать официальную документацию в таких случаях. :) <a href="http://download.oracle.com/docs/html/B10813_01/toc.htm" rel="nofollow">Oracle® Database Quick Installation Guide 10g Release 1 (10.1) for Linux x86</a><br /><br />И ставить, всё же, лучше на поддерживаемый Ораклом дистрибутив, например на Redhat.</div>
-</div>
-<div class='comment'>
-<div class='author'>karri</div>
-<div class='content'>
-Вкратце о себе: в прошлом году окончила университет, пол года работаю тестировщиком (тестирую web-приложения и оракловые формсы для биллнговых систем сотовых операторов). Значения SQl начальные: пишу частые несложные запросы для выборки необходимых тестовых данных, заполняю/удаляю/обновляю данные. Иногда запускаю на низком уровне пакетные методы для проверки работоспособности api-методов. Понимаю более сложные запросы (но правда требуется время, чтобы подумать :)). <br /><br />Есть большое желания поставить, даже ни сколько поставить, а сколько грамотно настроить (!) СУБД Oracle под linux. Linux стоит (являюсь пользователем, не администрирую, к своему стыду), осталось Oracle поставить :) <br /><br />Понимаю, что задача для меня сложная, но оч хочется :) При поверхностном поиске наткнулась на статью http://www.interface.ru/home.asp?artId=17461<br />Что вы об этом думаете? С чего бы вы посоветовали мне начать?</div>
-</div>
-<div class='comment'>
-<div class='author'>uthark</div>
-<div class='content'>
-@karri Извините, я не нарочно. :)<br />С Oracle тоже работаю. Проконсультировать могу попробовать. :)</div>
-</div>
-<div class='comment'>
-<div class='author'>karri</div>
-<div class='content'>
-А почему karrY?<br /><br />А вы с Oracle работаете ? Проконсультироваться с вами можно?</div>
-</div>
-<div class='comment'>
-<div class='author'>karri</div>
-<div class='content'>
-This comment has been removed by the author.</div>
-</div>
-<div class='comment'>
-<div class='author'>uthark</div>
-<div class='content'>
-@karry Да, конечно. Интересно. )</div>
-</div>
-<div class='comment'>
-<div class='author'>karri</div>
-<div class='content'>
-Ух ты :) Класс! Нравится?</div>
-</div>
-<div class='comment'>
-<div class='author'>uthark</div>
-<div class='content'>
-@karry Начинал работу Java-разработчиком, сейчас архитектором работаю.</div>
-</div>
-<div class='comment'>
-<div class='author'>karri</div>
-<div class='content'>
-А вы на java пишете?</div>
 </div>
 </div>
 
