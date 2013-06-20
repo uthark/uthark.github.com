@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Пишем собственный валидатор для Bean Validation API"
+title: "Пишем валидатор для Bean Validation API"
 date: 2013-06-19 08:00
 comments: true
 sharing: true
@@ -10,11 +10,11 @@ categories:
  - validator
  - validation
 ---
-[JSR-303](http://jcp.org/en/jsr/detail?id=303) предоставляет удобный API для проверки валидности объектов, а также входных параметров. Очевидно, что стандартных валидаторов в какой-то момент может быть недостаточно, поэтому необходимо писать собственный.
+[JSR-303](http://jcp.org/en/jsr/detail?id=303) предоставляет удобный API для проверки валидности объектов, а также входных параметров. Очевидно, что [стандартных валидаторов](http://docs.oracle.com/javaee/6/tutorial/doc/gircz.html) в какой-то момент может быть недостаточно, поэтому необходимо писать собственный.
 
-Хочу показать на примере, как легко это делается.
+Хочу показать на примере валидации запроса к [MongoDB](http://www.mongodb.org/), как легко это делается.
 
-## Создаём аннотацию
+## Создание аннотации
 
 {% codeblock lang:java %}
 @Target({FIELD, PARAMETER})
@@ -33,7 +33,7 @@ public @interface MongoQuery {
 
 Обратите внимание на аннотацию [@Constraint](http://docs.oracle.com/javaee/7/api/javax/validation/Constraint.html) - она описывает, какой класс будет проводить реальную валидацию. Атрибуты `groups()` и `payload()` являются обязательными.
 
-## Пишем валидатор
+## Написание валидатора
 
 {% codeblock lang:java %}
 public class MongoQueryValidator implements ConstraintValidator<MongoQuery, CharSequence> {
@@ -60,7 +60,7 @@ public class MongoQueryValidator implements ConstraintValidator<MongoQuery, Char
 }
 {% endcodeblock %}
 
-В данном случае, валидатор просто пытается создать Mongo Query из переданной строки, если это не удаётся, то считаем, что строка не является корректным запросом к Mongo и возвращаем `false`.
+В данном случае, валидатор у нас простой - мы пытаемся создать Mongo Query из переданной строки, если это не удаётся, то считаем, что строка не является корректным запросом к Mongo и возвращаем `false`.
 
 Если есть желание возвращать динамическое сообщение об ошибке, то это можно сделать следующим образом:
 

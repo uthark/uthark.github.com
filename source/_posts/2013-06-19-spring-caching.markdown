@@ -13,11 +13,11 @@ categories:
  - memcached
 ---
 
-В [Spring 3.1](http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/html/new-in-3.1.html) появился замечательный модуль - [Spring Cache](http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/html/cache.html), который является абстракцией над кэшированием, что позволяет декларативно реализовывать кэширование в приложение.
+В [Spring 3.1](http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/html/new-in-3.1.html) появился замечательный модуль - [Spring Cache](http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/html/cache.html), который является абстракцией над кэшированием, что позволяет декларативно реализовывать кэширование в приложении.
 
-Я не буду вдаваться в подробности работы, их можно прочитать в документации, но опишу, каким образом можно настроить memcached в качестве бэкэнда для работы.
+Я не буду вдаваться в подробности работы, их можно прочитать в документации, но опишу, каким образом можно настроить [memcached](http://memcached.org/) в качестве бэкэнда для работы.
 
-## Подключаем зависимости
+## Подключение зависимостей
 
 {% codeblock lang:xml %}
 <dependency>
@@ -34,7 +34,7 @@ categories:
 
 `spymemcached-provider` - это библиотечка для работы с `memcached` из Java, а `spring-cache` - модуль интеграции со Spring.
 
-## Включаем кэширование
+## Включение кэширования
 
 {% codeblock lang:java %}
 
@@ -63,35 +63,33 @@ public class CacheConfiguration {
         result.setCaches(Arrays.asList(
                 new SSMCache(defaultCacheFactory().getObject(), 45)
         ));
-
         return result;
     }
 
     @Bean
     public CacheFactory defaultCacheFactory() {
-
         CacheFactory factory = new CacheFactory();
         factory.setCacheName("defaultCache");
         factory.setAddressProvider(addressProvider());
         factory.setCacheClientFactory(cacheClientFactory());
         factory.setConfiguration(cacheConfiguration());
-
         return factory;
     }
 
     @Bean
-    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE) CacheClientFactory cacheClientFactory() {
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    public CacheClientFactory cacheClientFactory() {
         return new MemcacheClientFactoryImpl();
     }
 
     @Bean
-    AddressProvider addressProvider() {
+    public AddressProvider addressProvider() {
         return new DefaultAddressProvider(memcachedUrl);
     }
 
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    com.google.code.ssm.providers.CacheConfiguration cacheConfiguration() {
+    public com.google.code.ssm.providers.CacheConfiguration cacheConfiguration() {
         com.google.code.ssm.providers.CacheConfiguration configuration =
                 new com.google.code.ssm.providers.CacheConfiguration();
         configuration.setConsistentHashing(true);

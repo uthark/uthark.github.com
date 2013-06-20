@@ -22,11 +22,11 @@ public class UserService {
 }
 {% endcodeblock %}
 
-Для этого в Spring существует [FactoryBean](http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/htmlsingle/#beans-factory-extension-factorybean) - класс, который знает, как создавать бины нужного типа. Собственно, нам необходимо написать такой класс:
+Для этого в Spring существует [FactoryBean](http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/htmlsingle/#beans-factory-extension-factorybean) - класс, который знает, как создавать бины нужного типа. Собственно, нам необходимо написать такой класс (код на [Scala](http://www.scala-lang.org/)):
 
 {% codeblock lang:scala %}
 @Component
-class UserRemoteBeanFactoryBean[UserRemoteBean] extends FactoryBean[UserRemoteBean] {
+class UserRemoteBeanFactoryBean extends FactoryBean[UserRemoteBean] {
 
   def ACCESS_BEAN_REMOTE_NAME: String = "our ejb name."
 
@@ -34,11 +34,11 @@ class UserRemoteBeanFactoryBean[UserRemoteBean] extends FactoryBean[UserRemoteBe
 
   var ctx: Context = null
 
-  def getObject: T = {
+  def getObject: UserRemoteBean = {
     log.debug("Requesting new instance of {}", getObjectType)
 
     try {
-      ctx.lookup(ACCESS_BEAN_REMOTE_NAME).asInstanceOf[T]
+      ctx.lookup(ACCESS_BEAN_REMOTE_NAME).asInstanceOf[UserRemoteBean]
     }
     catch {
       case e: NamingException => {
