@@ -4,7 +4,7 @@
   <title><![CDATA[Category: factory bean | Блог о разработке ПО]]></title>
   <link href="http://uthark.github.com/blog/categories/factory-bean/atom.xml" rel="self"/>
   <link href="http://uthark.github.com/"/>
-  <updated>2013-06-19T15:40:40-04:00</updated>
+  <updated>2013-06-19T22:16:52-04:00</updated>
   <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
@@ -98,12 +98,12 @@
 </span><span class='line'>
 </span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="k">var</span> <span class="n">ctx</span><span class="k">:</span> <span class="kt">Context</span> <span class="o">=</span> <span class="kc">null</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="k">def</span> <span class="n">getObject</span><span class="k">:</span> <span class="kt">T</span> <span class="o">=</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="k">def</span> <span class="n">getObject</span><span class="k">:</span> <span class="kt">UserRemoteBean</span> <span class="o">=</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="o">(</span><span class="s">&quot;Requesting new instance of {}&quot;</span><span class="o">,</span> <span class="n">getObjectType</span><span class="o">)</span>
 </span><span class='line'>
 </span><span class='line'><span class="k">try</span> <span class="o">{</span>
-</span><span class='line'>  <span class="n">ctx</span><span class="o">.</span><span class="n">lookup</span><span class="o">(</span><span class="nc">ACCESS_BEAN_REMOTE_NAME</span><span class="o">).</span><span class="n">asInstanceOf</span><span class="o">[</span><span class="kt">T</span><span class="o">]</span>
+</span><span class='line'>  <span class="n">ctx</span><span class="o">.</span><span class="n">lookup</span><span class="o">(</span><span class="nc">ACCESS_BEAN_REMOTE_NAME</span><span class="o">).</span><span class="n">asInstanceOf</span><span class="o">[</span><span class="kt">UserRemoteBean</span><span class="o">]</span>
 </span><span class='line'><span class="o">}</span>
 </span><span class='line'><span class="k">catch</span> <span class="o">{</span>
 </span><span class='line'>  <span class="k">case</span> <span class="n">e</span><span class="k">:</span> <span class="kt">NamingException</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="o">{</span>

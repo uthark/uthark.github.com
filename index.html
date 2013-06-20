@@ -179,11 +179,11 @@
 </span><span class='line'>
 </span><span class='line'>  <span class="k">var</span> <span class="n">ctx</span><span class="k">:</span> <span class="kt">Context</span> <span class="o">=</span> <span class="kc">null</span>
 </span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="n">getObject</span><span class="k">:</span> <span class="kt">T</span> <span class="o">=</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">def</span> <span class="n">getObject</span><span class="k">:</span> <span class="kt">UserRemoteBean</span> <span class="o">=</span> <span class="o">{</span>
 </span><span class='line'>    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="o">(</span><span class="s">&quot;Requesting new instance of {}&quot;</span><span class="o">,</span> <span class="n">getObjectType</span><span class="o">)</span>
 </span><span class='line'>
 </span><span class='line'>    <span class="k">try</span> <span class="o">{</span>
-</span><span class='line'>      <span class="n">ctx</span><span class="o">.</span><span class="n">lookup</span><span class="o">(</span><span class="nc">ACCESS_BEAN_REMOTE_NAME</span><span class="o">).</span><span class="n">asInstanceOf</span><span class="o">[</span><span class="kt">T</span><span class="o">]</span>
+</span><span class='line'>      <span class="n">ctx</span><span class="o">.</span><span class="n">lookup</span><span class="o">(</span><span class="nc">ACCESS_BEAN_REMOTE_NAME</span><span class="o">).</span><span class="n">asInstanceOf</span><span class="o">[</span><span class="kt">UserRemoteBean</span><span class="o">]</span>
 </span><span class='line'>    <span class="o">}</span>
 </span><span class='line'>    <span class="k">catch</span> <span class="o">{</span>
 </span><span class='line'>      <span class="k">case</span> <span class="n">e</span><span class="k">:</span> <span class="kt">NamingException</span> <span class="o">=&gt;</span> <span class="o">{</span>
@@ -348,8 +348,6 @@
 <span class='line-number'>43</span>
 <span class='line-number'>44</span>
 <span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
 </pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Configuration</span>
 </span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CacheConfiguration</span> <span class="o">{</span>
 </span><span class='line'>
@@ -362,35 +360,33 @@
 </span><span class='line'>        <span class="n">result</span><span class="o">.</span><span class="na">setCaches</span><span class="o">(</span><span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span>
 </span><span class='line'>                <span class="k">new</span> <span class="nf">SSMCache</span><span class="o">(</span><span class="n">defaultCacheFactory</span><span class="o">().</span><span class="na">getObject</span><span class="o">(),</span> <span class="mi">45</span><span class="o">)</span>
 </span><span class='line'>        <span class="o">));</span>
-</span><span class='line'>
 </span><span class='line'>        <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
 </span><span class='line'>    <span class="o">}</span>
 </span><span class='line'>
 </span><span class='line'>    <span class="nd">@Bean</span>
 </span><span class='line'>    <span class="kd">public</span> <span class="n">CacheFactory</span> <span class="nf">defaultCacheFactory</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>
 </span><span class='line'>        <span class="n">CacheFactory</span> <span class="n">factory</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CacheFactory</span><span class="o">();</span>
 </span><span class='line'>        <span class="n">factory</span><span class="o">.</span><span class="na">setCacheName</span><span class="o">(</span><span class="s">&quot;defaultCache&quot;</span><span class="o">);</span>
 </span><span class='line'>        <span class="n">factory</span><span class="o">.</span><span class="na">setAddressProvider</span><span class="o">(</span><span class="n">addressProvider</span><span class="o">());</span>
 </span><span class='line'>        <span class="n">factory</span><span class="o">.</span><span class="na">setCacheClientFactory</span><span class="o">(</span><span class="n">cacheClientFactory</span><span class="o">());</span>
 </span><span class='line'>        <span class="n">factory</span><span class="o">.</span><span class="na">setConfiguration</span><span class="o">(</span><span class="n">cacheConfiguration</span><span class="o">());</span>
-</span><span class='line'>
 </span><span class='line'>        <span class="k">return</span> <span class="n">factory</span><span class="o">;</span>
 </span><span class='line'>    <span class="o">}</span>
 </span><span class='line'>
 </span><span class='line'>    <span class="nd">@Bean</span>
-</span><span class='line'>    <span class="nd">@Scope</span><span class="o">(</span><span class="n">ConfigurableBeanFactory</span><span class="o">.</span><span class="na">SCOPE_PROTOTYPE</span><span class="o">)</span> <span class="n">CacheClientFactory</span> <span class="n">cacheClientFactory</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    <span class="nd">@Scope</span><span class="o">(</span><span class="n">ConfigurableBeanFactory</span><span class="o">.</span><span class="na">SCOPE_PROTOTYPE</span><span class="o">)</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="n">CacheClientFactory</span> <span class="nf">cacheClientFactory</span><span class="o">()</span> <span class="o">{</span>
 </span><span class='line'>        <span class="k">return</span> <span class="k">new</span> <span class="nf">MemcacheClientFactoryImpl</span><span class="o">();</span>
 </span><span class='line'>    <span class="o">}</span>
 </span><span class='line'>
 </span><span class='line'>    <span class="nd">@Bean</span>
-</span><span class='line'>    <span class="n">AddressProvider</span> <span class="nf">addressProvider</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="n">AddressProvider</span> <span class="nf">addressProvider</span><span class="o">()</span> <span class="o">{</span>
 </span><span class='line'>        <span class="k">return</span> <span class="k">new</span> <span class="nf">DefaultAddressProvider</span><span class="o">(</span><span class="n">memcachedUrl</span><span class="o">);</span>
 </span><span class='line'>    <span class="o">}</span>
 </span><span class='line'>
 </span><span class='line'>    <span class="nd">@Bean</span>
 </span><span class='line'>    <span class="nd">@Scope</span><span class="o">(</span><span class="n">ConfigurableBeanFactory</span><span class="o">.</span><span class="na">SCOPE_PROTOTYPE</span><span class="o">)</span>
-</span><span class='line'>    <span class="n">com</span><span class="o">.</span><span class="na">google</span><span class="o">.</span><span class="na">code</span><span class="o">.</span><span class="na">ssm</span><span class="o">.</span><span class="na">providers</span><span class="o">.</span><span class="na">CacheConfiguration</span> <span class="nf">cacheConfiguration</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="n">com</span><span class="o">.</span><span class="na">google</span><span class="o">.</span><span class="na">code</span><span class="o">.</span><span class="na">ssm</span><span class="o">.</span><span class="na">providers</span><span class="o">.</span><span class="na">CacheConfiguration</span> <span class="nf">cacheConfiguration</span><span class="o">()</span> <span class="o">{</span>
 </span><span class='line'>        <span class="n">com</span><span class="o">.</span><span class="na">google</span><span class="o">.</span><span class="na">code</span><span class="o">.</span><span class="na">ssm</span><span class="o">.</span><span class="na">providers</span><span class="o">.</span><span class="na">CacheConfiguration</span> <span class="n">configuration</span> <span class="o">=</span>
 </span><span class='line'>                <span class="k">new</span> <span class="n">com</span><span class="o">.</span><span class="na">google</span><span class="o">.</span><span class="na">code</span><span class="o">.</span><span class="na">ssm</span><span class="o">.</span><span class="na">providers</span><span class="o">.</span><span class="na">CacheConfiguration</span><span class="o">();</span>
 </span><span class='line'>        <span class="n">configuration</span><span class="o">.</span><span class="na">setConsistentHashing</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>

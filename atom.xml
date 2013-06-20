@@ -4,7 +4,7 @@
   <title><![CDATA[Блог о разработке ПО]]></title>
   <link href="http://uthark.github.com/atom.xml" rel="self"/>
   <link href="http://uthark.github.com/"/>
-  <updated>2013-06-19T15:40:40-04:00</updated>
+  <updated>2013-06-19T22:16:52-04:00</updated>
   <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
@@ -90,11 +90,11 @@
 </span><span class='line'>
 </span><span class='line'>  <span class="k">var</span> <span class="n">ctx</span><span class="k">:</span> <span class="kt">Context</span> <span class="o">=</span> <span class="kc">null</span>
 </span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="n">getObject</span><span class="k">:</span> <span class="kt">T</span> <span class="o">=</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">def</span> <span class="n">getObject</span><span class="k">:</span> <span class="kt">UserRemoteBean</span> <span class="o">=</span> <span class="o">{</span>
 </span><span class='line'>    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="o">(</span><span class="s">&quot;Requesting new instance of {}&quot;</span><span class="o">,</span> <span class="n">getObjectType</span><span class="o">)</span>
 </span><span class='line'>
 </span><span class='line'>    <span class="k">try</span> <span class="o">{</span>
-</span><span class='line'>      <span class="n">ctx</span><span class="o">.</span><span class="n">lookup</span><span class="o">(</span><span class="nc">ACCESS_BEAN_REMOTE_NAME</span><span class="o">).</span><span class="n">asInstanceOf</span><span class="o">[</span><span class="kt">T</span><span class="o">]</span>
+</span><span class='line'>      <span class="n">ctx</span><span class="o">.</span><span class="n">lookup</span><span class="o">(</span><span class="nc">ACCESS_BEAN_REMOTE_NAME</span><span class="o">).</span><span class="n">asInstanceOf</span><span class="o">[</span><span class="kt">UserRemoteBean</span><span class="o">]</span>
 </span><span class='line'>    <span class="o">}</span>
 </span><span class='line'>    <span class="k">catch</span> <span class="o">{</span>
 </span><span class='line'>      <span class="k">case</span> <span class="n">e</span><span class="k">:</span> <span class="kt">NamingException</span> <span class="o">=&gt;</span> <span class="o">{</span>
@@ -232,8 +232,6 @@
 <span class='line-number'>43</span>
 <span class='line-number'>44</span>
 <span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
 </pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Configuration</span>
 </span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CacheConfiguration</span> <span class="o">{</span>
 </span><span class='line'>
@@ -246,35 +244,33 @@
 </span><span class='line'>        <span class="n">result</span><span class="o">.</span><span class="na">setCaches</span><span class="o">(</span><span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span>
 </span><span class='line'>                <span class="k">new</span> <span class="nf">SSMCache</span><span class="o">(</span><span class="n">defaultCacheFactory</span><span class="o">().</span><span class="na">getObject</span><span class="o">(),</span> <span class="mi">45</span><span class="o">)</span>
 </span><span class='line'>        <span class="o">));</span>
-</span><span class='line'>
 </span><span class='line'>        <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
 </span><span class='line'>    <span class="o">}</span>
 </span><span class='line'>
 </span><span class='line'>    <span class="nd">@Bean</span>
 </span><span class='line'>    <span class="kd">public</span> <span class="n">CacheFactory</span> <span class="nf">defaultCacheFactory</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>
 </span><span class='line'>        <span class="n">CacheFactory</span> <span class="n">factory</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CacheFactory</span><span class="o">();</span>
 </span><span class='line'>        <span class="n">factory</span><span class="o">.</span><span class="na">setCacheName</span><span class="o">(</span><span class="s">&quot;defaultCache&quot;</span><span class="o">);</span>
 </span><span class='line'>        <span class="n">factory</span><span class="o">.</span><span class="na">setAddressProvider</span><span class="o">(</span><span class="n">addressProvider</span><span class="o">());</span>
 </span><span class='line'>        <span class="n">factory</span><span class="o">.</span><span class="na">setCacheClientFactory</span><span class="o">(</span><span class="n">cacheClientFactory</span><span class="o">());</span>
 </span><span class='line'>        <span class="n">factory</span><span class="o">.</span><span class="na">setConfiguration</span><span class="o">(</span><span class="n">cacheConfiguration</span><span class="o">());</span>
-</span><span class='line'>
 </span><span class='line'>        <span class="k">return</span> <span class="n">factory</span><span class="o">;</span>
 </span><span class='line'>    <span class="o">}</span>
 </span><span class='line'>
 </span><span class='line'>    <span class="nd">@Bean</span>
-</span><span class='line'>    <span class="nd">@Scope</span><span class="o">(</span><span class="n">ConfigurableBeanFactory</span><span class="o">.</span><span class="na">SCOPE_PROTOTYPE</span><span class="o">)</span> <span class="n">CacheClientFactory</span> <span class="n">cacheClientFactory</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    <span class="nd">@Scope</span><span class="o">(</span><span class="n">ConfigurableBeanFactory</span><span class="o">.</span><span class="na">SCOPE_PROTOTYPE</span><span class="o">)</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="n">CacheClientFactory</span> <span class="nf">cacheClientFactory</span><span class="o">()</span> <span class="o">{</span>
 </span><span class='line'>        <span class="k">return</span> <span class="k">new</span> <span class="nf">MemcacheClientFactoryImpl</span><span class="o">();</span>
 </span><span class='line'>    <span class="o">}</span>
 </span><span class='line'>
 </span><span class='line'>    <span class="nd">@Bean</span>
-</span><span class='line'>    <span class="n">AddressProvider</span> <span class="nf">addressProvider</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="n">AddressProvider</span> <span class="nf">addressProvider</span><span class="o">()</span> <span class="o">{</span>
 </span><span class='line'>        <span class="k">return</span> <span class="k">new</span> <span class="nf">DefaultAddressProvider</span><span class="o">(</span><span class="n">memcachedUrl</span><span class="o">);</span>
 </span><span class='line'>    <span class="o">}</span>
 </span><span class='line'>
 </span><span class='line'>    <span class="nd">@Bean</span>
 </span><span class='line'>    <span class="nd">@Scope</span><span class="o">(</span><span class="n">ConfigurableBeanFactory</span><span class="o">.</span><span class="na">SCOPE_PROTOTYPE</span><span class="o">)</span>
-</span><span class='line'>    <span class="n">com</span><span class="o">.</span><span class="na">google</span><span class="o">.</span><span class="na">code</span><span class="o">.</span><span class="na">ssm</span><span class="o">.</span><span class="na">providers</span><span class="o">.</span><span class="na">CacheConfiguration</span> <span class="nf">cacheConfiguration</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="n">com</span><span class="o">.</span><span class="na">google</span><span class="o">.</span><span class="na">code</span><span class="o">.</span><span class="na">ssm</span><span class="o">.</span><span class="na">providers</span><span class="o">.</span><span class="na">CacheConfiguration</span> <span class="nf">cacheConfiguration</span><span class="o">()</span> <span class="o">{</span>
 </span><span class='line'>        <span class="n">com</span><span class="o">.</span><span class="na">google</span><span class="o">.</span><span class="na">code</span><span class="o">.</span><span class="na">ssm</span><span class="o">.</span><span class="na">providers</span><span class="o">.</span><span class="na">CacheConfiguration</span> <span class="n">configuration</span> <span class="o">=</span>
 </span><span class='line'>                <span class="k">new</span> <span class="n">com</span><span class="o">.</span><span class="na">google</span><span class="o">.</span><span class="na">code</span><span class="o">.</span><span class="na">ssm</span><span class="o">.</span><span class="na">providers</span><span class="o">.</span><span class="na">CacheConfiguration</span><span class="o">();</span>
 </span><span class='line'>        <span class="n">configuration</span><span class="o">.</span><span class="na">setConsistentHashing</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
@@ -2104,7 +2100,7 @@ public @interface SuppressExceptions {
 <div class='comment'>
 <div class='author'>Anonymous</div>
 <div class='content'>
-Добрый день, прочитал Вашу статью &ndash; интересно! =) На данный момент пытаюсь вникнуть в АОП в БД, но не совсем понимаю как можно реализовать аспекты при работе с БД (именно с точки зрения системы &ndash; код, компиляция и пр. т.к. теоретически все прозрачно и ясно). Не подскажите &ndash; где можно найти, для наглядности, простенькую БД с реализованным аспектами и хоть какое-то пояснение по реализованному &quot;проекту&quot; &ndash; на чем писали, как внедряли аспекты и пр. Мэйл для связи &ndash; <a href="&#x6d;&#97;&#x69;&#108;&#116;&#x6f;&#x3a;&#x75;&#116;&#111;&#112;&#105;&#x61;&#50;&#48;&#48;&#x35;&#x40;&#x79;&#97;&#110;&#x64;&#x65;&#120;&#46;&#x72;&#117;">&#117;&#x74;&#111;&#x70;&#x69;&#97;&#50;&#x30;&#48;&#x35;&#x40;&#x79;&#x61;&#x6e;&#100;&#101;&#x78;&#46;&#114;&#x75;</a></div>
+Добрый день, прочитал Вашу статью &ndash; интересно! =) На данный момент пытаюсь вникнуть в АОП в БД, но не совсем понимаю как можно реализовать аспекты при работе с БД (именно с точки зрения системы &ndash; код, компиляция и пр. т.к. теоретически все прозрачно и ясно). Не подскажите &ndash; где можно найти, для наглядности, простенькую БД с реализованным аспектами и хоть какое-то пояснение по реализованному &quot;проекту&quot; &ndash; на чем писали, как внедряли аспекты и пр. Мэйл для связи &ndash; <a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#x6f;&#58;&#x75;&#116;&#x6f;&#x70;&#105;&#x61;&#50;&#48;&#48;&#53;&#x40;&#121;&#x61;&#x6e;&#100;&#101;&#x78;&#46;&#114;&#x75;">&#117;&#116;&#x6f;&#x70;&#x69;&#x61;&#x32;&#x30;&#48;&#53;&#x40;&#x79;&#x61;&#x6e;&#100;&#x65;&#120;&#x2e;&#x72;&#117;</a></div>
 </div></p>
 ]]></content>
   </entry>
