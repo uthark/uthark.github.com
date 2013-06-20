@@ -4,7 +4,7 @@
   <title><![CDATA[Category: cache | Блог о разработке ПО]]></title>
   <link href="http://uthark.github.com/blog/categories/cache/atom.xml" rel="self"/>
   <link href="http://uthark.github.com/"/>
-  <updated>2013-06-19T22:23:39-04:00</updated>
+  <updated>2013-06-19T22:25:33-04:00</updated>
   <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
@@ -22,7 +22,7 @@
 
 <p>Я не буду вдаваться в подробности работы, их можно прочитать в документации, но опишу, каким образом можно настроить <a href="http://memcached.org/">memcached</a> в качестве бэкэнда для работы.</p>
 
-<h2>Подключаем зависимости</h2>
+<h2>Подключение зависимостей</h2>
 
 <p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -60,7 +60,7 @@
 
 <p><code>spymemcached-provider</code> &ndash; это библиотечка для работы с <code>memcached</code> из Java, а <code>spring-cache</code> &ndash; модуль интеграции со Spring.</p>
 
-<h2>Включаем кэширование</h2>
+<h2>Включение кэширования</h2>
 
 <p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
