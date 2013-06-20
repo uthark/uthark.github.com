@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Пишем собственный валидатор для Bean Validation API - Блог о разработке ПО</title>
+  <title>Пишем валидатор для Bean Validation API - Блог о разработке ПО</title>
   <meta name="author" content="Oleg Atamanenko">
 
   
@@ -81,7 +81,7 @@
   
   <header>
     
-      <h1 class="entry-title">Пишем собственный валидатор для Bean Validation API</h1>
+      <h1 class="entry-title">Пишем валидатор для Bean Validation API</h1>
     
     
       <p class="meta">
@@ -104,11 +104,11 @@
   </header>
 
 
-<div class="entry-content"><p><a href="http://jcp.org/en/jsr/detail?id=303">JSR-303</a> предоставляет удобный API для проверки валидности объектов, а также входных параметров. Очевидно, что стандартных валидаторов в какой-то момент может быть недостаточно, поэтому необходимо писать собственный.</p>
+<div class="entry-content"><p><a href="http://jcp.org/en/jsr/detail?id=303">JSR-303</a> предоставляет удобный API для проверки валидности объектов, а также входных параметров. Очевидно, что <a href="http://docs.oracle.com/javaee/6/tutorial/doc/gircz.html">стандартных валидаторов</a> в какой-то момент может быть недостаточно, поэтому необходимо писать собственный.</p>
 
-<p>Хочу показать на примере, как легко это делается.</p>
+<p>Хочу показать на примере валидации запроса к <a href="http://www.mongodb.org/">MongoDB</a>, как легко это делается.</p>
 
-<h2>Создаём аннотацию</h2>
+<h2>Создание аннотации</h2>
 
 <figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -139,7 +139,7 @@
 
 <p>Обратите внимание на аннотацию <a href="http://docs.oracle.com/javaee/7/api/javax/validation/Constraint.html">@Constraint</a> &ndash; она описывает, какой класс будет проводить реальную валидацию. Атрибуты <code>groups()</code> и <code>payload()</code> являются обязательными.</p>
 
-<h2>Пишем валидатор</h2>
+<h2>Написание валидатора</h2>
 
 <figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -188,7 +188,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>В данном случае, валидатор просто пытается создать Mongo Query из переданной строки, если это не удаётся, то считаем, что строка не является корректным запросом к Mongo и возвращаем <code>false</code>.</p>
+<p>В данном случае, валидатор у нас простой &ndash; мы пытаемся создать Mongo Query из переданной строки, если это не удаётся, то считаем, что строка не является корректным запросом к Mongo и возвращаем <code>false</code>.</p>
 
 <p>Если есть желание возвращать динамическое сообщение об ошибке, то это можно сделать следующим образом:</p>
 
@@ -312,7 +312,7 @@
       </li>
     
       <li class="post">
-        <a href="/blog/2013/06/19/custom-bean-validator/">Пишем собственный валидатор для Bean Validation API</a>
+        <a href="/blog/2013/06/19/custom-bean-validator/">Пишем валидатор для Bean Validation API</a>
       </li>
     
       <li class="post">

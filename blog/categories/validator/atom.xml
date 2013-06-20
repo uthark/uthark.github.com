@@ -4,7 +4,7 @@
   <title><![CDATA[Category: validator | Блог о разработке ПО]]></title>
   <link href="http://uthark.github.com/blog/categories/validator/atom.xml" rel="self"/>
   <link href="http://uthark.github.com/"/>
-  <updated>2013-06-19T22:25:33-04:00</updated>
+  <updated>2013-06-19T22:31:55-04:00</updated>
   <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
@@ -14,15 +14,15 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Пишем собственный валидатор для Bean Validation API]]></title>
+    <title type="html"><![CDATA[Пишем валидатор для Bean Validation API]]></title>
     <link href="http://uthark.github.com/blog/2013/06/19/custom-bean-validator/"/>
     <updated>2013-06-19T08:00:00-04:00</updated>
     <id>http://uthark.github.com/blog/2013/06/19/custom-bean-validator</id>
-    <content type="html"><![CDATA[<p><a href="http://jcp.org/en/jsr/detail?id=303">JSR-303</a> предоставляет удобный API для проверки валидности объектов, а также входных параметров. Очевидно, что стандартных валидаторов в какой-то момент может быть недостаточно, поэтому необходимо писать собственный.</p>
+    <content type="html"><![CDATA[<p><a href="http://jcp.org/en/jsr/detail?id=303">JSR-303</a> предоставляет удобный API для проверки валидности объектов, а также входных параметров. Очевидно, что <a href="http://docs.oracle.com/javaee/6/tutorial/doc/gircz.html">стандартных валидаторов</a> в какой-то момент может быть недостаточно, поэтому необходимо писать собственный.</p>
 
-<p>Хочу показать на примере, как легко это делается.</p>
+<p>Хочу показать на примере валидации запроса к <a href="http://www.mongodb.org/">MongoDB</a>, как легко это делается.</p>
 
-<h2>Создаём аннотацию</h2>
+<h2>Создание аннотации</h2>
 
 <p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -56,7 +56,7 @@
 
 <p>Обратите внимание на аннотацию <a href="http://docs.oracle.com/javaee/7/api/javax/validation/Constraint.html">@Constraint</a> &ndash; она описывает, какой класс будет проводить реальную валидацию. Атрибуты <code>groups()</code> и <code>payload()</code> являются обязательными.</p>
 
-<h2>Пишем валидатор</h2>
+<h2>Написание валидатора</h2>
 
 <p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -108,7 +108,7 @@
 </span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<p>В данном случае, валидатор просто пытается создать Mongo Query из переданной строки, если это не удаётся, то считаем, что строка не является корректным запросом к Mongo и возвращаем <code>false</code>.</p>
+<p>В данном случае, валидатор у нас простой &ndash; мы пытаемся создать Mongo Query из переданной строки, если это не удаётся, то считаем, что строка не является корректным запросом к Mongo и возвращаем <code>false</code>.</p>
 
 <p>Если есть желание возвращать динамическое сообщение об ошибке, то это можно сделать следующим образом:</p>
 
