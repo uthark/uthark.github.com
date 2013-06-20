@@ -4,7 +4,7 @@
   <title><![CDATA[Блог о разработке ПО]]></title>
   <link href="http://uthark.github.com/atom.xml" rel="self"/>
   <link href="http://uthark.github.com/"/>
-  <updated>2013-06-19T22:31:55-04:00</updated>
+  <updated>2013-06-19T23:31:16-04:00</updated>
   <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
@@ -82,7 +82,7 @@
 <span class='line-number'>41</span>
 <span class='line-number'>42</span>
 </pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="nd">@Component</span>
-</span><span class='line'><span class="k">class</span> <span class="nc">UserRemoteBeanFactoryBean</span><span class="o">[</span><span class="kt">UserRemoteBean</span><span class="o">]</span> <span class="nc">extends</span> <span class="nc">FactoryBean</span><span class="o">[</span><span class="kt">UserRemoteBean</span><span class="o">]</span> <span class="o">{</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">UserRemoteBeanFactoryBean</span> <span class="k">extends</span> <span class="nc">FactoryBean</span><span class="o">[</span><span class="kt">UserRemoteBean</span><span class="o">]</span> <span class="o">{</span>
 </span><span class='line'>
 </span><span class='line'>  <span class="k">def</span> <span class="nc">ACCESS_BEAN_REMOTE_NAME</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">&quot;our ejb name.&quot;</span>
 </span><span class='line'>
@@ -2100,7 +2100,7 @@ public @interface SuppressExceptions {
 <div class='comment'>
 <div class='author'>Anonymous</div>
 <div class='content'>
-Добрый день, прочитал Вашу статью &ndash; интересно! =) На данный момент пытаюсь вникнуть в АОП в БД, но не совсем понимаю как можно реализовать аспекты при работе с БД (именно с точки зрения системы &ndash; код, компиляция и пр. т.к. теоретически все прозрачно и ясно). Не подскажите &ndash; где можно найти, для наглядности, простенькую БД с реализованным аспектами и хоть какое-то пояснение по реализованному &quot;проекту&quot; &ndash; на чем писали, как внедряли аспекты и пр. Мэйл для связи &ndash; <a href="&#109;&#97;&#x69;&#108;&#116;&#x6f;&#x3a;&#x75;&#x74;&#111;&#x70;&#x69;&#x61;&#x32;&#48;&#48;&#x35;&#64;&#x79;&#x61;&#110;&#x64;&#101;&#120;&#x2e;&#114;&#x75;">&#117;&#116;&#111;&#x70;&#105;&#97;&#50;&#48;&#48;&#x35;&#64;&#x79;&#97;&#110;&#100;&#101;&#x78;&#x2e;&#114;&#117;</a></div>
+Добрый день, прочитал Вашу статью &ndash; интересно! =) На данный момент пытаюсь вникнуть в АОП в БД, но не совсем понимаю как можно реализовать аспекты при работе с БД (именно с точки зрения системы &ndash; код, компиляция и пр. т.к. теоретически все прозрачно и ясно). Не подскажите &ndash; где можно найти, для наглядности, простенькую БД с реализованным аспектами и хоть какое-то пояснение по реализованному &quot;проекту&quot; &ndash; на чем писали, как внедряли аспекты и пр. Мэйл для связи &ndash; <a href="&#x6d;&#97;&#105;&#108;&#x74;&#x6f;&#x3a;&#117;&#x74;&#x6f;&#x70;&#x69;&#97;&#50;&#48;&#48;&#53;&#64;&#121;&#97;&#110;&#x64;&#101;&#x78;&#x2e;&#114;&#x75;">&#x75;&#116;&#111;&#x70;&#105;&#97;&#x32;&#48;&#48;&#x35;&#x40;&#121;&#97;&#x6e;&#x64;&#x65;&#x78;&#x2e;&#114;&#x75;</a></div>
 </div></p>
 ]]></content>
   </entry>
