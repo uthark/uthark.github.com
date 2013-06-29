@@ -9,8 +9,9 @@
   <meta name="author" content="Oleg Atamanenko">
 
   
-  <meta name="description" content="Выкладываю ниже список задач, которые нужно/можно выполнить для оптимизации приложения, написанного на Grails, может кому пригодится.
-Тестирование &hellip;">
+  <meta name="description" content="Summary: Пример разработки плагина для TiddlyWiki
+Вступление
+TiddlyWiki - это вики-движок, полностью написанный на JavaScript и хранящийся в одном &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +80,257 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/03/21/tiddlywiki/">Разработка макроса для TiddlyWiki</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-21T10:54:00-04:00" pubdate data-updated="true">Mar 21<span>st</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+<p><b>Summary</b>: Пример разработки плагина для TiddlyWiki</p>
+<h4>Вступление</h4>
+<p><a href="http://www.tiddlywiki.com/">TiddlyWiki</a> - это вики-движок, полностью написанный на <a href="http://en.wikipedia.org/wiki/JavaScript">JavaScript</a> и хранящийся в одном файле (как сам движок, так и содержимое). Создатели позиционируют его как &quot;переиспользуемую нелинейную персональную веб записную книжку&quot;.</p>
+<p>Я давно использую TiddlyWiki в различных целях:</p>
+<ol><li>По прямому назначению.</li>
+<li>Как систему <a href="http://mgsd.tiddlyspot.com/#mGSD">GTD</a>.</li>
+<li>Как домашнюю страницу на компьютере.</li>
+</ol>
+<p>Моя домашняя страница на компьютере - это, если говорить терминами TiddlyWiki, <a href="http://en.wikipedia.org/wiki/Tiddler">тиддлер</a>, содержащий ссылки на страницы, которые я часто посещаю.</p>
+<p>Для удобства использования я разработал пару стилей CSS, так что ссылки были крупными.</p>
+<a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://2.bp.blogspot.com/_y8p0_dtMJ38/S6Y0rP2J0eI/AAAAAAAAA9I/xrZhzZf2ad0/s1600-h/tiddly-before.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;width: 172px; height: 132px;" src="http://2.bp.blogspot.com/_y8p0_dtMJ38/S6Y0rP2J0eI/AAAAAAAAA9I/xrZhzZf2ad0/s400/tiddly-before.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5451102316571251170" /></a>
+<h4>Исходный код плагина</h4>
+<p>После длительного использования tiddlywiki в качестве домашней страницы я понял, что мне хочется, чтобы с каждой ссылкой была иконка сайта. Вручную вставлять картинки мне не хотелось, поэтому было решено написать собственный плагин.</p>
+<pre class="brush: jscript">
+/*{&nbsp;{&nbsp;{*/
+version.extensions.faviconLinkMacro = {major: 0, minor: 1, revision: 0, date: new Date(2010,3,21)};
+// Author: Oleg Atamanenko
+config.macros.faviconLink = {}
+config.macros.faviconLink.handler = function(place, macroName,  params, wikifier, paramString) {
+  var linkBox = createTiddlyElement(place, &quot;span&quot;, null, &quot;favIcon&quot;, &quot;&quot;);
+
+  var args = paramString.parseParams(&quot;list&quot;,null,true);
+  var link = getParam(args, &quot;link&quot;, 'false');
+
+  if (link != 'false'){
+    urlParts = link.split('/');
+    imgLink = urlParts[0] + &quot;//&quot; + urlParts[2] + &quot;/favicon.ico&quot;;
+
+    var imgElement = createTiddlyElement(linkBox, &quot;img&quot;, null, &quot;faviconImage&quot;, &quot;&quot;);
+    imgElement.src = imgLink;
+    imgElement.width = 16;
+    imgElement.height = 16;
+
+    var linkTitle = getParam(args, &quot;title&quot;, 'false');
+
+    if(linkTitle == 'false'){
+      linkTitle = link;
+    }
+    var linkElement = createTiddlyElement(linkBox, &quot;a&quot;, null, &quot;faviconLink&quot;, linkTitle);
+    linkElement.href = link;
+    linkElement.target = '_blank';
+  }
+}
+
+/*}&nbsp;}&nbsp;}*/
+</pre>
+<h4> Установка плагина</h4>
+<ol><li>Создаём новый тиддлер, называем его faviconLinkMacro</li>
+<li>Помечаем тиддлер тегом systemConfig, тогда TiddlyWiki при открытии страницы его подгрузит.</li>
+</ol>
+<h4>Использование плагина</h4>
+<ol><li>Плагин создаёт новый макрос, faviconLink, с двумя параметрами link и title.</li>
+<li>Вызов <tt>&lt;&lt;faviconLink link:&#8217;https://mail.google.com/mail&#8217; title:&#8217;mail&#8217;&gt;&gt;</tt> создаёт ссылку с картинкой с GMail</li>
+</ol>
+<a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://1.bp.blogspot.com/_y8p0_dtMJ38/S6Y0qnki7nI/AAAAAAAAA9A/Ic3skFoirY8/s1600-h/favicon-sample.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;width: 161px; height: 64px;" src="http://1.bp.blogspot.com/_y8p0_dtMJ38/S6Y0qnki7nI/AAAAAAAAA9A/Ic3skFoirY8/s400/favicon-sample.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5451102305759981170" /></a>
+<h4>Настройка визульных стилей плагина</h4>
+<p>Макрос создаёт следующие классы:</p>
+<ol><li>span.favIcon</li>
+<li>img.faviconImage</li>
+<li>a.faviconLink</li>
+</ol>
+<h4> Пример стилей</h4>
+<pre class="brush: css">
+.links span {
+  display: block;
+  position: relative;
+  padding: 0.7em;
+  margin: 0.3em;
+  min-width: 6em;
+  float:left;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.5em;
+  font-family: &quot;Gill Sans MT&quot;, &quot;Candara&quot;, &quot;Arial&quot;;
+  border: 2px solid [[ColorPalette::SecondaryLight]];
+  background-color: [[ColorPalette::SecondaryPale]];
+}
+
+.links span:hover {
+  border: 2px solid [[ColorPalette::SecondaryMid]];
+  background-color: [[ColorPalette::SecondaryLight]];
+  color: [[ColorPalette::PrimaryMid]];
+}
+
+.links img.faviconImage {
+  position: relative;
+  padding-right: 10px;
+}
+
+</pre>
+<p> Данный CSS необходимо добавить в тиддлер с именем StyleSheet</p>
+<h4>Пример тиддлера со ссылками</h4>
+<pre class="brush: html">
+{&nbsp;{links{
+&lt;&lt;faviconLink link:'http://delicious.com/dark.schakal/2read' title:'2read'&gt;&gt; &lt;&lt;faviconLink link:'https://mail.google.com/mail' title:'mail'&gt;&gt; &lt;&lt;faviconLink link:'http://www.google.com/reader/view' title:'rss'&gt;&gt; &lt;&lt;faviconLink link:'http://atamanenko.blogspot.com/' title:'blog'&gt;&gt; &lt;&lt;faviconLink link:'http://feedburner.google.com/fb/a/myfeeds' title:'feedburner'&gt;&gt; &lt;&lt;faviconLink link:'https://www.google.com/analytics/settings/' title:'analytics'&gt;&gt; &lt;&lt;faviconLink link:'http://wave.google.com' title:'wave'&gt;&gt; &lt;&lt;faviconLink link:'http://www.blogger.com/home' title:'blogger'&gt;&gt; &lt;&lt;faviconLink link:'http://twitter.com/' title:'twitter'&gt;&gt; &lt;&lt;faviconLink link:'https://www.dropbox.com/home#/' title:'dropbox'&gt;&gt; &lt;&lt;faviconLink link:'http://translate.google.com/toolkit/' title:'translator'&gt;&gt; &lt;&lt;faviconLink link:'http://sibir.megafon.ru/sendsms/' title:'SendSMS'&gt;&gt;
+}}}
+</pre>
+Вышеприведённый код тиддлера создаёт следующую страницу:
+
+<a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://1.bp.blogspot.com/_y8p0_dtMJ38/S6Y0qOLAO4I/AAAAAAAAA84/DFkORdMO8gE/s1600-h/favicon-sample-big.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;width: 400px; height: 157px;" src="http://1.bp.blogspot.com/_y8p0_dtMJ38/S6Y0qOLAO4I/AAAAAAAAA84/DFkORdMO8gE/s400/favicon-sample-big.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5451102298941963138" /></a></div>
+
+
+<h2>Comments</h2>
+
+
+<div class='comments'>
+<div class='comment'>
+<div class='author'>uthark</div>
+<div class='content'>
+Хорошо, выложу. :) Почистить только нужно.</div>
+</div>
+<div class='comment'>
+<div class='author'>Николай Мишин</div>
+<div class='content'>
+выложи архив своего tiddywiki c плагинами, а я поделюсь своим</div>
+</div>
+<div class='comment'>
+<div class='author'>Denis</div>
+<div class='content'>
+Спасибо за пример, сегодня же в свою вики встрою )</div>
+</div>
+</div>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/03/16/blog-post/">Борьба с убийцами производительности</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-16T11:52:00-04:00" pubdate data-updated="true">Mar 16<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+<p><strong>Summary</strong>: Мой опыт борьбы с &quot;убийцами производительности&quot;.</p>
+<h3>Постановка проблемы</h3>
+<p> Иногда бывает так, что хочется отвлечься от работы, от поставленной задачи на какую-нибудь фигню, лишь бы не заниматься текущей задачей. У меня это чаще всего сводилось к тому, что я начинал читать что-нибудь в сети (<a href="http://www.google.com/reader/view/" target="_blank">Google Reader</a>, <a href="http://habrahabr.ru/">Habrahabr</a>, <a href="http://www.linux.org.ru/">LOR</a>, etc). </p>
+<p>Истоки проблемы могут быть абсолютно разными, например: </p>
+<ol><li>Долгий запуск среды разработки </li>
+<li>Долгая сборка проекта</li>
+<li>Нудная задача</li>
+<li>Неинтересная задача</li>
+</ol>
+<p>Все эти причины спокойно могут приводить к потере производительности, причём неявным образом, например - &quot;А посижу пока я на хабре, пока полная сборка идёт&quot;, в итоге после 20 минут обнаруживается, что сборка закончилась уже 15 минут назад.</p>
+<p>Так как у меня тайм-киллер вполне простой - интернет, то и решение вполне простое.</p>
+<p>Вот список действий, что я сделал:</p>
+<ol><li>Удалил быстрые браузеры, теперь у меня только <a href="http://www.mozilla.com/firefox">Mozilla Firefox</a> под Linux и страшный <a href="http://www.microsoft.com/windows/ie/ie6/downloads/default.mspx">Internet Explorer 6.0 под Windows</a>.</li>
+<li>Забанил сайты которые не нужны для работы, но на которых я провожу много времени.</li>
+</ol>
+<p>Сначала я сделал радикальный бан - внёс в <tt>/etc/hosts</tt> эти сайты:</p>
+<pre class="brush: bash">
+127.0.0.1 www.linux.org.ru linux.org.ru
+127.0.0.1 www.habrahabr.ru habrahabr.ru
+127.0.0.1 www.lorquotes.ru lorquotes.ru
+</pre>
+<p> Но потом обнаружилось, что есть ещё <a href="http://www.google.com/reader/view/">Google Reader</a>, который также отнимает много времени (у меня было до 200 подписок, что давало до 300 новых статей в сутки). Проблему с <a href="http://www.google.com/reader/view/">Google Reader</a> я решал поэтапно: </p>
+<ol><li>Почистил список лент от юмора, который обновляется практически ежедневно, является пожирателем трафика и времени.</li>
+<li>После этого я почистил список лент от лент, которые достаточно интересные, но при этом без них можно спокойно обходиться (Например, <a href="http://aseigo.blogspot.com/">блог Аарона Сейго</a>, одного из главных разработчиков <a href="http://www.kde.org/">KDE</a>)</li>
+</ol>
+<p>Вышеперечисленные действия помогли мне сократить список фидов с 200 сначала до 100 с небольшим, а затем и до 65. Но я понимал, что это ещё не предел и есть к чему стремиться, поэтому решил перейти к использованию оффлайнового <a href="http://www.whatisrss.com/">RSS</a>-<a href="http://en.wikipedia.org/wiki/RSS_Reader">клиента</a>. </p>
+<p>Для этого я экспортировал <a href="http://www.opml.org/">OPML</a>-файл с подписками из <a href="http://www.google.com/reader/view/">Google Reader</a>, удалил все ленты (к сожалению, <a href="http://www.google.com/support/forum/p/reader/thread?tid=53c0b347fa8cd843&hl=en">удалить аккаунт</a> на <a href="http://www.google.com/reader/view/">Google Reader</a> невозможно, только полностью Google Account) и импортировал на <a href="http://userbase.kde.org/Akregator">Akregator</a> на домашней машинке. Это помогло мне аккумулировать все чтения ленты новостей в один временной промежуток - вечером, дома.</p>
+<p>Но, как оказалось, ещё есть к чему стремиться и гугление на просторах сети дало свои результаты: <a href="http://www.proginosko.com/leechblock.html"><strong>LeechBlock</strong></a>.</p>
+<p>LeechBlock это расширение для Mozilla Firefox, которое позволяет блокировать отдельные сайты на различные промежутки времени.</p>
+<p>Собственно, начав им пользоваться, я понял, что это именно то, что мне нужно:</p>
+<p> <a href="http://picasaweb.google.com/lh/photo/GiOXKIEw3fz0uoNMZxGTlg?authkey=Gv1sRgCOCWw8r8gI-DRQ&feat=embedwebsite"><img src="http://lh6.ggpht.com/_y8p0_dtMJ38/S56FpVJKVHI/AAAAAAAAA8Q/e6hTfBRPkRo/s800/leechblock.png" title="Leechblock Settings UI" alt="Leechblock Settings UI" /></a></p>
+<p> Возможности данного расширения следующие: </p>
+<ol><li>Блокировка сайтов различные периоды времени</li>
+<li>Блокировка сайтов по временному диапазону, в том числе по дням недели.</li>
+<li>Поддержка нескольких наборов сайтов для блокировки</li>
+<li>Возможность быстрого добавления сайта в список для блокировки </li>
+</ol>
+<p>Конечно, данное расширение не является панацеей, его нужно использовать в комплексе с другими средствами.</p></div>
+
+
+<h2>Comments</h2>
+
+
+<div class='comments'>
+<div class='comment'>
+<div class='author'>uthark</div>
+<div class='content'>
+@see to learn Это вполне решаемо с помощью этого же плагина. :)<br /><br /><br /><a href="http://picasaweb.google.com/lh/photo/SnNiIIES_ZbHcYqrzg5gPA?authkey=Gv1sRgCOCWw8r8gI-DRQ&amp;feat=embedwebsite" rel="nofollow">Скриншот с примером настройки</a><br /><br />Общий смысл:<br />1. блокируем все сайты (*)<br />2. Добавляем исключения через (+)</div>
+</div>
+<div class='comment'>
+<div class='author'>see to learn</div>
+<div class='content'>
+Мне бы такую примочку, которая показывает сайты только из белого списка.</div>
+</div>
+</div>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -750,175 +1002,6 @@ P.P.S. Да, ещё забыл сказать, что сервис достат�
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/11/25/delicious-plugin/">Расширение Delicious Plugin идёт в массы</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-11-25T12:16:00-05:00" pubdate data-updated="true">Nov 25<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div class='post'>
-Google запустил сайт <a href="https://chrome.google.com/extensions/" target="_blank">Chrome Extensions</a>.<br />
-<br />
-В данный момент сайт доступен только разработчикам расширений. Залил расширение, написал кратенькое описание. Жду запуска сайта. :)<br />
-<br />
-А пока сайт закрыт для рядовых пользователей последнюю версию можно скачать <a href="http://bit.ly/2KYnr8">тут</a>.<br />
-<br />
-P.S. А тем временем работа над расширением продолжается.<br />
-<br />
-P.P.S. У расширения появилась своя страничка в сети: <a href="http://code.google.com/p/chromium-delicious-extension/">Project Home Page</a></div>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/11/24/google-chrome/">Создание страницы настроек для расширений Google Chrome</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-11-24T12:09:00-05:00" pubdate data-updated="true">Nov 24<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div class='post'>
-В продолжение <a href="http://atamanenko.blogspot.com/2009/11/delicious-bookmarks-google.html">предыдущей заметки</a><br />
-<br />
-Логично предположить, что у расширений могут быть настройки. В Google Chrome/Chromium для этого есть специальный API.<br />
-<br />
-Для того, чтобы создать собственную страницу настроек необходимо сделать следующее:<br />
-<br />
-1. Объявить в манифесте страницу настроек<br />
-<pre class="brush:js; highlight: [5]">{
-  "name": "Delicious plugin", 
-  "version": "0.2", 
-  "background_page": "background.html", 
-  "options_page": "options.html"
-}
-</pre><br />
-2. Реализовать страницу с настройками.<br />
-<br />
-Страница с настройками - это обычная HTML-страничка. Для доступа к настройкам Google Chrome предоставляет объект <tt>localStorage</tt>, который умеет сохранять и возвращать значения.<br />
-<br />
-С объектом <tt>localStorage</tt> работа идёт как с обычным hash. <br />
-<br />
-<pre class="brush:js; html-script: true; highlight:[09, 21, 20, 33, 41]">&lt;html&gt;
-&lt;head&gt;
-&lt;title&gt;Delicious Bookmarks Options&lt;/title&gt;
-&lt;/head&gt;
-&lt;script type=&quot;text/javascript&quot;&gt;
-    // Saves options to localStorage.
-    function saveOptions() {
-        var share = document.getElementById(&quot;share&quot;);
-        localStorage[&quot;markPrivate&quot;] = share.checked;
-
-        // Update status to let user know options were saved.
-        var status = document.getElementById(&quot;status&quot;);
-        status.innerHTML = &quot;Options Saved.&quot;;
-        setTimeout(function() {
-            status.innerHTML = &quot;&quot;;
-        }, 1500);
-    }
-
-    // Restores select box state to saved value from localStorage.
-    function restoreOptions() {
-        var share = localStorage[&quot;markPrivate&quot;];
-
-        if (!share) {
-            return;
-        }
-        var shareCheckbox = document.getElementById(&quot;share&quot;);
-
-        shareCheckbox.checked = share;
-        
-    }
-&lt;/script&gt;
-
-&lt;body onload=&quot;restoreOptions()&quot;&gt;
-
-&lt;label for=&quot;share&quot;&gt;Mark as Private&lt;/label&gt;
-&lt;input type=&quot;checkbox&quot; class=&quot;checkbox&quot; name=&quot;share&quot; id=&quot;share&quot; /&gt;
-
-
-&lt;br&gt;
-&lt;button onclick=&quot;saveOptions();&quot;&gt;Save&lt;/button&gt;
-&lt;div id=&quot;status&quot;&gt;&amp;nbsp;&lt;/div&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</pre><br />
-<h2>Чтение настроек</h2>При инициализации страницы настроек необходимо проставить актуальные значения. Для этого на событе <tt>onload</tt> навешивается функция <tt>restoreOptions()</tt>, которая проставляет в пользовательском интерфейсе текущие настройки. <br />
-<br />
-<h2>Запись настроек</h2>Для сохранения настроек навешивается обработчик <tt>onclick</tt> для кнопки save - метод <tt>saveOptions</tt>.<br />
-<br />
-Вот таким простым способом можно сохранять настройки расширения. <br />
-<br />
-<h1>Документация</h1><ul><li><a href="http://code.google.com/chrome/extensions/options.html">Google Chrome Extensions Options</a><br />
-<li><a href="http://www.w3.org/TR/2009/WD-webstorage-20091029/#the-localstorage-attribute">Документация по localStorage</a></li><br />
-<br />
-</ul></div>
-
-
-<h2>Comments</h2>
-
-
-<div class='comments'>
-<div class='comment'>
-<div class='author'>karri</div>
-<div class='content'>
-Мне вот тут понадобилось поставить Flash player для Chromium&#39;a, перерыла кучу ссылок в инете и наткнулась на классный блог http://www.ubuntugeek.com/<br />Он, судя по всему, для таких чайников как я(все было понятно даже на английском), поставила player без проблем и терь сижу довольная до невозможности :) Оч рекомендую начинающим линуксоидам, может кому пригодится :)</div>
-</div>
-</div>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -936,6 +1019,14 @@ P.P.S. У расширения появилась своя страничка в
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/06/28/jaxrs-spring-autowiring/">@Autowired JAX-RS Client API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/28/jaxrs/">JAX-RS Client API</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/06/19/autowiring-factorybean/">@Autowiring EJBs with Spring</a>
       </li>
     
@@ -945,14 +1036,6 @@ P.P.S. У расширения появилась своя страничка в
     
       <li class="post">
         <a href="/blog/2013/06/19/custom-bean-validator/">Пишем валидатор для Bean Validation API</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/06/19/validation/">Валидация входных параметров с использованием Spring</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/10/24/vagrant/">Автоматизируем работу с виртуальными машинами с помощью Vagrant</a>
       </li>
     
   </ul>

@@ -4,7 +4,7 @@
   <title><![CDATA[Блог о разработке ПО]]></title>
   <link href="http://uthark.github.com/atom.xml" rel="self"/>
   <link href="http://uthark.github.com/"/>
-  <updated>2013-06-19T23:31:16-04:00</updated>
+  <updated>2013-06-28T22:15:41-04:00</updated>
   <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
@@ -12,6 +12,393 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[@Autowired JAX-RS Client API]]></title>
+    <link href="http://uthark.github.com/blog/2013/06/28/jaxrs-spring-autowiring/"/>
+    <updated>2013-06-28T19:05:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2013/06/28/jaxrs-spring-autowiring</id>
+    <content type="html"><![CDATA[<p>Продолжая разговор о <a href="http://www.jcp.org/en/jsr/detail?id=339">JAX RS</a> <a href="https://jax-rs-spec.java.net/nonav/2.0/apidocs/javax/ws/rs/client/package-summary.html">Client API</a> &ndash; предположим, что мы уже <a href="http://uthark.github.com/blog/2013/06/28/jaxrs/">используем JAX-RS клиент</a></p>
+
+<p>У нас есть класс, который умеет создавать прокси для любого REST-интерфейса в проекте. Теперь мы хотим сделать так, чтобы эти интерфейсы можно было автоматически создавать в контексте Spring и связывать с другими бинами.</p>
+
+<p>Первое решение, которое приходит в лоб &ndash; объявить бин в конфигурации для каждого интерфейса:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Configuration</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SpringConfiguration</span> <span class="o">{</span>
+</span><span class='line'>    <span class="nd">@Bean</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="n">UserRest</span> <span class="nf">userRest</span><span class="o">(){</span>
+</span><span class='line'>        <span class="n">List</span><span class="o">&lt;?&gt;</span> <span class="n">providers</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="k">new</span> <span class="n">JsonMessageHandler</span><span class="o">(</span><span class="k">new</span> <span class="n">ObjectMapper</span><span class="o">()));</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">JAXRSClientFactory</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="s">&quot;http://localhost:8080&quot;</span><span class="o">,</span> <span class="n">UserRest</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">providers</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Написав объявление нескольких таких бинов можно задуматься &ndash; &ldquo;Есть ли способ проще?&rdquo;.</p>
+
+<p>Есть, и я вам сейчас его покажу.</p>
+
+<p>Для того, чтобы добавлять собственные бины в Spring контекст, мы воспользуемся возможностью расширения Spring контекста с использованием <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/beans/factory/config/BeanFactoryPostProcessor.html"><code>BeanFactoryPostProcessor</code></a>.
+Метод <code>postProcessBeanFactory</code> данного класса позволяет выполнить дополнительную обработку фабрики бинов Spring, например, удалить, добавить, переопределить бин.
+Это именно то, что нам нужно &ndash; автоматически добавить новые бины в фабрику.</p>
+
+<p>Итак, что нам нужно сделать:</p>
+
+<ol>
+<li>Найти все доступные REST интерфейсы в текущем classpath.</li>
+<li>Для каждого из них создать прокси с использованием <code>JAXRSClientFactory</code> .</li>
+<li>Зарегистрировать каждый прокси в фабрике бинов для дальнейшего использования (например, для @Autowired).</li>
+</ol>
+
+
+<p>По спецификации JAX-RS, чтобы класс распознавался как REST-ресурс, у него должна быть аннотация <a href="https://jax-rs-spec.java.net/nonav/2.0/apidocs/javax/ws/rs/Path.html"><code>@Path()</code></a>.</p>
+
+<p>Для поиска всех возможных классов/интерфейсов воспользуемся классом <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/context/annotation/ClassPathScanningCandidateComponentProvider.html"><code>ClassPathScanningCandidateComponentProvider</code></a>, который умеет сканировать классы в выбранном пакете и применять фильтры, чтобы собрать только нужные. Также нам нужно учесть, что по умолчанию <code>ClassPathScanningCandidateComponentProvider</code> пытается определить, может ли найденный класс быть и бином (например, проверяет, что это не абстрактный класс и не интерфейс), поэтому нам нужно написать подкласс, который позволит нам работать с интерфейсами.</p>
+
+<p>Пишем класс:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">RestClientPostProcessor</span> <span class="kd">implements</span> <span class="n">BeanFactoryPostProcessor</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Logger</span> <span class="n">LOGGER</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">RestClientPostProcessor</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">protected</span> <span class="n">String</span> <span class="n">endpoint</span> <span class="o">=</span> <span class="s">&quot;http://localhost:8080&quot;</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">private</span> <span class="n">Class</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">Annotation</span><span class="o">&gt;</span> <span class="n">requiredAnnotation</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="na">class</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">private</span> <span class="n">String</span> <span class="n">basePackage</span> <span class="o">=</span> <span class="s">&quot;&lt;base package&gt;&quot;</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">private</span> <span class="n">ObjectMapper</span> <span class="n">objectMapper</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// getters/setters omitted.</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">protected</span> <span class="n">Object</span> <span class="nf">createBean</span><span class="o">(</span><span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">clazz</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">List</span><span class="o">&lt;?&gt;</span> <span class="n">providers</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="k">new</span> <span class="n">JsonMessageHandler</span><span class="o">(</span><span class="n">objectMapper</span><span class="o">));</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">JAXRSClientFactory</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">endpoint</span><span class="o">,</span> <span class="n">clazz</span><span class="o">,</span> <span class="n">providers</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Override</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">postProcessBeanFactory</span><span class="o">(</span><span class="n">ConfigurableListableBeanFactory</span> <span class="n">beanFactory</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">BeansException</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">ClassPathScanningCandidateComponentProvider</span> <span class="n">provider</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ClasspathScanner</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">provider</span><span class="o">.</span><span class="na">addIncludeFilter</span><span class="o">(</span><span class="k">new</span> <span class="n">AnnotationTypeFilter</span><span class="o">(</span><span class="n">requiredAnnotation</span><span class="o">));</span>
+</span><span class='line'>        <span class="n">Set</span><span class="o">&lt;</span><span class="n">BeanDefinition</span><span class="o">&gt;</span> <span class="n">components</span> <span class="o">=</span> <span class="n">provider</span><span class="o">.</span><span class="na">findCandidateComponents</span><span class="o">(</span><span class="n">basePackage</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">for</span> <span class="o">(</span><span class="n">BeanDefinition</span> <span class="n">component</span> <span class="o">:</span> <span class="n">components</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">createAndRegisterBean</span><span class="o">(</span><span class="n">beanFactory</span><span class="o">,</span> <span class="n">component</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">createAndRegisterBean</span><span class="o">(</span><span class="n">ConfigurableListableBeanFactory</span> <span class="n">beanFactory</span><span class="o">,</span> <span class="n">BeanDefinition</span> <span class="n">component</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">try</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">String</span> <span class="n">beanClassName</span> <span class="o">=</span> <span class="n">component</span><span class="o">.</span><span class="na">getBeanClassName</span><span class="o">();</span>
+</span><span class='line'>            <span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">clazz</span> <span class="o">=</span> <span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="n">beanClassName</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="n">Object</span> <span class="n">o</span> <span class="o">=</span> <span class="n">createBean</span><span class="o">(</span><span class="n">clazz</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="n">beanFactory</span><span class="o">.</span><span class="na">registerResolvableDependency</span><span class="o">(</span><span class="n">clazz</span><span class="o">,</span> <span class="n">o</span><span class="o">);</span>
+</span><span class='line'>        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ClassNotFoundException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">LOGGER</span><span class="o">.</span><span class="na">warn</span><span class="o">(</span><span class="s">&quot;Unable to find class: {}&quot;</span><span class="o">,</span> <span class="n">component</span><span class="o">.</span><span class="na">getBeanClassName</span><span class="o">(),</span> <span class="n">e</span><span class="o">);</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">ClasspathScanner</span> <span class="kd">extends</span> <span class="n">ClassPathScanningCandidateComponentProvider</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="kd">public</span> <span class="nf">ClasspathScanner</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>            <span class="kd">super</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nd">@Override</span> <span class="kd">protected</span> <span class="kt">boolean</span> <span class="n">isCandidateComponent</span><span class="o">(</span><span class="n">AnnotatedBeanDefinition</span> <span class="n">beanDefinition</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="c1">// override this method, because our classes are interfaces, by default interfaces are</span>
+</span><span class='line'>            <span class="c1">// not allowed.</span>
+</span><span class='line'>            <span class="k">return</span> <span class="n">beanDefinition</span><span class="o">.</span><span class="na">getMetadata</span><span class="o">().</span><span class="na">isIndependent</span><span class="o">();</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Теперь этот процессор необходимо зарегистрировать в контексте Spring:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Configuration</span>
+</span><span class='line'><span class="kd">class</span> <span class="nc">TestAutowiringConfiguration</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Bean</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="n">RestClientPostProcessor</span> <span class="nf">autowiringRestApiProcessor</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="k">new</span> <span class="nf">RestClientPostProcessor</span><span class="o">();</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>И теперь можно использовать <code>UserRest</code> как обычный бин:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'>    <span class="nd">@Autowired</span>
+</span><span class='line'>    <span class="kd">private</span> <span class="n">UserShowRest</span> <span class="n">userShowRest</span><span class="o">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Если есть вопросы &ndash; <a href="https://plus.google.com/112372998073079463630/posts">спрашивайте в Google+</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[JAX-RS Client API]]></title>
+    <link href="http://uthark.github.com/blog/2013/06/28/jaxrs/"/>
+    <updated>2013-06-28T19:00:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2013/06/28/jaxrs</id>
+    <content type="html"><![CDATA[<p><a href="http://jcp.org/en/jsr/detail?id=339">JAX-RS</a> &ndash; набор Java API для работы с REST сервисами. Существует несколько реализаций, <a href="http://uthark.github.com/blog/2012/02/08/java-rest/">о которых я уже писал раньше</a>.</p>
+
+<p>Предположим, что проект А выставляет наружу REST API, который мы хотим использовать в проекте Б. Очевидно, что сразу возникает вопрос &ndash; можно ли переиспользовать классы модели и интерфейс в другом проекте. Ответ &ndash; да, можно. Client API, появившийся в JAX RS 2.0, упрощает реализацию клиента, но это всё равно не самый оптимальный вариант.</p>
+
+<p>Есть более интересный способ &ndash; в замечательной библиотеке <a href="http://cxf.apache.org/">Apache CXF</a> есть класс <a href="http://cxf.apache.org/javadoc/latest/org/apache/cxf/jaxrs/client/JAXRSClientFactory.html"><code>org.apache.cxf.jaxrs.client.JAXRSClientFactory</code></a>, который позволяет автоматически получать прокси-клиент для работы с сервером.</p>
+
+<p>К сожалению, у меня не получилось завести его с JSON без JAXB &ndash; Проблема с Generic Collections &ndash; <a href="http://cxf.apache.org/javadoc/latest/org/apache/cxf/jaxrs/provider/json/JSONProvider.html"><code>org.apache.cxf.jaxrs.provider.json.JSONProvider</code></a> подразумевает, что в проекте используется JAXB, с помощью которого у нас проаннотирована модель. Поэтому пришлось написать собственную реализацию <a href="http://docs.oracle.com/javaee/6/api/javax/ws/rs/ext/MessageBodyReader.html"><code>javax.ws.rs.ext.MessageBodyReader&lt;T&gt;</code></a> и <a href="http://docs.oracle.com/javaee/6/api/javax/ws/rs/ext/MessageBodyWriter.html">javax.ws.rs.ext.MessageBodyWriter<T></a>.</p>
+
+<p>Основная проблема при работе с JSON &ndash; это то, что, в общем случае, у нас нет информации об используемых типах данных, а вкупе с тем, что в  Java Generics реализованы с <a href="http://docs.oracle.com/javase/tutorial/java/generics/erasure.html">Type Erasure</a> &ndash; ситуация усугубляется, если не предпринять каких-то действий.</p>
+
+<p>Для реализации чтения будем использовать <a href="http://jackson.codehaus.org/Home">Jackson Java JSON-processor</a> и его возможности <a href="http://fasterxml.github.io/jackson-databind/javadoc/2.2.0/com/fasterxml/jackson/databind/type/TypeFactory.html"><code>com.fasterxml.jackson.databind.type.TypeFactory</code></a></p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">JsonMessageHandler</span> <span class="kd">implements</span> <span class="n">MessageBodyReader</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;,</span> <span class="n">MessageBodyWriter</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">protected</span> <span class="kd">final</span> <span class="n">ObjectMapper</span> <span class="n">mapper</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">public</span> <span class="nf">JsonMessageHandler</span><span class="o">(</span><span class="n">ObjectMapper</span> <span class="n">mapper</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">this</span><span class="o">.</span><span class="na">mapper</span> <span class="o">=</span> <span class="n">mapper</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Override</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isReadable</span><span class="o">(</span><span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">type</span><span class="o">,</span> <span class="n">Type</span> <span class="n">genericType</span><span class="o">,</span> <span class="n">Annotation</span><span class="o">[]</span> <span class="n">annotations</span><span class="o">,</span> <span class="n">MediaType</span> <span class="n">mediaType</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Override</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="n">Object</span> <span class="nf">readFrom</span><span class="o">(</span><span class="n">Class</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span> <span class="n">type</span><span class="o">,</span> <span class="n">Type</span> <span class="n">genericType</span><span class="o">,</span> <span class="n">Annotation</span><span class="o">[]</span> <span class="n">annotations</span><span class="o">,</span> <span class="n">MediaType</span> <span class="n">mediaType</span><span class="o">,</span> <span class="n">MultivaluedMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">httpHeaders</span><span class="o">,</span> <span class="n">InputStream</span> <span class="n">entityStream</span><span class="o">)</span>
+</span><span class='line'>            <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">WebApplicationException</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="o">(</span><span class="n">genericType</span> <span class="k">instanceof</span> <span class="n">ParameterizedType</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="k">if</span> <span class="o">(</span><span class="n">Collection</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">isAssignableFrom</span><span class="o">(</span><span class="n">type</span><span class="o">))</span> <span class="o">{</span>
+</span><span class='line'>                <span class="n">CollectionType</span> <span class="n">collectionType</span> <span class="o">=</span> <span class="n">resolveCollectionType</span><span class="o">(</span><span class="n">type</span><span class="o">,</span> <span class="o">(</span><span class="n">ParameterizedType</span><span class="o">)</span> <span class="n">genericType</span><span class="o">);</span>
+</span><span class='line'>                <span class="k">return</span> <span class="n">mapper</span><span class="o">.</span><span class="na">readValue</span><span class="o">(</span><span class="n">entityStream</span><span class="o">,</span> <span class="n">collectionType</span><span class="o">);</span>
+</span><span class='line'>            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">Map</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">isAssignableFrom</span><span class="o">(</span><span class="n">type</span><span class="o">))</span> <span class="o">{</span>
+</span><span class='line'>                <span class="n">MapType</span> <span class="n">mapType</span> <span class="o">=</span> <span class="n">resolveMapType</span><span class="o">(</span><span class="n">type</span><span class="o">,</span> <span class="o">(</span><span class="n">ParameterizedType</span><span class="o">)</span> <span class="n">genericType</span><span class="o">);</span>
+</span><span class='line'>                <span class="k">return</span> <span class="n">mapper</span><span class="o">.</span><span class="na">readValue</span><span class="o">(</span><span class="n">entityStream</span><span class="o">,</span> <span class="n">mapType</span><span class="o">);</span>
+</span><span class='line'>            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span><span class='line'>                <span class="n">Type</span><span class="o">[]</span> <span class="n">actualTypeArguments</span> <span class="o">=</span> <span class="o">((</span><span class="n">ParameterizedType</span><span class="o">)</span> <span class="n">genericType</span><span class="o">).</span><span class="na">getActualTypeArguments</span><span class="o">();</span>
+</span><span class='line'>                <span class="n">Class</span><span class="o">[]</span> <span class="n">typeArgs</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Class</span><span class="o">[</span><span class="n">actualTypeArguments</span><span class="o">.</span><span class="na">length</span><span class="o">];</span>
+</span><span class='line'>                <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">actualTypeArguments</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+</span><span class='line'>                    <span class="n">Type</span> <span class="n">actualTypeArgument</span> <span class="o">=</span> <span class="n">actualTypeArguments</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+</span><span class='line'>                    <span class="n">typeArgs</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="o">(</span><span class="n">Class</span><span class="o">)</span> <span class="n">actualTypeArgument</span><span class="o">;</span>
+</span><span class='line'>                <span class="o">}</span>
+</span><span class='line'>                <span class="n">JavaType</span> <span class="n">javaType</span> <span class="o">=</span>
+</span><span class='line'>                        <span class="n">TypeFactory</span><span class="o">.</span><span class="na">defaultInstance</span><span class="o">().</span><span class="na">constructParametricType</span><span class="o">(</span><span class="n">type</span><span class="o">,</span> <span class="n">typeArgs</span><span class="o">);</span>
+</span><span class='line'>                <span class="k">return</span> <span class="n">mapper</span><span class="o">.</span><span class="na">readValue</span><span class="o">(</span><span class="n">entityStream</span><span class="o">,</span> <span class="n">javaType</span><span class="o">);</span>
+</span><span class='line'>            <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">return</span> <span class="n">mapper</span><span class="o">.</span><span class="na">readValue</span><span class="o">(</span><span class="n">entityStream</span><span class="o">,</span> <span class="n">type</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">private</span> <span class="n">MapType</span> <span class="nf">resolveMapType</span><span class="o">(</span><span class="n">Class</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span> <span class="n">type</span><span class="o">,</span> <span class="n">ParameterizedType</span> <span class="n">genericType</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">Type</span><span class="o">[]</span> <span class="n">args</span> <span class="o">=</span> <span class="n">genericType</span><span class="o">.</span><span class="na">getActualTypeArguments</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">Class</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">Map</span><span class="o">&gt;</span> <span class="n">mapClass</span> <span class="o">=</span> <span class="n">type</span><span class="o">.</span><span class="na">asSubclass</span><span class="o">(</span><span class="n">Map</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">TypeFactory</span><span class="o">.</span><span class="na">defaultInstance</span><span class="o">().</span><span class="na">constructMapType</span><span class="o">(</span><span class="n">mapClass</span><span class="o">,</span> <span class="o">(</span><span class="n">Class</span><span class="o">)</span> <span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="o">(</span><span class="n">Class</span><span class="o">)</span> <span class="n">args</span><span class="o">[</span><span class="mi">1</span><span class="o">]);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">private</span> <span class="n">CollectionType</span> <span class="nf">resolveCollectionType</span><span class="o">(</span><span class="n">Class</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span> <span class="n">type</span><span class="o">,</span> <span class="n">ParameterizedType</span> <span class="n">genericType</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">Type</span> <span class="n">type1</span> <span class="o">=</span> <span class="n">genericType</span><span class="o">.</span><span class="na">getActualTypeArguments</span><span class="o">()[</span><span class="mi">0</span><span class="o">];</span>
+</span><span class='line'>        <span class="n">Class</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">Collection</span><span class="o">&gt;</span> <span class="n">collectionClass</span> <span class="o">=</span> <span class="n">type</span><span class="o">.</span><span class="na">asSubclass</span><span class="o">(</span><span class="n">Collection</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">TypeFactory</span><span class="o">.</span><span class="na">defaultInstance</span><span class="o">().</span><span class="na">constructCollectionType</span><span class="o">(</span><span class="n">collectionClass</span><span class="o">,</span> <span class="o">(</span><span class="n">Class</span><span class="o">)</span> <span class="n">type1</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Override</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isWriteable</span><span class="o">(</span><span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">type</span><span class="o">,</span> <span class="n">Type</span> <span class="n">genericType</span><span class="o">,</span> <span class="n">Annotation</span><span class="o">[]</span> <span class="n">annotations</span><span class="o">,</span> <span class="n">MediaType</span> <span class="n">mediaType</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Override</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">long</span> <span class="nf">getSize</span><span class="o">(</span><span class="n">Object</span> <span class="n">o</span><span class="o">,</span> <span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">type</span><span class="o">,</span> <span class="n">Type</span> <span class="n">genericType</span><span class="o">,</span> <span class="n">Annotation</span><span class="o">[]</span> <span class="n">annotations</span><span class="o">,</span> <span class="n">MediaType</span> <span class="n">mediaType</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="o">-</span><span class="mi">1L</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Override</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">writeTo</span><span class="o">(</span><span class="n">Object</span> <span class="n">o</span><span class="o">,</span> <span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">type</span><span class="o">,</span> <span class="n">Type</span> <span class="n">genericType</span><span class="o">,</span> <span class="n">Annotation</span><span class="o">[]</span> <span class="n">annotations</span><span class="o">,</span> <span class="n">MediaType</span> <span class="n">mediaType</span><span class="o">,</span> <span class="n">MultivaluedMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">httpHeaders</span><span class="o">,</span> <span class="n">OutputStream</span> <span class="n">entityStream</span><span class="o">)</span>
+</span><span class='line'>            <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">WebApplicationException</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">mapper</span><span class="o">.</span><span class="na">writeValue</span><span class="o">(</span><span class="n">entityStream</span><span class="o">,</span> <span class="n">o</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Основной код класса сосредоточен в методе <code>readFrom</code>, который определяет типизацию класса и создаёт необходимый подкласс <code>com.fasterxml.jackson.databind.JavaType</code>, который будет использован во время десериализации.</p>
+
+<p>Теперь мы можем создать клиента следующим образом:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'>        <span class="n">List</span><span class="o">&lt;?&gt;</span> <span class="n">providers</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="k">new</span> <span class="n">JsonMessageHandler</span><span class="o">(</span><span class="n">objectMapper</span><span class="o">));</span>
+</span><span class='line'>        <span class="n">UserRest</span> <span class="n">userRest</span> <span class="o">=</span> <span class="n">JAXRSClientFactory</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="s">&quot;http://localhost:8080&quot;</span><span class="o">,</span> <span class="n">UserRest</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">providers</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">// usage:</span>
+</span><span class='line'>        <span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="n">userRest</span><span class="o">.</span><span class="na">findByLogin</span><span class="o">(</span><span class="s">&quot;uthark&quot;</span><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Когда вызывается метод <code>findByLogin</code> под капотом создаётся HTTP Request, дёргается сервер и полученный ответ десериализуется. От конечного пользотеля детали реализации API скрыты.</p>
+
+<p>В <a href="http://uthark.github.com/blog/2013/06/28/jaxrs-spring-autowiring/">следующем посте</a> описано, как автоматически добавить полученные прокси в фабрику бинов Spring для дальнейшего использования.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[@Autowiring EJBs with Spring]]></title>
@@ -2100,7 +2487,7 @@ public @interface SuppressExceptions {
 <div class='comment'>
 <div class='author'>Anonymous</div>
 <div class='content'>
-Добрый день, прочитал Вашу статью &ndash; интересно! =) На данный момент пытаюсь вникнуть в АОП в БД, но не совсем понимаю как можно реализовать аспекты при работе с БД (именно с точки зрения системы &ndash; код, компиляция и пр. т.к. теоретически все прозрачно и ясно). Не подскажите &ndash; где можно найти, для наглядности, простенькую БД с реализованным аспектами и хоть какое-то пояснение по реализованному &quot;проекту&quot; &ndash; на чем писали, как внедряли аспекты и пр. Мэйл для связи &ndash; <a href="&#x6d;&#97;&#105;&#108;&#x74;&#x6f;&#x3a;&#117;&#x74;&#x6f;&#x70;&#x69;&#97;&#50;&#48;&#48;&#53;&#64;&#121;&#97;&#110;&#x64;&#101;&#x78;&#x2e;&#114;&#x75;">&#x75;&#116;&#111;&#x70;&#105;&#97;&#x32;&#48;&#48;&#x35;&#x40;&#121;&#97;&#x6e;&#x64;&#x65;&#x78;&#x2e;&#114;&#x75;</a></div>
+Добрый день, прочитал Вашу статью &ndash; интересно! =) На данный момент пытаюсь вникнуть в АОП в БД, но не совсем понимаю как можно реализовать аспекты при работе с БД (именно с точки зрения системы &ndash; код, компиляция и пр. т.к. теоретически все прозрачно и ясно). Не подскажите &ndash; где можно найти, для наглядности, простенькую БД с реализованным аспектами и хоть какое-то пояснение по реализованному &quot;проекту&quot; &ndash; на чем писали, как внедряли аспекты и пр. Мэйл для связи &ndash; <a href="&#109;&#97;&#x69;&#x6c;&#x74;&#111;&#58;&#117;&#x74;&#111;&#x70;&#105;&#x61;&#x32;&#x30;&#x30;&#x35;&#64;&#x79;&#x61;&#110;&#100;&#x65;&#x78;&#x2e;&#114;&#x75;">&#x75;&#x74;&#x6f;&#x70;&#x69;&#x61;&#50;&#x30;&#x30;&#53;&#x40;&#x79;&#x61;&#110;&#x64;&#101;&#x78;&#46;&#x72;&#117;</a></div>
 </div></p>
 ]]></content>
   </entry>
@@ -2621,203 +3008,6 @@ if __name__ == &quot;__main__&quot;:
 <div class='author'>karri</div>
 <div class='content'>
 То есть по нажатию кнопки выключались три приложения, правильно?!</div>
-</div>
-</div>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Разработка макроса для TiddlyWiki]]></title>
-    <link href="http://uthark.github.com/blog/2010/03/21/tiddlywiki/"/>
-    <updated>2010-03-21T10:54:00-04:00</updated>
-    <id>http://uthark.github.com/blog/2010/03/21/tiddlywiki</id>
-    <content type="html"><![CDATA[<div class='post'>
-<p><b>Summary</b>: Пример разработки плагина для TiddlyWiki</p>
-<h4>Вступление</h4>
-<p><a href="http://www.tiddlywiki.com/">TiddlyWiki</a> - это вики-движок, полностью написанный на <a href="http://en.wikipedia.org/wiki/JavaScript">JavaScript</a> и хранящийся в одном файле (как сам движок, так и содержимое). Создатели позиционируют его как &quot;переиспользуемую нелинейную персональную веб записную книжку&quot;.</p>
-<p>Я давно использую TiddlyWiki в различных целях:</p>
-<ol><li>По прямому назначению.</li>
-<li>Как систему <a href="http://mgsd.tiddlyspot.com/#mGSD">GTD</a>.</li>
-<li>Как домашнюю страницу на компьютере.</li>
-</ol>
-<p>Моя домашняя страница на компьютере - это, если говорить терминами TiddlyWiki, <a href="http://en.wikipedia.org/wiki/Tiddler">тиддлер</a>, содержащий ссылки на страницы, которые я часто посещаю.</p>
-<p>Для удобства использования я разработал пару стилей CSS, так что ссылки были крупными.</p>
-<a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://2.bp.blogspot.com/_y8p0_dtMJ38/S6Y0rP2J0eI/AAAAAAAAA9I/xrZhzZf2ad0/s1600-h/tiddly-before.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;width: 172px; height: 132px;" src="http://2.bp.blogspot.com/_y8p0_dtMJ38/S6Y0rP2J0eI/AAAAAAAAA9I/xrZhzZf2ad0/s400/tiddly-before.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5451102316571251170" /></a>
-<h4>Исходный код плагина</h4>
-<p>После длительного использования tiddlywiki в качестве домашней страницы я понял, что мне хочется, чтобы с каждой ссылкой была иконка сайта. Вручную вставлять картинки мне не хотелось, поэтому было решено написать собственный плагин.</p>
-<pre class="brush: jscript">
-/*{&nbsp;{&nbsp;{*/
-version.extensions.faviconLinkMacro = {major: 0, minor: 1, revision: 0, date: new Date(2010,3,21)};
-// Author: Oleg Atamanenko
-config.macros.faviconLink = {}
-config.macros.faviconLink.handler = function(place, macroName,  params, wikifier, paramString) {
-  var linkBox = createTiddlyElement(place, &quot;span&quot;, null, &quot;favIcon&quot;, &quot;&quot;);
-
-  var args = paramString.parseParams(&quot;list&quot;,null,true);
-  var link = getParam(args, &quot;link&quot;, 'false');
-
-  if (link != 'false'){
-    urlParts = link.split('/');
-    imgLink = urlParts[0] + &quot;//&quot; + urlParts[2] + &quot;/favicon.ico&quot;;
-
-    var imgElement = createTiddlyElement(linkBox, &quot;img&quot;, null, &quot;faviconImage&quot;, &quot;&quot;);
-    imgElement.src = imgLink;
-    imgElement.width = 16;
-    imgElement.height = 16;
-
-    var linkTitle = getParam(args, &quot;title&quot;, 'false');
-
-    if(linkTitle == 'false'){
-      linkTitle = link;
-    }
-    var linkElement = createTiddlyElement(linkBox, &quot;a&quot;, null, &quot;faviconLink&quot;, linkTitle);
-    linkElement.href = link;
-    linkElement.target = '_blank';
-  }
-}
-
-/*}&nbsp;}&nbsp;}*/
-</pre>
-<h4> Установка плагина</h4>
-<ol><li>Создаём новый тиддлер, называем его faviconLinkMacro</li>
-<li>Помечаем тиддлер тегом systemConfig, тогда TiddlyWiki при открытии страницы его подгрузит.</li>
-</ol>
-<h4>Использование плагина</h4>
-<ol><li>Плагин создаёт новый макрос, faviconLink, с двумя параметрами link и title.</li>
-<li>Вызов <tt>&lt;&lt;faviconLink link:&#8217;https://mail.google.com/mail&#8217; title:&#8217;mail&#8217;&gt;&gt;</tt> создаёт ссылку с картинкой с GMail</li>
-</ol>
-<a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://1.bp.blogspot.com/_y8p0_dtMJ38/S6Y0qnki7nI/AAAAAAAAA9A/Ic3skFoirY8/s1600-h/favicon-sample.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;width: 161px; height: 64px;" src="http://1.bp.blogspot.com/_y8p0_dtMJ38/S6Y0qnki7nI/AAAAAAAAA9A/Ic3skFoirY8/s400/favicon-sample.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5451102305759981170" /></a>
-<h4>Настройка визульных стилей плагина</h4>
-<p>Макрос создаёт следующие классы:</p>
-<ol><li>span.favIcon</li>
-<li>img.faviconImage</li>
-<li>a.faviconLink</li>
-</ol>
-<h4> Пример стилей</h4>
-<pre class="brush: css">
-.links span {
-  display: block;
-  position: relative;
-  padding: 0.7em;
-  margin: 0.3em;
-  min-width: 6em;
-  float:left;
-  text-align: center;
-  font-weight: bold;
-  font-size: 1.5em;
-  font-family: &quot;Gill Sans MT&quot;, &quot;Candara&quot;, &quot;Arial&quot;;
-  border: 2px solid [[ColorPalette::SecondaryLight]];
-  background-color: [[ColorPalette::SecondaryPale]];
-}
-
-.links span:hover {
-  border: 2px solid [[ColorPalette::SecondaryMid]];
-  background-color: [[ColorPalette::SecondaryLight]];
-  color: [[ColorPalette::PrimaryMid]];
-}
-
-.links img.faviconImage {
-  position: relative;
-  padding-right: 10px;
-}
-
-</pre>
-<p> Данный CSS необходимо добавить в тиддлер с именем StyleSheet</p>
-<h4>Пример тиддлера со ссылками</h4>
-<pre class="brush: html">
-{&nbsp;{links{
-&lt;&lt;faviconLink link:'http://delicious.com/dark.schakal/2read' title:'2read'&gt;&gt; &lt;&lt;faviconLink link:'https://mail.google.com/mail' title:'mail'&gt;&gt; &lt;&lt;faviconLink link:'http://www.google.com/reader/view' title:'rss'&gt;&gt; &lt;&lt;faviconLink link:'http://atamanenko.blogspot.com/' title:'blog'&gt;&gt; &lt;&lt;faviconLink link:'http://feedburner.google.com/fb/a/myfeeds' title:'feedburner'&gt;&gt; &lt;&lt;faviconLink link:'https://www.google.com/analytics/settings/' title:'analytics'&gt;&gt; &lt;&lt;faviconLink link:'http://wave.google.com' title:'wave'&gt;&gt; &lt;&lt;faviconLink link:'http://www.blogger.com/home' title:'blogger'&gt;&gt; &lt;&lt;faviconLink link:'http://twitter.com/' title:'twitter'&gt;&gt; &lt;&lt;faviconLink link:'https://www.dropbox.com/home#/' title:'dropbox'&gt;&gt; &lt;&lt;faviconLink link:'http://translate.google.com/toolkit/' title:'translator'&gt;&gt; &lt;&lt;faviconLink link:'http://sibir.megafon.ru/sendsms/' title:'SendSMS'&gt;&gt;
-}}}
-</pre>
-Вышеприведённый код тиддлера создаёт следующую страницу:
-
-<a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://1.bp.blogspot.com/_y8p0_dtMJ38/S6Y0qOLAO4I/AAAAAAAAA84/DFkORdMO8gE/s1600-h/favicon-sample-big.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;width: 400px; height: 157px;" src="http://1.bp.blogspot.com/_y8p0_dtMJ38/S6Y0qOLAO4I/AAAAAAAAA84/DFkORdMO8gE/s400/favicon-sample-big.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5451102298941963138" /></a></div>
-
-
-<h2>Comments</h2>
-
-
-<div class='comments'>
-<div class='comment'>
-<div class='author'>uthark</div>
-<div class='content'>
-Хорошо, выложу. :) Почистить только нужно.</div>
-</div>
-<div class='comment'>
-<div class='author'>Николай Мишин</div>
-<div class='content'>
-выложи архив своего tiddywiki c плагинами, а я поделюсь своим</div>
-</div>
-<div class='comment'>
-<div class='author'>Denis</div>
-<div class='content'>
-Спасибо за пример, сегодня же в свою вики встрою )</div>
-</div>
-</div>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Борьба с убийцами производительности]]></title>
-    <link href="http://uthark.github.com/blog/2010/03/16/blog-post/"/>
-    <updated>2010-03-16T11:52:00-04:00</updated>
-    <id>http://uthark.github.com/blog/2010/03/16/blog-post</id>
-    <content type="html"><![CDATA[<div class='post'>
-<p><strong>Summary</strong>: Мой опыт борьбы с &quot;убийцами производительности&quot;.</p>
-<h3>Постановка проблемы</h3>
-<p> Иногда бывает так, что хочется отвлечься от работы, от поставленной задачи на какую-нибудь фигню, лишь бы не заниматься текущей задачей. У меня это чаще всего сводилось к тому, что я начинал читать что-нибудь в сети (<a href="http://www.google.com/reader/view/" target="_blank">Google Reader</a>, <a href="http://habrahabr.ru/">Habrahabr</a>, <a href="http://www.linux.org.ru/">LOR</a>, etc). </p>
-<p>Истоки проблемы могут быть абсолютно разными, например: </p>
-<ol><li>Долгий запуск среды разработки </li>
-<li>Долгая сборка проекта</li>
-<li>Нудная задача</li>
-<li>Неинтересная задача</li>
-</ol>
-<p>Все эти причины спокойно могут приводить к потере производительности, причём неявным образом, например - &quot;А посижу пока я на хабре, пока полная сборка идёт&quot;, в итоге после 20 минут обнаруживается, что сборка закончилась уже 15 минут назад.</p>
-<p>Так как у меня тайм-киллер вполне простой - интернет, то и решение вполне простое.</p>
-<p>Вот список действий, что я сделал:</p>
-<ol><li>Удалил быстрые браузеры, теперь у меня только <a href="http://www.mozilla.com/firefox">Mozilla Firefox</a> под Linux и страшный <a href="http://www.microsoft.com/windows/ie/ie6/downloads/default.mspx">Internet Explorer 6.0 под Windows</a>.</li>
-<li>Забанил сайты которые не нужны для работы, но на которых я провожу много времени.</li>
-</ol>
-<p>Сначала я сделал радикальный бан - внёс в <tt>/etc/hosts</tt> эти сайты:</p>
-<pre class="brush: bash">
-127.0.0.1 www.linux.org.ru linux.org.ru
-127.0.0.1 www.habrahabr.ru habrahabr.ru
-127.0.0.1 www.lorquotes.ru lorquotes.ru
-</pre>
-<p> Но потом обнаружилось, что есть ещё <a href="http://www.google.com/reader/view/">Google Reader</a>, который также отнимает много времени (у меня было до 200 подписок, что давало до 300 новых статей в сутки). Проблему с <a href="http://www.google.com/reader/view/">Google Reader</a> я решал поэтапно: </p>
-<ol><li>Почистил список лент от юмора, который обновляется практически ежедневно, является пожирателем трафика и времени.</li>
-<li>После этого я почистил список лент от лент, которые достаточно интересные, но при этом без них можно спокойно обходиться (Например, <a href="http://aseigo.blogspot.com/">блог Аарона Сейго</a>, одного из главных разработчиков <a href="http://www.kde.org/">KDE</a>)</li>
-</ol>
-<p>Вышеперечисленные действия помогли мне сократить список фидов с 200 сначала до 100 с небольшим, а затем и до 65. Но я понимал, что это ещё не предел и есть к чему стремиться, поэтому решил перейти к использованию оффлайнового <a href="http://www.whatisrss.com/">RSS</a>-<a href="http://en.wikipedia.org/wiki/RSS_Reader">клиента</a>. </p>
-<p>Для этого я экспортировал <a href="http://www.opml.org/">OPML</a>-файл с подписками из <a href="http://www.google.com/reader/view/">Google Reader</a>, удалил все ленты (к сожалению, <a href="http://www.google.com/support/forum/p/reader/thread?tid=53c0b347fa8cd843&hl=en">удалить аккаунт</a> на <a href="http://www.google.com/reader/view/">Google Reader</a> невозможно, только полностью Google Account) и импортировал на <a href="http://userbase.kde.org/Akregator">Akregator</a> на домашней машинке. Это помогло мне аккумулировать все чтения ленты новостей в один временной промежуток - вечером, дома.</p>
-<p>Но, как оказалось, ещё есть к чему стремиться и гугление на просторах сети дало свои результаты: <a href="http://www.proginosko.com/leechblock.html"><strong>LeechBlock</strong></a>.</p>
-<p>LeechBlock это расширение для Mozilla Firefox, которое позволяет блокировать отдельные сайты на различные промежутки времени.</p>
-<p>Собственно, начав им пользоваться, я понял, что это именно то, что мне нужно:</p>
-<p> <a href="http://picasaweb.google.com/lh/photo/GiOXKIEw3fz0uoNMZxGTlg?authkey=Gv1sRgCOCWw8r8gI-DRQ&feat=embedwebsite"><img src="http://lh6.ggpht.com/_y8p0_dtMJ38/S56FpVJKVHI/AAAAAAAAA8Q/e6hTfBRPkRo/s800/leechblock.png" title="Leechblock Settings UI" alt="Leechblock Settings UI" /></a></p>
-<p> Возможности данного расширения следующие: </p>
-<ol><li>Блокировка сайтов различные периоды времени</li>
-<li>Блокировка сайтов по временному диапазону, в том числе по дням недели.</li>
-<li>Поддержка нескольких наборов сайтов для блокировки</li>
-<li>Возможность быстрого добавления сайта в список для блокировки </li>
-</ol>
-<p>Конечно, данное расширение не является панацеей, его нужно использовать в комплексе с другими средствами.</p></div>
-
-
-<h2>Comments</h2>
-
-
-<div class='comments'>
-<div class='comment'>
-<div class='author'>uthark</div>
-<div class='content'>
-@see to learn Это вполне решаемо с помощью этого же плагина. :)<br /><br /><br /><a href="http://picasaweb.google.com/lh/photo/SnNiIIES_ZbHcYqrzg5gPA?authkey=Gv1sRgCOCWw8r8gI-DRQ&amp;feat=embedwebsite" rel="nofollow">Скриншот с примером настройки</a><br /><br />Общий смысл:<br />1. блокируем все сайты (*)<br />2. Добавляем исключения через (+)</div>
-</div>
-<div class='comment'>
-<div class='author'>see to learn</div>
-<div class='content'>
-Мне бы такую примочку, которая показывает сайты только из белого списка.</div>
 </div>
 </div>
 

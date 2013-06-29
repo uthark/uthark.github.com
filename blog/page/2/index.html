@@ -9,9 +9,7 @@
   <meta name="author" content="Oleg Atamanenko">
 
   
-  <meta name="description" content="Введение
-Для разработки REST веб-сервисов Java предлагает JSR-311 - JAX-RS: The Java&trade; API for RESTful Web Services
-Как это обычно бывает в &hellip;">
+  <meta name="description" content="Казалось бы, есть простейшая задача &ndash; преобразовать строковое представление даты в объект класса java.util.Date. Как оказалось, иногда &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +78,276 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/04/20/blog-post/">Преобразуем строку в дату</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-20T04:25:00-04:00" pubdate data-updated="true">Apr 20<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Казалось бы, есть простейшая задача &ndash; преобразовать строковое представление даты в объект класса <tt>java.util.Date</tt>.</p>
+
+<p>Как оказалось, иногда использование DateFormat не помогает. В случае, если строка &ndash; это заголовок <tt>Date</tt> из письма, то нам нужно использовать <tt><a href="http://docs.oracle.com/javaee/5/api/javax/mail/internet/MailDateFormat.html">javax.mail.internet.MailDateFormat</a></tt> для преобразования такой строки.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">String</span> <span class="n">dateStr</span> <span class="o">=</span> <span class="o">...</span>
+</span><span class='line'><span class="n">Date</span> <span class="n">parsedDate</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MailDateFormat</span><span class="o">().</span><span class="na">parse</span><span class="o">(</span><span class="n">dateStr</span><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/02/22/jpa-spring-data-jpa/">Упрощаем работу с JPA при помощи Spring Data JPA</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-02-22T14:17:00-05:00" pubdate data-updated="true">Feb 22<span>nd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+<h3>Введение</h3>
+<p>Уже прошло несколько лет с тех пор, как появился JPA. Работа с <a href="http://docs.oracle.com/javaee/5/api/javax/persistence/EntityManager.html">EntityManager</a> увлекательна, но разработчики пишут красивый API, а подробности работы с базой данных скрывают. При этом частая проблема - дублирование имплементации, когда из одного DAO в другой у нас плавно перекочёвывает один и тот же код, в лучшем случае этот код переносится в абстрактный базовый DAO. <a href="http://www.springsource.org/spring-data/jpa">Spring Data</a>  коренным образом решает проблему - при  его использовании остаётся только API на уровне интерфейсов, вся имплементация создаётся автоматически с использованием <a href="http://en.wikipedia.org/wiki/Aspect-oriented_programming">AOP</a>.</p>
+<h3>История Spring Data</h3>
+
+Несмотря на то, что проект только недавно достиг версии 1.0, у него достаточно богатая история - раньше он развивался в рамках проекта <a href="http://redmine.synyx.org/projects/show/hades">Hades</a>.
+
+<h3>Объявление DAO-интерфейса</h3>
+
+Итак, для начала нам необходимо объявить DAO-интерфейс, в котором мы будем объявлять методы для работы с сущностью.
+<pre class="brush:java">
+public interface UserRepository extends CrudRepository&lt;User, Long&gt; {
+}
+</pre>
+
+Данного кода достаточно для обычного DAO с <a href="http://en.wikipedia.org/wiki/Create,_read,_update_and_delete">CRUD</a>-методами. 
+
+<ul>
+  <li><b>save</b> - сохраняет или обновляет переданную сущность.</li>
+  <li><b>findOne</b> - ищет сущность по первичному ключу.</li>
+  <li><b>findAll</b> - возвращает коллекцию всех сущностей</li>
+  <li><b>count</b> - возвращает количество сущностей</li>
+  <li><b>delete</b> - удаляет сущность</li>
+  <li><b>exists</b> - проверяет, существует ли сущность с данным первичным ключом</li>
+ 
+</ul>
+
+Полный список методов, объявленный в CrudRepository можно посмотреть в <a href="http://static.springsource.org/spring-data/data-commons/docs/current/api/org/springframework/data/repository/CrudRepository.html">javadoc</a>.
+
+В случае, если нам нужны не все методы, то есть возможность произвести наследование от интерфейса <a href="http://static.springsource.org/spring-data/data-commons/docs/current/api/org/springframework/data/repository/Repository.html">Repository</a> и перенести в наследника только те методы из интерфейса CrudRepository, которые нужны.
+
+<h3>Поддержка сортировки и постраничного просмотра</h3>
+Очень часто требующаяся функциональность - это возможность возвращать только часть сущностей из БД, например, для реализации постраничного просмотра в пользовательском интерфейсе. Spring Data и тут хорош и предоставляет нам возможность добавить такую функциональность в наш DAO. Для этого достаточно добавить объявление следующего метода в наш DAO-интерфейс:
+<pre class="brush:java">
+ Page&lt;User&gt; findAll(Pageable pageable);
+</pre>
+Интерфейс <a href="http://static.springsource.org/spring-data/data-commons/docs/current/api/org/springframework/data/domain/Pageable.html">Pageable</a> инкапсулирует в себе сведения о номере запрашиваемой страницы, размере страницы, а также требуемой сортировке.
+
+<h3>Ищем данные</h3>
+Как правило, на обычных CRUD-ах DAO не заканчиваются и часто требуются дополнительные методы, которые возвращают только те сущности, которые удовлетворяют заданным условиям. На мой взгляд, Spring Data сильно упрощает жизнь в данной области.
+
+Например, нам нужен методы для поиска пользователя по логину и по его e-mail адресу:
+
+<pre class="brush:java">
+ User findByLogin(String login);
+ User findByEmail(String email);
+</pre>
+
+Все просто.
+
+В случае, если нужны более сложные условия для поиска, то и это тоже реализовано.
+
+Spring Data поддерживает следующие операторы:
+
+<ul>
+  <li>Between</li>
+  <li>IsNotNull</li>
+  <li>NotNull</li>
+  <li>IsNull</li>
+  <li>Null</li>
+  <li>LessThan</li>
+  <li>LessThanEqual</li>
+  <li>GreaterThan</li>
+  <li>GreaterThanEqual</li>
+  <li>NotLike</li>
+  <li>Like</li>
+  <li>NotIn</li>
+  <li>In</li>
+  <li>Near</li>
+  <li>Within</li>
+  <li>Regex</li>
+  <li>Exists</li>
+  <li>IsTrue</li>
+  <li>True</li>
+  <li>IsFalse</li>
+<li>False</li>
+<li>Not</li>
+
+</ul>
+Такой внушительный список открывает простор для фантазии, так что можно составить сколь угодно сложный запрос. 
+
+Если необходимо, чтобы в результатах поиска было несколько сущностей, то необходимо называть метод find<b>All</b>ByBlahBlah
+
+<h3>Поддержка Spring MVC</h3>
+<i>Это часть основана на официальной документации.</i>
+Представьте, что вы разрабатываете веб-приложение с использованием <a href="http://static.springsource.org/spring/docs/current/spring-framework-reference/html/mvc.html">Spring MVC</a>. Тогда вам необходимо будет загружать сущность из базы данных используя параметры HTTP-запроса. Это может выглядеть следующим образом:
+<pre class="brush:java">
+@Controller
+@RequestMapping("/users")
+public class UserController {
+
+  private final UserRepository userRepository;
+
+  public UserController(UserRepository userRepository) {
+    userRepository = userRepository;
+  }
+
+  @RequestMapping("/{id}")
+  public String showUserForm(@PathVariable("id") Long id, Model model) {
+    
+    // Do null check for id
+    User user = userRepository.findOne(id);
+    // Do null check for user
+    // Populate model
+    return "user";
+  }
+}</pre>
+
+Во-первых, вы объявляете зависимость на DAO, а во-вторых всегда вызываете метод <tt>findOne()</tt> для загрузки сущности. К счастью, Spring позволяет нам преобразовывать строковые значения из HTTP-запросов в любой нужный тип используя либо <tt><a href="http://docs.oracle.com/javase/6/docs/api/java/beans/PropertyEditor.html">PropertyEditor</a></tt>, либо <tt><a href="http://static.springsource.org/spring/docs/current/javadoc-api/org/springframework/core/convert/ConversionService.html">ConversionService</a></tt>.
+
+Если вы используете Spring версии 3.0 и выше, то вам необходимо добавить следующую конфигурацию:
+<pre class="brush:xml">
+&lt;mvc:annotation-driven conversion-service="conversionService" /&gt;
+&lt;bean id="conversionService" class="&#8230;.context.support.ConversionServiceFactoryBean"&gt;
+  &lt;property name="converters"&gt;
+    &lt;list&gt;
+      &lt;bean class="org.springframework.data.repository.support.DomainClassConverter"&gt;
+        &lt;constructor-arg ref="conversionService" /&gt;
+      &lt;/bean&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;
+</pre>
+
+Если же вы используете Spring более старой версии, то вам необходима вот такая конфигурация:
+
+<pre class="brush:xml">
+&lt;bean class="&#8230;.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter"&gt;
+  &lt;property name="webBindingInitializer"&gt;
+    &lt;bean class="&#8230;.web.bind.support.ConfigurableWebBindingInitializer"&gt;
+      &lt;property name="propertyEditorRegistrars"&gt;
+        &lt;bean class="org.springframework.data.repository.support.DomainClassPropertyEditorRegistrar" /&gt;
+      &lt;/property&gt;
+    &lt;/bean&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;
+</pre>
+
+После данных изменений в конфигурации можно переписать контроллер следующим образом:
+
+<pre class="brush:java">
+
+@Controller
+@RequestMapping("/users")
+public class UserController {
+
+  @RequestMapping("/{id}")
+  public String showUserForm(@PathVariable("id") User user, Model model) {
+
+    // Do null check for user
+    // Populate model
+    return "userForm";
+  }
+}
+</pre>
+
+Обратите внимание на то, как упростился код и как мы красиво избавились от его дублирования.
+
+
+<h3>Документация</h3>
+На данный момент документации по проекту не так уж и много, но, тем не менее, она есть:
+
+<ul>
+<li><a href="http://static.springsource.org/spring-data/data-jpa/docs/current/reference/html/">Spring Data JPA - Reference Documentation</a></li>
+<li><a href="http://static.springsource.org/spring-data/data-commons/docs/current/reference/html/">Spring Data Commons - Reference Documentation</a></li>
+<li><a href="https://github.com/SpringSource/spring-data-jpa">исходники на github</a></li>
+
+</ul>
+<h3>Заключение</h3>
+Spring Data значительно упрощает жизнь при использовании JPA. Рекомендуется к использованию в своих проектах.</div>
+
+
+<h2>Comments</h2>
+
+
+<div class='comments'>
+<div class='comment'>
+<div class='author'>Oleg Atamanenko</div>
+<div class='content'>
+1. Разве в SQL есть операторы Near, Regex, Within?<br />2. Для монги есть отдельный проект - Spring Data MongoDB, который поддерживает вышеперечисленный операторы.<br />В документации всё описано - http://static.springsource.org/spring-data/data-mongodb/docs/current/reference/html/#mongo.query</div>
+</div>
+<div class='comment'>
+<div class='author'>php-coder</div>
+<div class='content'>
+Где можно найти описание операторов Near, Within и Regex? В доке по spring-data-jpa я их не вижу. Не там смотрю? Или они не поддерживаются в JPA и могут быть использованы только с NoSQL БД, типа MongoDb?</div>
+</div>
+</div>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -759,7 +1027,7 @@ public @interface SuppressExceptions {
 <div class='comment'>
 <div class='author'>Anonymous</div>
 <div class='content'>
-Добрый день, прочитал Вашу статью &ndash; интересно! =) На данный момент пытаюсь вникнуть в АОП в БД, но не совсем понимаю как можно реализовать аспекты при работе с БД (именно с точки зрения системы &ndash; код, компиляция и пр. т.к. теоретически все прозрачно и ясно). Не подскажите &ndash; где можно найти, для наглядности, простенькую БД с реализованным аспектами и хоть какое-то пояснение по реализованному &quot;проекту&quot; &ndash; на чем писали, как внедряли аспекты и пр. Мэйл для связи &ndash; <a href="&#x6d;&#97;&#105;&#108;&#x74;&#x6f;&#x3a;&#117;&#x74;&#x6f;&#x70;&#x69;&#97;&#50;&#48;&#48;&#53;&#64;&#121;&#97;&#110;&#x64;&#101;&#x78;&#x2e;&#114;&#x75;">&#x75;&#116;&#111;&#x70;&#105;&#97;&#x32;&#48;&#48;&#x35;&#x40;&#121;&#97;&#x6e;&#x64;&#x65;&#x78;&#x2e;&#114;&#x75;</a></div>
+Добрый день, прочитал Вашу статью &ndash; интересно! =) На данный момент пытаюсь вникнуть в АОП в БД, но не совсем понимаю как можно реализовать аспекты при работе с БД (именно с точки зрения системы &ndash; код, компиляция и пр. т.к. теоретически все прозрачно и ясно). Не подскажите &ndash; где можно найти, для наглядности, простенькую БД с реализованным аспектами и хоть какое-то пояснение по реализованному &quot;проекту&quot; &ndash; на чем писали, как внедряли аспекты и пр. Мэйл для связи &ndash; <a href="&#109;&#97;&#x69;&#x6c;&#x74;&#111;&#58;&#117;&#x74;&#111;&#x70;&#105;&#x61;&#x32;&#x30;&#x30;&#x35;&#64;&#x79;&#x61;&#110;&#100;&#x65;&#x78;&#x2e;&#114;&#x75;">&#x75;&#x74;&#x6f;&#x70;&#x69;&#x61;&#50;&#x30;&#x30;&#53;&#x40;&#x79;&#x61;&#110;&#x64;&#101;&#x78;&#46;&#x72;&#117;</a></div>
 </div></p>
 </div>
   
@@ -1452,257 +1720,6 @@ if __name__ == &quot;__main__&quot;:
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/03/21/tiddlywiki/">Разработка макроса для TiddlyWiki</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-03-21T10:54:00-04:00" pubdate data-updated="true">Mar 21<span>st</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div class='post'>
-<p><b>Summary</b>: Пример разработки плагина для TiddlyWiki</p>
-<h4>Вступление</h4>
-<p><a href="http://www.tiddlywiki.com/">TiddlyWiki</a> - это вики-движок, полностью написанный на <a href="http://en.wikipedia.org/wiki/JavaScript">JavaScript</a> и хранящийся в одном файле (как сам движок, так и содержимое). Создатели позиционируют его как &quot;переиспользуемую нелинейную персональную веб записную книжку&quot;.</p>
-<p>Я давно использую TiddlyWiki в различных целях:</p>
-<ol><li>По прямому назначению.</li>
-<li>Как систему <a href="http://mgsd.tiddlyspot.com/#mGSD">GTD</a>.</li>
-<li>Как домашнюю страницу на компьютере.</li>
-</ol>
-<p>Моя домашняя страница на компьютере - это, если говорить терминами TiddlyWiki, <a href="http://en.wikipedia.org/wiki/Tiddler">тиддлер</a>, содержащий ссылки на страницы, которые я часто посещаю.</p>
-<p>Для удобства использования я разработал пару стилей CSS, так что ссылки были крупными.</p>
-<a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://2.bp.blogspot.com/_y8p0_dtMJ38/S6Y0rP2J0eI/AAAAAAAAA9I/xrZhzZf2ad0/s1600-h/tiddly-before.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;width: 172px; height: 132px;" src="http://2.bp.blogspot.com/_y8p0_dtMJ38/S6Y0rP2J0eI/AAAAAAAAA9I/xrZhzZf2ad0/s400/tiddly-before.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5451102316571251170" /></a>
-<h4>Исходный код плагина</h4>
-<p>После длительного использования tiddlywiki в качестве домашней страницы я понял, что мне хочется, чтобы с каждой ссылкой была иконка сайта. Вручную вставлять картинки мне не хотелось, поэтому было решено написать собственный плагин.</p>
-<pre class="brush: jscript">
-/*{&nbsp;{&nbsp;{*/
-version.extensions.faviconLinkMacro = {major: 0, minor: 1, revision: 0, date: new Date(2010,3,21)};
-// Author: Oleg Atamanenko
-config.macros.faviconLink = {}
-config.macros.faviconLink.handler = function(place, macroName,  params, wikifier, paramString) {
-  var linkBox = createTiddlyElement(place, &quot;span&quot;, null, &quot;favIcon&quot;, &quot;&quot;);
-
-  var args = paramString.parseParams(&quot;list&quot;,null,true);
-  var link = getParam(args, &quot;link&quot;, 'false');
-
-  if (link != 'false'){
-    urlParts = link.split('/');
-    imgLink = urlParts[0] + &quot;//&quot; + urlParts[2] + &quot;/favicon.ico&quot;;
-
-    var imgElement = createTiddlyElement(linkBox, &quot;img&quot;, null, &quot;faviconImage&quot;, &quot;&quot;);
-    imgElement.src = imgLink;
-    imgElement.width = 16;
-    imgElement.height = 16;
-
-    var linkTitle = getParam(args, &quot;title&quot;, 'false');
-
-    if(linkTitle == 'false'){
-      linkTitle = link;
-    }
-    var linkElement = createTiddlyElement(linkBox, &quot;a&quot;, null, &quot;faviconLink&quot;, linkTitle);
-    linkElement.href = link;
-    linkElement.target = '_blank';
-  }
-}
-
-/*}&nbsp;}&nbsp;}*/
-</pre>
-<h4> Установка плагина</h4>
-<ol><li>Создаём новый тиддлер, называем его faviconLinkMacro</li>
-<li>Помечаем тиддлер тегом systemConfig, тогда TiddlyWiki при открытии страницы его подгрузит.</li>
-</ol>
-<h4>Использование плагина</h4>
-<ol><li>Плагин создаёт новый макрос, faviconLink, с двумя параметрами link и title.</li>
-<li>Вызов <tt>&lt;&lt;faviconLink link:&#8217;https://mail.google.com/mail&#8217; title:&#8217;mail&#8217;&gt;&gt;</tt> создаёт ссылку с картинкой с GMail</li>
-</ol>
-<a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://1.bp.blogspot.com/_y8p0_dtMJ38/S6Y0qnki7nI/AAAAAAAAA9A/Ic3skFoirY8/s1600-h/favicon-sample.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;width: 161px; height: 64px;" src="http://1.bp.blogspot.com/_y8p0_dtMJ38/S6Y0qnki7nI/AAAAAAAAA9A/Ic3skFoirY8/s400/favicon-sample.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5451102305759981170" /></a>
-<h4>Настройка визульных стилей плагина</h4>
-<p>Макрос создаёт следующие классы:</p>
-<ol><li>span.favIcon</li>
-<li>img.faviconImage</li>
-<li>a.faviconLink</li>
-</ol>
-<h4> Пример стилей</h4>
-<pre class="brush: css">
-.links span {
-  display: block;
-  position: relative;
-  padding: 0.7em;
-  margin: 0.3em;
-  min-width: 6em;
-  float:left;
-  text-align: center;
-  font-weight: bold;
-  font-size: 1.5em;
-  font-family: &quot;Gill Sans MT&quot;, &quot;Candara&quot;, &quot;Arial&quot;;
-  border: 2px solid [[ColorPalette::SecondaryLight]];
-  background-color: [[ColorPalette::SecondaryPale]];
-}
-
-.links span:hover {
-  border: 2px solid [[ColorPalette::SecondaryMid]];
-  background-color: [[ColorPalette::SecondaryLight]];
-  color: [[ColorPalette::PrimaryMid]];
-}
-
-.links img.faviconImage {
-  position: relative;
-  padding-right: 10px;
-}
-
-</pre>
-<p> Данный CSS необходимо добавить в тиддлер с именем StyleSheet</p>
-<h4>Пример тиддлера со ссылками</h4>
-<pre class="brush: html">
-{&nbsp;{links{
-&lt;&lt;faviconLink link:'http://delicious.com/dark.schakal/2read' title:'2read'&gt;&gt; &lt;&lt;faviconLink link:'https://mail.google.com/mail' title:'mail'&gt;&gt; &lt;&lt;faviconLink link:'http://www.google.com/reader/view' title:'rss'&gt;&gt; &lt;&lt;faviconLink link:'http://atamanenko.blogspot.com/' title:'blog'&gt;&gt; &lt;&lt;faviconLink link:'http://feedburner.google.com/fb/a/myfeeds' title:'feedburner'&gt;&gt; &lt;&lt;faviconLink link:'https://www.google.com/analytics/settings/' title:'analytics'&gt;&gt; &lt;&lt;faviconLink link:'http://wave.google.com' title:'wave'&gt;&gt; &lt;&lt;faviconLink link:'http://www.blogger.com/home' title:'blogger'&gt;&gt; &lt;&lt;faviconLink link:'http://twitter.com/' title:'twitter'&gt;&gt; &lt;&lt;faviconLink link:'https://www.dropbox.com/home#/' title:'dropbox'&gt;&gt; &lt;&lt;faviconLink link:'http://translate.google.com/toolkit/' title:'translator'&gt;&gt; &lt;&lt;faviconLink link:'http://sibir.megafon.ru/sendsms/' title:'SendSMS'&gt;&gt;
-}}}
-</pre>
-Вышеприведённый код тиддлера создаёт следующую страницу:
-
-<a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://1.bp.blogspot.com/_y8p0_dtMJ38/S6Y0qOLAO4I/AAAAAAAAA84/DFkORdMO8gE/s1600-h/favicon-sample-big.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;width: 400px; height: 157px;" src="http://1.bp.blogspot.com/_y8p0_dtMJ38/S6Y0qOLAO4I/AAAAAAAAA84/DFkORdMO8gE/s400/favicon-sample-big.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5451102298941963138" /></a></div>
-
-
-<h2>Comments</h2>
-
-
-<div class='comments'>
-<div class='comment'>
-<div class='author'>uthark</div>
-<div class='content'>
-Хорошо, выложу. :) Почистить только нужно.</div>
-</div>
-<div class='comment'>
-<div class='author'>Николай Мишин</div>
-<div class='content'>
-выложи архив своего tiddywiki c плагинами, а я поделюсь своим</div>
-</div>
-<div class='comment'>
-<div class='author'>Denis</div>
-<div class='content'>
-Спасибо за пример, сегодня же в свою вики встрою )</div>
-</div>
-</div>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/03/16/blog-post/">Борьба с убийцами производительности</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-03-16T11:52:00-04:00" pubdate data-updated="true">Mar 16<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div class='post'>
-<p><strong>Summary</strong>: Мой опыт борьбы с &quot;убийцами производительности&quot;.</p>
-<h3>Постановка проблемы</h3>
-<p> Иногда бывает так, что хочется отвлечься от работы, от поставленной задачи на какую-нибудь фигню, лишь бы не заниматься текущей задачей. У меня это чаще всего сводилось к тому, что я начинал читать что-нибудь в сети (<a href="http://www.google.com/reader/view/" target="_blank">Google Reader</a>, <a href="http://habrahabr.ru/">Habrahabr</a>, <a href="http://www.linux.org.ru/">LOR</a>, etc). </p>
-<p>Истоки проблемы могут быть абсолютно разными, например: </p>
-<ol><li>Долгий запуск среды разработки </li>
-<li>Долгая сборка проекта</li>
-<li>Нудная задача</li>
-<li>Неинтересная задача</li>
-</ol>
-<p>Все эти причины спокойно могут приводить к потере производительности, причём неявным образом, например - &quot;А посижу пока я на хабре, пока полная сборка идёт&quot;, в итоге после 20 минут обнаруживается, что сборка закончилась уже 15 минут назад.</p>
-<p>Так как у меня тайм-киллер вполне простой - интернет, то и решение вполне простое.</p>
-<p>Вот список действий, что я сделал:</p>
-<ol><li>Удалил быстрые браузеры, теперь у меня только <a href="http://www.mozilla.com/firefox">Mozilla Firefox</a> под Linux и страшный <a href="http://www.microsoft.com/windows/ie/ie6/downloads/default.mspx">Internet Explorer 6.0 под Windows</a>.</li>
-<li>Забанил сайты которые не нужны для работы, но на которых я провожу много времени.</li>
-</ol>
-<p>Сначала я сделал радикальный бан - внёс в <tt>/etc/hosts</tt> эти сайты:</p>
-<pre class="brush: bash">
-127.0.0.1 www.linux.org.ru linux.org.ru
-127.0.0.1 www.habrahabr.ru habrahabr.ru
-127.0.0.1 www.lorquotes.ru lorquotes.ru
-</pre>
-<p> Но потом обнаружилось, что есть ещё <a href="http://www.google.com/reader/view/">Google Reader</a>, который также отнимает много времени (у меня было до 200 подписок, что давало до 300 новых статей в сутки). Проблему с <a href="http://www.google.com/reader/view/">Google Reader</a> я решал поэтапно: </p>
-<ol><li>Почистил список лент от юмора, который обновляется практически ежедневно, является пожирателем трафика и времени.</li>
-<li>После этого я почистил список лент от лент, которые достаточно интересные, но при этом без них можно спокойно обходиться (Например, <a href="http://aseigo.blogspot.com/">блог Аарона Сейго</a>, одного из главных разработчиков <a href="http://www.kde.org/">KDE</a>)</li>
-</ol>
-<p>Вышеперечисленные действия помогли мне сократить список фидов с 200 сначала до 100 с небольшим, а затем и до 65. Но я понимал, что это ещё не предел и есть к чему стремиться, поэтому решил перейти к использованию оффлайнового <a href="http://www.whatisrss.com/">RSS</a>-<a href="http://en.wikipedia.org/wiki/RSS_Reader">клиента</a>. </p>
-<p>Для этого я экспортировал <a href="http://www.opml.org/">OPML</a>-файл с подписками из <a href="http://www.google.com/reader/view/">Google Reader</a>, удалил все ленты (к сожалению, <a href="http://www.google.com/support/forum/p/reader/thread?tid=53c0b347fa8cd843&hl=en">удалить аккаунт</a> на <a href="http://www.google.com/reader/view/">Google Reader</a> невозможно, только полностью Google Account) и импортировал на <a href="http://userbase.kde.org/Akregator">Akregator</a> на домашней машинке. Это помогло мне аккумулировать все чтения ленты новостей в один временной промежуток - вечером, дома.</p>
-<p>Но, как оказалось, ещё есть к чему стремиться и гугление на просторах сети дало свои результаты: <a href="http://www.proginosko.com/leechblock.html"><strong>LeechBlock</strong></a>.</p>
-<p>LeechBlock это расширение для Mozilla Firefox, которое позволяет блокировать отдельные сайты на различные промежутки времени.</p>
-<p>Собственно, начав им пользоваться, я понял, что это именно то, что мне нужно:</p>
-<p> <a href="http://picasaweb.google.com/lh/photo/GiOXKIEw3fz0uoNMZxGTlg?authkey=Gv1sRgCOCWw8r8gI-DRQ&feat=embedwebsite"><img src="http://lh6.ggpht.com/_y8p0_dtMJ38/S56FpVJKVHI/AAAAAAAAA8Q/e6hTfBRPkRo/s800/leechblock.png" title="Leechblock Settings UI" alt="Leechblock Settings UI" /></a></p>
-<p> Возможности данного расширения следующие: </p>
-<ol><li>Блокировка сайтов различные периоды времени</li>
-<li>Блокировка сайтов по временному диапазону, в том числе по дням недели.</li>
-<li>Поддержка нескольких наборов сайтов для блокировки</li>
-<li>Возможность быстрого добавления сайта в список для блокировки </li>
-</ol>
-<p>Конечно, данное расширение не является панацеей, его нужно использовать в комплексе с другими средствами.</p></div>
-
-
-<h2>Comments</h2>
-
-
-<div class='comments'>
-<div class='comment'>
-<div class='author'>uthark</div>
-<div class='content'>
-@see to learn Это вполне решаемо с помощью этого же плагина. :)<br /><br /><br /><a href="http://picasaweb.google.com/lh/photo/SnNiIIES_ZbHcYqrzg5gPA?authkey=Gv1sRgCOCWw8r8gI-DRQ&amp;feat=embedwebsite" rel="nofollow">Скриншот с примером настройки</a><br /><br />Общий смысл:<br />1. блокируем все сайты (*)<br />2. Добавляем исключения через (+)</div>
-</div>
-<div class='comment'>
-<div class='author'>see to learn</div>
-<div class='content'>
-Мне бы такую примочку, которая показывает сайты только из белого списка.</div>
-</div>
-</div>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -1720,6 +1737,14 @@ config.macros.faviconLink.handler = function(place, macroName,  params, wikifier
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/06/28/jaxrs-spring-autowiring/">@Autowired JAX-RS Client API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/28/jaxrs/">JAX-RS Client API</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/06/19/autowiring-factorybean/">@Autowiring EJBs with Spring</a>
       </li>
     
@@ -1729,14 +1754,6 @@ config.macros.faviconLink.handler = function(place, macroName,  params, wikifier
     
       <li class="post">
         <a href="/blog/2013/06/19/custom-bean-validator/">Пишем валидатор для Bean Validation API</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/06/19/validation/">Валидация входных параметров с использованием Spring</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/10/24/vagrant/">Автоматизируем работу с виртуальными машинами с помощью Vagrant</a>
       </li>
     
   </ul>
