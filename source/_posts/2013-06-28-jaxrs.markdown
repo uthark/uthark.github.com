@@ -1,0 +1,110 @@
+---
+layout: post
+title: "JAX-RS Client API"
+date: 2013-06-28 19:00
+comments: true
+sharing: true
+published: true
+categories:
+ - jax-rs client
+---
+
+ 
+[JAX-RS](http://jcp.org/en/jsr/detail?id=339) - набор Java API для работы с REST сервисами. Существует несколько реализаций, [о которых я уже писал раньше](/blog/2012/02/08/java-rest/). 
+
+Предположим, что проект А выставляет наружу REST API, который мы хотим использовать в проекте Б. Очевидно, что сразу возникает вопрос - можно ли переиспользовать классы модели и интерфейс в другом проекте. Ответ - да, можно. Client API, появившийся в JAX RS 2.0, упрощает реализацию клиента, но это всё равно не самый оптимальный вариант. 
+
+Есть более интересный способ - в замечательной библиотеке [Apache CXF](http://cxf.apache.org/) есть класс [`org.apache.cxf.jaxrs.client.JAXRSClientFactory`](http://cxf.apache.org/javadoc/latest/org/apache/cxf/jaxrs/client/JAXRSClientFactory.html), который позволяет автоматически получать прокси-клиент для работы с сервером.
+
+К сожалению, у меня не получилось завести его с JSON без JAXB - Проблема с Generic Collections - [`org.apache.cxf.jaxrs.provider.json.JSONProvider`](http://cxf.apache.org/javadoc/latest/org/apache/cxf/jaxrs/provider/json/JSONProvider.html) подразумевает, что в проекте используется JAXB, с помощью которого у нас проаннотирована модель. Поэтому пришлось написать собственную реализацию [`javax.ws.rs.ext.MessageBodyReader<T>`](http://docs.oracle.com/javaee/6/api/javax/ws/rs/ext/MessageBodyReader.html) и [javax.ws.rs.ext.MessageBodyWriter<T>](http://docs.oracle.com/javaee/6/api/javax/ws/rs/ext/MessageBodyWriter.html).
+
+Основная проблема при работе с JSON - это то, что, в общем случае, у нас нет информации об используемых типах данных, а вкупе с тем, что в  Java Generics реализованы с [Type Erasure](http://docs.oracle.com/javase/tutorial/java/generics/erasure.html) - ситуация усугубляется, если не предпринять каких-то действий.
+
+Для реализации чтения будем использовать [Jackson Java JSON-processor](http://jackson.codehaus.org/Home) и его возможности [`com.fasterxml.jackson.databind.type.TypeFactory`](http://fasterxml.github.io/jackson-databind/javadoc/2.2.0/com/fasterxml/jackson/databind/type/TypeFactory.html)
+
+{% codeblock lang:java %}
+public class JsonMessageHandler implements MessageBodyReader<Object>, MessageBodyWriter<Object> {
+
+    protected final ObjectMapper mapper;
+
+    public JsonMessageHandler(ObjectMapper mapper) {
+        this.mapper = mapper;
+    }
+
+    @Override
+    public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+        return true;
+    }
+
+    @Override
+    public Object readFrom(Class<Object> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, String> httpHeaders, InputStream entityStream)
+            throws IOException, WebApplicationException {
+        if (genericType instanceof ParameterizedType) {
+            if (Collection.class.isAssignableFrom(type)) {
+                CollectionType collectionType = resolveCollectionType(type, (ParameterizedType) genericType);
+                return mapper.readValue(entityStream, collectionType);
+            } else if (Map.class.isAssignableFrom(type)) {
+                MapType mapType = resolveMapType(type, (ParameterizedType) genericType);
+                return mapper.readValue(entityStream, mapType);
+            } else {
+                Type[] actualTypeArguments = ((ParameterizedType) genericType).getActualTypeArguments();
+                Class[] typeArgs = new Class[actualTypeArguments.length];
+                for (int i = 0; i < actualTypeArguments.length; i++) {
+                    Type actualTypeArgument = actualTypeArguments[i];
+                    typeArgs[i] = (Class) actualTypeArgument;
+                }
+                JavaType javaType =
+                        TypeFactory.defaultInstance().constructParametricType(type, typeArgs);
+                return mapper.readValue(entityStream, javaType);
+            }
+
+        }
+
+        return mapper.readValue(entityStream, type);
+
+    }
+
+    private MapType resolveMapType(Class<Object> type, ParameterizedType genericType) {
+        Type[] args = genericType.getActualTypeArguments();
+        Class<? extends Map> mapClass = type.asSubclass(Map.class);
+        return TypeFactory.defaultInstance().constructMapType(mapClass, (Class) args[0], (Class) args[1]);
+    }
+
+    private CollectionType resolveCollectionType(Class<Object> type, ParameterizedType genericType) {
+        Type type1 = genericType.getActualTypeArguments()[0];
+        Class<? extends Collection> collectionClass = type.asSubclass(Collection.class);
+        return TypeFactory.defaultInstance().constructCollectionType(collectionClass, (Class) type1);
+    }
+
+    @Override
+    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+        return true;
+    }
+
+    @Override
+    public long getSize(Object o, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+        return -1L;
+    }
+
+    @Override
+    public void writeTo(Object o, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream)
+            throws IOException, WebApplicationException {
+        mapper.writeValue(entityStream, o);
+    }
+}
+{% endcodeblock %}
+
+Основной код класса сосредоточен в методе `readFrom`, который определяет типизацию класса и создаёт необходимый подкласс `com.fasterxml.jackson.databind.JavaType`, который будет использован во время десериализации.
+
+Теперь мы можем создать клиента следующим образом:
+{% codeblock lang:java %}
+        List<?> providers = Arrays.asList(new JsonMessageHandler(objectMapper));
+        UserRest userRest = JAXRSClientFactory.create("http://localhost:8080", UserRest.class, providers);
+
+        // usage:
+        User user = userRest.findByLogin("uthark");
+{% endcodeblock %}
+
+Когда вызывается метод `findByLogin` под капотом создаётся HTTP Request, дёргается сервер и полученный ответ десериализуется. От конечного пользотеля детали реализации API скрыты.
+
+В [следующем посте](/blog/2013/06/28/jaxrs-spring-autowiring/) описано, как автоматически добавить полученные прокси в фабрику бинов Spring для дальнейшего использования.
