@@ -9,7 +9,7 @@
   <meta name="author" content="Oleg Atamanenko">
 
   
-  <meta name="description" content="Продолжая разговор о JAX RS Client API &ndash; предположим, что мы уже используем JAX-RS клиент У нас есть класс, который умеет создавать прокси для &hellip;">
+  <meta name="description" content="Начиная с версии 3.1 Spring поддерживает декларативное включение необходимой функциональности через, так называемые, @Enable* аннотации. Пример таких &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +78,170 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/06/29/spring-enable-annotation/">Пишем @Enable*-аннотацию для Spring</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-29T23:15:00-04:00" pubdate data-updated="true">Jun 29<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Начиная с версии 3.1 Spring поддерживает декларативное включение необходимой функциональности через, так называемые, <code>@Enable*</code> аннотации. Пример таких аннотаций:
+<a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/web/servlet/config/annotation/EnableWebMvc.html"><code>org.springframework.web.servlet.config.annotation.EnableWebMvc</code></a>, <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/cache/annotation/EnableCaching.html"><code>org.springframework.cache.annotation.EnableCaching</code></a>, <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/scheduling/annotation/EnableAsync.html"><code>org.springframework.scheduling.annotation.EnableAsync</code></a> и другие.</p>
+
+<p>В продолжение темы <a href="/blog/2013/06/28/jaxrs-spring-autowiring/">прошлого поста</a>, я хочу показать, как можно добавить собственную <code>@Enable</code> аннотацию.</p>
+
+<p>Для автоматического создания клиента для REST-ресурса нам необходима следующая информация:</p>
+
+<ol>
+<li>Пакет, в котором искать интерфейсы, проаннотированные аннотацией <a href="https://jax-rs-spec.java.net/nonav/2.0/apidocs/javax/ws/rs/Path.html"><code>@Path()</code></a></li>
+<li>Базовый адрес REST-приложения.</li>
+</ol>
+
+
+<p>Для того, чтобы передать эту информацию, мы создадим два атрибута в аннотации: <code>scanPackage()</code> и <code>endpoint()</code></p>
+
+<p>Кроме того, для обработки аннотации необходимо указать обработчик. Это можно сделать передав подкласс <a href="http://static.springsource.org/spring-framework/docs/3.2.x/javadoc-api/org/springframework/context/annotation/ImportBeanDefinitionRegistrar.html"><code>org.springframework.context.annotation.ImportBeanDefinitionRegistrar</code></a> через аннотацию <a href="http://static.springsource.org/spring-framework/docs/3.2.x/javadoc-api/org/springframework/context/annotation/Import.html"><code>@Import</code></a></p>
+
+<p>Пишем аннотацию:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Target</span><span class="o">(</span><span class="n">ElementType</span><span class="o">.</span><span class="na">TYPE</span><span class="o">)</span>
+</span><span class='line'><span class="nd">@Retention</span><span class="o">(</span><span class="n">RetentionPolicy</span><span class="o">.</span><span class="na">RUNTIME</span><span class="o">)</span>
+</span><span class='line'><span class="nd">@Documented</span>
+</span><span class='line'><span class="nd">@Inherited</span>
+</span><span class='line'><span class="nd">@Import</span><span class="o">(</span><span class="n">JaxRsRestClientRegistrar</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+</span><span class='line'><span class="kd">public</span> <span class="nd">@interface</span> <span class="n">EnableJaxRsRestClient</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">String</span> <span class="nf">scanPackage</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">String</span> <span class="nf">endpoint</span><span class="o">();</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Теперь осталось написать реализацию интерфейса <code>org.springframework.context.annotation.ImportBeanDefinitionRegistrar</code>. Так как у нас уже есть написанный ранее <a href="http://static.springsource.org/spring-framework/docs/3.2.x/javadoc-api/org/springframework/beans/factory/config/BeanFactoryPostProcessor.html">BeanFactoryPostProcessor</a> в виде <code>RestClientPostProcessor</code>, реализация интерфейса будет простой &ndash; мы создадим описание бина для Spring и зарегистрируем его в реестре бинов.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">JaxRsRestClientRegistrar</span> <span class="kd">implements</span> <span class="n">ImportBeanDefinitionRegistrar</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">protected</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">PROPERTY_ENDPOINT</span> <span class="o">=</span> <span class="s">&quot;endpoint&quot;</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">protected</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">PROPERTY_SCAN_PACKAGE</span> <span class="o">=</span> <span class="s">&quot;basePackage&quot;</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Override</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">registerBeanDefinitions</span><span class="o">(</span><span class="n">AnnotationMetadata</span> <span class="n">importingClassMetadata</span><span class="o">,</span> <span class="n">BeanDefinitionRegistry</span> <span class="n">registry</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">EnableJaxRsRestClient</span> <span class="n">annotation</span> <span class="o">=</span>
+</span><span class='line'>                <span class="o">(</span><span class="n">EnableJaxRsRestClient</span><span class="o">)</span> <span class="o">((</span><span class="n">StandardClassMetadata</span><span class="o">)</span> <span class="n">importingClassMetadata</span><span class="o">).</span><span class="na">getIntrospectedClass</span><span class="o">()</span>
+</span><span class='line'>                        <span class="o">.</span><span class="na">getAnnotation</span><span class="o">(</span><span class="n">EnableJaxRsRestClient</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">String</span> <span class="n">scanPackage</span> <span class="o">=</span> <span class="n">annotation</span><span class="o">.</span><span class="na">scanPackage</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">String</span> <span class="n">endpoint</span> <span class="o">=</span> <span class="n">annotation</span><span class="o">.</span><span class="na">endpoint</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">GenericBeanDefinition</span> <span class="n">beanDefinition</span> <span class="o">=</span> <span class="k">new</span> <span class="n">GenericBeanDefinition</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">beanDefinition</span><span class="o">.</span><span class="na">setAbstract</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">beanDefinition</span><span class="o">.</span><span class="na">setBeanClass</span><span class="o">(</span><span class="n">RestClientPostProcessor</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">MutablePropertyValues</span> <span class="n">propertyValues</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MutablePropertyValues</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">propertyValues</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">PROPERTY_ENDPOINT</span><span class="o">,</span> <span class="n">endpoint</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">propertyValues</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">PROPERTY_SCAN_PACKAGE</span><span class="o">,</span> <span class="n">scanPackage</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">beanDefinition</span><span class="o">.</span><span class="na">setPropertyValues</span><span class="o">(</span><span class="n">propertyValues</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">registry</span><span class="o">.</span><span class="na">registerBeanDefinition</span><span class="o">(</span><span class="n">ClassUtils</span><span class="o">.</span><span class="na">getShortName</span><span class="o">(</span><span class="n">getClass</span><span class="o">()),</span> <span class="n">beanDefinition</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Теперь мы можем использовать аннотацию:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Configuration</span>
+</span><span class='line'><span class="nd">@EnableJaxRsRestClient</span><span class="o">(</span><span class="n">scanPackage</span> <span class="o">=</span> <span class="s">&quot;&lt;base package&gt;&quot;</span><span class="o">,</span> <span class="n">endpoint</span> <span class="o">=</span> <span class="s">&quot;${remote.rest.endpoint}&quot;</span><span class="o">)</span>
+</span><span class='line'><span class="kd">class</span> <span class="nc">TestAutowiringConfiguration</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Bean</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="n">PropertyPlaceholderConfigurer</span> <span class="nf">configurer</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">PropertyPlaceholderConfigurer</span> <span class="n">pph</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PropertyPlaceholderConfigurer</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">pph</span><span class="o">.</span><span class="na">setLocation</span><span class="o">(</span><span class="k">new</span> <span class="n">ClassPathResource</span><span class="o">(</span><span class="s">&quot;application.properties&quot;</span><span class="o">));</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">pph</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Обратите внимание, что endpoint можно передавать с использованием подстановочных свойств.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1848,137 +2012,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/04/20/beanpostprocessor/">Использование BeanPostProcessor на примере журналирования</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-04-20T04:51:00-04:00" pubdate data-updated="true">Apr 20<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div class='post'>
-Сегодня я хочу рассказать, как можно сделать инициализацию логгера в классе с использованием аннотаций и <a href="http://static.springsource.org/spring/docs/current/javadoc-api/org/springframework/beans/factory/config/BeanPostProcessor.html">BeanPostProcessor</a>
-
-Очень часто мы инициализируем логгер следующим образом:
-<pre class="brush:java">
-public class MyClass {
-    private static final Logger LOG = LoggerFactory.getLogger(MyClass.class);
-}
-</pre>
-
-Я покажу, как сделать, чтобы можно было писать вот так: 
-<pre class="brush:java">
-    @Log
-    private Logger LOG;
-</pre>
-
-Первым делом нам нужно объявить аннотацию:
-
-<pre class="brush:java">
-@Retention(RUNTIME)
-@Target(FIELD)
-@Documented
-public @interface Log {
-    String category() default "";
-}
-</pre>
-
-А вторым делом, написать собственный <tt>BeanPostProcessor</tt>, который бы устанавливал нам логгер:
-
-<pre class="brush:java">
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.stereotype.Component;
-import org.springframework.util.ReflectionUtils;
-
-@Component
-public class LoggerPostProcessor implements BeanPostProcessor {
-    @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) {
-        return bean;
-    }
-
-    @Override
-    public Object postProcessBeforeInitialization(final Object bean, final String beanName) {
-        ReflectionUtils.doWithFields(bean.getClass(), new FieldProcessor(bean, beanName), new LoggerFieldFilter());
-        return bean;
-    }
-
-    private static class FieldProcessor implements ReflectionUtils.FieldCallback {
-        private final Object bean;
-        private final String beanName;
-
-        private FieldProcessor(Object bean, String beanName) {
-            this.bean = bean;
-            this.beanName = beanName;
-        }
-
-        @Override
-        public void doWith(Field field) throws IllegalAccessException {
-            Log loggerAnnot = field.getAnnotation(Log.class);
-
-            // Sanity check if annotation is on the field with correct type.
-            if (field.getType().equals(org.slf4j.Logger.class)) {
-                // As user can override logger category - check if it was done.
-                String loggerCategory = loggerAnnot.category();
-                if (StringUtils.isBlank(loggerCategory)) {
-                    // use default category instead.
-                    loggerCategory = bean.getClass().getName();
-                }
-                Logger logger = LoggerFactory.getLogger(loggerCategory);
-                ReflectionUtils.makeAccessible(field);
-                field.set(bean, logger);
-            } else {
-                throw new IllegalArgumentException(
-                    "Unable to set logger on field '" + field.getName() + "' in bean '" + beanName +
-                        "': field should have class " + Logger.class.getName());
-            }
-        }
-    }
-
-    private static class LoggerFieldFilter implements ReflectionUtils.FieldFilter {
-        @Override
-        public boolean matches(Field field) {
-            Log logger = field.getAnnotation(Log.class);
-            return null != logger;
-        }
-    }
-}
-</pre>
-
-Если вы используете не <a href="http://www.slf4j.org/">sfl4j</a>, а, например, <a href="http://logging.apache.org/log4j/1.2/">log4j</a>, или <a href="http://commons.apache.org/logging/">commons-logging</a>, то нужно немного поправить код внутри метода <tt>doWith</tt>
-
-Попутно, данный код показывает пример использования класса <a href="http://static.springsource.org/spring/docs/current/javadoc-api/org/springframework/util/ReflectionUtils.html">org.springframework.util.ReflectionUtils</a>.</div>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1994,6 +2027,10 @@ public class LoggerPostProcessor implements BeanPostProcessor {
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/06/29/spring-enable-annotation/">Пишем @Enable*-аннотацию для Spring</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/06/28/jaxrs-spring-autowiring/">@Autowired JAX-RS Client API</a>
       </li>
     
@@ -2007,10 +2044,6 @@ public class LoggerPostProcessor implements BeanPostProcessor {
     
       <li class="post">
         <a href="/blog/2013/06/19/spring-caching/">Использование memcached в качестве backend для Spring Caching Abstraction</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/06/19/custom-bean-validator/">Пишем валидатор для Bean Validation API</a>
       </li>
     
   </ul>

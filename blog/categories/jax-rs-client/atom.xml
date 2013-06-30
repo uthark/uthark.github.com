@@ -4,7 +4,7 @@
   <title><![CDATA[Category: jax-rs client | Блог о разработке ПО]]></title>
   <link href="http://uthark.github.com/blog/categories/jax-rs-client/atom.xml" rel="self"/>
   <link href="http://uthark.github.com/"/>
-  <updated>2013-06-28T22:15:41-04:00</updated>
+  <updated>2013-06-29T23:39:52-04:00</updated>
   <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
@@ -24,33 +24,20 @@
 
 <p>Первое решение, которое приходит в лоб &ndash; объявить бин в конфигурации для каждого интерфейса:</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Configuration</span>
-</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SpringConfiguration</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="nd">@Bean</span>
-</span><span class='line'><span class="kd">public</span> <span class="n">UserRest</span> <span class="nf">userRest</span><span class="o">(){</span>
-</span><span class='line'>    <span class="n">List</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;?&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">providers</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="k">new</span> <span class="n">JsonMessageHandler</span><span class="o">(</span><span class="k">new</span> <span class="n">ObjectMapper</span><span class="o">()));</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">JAXRSClientFactory</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="s">&quot;http://localhost:8080&quot;</span><span class="o">,</span> <span class="n">UserRest</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">providers</span><span class="o">);</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock lang:java %}
+@Configuration
+public class SpringConfiguration {</p>
+
+<pre><code>@Bean
+public UserRest userRest(){
+    List&lt;?&gt; providers = Arrays.asList(new JsonMessageHandler(new ObjectMapper()));
+    return JAXRSClientFactory.create("http://localhost:8080", UserRest.class, providers);
+}
+</code></pre>
+
+<p>}</p>
+
+<p>{% endcodeblock %}</p>
 
 <p>Написав объявление нескольких таких бинов можно задуматься &ndash; &ldquo;Есть ли способ проще?&rdquo;.</p>
 
@@ -74,171 +61,92 @@
 <p>Для поиска всех возможных классов/интерфейсов воспользуемся классом <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/context/annotation/ClassPathScanningCandidateComponentProvider.html"><code>ClassPathScanningCandidateComponentProvider</code></a>, который умеет сканировать классы в выбранном пакете и применять фильтры, чтобы собрать только нужные. Также нам нужно учесть, что по умолчанию <code>ClassPathScanningCandidateComponentProvider</code> пытается определить, может ли найденный класс быть и бином (например, проверяет, что это не абстрактный класс и не интерфейс), поэтому нам нужно написать подкласс, который позволит нам работать с интерфейсами.</p>
 
 <p>Пишем класс:
-<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">RestClientPostProcessor</span> <span class="kd">implements</span> <span class="n">BeanFactoryPostProcessor</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Logger</span> <span class="n">LOGGER</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">RestClientPostProcessor</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">protected</span> <span class="n">String</span> <span class="n">endpoint</span> <span class="o">=</span> <span class="s">&quot;http://localhost:8080&quot;</span><span class="o">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">private</span> <span class="n">Class</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;?</span> <span class="kd">extends</span> <span class="n">Annotation</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">requiredAnnotation</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="na">class</span><span class="o">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">private</span> <span class="n">String</span> <span class="n">basePackage</span> <span class="o">=</span> <span class="s">&quot;&amp;lt;base package&amp;gt;&quot;</span><span class="o">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">private</span> <span class="n">ObjectMapper</span> <span class="n">objectMapper</span><span class="o">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// getters/setters omitted.</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">protected</span> <span class="n">Object</span> <span class="nf">createBean</span><span class="o">(</span><span class="n">Class</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;?&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">clazz</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>    <span class="n">List</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;?&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">providers</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="k">new</span> <span class="n">JsonMessageHandler</span><span class="o">(</span><span class="n">objectMapper</span><span class="o">));</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">JAXRSClientFactory</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">endpoint</span><span class="o">,</span> <span class="n">clazz</span><span class="o">,</span> <span class="n">providers</span><span class="o">);</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="nd">@Override</span>
-</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">postProcessBeanFactory</span><span class="o">(</span><span class="n">ConfigurableListableBeanFactory</span> <span class="n">beanFactory</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">BeansException</span> <span class="o">{</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">ClassPathScanningCandidateComponentProvider</span> <span class="n">provider</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ClasspathScanner</span><span class="o">();</span>
-</span><span class='line'>    <span class="n">provider</span><span class="o">.</span><span class="na">addIncludeFilter</span><span class="o">(</span><span class="k">new</span> <span class="n">AnnotationTypeFilter</span><span class="o">(</span><span class="n">requiredAnnotation</span><span class="o">));</span>
-</span><span class='line'>    <span class="n">Set</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">BeanDefinition</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">components</span> <span class="o">=</span> <span class="n">provider</span><span class="o">.</span><span class="na">findCandidateComponents</span><span class="o">(</span><span class="n">basePackage</span><span class="o">);</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">for</span> <span class="o">(</span><span class="n">BeanDefinition</span> <span class="n">component</span> <span class="o">:</span> <span class="n">components</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="n">createAndRegisterBean</span><span class="o">(</span><span class="n">beanFactory</span><span class="o">,</span> <span class="n">component</span><span class="o">);</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">protected</span> <span class="kt">void</span> <span class="nf">createAndRegisterBean</span><span class="o">(</span><span class="n">ConfigurableListableBeanFactory</span> <span class="n">beanFactory</span><span class="o">,</span> <span class="n">BeanDefinition</span> <span class="n">component</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>    <span class="k">try</span> <span class="o">{</span>
-</span><span class='line'>        <span class="n">String</span> <span class="n">beanClassName</span> <span class="o">=</span> <span class="n">component</span><span class="o">.</span><span class="na">getBeanClassName</span><span class="o">();</span>
-</span><span class='line'>        <span class="n">Class</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;?&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">clazz</span> <span class="o">=</span> <span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="n">beanClassName</span><span class="o">);</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="n">Object</span> <span class="n">o</span> <span class="o">=</span> <span class="n">createBean</span><span class="o">(</span><span class="n">clazz</span><span class="o">);</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="n">beanFactory</span><span class="o">.</span><span class="na">registerResolvableDependency</span><span class="o">(</span><span class="n">clazz</span><span class="o">,</span> <span class="n">o</span><span class="o">);</span>
-</span><span class='line'>    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ClassNotFoundException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="n">LOGGER</span><span class="o">.</span><span class="na">warn</span><span class="o">(</span><span class="s">&quot;Unable to find class: {}&quot;</span><span class="o">,</span> <span class="n">component</span><span class="o">.</span><span class="na">getBeanClassName</span><span class="o">(),</span> <span class="n">e</span><span class="o">);</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">ClasspathScanner</span> <span class="kd">extends</span> <span class="n">ClassPathScanningCandidateComponentProvider</span> <span class="o">{</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="kd">public</span> <span class="nf">ClasspathScanner</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>        <span class="kd">super</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nd">@Override</span> <span class="kd">protected</span> <span class="kt">boolean</span> <span class="n">isCandidateComponent</span><span class="o">(</span><span class="n">AnnotatedBeanDefinition</span> <span class="n">beanDefinition</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="c1">// override this method, because our classes are interfaces, by default interfaces are</span>
-</span><span class='line'>        <span class="c1">// not allowed.</span>
-</span><span class='line'>        <span class="k">return</span> <span class="n">beanDefinition</span><span class="o">.</span><span class="na">getMetadata</span><span class="o">().</span><span class="na">isIndependent</span><span class="o">();</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+{% codeblock lang:java %}
+public class RestClientPostProcessor implements BeanFactoryPostProcessor {</p>
+
+<pre><code>private static final Logger LOGGER = LoggerFactory.getLogger(RestClientPostProcessor.class);
+
+protected String endpoint = "http://localhost:8080";
+
+private Class&lt;? extends Annotation&gt; requiredAnnotation = Path.class;
+
+private String basePackage = "&lt;base package&gt;";
+
+private ObjectMapper objectMapper;
+
+// getters/setters omitted.
+
+protected Object createBean(Class&lt;?&gt; clazz) {
+    List&lt;?&gt; providers = Arrays.asList(new JsonMessageHandler(objectMapper));
+    return JAXRSClientFactory.create(endpoint, clazz, providers);
+}
+
+@Override 
+public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+
+    ClassPathScanningCandidateComponentProvider provider = new ClasspathScanner();
+    provider.addIncludeFilter(new AnnotationTypeFilter(requiredAnnotation));
+    Set&lt;BeanDefinition&gt; components = provider.findCandidateComponents(basePackage);
+
+    for (BeanDefinition component : components) {
+        createAndRegisterBean(beanFactory, component);
+
+    }
+}
+
+protected void createAndRegisterBean(ConfigurableListableBeanFactory beanFactory, BeanDefinition component) {
+    try {
+        String beanClassName = component.getBeanClassName();
+        Class&lt;?&gt; clazz = Class.forName(beanClassName);
+
+        Object o = createBean(clazz);
+
+        beanFactory.registerResolvableDependency(clazz, o);
+    } catch (ClassNotFoundException e) {
+        LOGGER.warn("Unable to find class: {}", component.getBeanClassName(), e);
+    }
+}
+
+private static class ClasspathScanner extends ClassPathScanningCandidateComponentProvider {
+
+    public ClasspathScanner() {
+        super(false);
+    }
+
+    @Override protected boolean isCandidateComponent(AnnotatedBeanDefinition beanDefinition) {
+        // override this method, because our classes are interfaces, by default interfaces are
+        // not allowed.
+        return beanDefinition.getMetadata().isIndependent();
+    }
+}
+</code></pre>
+
+<p>}</p>
+
+<p>{% endcodeblock %}</p>
 
 <p>Теперь этот процессор необходимо зарегистрировать в контексте Spring:
-<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Configuration</span>
-</span><span class='line'><span class="kd">class</span> <span class="nc">TestAutowiringConfiguration</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="nd">@Bean</span>
-</span><span class='line'><span class="kd">public</span> <span class="kd">static</span> <span class="n">RestClientPostProcessor</span> <span class="nf">autowiringRestApiProcessor</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="k">new</span> <span class="nf">RestClientPostProcessor</span><span class="o">();</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+{% codeblock lang:java %}
+@Configuration
+class TestAutowiringConfiguration {</p>
+
+<pre><code>@Bean
+public static RestClientPostProcessor autowiringRestApiProcessor() {
+    return new RestClientPostProcessor();
+}
+</code></pre>
+
+<p>}
+{% endcodeblock %}</p>
 
 <p>И теперь можно использовать <code>UserRest</code> как обычный бин:
-<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="nd">@Autowired</span>
-</span><span class='line'><span class="kd">private</span> <span class="n">UserShowRest</span> <span class="n">userShowRest</span><span class="o">;</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+{% codeblock lang:java %}</p>
+
+<pre><code>@Autowired
+private UserShowRest userShowRest;
+</code></pre>
+
+<p>{% endcodeblock %}</p>
 
 <p>Если есть вопросы &ndash; <a href="https://plus.google.com/112372998073079463630/posts">спрашивайте в Google+</a></p>
 ]]></content>
@@ -261,174 +169,93 @@
 
 <p>Для реализации чтения будем использовать <a href="http://jackson.codehaus.org/Home">Jackson Java JSON-processor</a> и его возможности <a href="http://fasterxml.github.io/jackson-databind/javadoc/2.2.0/com/fasterxml/jackson/databind/type/TypeFactory.html"><code>com.fasterxml.jackson.databind.type.TypeFactory</code></a></p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-<span class='line-number'>66</span>
-<span class='line-number'>67</span>
-<span class='line-number'>68</span>
-<span class='line-number'>69</span>
-<span class='line-number'>70</span>
-<span class='line-number'>71</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">JsonMessageHandler</span> <span class="kd">implements</span> <span class="n">MessageBodyReader</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;,</span> <span class="n">MessageBodyWriter</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="kd">protected</span> <span class="kd">final</span> <span class="n">ObjectMapper</span> <span class="n">mapper</span><span class="o">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">public</span> <span class="nf">JsonMessageHandler</span><span class="o">(</span><span class="n">ObjectMapper</span> <span class="n">mapper</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>    <span class="k">this</span><span class="o">.</span><span class="na">mapper</span> <span class="o">=</span> <span class="n">mapper</span><span class="o">;</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="nd">@Override</span>
-</span><span class='line'><span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isReadable</span><span class="o">(</span><span class="n">Class</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;?&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">type</span><span class="o">,</span> <span class="n">Type</span> <span class="n">genericType</span><span class="o">,</span> <span class="n">Annotation</span><span class="o">[]</span> <span class="n">annotations</span><span class="o">,</span> <span class="n">MediaType</span> <span class="n">mediaType</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="nd">@Override</span>
-</span><span class='line'><span class="kd">public</span> <span class="n">Object</span> <span class="nf">readFrom</span><span class="o">(</span><span class="n">Class</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">Object</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">type</span><span class="o">,</span> <span class="n">Type</span> <span class="n">genericType</span><span class="o">,</span> <span class="n">Annotation</span><span class="o">[]</span> <span class="n">annotations</span><span class="o">,</span> <span class="n">MediaType</span> <span class="n">mediaType</span><span class="o">,</span> <span class="n">MultivaluedMap</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">httpHeaders</span><span class="o">,</span> <span class="n">InputStream</span> <span class="n">entityStream</span><span class="o">)</span>
-</span><span class='line'>        <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">WebApplicationException</span> <span class="o">{</span>
-</span><span class='line'>    <span class="k">if</span> <span class="o">(</span><span class="n">genericType</span> <span class="k">instanceof</span> <span class="n">ParameterizedType</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="k">if</span> <span class="o">(</span><span class="n">Collection</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">isAssignableFrom</span><span class="o">(</span><span class="n">type</span><span class="o">))</span> <span class="o">{</span>
-</span><span class='line'>            <span class="n">CollectionType</span> <span class="n">collectionType</span> <span class="o">=</span> <span class="n">resolveCollectionType</span><span class="o">(</span><span class="n">type</span><span class="o">,</span> <span class="o">(</span><span class="n">ParameterizedType</span><span class="o">)</span> <span class="n">genericType</span><span class="o">);</span>
-</span><span class='line'>            <span class="k">return</span> <span class="n">mapper</span><span class="o">.</span><span class="na">readValue</span><span class="o">(</span><span class="n">entityStream</span><span class="o">,</span> <span class="n">collectionType</span><span class="o">);</span>
-</span><span class='line'>        <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">Map</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">isAssignableFrom</span><span class="o">(</span><span class="n">type</span><span class="o">))</span> <span class="o">{</span>
-</span><span class='line'>            <span class="n">MapType</span> <span class="n">mapType</span> <span class="o">=</span> <span class="n">resolveMapType</span><span class="o">(</span><span class="n">type</span><span class="o">,</span> <span class="o">(</span><span class="n">ParameterizedType</span><span class="o">)</span> <span class="n">genericType</span><span class="o">);</span>
-</span><span class='line'>            <span class="k">return</span> <span class="n">mapper</span><span class="o">.</span><span class="na">readValue</span><span class="o">(</span><span class="n">entityStream</span><span class="o">,</span> <span class="n">mapType</span><span class="o">);</span>
-</span><span class='line'>        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-</span><span class='line'>            <span class="n">Type</span><span class="o">[]</span> <span class="n">actualTypeArguments</span> <span class="o">=</span> <span class="o">((</span><span class="n">ParameterizedType</span><span class="o">)</span> <span class="n">genericType</span><span class="o">).</span><span class="na">getActualTypeArguments</span><span class="o">();</span>
-</span><span class='line'>            <span class="n">Class</span><span class="o">[]</span> <span class="n">typeArgs</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Class</span><span class="o">[</span><span class="n">actualTypeArguments</span><span class="o">.</span><span class="na">length</span><span class="o">];</span>
-</span><span class='line'>            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span> <span class="n">actualTypeArguments</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-</span><span class='line'>                <span class="n">Type</span> <span class="n">actualTypeArgument</span> <span class="o">=</span> <span class="n">actualTypeArguments</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
-</span><span class='line'>                <span class="n">typeArgs</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="o">(</span><span class="n">Class</span><span class="o">)</span> <span class="n">actualTypeArgument</span><span class="o">;</span>
-</span><span class='line'>            <span class="o">}</span>
-</span><span class='line'>            <span class="n">JavaType</span> <span class="n">javaType</span> <span class="o">=</span>
-</span><span class='line'>                    <span class="n">TypeFactory</span><span class="o">.</span><span class="na">defaultInstance</span><span class="o">().</span><span class="na">constructParametricType</span><span class="o">(</span><span class="n">type</span><span class="o">,</span> <span class="n">typeArgs</span><span class="o">);</span>
-</span><span class='line'>            <span class="k">return</span> <span class="n">mapper</span><span class="o">.</span><span class="na">readValue</span><span class="o">(</span><span class="n">entityStream</span><span class="o">,</span> <span class="n">javaType</span><span class="o">);</span>
-</span><span class='line'>        <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">return</span> <span class="n">mapper</span><span class="o">.</span><span class="na">readValue</span><span class="o">(</span><span class="n">entityStream</span><span class="o">,</span> <span class="n">type</span><span class="o">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">private</span> <span class="n">MapType</span> <span class="nf">resolveMapType</span><span class="o">(</span><span class="n">Class</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">Object</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">type</span><span class="o">,</span> <span class="n">ParameterizedType</span> <span class="n">genericType</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>    <span class="n">Type</span><span class="o">[]</span> <span class="n">args</span> <span class="o">=</span> <span class="n">genericType</span><span class="o">.</span><span class="na">getActualTypeArguments</span><span class="o">();</span>
-</span><span class='line'>    <span class="n">Class</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;?</span> <span class="kd">extends</span> <span class="n">Map</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">mapClass</span> <span class="o">=</span> <span class="n">type</span><span class="o">.</span><span class="na">asSubclass</span><span class="o">(</span><span class="n">Map</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">TypeFactory</span><span class="o">.</span><span class="na">defaultInstance</span><span class="o">().</span><span class="na">constructMapType</span><span class="o">(</span><span class="n">mapClass</span><span class="o">,</span> <span class="o">(</span><span class="n">Class</span><span class="o">)</span> <span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="o">(</span><span class="n">Class</span><span class="o">)</span> <span class="n">args</span><span class="o">[</span><span class="mi">1</span><span class="o">]);</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">private</span> <span class="n">CollectionType</span> <span class="nf">resolveCollectionType</span><span class="o">(</span><span class="n">Class</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">Object</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">type</span><span class="o">,</span> <span class="n">ParameterizedType</span> <span class="n">genericType</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>    <span class="n">Type</span> <span class="n">type1</span> <span class="o">=</span> <span class="n">genericType</span><span class="o">.</span><span class="na">getActualTypeArguments</span><span class="o">()[</span><span class="mi">0</span><span class="o">];</span>
-</span><span class='line'>    <span class="n">Class</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;?</span> <span class="kd">extends</span> <span class="n">Collection</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">collectionClass</span> <span class="o">=</span> <span class="n">type</span><span class="o">.</span><span class="na">asSubclass</span><span class="o">(</span><span class="n">Collection</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">TypeFactory</span><span class="o">.</span><span class="na">defaultInstance</span><span class="o">().</span><span class="na">constructCollectionType</span><span class="o">(</span><span class="n">collectionClass</span><span class="o">,</span> <span class="o">(</span><span class="n">Class</span><span class="o">)</span> <span class="n">type1</span><span class="o">);</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="nd">@Override</span>
-</span><span class='line'><span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isWriteable</span><span class="o">(</span><span class="n">Class</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;?&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">type</span><span class="o">,</span> <span class="n">Type</span> <span class="n">genericType</span><span class="o">,</span> <span class="n">Annotation</span><span class="o">[]</span> <span class="n">annotations</span><span class="o">,</span> <span class="n">MediaType</span> <span class="n">mediaType</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="nd">@Override</span>
-</span><span class='line'><span class="kd">public</span> <span class="kt">long</span> <span class="nf">getSize</span><span class="o">(</span><span class="n">Object</span> <span class="n">o</span><span class="o">,</span> <span class="n">Class</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;?&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">type</span><span class="o">,</span> <span class="n">Type</span> <span class="n">genericType</span><span class="o">,</span> <span class="n">Annotation</span><span class="o">[]</span> <span class="n">annotations</span><span class="o">,</span> <span class="n">MediaType</span> <span class="n">mediaType</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="o">-</span><span class="mi">1L</span><span class="o">;</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="nd">@Override</span>
-</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">writeTo</span><span class="o">(</span><span class="n">Object</span> <span class="n">o</span><span class="o">,</span> <span class="n">Class</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;?&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">type</span><span class="o">,</span> <span class="n">Type</span> <span class="n">genericType</span><span class="o">,</span> <span class="n">Annotation</span><span class="o">[]</span> <span class="n">annotations</span><span class="o">,</span> <span class="n">MediaType</span> <span class="n">mediaType</span><span class="o">,</span> <span class="n">MultivaluedMap</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">httpHeaders</span><span class="o">,</span> <span class="n">OutputStream</span> <span class="n">entityStream</span><span class="o">)</span>
-</span><span class='line'>        <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">WebApplicationException</span> <span class="o">{</span>
-</span><span class='line'>    <span class="n">mapper</span><span class="o">.</span><span class="na">writeValue</span><span class="o">(</span><span class="n">entityStream</span><span class="o">,</span> <span class="n">o</span><span class="o">);</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock lang:java %}
+public class JsonMessageHandler implements MessageBodyReader<Object>, MessageBodyWriter<Object> {</p>
+
+<pre><code>protected final ObjectMapper mapper;
+
+public JsonMessageHandler(ObjectMapper mapper) {
+    this.mapper = mapper;
+}
+
+@Override
+public boolean isReadable(Class&lt;?&gt; type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    return true;
+}
+
+@Override
+public Object readFrom(Class&lt;Object&gt; type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap&lt;String, String&gt; httpHeaders, InputStream entityStream)
+        throws IOException, WebApplicationException {
+    if (genericType instanceof ParameterizedType) {
+        if (Collection.class.isAssignableFrom(type)) {
+            CollectionType collectionType = resolveCollectionType(type, (ParameterizedType) genericType);
+            return mapper.readValue(entityStream, collectionType);
+        } else if (Map.class.isAssignableFrom(type)) {
+            MapType mapType = resolveMapType(type, (ParameterizedType) genericType);
+            return mapper.readValue(entityStream, mapType);
+        } else {
+            Type[] actualTypeArguments = ((ParameterizedType) genericType).getActualTypeArguments();
+            Class[] typeArgs = new Class[actualTypeArguments.length];
+            for (int i = 0; i &lt; actualTypeArguments.length; i++) {
+                Type actualTypeArgument = actualTypeArguments[i];
+                typeArgs[i] = (Class) actualTypeArgument;
+            }
+            JavaType javaType =
+                    TypeFactory.defaultInstance().constructParametricType(type, typeArgs);
+            return mapper.readValue(entityStream, javaType);
+        }
+
+    }
+
+    return mapper.readValue(entityStream, type);
+
+}
+
+private MapType resolveMapType(Class&lt;Object&gt; type, ParameterizedType genericType) {
+    Type[] args = genericType.getActualTypeArguments();
+    Class&lt;? extends Map&gt; mapClass = type.asSubclass(Map.class);
+    return TypeFactory.defaultInstance().constructMapType(mapClass, (Class) args[0], (Class) args[1]);
+}
+
+private CollectionType resolveCollectionType(Class&lt;Object&gt; type, ParameterizedType genericType) {
+    Type type1 = genericType.getActualTypeArguments()[0];
+    Class&lt;? extends Collection&gt; collectionClass = type.asSubclass(Collection.class);
+    return TypeFactory.defaultInstance().constructCollectionType(collectionClass, (Class) type1);
+}
+
+@Override
+public boolean isWriteable(Class&lt;?&gt; type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    return true;
+}
+
+@Override
+public long getSize(Object o, Class&lt;?&gt; type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+    return -1L;
+}
+
+@Override
+public void writeTo(Object o, Class&lt;?&gt; type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap&lt;String, Object&gt; httpHeaders, OutputStream entityStream)
+        throws IOException, WebApplicationException {
+    mapper.writeValue(entityStream, o);
+}
+</code></pre>
+
+<p>}
+{% endcodeblock %}</p>
 
 <p>Основной код класса сосредоточен в методе <code>readFrom</code>, который определяет типизацию класса и создаёт необходимый подкласс <code>com.fasterxml.jackson.databind.JavaType</code>, который будет использован во время десериализации.</p>
 
 <p>Теперь мы можем создать клиента следующим образом:
-<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>    <span class="n">List</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;?&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">providers</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="k">new</span> <span class="n">JsonMessageHandler</span><span class="o">(</span><span class="n">objectMapper</span><span class="o">));</span>
-</span><span class='line'>    <span class="n">UserRest</span> <span class="n">userRest</span> <span class="o">=</span> <span class="n">JAXRSClientFactory</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="s">&quot;http://localhost:8080&quot;</span><span class="o">,</span> <span class="n">UserRest</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">providers</span><span class="o">);</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// usage:</span>
-</span><span class='line'>    <span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="n">userRest</span><span class="o">.</span><span class="na">findByLogin</span><span class="o">(</span><span class="s">&quot;uthark&quot;</span><span class="o">);</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+{% codeblock lang:java %}</p>
+
+<pre><code>    List&lt;?&gt; providers = Arrays.asList(new JsonMessageHandler(objectMapper));
+    UserRest userRest = JAXRSClientFactory.create("http://localhost:8080", UserRest.class, providers);
+
+    // usage:
+    User user = userRest.findByLogin("uthark");
+</code></pre>
+
+<p>{% endcodeblock %}</p>
 
 <p>Когда вызывается метод <code>findByLogin</code> под капотом создаётся HTTP Request, дёргается сервер и полученный ответ десериализуется. От конечного пользотеля детали реализации API скрыты.</p>
 

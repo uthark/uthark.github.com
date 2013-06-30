@@ -9,7 +9,7 @@
   <meta name="author" content="Oleg Atamanenko">
 
   
-  <meta name="description" content="Google запустил сайт Chrome Extensions. В данный момент сайт доступен только разработчикам расширений. Залил расширение, написал кратенькое описание &hellip;">
+  <meta name="description" content="Раньше я использовал коллекцию скриптов nautilussvn, весьма неудобную в использовании. Бродя по просторам сети наткнулся на отличную замену. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +78,74 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/05/nautilus-subversion/">RabbitVCS - расширение для Nautilus для работы с Subversion</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-05T14:03:00-05:00" pubdate data-updated="true">Dec 5<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+Раньше я использовал коллекцию скриптов <tt>nautilussvn</tt>, весьма неудобную в использовании.<br />
+<br />
+Бродя по просторам сети наткнулся на отличную замену. Встречайте - <a href="http://rabbitvcs.org/">RabbitVCS</a>.<br />
+<br />
+<h3>Возможности</h3><ul><li>Интеграция с Nautilus</li>
+<li>Поддержка Subversion</li>
+<li>Полная локализация</li>
+<li>Поддержка командной строки</li>
+<li>Доступны пакеты для различных дистрибутивов</li>
+</ul><h3>Установка</h3><br />
+<strong>Для Ubuntu Hardy, Intepid, Jaunty</strong><br />
+<pre class="brush:bash;">deb http://ppa.launchpad.net/rabbitvcs/ppa/ubuntu hardy main
+
+</pre><br />
+<strong>Для Ubuntu Karmic</strong><br />
+<pre class="brush:bash;">sudo add-apt-repository ppa:rabbitvcs/ppa
+
+</pre><br />
+Установка для других дистрибутивов описана <a href="http://wiki.rabbitvcs.org/wiki/download">на официальном сайте</a>.<br />
+<br />
+<h3>Работа</h3>Несмотря на очень маленький номер версии работает достаточно стабильно, не падает.<br />
+<br />
+<h4>Скриншоты</h4>После установки внешний вид наутилуса преображается и выглядит примерно следующим образом (картинки кликабельны):<br />
+<div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/_y8p0_dtMJ38/Sxqtltez5bI/AAAAAAAAAtk/KUPsnbkZTNU/s1600-h/Screenshot-Delicious+-+administrilo+de+dosieroj.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/_y8p0_dtMJ38/Sxqtltez5bI/AAAAAAAAAtk/KUPsnbkZTNU/s320/Screenshot-Delicious+-+administrilo+de+dosieroj.png" /></a><br />
+</div><br />
+Диалог коммита выглядит вот так:<br />
+<div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/_y8p0_dtMJ38/Sxqt9y_wAbI/AAAAAAAAAts/YMfhdkKJ_Ck/s1600-h/Screenshot-1.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/_y8p0_dtMJ38/Sxqt9y_wAbI/AAAAAAAAAts/YMfhdkKJ_Ck/s320/Screenshot-1.png" /></a><br />
+</div><br />
+Контекстное меню:<br />
+<div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/_y8p0_dtMJ38/SxqwIz8iOfI/AAAAAAAAAt0/bDLo2ZIzpKY/s1600-h/Screenshot-2.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/_y8p0_dtMJ38/SxqwIz8iOfI/AAAAAAAAAt0/bDLo2ZIzpKY/s320/Screenshot-2.png" /></a><br />
+</div><h3>Заключение</h3>Достойный аналог TortoiseSVN под линукс.</div>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1301,48 +1369,6 @@ package com.x.y.z;
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/05/30/protected/">Использование модификатора Protected на полях в базовом классе</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-05-30T12:45:00-04:00" pubdate data-updated="true">May 30<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div class='post'>
-Недавно задали мне вопрос - что я думаю об использовании модификатора protected для членов базового класса? Под этим вопросом кроются более серьёзные вещи.
-
-Например, любой член класса, имеющий модификатор protected, расширяет интерфейс базового класса для подклассов - подклассы имеют доступ ко всем protected и public методам этого поля. Иногда это сделано специально, например, для того, чтобы подклассы могли иметь доступ к какой-либо функциональности. Однако, если подкласс будет использовать protected поля неправильно (например, он может установить его в null, нарушив, таким образом, поведение базового класса), то это не принесёт пользы.
-
-Поразмыслив над вопросом я пришел к следующему, достаточно логичному и широкоизвестному выводу - необходимо давать наиболее закрытый доступ, какой можно. То есть, если можно объявить член класса как private, то необходимо сделать его private. Если в подклассах необходим доступ к члену класса, то необходимо проанализировать, какие методы нужны в подклассах и открыть только их через делегирование. Если набор методов заранее неизвестен, то можно сделать protected getter для поля.</div>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -1360,6 +1386,10 @@ package com.x.y.z;
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/06/29/spring-enable-annotation/">Пишем @Enable*-аннотацию для Spring</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/06/28/jaxrs-spring-autowiring/">@Autowired JAX-RS Client API</a>
       </li>
     
@@ -1373,10 +1403,6 @@ package com.x.y.z;
     
       <li class="post">
         <a href="/blog/2013/06/19/spring-caching/">Использование memcached в качестве backend для Spring Caching Abstraction</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/06/19/custom-bean-validator/">Пишем валидатор для Bean Validation API</a>
       </li>
     
   </ul>

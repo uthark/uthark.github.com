@@ -9,9 +9,8 @@
   <meta name="author" content="Oleg Atamanenko">
 
   
-  <meta name="description" content="Summary: Пример разработки плагина для TiddlyWiki
-Вступление
-TiddlyWiki - это вики-движок, полностью написанный на JavaScript и хранящийся в одном &hellip;">
+  <meta name="description" content="Summary: в данной заметке описывается работа с программой Skype через D-Bus на Python. Введение
+Захотелось мне странного - когда я ухожу домой, мне &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +79,148 @@ TiddlyWiki - это вики-движок, полностью написанны
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/03/22/skype-d-bus-python/">Общение со Skype через D-Bus на Python</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-22T13:50:00-04:00" pubdate data-updated="true">Mar 22<span>nd</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+<p><b>Summary</b>: в данной заметке описывается работа с программой Skype через D-Bus на Python.</p>
+
+<h4>Введение</h4>
+<p>Захотелось мне странного - когда я ухожу домой, мне нужно выключить amarok, kopete и Skype. Собственно, решено было через D-Bus отправлять вышеперечисленным приложениям релевантные сообщения.</p>
+
+<h4>Используем dbus-send</h4>
+<p>Сначала я использовал обычный dbus-send, что оформилось в виде следующего скрипта <tt>go2home</tt>:</p>
+<pre class="brush: bash">
+#!/bin/sh
+
+# Stop amarok
+dbus-send --session --type=method_call --dest=org.kde.amarok /Player org.freedesktop.MediaPlayer.Stop
+
+# Logout from kopete
+dbus-send --session --type=method_call --dest=org.kde.kopete /Kopete org.kde.Kopete.disconnectAll 
+
+# Logout from Skype
+skypeapi.py 'SET USERSTATUS OFFLINE'
+
+# Lock screen
+dbus-send --session --type=method_call --dest=org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.Lock
+</pre>
+
+Детали и параметры работы команды <tt>dbus-send</tt> описаны в <a href="http://dbus.freedesktop.org/doc/dbus-send.1.html">man-странице</a>
+
+<h4>Проблема со скайпом</h4>
+<p> Со скайпом пришлось немного повозиться, так как для работы с ним необходима постоянная сессия, что нельзя сделать с помощью <tt>dbus-send</tt>. </p>
+<p>Прочитав <a href="https://developer.skype.com/Docs/ApiDoc">описание протокола</a> на сайте </p>
+<p> был создан нижеследующий скрипт: skypeapi.py</p>
+<pre class="brush: python">
+#!/usr/bin/env python
+import dbus, sys
+
+def main():
+    remote_bus = dbus.SessionBus()
+    
+    # Check if skype is running.
+    system_service_list = remote_bus.get_object('org.freedesktop.DBus', '/org/freedesktop/DBus').ListNames()
+    skype_api_found = 0
+    for service in system_service_list:
+        if service=='com.Skype.API':
+            skype_api_found = 1
+            break
+    if not skype_api_found:
+        sys.exit('No running API-capable Skype found')
+
+    # Get skype dbus api
+    skype_service = remote_bus.get_object('com.Skype.API', '/com/Skype')
+
+    # Connect to skype.
+    answer = skype_service.Invoke('NAME SkypeApiClient')
+    if answer != 'OK':
+        sys.exit('Could not bind to Skype client')
+
+    # Check if protocol is supported.
+    answer = skype_service.Invoke('PROTOCOL 1')
+    if answer != 'PROTOCOL 1':
+        sys.exit('This test program only supports Skype API protocol version 1')
+
+    # Invoke operations
+    for arg in sys.argv:
+        skype_service.Invoke(arg)
+    
+    return 0    
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</pre>
+<p> При первом запуске скрипта появится скайповский диалог с вопросом, можно ли разрешить приложению доступ к скайпу. После нажатия на &quot;Да&quot; Skype добавит наш скрипт в разрешённые и мы сможем управлять скайпом.</p>
+
+<a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://2.bp.blogspot.com/_y8p0_dtMJ38/S6ev4yVZkJI/AAAAAAAAA9Q/O87mz2Qnku0/s1600-h/skype.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;width: 376px; height: 185px;" src="http://2.bp.blogspot.com/_y8p0_dtMJ38/S6ev4yVZkJI/AAAAAAAAA9Q/O87mz2Qnku0/s400/skype.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5451519264074338450" /></a>
+
+После этого для скрипта <tt>go2home</tt> был создана иконка на панели.
+
+<h4>Заключение</h4>
+Как видно, работа с DBus из Python проста и элегантна.
+
+В качестве домашнего упражнения предлагаю написать скрипт, который после разблокирования экрана будет запускать все нужные приложения.</div>
+
+
+<h2>Comments</h2>
+
+
+<div class='comments'>
+<div class='comment'>
+<div class='author'>Oleg Atamanenko</div>
+<div class='content'>
+В данном случае это не так уж и важно.</div>
+</div>
+<div class='comment'>
+<div class='author'>Anonymous</div>
+<div class='content'>
+Написать<br />skype_api_found = False<br /><br />религия не позволила?</div>
+</div>
+<div class='comment'>
+<div class='author'>uthark</div>
+<div class='content'>
+@karri Не выключались, а только меняли статус. :) Амарок прекращал играть, скайп и kopete уходили в оффлайн.</div>
+</div>
+<div class='comment'>
+<div class='author'>karri</div>
+<div class='content'>
+То есть по нажатию кнопки выключались три приложения, правильно?!</div>
+</div>
+</div>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -934,74 +1075,6 @@ P.P.S. Да, ещё забыл сказать, что сервис достат�
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/05/nautilus-subversion/">RabbitVCS - расширение для Nautilus для работы с Subversion</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-05T14:03:00-05:00" pubdate data-updated="true">Dec 5<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div class='post'>
-Раньше я использовал коллекцию скриптов <tt>nautilussvn</tt>, весьма неудобную в использовании.<br />
-<br />
-Бродя по просторам сети наткнулся на отличную замену. Встречайте - <a href="http://rabbitvcs.org/">RabbitVCS</a>.<br />
-<br />
-<h3>Возможности</h3><ul><li>Интеграция с Nautilus</li>
-<li>Поддержка Subversion</li>
-<li>Полная локализация</li>
-<li>Поддержка командной строки</li>
-<li>Доступны пакеты для различных дистрибутивов</li>
-</ul><h3>Установка</h3><br />
-<strong>Для Ubuntu Hardy, Intepid, Jaunty</strong><br />
-<pre class="brush:bash;">deb http://ppa.launchpad.net/rabbitvcs/ppa/ubuntu hardy main
-
-</pre><br />
-<strong>Для Ubuntu Karmic</strong><br />
-<pre class="brush:bash;">sudo add-apt-repository ppa:rabbitvcs/ppa
-
-</pre><br />
-Установка для других дистрибутивов описана <a href="http://wiki.rabbitvcs.org/wiki/download">на официальном сайте</a>.<br />
-<br />
-<h3>Работа</h3>Несмотря на очень маленький номер версии работает достаточно стабильно, не падает.<br />
-<br />
-<h4>Скриншоты</h4>После установки внешний вид наутилуса преображается и выглядит примерно следующим образом (картинки кликабельны):<br />
-<div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/_y8p0_dtMJ38/Sxqtltez5bI/AAAAAAAAAtk/KUPsnbkZTNU/s1600-h/Screenshot-Delicious+-+administrilo+de+dosieroj.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/_y8p0_dtMJ38/Sxqtltez5bI/AAAAAAAAAtk/KUPsnbkZTNU/s320/Screenshot-Delicious+-+administrilo+de+dosieroj.png" /></a><br />
-</div><br />
-Диалог коммита выглядит вот так:<br />
-<div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/_y8p0_dtMJ38/Sxqt9y_wAbI/AAAAAAAAAts/YMfhdkKJ_Ck/s1600-h/Screenshot-1.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/_y8p0_dtMJ38/Sxqt9y_wAbI/AAAAAAAAAts/YMfhdkKJ_Ck/s320/Screenshot-1.png" /></a><br />
-</div><br />
-Контекстное меню:<br />
-<div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/_y8p0_dtMJ38/SxqwIz8iOfI/AAAAAAAAAt0/bDLo2ZIzpKY/s1600-h/Screenshot-2.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/_y8p0_dtMJ38/SxqwIz8iOfI/AAAAAAAAAt0/bDLo2ZIzpKY/s320/Screenshot-2.png" /></a><br />
-</div><h3>Заключение</h3>Достойный аналог TortoiseSVN под линукс.</div>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -1019,6 +1092,10 @@ P.P.S. Да, ещё забыл сказать, что сервис достат�
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/06/29/spring-enable-annotation/">Пишем @Enable*-аннотацию для Spring</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/06/28/jaxrs-spring-autowiring/">@Autowired JAX-RS Client API</a>
       </li>
     
@@ -1032,10 +1109,6 @@ P.P.S. Да, ещё забыл сказать, что сервис достат�
     
       <li class="post">
         <a href="/blog/2013/06/19/spring-caching/">Использование memcached в качестве backend для Spring Caching Abstraction</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/06/19/custom-bean-validator/">Пишем валидатор для Bean Validation API</a>
       </li>
     
   </ul>
