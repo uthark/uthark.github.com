@@ -1,0 +1,807 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: разработка | Блог о разработке ПО]]></title>
+  <link href="http://uthark.github.com/blog/categories/razrabotka/atom.xml" rel="self"/>
+  <link href="http://uthark.github.com/"/>
+  <updated>2013-06-29T23:40:55-04:00</updated>
+  <id>http://uthark.github.com/</id>
+  <author>
+    <name><![CDATA[Oleg Atamanenko]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Собственная реализация методов в Spring Data JPA]]></title>
+    <link href="http://uthark.github.com/blog/2012/04/28/spring-data-jpa_28/"/>
+    <updated>2012-04-28T04:03:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2012/04/28/spring-data-jpa_28</id>
+    <content type="html"><![CDATA[<p>Очевидно, что мы не всегда можем воспользоваться автоматической генерацией кода, предоставляемой <a href="http://www.springsource.org/spring-data/jpa">Spring Data JPA</a>. Например, у нас слишком сложный запрос, или нам необходимо вызвать процедуру в базе данных, либо у нас сложная бизнес-логика.</p>
+
+<p>Рассмотрим следующий пример &ndash; например, нам нужна функциональность уникального счётчика, который мы решили реализовать с помощью последовательности (sequence).</p>
+
+<p>Сначала определим интерфейс, в котором опишем все методы, которые мы будем реализовывать самостоятельно. В нашем случае, это будет только один метод:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UserRepositoryCustom</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="cm">/**</span>
+</span><span class='line'><span class="cm"> * Returns next unique id.</span>
+</span><span class='line'><span class="cm"> *</span>
+</span><span class='line'><span class="cm"> * @return next unique id.</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="n">Integer</span> <span class="nf">getNextUniqueId</span><span class="o">();</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Затем обновим объявление репозитория, чтобы он унаследовал новый интерфейс <tt>UserRepositoryCustom</tt></p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UserRepository</span> <span class="kd">extends</span> <span class="n">JpaRepository</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">User</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;,</span> <span class="n">UserRepositoryCustom</span> <span class="o">{</span>
+</span><span class='line'>   <span class="o">&amp;</span><span class="n">hellip</span><span class="o">;</span>
+</span><span class='line'><span class="o">}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Теперь напишем реализацию метода:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserRepositoryImpl</span> <span class="kd">implements</span> <span class="n">UserRepositoryCustom</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="nd">@PersistenceContext</span>
+</span><span class='line'><span class="kd">private</span> <span class="n">EntityManager</span> <span class="n">entityManager</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nd">@Override</span>
+</span><span class='line'><span class="kd">public</span> <span class="n">Integer</span> <span class="nf">getNextUniqueId</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// When using Hibernate via JPA native queries fails with mapping exception, so just use Hibernate directly:</span>
+</span><span class='line'>    <span class="n">Session</span> <span class="n">session</span> <span class="o">=</span> <span class="o">(</span><span class="n">Session</span><span class="o">)</span> <span class="n">entityManager</span><span class="o">.</span><span class="na">getDelegate</span><span class="o">();</span>
+</span><span class='line'>    <span class="n">SQLQuery</span> <span class="n">nativeQuery</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="na">createSQLQuery</span><span class="o">(</span><span class="s">&quot;SELECT \&quot;nextval\&quot;(&#39;unique_id_seq&#39;) &quot;</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">List</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">BigInteger</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">list</span> <span class="o">=</span> <span class="n">nativeQuery</span><span class="o">.</span><span class="na">list</span><span class="o">();</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">(</span><span class="n">list</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">throw</span> <span class="k">new</span> <span class="nf">IncorrectResultSizeDataAccessException</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">BigInteger</span> <span class="n">result</span> <span class="o">=</span> <span class="n">list</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="na">intValue</span><span class="o">();</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>И, наконец, укажем Spring Data JPA, чтобы в качестве класса для прокси использовался наш класс с реализацией собственных методов. Для этого нам нужна ещё одна секция <tt>repositories</tt> в конфигурационном файле:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;pre&gt;&lt;code&gt;</span><span class="ni">&amp;lt;</span>repositories base-package=&quot;[base.repository.package]&quot;/<span class="ni">&amp;gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="ni">&amp;lt;</span>repositories base-package=&quot;[base.repository.package]&quot;<span class="ni">&amp;gt;</span>
+</span><span class='line'>    <span class="ni">&amp;lt;</span>repository id=&quot;userRepository&quot; custom-impl-ref=&quot;userRepositoryImpl&quot;/<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="ni">&amp;lt;</span>/repositories<span class="ni">&amp;gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="ni">&amp;lt;</span>beans:bean id=&quot;userRepositoryImpl&quot; class=&quot;...UserRepositoryImpl&quot;/<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="nt">&lt;/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Вот и всё.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Использование BeanPostProcessor на примере журналирования]]></title>
+    <link href="http://uthark.github.com/blog/2012/04/20/beanpostprocessor/"/>
+    <updated>2012-04-20T04:51:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2012/04/20/beanpostprocessor</id>
+    <content type="html"><![CDATA[<div class='post'>
+Сегодня я хочу рассказать, как можно сделать инициализацию логгера в классе с использованием аннотаций и <a href="http://static.springsource.org/spring/docs/current/javadoc-api/org/springframework/beans/factory/config/BeanPostProcessor.html">BeanPostProcessor</a>
+
+Очень часто мы инициализируем логгер следующим образом:
+<pre class="brush:java">
+public class MyClass {
+    private static final Logger LOG = LoggerFactory.getLogger(MyClass.class);
+}
+</pre>
+
+Я покажу, как сделать, чтобы можно было писать вот так: 
+<pre class="brush:java">
+    @Log
+    private Logger LOG;
+</pre>
+
+Первым делом нам нужно объявить аннотацию:
+
+<pre class="brush:java">
+@Retention(RUNTIME)
+@Target(FIELD)
+@Documented
+public @interface Log {
+    String category() default "";
+}
+</pre>
+
+А вторым делом, написать собственный <tt>BeanPostProcessor</tt>, который бы устанавливал нам логгер:
+
+<pre class="brush:java">
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.stereotype.Component;
+import org.springframework.util.ReflectionUtils;
+
+@Component
+public class LoggerPostProcessor implements BeanPostProcessor {
+    @Override
+    public Object postProcessAfterInitialization(Object bean, String beanName) {
+        return bean;
+    }
+
+    @Override
+    public Object postProcessBeforeInitialization(final Object bean, final String beanName) {
+        ReflectionUtils.doWithFields(bean.getClass(), new FieldProcessor(bean, beanName), new LoggerFieldFilter());
+        return bean;
+    }
+
+    private static class FieldProcessor implements ReflectionUtils.FieldCallback {
+        private final Object bean;
+        private final String beanName;
+
+        private FieldProcessor(Object bean, String beanName) {
+            this.bean = bean;
+            this.beanName = beanName;
+        }
+
+        @Override
+        public void doWith(Field field) throws IllegalAccessException {
+            Log loggerAnnot = field.getAnnotation(Log.class);
+
+            // Sanity check if annotation is on the field with correct type.
+            if (field.getType().equals(org.slf4j.Logger.class)) {
+                // As user can override logger category - check if it was done.
+                String loggerCategory = loggerAnnot.category();
+                if (StringUtils.isBlank(loggerCategory)) {
+                    // use default category instead.
+                    loggerCategory = bean.getClass().getName();
+                }
+                Logger logger = LoggerFactory.getLogger(loggerCategory);
+                ReflectionUtils.makeAccessible(field);
+                field.set(bean, logger);
+            } else {
+                throw new IllegalArgumentException(
+                    "Unable to set logger on field '" + field.getName() + "' in bean '" + beanName +
+                        "': field should have class " + Logger.class.getName());
+            }
+        }
+    }
+
+    private static class LoggerFieldFilter implements ReflectionUtils.FieldFilter {
+        @Override
+        public boolean matches(Field field) {
+            Log logger = field.getAnnotation(Log.class);
+            return null != logger;
+        }
+    }
+}
+</pre>
+
+Если вы используете не <a href="http://www.slf4j.org/">sfl4j</a>, а, например, <a href="http://logging.apache.org/log4j/1.2/">log4j</a>, или <a href="http://commons.apache.org/logging/">commons-logging</a>, то нужно немного поправить код внутри метода <tt>doWith</tt>
+
+Попутно, данный код показывает пример использования класса <a href="http://static.springsource.org/spring/docs/current/javadoc-api/org/springframework/util/ReflectionUtils.html">org.springframework.util.ReflectionUtils</a>.</div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Преобразуем строку в дату]]></title>
+    <link href="http://uthark.github.com/blog/2012/04/20/blog-post/"/>
+    <updated>2012-04-20T04:25:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2012/04/20/blog-post</id>
+    <content type="html"><![CDATA[<p>Казалось бы, есть простейшая задача &ndash; преобразовать строковое представление даты в объект класса <tt>java.util.Date</tt>.</p>
+
+<p>Как оказалось, иногда использование DateFormat не помогает. В случае, если строка &ndash; это заголовок <tt>Date</tt> из письма, то нам нужно использовать <tt><a href="http://docs.oracle.com/javaee/5/api/javax/mail/internet/MailDateFormat.html">javax.mail.internet.MailDateFormat</a></tt> для преобразования такой строки.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">String</span> <span class="n">dateStr</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">hellip</span><span class="o">;</span>
+</span><span class='line'><span class="n">Date</span> <span class="n">parsedDate</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MailDateFormat</span><span class="o">().</span><span class="na">parse</span><span class="o">(</span><span class="n">dateStr</span><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Упрощаем работу с JPA при помощи Spring Data JPA]]></title>
+    <link href="http://uthark.github.com/blog/2012/02/22/jpa-spring-data-jpa/"/>
+    <updated>2012-02-22T14:17:00-05:00</updated>
+    <id>http://uthark.github.com/blog/2012/02/22/jpa-spring-data-jpa</id>
+    <content type="html"><![CDATA[<div class='post'>
+<h3>Введение</h3>
+<p>Уже прошло несколько лет с тех пор, как появился JPA. Работа с <a href="http://docs.oracle.com/javaee/5/api/javax/persistence/EntityManager.html">EntityManager</a> увлекательна, но разработчики пишут красивый API, а подробности работы с базой данных скрывают. При этом частая проблема - дублирование имплементации, когда из одного DAO в другой у нас плавно перекочёвывает один и тот же код, в лучшем случае этот код переносится в абстрактный базовый DAO. <a href="http://www.springsource.org/spring-data/jpa">Spring Data</a>  коренным образом решает проблему - при  его использовании остаётся только API на уровне интерфейсов, вся имплементация создаётся автоматически с использованием <a href="http://en.wikipedia.org/wiki/Aspect-oriented_programming">AOP</a>.</p>
+<h3>История Spring Data</h3>
+
+Несмотря на то, что проект только недавно достиг версии 1.0, у него достаточно богатая история - раньше он развивался в рамках проекта <a href="http://redmine.synyx.org/projects/show/hades">Hades</a>.
+
+<h3>Объявление DAO-интерфейса</h3>
+
+Итак, для начала нам необходимо объявить DAO-интерфейс, в котором мы будем объявлять методы для работы с сущностью.
+<pre class="brush:java">
+public interface UserRepository extends CrudRepository&lt;User, Long&gt; {
+}
+</pre>
+
+Данного кода достаточно для обычного DAO с <a href="http://en.wikipedia.org/wiki/Create,_read,_update_and_delete">CRUD</a>-методами. 
+
+<ul>
+  <li><b>save</b> - сохраняет или обновляет переданную сущность.</li>
+  <li><b>findOne</b> - ищет сущность по первичному ключу.</li>
+  <li><b>findAll</b> - возвращает коллекцию всех сущностей</li>
+  <li><b>count</b> - возвращает количество сущностей</li>
+  <li><b>delete</b> - удаляет сущность</li>
+  <li><b>exists</b> - проверяет, существует ли сущность с данным первичным ключом</li>
+ 
+</ul>
+
+Полный список методов, объявленный в CrudRepository можно посмотреть в <a href="http://static.springsource.org/spring-data/data-commons/docs/current/api/org/springframework/data/repository/CrudRepository.html">javadoc</a>.
+
+В случае, если нам нужны не все методы, то есть возможность произвести наследование от интерфейса <a href="http://static.springsource.org/spring-data/data-commons/docs/current/api/org/springframework/data/repository/Repository.html">Repository</a> и перенести в наследника только те методы из интерфейса CrudRepository, которые нужны.
+
+<h3>Поддержка сортировки и постраничного просмотра</h3>
+Очень часто требующаяся функциональность - это возможность возвращать только часть сущностей из БД, например, для реализации постраничного просмотра в пользовательском интерфейсе. Spring Data и тут хорош и предоставляет нам возможность добавить такую функциональность в наш DAO. Для этого достаточно добавить объявление следующего метода в наш DAO-интерфейс:
+<pre class="brush:java">
+ Page&lt;User&gt; findAll(Pageable pageable);
+</pre>
+Интерфейс <a href="http://static.springsource.org/spring-data/data-commons/docs/current/api/org/springframework/data/domain/Pageable.html">Pageable</a> инкапсулирует в себе сведения о номере запрашиваемой страницы, размере страницы, а также требуемой сортировке.
+
+<h3>Ищем данные</h3>
+Как правило, на обычных CRUD-ах DAO не заканчиваются и часто требуются дополнительные методы, которые возвращают только те сущности, которые удовлетворяют заданным условиям. На мой взгляд, Spring Data сильно упрощает жизнь в данной области.
+
+Например, нам нужен методы для поиска пользователя по логину и по его e-mail адресу:
+
+<pre class="brush:java">
+ User findByLogin(String login);
+ User findByEmail(String email);
+</pre>
+
+Все просто.
+
+В случае, если нужны более сложные условия для поиска, то и это тоже реализовано.
+
+Spring Data поддерживает следующие операторы:
+
+<ul>
+  <li>Between</li>
+  <li>IsNotNull</li>
+  <li>NotNull</li>
+  <li>IsNull</li>
+  <li>Null</li>
+  <li>LessThan</li>
+  <li>LessThanEqual</li>
+  <li>GreaterThan</li>
+  <li>GreaterThanEqual</li>
+  <li>NotLike</li>
+  <li>Like</li>
+  <li>NotIn</li>
+  <li>In</li>
+  <li>Near</li>
+  <li>Within</li>
+  <li>Regex</li>
+  <li>Exists</li>
+  <li>IsTrue</li>
+  <li>True</li>
+  <li>IsFalse</li>
+<li>False</li>
+<li>Not</li>
+
+</ul>
+Такой внушительный список открывает простор для фантазии, так что можно составить сколь угодно сложный запрос. 
+
+Если необходимо, чтобы в результатах поиска было несколько сущностей, то необходимо называть метод find<b>All</b>ByBlahBlah
+
+<h3>Поддержка Spring MVC</h3>
+<i>Это часть основана на официальной документации.</i>
+Представьте, что вы разрабатываете веб-приложение с использованием <a href="http://static.springsource.org/spring/docs/current/spring-framework-reference/html/mvc.html">Spring MVC</a>. Тогда вам необходимо будет загружать сущность из базы данных используя параметры HTTP-запроса. Это может выглядеть следующим образом:
+<pre class="brush:java">
+@Controller
+@RequestMapping("/users")
+public class UserController {
+
+  private final UserRepository userRepository;
+
+  public UserController(UserRepository userRepository) {
+    userRepository = userRepository;
+  }
+
+  @RequestMapping("/{id}")
+  public String showUserForm(@PathVariable("id") Long id, Model model) {
+    
+    // Do null check for id
+    User user = userRepository.findOne(id);
+    // Do null check for user
+    // Populate model
+    return "user";
+  }
+}</pre>
+
+Во-первых, вы объявляете зависимость на DAO, а во-вторых всегда вызываете метод <tt>findOne()</tt> для загрузки сущности. К счастью, Spring позволяет нам преобразовывать строковые значения из HTTP-запросов в любой нужный тип используя либо <tt><a href="http://docs.oracle.com/javase/6/docs/api/java/beans/PropertyEditor.html">PropertyEditor</a></tt>, либо <tt><a href="http://static.springsource.org/spring/docs/current/javadoc-api/org/springframework/core/convert/ConversionService.html">ConversionService</a></tt>.
+
+Если вы используете Spring версии 3.0 и выше, то вам необходимо добавить следующую конфигурацию:
+<pre class="brush:xml">
+&lt;mvc:annotation-driven conversion-service="conversionService" /&gt;
+&lt;bean id="conversionService" class="&#8230;.context.support.ConversionServiceFactoryBean"&gt;
+  &lt;property name="converters"&gt;
+    &lt;list&gt;
+      &lt;bean class="org.springframework.data.repository.support.DomainClassConverter"&gt;
+        &lt;constructor-arg ref="conversionService" /&gt;
+      &lt;/bean&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;
+</pre>
+
+Если же вы используете Spring более старой версии, то вам необходима вот такая конфигурация:
+
+<pre class="brush:xml">
+&lt;bean class="&#8230;.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter"&gt;
+  &lt;property name="webBindingInitializer"&gt;
+    &lt;bean class="&#8230;.web.bind.support.ConfigurableWebBindingInitializer"&gt;
+      &lt;property name="propertyEditorRegistrars"&gt;
+        &lt;bean class="org.springframework.data.repository.support.DomainClassPropertyEditorRegistrar" /&gt;
+      &lt;/property&gt;
+    &lt;/bean&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;
+</pre>
+
+После данных изменений в конфигурации можно переписать контроллер следующим образом:
+
+<pre class="brush:java">
+
+@Controller
+@RequestMapping("/users")
+public class UserController {
+
+  @RequestMapping("/{id}")
+  public String showUserForm(@PathVariable("id") User user, Model model) {
+
+    // Do null check for user
+    // Populate model
+    return "userForm";
+  }
+}
+</pre>
+
+Обратите внимание на то, как упростился код и как мы красиво избавились от его дублирования.
+
+
+<h3>Документация</h3>
+На данный момент документации по проекту не так уж и много, но, тем не менее, она есть:
+
+<ul>
+<li><a href="http://static.springsource.org/spring-data/data-jpa/docs/current/reference/html/">Spring Data JPA - Reference Documentation</a></li>
+<li><a href="http://static.springsource.org/spring-data/data-commons/docs/current/reference/html/">Spring Data Commons - Reference Documentation</a></li>
+<li><a href="https://github.com/SpringSource/spring-data-jpa">исходники на github</a></li>
+
+</ul>
+<h3>Заключение</h3>
+Spring Data значительно упрощает жизнь при использовании JPA. Рекомендуется к использованию в своих проектах.</div>
+
+
+<h2>Comments</h2>
+
+
+<div class='comments'>
+<div class='comment'>
+<div class='author'>Oleg Atamanenko</div>
+<div class='content'>
+1. Разве в SQL есть операторы Near, Regex, Within?<br />2. Для монги есть отдельный проект - Spring Data MongoDB, который поддерживает вышеперечисленный операторы.<br />В документации всё описано - http://static.springsource.org/spring-data/data-mongodb/docs/current/reference/html/#mongo.query</div>
+</div>
+<div class='comment'>
+<div class='author'>php-coder</div>
+<div class='content'>
+Где можно найти описание операторов Near, Within и Regex? В доке по spring-data-jpa я их не вижу. Не там смотрю? Или они не поддерживаются в JPA и могут быть использованы только с NoSQL БД, типа MongoDb?</div>
+</div>
+</div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Разработка и тестирование Java REST веб-сервисов]]></title>
+    <link href="http://uthark.github.com/blog/2012/02/08/java-rest/"/>
+    <updated>2012-02-08T13:05:00-05:00</updated>
+    <id>http://uthark.github.com/blog/2012/02/08/java-rest</id>
+    <content type="html"><![CDATA[<div class='post'>
+<h4>Введение</h4>
+Для разработки <a href="http://restpatterns.org/">REST</a> веб-сервисов Java предлагает <a href="http://jcp.org/en/jsr/detail?id=311">JSR-311 - JAX-RS: The Java&trade; API for RESTful Web Services</a>
+Как это обычно бывает в мире Enterprise Java, существует несколько реализаций данной спецификации:
+<ul>
+<li><a href="http://jersey.java.net/">Jersey</a> - это эталонная реализация спецификации от компании <strike>Sun</strike> Oracle</li>
+<li><a href="http://cxf.apache.org/">Apache CXF</a></li>
+<li><a href="http://www.jboss.org/resteasy">JBoss RESTEasy</a></li>
+</ul>
+На примере последней реализации, я и расскажу, каким образом можно написать REST-сервис.
+
+<h4>Пишем REST-сервис</h4>
+
+<pre class="brush:java">
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+
+@Path("/service/entity")
+@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+public interface EntityRestService {
+
+ @GET
+ @Path("/all")
+ EntityList listAll();
+
+ @GET
+ @Path("/{id}")
+ Entity findById(@PathParam("id") Integer id);
+
+
+}
+</pre>
+
+Создаём интерфейс, в котором расставляем JAX-RS аннотации. Аннотация <a href="http://jsr311.java.net/nonav/releases/1.1/javax/ws/rs/Path.html">@Path</a> указывает путь, по которому будет доступен наш сервис. Аннотация <a href="http://jsr311.java.net/nonav/releases/1.1/javax/ws/rs/GET.html">@GET</a> определяет, какой HTTP-запрос будет обрабатываться данным методом. Аннотация <a href="http://jsr311.java.net/nonav/releases/1.1/javax/ws/rs/Produces.html">@Produces</a> позволяет указать, в каком формате данный сервис предоставляет результаты.
+
+<h4>Конфигурация JBoss RESTEasy</h4>
+
+Конфигурация очень проста, во-первых, нам нужно добавить обновить <tt>pom.xml</tt> и добавить необходимые зависимости:
+
+<h5>Обновляем <tt>pom.xml</tt></h5>
+
+Добавляем compile-time зависимость на JAX-RS API
+<pre class="brush:xml">
+&lt;dependency&gt;
+    &lt;groupId&gt;org.jboss.resteasy&lt;/groupId&gt;
+    &lt;artifactId&gt;jaxrs-api&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</pre>
+
+и runtime зависимости на реализацию
+<pre class="brush:xml">
+&lt;dependency&gt;
+    &lt;groupId&gt;org.jboss.resteasy&lt;/groupId&gt;
+    &lt;artifactId&gt;resteasy-jaxrs&lt;/artifactId&gt;
+    &lt;version&gt;${resteasy-jaxrs.version}&lt;/version&gt;
+    &lt;scope&gt;runtime&lt;/scope&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.jboss.resteasy&lt;/groupId&gt;
+    &lt;artifactId&gt;resteasy-jackson-provider&lt;/artifactId&gt;
+    &lt;version&gt;${resteasy-jaxrs.version}&lt;/version&gt;
+    &lt;scope&gt;runtime&lt;/scope&gt;
+&lt;/dependency&gt;
+
+</pre>
+
+<h5>Обновляем конфигурацию веб-приложения в <tt>web.xml</tt></h5>
+Необходимо выполнить следующую модификацию <tt>web.xml</tt>
+<pre class="brush: xml">
+ &lt;listener&gt;
+  &lt;listener-class&gt;org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap&lt;/listener-class&gt;
+ &lt;/listener&gt;
+
+ &lt;context-param&gt;
+  &lt;param-name&gt;resteasy.servlet.mapping.prefix&lt;/param-name&gt;
+  &lt;param-value&gt;/rest&lt;/param-value&gt;
+ &lt;/context-param&gt;
+ &lt;servlet&gt;
+  &lt;servlet-name&gt;REST Easy&lt;/servlet-name&gt;
+  &lt;servlet-class&gt;org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher&lt;/servlet-class&gt;
+ &lt;/servlet&gt;
+ &lt;servlet-mapping&gt;
+  &lt;servlet-name&gt;REST Easy&lt;/servlet-name&gt;
+  &lt;url-pattern&gt;/rest/*&lt;/url-pattern&gt;
+ &lt;/servlet-mapping&gt;
+</pre>
+
+Данный код объявляет <a href="http://docs.jboss.org/resteasy/docs/2.3.1.GA/javadocs/org/jboss/resteasy/plugins/server/servlet/HttpServletDispatcher.html">сервлет HttpServletDispatcher</a>, который будет обрабатывать все запросы, которые приходят на <tt>/rest/*</tt>. Слушатель <tt><a href="http://docs.jboss.org/resteasy/docs/2.3.1.GA/javadocs/org/jboss/resteasy/plugins/server/servlet/ResteasyBootstrap.html">ResteasyBootstrap</a></tt> выполняет всю необходимую инициализацию JBoss RESTEasy.
+
+
+<h5>Поддержка Spring</h5>
+Для того, чтобы использовать <a href="http://www.springsource.org/spring-framework">Spring Framework</a>, нам необходимо сделать следующие изменения:
+
+1. Добавить зависимость в <tt>pom.xml</tt>
+<pre class="brush: xml">
+&lt;dependency&gt;
+    &lt;groupId&gt;org.jboss.resteasy&lt;/groupId&gt;
+    &lt;artifactId&gt;resteasy-spring&lt;/artifactId&gt;
+    &lt;version&gt;${resteasy-jaxrs.version}&lt;/version&gt;
+    &lt;scope&gt;runtime&lt;/scope&gt;
+&lt;/dependency&gt;
+</pre>
+
+
+2. Добавить Spring-ового слушателя в <tt>web.xml</tt>
+
+<pre class="brush: xml">
+ &lt;listener&gt;
+  &lt;listener-class&gt;org.jboss.resteasy.plugins.spring.SpringContextLoaderListener&lt;/listener-class&gt;
+ &lt;/listener&gt;
+
+</pre>
+
+После этих изменений JBoss RESTEasy будет в курсе про Spring, это позволит в реализации REST-сервисов полноценно использовать все возможности, предоставляемые Spring Framework.
+
+<h4>Пишем тесты</h4>
+Написание тестов - весьма полезная вещь, ниже я покажу пример теста для REST-сервиса.
+В рамках данного теста у нас будет подниматься <a href="http://docs.jboss.org/resteasy/docs/2.3.1.GA/javadocs/org/jboss/resteasy/plugins/server/tjws/TJWSEmbeddedJaxrsServer.html">встраиваемый веб-сервер TJWSEmbeddedJaxrsServer</a>, к которому мы будем обращаться для тестирования наших REST-сервисов.
+<pre class="brush: java">
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration({"/applicationContext-test.xml"})
+@TestExecutionListeners({DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class})
+public class TestEntityServiceRest {
+
+ private static final int PORT = 8081;
+ private static final String BASE_URL = "http://localhost:" + PORT;
+
+ @Autowired
+ EntityService entityService;
+
+ @Autowired
+ ConfigurableApplicationContext applicationContext;
+
+
+ protected HttpClient client;
+ protected TJWSEmbeddedJaxrsServer server;
+
+
+ @Before
+ public void setUpClient() throws Exception {
+  client = new DefaultHttpClient();
+ }
+
+ @Before
+ public void setUpServer() throws Exception {
+  server = new TJWSEmbeddedJaxrsServer();
+  server.setPort(PORT);
+  ResteasyDeployment deployment = server.getDeployment();
+
+  server.start();
+
+  Dispatcher dispatcher = deployment.getDispatcher();
+  SpringBeanProcessor processor = new SpringBeanProcessor(dispatcher, deployment.getRegistry(), deployment.getProviderFactory());
+  applicationContext.addBeanFactoryPostProcessor(processor);
+
+  SpringResourceFactory noDefaults = new SpringResourceFactory(
+    "entityServiceRestImpl", applicationContext, EntityRestServiceImpl.class);
+  dispatcher.getRegistry().addResourceFactory(noDefaults);
+ }
+
+ @After
+ public void stop() {
+  server.stop();
+ }
+
+ @Test
+ public void testListAll() throws Exception {
+
+  int i = 0;
+  final List&lt;Entity&gt; returnedList = new ArrayList&lt;Entity&gt;();
+  int EXPECTED_SIZE = 6;
+  while (i &lt; EXPECTED_SIZE) {
+   i++;
+   final Entity entity = new Entity();
+   entity.setId(i);
+   entity.setName("test" + i);
+   returnedList.add(entity);
+  }
+  when(entityService.findAll()).thenReturn(returnedList);
+
+
+  HttpGet get = new HttpGet(BASE_URL + "/service/entity/");
+
+  HttpResponse response = client.execute(get);
+  InputStream content = response.getEntity().getContent();
+
+  EntityList result = fromString(EntityList.class, content);
+  content.close();
+
+  Assert.assertNotNull(result);
+  Assert.assertEquals(EXPECTED_SIZE, result.getEntities().size());
+ }
+
+ @Test
+ public void testFindById() throws Exception {
+
+  final Entity validEntity = getValidEntity();
+  validEntity.setId(2);
+
+  when(entityService.findById(validEntity.getId())).thenAnswer(new Answer&lt;Object&gt;() {
+   @Override
+   public Object answer(InvocationOnMock invocation) throws Throwable {
+    return validEntity;
+   }
+  });
+
+  HttpGet get = new HttpGet(BASE_URL + "/service/entity/2");
+
+  HttpResponse response = client.execute(get);
+  InputStream content = response.getEntity().getContent();
+
+  Entity result = fromString(Entity.class, content);
+  content.close();
+
+  Assert.assertNotNull(result);
+
+  deepAssertEquals(validEntity, result);
+
+ }
+
+ private void deepAssertEquals(Object expected, Object actual) throws IllegalAccessException, InvocationTargetException {
+  Assert.assertEquals(expected.getClass(), actual.getClass());
+  PropertyDescriptor[] propertyDescriptors = BeanUtils.getPropertyDescriptors(expected.getClass());
+  for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
+   Object expectedValue = propertyDescriptor.getReadMethod().invoke(expected);
+   Object actualValue = propertyDescriptor.getReadMethod().invoke(actual);
+   Assert.assertEquals(expectedValue, actualValue);
+  }
+ }
+
+        public static &lt;T&gt; T fromString(Class&lt;T&gt; clazz, String input) throws JAXBException {
+  JAXBContext ctx = JAXBContext.newInstance(clazz);
+  Unmarshaller unmarshaller = ctx.createUnmarshaller();
+  @SuppressWarnings(&quot;unchecked&quot;)
+  T unmarshal = (T) unmarshaller.unmarshal(new StringReader(input));
+  return unmarshal;
+ }
+
+ public static &lt;T&gt; T fromString(Class&lt;T&gt; clazz, InputStream input) throws JAXBException {
+  JAXBContext ctx = JAXBContext.newInstance(clazz);
+  @SuppressWarnings(&quot;unchecked&quot;)
+  T unmarshal = (T) ctx.createUnmarshaller().unmarshal(input);
+  return unmarshal;
+ }
+}
+
+
+</pre>
+
+<h4>Запуск тестов</h4>
+Половина дела сделана, теперь нам необходимо настроить инфраструктуру для тестирования наших свеженаписанных REST-сервисов.
+
+Для этого нам необходимо внести следующие модификации в <tt>pom.xml</tt>:
+
+<pre class="brush: xml">
+
+&lt;plugin&gt;
+    &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+    &lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;
+    &lt;version&gt;2.11&lt;/version&gt;
+
+    &lt;executions&gt;
+        &lt;execution&gt;
+     &lt;id&gt;Unit tests&lt;/id&gt;
+            &lt;phase&gt;test&lt;/phase&gt;
+            &lt;goals&gt;
+                &lt;goal&gt;test&lt;/goal&gt;
+            &lt;/goals&gt;
+            &lt;configuration&gt;
+                &lt;excludes&gt;
+                    &lt;exclude&gt;**/IT*.java&lt;/exclude&gt;
+                &lt;/excludes&gt;
+            &lt;/configuration&gt;
+        &lt;/execution&gt;
+        &lt;execution&gt;
+            &lt;id&gt;Integration tests&lt;/id&gt;
+            &lt;phase&gt;integration-test&lt;/phase&gt;
+            &lt;goals&gt;
+                &lt;goal&gt;test&lt;/goal&gt;
+            &lt;/goals&gt;
+            &lt;configuration&gt;
+                &lt;includes&gt;
+                    &lt;include&gt;**/IT*.java&lt;/include&gt;
+                &lt;/includes&gt;
+            &lt;/configuration&gt;
+        &lt;/execution&gt;
+    &lt;/executions&gt;
+&lt;/plugin&gt;
+
+&lt;dependency&gt;
+    &lt;groupId&gt;org.apache.httpcomponents&lt;/groupId&gt;
+    &lt;artifactId&gt;httpclient&lt;/artifactId&gt;
+    &lt;version&gt;4.1.2&lt;/version&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.jboss.resteasy&lt;/groupId&gt;
+    &lt;artifactId&gt;resteasy-jaxrs&lt;/artifactId&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.jboss.resteasy&lt;/groupId&gt;
+    &lt;artifactId&gt;resteasy-spring&lt;/artifactId&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.jboss.resteasy&lt;/groupId&gt;
+    &lt;artifactId&gt;tjws&lt;/artifactId&gt;
+    &lt;version&gt;${resteasy-jaxrs.version}&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;javax.servlet&lt;/groupId&gt;
+    &lt;artifactId&gt;servlet-api&lt;/artifactId&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;commons-io&lt;/groupId&gt;
+    &lt;artifactId&gt;commons-io&lt;/artifactId&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;
+</pre>
+
+<h4>Заключение</h4>
+В целом, ничего сложного, главное делать всё аккуратно. Хорошего вам кода!</div>
+
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: apache ant | Блог о разработке ПО]]></title>
+  <link href="http://uthark.github.com/blog/categories/apache-ant/atom.xml" rel="self"/>
+  <link href="http://uthark.github.com/"/>
+  <updated>2013-06-29T23:40:55-04:00</updated>
+  <id>http://uthark.github.com/</id>
+  <author>
+    <name><![CDATA[Oleg Atamanenko]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Apache Ant и Metro]]></title>
+    <link href="http://uthark.github.com/blog/2009/06/02/apache-ant-metro/"/>
+    <updated>2009-06-02T12:31:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2009/06/02/apache-ant-metro</id>
+    <content type="html"><![CDATA[<div class='post'>
+Столкнулся с такой проблемой - в некоторых случаях приложение, собранное антом не работает. Конкретно - не работает десереализация запросов на веб-сервис. Получаемый запрос содержит <tt>null</tt> в значениях полей.
+
+Опытным путём было выяснено, что на это влияет используемая версия Java. Под 1.5 работает корректно, под 1.6 - не работает. Нашли <a href="https://jaxb.dev.java.net/guide/Runtime_Errors.html#Illegal_class_modifiers_for_package_info__0x1600">ошибку в метро</a>, связанную именно с версией JDK и на этом успокоились. Но было одно исключение из правил. У одного из разработчиков под 1.5 тоже не работало.
+
+Как выяснилось позже, виноват был во всё Ant.
+Metro создавал файл package-info.java, в котором было примерно следующее содержание:
+
+<code>
+@javax.xml.bind.annotation.XmlSchema(namespace = "http://z.y.x.com", elementFormDefault=javax.xml.bind.annotation.XmlNsForm.UNQUALIFIED)
+package com.x.y.z;
+</code>
+
+Ант, в свою очередь, должен был этот файл компилировать. А <a href="http://ant.apache.org/manual/CoreTasks/javac.html">в реальности этого не происходило</a>, поэтому Metro не мог корректно отобразить XML-запрос на объекты доменной области.
+
+Решение было немного кривым, но при этом поразительно простым - принудительный вызов javac на файлах package-info.java.</div>
+
+]]></content>
+  </entry>
+  
+</feed>

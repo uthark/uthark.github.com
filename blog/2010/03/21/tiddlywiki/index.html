@@ -1,0 +1,425 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Разработка макроса для TiddlyWiki - Блог о разработке ПО</title>
+  <meta name="author" content="Oleg Atamanenko">
+
+  
+  <meta name="description" content="Summary: Пример разработки плагина для TiddlyWiki
+Вступление
+TiddlyWiki - это вики-движок, полностью написанный на JavaScript и хранящийся в одном &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://uthark.github.com/blog/2010/03/21/tiddlywiki/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feeds.feedburner.com/atamanenko" rel="alternate" title="Блог о разработке ПО" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=Roboto+Slab:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Roboto:300,700,900&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+<link rel="author" href="https://plus.google.com/112372998073079463630/?rel=author" />
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-8688665-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Блог о разработке ПО</a></h1>
+  
+    <h2>Cтруктурированные нерегулярные заметки о разработке программного обеспечения</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="http://feeds.feedburner.com/atamanenko" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:uthark.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Разработка макроса для TiddlyWiki</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-21T10:54:00-04:00" pubdate data-updated="true">Mar 21<span>st</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><div class='post'>
+<p><b>Summary</b>: Пример разработки плагина для TiddlyWiki</p>
+<h4>Вступление</h4>
+<p><a href="http://www.tiddlywiki.com/">TiddlyWiki</a> - это вики-движок, полностью написанный на <a href="http://en.wikipedia.org/wiki/JavaScript">JavaScript</a> и хранящийся в одном файле (как сам движок, так и содержимое). Создатели позиционируют его как &quot;переиспользуемую нелинейную персональную веб записную книжку&quot;.</p>
+<p>Я давно использую TiddlyWiki в различных целях:</p>
+<ol><li>По прямому назначению.</li>
+<li>Как систему <a href="http://mgsd.tiddlyspot.com/#mGSD">GTD</a>.</li>
+<li>Как домашнюю страницу на компьютере.</li>
+</ol>
+<p>Моя домашняя страница на компьютере - это, если говорить терминами TiddlyWiki, <a href="http://en.wikipedia.org/wiki/Tiddler">тиддлер</a>, содержащий ссылки на страницы, которые я часто посещаю.</p>
+<p>Для удобства использования я разработал пару стилей CSS, так что ссылки были крупными.</p>
+<a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://2.bp.blogspot.com/_y8p0_dtMJ38/S6Y0rP2J0eI/AAAAAAAAA9I/xrZhzZf2ad0/s1600-h/tiddly-before.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;width: 172px; height: 132px;" src="http://2.bp.blogspot.com/_y8p0_dtMJ38/S6Y0rP2J0eI/AAAAAAAAA9I/xrZhzZf2ad0/s400/tiddly-before.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5451102316571251170" /></a>
+<h4>Исходный код плагина</h4>
+<p>После длительного использования tiddlywiki в качестве домашней страницы я понял, что мне хочется, чтобы с каждой ссылкой была иконка сайта. Вручную вставлять картинки мне не хотелось, поэтому было решено написать собственный плагин.</p>
+<pre class="brush: jscript">
+/*{&nbsp;{&nbsp;{*/
+version.extensions.faviconLinkMacro = {major: 0, minor: 1, revision: 0, date: new Date(2010,3,21)};
+// Author: Oleg Atamanenko
+config.macros.faviconLink = {}
+config.macros.faviconLink.handler = function(place, macroName,  params, wikifier, paramString) {
+  var linkBox = createTiddlyElement(place, &quot;span&quot;, null, &quot;favIcon&quot;, &quot;&quot;);
+
+  var args = paramString.parseParams(&quot;list&quot;,null,true);
+  var link = getParam(args, &quot;link&quot;, 'false');
+
+  if (link != 'false'){
+    urlParts = link.split('/');
+    imgLink = urlParts[0] + &quot;//&quot; + urlParts[2] + &quot;/favicon.ico&quot;;
+
+    var imgElement = createTiddlyElement(linkBox, &quot;img&quot;, null, &quot;faviconImage&quot;, &quot;&quot;);
+    imgElement.src = imgLink;
+    imgElement.width = 16;
+    imgElement.height = 16;
+
+    var linkTitle = getParam(args, &quot;title&quot;, 'false');
+
+    if(linkTitle == 'false'){
+      linkTitle = link;
+    }
+    var linkElement = createTiddlyElement(linkBox, &quot;a&quot;, null, &quot;faviconLink&quot;, linkTitle);
+    linkElement.href = link;
+    linkElement.target = '_blank';
+  }
+}
+
+/*}&nbsp;}&nbsp;}*/
+</pre>
+<h4> Установка плагина</h4>
+<ol><li>Создаём новый тиддлер, называем его faviconLinkMacro</li>
+<li>Помечаем тиддлер тегом systemConfig, тогда TiddlyWiki при открытии страницы его подгрузит.</li>
+</ol>
+<h4>Использование плагина</h4>
+<ol><li>Плагин создаёт новый макрос, faviconLink, с двумя параметрами link и title.</li>
+<li>Вызов <tt>&lt;&lt;faviconLink link:&#8217;https://mail.google.com/mail&#8217; title:&#8217;mail&#8217;&gt;&gt;</tt> создаёт ссылку с картинкой с GMail</li>
+</ol>
+<a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://1.bp.blogspot.com/_y8p0_dtMJ38/S6Y0qnki7nI/AAAAAAAAA9A/Ic3skFoirY8/s1600-h/favicon-sample.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;width: 161px; height: 64px;" src="http://1.bp.blogspot.com/_y8p0_dtMJ38/S6Y0qnki7nI/AAAAAAAAA9A/Ic3skFoirY8/s400/favicon-sample.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5451102305759981170" /></a>
+<h4>Настройка визульных стилей плагина</h4>
+<p>Макрос создаёт следующие классы:</p>
+<ol><li>span.favIcon</li>
+<li>img.faviconImage</li>
+<li>a.faviconLink</li>
+</ol>
+<h4> Пример стилей</h4>
+<pre class="brush: css">
+.links span {
+  display: block;
+  position: relative;
+  padding: 0.7em;
+  margin: 0.3em;
+  min-width: 6em;
+  float:left;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.5em;
+  font-family: &quot;Gill Sans MT&quot;, &quot;Candara&quot;, &quot;Arial&quot;;
+  border: 2px solid [[ColorPalette::SecondaryLight]];
+  background-color: [[ColorPalette::SecondaryPale]];
+}
+
+.links span:hover {
+  border: 2px solid [[ColorPalette::SecondaryMid]];
+  background-color: [[ColorPalette::SecondaryLight]];
+  color: [[ColorPalette::PrimaryMid]];
+}
+
+.links img.faviconImage {
+  position: relative;
+  padding-right: 10px;
+}
+
+</pre>
+<p> Данный CSS необходимо добавить в тиддлер с именем StyleSheet</p>
+<h4>Пример тиддлера со ссылками</h4>
+<pre class="brush: html">
+{&nbsp;{links{
+&lt;&lt;faviconLink link:'http://delicious.com/dark.schakal/2read' title:'2read'&gt;&gt; &lt;&lt;faviconLink link:'https://mail.google.com/mail' title:'mail'&gt;&gt; &lt;&lt;faviconLink link:'http://www.google.com/reader/view' title:'rss'&gt;&gt; &lt;&lt;faviconLink link:'http://atamanenko.blogspot.com/' title:'blog'&gt;&gt; &lt;&lt;faviconLink link:'http://feedburner.google.com/fb/a/myfeeds' title:'feedburner'&gt;&gt; &lt;&lt;faviconLink link:'https://www.google.com/analytics/settings/' title:'analytics'&gt;&gt; &lt;&lt;faviconLink link:'http://wave.google.com' title:'wave'&gt;&gt; &lt;&lt;faviconLink link:'http://www.blogger.com/home' title:'blogger'&gt;&gt; &lt;&lt;faviconLink link:'http://twitter.com/' title:'twitter'&gt;&gt; &lt;&lt;faviconLink link:'https://www.dropbox.com/home#/' title:'dropbox'&gt;&gt; &lt;&lt;faviconLink link:'http://translate.google.com/toolkit/' title:'translator'&gt;&gt; &lt;&lt;faviconLink link:'http://sibir.megafon.ru/sendsms/' title:'SendSMS'&gt;&gt;
+}}}
+</pre>
+Вышеприведённый код тиддлера создаёт следующую страницу:
+
+<a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://1.bp.blogspot.com/_y8p0_dtMJ38/S6Y0qOLAO4I/AAAAAAAAA84/DFkORdMO8gE/s1600-h/favicon-sample-big.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;width: 400px; height: 157px;" src="http://1.bp.blogspot.com/_y8p0_dtMJ38/S6Y0qOLAO4I/AAAAAAAAA84/DFkORdMO8gE/s400/favicon-sample-big.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5451102298941963138" /></a></div>
+
+
+<h2>Comments</h2>
+
+
+<div class='comments'>
+<div class='comment'>
+<div class='author'>uthark</div>
+<div class='content'>
+Хорошо, выложу. :) Почистить только нужно.</div>
+</div>
+<div class='comment'>
+<div class='author'>Николай Мишин</div>
+<div class='content'>
+выложи архив своего tiddywiki c плагинами, а я поделюсь своим</div>
+</div>
+<div class='comment'>
+<div class='author'>Denis</div>
+<div class='content'>
+Спасибо за пример, сегодня же в свою вики встрою )</div>
+</div>
+</div>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Oleg Atamanenko</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-21T10:54:00-04:00" pubdate data-updated="true">Mar 21<span>st</span>, 2010</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/howto/'>howto</a>, <a class='category' href='/blog/categories/tiddlywiki/'>tiddlywiki</a>, <a class='category' href='/blog/categories/razrabotka/'>разработка</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://uthark.github.com/blog/2010/03/21/tiddlywiki/" data-via="" data-counturl="http://uthark.github.com/blog/2010/03/21/tiddlywiki/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2010/03/16/blog-post/" title="Previous Post: Борьба с убийцами производительности">&laquo; Борьба с убийцами производительности</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2010/03/22/skype-d-bus-python/" title="Next Post: Общение со Skype через D-Bus на Python">Общение со Skype через D-Bus на Python &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/06/29/spring-enable-annotation/">Пишем @Enable*-аннотацию для Spring</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/28/jaxrs-spring-autowiring/">@Autowired JAX-RS Client API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/28/jaxrs/">JAX-RS Client API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/19/autowiring-factorybean/">@Autowiring EJBs with Spring</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/19/spring-caching/">Использование memcached в качестве backend для Spring Caching Abstraction</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/uthark">@uthark</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'uthark',
+            count: 3,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+<section class="googleplus googleplus-hidden">
+  <h1>
+    <a href="https://plus.google.com/112372998073079463630?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+<section>
+  <h1>Stack Overflow</h1>
+  <a href="http://stackoverflow.com/users/216764/uthark" style="text-decoration:none">
+  <img src="http://stackoverflow.com/users/flair/216764.png" width="208" height="58" alt="profile for uthark at Stack Overflow, Q&amp;A for professional and enthusiast programmers" title="profile for uthark at Stack Overflow, Q&amp;A for professional and enthusiast programmers">
+  </a>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Oleg Atamanenko -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

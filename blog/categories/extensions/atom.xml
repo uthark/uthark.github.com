@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: extensions | Блог о разработке ПО]]></title>
+  <link href="http://uthark.github.com/blog/categories/extensions/atom.xml" rel="self"/>
+  <link href="http://uthark.github.com/"/>
+  <updated>2013-06-29T23:40:55-04:00</updated>
+  <id>http://uthark.github.com/</id>
+  <author>
+    <name><![CDATA[Oleg Atamanenko]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Расширение Delicious Plugin идёт в массы]]></title>
+    <link href="http://uthark.github.com/blog/2009/11/25/delicious-plugin/"/>
+    <updated>2009-11-25T12:16:00-05:00</updated>
+    <id>http://uthark.github.com/blog/2009/11/25/delicious-plugin</id>
+    <content type="html"><![CDATA[<div class='post'>
+Google запустил сайт <a href="https://chrome.google.com/extensions/" target="_blank">Chrome Extensions</a>.<br />
+<br />
+В данный момент сайт доступен только разработчикам расширений. Залил расширение, написал кратенькое описание. Жду запуска сайта. :)<br />
+<br />
+А пока сайт закрыт для рядовых пользователей последнюю версию можно скачать <a href="http://bit.ly/2KYnr8">тут</a>.<br />
+<br />
+P.S. А тем временем работа над расширением продолжается.<br />
+<br />
+P.P.S. У расширения появилась своя страничка в сети: <a href="http://code.google.com/p/chromium-delicious-extension/">Project Home Page</a></div>
+
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,387 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Создание страницы настроек для расширений Google Chrome - Блог о разработке ПО</title>
+  <meta name="author" content="Oleg Atamanenko">
+
+  
+  <meta name="description" content="В продолжение предыдущей заметки Логично предположить, что у расширений могут быть настройки. В Google Chrome/Chromium для этого есть специальный &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://uthark.github.com/blog/2009/11/24/google-chrome/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feeds.feedburner.com/atamanenko" rel="alternate" title="Блог о разработке ПО" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=Roboto+Slab:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Roboto:300,700,900&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+<link rel="author" href="https://plus.google.com/112372998073079463630/?rel=author" />
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-8688665-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Блог о разработке ПО</a></h1>
+  
+    <h2>Cтруктурированные нерегулярные заметки о разработке программного обеспечения</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="http://feeds.feedburner.com/atamanenko" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:uthark.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Создание страницы настроек для расширений Google Chrome</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-11-24T12:09:00-05:00" pubdate data-updated="true">Nov 24<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><div class='post'>
+В продолжение <a href="http://atamanenko.blogspot.com/2009/11/delicious-bookmarks-google.html">предыдущей заметки</a><br />
+<br />
+Логично предположить, что у расширений могут быть настройки. В Google Chrome/Chromium для этого есть специальный API.<br />
+<br />
+Для того, чтобы создать собственную страницу настроек необходимо сделать следующее:<br />
+<br />
+1. Объявить в манифесте страницу настроек<br />
+<pre class="brush:js; highlight: [5]">{
+  "name": "Delicious plugin", 
+  "version": "0.2", 
+  "background_page": "background.html", 
+  "options_page": "options.html"
+}
+</pre><br />
+2. Реализовать страницу с настройками.<br />
+<br />
+Страница с настройками - это обычная HTML-страничка. Для доступа к настройкам Google Chrome предоставляет объект <tt>localStorage</tt>, который умеет сохранять и возвращать значения.<br />
+<br />
+С объектом <tt>localStorage</tt> работа идёт как с обычным hash. <br />
+<br />
+<pre class="brush:js; html-script: true; highlight:[09, 21, 20, 33, 41]">&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Delicious Bookmarks Options&lt;/title&gt;
+&lt;/head&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+    // Saves options to localStorage.
+    function saveOptions() {
+        var share = document.getElementById(&quot;share&quot;);
+        localStorage[&quot;markPrivate&quot;] = share.checked;
+
+        // Update status to let user know options were saved.
+        var status = document.getElementById(&quot;status&quot;);
+        status.innerHTML = &quot;Options Saved.&quot;;
+        setTimeout(function() {
+            status.innerHTML = &quot;&quot;;
+        }, 1500);
+    }
+
+    // Restores select box state to saved value from localStorage.
+    function restoreOptions() {
+        var share = localStorage[&quot;markPrivate&quot;];
+
+        if (!share) {
+            return;
+        }
+        var shareCheckbox = document.getElementById(&quot;share&quot;);
+
+        shareCheckbox.checked = share;
+        
+    }
+&lt;/script&gt;
+
+&lt;body onload=&quot;restoreOptions()&quot;&gt;
+
+&lt;label for=&quot;share&quot;&gt;Mark as Private&lt;/label&gt;
+&lt;input type=&quot;checkbox&quot; class=&quot;checkbox&quot; name=&quot;share&quot; id=&quot;share&quot; /&gt;
+
+
+&lt;br&gt;
+&lt;button onclick=&quot;saveOptions();&quot;&gt;Save&lt;/button&gt;
+&lt;div id=&quot;status&quot;&gt;&amp;nbsp;&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre><br />
+<h2>Чтение настроек</h2>При инициализации страницы настроек необходимо проставить актуальные значения. Для этого на событе <tt>onload</tt> навешивается функция <tt>restoreOptions()</tt>, которая проставляет в пользовательском интерфейсе текущие настройки. <br />
+<br />
+<h2>Запись настроек</h2>Для сохранения настроек навешивается обработчик <tt>onclick</tt> для кнопки save - метод <tt>saveOptions</tt>.<br />
+<br />
+Вот таким простым способом можно сохранять настройки расширения. <br />
+<br />
+<h1>Документация</h1><ul><li><a href="http://code.google.com/chrome/extensions/options.html">Google Chrome Extensions Options</a><br />
+<li><a href="http://www.w3.org/TR/2009/WD-webstorage-20091029/#the-localstorage-attribute">Документация по localStorage</a></li><br />
+<br />
+</ul></div>
+
+
+<h2>Comments</h2>
+
+
+<div class='comments'>
+<div class='comment'>
+<div class='author'>karri</div>
+<div class='content'>
+Мне вот тут понадобилось поставить Flash player для Chromium&#39;a, перерыла кучу ссылок в инете и наткнулась на классный блог http://www.ubuntugeek.com/<br />Он, судя по всему, для таких чайников как я(все было понятно даже на английском), поставила player без проблем и терь сижу довольная до невозможности :) Оч рекомендую начинающим линуксоидам, может кому пригодится :)</div>
+</div>
+</div>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Oleg Atamanenko</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-11-24T12:09:00-05:00" pubdate data-updated="true">Nov 24<span>th</span>, 2009</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/chromium/'>chromium</a>, <a class='category' href='/blog/categories/extension/'>extension</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://uthark.github.com/blog/2009/11/24/google-chrome/" data-via="" data-counturl="http://uthark.github.com/blog/2009/11/24/google-chrome/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2009/11/14/delicious-bookmarks-google/" title="Previous Post: Расширение Delicious Bookmarks для Google Chrome/Chromium">&laquo; Расширение Delicious Bookmarks для Google Chrome/Chromium</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2009/11/25/delicious-plugin/" title="Next Post: Расширение Delicious Plugin идёт в массы">Расширение Delicious Plugin идёт в массы &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/06/29/spring-enable-annotation/">Пишем @Enable*-аннотацию для Spring</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/28/jaxrs-spring-autowiring/">@Autowired JAX-RS Client API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/28/jaxrs/">JAX-RS Client API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/19/autowiring-factorybean/">@Autowiring EJBs with Spring</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/19/spring-caching/">Использование memcached в качестве backend для Spring Caching Abstraction</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/uthark">@uthark</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'uthark',
+            count: 3,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+<section class="googleplus googleplus-hidden">
+  <h1>
+    <a href="https://plus.google.com/112372998073079463630?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+<section>
+  <h1>Stack Overflow</h1>
+  <a href="http://stackoverflow.com/users/216764/uthark" style="text-decoration:none">
+  <img src="http://stackoverflow.com/users/flair/216764.png" width="208" height="58" alt="profile for uthark at Stack Overflow, Q&amp;A for professional and enthusiast programmers" title="profile for uthark at Stack Overflow, Q&amp;A for professional and enthusiast programmers">
+  </a>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Oleg Atamanenko -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

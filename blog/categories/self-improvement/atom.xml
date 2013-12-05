@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: self-improvement | Блог о разработке ПО]]></title>
+  <link href="http://uthark.github.com/blog/categories/self-improvement/atom.xml" rel="self"/>
+  <link href="http://uthark.github.com/"/>
+  <updated>2013-06-29T23:40:55-04:00</updated>
+  <id>http://uthark.github.com/</id>
+  <author>
+    <name><![CDATA[Oleg Atamanenko]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Борьба с убийцами производительности]]></title>
+    <link href="http://uthark.github.com/blog/2010/03/16/blog-post/"/>
+    <updated>2010-03-16T11:52:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2010/03/16/blog-post</id>
+    <content type="html"><![CDATA[<div class='post'>
+<p><strong>Summary</strong>: Мой опыт борьбы с &quot;убийцами производительности&quot;.</p>
+<h3>Постановка проблемы</h3>
+<p> Иногда бывает так, что хочется отвлечься от работы, от поставленной задачи на какую-нибудь фигню, лишь бы не заниматься текущей задачей. У меня это чаще всего сводилось к тому, что я начинал читать что-нибудь в сети (<a href="http://www.google.com/reader/view/" target="_blank">Google Reader</a>, <a href="http://habrahabr.ru/">Habrahabr</a>, <a href="http://www.linux.org.ru/">LOR</a>, etc). </p>
+<p>Истоки проблемы могут быть абсолютно разными, например: </p>
+<ol><li>Долгий запуск среды разработки </li>
+<li>Долгая сборка проекта</li>
+<li>Нудная задача</li>
+<li>Неинтересная задача</li>
+</ol>
+<p>Все эти причины спокойно могут приводить к потере производительности, причём неявным образом, например - &quot;А посижу пока я на хабре, пока полная сборка идёт&quot;, в итоге после 20 минут обнаруживается, что сборка закончилась уже 15 минут назад.</p>
+<p>Так как у меня тайм-киллер вполне простой - интернет, то и решение вполне простое.</p>
+<p>Вот список действий, что я сделал:</p>
+<ol><li>Удалил быстрые браузеры, теперь у меня только <a href="http://www.mozilla.com/firefox">Mozilla Firefox</a> под Linux и страшный <a href="http://www.microsoft.com/windows/ie/ie6/downloads/default.mspx">Internet Explorer 6.0 под Windows</a>.</li>
+<li>Забанил сайты которые не нужны для работы, но на которых я провожу много времени.</li>
+</ol>
+<p>Сначала я сделал радикальный бан - внёс в <tt>/etc/hosts</tt> эти сайты:</p>
+<pre class="brush: bash">
+127.0.0.1 www.linux.org.ru linux.org.ru
+127.0.0.1 www.habrahabr.ru habrahabr.ru
+127.0.0.1 www.lorquotes.ru lorquotes.ru
+</pre>
+<p> Но потом обнаружилось, что есть ещё <a href="http://www.google.com/reader/view/">Google Reader</a>, который также отнимает много времени (у меня было до 200 подписок, что давало до 300 новых статей в сутки). Проблему с <a href="http://www.google.com/reader/view/">Google Reader</a> я решал поэтапно: </p>
+<ol><li>Почистил список лент от юмора, который обновляется практически ежедневно, является пожирателем трафика и времени.</li>
+<li>После этого я почистил список лент от лент, которые достаточно интересные, но при этом без них можно спокойно обходиться (Например, <a href="http://aseigo.blogspot.com/">блог Аарона Сейго</a>, одного из главных разработчиков <a href="http://www.kde.org/">KDE</a>)</li>
+</ol>
+<p>Вышеперечисленные действия помогли мне сократить список фидов с 200 сначала до 100 с небольшим, а затем и до 65. Но я понимал, что это ещё не предел и есть к чему стремиться, поэтому решил перейти к использованию оффлайнового <a href="http://www.whatisrss.com/">RSS</a>-<a href="http://en.wikipedia.org/wiki/RSS_Reader">клиента</a>. </p>
+<p>Для этого я экспортировал <a href="http://www.opml.org/">OPML</a>-файл с подписками из <a href="http://www.google.com/reader/view/">Google Reader</a>, удалил все ленты (к сожалению, <a href="http://www.google.com/support/forum/p/reader/thread?tid=53c0b347fa8cd843&hl=en">удалить аккаунт</a> на <a href="http://www.google.com/reader/view/">Google Reader</a> невозможно, только полностью Google Account) и импортировал на <a href="http://userbase.kde.org/Akregator">Akregator</a> на домашней машинке. Это помогло мне аккумулировать все чтения ленты новостей в один временной промежуток - вечером, дома.</p>
+<p>Но, как оказалось, ещё есть к чему стремиться и гугление на просторах сети дало свои результаты: <a href="http://www.proginosko.com/leechblock.html"><strong>LeechBlock</strong></a>.</p>
+<p>LeechBlock это расширение для Mozilla Firefox, которое позволяет блокировать отдельные сайты на различные промежутки времени.</p>
+<p>Собственно, начав им пользоваться, я понял, что это именно то, что мне нужно:</p>
+<p> <a href="http://picasaweb.google.com/lh/photo/GiOXKIEw3fz0uoNMZxGTlg?authkey=Gv1sRgCOCWw8r8gI-DRQ&feat=embedwebsite"><img src="http://lh6.ggpht.com/_y8p0_dtMJ38/S56FpVJKVHI/AAAAAAAAA8Q/e6hTfBRPkRo/s800/leechblock.png" title="Leechblock Settings UI" alt="Leechblock Settings UI" /></a></p>
+<p> Возможности данного расширения следующие: </p>
+<ol><li>Блокировка сайтов различные периоды времени</li>
+<li>Блокировка сайтов по временному диапазону, в том числе по дням недели.</li>
+<li>Поддержка нескольких наборов сайтов для блокировки</li>
+<li>Возможность быстрого добавления сайта в список для блокировки </li>
+</ol>
+<p>Конечно, данное расширение не является панацеей, его нужно использовать в комплексе с другими средствами.</p></div>
+
+
+<h2>Comments</h2>
+
+
+<div class='comments'>
+<div class='comment'>
+<div class='author'>uthark</div>
+<div class='content'>
+@see to learn Это вполне решаемо с помощью этого же плагина. :)<br /><br /><br /><a href="http://picasaweb.google.com/lh/photo/SnNiIIES_ZbHcYqrzg5gPA?authkey=Gv1sRgCOCWw8r8gI-DRQ&amp;feat=embedwebsite" rel="nofollow">Скриншот с примером настройки</a><br /><br />Общий смысл:<br />1. блокируем все сайты (*)<br />2. Добавляем исключения через (+)</div>
+</div>
+<div class='comment'>
+<div class='author'>see to learn</div>
+<div class='content'>
+Мне бы такую примочку, которая показывает сайты только из белого списка.</div>
+</div>
+</div>
+
+]]></content>
+  </entry>
+  
+</feed>

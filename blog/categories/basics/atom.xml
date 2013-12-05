@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: basics | Блог о разработке ПО]]></title>
+  <link href="http://uthark.github.com/blog/categories/basics/atom.xml" rel="self"/>
+  <link href="http://uthark.github.com/"/>
+  <updated>2013-06-29T23:40:55-04:00</updated>
+  <id>http://uthark.github.com/</id>
+  <author>
+    <name><![CDATA[Oleg Atamanenko]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Немного о виртуальных методах в Java]]></title>
+    <link href="http://uthark.github.com/blog/2011/07/21/java/"/>
+    <updated>2011-07-21T01:06:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2011/07/21/java</id>
+    <content type="html"><![CDATA[<div class='post'>
+Сегодня я хочу рассмотреть некоторые особенности переопределения методов в Java.  В java нельзя переопределить:   <br />
+<ul><li>поля класса</li>
+<li>конструкторы, инициализаторы класса</li>
+<li>статические методы</li>
+<li>статические поля</li>
+</ul><br />
+Подробнее об этом можно прочитать в <a href="http://java.sun.com/docs/books/jls/third_edition/html/classes.html#228745">Java Language Specification, §8.4.8</a><br />
+<br />
+Итак, в java все нестатические неприватные (то есть, <tt>protected</tt>, <tt>package</tt> и <tt>public</tt>) методы являются виртуальными. Ключевое слово <tt>final</tt> запрещает возможность дальнейшего переопределения метода в подклассах.  Рассмотрим следующий пример:  <br />
+<br />
+<pre class="brush: java">public class A {
+     int i = 3;
+     int getI() {return i;}
+}
+
+public class B extends A{
+     int i = 5;
+     int getI() {return i;}
+}
+
+A a = new B();
+System.out.println(a.i);
+System.out.println(a.getI());
+
+</pre><br />
+Вопрос: что выведет данный код?<br />
+Ответ: <br />
+1. Так как поля класса не наследуются, то у класса A своё поле i и у класса B тоже своё поле i. Так как для полей полиморфизм не действует, то при обращении a.i мы обращаемся к классу A, поэтому на экран будет выведено 3.<br />
+2. При вызове метода a.getI() у нас в дело вступает полиморфизм, поэтому будет вызван метод от класса, инстанс которого был создан. Соответственно, мы получим на выходе 5.<br />
+<br />
+<br />
+Другой пример:<br />
+<br />
+<pre class="brush: java">public class A {
+     static int i = 3;
+     static int getI() {return i;} 
+}
+
+public class B extends A{
+     static int i = 5;
+     static int getI() {return i;}
+}
+
+A a = new B();
+System.out.println(a.i);
+System.out.println(a.getI());
+
+</pre><br />
+Статические поля и методы виртуальными не являются, поэтому оба вызова выведут нам 3.</div>
+
+]]></content>
+  </entry>
+  
+</feed>

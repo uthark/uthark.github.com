@@ -1,0 +1,418 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Двунаправленная ссылочная целостность - Блог о разработке ПО</title>
+  <meta name="author" content="Oleg Atamanenko">
+
+  
+  <meta name="description" content="Здравствуйте. Я считаю, что разработчику всегда стоит иметь представление о том, как работают низлежащие абстракции. Хотя бы потому, что часто &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://uthark.github.com/blog/2009/07/07/blog-post/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feeds.feedburner.com/atamanenko" rel="alternate" title="Блог о разработке ПО" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=Roboto+Slab:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Roboto:300,700,900&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+<link rel="author" href="https://plus.google.com/112372998073079463630/?rel=author" />
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-8688665-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Блог о разработке ПО</a></h1>
+  
+    <h2>Cтруктурированные нерегулярные заметки о разработке программного обеспечения</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="http://feeds.feedburner.com/atamanenko" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:uthark.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Двунаправленная ссылочная целостность</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-07-07T11:11:00-04:00" pubdate data-updated="true">Jul 7<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><div class='post'>
+Здравствуйте.<br />
+<br />
+Я считаю, что разработчику всегда стоит иметь представление о том, как работают низлежащие абстракции. Хотя бы потому, что часто <a href="http://c2.com/cgi/wiki?LeakyAbstraction">абстракции</a> <a href="http://en.wikipedia.org/wiki/Leaky_abstraction">бывают</a> <a href="http://www.joelonsoftware.com/articles/LeakyAbstractions.html">протекающими</a>.<br />
+<br />
+А веду я это к тому, что когда фреймворк вываливает стектрейс с несколькими вложенными (и, часто, для непосвященных непонятными) исключениями, то бывает непонятно, что с этим делать, особенно, если не знаешь, как реализована абстракция.<br />
+<br />
+Иногда бывает нужно хранить двунаправленные связи между таблицами. Например, есть игрок и есть его статистика и нужно, чтобы каждая из сущностей знала про другую.<br />
+<br />
+Вопрос - каким образом вставлять в базу данных такие сущности?<br />
+<br />
+При вставке в таблицу в Player нам нужно уже иметь запись в таблице Statistics, а для вставки в таблицу Statistics нужно знать идентификатор игрока, к которому относится эта запись.<br />
+<br />
+Выглядит замкнутым кругом, но решение есть.<br />
+<p>Во-первых, вставки в обе таблицы должны происходить в рамках одной транзакции (как я <a href="http://www.blogger.com/2009/04/blog-post_24.html">уже писал</a>, транзакция обеспечивает перевод базы данных из одного непротиворечащего состояния в другое непротиворечащее состояние).<br />
+</p><br />
+К сожалению, этого недостаточно:<br />
+<br />
+<pre class="brush: sql">begin transaction;
+
+INSERT INTO "Player"  VALUES (10, 20);
+INSERT INTO "Statistics"  VALUES (20, 10);
+
+commit;
+</pre><br />
+<br />
+выдаёт следующую ошибку:<br />
+<br />
+<pre class="brush: plain">ERROR: insert or update on table "Player" violates foreign key constraint "statisticsId"
+SQL state: 23503
+Detail: Key (statisticsId)=(20) is not present in table "Statistics".
+</pre><br />
+<br />
+И снова кажется, что замкнутый круг не разорвать.<br />
+<br />
+Но решение всё же есть.<br />
+Многие базы данных позволяют нарушать консистентность базы данных внутри транзакции. В данном случае можно &#8220;попросить&#8221; базу данных отложить проверку ссылочной целостности. На примере PostgreSQL рассмотрим, как это работает.<br />
+<br />
+<h3>PostgreSQL</h3><br />
+<pre class="brush: sql">begin transaction;
+
+set constraints all deferred; -- 1
+
+INSERT INTO "Player"  VALUES (10, 20);
+INSERT INTO "Statistics"  VALUES (20, 10);
+
+set constraints all immediate; -- 2
+
+commit; -- 3
+</pre><br />
+<br />
+1 - Сделать все ограничения отложенными. Ограничения будут проверены в момент проведения фиксации транзакции (в строке 3)<br />
+2 - Явно делаем все ограничения немедленными. В данном примере это необязательно, так как в 3) они всё равно будут проверены.<br />
+<br />
+После выполнения данного кода получаем:<br />
+<pre class="brush: plain">Query returned successfully with no result in 24 ms.
+</pre><br />
+<br />
+Это уже полностью рабочий пример, чтобы это заработало нужно явно сделать ограничения отложенными - они должны быть объявлены как DEFERRED. Официальная документация к PostgreSQL гласит:<br />
+<blockquote>Upon creation, a constraint is given one of three characteristics: DEFERRABLE INITIALLY DEFERRED, DEFERRABLE INITIALLY IMMEDIATE, or NOT DEFERRABLE. The third class is always IMMEDIATE and is not affected by the SET CONSTRAINTS command. The first two classes start every transaction in the indicated mode, but their behavior can be changed within a transaction by SET CONSTRAINTS.</blockquote><br />
+<br />
+Так что необходимо также модифицировать объявления ограничений:<br />
+<pre class="brush: sql">ALTER TABLE "Player"
+ADD CONSTRAINT "statisticsId" FOREIGN KEY ("statisticsId")
+REFERENCES "Statistics" ("statisticsId") MATCH SIMPLE
+ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE;
+
+</pre><br />
+<br />
+Данный пример был приведён для PostgreSQL.<br />
+<br />
+Для других баз данных решения следующие:<br />
+<h3>Sybase</h3><br />
+В Sybase есть переменная <a href="http://manuals.sybase.com/onlinebooks/group-sasarc/awg0600e/dbugen6/@Generic__BookTextView/26075;hf=0;pt=25811">WAIT_FOR_COMMIT</a>, которая управляет поведением проверки ограничений. По умолчанию она отключена. Кроме того, это поведение можно переопределить при объявлении можно указывать CHECK ON COMMIT. Подробнее можно посмотреть в <a href="http://manuals.sybase.com/onlinebooks/group-pbarc/conn5/sqlug/@Generic__BookTextView/39397%3Bpt=39951">официальной документации</a>.<br />
+<br />
+<h3>Oracle</h3><br />
+Также, как и в PostgreSQL:<br />
+<blockquote>You can define constraints as either deferrable or not deferrable, and either initially deferred or initially immediate. These attributes can be different for each constraint. You specify them with keywords in the CONSTRAINT clause:<br />
+DEFERRABLE or NOT DEFERRABLE<br />
+INITIALLY DEFERRED or INITIALLY IMMEDIATE<br />
+<br />
+Constraints can be added, dropped, enabled, disabled, or validated. You can also modify a constraint&#8217;s attributes.<br />
+</blockquote><br />
+Подробнее в <a href="http://download.oracle.com/docs/cd/B10501_01/server.920/a96524/c22integ.htm#4666">официльной документации</a>.<br />
+<br />
+<h3>mySQL</h3><br />
+К сожалению, mySQL не имеет возможности отложенной проверки ограничении, о чём в документации и сказано:<br />
+<blockquote><em>Deviation from SQL standards</em>: Like MySQL in general, in an SQL statement that inserts, deletes, or updates many rows, InnoDB checks UNIQUE and FOREIGN KEY constraints row-by-row. According to the SQL standard, the default behavior should be deferred checking. That is, constraints are only checked after the entire SQL statement has been processed. Until InnoDB implements deferred constraint checking, some things will be impossible, such as deleting a record that refers to itself via a foreign key.</blockquote><br />
+<br />
+Но это не конец света, так как можно отключить проверку внешних ключей:<br />
+<pre class="brush: sql">SET foreign_key_checks = 0;
+-- code goes here
+SET foreign_key_checks = 1;
+</pre><br />
+<br />
+Чем эта информация может быть полезна для разработчика? Например, в случае, если ошибки и недоработки Hibernate покажут себя в виде стектрейса в логе(например, <a href="http://opensource.atlassian.com/projects/hibernate/browse/HHH-2248">HHH-2248</a>), то разработчик будет понимать причину ошибки и то, как реализовать work-around.</div>
+
+
+<h2>Comments</h2>
+
+
+<div class='comments'>
+<div class='comment'>
+<div class='author'>Oleg Atamanenko</div>
+<div class='content'>
+Очень рад, что вам эта статья была полезной.</div>
+</div>
+<div class='comment'>
+<div class='author'>Anonymous</div>
+<div class='content'>
+спасибо, а я понял что такое двунаправленные связи</div>
+</div>
+<div class='comment'>
+<div class='author'>Safarov</div>
+<div class='content'>
+Спасибо за вашу статью. Для меня она объяснила как можно повысть целостность базы.</div>
+</div>
+</div>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Oleg Atamanenko</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-07-07T11:11:00-04:00" pubdate data-updated="true">Jul 7<span>th</span>, 2009</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/constraint/'>constraint</a>, <a class='category' href='/blog/categories/foreign-key/'>foreign key</a>, <a class='category' href='/blog/categories/mysql/'>mysql</a>, <a class='category' href='/blog/categories/oracle/'>oracle</a>, <a class='category' href='/blog/categories/postgresql/'>postgresql</a>, <a class='category' href='/blog/categories/sybase/'>sybase</a>, <a class='category' href='/blog/categories/transaction/'>transaction</a>, <a class='category' href='/blog/categories/baza-dannykh/'>база данных</a>, <a class='category' href='/blog/categories/razrabotka/'>разработка</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://uthark.github.com/blog/2009/07/07/blog-post/" data-via="" data-counturl="http://uthark.github.com/blog/2009/07/07/blog-post/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2009/07/03/opera-delicious/" title="Previous Post: Opera и del.icio.us">&laquo; Opera и del.icio.us</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2009/11/02/google-wave/" title="Next Post: Инвайты на Google Wave">Инвайты на Google Wave &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/06/29/spring-enable-annotation/">Пишем @Enable*-аннотацию для Spring</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/28/jaxrs-spring-autowiring/">@Autowired JAX-RS Client API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/28/jaxrs/">JAX-RS Client API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/19/autowiring-factorybean/">@Autowiring EJBs with Spring</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/19/spring-caching/">Использование memcached в качестве backend для Spring Caching Abstraction</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/uthark">@uthark</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'uthark',
+            count: 3,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+<section class="googleplus googleplus-hidden">
+  <h1>
+    <a href="https://plus.google.com/112372998073079463630?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+<section>
+  <h1>Stack Overflow</h1>
+  <a href="http://stackoverflow.com/users/216764/uthark" style="text-decoration:none">
+  <img src="http://stackoverflow.com/users/flair/216764.png" width="208" height="58" alt="profile for uthark at Stack Overflow, Q&amp;A for professional and enthusiast programmers" title="profile for uthark at Stack Overflow, Q&amp;A for professional and enthusiast programmers">
+  </a>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Oleg Atamanenko -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,357 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Борьба с убийцами производительности - Блог о разработке ПО</title>
+  <meta name="author" content="Oleg Atamanenko">
+
+  
+  <meta name="description" content="Summary: Мой опыт борьбы с &quot;убийцами производительности&quot;.
+Постановка проблемы Иногда бывает так, что хочется отвлечься от работы, от &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://uthark.github.com/blog/2010/03/16/blog-post/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feeds.feedburner.com/atamanenko" rel="alternate" title="Блог о разработке ПО" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=Roboto+Slab:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Roboto:300,700,900&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+<link rel="author" href="https://plus.google.com/112372998073079463630/?rel=author" />
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-8688665-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Блог о разработке ПО</a></h1>
+  
+    <h2>Cтруктурированные нерегулярные заметки о разработке программного обеспечения</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="http://feeds.feedburner.com/atamanenko" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:uthark.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Борьба с убийцами производительности</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-16T11:52:00-04:00" pubdate data-updated="true">Mar 16<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><div class='post'>
+<p><strong>Summary</strong>: Мой опыт борьбы с &quot;убийцами производительности&quot;.</p>
+<h3>Постановка проблемы</h3>
+<p> Иногда бывает так, что хочется отвлечься от работы, от поставленной задачи на какую-нибудь фигню, лишь бы не заниматься текущей задачей. У меня это чаще всего сводилось к тому, что я начинал читать что-нибудь в сети (<a href="http://www.google.com/reader/view/" target="_blank">Google Reader</a>, <a href="http://habrahabr.ru/">Habrahabr</a>, <a href="http://www.linux.org.ru/">LOR</a>, etc). </p>
+<p>Истоки проблемы могут быть абсолютно разными, например: </p>
+<ol><li>Долгий запуск среды разработки </li>
+<li>Долгая сборка проекта</li>
+<li>Нудная задача</li>
+<li>Неинтересная задача</li>
+</ol>
+<p>Все эти причины спокойно могут приводить к потере производительности, причём неявным образом, например - &quot;А посижу пока я на хабре, пока полная сборка идёт&quot;, в итоге после 20 минут обнаруживается, что сборка закончилась уже 15 минут назад.</p>
+<p>Так как у меня тайм-киллер вполне простой - интернет, то и решение вполне простое.</p>
+<p>Вот список действий, что я сделал:</p>
+<ol><li>Удалил быстрые браузеры, теперь у меня только <a href="http://www.mozilla.com/firefox">Mozilla Firefox</a> под Linux и страшный <a href="http://www.microsoft.com/windows/ie/ie6/downloads/default.mspx">Internet Explorer 6.0 под Windows</a>.</li>
+<li>Забанил сайты которые не нужны для работы, но на которых я провожу много времени.</li>
+</ol>
+<p>Сначала я сделал радикальный бан - внёс в <tt>/etc/hosts</tt> эти сайты:</p>
+<pre class="brush: bash">
+127.0.0.1 www.linux.org.ru linux.org.ru
+127.0.0.1 www.habrahabr.ru habrahabr.ru
+127.0.0.1 www.lorquotes.ru lorquotes.ru
+</pre>
+<p> Но потом обнаружилось, что есть ещё <a href="http://www.google.com/reader/view/">Google Reader</a>, который также отнимает много времени (у меня было до 200 подписок, что давало до 300 новых статей в сутки). Проблему с <a href="http://www.google.com/reader/view/">Google Reader</a> я решал поэтапно: </p>
+<ol><li>Почистил список лент от юмора, который обновляется практически ежедневно, является пожирателем трафика и времени.</li>
+<li>После этого я почистил список лент от лент, которые достаточно интересные, но при этом без них можно спокойно обходиться (Например, <a href="http://aseigo.blogspot.com/">блог Аарона Сейго</a>, одного из главных разработчиков <a href="http://www.kde.org/">KDE</a>)</li>
+</ol>
+<p>Вышеперечисленные действия помогли мне сократить список фидов с 200 сначала до 100 с небольшим, а затем и до 65. Но я понимал, что это ещё не предел и есть к чему стремиться, поэтому решил перейти к использованию оффлайнового <a href="http://www.whatisrss.com/">RSS</a>-<a href="http://en.wikipedia.org/wiki/RSS_Reader">клиента</a>. </p>
+<p>Для этого я экспортировал <a href="http://www.opml.org/">OPML</a>-файл с подписками из <a href="http://www.google.com/reader/view/">Google Reader</a>, удалил все ленты (к сожалению, <a href="http://www.google.com/support/forum/p/reader/thread?tid=53c0b347fa8cd843&hl=en">удалить аккаунт</a> на <a href="http://www.google.com/reader/view/">Google Reader</a> невозможно, только полностью Google Account) и импортировал на <a href="http://userbase.kde.org/Akregator">Akregator</a> на домашней машинке. Это помогло мне аккумулировать все чтения ленты новостей в один временной промежуток - вечером, дома.</p>
+<p>Но, как оказалось, ещё есть к чему стремиться и гугление на просторах сети дало свои результаты: <a href="http://www.proginosko.com/leechblock.html"><strong>LeechBlock</strong></a>.</p>
+<p>LeechBlock это расширение для Mozilla Firefox, которое позволяет блокировать отдельные сайты на различные промежутки времени.</p>
+<p>Собственно, начав им пользоваться, я понял, что это именно то, что мне нужно:</p>
+<p> <a href="http://picasaweb.google.com/lh/photo/GiOXKIEw3fz0uoNMZxGTlg?authkey=Gv1sRgCOCWw8r8gI-DRQ&feat=embedwebsite"><img src="http://lh6.ggpht.com/_y8p0_dtMJ38/S56FpVJKVHI/AAAAAAAAA8Q/e6hTfBRPkRo/s800/leechblock.png" title="Leechblock Settings UI" alt="Leechblock Settings UI" /></a></p>
+<p> Возможности данного расширения следующие: </p>
+<ol><li>Блокировка сайтов различные периоды времени</li>
+<li>Блокировка сайтов по временному диапазону, в том числе по дням недели.</li>
+<li>Поддержка нескольких наборов сайтов для блокировки</li>
+<li>Возможность быстрого добавления сайта в список для блокировки </li>
+</ol>
+<p>Конечно, данное расширение не является панацеей, его нужно использовать в комплексе с другими средствами.</p></div>
+
+
+<h2>Comments</h2>
+
+
+<div class='comments'>
+<div class='comment'>
+<div class='author'>uthark</div>
+<div class='content'>
+@see to learn Это вполне решаемо с помощью этого же плагина. :)<br /><br /><br /><a href="http://picasaweb.google.com/lh/photo/SnNiIIES_ZbHcYqrzg5gPA?authkey=Gv1sRgCOCWw8r8gI-DRQ&amp;feat=embedwebsite" rel="nofollow">Скриншот с примером настройки</a><br /><br />Общий смысл:<br />1. блокируем все сайты (*)<br />2. Добавляем исключения через (+)</div>
+</div>
+<div class='comment'>
+<div class='author'>see to learn</div>
+<div class='content'>
+Мне бы такую примочку, которая показывает сайты только из белого списка.</div>
+</div>
+</div>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Oleg Atamanenko</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-16T11:52:00-04:00" pubdate data-updated="true">Mar 16<span>th</span>, 2010</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/self-improvement/'>self-improvement</a>, <a class='category' href='/blog/categories/proizvoditiel'nost'/'>производительность</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://uthark.github.com/blog/2010/03/16/blog-post/" data-via="" data-counturl="http://uthark.github.com/blog/2010/03/16/blog-post/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2010/02/06/grails/" title="Previous Post: Список для проверки при оптимизации Grails приложений">&laquo; Список для проверки при оптимизации Grails приложений</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2010/03/21/tiddlywiki/" title="Next Post: Разработка макроса для TiddlyWiki">Разработка макроса для TiddlyWiki &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/06/29/spring-enable-annotation/">Пишем @Enable*-аннотацию для Spring</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/28/jaxrs-spring-autowiring/">@Autowired JAX-RS Client API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/28/jaxrs/">JAX-RS Client API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/19/autowiring-factorybean/">@Autowiring EJBs with Spring</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/19/spring-caching/">Использование memcached в качестве backend для Spring Caching Abstraction</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/uthark">@uthark</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'uthark',
+            count: 3,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+<section class="googleplus googleplus-hidden">
+  <h1>
+    <a href="https://plus.google.com/112372998073079463630?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+<section>
+  <h1>Stack Overflow</h1>
+  <a href="http://stackoverflow.com/users/216764/uthark" style="text-decoration:none">
+  <img src="http://stackoverflow.com/users/flair/216764.png" width="208" height="58" alt="profile for uthark at Stack Overflow, Q&amp;A for professional and enthusiast programmers" title="profile for uthark at Stack Overflow, Q&amp;A for professional and enthusiast programmers">
+  </a>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Oleg Atamanenko -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

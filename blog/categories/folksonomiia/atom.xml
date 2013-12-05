@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: фолксономия | Блог о разработке ПО]]></title>
+  <link href="http://uthark.github.com/blog/categories/folksonomiia/atom.xml" rel="self"/>
+  <link href="http://uthark.github.com/"/>
+  <updated>2013-06-29T23:40:55-04:00</updated>
+  <id>http://uthark.github.com/</id>
+  <author>
+    <name><![CDATA[Oleg Atamanenko]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Практический опыт использования фолксономии в условиях неограниченной свободы расстановки меток  (часть 2)]]></title>
+    <link href="http://uthark.github.com/blog/2009/04/21/2/"/>
+    <updated>2009-04-21T13:14:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2009/04/21/2</id>
+    <content type="html"><![CDATA[<div class='post'>
+В продолжение <a href="http://atamanenko.blogspot.com/2009/04/blog-post.html">предыдущей заметки </a>.
+
+Для работы с <a href="http://delicious.com">del.icio.us</a> я использую <a href="https://addons.mozilla.org/en-US/firefox/addon/3615">официальный плагин</a> от <a href="http://www.yahoo.com/">Yahoo!</a>.
+
+Он предоставляет следующие возможности:
+ 1. Синхронизация закладок из Firefox с del.icio.us
+ 2. Переопределение стандартного менеджера закладок.
+ 3. Отслеживание изменений на del.icio.us.
+ 4. Интерфейс для отображения и поиска закладок в панели браузера.
+ 5. Панель инструментов для работы с закладками.
+
+Из всех вышеперечисленных возможностей раньше пользовался только вторым пунктом. Это очень удобно - выделяешь на странице кусок текста и клацаешь <tt>ctrl+b</tt>. Появляется окошечко с уже заполненной ссылкой, заголовком и описанием ссылки. В поле описания попадает выделенный текст. После этого расставляешь метки и жмёшь кнопку <tt>save</tt>.
+Мне этого хватало и я был доволен. Недавно я для себя открыл следующую вещь - в панели инструментов Delicous Toolbar можно выбрать вид Favorites Tag Views и настроить избранные теги, которые будут отображаться на панели. Выглядит это следующим образом:
+
+<a href="http://picasaweb.google.com/lh/photo/IDr7sedWFbCl_34udJAfxA?authkey=Gv1sRgCP2ooa-PsKuf1AE&feat=embedwebsite"><img src="http://lh3.ggpht.com/_ZAsANEcJSbo/Se4DrHrgdmI/AAAAAAAAAE4/nZ4BIf-FYLE/delicious.png" /></a>
+
+При щелчке на тег показыватся список закладок, помеченных избранными тегами. Очень удобно.</div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Практический опыт использования фолксономии в условиях неограниченной свободы расстановки меток]]></title>
+    <link href="http://uthark.github.com/blog/2009/04/19/blog-post/"/>
+    <updated>2009-04-19T01:48:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2009/04/19/blog-post</id>
+    <content type="html"><![CDATA[<div class='post'>
+Уже более двух лет я использую <a href="http://delicious.com/">del.icio.us</a>.
+
+Недавно возник вопрос - а вот каким образом можно наиболее эффективно использовать теги?
+Для себя я придумал вот такой вариант использования - сделал tag bundle <span style="font-weight: bold;">Actions</span>, в который поместил теги, диктующие дальнейшие действия.
+
+Для себя я выделил следующие теги:
+<span style="font-weight: bold;">2rss</span> - закладки с этим тегом я позже добавляю в свою RSS-читалку.
+
+<span style="font-weight: bold;">2check</span> - этим тегом я помечаю софт или библиотеки, которые хотелось бы изучить и попробовать на деле.
+
+<span style="font-weight: bold;">2read</span> - статьи, которые нужно прочитать и/или изучить.
+
+<span style="font-weight: bold;">2download</span> - то, что нужно скачать.
+
+Соответственно, после того, как я действие было выполнено, я удаляю тег действия и обновляю теги на странице (особенно для страниц, помеченных как 2read).
+
+Для себя я вынес следующие правила расстановки тегов:
+
+1. Теги должны быть в одном числе. Я ставлю в единственном. Кому-то покажется, что лучше во множественном лучше, пусть. Главное - быть консистентным.
+2. Теги нужно ставить понятные самому себе, а не те, что предлагает народ - пользоваться-то в первую очередь потом тегами придется мне, а не народу.
+3. Расставлять не более 10 тегов на страницу, иначе релевантность тегов уменьшается.
+4. Теги должны отражать содержимое страницы.</div>
+
+]]></content>
+  </entry>
+  
+</feed>

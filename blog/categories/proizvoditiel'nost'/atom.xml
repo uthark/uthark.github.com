@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: производительность | Блог о разработке ПО]]></title>
+  <link href="http://uthark.github.com/blog/categories/proizvoditiel'nost'/atom.xml" rel="self"/>
+  <link href="http://uthark.github.com/"/>
+  <updated>2013-06-29T23:40:55-04:00</updated>
+  <id>http://uthark.github.com/</id>
+  <author>
+    <name><![CDATA[Oleg Atamanenko]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Борьба с убийцами производительности]]></title>
+    <link href="http://uthark.github.com/blog/2010/03/16/blog-post/"/>
+    <updated>2010-03-16T11:52:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2010/03/16/blog-post</id>
+    <content type="html"><![CDATA[<div class='post'>
+<p><strong>Summary</strong>: Мой опыт борьбы с &quot;убийцами производительности&quot;.</p>
+<h3>Постановка проблемы</h3>
+<p> Иногда бывает так, что хочется отвлечься от работы, от поставленной задачи на какую-нибудь фигню, лишь бы не заниматься текущей задачей. У меня это чаще всего сводилось к тому, что я начинал читать что-нибудь в сети (<a href="http://www.google.com/reader/view/" target="_blank">Google Reader</a>, <a href="http://habrahabr.ru/">Habrahabr</a>, <a href="http://www.linux.org.ru/">LOR</a>, etc). </p>
+<p>Истоки проблемы могут быть абсолютно разными, например: </p>
+<ol><li>Долгий запуск среды разработки </li>
+<li>Долгая сборка проекта</li>
+<li>Нудная задача</li>
+<li>Неинтересная задача</li>
+</ol>
+<p>Все эти причины спокойно могут приводить к потере производительности, причём неявным образом, например - &quot;А посижу пока я на хабре, пока полная сборка идёт&quot;, в итоге после 20 минут обнаруживается, что сборка закончилась уже 15 минут назад.</p>
+<p>Так как у меня тайм-киллер вполне простой - интернет, то и решение вполне простое.</p>
+<p>Вот список действий, что я сделал:</p>
+<ol><li>Удалил быстрые браузеры, теперь у меня только <a href="http://www.mozilla.com/firefox">Mozilla Firefox</a> под Linux и страшный <a href="http://www.microsoft.com/windows/ie/ie6/downloads/default.mspx">Internet Explorer 6.0 под Windows</a>.</li>
+<li>Забанил сайты которые не нужны для работы, но на которых я провожу много времени.</li>
+</ol>
+<p>Сначала я сделал радикальный бан - внёс в <tt>/etc/hosts</tt> эти сайты:</p>
+<pre class="brush: bash">
+127.0.0.1 www.linux.org.ru linux.org.ru
+127.0.0.1 www.habrahabr.ru habrahabr.ru
+127.0.0.1 www.lorquotes.ru lorquotes.ru
+</pre>
+<p> Но потом обнаружилось, что есть ещё <a href="http://www.google.com/reader/view/">Google Reader</a>, который также отнимает много времени (у меня было до 200 подписок, что давало до 300 новых статей в сутки). Проблему с <a href="http://www.google.com/reader/view/">Google Reader</a> я решал поэтапно: </p>
+<ol><li>Почистил список лент от юмора, который обновляется практически ежедневно, является пожирателем трафика и времени.</li>
+<li>После этого я почистил список лент от лент, которые достаточно интересные, но при этом без них можно спокойно обходиться (Например, <a href="http://aseigo.blogspot.com/">блог Аарона Сейго</a>, одного из главных разработчиков <a href="http://www.kde.org/">KDE</a>)</li>
+</ol>
+<p>Вышеперечисленные действия помогли мне сократить список фидов с 200 сначала до 100 с небольшим, а затем и до 65. Но я понимал, что это ещё не предел и есть к чему стремиться, поэтому решил перейти к использованию оффлайнового <a href="http://www.whatisrss.com/">RSS</a>-<a href="http://en.wikipedia.org/wiki/RSS_Reader">клиента</a>. </p>
+<p>Для этого я экспортировал <a href="http://www.opml.org/">OPML</a>-файл с подписками из <a href="http://www.google.com/reader/view/">Google Reader</a>, удалил все ленты (к сожалению, <a href="http://www.google.com/support/forum/p/reader/thread?tid=53c0b347fa8cd843&hl=en">удалить аккаунт</a> на <a href="http://www.google.com/reader/view/">Google Reader</a> невозможно, только полностью Google Account) и импортировал на <a href="http://userbase.kde.org/Akregator">Akregator</a> на домашней машинке. Это помогло мне аккумулировать все чтения ленты новостей в один временной промежуток - вечером, дома.</p>
+<p>Но, как оказалось, ещё есть к чему стремиться и гугление на просторах сети дало свои результаты: <a href="http://www.proginosko.com/leechblock.html"><strong>LeechBlock</strong></a>.</p>
+<p>LeechBlock это расширение для Mozilla Firefox, которое позволяет блокировать отдельные сайты на различные промежутки времени.</p>
+<p>Собственно, начав им пользоваться, я понял, что это именно то, что мне нужно:</p>
+<p> <a href="http://picasaweb.google.com/lh/photo/GiOXKIEw3fz0uoNMZxGTlg?authkey=Gv1sRgCOCWw8r8gI-DRQ&feat=embedwebsite"><img src="http://lh6.ggpht.com/_y8p0_dtMJ38/S56FpVJKVHI/AAAAAAAAA8Q/e6hTfBRPkRo/s800/leechblock.png" title="Leechblock Settings UI" alt="Leechblock Settings UI" /></a></p>
+<p> Возможности данного расширения следующие: </p>
+<ol><li>Блокировка сайтов различные периоды времени</li>
+<li>Блокировка сайтов по временному диапазону, в том числе по дням недели.</li>
+<li>Поддержка нескольких наборов сайтов для блокировки</li>
+<li>Возможность быстрого добавления сайта в список для блокировки </li>
+</ol>
+<p>Конечно, данное расширение не является панацеей, его нужно использовать в комплексе с другими средствами.</p></div>
+
+
+<h2>Comments</h2>
+
+
+<div class='comments'>
+<div class='comment'>
+<div class='author'>uthark</div>
+<div class='content'>
+@see to learn Это вполне решаемо с помощью этого же плагина. :)<br /><br /><br /><a href="http://picasaweb.google.com/lh/photo/SnNiIIES_ZbHcYqrzg5gPA?authkey=Gv1sRgCOCWw8r8gI-DRQ&amp;feat=embedwebsite" rel="nofollow">Скриншот с примером настройки</a><br /><br />Общий смысл:<br />1. блокируем все сайты (*)<br />2. Добавляем исключения через (+)</div>
+</div>
+<div class='comment'>
+<div class='author'>see to learn</div>
+<div class='content'>
+Мне бы такую примочку, которая показывает сайты только из белого списка.</div>
+</div>
+</div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Список для проверки при оптимизации Grails приложений]]></title>
+    <link href="http://uthark.github.com/blog/2010/02/06/grails/"/>
+    <updated>2010-02-06T12:31:00-05:00</updated>
+    <id>http://uthark.github.com/blog/2010/02/06/grails</id>
+    <content type="html"><![CDATA[<div class='post'>
+Выкладываю ниже список задач, которые нужно/можно выполнить для оптимизации приложения, написанного на Grails, может кому пригодится.<br />
+<h4>Тестирование проведённых оптимизаций </h4>Первым делом необходимо разработать критерии проверки, которые позволят оценить эффективность проведённых оптимизаций.<br />
+<ol><li>Установить <a href="http://code.google.com/p/javamelody/">Java Melody</a> <a href="http://www.grails.org/plugin/grails-melody">плагин</a> для Grails для проведения анализа. <br />
+</li>
+<li>Разработать скрипты для проведения нагрузочного тестирования.<br />
+</li>
+<li>Прогнать скрипты.<br />
+</li>
+<li>Проанализировать результаты Java Melody, выявить узкие места, произвести нужные оптимизации.</li>
+</ol><h4>Общие оптимизации </h4>Очень часто обновление до последней версии используемых библиотек попутно улучшает производительность.<br />
+<ol><li>Обновить Java до последней версии<br />
+</li>
+<li>Обновить Groovy до последней версии.<br />
+</li>
+<li>Обновить Grails до последней версии.<br />
+</li>
+<li>Обновить jQuery до последней версии.<br />
+</li>
+<li>Оптимизировать настройки виртуальной машины Java (например, -server -Xmx270m -Xms270m -XX:MaxPermSize=80m -Xverify:none -XX:+UseParallelGC -XX:+UseParallelOldGC -XX:+UseAdaptiveSizePolicy -XX:SurvivorRatio=4 -XX:TargetSurvivorRatio=90 -XX:MaxTenuringThreshold=31 -XX:+AggressiveOpts)<br />
+a. http://java.sun.com/javase/technologies/hotspot/gc/gc_tuning_6.html<br />
+Вообще, по оптимизации JVM написаны целые книги, так что не буду здесь останавливаться.<br />
+</li>
+</ol><h4>Оптимизация клиентской части </h4><ol><li>Настроить <a href="http://tomcat.apache.org/tomcat-5.5-doc/config/context.html">кэширование статических ресурсов</a> в Томкате.<br />
+</li>
+<li>Настроить <a href="http://tomcat.apache.org/tomcat-5.5-doc/config/http.html">сжатие статических ресурсов</a> в Томкате.<br />
+</li>
+<li>(поставить прокси на nginx для кэширования статических ресурсов ?)<br />
+</li>
+<li>Установить плагины для Firebug, которые оценят производительность клиентской части.<br />
+<ul><li><a href="http://code.google.com/speed/page-speed">PageSpeed</a> </li>
+<li><a href="http://developer.yahoo.com/yslow/">YSlow</a> </li>
+</ul></li>
+<li>Проанализировать страницы веб-сайта с их помощью<br />
+</li>
+<li>Провести предлагаемые оптимизации.<br />
+</li>
+</ol><h4>Оптимизация клиентской части приложений, написанных на Grails </h4><ol><li>Установить плагин <a href="http://www.grails.org/plugin/ui-performance">UI Performance</a><br />
+</li>
+<li>Провести оптимизацию с использованием плагина UI Performance <br />
+</li>
+</ol><h4>Оптимизация базы данных </h4><ol><li>Оптимизировать производительность сервера базы данных (SQL Server) <br />
+a. http://www.sql-server-performance.com/tips/all_main.aspx <br />
+a. http://msdn.microsoft.com/en-us/library/ms998577.aspx<br />
+</li>
+<li>Проверить наличие индексов в базе данных, добавить необходимые<br />
+</li>
+<li>Найти неоптимальные запросы в БД, оптимизировать</li>
+</ol><h4>Оптимизация работы с базой данных </h4><ol><li>Обновить версию JDBC-драйвера<br />
+</li>
+<li>Настроить кэширование в Hibernate.<br />
+Ресурсов в сети предостаточно, навскидку <a href="http://docs.jboss.org/hibernate/core/3.3/reference/en/html/performance.html">вот</a> <a href="http://www.devx.com/dbzone/Article/29685/1954"> парочка</a>.<br />
+</li>
+</ol><h4>Оптимизация серверной части приложения </h4><ol><li>Произвести профилирование приложения (использовать Visual VM, YJP Profiler), найти узкие места и оптимизировать их.</li>
+</ol><h4>Оптимизация серверной части приложения (опционально) </h4><ol><li>Установить плагин <a href="http://www.grails.org/plugin/perf4j">Perf4J</a> для грэйлза <br />
+</li>
+<li>Добавить необходимые счётчики в код<br />
+</li>
+<li>Прогнать нагрузочные тесты, найти узкие места, оптимизировать.</li>
+</ol><h4>Заключение</h4>В целом, в данном списке нет ничего нового, это всего лишь компиляция публично доступных материалов. Тем не менее, решил это опубликовать, чтобы сэкономить время другим.</div>
+
+
+<h2>Comments</h2>
+
+
+<div class='comments'>
+<div class='comment'>
+<div class='author'>uthark</div>
+<div class='content'>
+@serger По вашей ссылке достаточно странное сравнение.<br />Остались такие вопросы:<br />1. Какие были настройки JVM?<br />2. Почему не учитывается, что при работе на сервере поведение может изменяться (ограничения по количеству потоков, например)<br />3. Не сказано, сколько раз прогонялся каждый тест.<br />4. Сколько было памяти выделено тестам.<br /><br />У меня для groovy вот такой результат получился:<br />Using 100000 iterations.<br />7.531 sec. - +/- 0.1 секунды, прогонял 10 раз.<br /><br />Тесты гонял на домашней машинке (AMD64 4200, 4GB RAM, Java 1.6.0.16, Groovy 1.6.3. OS: Ubuntu 9.10).</div>
+</div>
+<div class='comment'>
+<div class='author'>serger</div>
+<div class='content'>
+и ещё:<br />http://blog.gramant.ru/2009/10/15/%D0%B0%D0%B1%D1%81%D0%BE%D0%BB%D1%8E%D1%82%D0%BD%D0%BE-%D0%B1%D0%B5%D1%81%D0%BF%D0%BE%D0%BB%D0%B5%D0%B7%D0%BD%D1%8B%D0%B9-%D1%82%D0%B5%D1%81%D1%82-%E2%84%961-php-vs-groovy/</div>
+</div>
+<div class='comment'>
+<div class='author'>uthark</div>
+<div class='content'>
+@serger Да, про груви++ я знаю. Но ведь это костыль. :)</div>
+</div>
+<div class='comment'>
+<div class='author'>serger</div>
+<div class='content'>
+Да, тяжко, но подвижки есть...<br />http://stronglytypedblog.blogspot.com/2010/02/java-vs-scala-vs-groovy-vs-groovy.html<br />http://stronglytypedblog.blogspot.com/2010/02/groovy-performance-now-were-talkin.html</div>
+</div>
+<div class='comment'>
+<div class='author'>uthark</div>
+<div class='content'>
+@serger Вообще сравнения производительности показывают, что groovy, на котором написан grails в десятки раз медленнее явы [1], [2]. Но зато добавляются бенефиты динамического языка. Вообще я за Roo, но его ещё рано пускать в production.<br /><br /> [1] http://www.codecommit.com/blog/java/groovys-performance-is-not-subjective<br /> [2] http://groovy.dzone.com/news/groovy-vs-java-performance-jav</div>
+</div>
+<div class='comment'>
+<div class='author'>serger</div>
+<div class='content'>
+А на сколько, по Вашему, медленнее Grails, чем допустим, spring MVC, (если знакомы Roo). И на чём конкретно падает производительность?</div>
+</div>
+</div>
+
+]]></content>
+  </entry>
+  
+</feed>

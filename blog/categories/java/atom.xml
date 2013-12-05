@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: java | Блог о разработке ПО]]></title>
+  <link href="http://uthark.github.com/blog/categories/java/atom.xml" rel="self"/>
+  <link href="http://uthark.github.com/"/>
+  <updated>2013-06-29T23:40:55-04:00</updated>
+  <id>http://uthark.github.com/</id>
+  <author>
+    <name><![CDATA[Oleg Atamanenko]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Собственная реализация методов в Spring Data JPA]]></title>
+    <link href="http://uthark.github.com/blog/2012/04/28/spring-data-jpa_28/"/>
+    <updated>2012-04-28T04:03:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2012/04/28/spring-data-jpa_28</id>
+    <content type="html"><![CDATA[<p>Очевидно, что мы не всегда можем воспользоваться автоматической генерацией кода, предоставляемой <a href="http://www.springsource.org/spring-data/jpa">Spring Data JPA</a>. Например, у нас слишком сложный запрос, или нам необходимо вызвать процедуру в базе данных, либо у нас сложная бизнес-логика.</p>
+
+<p>Рассмотрим следующий пример &ndash; например, нам нужна функциональность уникального счётчика, который мы решили реализовать с помощью последовательности (sequence).</p>
+
+<p>Сначала определим интерфейс, в котором опишем все методы, которые мы будем реализовывать самостоятельно. В нашем случае, это будет только один метод:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UserRepositoryCustom</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="cm">/**</span>
+</span><span class='line'><span class="cm"> * Returns next unique id.</span>
+</span><span class='line'><span class="cm"> *</span>
+</span><span class='line'><span class="cm"> * @return next unique id.</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="n">Integer</span> <span class="nf">getNextUniqueId</span><span class="o">();</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Затем обновим объявление репозитория, чтобы он унаследовал новый интерфейс <tt>UserRepositoryCustom</tt></p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UserRepository</span> <span class="kd">extends</span> <span class="n">JpaRepository</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">User</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;,</span> <span class="n">UserRepositoryCustom</span> <span class="o">{</span>
+</span><span class='line'>   <span class="o">&amp;</span><span class="n">hellip</span><span class="o">;</span>
+</span><span class='line'><span class="o">}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Теперь напишем реализацию метода:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserRepositoryImpl</span> <span class="kd">implements</span> <span class="n">UserRepositoryCustom</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="nd">@PersistenceContext</span>
+</span><span class='line'><span class="kd">private</span> <span class="n">EntityManager</span> <span class="n">entityManager</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nd">@Override</span>
+</span><span class='line'><span class="kd">public</span> <span class="n">Integer</span> <span class="nf">getNextUniqueId</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// When using Hibernate via JPA native queries fails with mapping exception, so just use Hibernate directly:</span>
+</span><span class='line'>    <span class="n">Session</span> <span class="n">session</span> <span class="o">=</span> <span class="o">(</span><span class="n">Session</span><span class="o">)</span> <span class="n">entityManager</span><span class="o">.</span><span class="na">getDelegate</span><span class="o">();</span>
+</span><span class='line'>    <span class="n">SQLQuery</span> <span class="n">nativeQuery</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="na">createSQLQuery</span><span class="o">(</span><span class="s">&quot;SELECT \&quot;nextval\&quot;(&#39;unique_id_seq&#39;) &quot;</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">List</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">BigInteger</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">list</span> <span class="o">=</span> <span class="n">nativeQuery</span><span class="o">.</span><span class="na">list</span><span class="o">();</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">(</span><span class="n">list</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">throw</span> <span class="k">new</span> <span class="nf">IncorrectResultSizeDataAccessException</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">BigInteger</span> <span class="n">result</span> <span class="o">=</span> <span class="n">list</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="na">intValue</span><span class="o">();</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>И, наконец, укажем Spring Data JPA, чтобы в качестве класса для прокси использовался наш класс с реализацией собственных методов. Для этого нам нужна ещё одна секция <tt>repositories</tt> в конфигурационном файле:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;pre&gt;&lt;code&gt;</span><span class="ni">&amp;lt;</span>repositories base-package=&quot;[base.repository.package]&quot;/<span class="ni">&amp;gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="ni">&amp;lt;</span>repositories base-package=&quot;[base.repository.package]&quot;<span class="ni">&amp;gt;</span>
+</span><span class='line'>    <span class="ni">&amp;lt;</span>repository id=&quot;userRepository&quot; custom-impl-ref=&quot;userRepositoryImpl&quot;/<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="ni">&amp;lt;</span>/repositories<span class="ni">&amp;gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="ni">&amp;lt;</span>beans:bean id=&quot;userRepositoryImpl&quot; class=&quot;...UserRepositoryImpl&quot;/<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="nt">&lt;/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Вот и всё.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Использование BeanPostProcessor на примере журналирования]]></title>
+    <link href="http://uthark.github.com/blog/2012/04/20/beanpostprocessor/"/>
+    <updated>2012-04-20T04:51:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2012/04/20/beanpostprocessor</id>
+    <content type="html"><![CDATA[<div class='post'>
+Сегодня я хочу рассказать, как можно сделать инициализацию логгера в классе с использованием аннотаций и <a href="http://static.springsource.org/spring/docs/current/javadoc-api/org/springframework/beans/factory/config/BeanPostProcessor.html">BeanPostProcessor</a>
+
+Очень часто мы инициализируем логгер следующим образом:
+<pre class="brush:java">
+public class MyClass {
+    private static final Logger LOG = LoggerFactory.getLogger(MyClass.class);
+}
+</pre>
+
+Я покажу, как сделать, чтобы можно было писать вот так: 
+<pre class="brush:java">
+    @Log
+    private Logger LOG;
+</pre>
+
+Первым делом нам нужно объявить аннотацию:
+
+<pre class="brush:java">
+@Retention(RUNTIME)
+@Target(FIELD)
+@Documented
+public @interface Log {
+    String category() default "";
+}
+</pre>
+
+А вторым делом, написать собственный <tt>BeanPostProcessor</tt>, который бы устанавливал нам логгер:
+
+<pre class="brush:java">
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.stereotype.Component;
+import org.springframework.util.ReflectionUtils;
+
+@Component
+public class LoggerPostProcessor implements BeanPostProcessor {
+    @Override
+    public Object postProcessAfterInitialization(Object bean, String beanName) {
+        return bean;
+    }
+
+    @Override
+    public Object postProcessBeforeInitialization(final Object bean, final String beanName) {
+        ReflectionUtils.doWithFields(bean.getClass(), new FieldProcessor(bean, beanName), new LoggerFieldFilter());
+        return bean;
+    }
+
+    private static class FieldProcessor implements ReflectionUtils.FieldCallback {
+        private final Object bean;
+        private final String beanName;
+
+        private FieldProcessor(Object bean, String beanName) {
+            this.bean = bean;
+            this.beanName = beanName;
+        }
+
+        @Override
+        public void doWith(Field field) throws IllegalAccessException {
+            Log loggerAnnot = field.getAnnotation(Log.class);
+
+            // Sanity check if annotation is on the field with correct type.
+            if (field.getType().equals(org.slf4j.Logger.class)) {
+                // As user can override logger category - check if it was done.
+                String loggerCategory = loggerAnnot.category();
+                if (StringUtils.isBlank(loggerCategory)) {
+                    // use default category instead.
+                    loggerCategory = bean.getClass().getName();
+                }
+                Logger logger = LoggerFactory.getLogger(loggerCategory);
+                ReflectionUtils.makeAccessible(field);
+                field.set(bean, logger);
+            } else {
+                throw new IllegalArgumentException(
+                    "Unable to set logger on field '" + field.getName() + "' in bean '" + beanName +
+                        "': field should have class " + Logger.class.getName());
+            }
+        }
+    }
+
+    private static class LoggerFieldFilter implements ReflectionUtils.FieldFilter {
+        @Override
+        public boolean matches(Field field) {
+            Log logger = field.getAnnotation(Log.class);
+            return null != logger;
+        }
+    }
+}
+</pre>
+
+Если вы используете не <a href="http://www.slf4j.org/">sfl4j</a>, а, например, <a href="http://logging.apache.org/log4j/1.2/">log4j</a>, или <a href="http://commons.apache.org/logging/">commons-logging</a>, то нужно немного поправить код внутри метода <tt>doWith</tt>
+
+Попутно, данный код показывает пример использования класса <a href="http://static.springsource.org/spring/docs/current/javadoc-api/org/springframework/util/ReflectionUtils.html">org.springframework.util.ReflectionUtils</a>.</div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Преобразуем строку в дату]]></title>
+    <link href="http://uthark.github.com/blog/2012/04/20/blog-post/"/>
+    <updated>2012-04-20T04:25:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2012/04/20/blog-post</id>
+    <content type="html"><![CDATA[<p>Казалось бы, есть простейшая задача &ndash; преобразовать строковое представление даты в объект класса <tt>java.util.Date</tt>.</p>
+
+<p>Как оказалось, иногда использование DateFormat не помогает. В случае, если строка &ndash; это заголовок <tt>Date</tt> из письма, то нам нужно использовать <tt><a href="http://docs.oracle.com/javaee/5/api/javax/mail/internet/MailDateFormat.html">javax.mail.internet.MailDateFormat</a></tt> для преобразования такой строки.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">String</span> <span class="n">dateStr</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">hellip</span><span class="o">;</span>
+</span><span class='line'><span class="n">Date</span> <span class="n">parsedDate</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MailDateFormat</span><span class="o">().</span><span class="na">parse</span><span class="o">(</span><span class="n">dateStr</span><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Немного о виртуальных методах в Java]]></title>
+    <link href="http://uthark.github.com/blog/2011/07/21/java/"/>
+    <updated>2011-07-21T01:06:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2011/07/21/java</id>
+    <content type="html"><![CDATA[<div class='post'>
+Сегодня я хочу рассмотреть некоторые особенности переопределения методов в Java.  В java нельзя переопределить:   <br />
+<ul><li>поля класса</li>
+<li>конструкторы, инициализаторы класса</li>
+<li>статические методы</li>
+<li>статические поля</li>
+</ul><br />
+Подробнее об этом можно прочитать в <a href="http://java.sun.com/docs/books/jls/third_edition/html/classes.html#228745">Java Language Specification, §8.4.8</a><br />
+<br />
+Итак, в java все нестатические неприватные (то есть, <tt>protected</tt>, <tt>package</tt> и <tt>public</tt>) методы являются виртуальными. Ключевое слово <tt>final</tt> запрещает возможность дальнейшего переопределения метода в подклассах.  Рассмотрим следующий пример:  <br />
+<br />
+<pre class="brush: java">public class A {
+     int i = 3;
+     int getI() {return i;}
+}
+
+public class B extends A{
+     int i = 5;
+     int getI() {return i;}
+}
+
+A a = new B();
+System.out.println(a.i);
+System.out.println(a.getI());
+
+</pre><br />
+Вопрос: что выведет данный код?<br />
+Ответ: <br />
+1. Так как поля класса не наследуются, то у класса A своё поле i и у класса B тоже своё поле i. Так как для полей полиморфизм не действует, то при обращении a.i мы обращаемся к классу A, поэтому на экран будет выведено 3.<br />
+2. При вызове метода a.getI() у нас в дело вступает полиморфизм, поэтому будет вызван метод от класса, инстанс которого был создан. Соответственно, мы получим на выходе 5.<br />
+<br />
+<br />
+Другой пример:<br />
+<br />
+<pre class="brush: java">public class A {
+     static int i = 3;
+     static int getI() {return i;} 
+}
+
+public class B extends A{
+     static int i = 5;
+     static int getI() {return i;}
+}
+
+A a = new B();
+System.out.println(a.i);
+System.out.println(a.getI());
+
+</pre><br />
+Статические поля и методы виртуальными не являются, поэтому оба вызова выведут нам 3.</div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Удаление различных диакритических символов из строки]]></title>
+    <link href="http://uthark.github.com/blog/2010/05/21/blog-post/"/>
+    <updated>2010-05-21T13:52:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2010/05/21/blog-post</id>
+    <content type="html"><![CDATA[<div class='post'>
+<p>Возникла проблема - каким образом заменить в строке символы из национальных кодировок на соответствующие им из латиницы.</p><p>Например, из строки explicación получить explicacion.</p><pre class="brush: java">
+package com.blogspot.atamanenko;
+
+import java.text.Normalizer;
+import java.text.Normalizer.Form;
+
+public class StringNormalizer {
+
+    public static String normalize(String string) {
+        return Normalizer.normalize(string, Form.NFD)
+            .replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+    }
+}
+
+</pre><p>Вызов <a href='http://java.sun.com/javase/6/docs/api/java/text/Normalizer.html#normalize%28java.lang.CharSequence,%20java.text.Normalizer.Form%29'>Normalizer.normalize</a> проводит <a href='http://www.unicode.org/reports/tr15/tr15-23.html'>нормализацию</a> входной строки. Последующий вызов регулярного выражения удаляет все диакритические знаки, полученные после нормализации.</p></div>
+
+]]></content>
+  </entry>
+  
+</feed>

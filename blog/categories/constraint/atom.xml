@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: constraint | Блог о разработке ПО]]></title>
+  <link href="http://uthark.github.com/blog/categories/constraint/atom.xml" rel="self"/>
+  <link href="http://uthark.github.com/"/>
+  <updated>2013-06-29T23:40:55-04:00</updated>
+  <id>http://uthark.github.com/</id>
+  <author>
+    <name><![CDATA[Oleg Atamanenko]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Двунаправленная ссылочная целостность]]></title>
+    <link href="http://uthark.github.com/blog/2009/07/07/blog-post/"/>
+    <updated>2009-07-07T11:11:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2009/07/07/blog-post</id>
+    <content type="html"><![CDATA[<div class='post'>
+Здравствуйте.<br />
+<br />
+Я считаю, что разработчику всегда стоит иметь представление о том, как работают низлежащие абстракции. Хотя бы потому, что часто <a href="http://c2.com/cgi/wiki?LeakyAbstraction">абстракции</a> <a href="http://en.wikipedia.org/wiki/Leaky_abstraction">бывают</a> <a href="http://www.joelonsoftware.com/articles/LeakyAbstractions.html">протекающими</a>.<br />
+<br />
+А веду я это к тому, что когда фреймворк вываливает стектрейс с несколькими вложенными (и, часто, для непосвященных непонятными) исключениями, то бывает непонятно, что с этим делать, особенно, если не знаешь, как реализована абстракция.<br />
+<br />
+Иногда бывает нужно хранить двунаправленные связи между таблицами. Например, есть игрок и есть его статистика и нужно, чтобы каждая из сущностей знала про другую.<br />
+<br />
+Вопрос - каким образом вставлять в базу данных такие сущности?<br />
+<br />
+При вставке в таблицу в Player нам нужно уже иметь запись в таблице Statistics, а для вставки в таблицу Statistics нужно знать идентификатор игрока, к которому относится эта запись.<br />
+<br />
+Выглядит замкнутым кругом, но решение есть.<br />
+<p>Во-первых, вставки в обе таблицы должны происходить в рамках одной транзакции (как я <a href="http://www.blogger.com/2009/04/blog-post_24.html">уже писал</a>, транзакция обеспечивает перевод базы данных из одного непротиворечащего состояния в другое непротиворечащее состояние).<br />
+</p><br />
+К сожалению, этого недостаточно:<br />
+<br />
+<pre class="brush: sql">begin transaction;
+
+INSERT INTO "Player"  VALUES (10, 20);
+INSERT INTO "Statistics"  VALUES (20, 10);
+
+commit;
+</pre><br />
+<br />
+выдаёт следующую ошибку:<br />
+<br />
+<pre class="brush: plain">ERROR: insert or update on table "Player" violates foreign key constraint "statisticsId"
+SQL state: 23503
+Detail: Key (statisticsId)=(20) is not present in table "Statistics".
+</pre><br />
+<br />
+И снова кажется, что замкнутый круг не разорвать.<br />
+<br />
+Но решение всё же есть.<br />
+Многие базы данных позволяют нарушать консистентность базы данных внутри транзакции. В данном случае можно "попросить" базу данных отложить проверку ссылочной целостности. На примере PostgreSQL рассмотрим, как это работает.<br />
+<br />
+<h3>PostgreSQL</h3><br />
+<pre class="brush: sql">begin transaction;
+
+set constraints all deferred; -- 1
+
+INSERT INTO "Player"  VALUES (10, 20);
+INSERT INTO "Statistics"  VALUES (20, 10);
+
+set constraints all immediate; -- 2
+
+commit; -- 3
+</pre><br />
+<br />
+1 - Сделать все ограничения отложенными. Ограничения будут проверены в момент проведения фиксации транзакции (в строке 3)<br />
+2 - Явно делаем все ограничения немедленными. В данном примере это необязательно, так как в 3) они всё равно будут проверены.<br />
+<br />
+После выполнения данного кода получаем:<br />
+<pre class="brush: plain">Query returned successfully with no result in 24 ms.
+</pre><br />
+<br />
+Это уже полностью рабочий пример, чтобы это заработало нужно явно сделать ограничения отложенными - они должны быть объявлены как DEFERRED. Официальная документация к PostgreSQL гласит:<br />
+<blockquote>Upon creation, a constraint is given one of three characteristics: DEFERRABLE INITIALLY DEFERRED, DEFERRABLE INITIALLY IMMEDIATE, or NOT DEFERRABLE. The third class is always IMMEDIATE and is not affected by the SET CONSTRAINTS command. The first two classes start every transaction in the indicated mode, but their behavior can be changed within a transaction by SET CONSTRAINTS.</blockquote><br />
+<br />
+Так что необходимо также модифицировать объявления ограничений:<br />
+<pre class="brush: sql">ALTER TABLE "Player"
+ADD CONSTRAINT "statisticsId" FOREIGN KEY ("statisticsId")
+REFERENCES "Statistics" ("statisticsId") MATCH SIMPLE
+ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE;
+
+</pre><br />
+<br />
+Данный пример был приведён для PostgreSQL.<br />
+<br />
+Для других баз данных решения следующие:<br />
+<h3>Sybase</h3><br />
+В Sybase есть переменная <a href="http://manuals.sybase.com/onlinebooks/group-sasarc/awg0600e/dbugen6/@Generic__BookTextView/26075;hf=0;pt=25811">WAIT_FOR_COMMIT</a>, которая управляет поведением проверки ограничений. По умолчанию она отключена. Кроме того, это поведение можно переопределить при объявлении можно указывать CHECK ON COMMIT. Подробнее можно посмотреть в <a href="http://manuals.sybase.com/onlinebooks/group-pbarc/conn5/sqlug/@Generic__BookTextView/39397%3Bpt=39951">официальной документации</a>.<br />
+<br />
+<h3>Oracle</h3><br />
+Также, как и в PostgreSQL:<br />
+<blockquote>You can define constraints as either deferrable or not deferrable, and either initially deferred or initially immediate. These attributes can be different for each constraint. You specify them with keywords in the CONSTRAINT clause:<br />
+DEFERRABLE or NOT DEFERRABLE<br />
+INITIALLY DEFERRED or INITIALLY IMMEDIATE<br />
+<br />
+Constraints can be added, dropped, enabled, disabled, or validated. You can also modify a constraint's attributes.<br />
+</blockquote><br />
+Подробнее в <a href="http://download.oracle.com/docs/cd/B10501_01/server.920/a96524/c22integ.htm#4666">официльной документации</a>.<br />
+<br />
+<h3>mySQL</h3><br />
+К сожалению, mySQL не имеет возможности отложенной проверки ограничении, о чём в документации и сказано:<br />
+<blockquote><em>Deviation from SQL standards</em>: Like MySQL in general, in an SQL statement that inserts, deletes, or updates many rows, InnoDB checks UNIQUE and FOREIGN KEY constraints row-by-row. According to the SQL standard, the default behavior should be deferred checking. That is, constraints are only checked after the entire SQL statement has been processed. Until InnoDB implements deferred constraint checking, some things will be impossible, such as deleting a record that refers to itself via a foreign key.</blockquote><br />
+<br />
+Но это не конец света, так как можно отключить проверку внешних ключей:<br />
+<pre class="brush: sql">SET foreign_key_checks = 0;
+-- code goes here
+SET foreign_key_checks = 1;
+</pre><br />
+<br />
+Чем эта информация может быть полезна для разработчика? Например, в случае, если ошибки и недоработки Hibernate покажут себя в виде стектрейса в логе(например, <a href="http://opensource.atlassian.com/projects/hibernate/browse/HHH-2248">HHH-2248</a>), то разработчик будет понимать причину ошибки и то, как реализовать work-around.</div>
+
+
+<h2>Comments</h2>
+
+
+<div class='comments'>
+<div class='comment'>
+<div class='author'>Oleg Atamanenko</div>
+<div class='content'>
+Очень рад, что вам эта статья была полезной.</div>
+</div>
+<div class='comment'>
+<div class='author'>Anonymous</div>
+<div class='content'>
+спасибо, а я понял что такое двунаправленные связи</div>
+</div>
+<div class='comment'>
+<div class='author'>Safarov</div>
+<div class='content'>
+Спасибо за вашу статью. Для меня она объяснила как можно повысть целостность базы.</div>
+</div>
+</div>
+
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,861 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Блог о разработке ПО</title>
+  <meta name="author" content="Oleg Atamanenko">
+
+  
+  <meta name="description" content="Недавно задали мне вопрос - что я думаю об использовании модификатора protected для членов базового класса? Под этим вопросом кроются более &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://uthark.github.com/blog/page/5/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feeds.feedburner.com/atamanenko" rel="alternate" title="Блог о разработке ПО" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=Roboto+Slab:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Roboto:300,700,900&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+<link rel="author" href="https://plus.google.com/112372998073079463630/?rel=author" />
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-8688665-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Блог о разработке ПО</a></h1>
+  
+    <h2>Cтруктурированные нерегулярные заметки о разработке программного обеспечения</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="http://feeds.feedburner.com/atamanenko" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:uthark.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/05/30/protected/">Использование модификатора Protected на полях в базовом классе</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-05-30T12:45:00-04:00" pubdate data-updated="true">May 30<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+Недавно задали мне вопрос - что я думаю об использовании модификатора protected для членов базового класса? Под этим вопросом кроются более серьёзные вещи.
+
+Например, любой член класса, имеющий модификатор protected, расширяет интерфейс базового класса для подклассов - подклассы имеют доступ ко всем protected и public методам этого поля. Иногда это сделано специально, например, для того, чтобы подклассы могли иметь доступ к какой-либо функциональности. Однако, если подкласс будет использовать protected поля неправильно (например, он может установить его в null, нарушив, таким образом, поведение базового класса), то это не принесёт пользы.
+
+Поразмыслив над вопросом я пришел к следующему, достаточно логичному и широкоизвестному выводу - необходимо давать наиболее закрытый доступ, какой можно. То есть, если можно объявить член класса как private, то необходимо сделать его private. Если в подклассах необходим доступ к члену класса, то необходимо проанализировать, какие методы нужны в подклассах и открыть только их через делегирование. Если набор методов заранее неизвестен, то можно сделать protected getter для поля.</div>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/05/26/fixed-price-2/">Сферический программист в вакууме и абстрактное понятие качества кода в условиях Fixed-Price проектов (часть 2)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-05-26T14:26:00-04:00" pubdate data-updated="true">May 26<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+Причин для написания плохого кода может быть несколько. Некоторые из них лежат на поверхности:
+
+<ol><li>  Отсутствие опыта</li><li>Невнимательность</li><li>  Некомпетентность</li><li>  Немотивированность
+</li></ol><span style="font-weight: bold;">Отсутствие опыта</span> - казалось бы, самая простая причина проблемы; решение проблемы выглядит очевидным - со временем, разработчик будет писать код лучше. Но это ошибочное мнение. Бывает, люди с опытом более 5-10 лет разработки коммерческих приложений пишут настолько плохой код, что иногда кажется, что они это нарочно. Решать эту проблему необходимо постоянным указанием на ошибки. Но это решит только часть проблемы - человек узнает, как писать код в конкретных ситуациях. Но не всякий разработчик (к сожалению, по опыту знаю) сможет экстраполировать знание на все подобные проблемы способ решения.
+
+<span style="font-weight: bold;">Невнимательность</span> - через это проходят почти все. Почти каждый сможет вспомнить случай, когда не был сделан <tt>svn add</tt> перед коммитом. Эта проблема решается обычно самомотивацией человека на хороший код. Впрочем, команда и сервер непрерывной интеграции тоже прилагают усилия для того, чтобы человек проверил ещё раз то, что он хочет выложить в репозиторий.
+
+<span style="font-weight: bold;">Некомпетентность</span> - эта причина пересекается с недостатком опыта, но, при этом отлична от неё. Адекватный разработчик, на мой взгляд, должен стремиться к компетентности в той области, в которой он работает. Но этого, к сожалению часто не происходит. На мой взгляд это из-за следующей причины.
+
+<span style="font-weight: bold;">Немотивированность</span>. Самое большое зло, которое может быть. Причины недостаточной мотивации разработчика могут быть весьма разнообразными - не выспался, дома проблемы, зарплата низкая, задача скучная и неинтересная. Список можно продолжать до бесконечности. Решение этой проблемы кроется, в первую очередь, в качественном управлении. Менеджер должен быть тонким и хорошим психологом, чтобы видеть или чувствовать все эти проблемы и предотвращать их.</div>
+
+
+<h2>Comments</h2>
+
+
+<div class='comments'>
+<div class='comment'>
+<div class='author'>uthark</div>
+<div class='content'>
+Увы, далеко не всякая это делает. Например, ни Eclipse, ни Jetbrains IDEA не предлагают тебе этого. Хотя и могут показать файлы, которые не были добавлены. В случае с idea у неё есть ещё один неприятный момент - не показывает в момент коммита библиотеки, которые не были добавлены. Пару раз натыкался на такую проблему. Правда, сервер непрерывной интеграции быстро нотифицировал о ней. :)</div>
+</div>
+<div class='comment'>
+<div class='author'>Ivan</div>
+<div class='content'>
+&gt;Почти каждый сможет вспомнить случай, <br />&gt;когда не был сделан svn add перед коммитом. <br /><br />хорошая среда разработки предупреждает разработчика о том, что он хочет сделать хуйню %)</div>
+</div>
+</div>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/05/26/fixed-price-1/">Сферический программист в вакууме и абстрактное понятие качества кода в условиях Fixed-Price проектов (часть 1)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-05-26T13:36:00-04:00" pubdate data-updated="true">May 26<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+В последнее время всё чаще задумываюсь о том, почему разработчики пишут плохой и некачественный код. Под кодом я подразумеваю не только сам код, но и, в том числе, архитектуру и дизайн.
+
+Плохим кодом я считаю следущий:
+<ol><li>Невыполняющий функциональные требования</li><li>Невыполняющий нефункциональные требования</li><li>Непокрытый тестами</li><li>Плохо тестируемый</li><li>Плохо поддерживаемый</li><li>С багами</li><li>Неоптимальный</li></ol>Если код не выполняет функциональные требования, то этот код вообще ничего не стоит. Заказчику такой код не нужен, именно поэтому этот код плохой. На него были потрачены ресурсы, но при этом сам код не имеет никакой ценности.
+
+Если код не выполняет нефункциональные требования, то это говорит о том, что либо дизайн, либо реализация, не учли требования и это тоже не добавляет удовлетворённости конечному пользователю. Часто здесь можно провести рефакторинг, но бывает и так, что архитектурные ошибки не дают в принципе выполнить нефункциональные требования, либо их реализация требует очень больших временных затрат.
+
+Если код не покрыт тестами, то этот код не работает. Эта аксиома должна всегда быть перед глазами разработчика. Как говорится, самая большая проблема с компьютерами это то, что они делают не то, что разработчик подразумевал, а то, что он написал. Именно поэтому тесты - гарантия того, что код выполняет то, что подразумевает разработчик. Хотя здесь тоже есть проблема, что разработчик не понимает, что именно ему нужно от кода, либо не знает, как протестировать нужную ему функциональность.
+
+Плохо тестируемый код. Такой код часто встречается, когда не используется TDD, в связи с этим разработчик не понимает или не знает, что именно он хочет от кода. Также, плохо тестируемый код это признак того, что код имеет не самую лучшую архитектуру (например, высокий coupling)
+
+Плохо поддерживаемый код это любой код, который сложно поддерживать. Сюда относятся любые ошибки в коде, которые осложняют поддержку - нет единого стиля форматирования, неясные имена переменных, методов, классов, плохая декомпозиция, отсутствие или наличие устаревших тестов, комментариев, документации, или, что ещё хуже ошибки в комментариях, документации, плохая архитектура (как её отсутствие, так и overdesigned). Все эти проблемы в конечном итоге влияют на качество проекта и на удовлетворённость заказчика.
+
+Код с багами. Логично, что это плохой код, и это, к сожалению, часто встречающийся код. По статистике, на 1000 строк кода приходится 10-12 багов. К сожалению, этот показатель меняется в зависимости от различных факторов (компетентность разработчика, сроки, сложность архитектуры, используемый язык и технологии и т.д.) и часто в сторону ухудшения.
+
+Неоптимальный код не всегда плохой, при условии, что он выполняет функциональные и нефункциональные требования, а также лёгок в поддерживании.
+
+Продолжение следует&#8230;</div>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/05/23/google-application-engine/">Google Application Engine</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-05-23T12:00:00-04:00" pubdate data-updated="true">May 23<span>rd</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+Посмотрел на <a href="http://code.google.com/appengine/">Google App Engine </a>(GAE).
+
+При своей цене (= бесплатно) это очень хороший сервис.
+
+GAE - это <a href="http://code.google.com/appengine/docs/whatisgoogleappengine.html">инфраструктура для запуска веб-приложений на серверах Google</a>. То, что сейчас модно называть <a href="http://en.wikipedia.org/wiki/Cloud_computing">cloud computing</a>.
+
+На <a href="http://www.google.com/intl/en/press/annc/20080407_app_engine.html">презентации платформы в 2008 году</a> Google объявил только о поддержке Python. <a href="http://googleappengine.blogspot.com/2009/04/seriously-this-time-new-language-on-app.html">Год спустя, в апреле 2009 года Google заявил о поддержке Java</a>, правда <a href="http://code.google.com/appengine/docs/java/jrewhitelist.html">с ограничениями</a>.
+Собственно, <a href="http://code.google.com/appengine/docs/java/overview.html">поддержка Java</a> и была тем самым толчком, что я решил поближе посмотреть на платформу.
+
+<h2>Возможности</h2>
+Google App Engine предоставляет <a href="http://code.google.com/appengine/whyappengine.html">следующие возможности</a> как платформа:
+<ul><li>масштабируемость</li><li>кластеризация</li><li>он-лайн мониторинг</li><li>балансировку нагрузки</li><li>безопасность</li><li>горизонтальное масштабирование базы данных</li><li>отказоустойчивость</li></ul>
+
+<h2>Ограничения</h2>Как и любое бесплатное решение у платформы есть ограничения. На данный момент эти ограничения следующие:
+<ul><li>Ограниченный набор Java API</li><li>Нереляционное хранилище данных</li><li>Ограничение доступа к другим компьютерам</li><li>Из доступных языков: Python, Java и JVM-based</li><li>Ограничения на используемые ресурсы
+</li></ul><h2>Технологии</h2><h2><a href="http://code.google.com/appengine/docs/java/apis.html">App Engine Services</a></h2><ul><li><a href="http://code.google.com/appengine/docs/java/urlfetch/">URL Fetch</a></li><li><a href="http://code.google.com/appengine/docs/java/mail/">Mail</a></li><li><a href="http://code.google.com/appengine/docs/java/memcache/">Memcache</a></li><li><a href="http://code.google.com/appengine/docs/java/images/">Image Manipulation</a></li><li><a href="http://code.google.com/appengine/docs/java/config/cron.html">Scheduled Tasks (Cron Jobs)</a></li><li>Secure Data Connector</li><li><a href="http://code.google.com/appengine/docs/java/users/">User Service API</a></li></ul><h3>База данных</h3>Это <a href="http://en.wikipedia.org/wiki/BigTable">небезызвестный</a> <a href="http://labs.google.com/papers/bigtable.html">BigTable</a>. Для работы с ним используется <a href="http://code.google.com/appengine/docs/python/datastore/gqlreference.html">GQL</a>. Для Java-реализации используется <a href="http://code.google.com/appengine/docs/java/datastore/usingjdo.html">JDO</a> с ограниченной поддержкой JPA.
+
+
+
+<h2>Применение</h2>
+Уже сейчас существует много приложений, которые размещены на серверах Google. Многие из них доступны в <a href="http://appgallery.appspot.com/">галерее приложений App Engine</a>
+На мой взгляд, использование нереляционной модели данных накладывает свои ограничения на тип проектируемых приложений, так как не всегда возможна полная денормализация данных.
+
+<h2>Впечатления от использования SDK</h2>Обзор не был бы полным, если бы я не попробовал написать простенькое приложение для платформы. Для этого необходимо зарегистрироваться на App Engine и запросить поддержку Java. Google объявил, что попробовать платформу можно только первым 10000 разработчикам. Судя по всему, ещё можно успеть, так как я получил доступ в течении 15 минут (приходит ключ по SMS). Подтверждение на поддержку Java пришло в течении суток.
+
+Google предоставляе SDK для работы с платформой. В SDK входят скрипты для создания приложения, загрузки их на сервера Google и API для доступа к вышеперечисленным сервисам платформы. Кроме того, при разработке используются заглушки для сервисов (например, для User Service API), которые позволяют локально писать и отлаживать приложение.
+
+Компания SpringSource объявила о <a href="http://blog.springsource.com/2009/05/14/grails-111-released-with-google-appengine-support/">поддержке Grails</a> на платформе Google App Engine. Это не может не радовать, но первые впечатления были смазаны, так как <a href="http://grails.org/plugin/app-engine">плагин appengine для Grails</a> ещё нужно дорабатывать. Например, кодогенератор заточен для gorm, который сделан поверх hibernate, но так как appengine не поддерживает hibernate, для генерации CRUD приходится делать следующие пассы: включать hibernate плагин, генерировать CRUD, отключать hibernate плагин. Надеюсь, в следующей версии appengine плагина эта проблема будет решена. Остальные проблемы можно почитать как в комментариях к анонсу, так и в <a href="http://jira.codehaus.org/secure/IssueNavigator.jspa?reset=true&amp;&amp;query=appengine&amp;summary=true&amp;description=true&amp;body=true">джире проекта</a>.
+
+<h2>Альтернативные платформы</h2>Самым известным, наверно, является <a href="http://aws.amazon.com/ec2/">Amazon EC2</a>, а замыкает тройку Microsoft с их <a href="http://www.microsoft.com/azure/windowsazure.mspx">Windows Azure</a>.
+Amazon не предоставляет бесплатной дозы, в отличии от Microsoft и Google. При этом Amazon предоставляет shell-доступ к серверам. Сравнивать в целом платформы не имеет смысла, поэтому не буду.</div>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/05/02/eclipse/">Eclipse и его расширения</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-05-02T13:18:00-04:00" pubdate data-updated="true">May 2<span>nd</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+Многие ругают <a href="http://www.eclipse.org/">Eclipse</a> за то, что там нет многого из того, что есть в коробке у <a href="http://www.jetbrains.com/idea/">Jetbrains Intellij IDEA</a>. Мне всегда казалось это не очень корректным, так как Eclipse в первую очередь платформа, а уже потом - среда для Java разработки.<br />
+Решил собрать воедино весь список используемых мною расширений для Eclipse.<br />
+<ol><li><a href="http://subclipse.tigris.org/">Subclipse</a> - без этого никуда. Это расширение позволяет работать с системой контроля версий <a href="http://subversion.tigris.org/">Subversion</a> не выходя из Eclipse.</li>
+<li><a href="http://m2eclipse.codehaus.org/">m2eclipse</a> - Расширение для работы с <a href="http://maven.apache.org/">maven</a>. Графический редактор pom.xml позволяет избавиться от редактирования pom.xml вручную. В качестве приятного дополнения - возможность посмотреть графически список зависимостей проекта (вместе с транзитивными), а так же увидеть ситуации, когда 2 разные библиотеки зависят от разных версий одной и той же библиотеки.</li>
+<li><a href="http://code.google.com/eclipse/">Google Plugin for Eclipse</a> - официальное расширение от Google для работы с <a href="http://code.google.com/webtoolkit">Google Web Toolkit</a> и <a href="http://code.google.com/appengine">Google Application Engine</a>.</li>
+<li><a href="http://eclipse-cs.sourceforge.net/">Eclipse-CS</a> - Нет, это не запускалка Counter Strike, а всего лишь расширение, интегрирующее статический анализатор исходного кода <a href="http://checkstyle.sourceforge.net/">Checkstyle</a> в Eclipse. Проверяет правильность форматирования кода согласно заданным правилам. Обязательное расширение при работе в команде.</li>
+<li><a href="http://springide.org/project/wiki">Spring IDE</a> - расширение от команды SpringSource для работы с проектами, использующими Spring, в том числе Spring AOP и Spring Webflow.</li>
+<li><a href="http://www.xmind.net/">XMind</a> - отличное расширение, предоставляющее <a href="http://en.wikipedia.org/wiki/Mindmap">mind-mapping</a> возможности в Eclipse.</li>
+<li><a href="http://www.jboss.org/tools">JBoss Tools</a> - наборо расширений для работы с продуктами JBoss - Hibernate, JBoss AS, Drools, jBPM, JSF, (X)HTML, Seam, Smooks, JBoss ESB, JBoss Portal&#8230;</li>
+<li><a href="http://www.eclemma.org/">EclEmma</a> - интеграция отличной библиотеки <a href="http://emma.sourceforge.net/">EMMA</a> в Eclipse. EMMA - приложение для подсчёта покрытия кода тестами. Must-have расширение.</li>
+<li><a href="http://www.eclipse.org/tptp/">TPTP</a> - Под этой странной аббревиатурой скрывается Test &amp; Performance Tools Platform. Набор расширений для тестирования и профилирования приложений.</li>
+<li><a href="http://pmd.sourceforge.net/integrations.html#eclipse">PMD</a> - Интеграция библиотеки <a href="http://pmd.sourceforge.net/">PMD</a>, которая выполняет статический анализ кода на предмет возможных ошибок в коде.</li>
+<li><a href="http://www.eclipse.org/webtools/">WTP</a> - Web Tools Platform - официальный набор расширений для разработки Web и Java EE приложений.</li>
+<li><a href="http://groovy.codehaus.org/Eclipse+Plugin">Groovy &amp; Grails</a> - расширение для работы с языком <a href="http://groovy.codehaus.org/">Groovy</a> и фреймворком <a href="http://grails.org/">Grails</a>.</li>
+<li><a href="http://code.google.com/p/egit/">eGit</a> - расширение предоставляет возможность работы с распределенной системой контроля версий <a href="http://git-scm.com/">git</a>.</li>
+<li><a href="http://eclipsesql.sourceforge.net/">Eclipse SQL Explorer</a> - тонкий SQL-клиент, который позволяет просматривать различные JDBC-совместимые базы данных.</li>
+</ol>Очень много расширений есть на <a href="http://www.eclipseplugincentral.com/">Eclipse Plugin Central</a><br />
+<br />
+Также, все плагины, на которые я обращаю внимание можно найти на <a href="http://delicious.com/dark.schakal/EclipsePlugin">del.icio.us</a></div>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/04/26/blog-post_26/">Критерии выбора блокировок</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-04-26T04:30:00-04:00" pubdate data-updated="true">Apr 26<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+Так как использование блокировок по-разному влияет на производительность, необходимо выбирать, в каких случаях какой вид блокировок лучше использовать.
+
+<style type="text/css">.nobr br { display: none }</style>
+<div class="nobr">
+<table>
+
+<tbody><tr>
+<th>Условие</th>
+<th>Пессимистичная</th>
+<th>Оптимистичная</th>
+<th>Сверх-оптимистичная</th>
+</tr>
+<tr>
+<td>Конфликты часты
+</td>
+<td>+
+</td>
+<td>−
+</td>
+<td>−
+</td>
+</tr>
+<tr>
+<td>Конфликты редки
+</td>
+<td>−
+</td>
+<td>+
+</td>
+<td>−
+</td>
+</tr>
+<tr>
+<td>Данные только добавляются (например, журнал)
+</td>
+<td>−
+</td>
+<td>−
+</td>
+<td>+
+</td>
+</tr>
+<tr>
+<td>Данные только читаются (справочники)</td>
+<td>−</td>
+<td>−</td>
+<td>+</td>
+</tr></tbody>
+<caption>Критерии выбора блокировок</caption>
+</table>
+</div></div>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/04/24/blog-post_25/">Традиции академгородка</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-04-24T13:19:00-04:00" pubdate data-updated="true">Apr 24<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+Сегодня была оказана помощь лягушкам, которых инстинкт гонит в озеро для размножения. Прогулка с ведром и фонарём, булькание лягушек в озере и их кваканье в ведре прохладным весенним вечером - это прекрасно.</div>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/04/24/blog-post_24/">Транзакции в реляционных базах данных</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-04-24T10:49:00-04:00" pubdate data-updated="true">Apr 24<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+<style type="text/css">.nobr br { display: none }</style>
+
+При работе в многопользовательском окружении может возникнуть ситуация, когда разные пользователи или системы обновляют одни и те же данные. Это может привести к ситуации, когда один из пользователей изменит данные, которые уже изменял другой пользователь и приведёт либо к потере данных, либо к переводу данных в неконсистентное состояние.
+Для решения этой проблемы были придуманы транзакции. Целью транзакции является создание абстракции того, что каждый пользователь - единственный в системе.
+
+<h3>Характеристики транзакций</h3>
+В конце 1970-х <a href="http://en.wikipedia.org/wiki/Jim_Gray_%28computer_scientist%29">Джим Грей</a> выделил следующие характеристики транзакций:
+<ul><li>Атомарность (<span style="font-weight: bold;">A</span>tomicity)
+</li><li>Непротиворечивость (<span style="font-weight: bold;">C</span>onsistency)
+</li><li>Изолированность (<span style="font-weight: bold;">I</span>solation)
+</li><li>Долговечность (<span style="font-weight: bold;">D</span>urability)
+</li></ul><span style="font-weight: bold;">Атомарность </span>означает, что все действия, производимые в рамках одной транзакции атомарны. Если транзакция заканчивается не успешно, то все изменения, сделанный в рамках этой транзакции откатываются назад. Если транзакция заканчивается успешно, то все её изменения сохраняются.
+
+<span style="font-weight: bold;">Непротиворечивость </span>означает, что транзакция переводит базу данных из одного непротиворечивого состояния в другое непротиворечивое состояние. При этом, внутри транзакции база данных <span style="font-style: italic;">может</span> находиться в противоречивом состоянии.
+
+<span style="font-weight: bold;">Изолированность</span> означает, что во время работы одной транзакции ей <a href="http://www.blogger.com/post-edit.g?blogID=8483146613266894707&amp;postID=831038356059470359#transaction_isolation_levels">недоступны изменения</a>, происходящие в другой транзакции.
+
+Под <span style="font-weight: bold;">долговечностью</span> подразумевают, что после окончания транзакции все изменения, сделанные транзакцией фиксируется навсегда, то есть, если происходит программно-аппаратный сбой, то после восстановления системы в рабочее состояние нет потерянных изменений.
+
+<a name="transaction_isolation_levels">
+<h3>Уровни изоляции транзакций</h3></a>
+При параллельном выполнении нескольких транзакций могут возникнуть следующие проблемы:
+<ul><li>Потерянное обновление</li><li>&#8220;Грязное&#8221; чтение</li><li>Неповторяющееся чтение</li><li>Фантомная вставка</li></ul><span style="font-weight: bold;">Потерянное обновление</span> может возникнуть в ситуации, когда две транзакции обновляют одни и те же данные.
+
+<span style="font-weight: bold;">&#8220;Грязное&#8221; чтение</span> возникает, когда одна транзакция видит несохранённые изменения, сделанные другой транзакцией.
+
+<span style="font-weight: bold;">Неповторяющееся чтение</span> - это ситуация, когда в рамках одной транзакции один и тот же запрос на выборку возвращает разные результаты.
+
+<span style="font-weight: bold;">Фантомная вставка</span> - ситуация, похожая на неповторяющее чтение - заключается в том, что результаты одной и той же выборки в рамках одной транзакции имеют разное количество возвращаемых строк.
+
+<a href="http://www.contrib.andrew.cmu.edu/%7Eshadow/sql/sql1992.txt">Стандарт SQL-92</a> определяет следующие уровни изоляции транзакции:
+<ol><li>READ_UNCOMMITED</li><li>READ_COMMITED</li><li>REPEATABLE_READ</li><li>SERIALIZABLE
+</li></ol><span style="font-weight: bold;">READ_UNCOMMITED</span> - позволяет другим транзакциям видеть несохранённые изменения
+
+<span style="font-weight: bold;">READ_COMMITED</span> - транзакция во время выполенения видит только зафиксированные изменения. В большинстве баз данных это уровень изоляции по умолчанию.
+
+<span style="font-weight: bold;">REPEATABLE_READ</span> - данный уровень изоляции решает проблему неповторяющего чтения.
+
+<span style="font-weight: bold;">SERIALIZABLE</span> - данный уровень изоляции выполняет все транзакции последовательно. Это самый надёжный уровень изоляции, но, при этом, и наименее производительный.
+
+Каждый уровень решает часть вышеперечисленных проблем.
+
+<div class="nobr">
+<table>
+<tbody><tr>
+<th>Проблема
+
+ Уровень изоляции</th>
+<th>Потерянное обновление</th>
+<th>Грязное чтение</th>
+<th>Неповторяющееся чтение</th>
+<th>Фантомная вставка</th>
+</tr><tr>
+<td>READ_UNCOMMITED</td>
+<td>невозможно</td>
+<td>возможно</td>
+<td>возможно</td>
+<td>возможна</td>
+</tr><tr>
+<td>READ_COMMITED</td>
+<td>невозможно</td>
+<td>невозможно</td>
+<td>возможно</td>
+<td>возможна</td>
+</tr>
+<tr>
+<td>REPEATABLE_READ</td>
+<td>невозможно</td>
+<td>невозможно</td>
+<td>невозможно</td>
+<td>возможна</td>
+</tr>
+<tr>
+<td>SERIALIZABLE</td>
+<td>невозможно</td>
+<td>невозможно</td>
+<td>невозможно</td>
+<td>невозможна</td>
+</tr></tbody></table>
+</div></div>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/04/22/blog-post_22/">Кратко о блокировках</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-04-22T12:58:00-04:00" pubdate data-updated="true">Apr 22<span>nd</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+<span style="font-weight: bold;">Блокировка</span> - в реляционных базах данных это установка метки на запись, что запись заблокирована для изменений.
+
+Существует два вида блокировок - оптимистичная и пессимистичная.
+
+<h3>Оптимистичная блокировка</h3>
+При оптимистичной блокировке на базе данных реальной блокировки не происходит.
+Вместо этого используется следующий подход - если во время выполнения транзакции она изменяет данные, которые были изменены после её начала, то транзакция прерывается с исключением. Использование оптимистичных блокировок позволяет избежать взаимных блокировок (dead-lock). Для реализации оптимистичной блокировки часто используется версионирование данных - в таблицу добавляется колонка, которая хранит текущую версию. При выполнении <tt>update</tt> в запросе в секции <tt>where</tt> передается версия данных, которая была забрана на изменение. Если <tt>update</tt> вернул 0 изменённых строк, значит данные были уже изменены и транзакцию необходимо запускать заново. Вместо версии можно хранить время последнего изменения данных.
+
+<h3>Пессимистичная блокировка</h3>
+При пессимистичной блокировке для записи ставится эксклюзивная блокировка на уровне базы данных, запрещая таким образом доступ к данным из других транзакций. Существует несколько видов пессимистичных блокировок:
+<ol><li>блокировка при чтении</li><li>блокировка при записи</li></ol>При <span style="font-weight: bold;">блокировке при чтении</span> запись блокируется когда она запрашивается из базы данных. Недостаток метода в том, что таким образом можно заблокировать даже те данные, которые не изменяются в рамках текущей транзакции.
+
+При <span style="font-weight: bold;">блокировке при записи</span> блокировка даных происходит при их обновлении в базе данных до конца текущей транзакции.
+
+Блокировка с данных снимается либо при коммите, либо при откате транзакции.
+<h3>
+Сравнение оптимистичных и пессимистичных блокировок</h3>
+При разработке программного обеспечения необходимо выбирать стратегию блокировок данных. При этом следует учитывать следующее:
+<ol><li>Если ситуация обновления одних и тех же данных в один момент времени относительно редка, то выгоднее использовать оптимистичную блокировку. В этом случае не будут происходить дорогая операция блокировки ресурсов.</li><li>Если же возможность возникновения ситуации обновления одних и тех же данных достаточно высока, то лучше использовать пессимистичную блокировку, это снизит количество прерванных транзакций.</li><li>Также следует учитывать, что при оптимистичной блокировке в случае прерывания транзакции её нужно запускать заново.
+</li></ol></div>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/04/21/2/">Практический опыт использования фолксономии в условиях неограниченной свободы расстановки меток (часть 2)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-04-21T13:14:00-04:00" pubdate data-updated="true">Apr 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+В продолжение <a href="http://atamanenko.blogspot.com/2009/04/blog-post.html">предыдущей заметки </a>.
+
+Для работы с <a href="http://delicious.com">del.icio.us</a> я использую <a href="https://addons.mozilla.org/en-US/firefox/addon/3615">официальный плагин</a> от <a href="http://www.yahoo.com/">Yahoo!</a>.
+
+Он предоставляет следующие возможности:
+ 1. Синхронизация закладок из Firefox с del.icio.us
+ 2. Переопределение стандартного менеджера закладок.
+ 3. Отслеживание изменений на del.icio.us.
+ 4. Интерфейс для отображения и поиска закладок в панели браузера.
+ 5. Панель инструментов для работы с закладками.
+
+Из всех вышеперечисленных возможностей раньше пользовался только вторым пунктом. Это очень удобно - выделяешь на странице кусок текста и клацаешь <tt>ctrl+b</tt>. Появляется окошечко с уже заполненной ссылкой, заголовком и описанием ссылки. В поле описания попадает выделенный текст. После этого расставляешь метки и жмёшь кнопку <tt>save</tt>.
+Мне этого хватало и я был доволен. Недавно я для себя открыл следующую вещь - в панели инструментов Delicous Toolbar можно выбрать вид Favorites Tag Views и настроить избранные теги, которые будут отображаться на панели. Выглядит это следующим образом:
+
+<a href="http://picasaweb.google.com/lh/photo/IDr7sedWFbCl_34udJAfxA?authkey=Gv1sRgCP2ooa-PsKuf1AE&feat=embedwebsite"><img src="http://lh3.ggpht.com/_ZAsANEcJSbo/Se4DrHrgdmI/AAAAAAAAAE4/nZ4BIf-FYLE/delicious.png" /></a>
+
+При щелчке на тег показыватся список закладок, помеченных избранными тегами. Очень удобно.</div>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/blog/page/6/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/blog/page/4/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/06/29/spring-enable-annotation/">Пишем @Enable*-аннотацию для Spring</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/28/jaxrs-spring-autowiring/">@Autowired JAX-RS Client API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/28/jaxrs/">JAX-RS Client API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/19/autowiring-factorybean/">@Autowiring EJBs with Spring</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/19/spring-caching/">Использование memcached в качестве backend для Spring Caching Abstraction</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/uthark">@uthark</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'uthark',
+            count: 3,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+<section class="googleplus googleplus-hidden">
+  <h1>
+    <a href="https://plus.google.com/112372998073079463630?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+<section>
+  <h1>Stack Overflow</h1>
+  <a href="http://stackoverflow.com/users/216764/uthark" style="text-decoration:none">
+  <img src="http://stackoverflow.com/users/flair/216764.png" width="208" height="58" alt="profile for uthark at Stack Overflow, Q&amp;A for professional and enthusiast programmers" title="profile for uthark at Stack Overflow, Q&amp;A for professional and enthusiast programmers">
+  </a>
+</section>
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Oleg Atamanenko -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

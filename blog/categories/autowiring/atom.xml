@@ -1,0 +1,532 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: autowiring | Блог о разработке ПО]]></title>
+  <link href="http://uthark.github.com/blog/categories/autowiring/atom.xml" rel="self"/>
+  <link href="http://uthark.github.com/"/>
+  <updated>2013-06-29T23:40:55-04:00</updated>
+  <id>http://uthark.github.com/</id>
+  <author>
+    <name><![CDATA[Oleg Atamanenko]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Пишем @Enable*-аннотацию для Spring]]></title>
+    <link href="http://uthark.github.com/blog/2013/06/29/spring-enable-annotation/"/>
+    <updated>2013-06-29T23:15:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2013/06/29/spring-enable-annotation</id>
+    <content type="html"><![CDATA[<p>Начиная с версии 3.1 Spring поддерживает декларативное включение необходимой функциональности через, так называемые, <code>@Enable*</code> аннотации. Пример таких аннотаций:
+<a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/web/servlet/config/annotation/EnableWebMvc.html"><code>org.springframework.web.servlet.config.annotation.EnableWebMvc</code></a>, <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/cache/annotation/EnableCaching.html"><code>org.springframework.cache.annotation.EnableCaching</code></a>, <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/scheduling/annotation/EnableAsync.html"><code>org.springframework.scheduling.annotation.EnableAsync</code></a> и другие.</p>
+
+<p>В продолжение темы <a href="/blog/2013/06/28/jaxrs-spring-autowiring/">прошлого поста</a>, я хочу показать, как можно добавить собственную <code>@Enable</code> аннотацию.</p>
+
+<p>Для автоматического создания клиента для REST-ресурса нам необходима следующая информация:</p>
+
+<ol>
+<li>Пакет, в котором искать интерфейсы, проаннотированные аннотацией <a href="https://jax-rs-spec.java.net/nonav/2.0/apidocs/javax/ws/rs/Path.html"><code>@Path()</code></a></li>
+<li>Базовый адрес REST-приложения.</li>
+</ol>
+
+
+<p>Для того, чтобы передать эту информацию, мы создадим два атрибута в аннотации: <code>scanPackage()</code> и <code>endpoint()</code></p>
+
+<p>Кроме того, для обработки аннотации необходимо указать обработчик. Это можно сделать передав подкласс <a href="http://static.springsource.org/spring-framework/docs/3.2.x/javadoc-api/org/springframework/context/annotation/ImportBeanDefinitionRegistrar.html"><code>org.springframework.context.annotation.ImportBeanDefinitionRegistrar</code></a> через аннотацию <a href="http://static.springsource.org/spring-framework/docs/3.2.x/javadoc-api/org/springframework/context/annotation/Import.html"><code>@Import</code></a></p>
+
+<p>Пишем аннотацию:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Target</span><span class="o">(</span><span class="n">ElementType</span><span class="o">.</span><span class="na">TYPE</span><span class="o">)</span>
+</span><span class='line'><span class="nd">@Retention</span><span class="o">(</span><span class="n">RetentionPolicy</span><span class="o">.</span><span class="na">RUNTIME</span><span class="o">)</span>
+</span><span class='line'><span class="nd">@Documented</span>
+</span><span class='line'><span class="nd">@Inherited</span>
+</span><span class='line'><span class="nd">@Import</span><span class="o">(</span><span class="n">JaxRsRestClientRegistrar</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+</span><span class='line'><span class="kd">public</span> <span class="nd">@interface</span> <span class="n">EnableJaxRsRestClient</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">String</span> <span class="n">scanPackage</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">String</span> <span class="nf">endpoint</span><span class="o">();</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Теперь осталось написать реализацию интерфейса <code>org.springframework.context.annotation.ImportBeanDefinitionRegistrar</code>. Так как у нас уже есть написанный ранее <a href="http://static.springsource.org/spring-framework/docs/3.2.x/javadoc-api/org/springframework/beans/factory/config/BeanFactoryPostProcessor.html">BeanFactoryPostProcessor</a> в виде <code>RestClientPostProcessor</code>, реализация интерфейса будет простой &ndash; мы создадим описание бина для Spring и зарегистрируем его в реестре бинов.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">JaxRsRestClientRegistrar</span> <span class="kd">implements</span> <span class="n">ImportBeanDefinitionRegistrar</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="kd">protected</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">PROPERTY_ENDPOINT</span> <span class="o">=</span> <span class="s">&quot;endpoint&quot;</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">protected</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">PROPERTY_SCAN_PACKAGE</span> <span class="o">=</span> <span class="s">&quot;basePackage&quot;</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nd">@Override</span>
+</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">registerBeanDefinitions</span><span class="o">(</span><span class="n">AnnotationMetadata</span> <span class="n">importingClassMetadata</span><span class="o">,</span> <span class="n">BeanDefinitionRegistry</span> <span class="n">registry</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">EnableJaxRsRestClient</span> <span class="n">annotation</span> <span class="o">=</span>
+</span><span class='line'>            <span class="o">(</span><span class="n">EnableJaxRsRestClient</span><span class="o">)</span> <span class="o">((</span><span class="n">StandardClassMetadata</span><span class="o">)</span> <span class="n">importingClassMetadata</span><span class="o">).</span><span class="na">getIntrospectedClass</span><span class="o">()</span>
+</span><span class='line'>                    <span class="o">.</span><span class="na">getAnnotation</span><span class="o">(</span><span class="n">EnableJaxRsRestClient</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">String</span> <span class="n">scanPackage</span> <span class="o">=</span> <span class="n">annotation</span><span class="o">.</span><span class="na">scanPackage</span><span class="o">();</span>
+</span><span class='line'>    <span class="n">String</span> <span class="n">endpoint</span> <span class="o">=</span> <span class="n">annotation</span><span class="o">.</span><span class="na">endpoint</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">GenericBeanDefinition</span> <span class="n">beanDefinition</span> <span class="o">=</span> <span class="k">new</span> <span class="n">GenericBeanDefinition</span><span class="o">();</span>
+</span><span class='line'>    <span class="n">beanDefinition</span><span class="o">.</span><span class="na">setAbstract</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">beanDefinition</span><span class="o">.</span><span class="na">setBeanClass</span><span class="o">(</span><span class="n">RestClientPostProcessor</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">MutablePropertyValues</span> <span class="n">propertyValues</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MutablePropertyValues</span><span class="o">();</span>
+</span><span class='line'>    <span class="n">propertyValues</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">PROPERTY_ENDPOINT</span><span class="o">,</span> <span class="n">endpoint</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">propertyValues</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">PROPERTY_SCAN_PACKAGE</span><span class="o">,</span> <span class="n">scanPackage</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">beanDefinition</span><span class="o">.</span><span class="na">setPropertyValues</span><span class="o">(</span><span class="n">propertyValues</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">registry</span><span class="o">.</span><span class="na">registerBeanDefinition</span><span class="o">(</span><span class="n">ClassUtils</span><span class="o">.</span><span class="na">getShortName</span><span class="o">(</span><span class="n">getClass</span><span class="o">()),</span> <span class="n">beanDefinition</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Теперь мы можем использовать аннотацию:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Configuration</span>
+</span><span class='line'><span class="nd">@EnableJaxRsRestClient</span><span class="o">(</span><span class="n">scanPackage</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="o">;&lt;</span><span class="n">base</span> <span class="n">package</span><span class="o">&gt;&amp;</span><span class="n">rdquo</span><span class="o">;,</span> <span class="n">endpoint</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">$</span><span class="o">{</span><span class="n">remote</span><span class="o">.</span><span class="na">rest</span><span class="o">.</span><span class="na">endpoint</span><span class="o">}&amp;</span><span class="n">rdquo</span><span class="o">;)</span>
+</span><span class='line'><span class="kd">class</span> <span class="nc">TestAutowiringConfiguration</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="nd">@Bean</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">static</span> <span class="n">PropertyPlaceholderConfigurer</span> <span class="nf">configurer</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">PropertyPlaceholderConfigurer</span> <span class="n">pph</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PropertyPlaceholderConfigurer</span><span class="o">();</span>
+</span><span class='line'>    <span class="n">pph</span><span class="o">.</span><span class="na">setLocation</span><span class="o">(</span><span class="k">new</span> <span class="n">ClassPathResource</span><span class="o">(</span><span class="s">&quot;application.properties&quot;</span><span class="o">));</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">pph</span><span class="o">;</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Обратите внимание, что endpoint можно передавать с использованием подстановочных свойств.</p>
+
+<p>На этом всё, если есть вопросы &ndash; <a href="https://plus.google.com/112372998073079463630/posts">спрашивайте в Google+</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[@Autowired JAX-RS Client API]]></title>
+    <link href="http://uthark.github.com/blog/2013/06/28/jaxrs-spring-autowiring/"/>
+    <updated>2013-06-28T19:05:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2013/06/28/jaxrs-spring-autowiring</id>
+    <content type="html"><![CDATA[<p>Продолжая разговор о <a href="http://www.jcp.org/en/jsr/detail?id=339">JAX RS</a> <a href="https://jax-rs-spec.java.net/nonav/2.0/apidocs/javax/ws/rs/client/package-summary.html">Client API</a> &ndash; предположим, что мы уже <a href="/blog/2013/06/28/jaxrs/">используем JAX-RS клиент</a></p>
+
+<p>У нас есть класс, который умеет создавать прокси для любого REST-интерфейса в проекте. Теперь мы хотим сделать так, чтобы эти интерфейсы можно было автоматически создавать в контексте Spring и связывать с другими бинами.</p>
+
+<p>Первое решение, которое приходит в лоб &ndash; объявить бин в конфигурации для каждого интерфейса:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Configuration</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SpringConfiguration</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="nd">@Bean</span>
+</span><span class='line'><span class="kd">public</span> <span class="n">UserRest</span> <span class="nf">userRest</span><span class="o">(){</span>
+</span><span class='line'>    <span class="n">List</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;?&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">providers</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="k">new</span> <span class="n">JsonMessageHandler</span><span class="o">(</span><span class="k">new</span> <span class="n">ObjectMapper</span><span class="o">()));</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">JAXRSClientFactory</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="s">&quot;http://localhost:8080&quot;</span><span class="o">,</span> <span class="n">UserRest</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">providers</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Написав объявление нескольких таких бинов можно задуматься &ndash; &ldquo;Есть ли способ проще?&rdquo;.</p>
+
+<p>Есть, и я вам сейчас его покажу.</p>
+
+<p>Для того, чтобы добавлять собственные бины в Spring контекст, мы воспользуемся возможностью расширения Spring контекста с использованием <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/beans/factory/config/BeanFactoryPostProcessor.html"><code>BeanFactoryPostProcessor</code></a>.
+Метод <code>postProcessBeanFactory</code> данного класса позволяет выполнить дополнительную обработку фабрики бинов Spring, например, удалить, добавить, переопределить бин.
+Это именно то, что нам нужно &ndash; автоматически добавить новые бины в фабрику.</p>
+
+<p>Итак, что нам нужно сделать:</p>
+
+<ol>
+<li>Найти все доступные REST интерфейсы в текущем classpath.</li>
+<li>Для каждого из них создать прокси с использованием <code>JAXRSClientFactory</code> .</li>
+<li>Зарегистрировать каждый прокси в фабрике бинов для дальнейшего использования (например, для @Autowired).</li>
+</ol>
+
+
+<p>По спецификации JAX-RS, чтобы класс распознавался как REST-ресурс, у него должна быть аннотация <a href="https://jax-rs-spec.java.net/nonav/2.0/apidocs/javax/ws/rs/Path.html"><code>@Path()</code></a>.</p>
+
+<p>Для поиска всех возможных классов/интерфейсов воспользуемся классом <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/context/annotation/ClassPathScanningCandidateComponentProvider.html"><code>ClassPathScanningCandidateComponentProvider</code></a>, который умеет сканировать классы в выбранном пакете и применять фильтры, чтобы собрать только нужные. Также нам нужно учесть, что по умолчанию <code>ClassPathScanningCandidateComponentProvider</code> пытается определить, может ли найденный класс быть и бином (например, проверяет, что это не абстрактный класс и не интерфейс), поэтому нам нужно написать подкласс, который позволит нам работать с интерфейсами.</p>
+
+<p>Пишем класс:
+<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">RestClientPostProcessor</span> <span class="kd">implements</span> <span class="n">BeanFactoryPostProcessor</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Logger</span> <span class="n">LOGGER</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">RestClientPostProcessor</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">protected</span> <span class="n">String</span> <span class="n">endpoint</span> <span class="o">=</span> <span class="s">&quot;http://localhost:8080&quot;</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">private</span> <span class="n">Class</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;?</span> <span class="kd">extends</span> <span class="n">Annotation</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">requiredAnnotation</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="na">class</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">private</span> <span class="n">String</span> <span class="n">basePackage</span> <span class="o">=</span> <span class="s">&quot;&amp;lt;base package&amp;gt;&quot;</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">private</span> <span class="n">ObjectMapper</span> <span class="n">objectMapper</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// getters/setters omitted.</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">protected</span> <span class="n">Object</span> <span class="nf">createBean</span><span class="o">(</span><span class="n">Class</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;?&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">clazz</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">List</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;?&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">providers</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="k">new</span> <span class="n">JsonMessageHandler</span><span class="o">(</span><span class="n">objectMapper</span><span class="o">));</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">JAXRSClientFactory</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">endpoint</span><span class="o">,</span> <span class="n">clazz</span><span class="o">,</span> <span class="n">providers</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nd">@Override</span>
+</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">postProcessBeanFactory</span><span class="o">(</span><span class="n">ConfigurableListableBeanFactory</span> <span class="n">beanFactory</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">BeansException</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">ClassPathScanningCandidateComponentProvider</span> <span class="n">provider</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ClasspathScanner</span><span class="o">();</span>
+</span><span class='line'>    <span class="n">provider</span><span class="o">.</span><span class="na">addIncludeFilter</span><span class="o">(</span><span class="k">new</span> <span class="n">AnnotationTypeFilter</span><span class="o">(</span><span class="n">requiredAnnotation</span><span class="o">));</span>
+</span><span class='line'>    <span class="n">Set</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">BeanDefinition</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">components</span> <span class="o">=</span> <span class="n">provider</span><span class="o">.</span><span class="na">findCandidateComponents</span><span class="o">(</span><span class="n">basePackage</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">for</span> <span class="o">(</span><span class="n">BeanDefinition</span> <span class="n">component</span> <span class="o">:</span> <span class="n">components</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">createAndRegisterBean</span><span class="o">(</span><span class="n">beanFactory</span><span class="o">,</span> <span class="n">component</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">protected</span> <span class="kt">void</span> <span class="nf">createAndRegisterBean</span><span class="o">(</span><span class="n">ConfigurableListableBeanFactory</span> <span class="n">beanFactory</span><span class="o">,</span> <span class="n">BeanDefinition</span> <span class="n">component</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">try</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">String</span> <span class="n">beanClassName</span> <span class="o">=</span> <span class="n">component</span><span class="o">.</span><span class="na">getBeanClassName</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">Class</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;?&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">clazz</span> <span class="o">=</span> <span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="n">beanClassName</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">Object</span> <span class="n">o</span> <span class="o">=</span> <span class="n">createBean</span><span class="o">(</span><span class="n">clazz</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">beanFactory</span><span class="o">.</span><span class="na">registerResolvableDependency</span><span class="o">(</span><span class="n">clazz</span><span class="o">,</span> <span class="n">o</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ClassNotFoundException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">LOGGER</span><span class="o">.</span><span class="na">warn</span><span class="o">(</span><span class="s">&quot;Unable to find class: {}&quot;</span><span class="o">,</span> <span class="n">component</span><span class="o">.</span><span class="na">getBeanClassName</span><span class="o">(),</span> <span class="n">e</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">ClasspathScanner</span> <span class="kd">extends</span> <span class="n">ClassPathScanningCandidateComponentProvider</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">public</span> <span class="nf">ClasspathScanner</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>        <span class="kd">super</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Override</span> <span class="kd">protected</span> <span class="kt">boolean</span> <span class="n">isCandidateComponent</span><span class="o">(</span><span class="n">AnnotatedBeanDefinition</span> <span class="n">beanDefinition</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="c1">// override this method, because our classes are interfaces, by default interfaces are</span>
+</span><span class='line'>        <span class="c1">// not allowed.</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">beanDefinition</span><span class="o">.</span><span class="na">getMetadata</span><span class="o">().</span><span class="na">isIndependent</span><span class="o">();</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Теперь этот процессор необходимо зарегистрировать в контексте Spring:
+<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Configuration</span>
+</span><span class='line'><span class="kd">class</span> <span class="nc">TestAutowiringConfiguration</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="nd">@Bean</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">static</span> <span class="n">RestClientPostProcessor</span> <span class="nf">autowiringRestApiProcessor</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="k">new</span> <span class="nf">RestClientPostProcessor</span><span class="o">();</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>И теперь можно использовать <code>UserRest</code> как обычный бин:
+<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="nd">@Autowired</span>
+</span><span class='line'><span class="kd">private</span> <span class="n">UserShowRest</span> <span class="n">userShowRest</span><span class="o">;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Если есть вопросы &ndash; <a href="https://plus.google.com/112372998073079463630/posts">спрашивайте в Google+</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[@Autowiring EJBs with Spring]]></title>
+    <link href="http://uthark.github.com/blog/2013/06/19/autowiring-factorybean/"/>
+    <updated>2013-06-19T20:00:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2013/06/19/autowiring-factorybean</id>
+    <content type="html"><![CDATA[<p>Предположим, что у нас есть проект на Spring, в котором необходимо использовать внешние EJB. Для получения бинов необходимо создавать <a href="http://docs.oracle.com/javase/6/docs/api/javax/naming/InitialContext.html">InitialContext</a> и делать <code>lookup()</code> нужных ejb. Но эту задачу можно автоматизировать и пользоваться <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/beans/factory/annotation/Autowired.html">@Autowired</a>, то есть код будет выглядеть вот так:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Service</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserService</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="nd">@Autowired</span>
+</span><span class='line'>  <span class="kd">private</span> <span class="n">UserRemoteBean</span> <span class="n">userRemoteBean</span><span class="o">;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Для этого в Spring существует <a href="http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/htmlsingle/#beans-factory-extension-factorybean">FactoryBean</a> &ndash; класс, который знает, как создавать бины нужного типа. Собственно, нам необходимо написать такой класс (код на <a href="http://www.scala-lang.org/">Scala</a>):</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="nd">@Component</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">UserRemoteBeanFactoryBean</span> <span class="k">extends</span> <span class="nc">FactoryBean</span><span class="o">[</span><span class="kt">UserRemoteBean</span><span class="o">]</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="k">def</span> <span class="nc">ACCESS_BEAN_REMOTE_NAME</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">our</span> <span class="n">ejb</span> <span class="n">name</span><span class="o">.&amp;</span><span class="n">rdquo</span><span class="o">;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="k">private</span> <span class="k">val</span> <span class="n">log</span><span class="k">:</span> <span class="kt">Logger</span> <span class="o">=</span> <span class="nc">LoggerFactory</span><span class="o">.</span><span class="n">getLogger</span><span class="o">(</span><span class="n">getObjectType</span><span class="o">)&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="k">var</span> <span class="n">ctx</span><span class="k">:</span> <span class="kt">Context</span> <span class="o">=</span> <span class="kc">null</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="k">def</span> <span class="n">getObject</span><span class="k">:</span> <span class="kt">UserRemoteBean</span> <span class="o">=</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="o">(</span><span class="s">&quot;Requesting new instance of {}&quot;</span><span class="o">,</span> <span class="n">getObjectType</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">try</span> <span class="o">{</span>
+</span><span class='line'>  <span class="n">ctx</span><span class="o">.</span><span class="n">lookup</span><span class="o">(</span><span class="nc">ACCESS_BEAN_REMOTE_NAME</span><span class="o">).</span><span class="n">asInstanceOf</span><span class="o">[</span><span class="kt">UserRemoteBean</span><span class="o">]</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="k">catch</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">case</span> <span class="n">e</span><span class="k">:</span> <span class="kt">NamingException</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="o">(</span><span class="s">&quot;Unable to get ejb: {}&quot;</span><span class="o">,</span> <span class="nc">Array</span><span class="o">[</span><span class="kt">AnyRef</span><span class="o">](</span><span class="n">e</span><span class="o">.</span><span class="n">getMessage</span><span class="o">,</span> <span class="n">e</span><span class="o">)</span><span class="k">:</span> <span class="k">_</span><span class="kt">*</span><span class="o">)</span>
+</span><span class='line'>    <span class="k">throw</span> <span class="k">new</span> <span class="nc">RuntimeException</span><span class="o">(</span><span class="s">&quot;Unable to get UserRemoteBean bean &quot;</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="n">getMessage</span><span class="o">,</span> <span class="n">e</span><span class="o">)</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="o">}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="nd">@PostConstruct</span>
+</span><span class='line'>  <span class="k">protected</span> <span class="k">def</span> <span class="n">init</span><span class="o">()</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">val</span> <span class="n">jndiProperties</span><span class="k">:</span> <span class="kt">Hashtable</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Object</span><span class="o">]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Hashtable</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Object</span><span class="o">]</span>
+</span><span class='line'><span class="n">jndiProperties</span><span class="o">.</span><span class="n">put</span><span class="o">(</span><span class="nc">Context</span><span class="o">.</span><span class="nc">URL_PKG_PREFIXES</span><span class="o">,</span> <span class="s">&quot;org.jboss.ejb.client.naming&quot;</span><span class="o">)</span>
+</span><span class='line'><span class="n">jndiProperties</span><span class="o">.</span><span class="n">put</span><span class="o">(</span><span class="s">&quot;jboss.naming.client.ejb.context&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="n">java</span><span class="o">.</span><span class="n">lang</span><span class="o">.</span><span class="nc">Boolean</span><span class="o">(</span><span class="kc">true</span><span class="o">))</span>
+</span><span class='line'><span class="k">try</span>
+</span><span class='line'>  <span class="n">ctx</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">InitialContext</span><span class="o">(</span><span class="n">jndiProperties</span><span class="o">)</span>
+</span><span class='line'><span class="k">catch</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">case</span> <span class="n">e</span><span class="k">:</span> <span class="kt">NamingException</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="o">(</span><span class="s">&quot;Unable to create JNDI Context: {}&quot;</span><span class="o">,</span> <span class="nc">Array</span><span class="o">[</span><span class="kt">AnyRef</span><span class="o">](</span><span class="n">e</span><span class="o">.</span><span class="n">getMessage</span><span class="o">,</span> <span class="n">e</span><span class="o">)</span><span class="k">:</span> <span class="k">_</span><span class="kt">*</span><span class="o">)</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="o">}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="k">def</span> <span class="n">isSingleton</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="kc">false</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="o">}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="k">def</span> <span class="n">getObjectType</span><span class="k">:</span> <span class="kt">Class</span><span class="o">[</span><span class="k">_</span><span class="o">]</span> <span class="k">=</span> <span class="n">classOf</span><span class="o">[</span><span class="kt">UserRemoteBean</span><span class="o">]</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+]]></content>
+  </entry>
+  
+</feed>

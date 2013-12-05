@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: opera | Блог о разработке ПО]]></title>
+  <link href="http://uthark.github.com/blog/categories/opera/atom.xml" rel="self"/>
+  <link href="http://uthark.github.com/"/>
+  <updated>2013-06-29T23:40:55-04:00</updated>
+  <id>http://uthark.github.com/</id>
+  <author>
+    <name><![CDATA[Oleg Atamanenko]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Opera и del.icio.us]]></title>
+    <link href="http://uthark.github.com/blog/2009/07/03/opera-delicious/"/>
+    <updated>2009-07-03T14:13:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2009/07/03/opera-delicious</id>
+    <content type="html"><![CDATA[<div class='post'>
+Так получилось, что в последнее время я стал пользоваться небезызвестной <a href="http://www.opera.com">оперой</a>.
+
+В связи с этим я стал искать замену часто используемым расширениям, одно из них - delicious bookmarks. Сервис <a href="http://delicious.com">del.icio.us</a> предоставляет букмарклеты для различных браузеров, которые позволяют сохранять закладки быстро и удобно. Вот только есть один недостаток - <a href="https://addons.mozilla.org/en-US/firefox/addon/3615">официальный плагин для Firefox</a> в свойство Notes новой закладки добавляет выделенный текст со страницы, чего букмарклет не делает.
+
+Посмотрев исходник букмарклета, а это обычный javascript, я добавил небольшой кусочек кода, который восстанавливает справедливость и тоже добавляет в поле Notes текст, выделенный на странице.
+
+Ниже привожу изменённый код букмарклета:
+<pre class="brush:js">
+javascript:(function(){f='http://delicious.com/save?url='+encodeURIComponent(window.location.href)+'&title='+encodeURIComponent(document.title)+'&notes='+encodeURIComponent(document.getSelection())+'&v=5&';a=function(){if(!window.open(f+'noui=1&jump=doclose','deliciousuiv5','location=yes,links=no,scrollbars=no,toolbar=no,width=550,height=550'))location.href=f+'jump=yes'};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})()
+</pre></div>
+
+
+<h2>Comments</h2>
+
+
+<div class='comments'>
+<div class='comment'>
+<div class='author'>uthark</div>
+<div class='content'>
+Как вы всё сложно делаете.<br />Можно просто кликнуть на значок в тулбаре правой кнопкой и сказать modify и ввести вышеприведённый код. Ровно так у себя и делал. )</div>
+</div>
+<div class='comment'>
+<div class='author'>Сергей К.</div>
+<div class='content'>
+Не знал, как добавить кнопку.<br />Надо зайти на сайт http://delicious.com, в разделе Помощь перетянуть их букмарклет (ссылку) для Оперы на панель, а приведенный здесь код скопировать в буфер или отдельный документ. Закрыть оперу. Затем зайти в папку с настройками оперы, на линуксе это папка .opera в домашней папке, на виндовсе это Dokuments and Settings/[имя пользователя]/ApplicationData/Opera/Opera/toolbar, там открыть файл standard_toolbar.ini и найти уже установленный код кнопки. Далее между кавычками вставить вместо записанного кода код с этого сайта, сохранить файл, открыть оперу и пользоваться на здоровье!</div>
+</div>
+</div>
+
+]]></content>
+  </entry>
+  
+</feed>

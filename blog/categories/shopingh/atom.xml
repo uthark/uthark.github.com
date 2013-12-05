@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: шопинг | Блог о разработке ПО]]></title>
+  <link href="http://uthark.github.com/blog/categories/shopingh/atom.xml" rel="self"/>
+  <link href="http://uthark.github.com/"/>
+  <updated>2013-06-29T23:40:55-04:00</updated>
+  <id>http://uthark.github.com/</id>
+  <author>
+    <name><![CDATA[Oleg Atamanenko]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Тренажёр для рук]]></title>
+    <link href="http://uthark.github.com/blog/2008/12/27/blog-post/"/>
+    <updated>2008-12-27T11:15:00-05:00</updated>
+    <id>http://uthark.github.com/blog/2008/12/27/blog-post</id>
+    <content type="html"><![CDATA[<div class='post'>
+Купили сегодня вещицу под названием <a href="http://powerball.ru">Powerball</a>.
+После первого получаса тренировок уже получается раскрутить на 8500 оборотов в минуту.
+
+Приятная истома в сухожилиях после, немного трясущиеся руки и желание раскручивать снова и снова.
+
+Мне довольно.</div>
+
+]]></content>
+  </entry>
+  
+</feed>

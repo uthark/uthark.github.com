@@ -1,0 +1,367 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Использование Dropbox для хранения конфигурационных файлов - Блог о разработке ПО</title>
+  <meta name="author" content="Oleg Atamanenko">
+
+  
+  <meta name="description" content="Есть такой замечательный сервис - Dropbox. Этот сервис является онлайн-хранилищем ваших данных. Работает очень просто: 1. Вы регистрируетесь в &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://uthark.github.com/blog/2009/12/08/dropbox/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feeds.feedburner.com/atamanenko" rel="alternate" title="Блог о разработке ПО" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=Roboto+Slab:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Roboto:300,700,900&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+<link rel="author" href="https://plus.google.com/112372998073079463630/?rel=author" />
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-8688665-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Блог о разработке ПО</a></h1>
+  
+    <h2>Cтруктурированные нерегулярные заметки о разработке программного обеспечения</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="http://feeds.feedburner.com/atamanenko" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:uthark.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Использование Dropbox для хранения конфигурационных файлов</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-08T12:17:00-05:00" pubdate data-updated="true">Dec 8<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><div class='post'>
+Есть такой замечательный сервис - <a href="https://www.getdropbox.com/">Dropbox</a>. <br />
+<br />
+Этот сервис является онлайн-хранилищем ваших данных. Работает очень просто:<br />
+<br />
+1. Вы регистрируетесь в сервисе.<br />
+2. Устанавливаете клиент<br />
+3. Пользуетесь.<br />
+<br />
+Недавно я понял, что этот сервис можно легко и непринуждённо использовать не только для хранения различных документов и фотографий, а также и конфигурационных файлов приложений, что существенно упрощает жизнь, когда у вас несколько рабочих машин (например, у меня домашний компьютер, ноутбук, а также ещё и рабочий) - необходимо каким-то образом синхронизовать конфиги при изменении их на одной из машине с другими.<br />
+<br />
+Итак, что я сделал.<br />
+<br />
+Нижеприведённые действия я делал на одной машине:<br />
+1. Создал каталог <tt>ConfigFiles</tt><br />
+2. Переместил в него свои конфигурационные файлы (<tt>~/.zshrc</tt>, <tt>~/.zsh</tt>, <tt>~/.vimrc</tt>, <tt>~/.vim</tt>)<br />
+3. Из каталога Dropbox сделал соответствующие симлинки в домашнем каталоге.<br />
+<br />
+<div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/_y8p0_dtMJ38/Sx6K22h5KKI/AAAAAAAAAuU/DRIi7hO5oFw/s1600-h/Screenshot-Dropbox+-+administrilo+de+dosieroj.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/_y8p0_dtMJ38/Sx6K22h5KKI/AAAAAAAAAuU/DRIi7hO5oFw/s320/Screenshot-Dropbox+-+administrilo+de+dosieroj.png" /></a><br />
+</div><br />
+На каждой из машин<br />
+1. Удалил существовавшие конфигурационные файлы<br />
+2. Сделал симлинки файлов из Dropbox на соответствующие конфигурационные файлы.<br />
+<br />
+В случае с <a href="http://www.zsh.org/">ZSH</a> (впрочем, для любого другого шелла это тоже реализуется) есть ещё один приятный лайфхак - если на разных машинах должны быть немного разные конфиги (например, другая переменная PATH, CDPATH, то это тоже реализуется просто: <br />
+<br />
+Внесите в свой <tt>~/.zshrc</tt> следующий код.<br />
+<pre class="brush:bash;">LOCAL_ENVIRONMENT=~/.environment_`hostname`
+if [[ -a $LOCAL_ENVIRONMENT ]]
+then
+    source $LOCAL_ENVIRONMENT
+fi
+
+</pre><br />
+Теперь нужно создать в домашнем каталоге файл с локальной конфигурацией:<br />
+<pre class="brush:bash;">touch ~/.environment_`hostname`
+
+</pre><br />
+И внести в него конфигурацию, локальную для машины.<br />
+<br />
+Да, этот файл тоже может быть симлинком на файл из dropbox.<br />
+<br />
+P.S. Если вас заинтересовал сервис, то прошу вас регистироваться по <a href="https://www.dropbox.com/referrals/NTI4MDgzMjc5">реферальной ссылке</a>, тогда и вам и мне добавят +250 мегабайт бесплатно.<br />
+<br />
+P.P.S. Да, ещё забыл сказать, что сервис достаточно умный и отправляет дельты файлов во время синхронизации. Подробнее - <a href="https://www.dropbox.com/help/8">в официальной документации</a>.</div>
+
+
+<h2>Comments</h2>
+
+
+<div class='comments'>
+<div class='comment'>
+<div class='author'>kmmbvnr</div>
+<div class='content'>
+Да именно так и пользуюсь Dropbox&#39;ом, для хранения конфигов :)</div>
+</div>
+<div class='comment'>
+<div class='author'>uthark</div>
+<div class='content'>
+@karri Да, сложно вам. С другой стороны, в некоторых компаниях политика безопасности вообще запрещает подобные сервисы.</div>
+</div>
+<div class='comment'>
+<div class='author'>karri</div>
+<div class='content'>
+А у нас на работе тестерам не положен инет :&#39;(</div>
+</div>
+</div>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Oleg Atamanenko</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-08T12:17:00-05:00" pubdate data-updated="true">Dec 8<span>th</span>, 2009</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/dropbox/'>dropbox</a>, <a class='category' href='/blog/categories/useful/'>useful</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://uthark.github.com/blog/2009/12/08/dropbox/" data-via="" data-counturl="http://uthark.github.com/blog/2009/12/08/dropbox/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2009/12/07/rss_07/" title="Previous Post: Дайджест ссылок в RSS-ленте">&laquo; Дайджест ссылок в RSS-ленте</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2009/12/08/delicious-google-chrome/" title="Next Post: Расширение для работы с Delicious доступно на сайте расширений Google Chrome">Расширение для работы с Delicious доступно на сайте расширений Google Chrome &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/06/29/spring-enable-annotation/">Пишем @Enable*-аннотацию для Spring</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/28/jaxrs-spring-autowiring/">@Autowired JAX-RS Client API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/28/jaxrs/">JAX-RS Client API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/19/autowiring-factorybean/">@Autowiring EJBs with Spring</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/19/spring-caching/">Использование memcached в качестве backend для Spring Caching Abstraction</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/uthark">@uthark</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'uthark',
+            count: 3,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+<section class="googleplus googleplus-hidden">
+  <h1>
+    <a href="https://plus.google.com/112372998073079463630?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+<section>
+  <h1>Stack Overflow</h1>
+  <a href="http://stackoverflow.com/users/216764/uthark" style="text-decoration:none">
+  <img src="http://stackoverflow.com/users/flair/216764.png" width="208" height="58" alt="profile for uthark at Stack Overflow, Q&amp;A for professional and enthusiast programmers" title="profile for uthark at Stack Overflow, Q&amp;A for professional and enthusiast programmers">
+  </a>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Oleg Atamanenko -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

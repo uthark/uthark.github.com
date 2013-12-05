@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: linux | Блог о разработке ПО]]></title>
+  <link href="http://uthark.github.com/blog/categories/linux/atom.xml" rel="self"/>
+  <link href="http://uthark.github.com/"/>
+  <updated>2013-06-29T23:40:55-04:00</updated>
+  <id>http://uthark.github.com/</id>
+  <author>
+    <name><![CDATA[Oleg Atamanenko]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Настройка autofs для монтирования NFS-ресурсов]]></title>
+    <link href="http://uthark.github.com/blog/2009/12/14/autofs-nfs/"/>
+    <updated>2009-12-14T12:14:00-05:00</updated>
+    <id>http://uthark.github.com/blog/2009/12/14/autofs-nfs</id>
+    <content type="html"><![CDATA[<div class='post'>
+Summary: В данной заметке описана настройка autofs для доступа к сетевым ресурсам, доступным по NFS.<br />
+<br />
+Последние несколько лет (с тех пор, как количество компьютеров дома стало больше одного) возникла проблема беспрепятственного доступа к данным, хранящимся на одном компьютере с другого.<br />
+<br />
+Было найдено самое простое решение - <a href="http://en.wikipedia.org/wiki/Network_File_System_(protocol)">NFS</a>.<br />
+<br />
+Как выяснилось позже это было не самое удачное решение - ноутбук не всегда находился дома, а, значит, домашние сетевые ресурсы не всегда доступны. Соответственно, при загрузке операционной системы происходили задержки из-за поиска компьютера с сетевыми ресурсами. Не очень удобно, но жить можно.<br />
+<br />
+Решил окончательно разобраться с этим и начал искать решение. Оно оказалось на поверхности и затронуло только клиента ресурсов, то есть ноутбук. Решение называется <tt><a href="http://www.autofs.org/">autofs</a></tt>.<br />
+<br />
+1. Устанавливаем <tt>autofs</tt>.<br />
+<pre class="brush: bash">sudo aptitude install autofs5 nfs-common
+</pre><br />
+2. Производим настройку.<br />
+Редактируем файл <tt>/etc/auto.master</tt>. Расскомментируем строку, содержащую строки <tt>/net -hosts</tt>:<br />
+<pre class="brush: bash">/net -hosts
++auto.master
+</pre><br />
+3. В файл <tt><a href="http://en.wikipedia.org/wiki/Hosts_file">/etc/hosts</a></tt> можно внести адреса серверов с NFS-ресурсами (для того, чтобы избежать <a href="http://en.wikipedia.org/wiki/Domain_Name_System">DNS</a>-запросов). В моём случае:<br />
+<pre class="brush: plain">192.168.18.1 server
+</pre><br />
+4. Перезапускаем сервис <tt>autofs</tt><br />
+<pre class="brush: plain">sudo service autofs restart
+</pre><br />
+5. Теперь открываем в файловом браузер адрес <tt>/net/server</tt> и видим его сетевые ресурсы, доступные для данного клиента.<br />
+<br />
+<div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/_y8p0_dtMJ38/SyZxDikTDxI/AAAAAAAAAvk/LTr3KsGATGk/s1600-h/Screenshot-media+-+administrilo+de+dosieroj.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/_y8p0_dtMJ38/SyZxDikTDxI/AAAAAAAAAvk/LTr3KsGATGk/s320/Screenshot-media+-+administrilo+de+dosieroj.png" /></a><br />
+</div><br />
+6. Пользуемся.</div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[RabbitVCS - расширение для Nautilus для работы с Subversion]]></title>
+    <link href="http://uthark.github.com/blog/2009/12/05/nautilus-subversion/"/>
+    <updated>2009-12-05T14:03:00-05:00</updated>
+    <id>http://uthark.github.com/blog/2009/12/05/nautilus-subversion</id>
+    <content type="html"><![CDATA[<div class='post'>
+Раньше я использовал коллекцию скриптов <tt>nautilussvn</tt>, весьма неудобную в использовании.<br />
+<br />
+Бродя по просторам сети наткнулся на отличную замену. Встречайте - <a href="http://rabbitvcs.org/">RabbitVCS</a>.<br />
+<br />
+<h3>Возможности</h3><ul><li>Интеграция с Nautilus</li>
+<li>Поддержка Subversion</li>
+<li>Полная локализация</li>
+<li>Поддержка командной строки</li>
+<li>Доступны пакеты для различных дистрибутивов</li>
+</ul><h3>Установка</h3><br />
+<strong>Для Ubuntu Hardy, Intepid, Jaunty</strong><br />
+<pre class="brush:bash;">deb http://ppa.launchpad.net/rabbitvcs/ppa/ubuntu hardy main
+
+</pre><br />
+<strong>Для Ubuntu Karmic</strong><br />
+<pre class="brush:bash;">sudo add-apt-repository ppa:rabbitvcs/ppa
+
+</pre><br />
+Установка для других дистрибутивов описана <a href="http://wiki.rabbitvcs.org/wiki/download">на официальном сайте</a>.<br />
+<br />
+<h3>Работа</h3>Несмотря на очень маленький номер версии работает достаточно стабильно, не падает.<br />
+<br />
+<h4>Скриншоты</h4>После установки внешний вид наутилуса преображается и выглядит примерно следующим образом (картинки кликабельны):<br />
+<div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/_y8p0_dtMJ38/Sxqtltez5bI/AAAAAAAAAtk/KUPsnbkZTNU/s1600-h/Screenshot-Delicious+-+administrilo+de+dosieroj.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/_y8p0_dtMJ38/Sxqtltez5bI/AAAAAAAAAtk/KUPsnbkZTNU/s320/Screenshot-Delicious+-+administrilo+de+dosieroj.png" /></a><br />
+</div><br />
+Диалог коммита выглядит вот так:<br />
+<div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/_y8p0_dtMJ38/Sxqt9y_wAbI/AAAAAAAAAts/YMfhdkKJ_Ck/s1600-h/Screenshot-1.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/_y8p0_dtMJ38/Sxqt9y_wAbI/AAAAAAAAAts/YMfhdkKJ_Ck/s320/Screenshot-1.png" /></a><br />
+</div><br />
+Контекстное меню:<br />
+<div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/_y8p0_dtMJ38/SxqwIz8iOfI/AAAAAAAAAt0/bDLo2ZIzpKY/s1600-h/Screenshot-2.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/_y8p0_dtMJ38/SxqwIz8iOfI/AAAAAAAAAt0/bDLo2ZIzpKY/s320/Screenshot-2.png" /></a><br />
+</div><h3>Заключение</h3>Достойный аналог TortoiseSVN под линукс.</div>
+
+]]></content>
+  </entry>
+  
+</feed>

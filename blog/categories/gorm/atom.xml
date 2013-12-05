@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: gorm | Блог о разработке ПО]]></title>
+  <link href="http://uthark.github.com/blog/categories/gorm/atom.xml" rel="self"/>
+  <link href="http://uthark.github.com/"/>
+  <updated>2013-06-29T23:40:55-04:00</updated>
+  <id>http://uthark.github.com/</id>
+  <author>
+    <name><![CDATA[Oleg Atamanenko]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Несколько слов о GORM]]></title>
+    <link href="http://uthark.github.com/blog/2010/04/11/gorm/"/>
+    <updated>2010-04-11T00:45:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2010/04/11/gorm</id>
+    <content type="html"><![CDATA[<div class='post'>
+<p>В данной заметке хочу поделиться некоторыми моментами использования GORM.</p>
+<p><a href="http://grails.org/doc/latest/guide/5.%20Object%20Relational%20Mapping%20%28GORM%29.html">GORM</a> - это <a href="http://en.wikipedia.org/wiki/Object-relational_mapping">ORM</a>-фреймворк, используемый в <a href="http://grails.org/">Grails</a>. Реализован он поверх <a href="http://hibernate.org/">Hibernate</a>, но, при этом, с некоторыми отличными умолчаниями.</p>
+<p>Для разработчиков, знающих <tt>Hibernate</tt>, рекомендую тщательно изучить <tt>GORM</tt>, так как его поведение в некоторых случаях отлично от <tt>Hibernate</tt>, что может приводить к различным сюрпризам.</p>
+<h4></h4>
+<h4>Маппинг один-ко-многим</h4>
+<p>По умолчанию <tt>GORM</tt> для связей <em>один ко многим</em> (one-to-many) <a href="http://www.grails.org/doc/latest/guide/5.%20Object%20Relational%20Mapping%20%28GORM%29.html#5.2.1.2%20One-to-many" title="Grails will, by default, map this kind of relationship with a join table.">создаёт таблицу-связку</a>, которая обычно нужна только при связях между сущностями вида <em>многие ко многим</em>. Чтобы исправить это поведение необходимо указать <tt>GORM</tt>, чтобы он не создавал таблицу связку.</p>
+<pre class="brush: java; highlight: [7]">
+class Person implements Serializable {
+  static hasMany = [
+    scores: ScoreSheet
+  ]
+  
+  static mapping = {
+    scores joinTable: false
+  };
+}
+</pre>
+<h4>Использование однонаправленных связей</h4>
+<p>Если в приложении используются двунаправленные связи и вероятность изменения сущности одновременно несколькими пользователями высокая, то лучше использовать однонаправленные связи для сущностей. Кроме того, лучше проектировать доменные классы таким образом, чтобы связь была не один-ко-многим, а многие к одному.</p>
+<pre class="brush: java">
+class Note implements Serializable {
+  static belongsTo = [
+    person: Person
+  ]
+}
+
+class Person implements Serializable {
+  // person fields.
+}
+</pre>
+<p>Для работы с <tt>Notes</tt> необходимо использовать такие запросы: </p>
+<pre class="brush: java">
+  Note.findByPerson(person).each { -&gt; };
+</pre>
+<p> вместо </p>
+<pre class="brush: java">
+  person.notes.each { -&gt; }
+</pre>
+<h4>Маппинг иерархии классов доменных сущностей</h4>
+<p>GORM поддерживает только <a href="http://www.grails.org/doc/latest/guide/5.%20Object%20Relational%20Mapping%20%28GORM%29.html#5.2.3%20Inheritance%20in%20GORM">два варианта </a>маппинга иерархии классов, в отличии от <a href="http://docs.jboss.org/hibernate/stable/core/reference/en/html/inheritance.html">Hibernate</a>: Таблица на всю иерархию (<tt>table-per-hierarchy</tt>), или таблица на каждый подкласс (<tt>table-per-subclass</tt>). У маппинга <tt>table-per-hierarchy</tt> есть серьёзный недостаток - подклассы не могут иметь ненулевые поля. Поэтому, если этот недостаток критичен, то необходимо использовать маппинг <tt>table-per-subclass</tt>.</p>
+<pre class="brush: java; highlight: [7]">
+class Payment {
+  Long id
+  Long version
+  Integer amount
+
+  static mapping = {
+    tablePerHierarchy false
+  }
+}
+
+class CreditCardPayment extends Payment {
+  String cardNumber
+}
+ </pre></div>
+
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,395 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Использование BeanPostProcessor на примере журналирования - Блог о разработке ПО</title>
+  <meta name="author" content="Oleg Atamanenko">
+
+  
+  <meta name="description" content="Сегодня я хочу рассказать, как можно сделать инициализацию логгера в классе с использованием аннотаций и BeanPostProcessor Очень часто мы &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://uthark.github.com/blog/2012/04/20/beanpostprocessor/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feeds.feedburner.com/atamanenko" rel="alternate" title="Блог о разработке ПО" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=Roboto+Slab:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Roboto:300,700,900&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+<link rel="author" href="https://plus.google.com/112372998073079463630/?rel=author" />
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-8688665-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Блог о разработке ПО</a></h1>
+  
+    <h2>Cтруктурированные нерегулярные заметки о разработке программного обеспечения</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="http://feeds.feedburner.com/atamanenko" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:uthark.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Использование BeanPostProcessor на примере журналирования</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-20T04:51:00-04:00" pubdate data-updated="true">Apr 20<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><div class='post'>
+Сегодня я хочу рассказать, как можно сделать инициализацию логгера в классе с использованием аннотаций и <a href="http://static.springsource.org/spring/docs/current/javadoc-api/org/springframework/beans/factory/config/BeanPostProcessor.html">BeanPostProcessor</a>
+
+Очень часто мы инициализируем логгер следующим образом:
+<pre class="brush:java">
+public class MyClass {
+    private static final Logger LOG = LoggerFactory.getLogger(MyClass.class);
+}
+</pre>
+
+Я покажу, как сделать, чтобы можно было писать вот так: 
+<pre class="brush:java">
+    @Log
+    private Logger LOG;
+</pre>
+
+Первым делом нам нужно объявить аннотацию:
+
+<pre class="brush:java">
+@Retention(RUNTIME)
+@Target(FIELD)
+@Documented
+public @interface Log {
+    String category() default "";
+}
+</pre>
+
+А вторым делом, написать собственный <tt>BeanPostProcessor</tt>, который бы устанавливал нам логгер:
+
+<pre class="brush:java">
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.stereotype.Component;
+import org.springframework.util.ReflectionUtils;
+
+@Component
+public class LoggerPostProcessor implements BeanPostProcessor {
+    @Override
+    public Object postProcessAfterInitialization(Object bean, String beanName) {
+        return bean;
+    }
+
+    @Override
+    public Object postProcessBeforeInitialization(final Object bean, final String beanName) {
+        ReflectionUtils.doWithFields(bean.getClass(), new FieldProcessor(bean, beanName), new LoggerFieldFilter());
+        return bean;
+    }
+
+    private static class FieldProcessor implements ReflectionUtils.FieldCallback {
+        private final Object bean;
+        private final String beanName;
+
+        private FieldProcessor(Object bean, String beanName) {
+            this.bean = bean;
+            this.beanName = beanName;
+        }
+
+        @Override
+        public void doWith(Field field) throws IllegalAccessException {
+            Log loggerAnnot = field.getAnnotation(Log.class);
+
+            // Sanity check if annotation is on the field with correct type.
+            if (field.getType().equals(org.slf4j.Logger.class)) {
+                // As user can override logger category - check if it was done.
+                String loggerCategory = loggerAnnot.category();
+                if (StringUtils.isBlank(loggerCategory)) {
+                    // use default category instead.
+                    loggerCategory = bean.getClass().getName();
+                }
+                Logger logger = LoggerFactory.getLogger(loggerCategory);
+                ReflectionUtils.makeAccessible(field);
+                field.set(bean, logger);
+            } else {
+                throw new IllegalArgumentException(
+                    "Unable to set logger on field '" + field.getName() + "' in bean '" + beanName +
+                        "': field should have class " + Logger.class.getName());
+            }
+        }
+    }
+
+    private static class LoggerFieldFilter implements ReflectionUtils.FieldFilter {
+        @Override
+        public boolean matches(Field field) {
+            Log logger = field.getAnnotation(Log.class);
+            return null != logger;
+        }
+    }
+}
+</pre>
+
+Если вы используете не <a href="http://www.slf4j.org/">sfl4j</a>, а, например, <a href="http://logging.apache.org/log4j/1.2/">log4j</a>, или <a href="http://commons.apache.org/logging/">commons-logging</a>, то нужно немного поправить код внутри метода <tt>doWith</tt>
+
+Попутно, данный код показывает пример использования класса <a href="http://static.springsource.org/spring/docs/current/javadoc-api/org/springframework/util/ReflectionUtils.html">org.springframework.util.ReflectionUtils</a>.</div>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Oleg Atamanenko</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-20T04:51:00-04:00" pubdate data-updated="true">Apr 20<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/java/'>java</a>, <a class='category' href='/blog/categories/logging/'>logging</a>, <a class='category' href='/blog/categories/reflection/'>reflection</a>, <a class='category' href='/blog/categories/spring/'>spring</a>, <a class='category' href='/blog/categories/razrabotka/'>разработка</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://uthark.github.com/blog/2012/04/20/beanpostprocessor/" data-via="" data-counturl="http://uthark.github.com/blog/2012/04/20/beanpostprocessor/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/04/20/blog-post/" title="Previous Post: Преобразуем строку в дату">&laquo; Преобразуем строку в дату</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/04/24/spring-data-jpa/" title="Next Post: Ищем с помощью Spring Data JPA">Ищем с помощью Spring Data JPA &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/06/29/spring-enable-annotation/">Пишем @Enable*-аннотацию для Spring</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/28/jaxrs-spring-autowiring/">@Autowired JAX-RS Client API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/28/jaxrs/">JAX-RS Client API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/19/autowiring-factorybean/">@Autowiring EJBs with Spring</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/19/spring-caching/">Использование memcached в качестве backend для Spring Caching Abstraction</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/uthark">@uthark</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'uthark',
+            count: 3,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+<section class="googleplus googleplus-hidden">
+  <h1>
+    <a href="https://plus.google.com/112372998073079463630?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+<section>
+  <h1>Stack Overflow</h1>
+  <a href="http://stackoverflow.com/users/216764/uthark" style="text-decoration:none">
+  <img src="http://stackoverflow.com/users/flair/216764.png" width="208" height="58" alt="profile for uthark at Stack Overflow, Q&amp;A for professional and enthusiast programmers" title="profile for uthark at Stack Overflow, Q&amp;A for professional and enthusiast programmers">
+  </a>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Oleg Atamanenko -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
