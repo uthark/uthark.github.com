@@ -1,13 +1,43 @@
-<script src="https://apis.google.com/js/plusone.js"></script>
-<div id="comments">
+<div id="gpluscomments"
+     data-href='{{ site.url }}{{ page.url }}'
+     data-viewtype='FILTERED_POSTMOD'></div>
+<script type="text/javascript">
+    window.___gcfg = {lang: '{{ site.lang }}'};
 
-</div>
-<script>
-    gapi.comments.render('comments', {
-        href: window.location,
-        width: '624',
-        first_party_property: 'BLOGGER',
-        view_type: 'FILTERED_POSTMOD'
-    });
-</script>
+    (function() {
+      function _getComputedStyle(el, cssprop){
+       if (el.currentStyle) {
+        // for IE
+        return el.currentStyle[cssprop]
+       } else if (document.defaultView && document.defaultView.getComputedStyle) {
+        // Any other normal brwoser (like Chrome, Firefox)
+        return document.defaultView.getComputedStyle(el, "")[cssprop]
+       } else {
+        // Try get inline style
+        return el.style[cssprop]
+        }
+      }
 
+
+      var script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.async = true;
+      script.onload = function() {
+        if (gapi && gapi['comments'] && gapi.comments['render']) {
+          var gPlusComments = document.getElementById('gpluscomments');
+          gapi.comments.render(
+            'gpluscomments',
+            {
+              href: gPlusComments.getAttribute('data-href'),
+              view_type: gPlusComments.getAttribute('data-viewtype'),
+              first_party_property: "BLOGGER",
+              width: parseInt(_getComputedStyle(gPlusComments, "width"), 10)
+            }
+          );
+        }
+      };
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(script, s);
+    })();
+  </script>
