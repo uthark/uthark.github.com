@@ -110,6 +110,11 @@ module OctopressLiquidFilters
     input.gsub(/\s{2,}/, ' ')
   end
 
+  # Strips quotes
+  def strip_quotes(input)
+    input.gsub(/[\'\""]/, '')
+  end
+
   # Removes trailing forward slash from a string for easily appending url segments
   def strip_slash(input)
     if input =~ /(.+)\/$|^\/$/
