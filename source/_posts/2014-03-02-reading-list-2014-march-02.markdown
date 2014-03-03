@@ -3,7 +3,8 @@ layout: post
 title: "Reading List 2014-March-02"
 date: 2014-03-02 16:41
 comments: true
-categories: reading list
+categories: 
+    - reading list
 ---
 Reading list for today:
 

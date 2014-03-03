@@ -3,7 +3,10 @@ layout: post
 title: "Сплин - Резонанс, часть 1."
 date: 2014-03-02 23:29
 comments: true
-categories: music, diary, russian
+categories: 
+    - music
+    - diary
+    - russian
 ---
 
 Splean [released new album][official] - Resonance, part 1.

@@ -3,7 +3,8 @@ layout: post
 title: "Fixing unescaped quotes in page rendering in Octopress"
 date: 2014-03-02 22:11
 comments: true
-categories: octopress
+categories:
+    - octopress
 ---
 
 When I created [About Me](/about) page I found issue with rendering: for some reason styles and some javascripts were missing on the page.
