@@ -1,2 +1,42 @@
 // This File is imported last, and will override other styles in the cascade
 // Add styles here to make changes without digging in too much
+$noise-bg: none;
+
+body {
+  > div {
+    background: $sidebar-bg $noise-bg;
+    border-bottom: 1px solid $page-border-bottom;
+    > div {
+      background: $main-bg $noise-bg;
+      border-right: 1px solid $sidebar-border;
+    }
+  }
+}
+
+#content>div {
+  padding-top: 0.5em;
+}
+
+article.hentry {
+	 padding-top: 0em; padding-bottom: 0em; background-color: white; border: 1px solid #c5c5c5; 
+}
+
+#content .blog-index {
+  article { padding-top: 1em; padding-bottom: 1em; background-color: white; border: 1px solid #c5c5c5; margin: 2em;}
+}
+
+article {
+	margin: 1em;
+	> header {
+		padding-top: 1em;
+		> p.meta {
+			position: initial;
+		}
+	}
+}
+
+body #content>div>section {
+  margin: 0em;
+  padding-left: 1em;
+  padding-right: 1em;
+}
