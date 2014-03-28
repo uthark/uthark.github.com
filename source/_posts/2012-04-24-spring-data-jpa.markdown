@@ -2,6 +2,10 @@
 layout: post
 title: "Ищем с помощью Spring Data JPA"
 date: 2012-04-24T14:04:00+07:00
+categories:
+ - development
+ - spring data
+ - jpa
 ---
 
 Рассмотрим подробнее одну из наиболее полезных вещей в Spring Data JPA - генерация JPQL-запросов на основе имени метода.

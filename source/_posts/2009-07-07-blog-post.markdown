@@ -12,6 +12,7 @@ categories:
  - разработка
  - postgresql
  - oracle
+ - development
 ---
 
 <div class='post'>

@@ -6,6 +6,7 @@ categories:
  - блокировка
  - транзакция
  - разработка
+ - development
 ---
 
 <div class='post'>

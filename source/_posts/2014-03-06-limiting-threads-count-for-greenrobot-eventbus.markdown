@@ -4,6 +4,7 @@ title: "Limiting threads count for GreenRobot EventBus"
 date: 2014-03-06 22:38:54 -0500
 comments: true
 categories: 
+    - development
     - greenrobot
     - android
 ---

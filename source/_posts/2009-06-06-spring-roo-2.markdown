@@ -6,6 +6,7 @@ categories:
  - java
  - spring roo
  - разработка
+ - development
 ---
 
 <div class='post'>

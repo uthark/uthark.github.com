@@ -8,6 +8,7 @@ categories:
  - logging
  - spring
  - разработка
+ - development
 ---
 
 <div class='post'>

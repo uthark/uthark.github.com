@@ -8,6 +8,7 @@ published: true
 categories:
  - jax-rs client
  - spring
+ - development
  - autowiring
 ---
 

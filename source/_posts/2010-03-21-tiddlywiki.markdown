@@ -6,6 +6,7 @@ categories:
  - howto
  - разработка
  - tiddlywiki
+ - development
 ---
 
 <div class='post'>

@@ -6,6 +6,7 @@ categories:
  - база данных
  - транзакция
  - разработка
+ - development
 ---
 
 <div class='post'>

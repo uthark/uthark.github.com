@@ -9,6 +9,7 @@ categories:
  - beanvalidation
  - validator
  - validation
+ - development
 ---
 [JSR-303](http://jcp.org/en/jsr/detail?id=303) предоставляет удобный API для проверки валидности объектов, а также входных параметров. Очевидно, что [стандартных валидаторов](http://docs.oracle.com/javaee/6/tutorial/doc/gircz.html) в какой-то момент может быть недостаточно, поэтому необходимо писать собственный.
 

@@ -6,6 +6,7 @@ categories:
  - spring
  - разработка
  - spring data
+ - development
 ---
 
 <div class='post'>

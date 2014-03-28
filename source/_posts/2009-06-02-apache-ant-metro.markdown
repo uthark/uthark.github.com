@@ -6,6 +6,7 @@ categories:
  - apache ant
  - java
  - грабли
+ - development
 ---
 
 <div class='post'>

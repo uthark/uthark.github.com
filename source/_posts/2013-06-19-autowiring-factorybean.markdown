@@ -9,6 +9,7 @@ categories:
  - autowiring
  - factory bean
  - spring framework
+ - development
 ---
 Предположим, что у нас есть проект на Spring, в котором необходимо использовать внешние EJB. Для получения бинов необходимо создавать [InitialContext](http://docs.oracle.com/javase/6/docs/api/javax/naming/InitialContext.html) и делать `lookup()` нужных ejb. Но эту задачу можно автоматизировать и пользоваться [@Autowired](http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/beans/factory/annotation/Autowired.html), то есть код будет выглядеть вот так:
 

@@ -5,6 +5,7 @@ date: 2009-05-03T00:18:00+07:00
 categories:
  - plugin
  - eclipse
+ - development
 ---
 
 <div class='post'>

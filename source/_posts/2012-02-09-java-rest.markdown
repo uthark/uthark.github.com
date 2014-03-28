@@ -6,6 +6,7 @@ categories:
  - jax-rs
  - разработка
  - resteasy
+ - development
 ---
 
 <div class='post'>

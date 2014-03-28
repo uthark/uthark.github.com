@@ -4,6 +4,7 @@ title: "Fixing unescaped quotes in page rendering in Octopress"
 date: 2014-03-02 22:11
 comments: true
 categories:
+    - development
     - octopress
 ---
 

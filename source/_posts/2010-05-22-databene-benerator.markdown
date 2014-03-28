@@ -5,6 +5,7 @@ date: 2010-05-22T00:26:00+07:00
 categories:
  - performance
  - testing
+ - development
 ---
 
 <div class='post'>

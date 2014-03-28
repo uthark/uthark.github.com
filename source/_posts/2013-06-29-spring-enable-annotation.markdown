@@ -6,6 +6,7 @@ comments: true
 sharing: true
 published: true
 categories:
+ - development
  - spring
  - autowiring
 

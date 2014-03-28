@@ -4,6 +4,7 @@ title: "Initializing Mockito @Mocks with JUnit @Rule"
 date: 2014-03-28 13:24:45 -0400
 comments: true
 categories: 
+    - article
     - java
     - mockito
     - junit

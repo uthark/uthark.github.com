@@ -6,6 +6,7 @@ categories:
  - delicious
  - chromium
  - google chrome
+ - development
 ---
 
 <div class='post'>

@@ -5,6 +5,7 @@ date: 2009-06-03T00:06:00+07:00
 categories:
  - spring roo
  - разработка
+ - development
 ---
 
 <div class='post'>

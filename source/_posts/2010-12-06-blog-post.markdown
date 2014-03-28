@@ -6,6 +6,7 @@ categories:
  - bitly
  - разработка
  - android
+ - development
 ---
 
 <div class='post'>

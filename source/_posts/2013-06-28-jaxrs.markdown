@@ -6,7 +6,8 @@ comments: true
 sharing: true
 published: true
 categories:
- - jax-rs client
+    - jax-rs client
+    - development
 ---
 
  

@@ -4,6 +4,7 @@ title: "Using iTerm triggers"
 date: 2014-03-02 23:51
 comments: true
 categories: 
+    - development
     - iterm
     - osx
     - tips

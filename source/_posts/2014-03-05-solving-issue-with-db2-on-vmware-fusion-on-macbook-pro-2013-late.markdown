@@ -4,6 +4,7 @@ title: "Solving issue with DB2 on VMWare Fusion on MacBook Pro 2013 Late"
 date: 2014-03-05 14:41:54 -0500
 comments: true
 categories: 
+    - development
     - macbook
     - vmware fusion
     - db2

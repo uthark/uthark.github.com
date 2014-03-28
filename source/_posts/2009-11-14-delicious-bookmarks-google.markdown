@@ -8,6 +8,7 @@ categories:
  - howto
  - chromium
  - article
+ - development
 ---
 
 <div class='post'>

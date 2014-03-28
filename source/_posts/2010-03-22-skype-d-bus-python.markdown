@@ -7,6 +7,7 @@ categories:
  - python
  - dbus
  - разработка
+ - development
 ---
 
 <div class='post'>

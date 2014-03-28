@@ -5,6 +5,7 @@ date: 2010-05-22T00:52:00+07:00
 categories:
  - java
  - разработка
+ - development
 ---
 
 <div class='post'>

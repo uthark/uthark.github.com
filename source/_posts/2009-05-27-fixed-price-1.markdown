@@ -5,6 +5,7 @@ date: 2009-05-27T00:36:00+07:00
 categories:
  - разработка
  - качество кода
+ - development
 ---
 
 <div class='post'>

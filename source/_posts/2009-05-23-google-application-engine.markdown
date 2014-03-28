@@ -6,6 +6,7 @@ categories:
  - GAE
  - обзор
  - разработка
+ - development
 ---
 
 <div class='post'>

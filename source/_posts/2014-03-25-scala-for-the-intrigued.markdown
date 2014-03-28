@@ -4,6 +4,7 @@ title: "Scala for the Intrigued"
 date: 2014-03-25 16:09:42 -0400
 comments: true
 categories:
+    - article
     - reading list
     - scala
 ---

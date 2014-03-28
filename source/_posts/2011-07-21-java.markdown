@@ -5,6 +5,7 @@ date: 2011-07-21T12:06:00+07:00
 categories:
  - java
  - basics
+ - development
 ---
 
 <div class='post'>

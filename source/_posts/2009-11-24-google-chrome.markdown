@@ -5,6 +5,7 @@ date: 2009-11-24T23:09:00+06:00
 categories:
  - extension
  - chromium
+ - development
 ---
 
 <div class='post'>
