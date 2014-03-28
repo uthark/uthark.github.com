@@ -4,6 +4,10 @@ title: "Initializing Mockito @Mocks with JUnit @Rule"
 date: 2014-03-28 13:24:45 -0400
 comments: true
 categories: 
+    - java
+    - mockito
+    - junit
+    - development
 ---
 
 In this post I will show how one can implement custom JUnit [@Rule].
