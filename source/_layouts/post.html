@@ -5,12 +5,14 @@ single: true
 
 <div>
 <article class="hentry" role="article">
+  <div style="float:right; position: relative; z-index: 3">
+  {% include post/categories.html %}
+  </div>
   {% include article.html %}
   <footer>
     <p class="meta">
       {% include post/author.html %}
       {% include post/date.html %}{% if updated %}{{ updated }}{% else %}{{ time }}{% endif %}
-      {% include post/categories.html %}
     </p>
     {% unless page.sharing == false %}
       {% include post/sharing.html %}

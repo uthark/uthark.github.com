@@ -41,6 +41,10 @@ body #content>div>section {
   padding-right: 1em;
 }
 
+a.category {
+  display: block;
+}
+ 
 a.category:before {
   content: '#';
 }
