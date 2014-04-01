@@ -40,3 +40,7 @@ body #content>div>section {
   padding-left: 1em;
   padding-right: 1em;
 }
+
+a.category:before {
+  content: '#';
+}
