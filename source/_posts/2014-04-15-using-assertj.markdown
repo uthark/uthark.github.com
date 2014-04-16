@@ -8,6 +8,7 @@ categories:
     - article
     - java
     - unit testing
+    - assertj
 ---
 
 [AssertJ] is a library which provides fluent strongly-typed assertions to use in unit tests.
