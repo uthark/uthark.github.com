@@ -13,7 +13,7 @@ categories:
 
 Spring Data JPA умеет автоматически генерировать запросы используя для подсказки название метода.
 
-Например, метод User.findByLoginAndPassword сгенерирует примерно следующий код:
+Например, метод `User.findByLoginAndPassword` сгенерирует примерно следующий код:
 
 {% codeblock lang:sql %}
 FROM User u where u.login = :login and password = :password
