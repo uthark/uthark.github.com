@@ -103,3 +103,8 @@ google_analytics_tracking_id: UA-8688665-1
 
 # Facebook Like
 facebook_like: true
+
+
+# Pocket share
+pocket_share: true
+

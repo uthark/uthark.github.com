@@ -48,3 +48,14 @@ a.category {
 a.category:before {
   content: '#';
 }
+
+.pocket-share {
+  display: inline-block;
+}
+
+div.fb-like {
+  vertical-align: top;
+}
+div.fb-like>span {
+  vertical-align: baseline !important;
+}
