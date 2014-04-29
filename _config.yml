@@ -2,11 +2,11 @@
 #      Main Configs       #
 # ----------------------- #
 
-url: http://uthark.github.com
+url: http://uthark.github.io
 title: Software Development and related activities
 subtitle: Something I want to share with you
 author: Oleg Atamanenko
-simple_search: http://google.com/search
+simple_search: https://www.google.com/webhp
 description:
 
 # Default date format is "ordinal" (resulting in "July 22nd 2007")

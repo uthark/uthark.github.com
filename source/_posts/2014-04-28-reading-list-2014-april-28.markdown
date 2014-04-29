@@ -19,7 +19,7 @@ categories:
 
 ### Java
 1. [JAX-RS 2.0: Custom Content Handling](http://j.mp/1rEUCPA)
-1. [Difference between Connected vs Disconnected RowSet in Java JDBC | 1. [The 7 Log Management Tools Java Developers Should Know](http://j.mp/1lMQNc4)
+1. [Difference between Connected vs Disconnected RowSet in Java JDBC RowSetProvider, RowSetFactory Example](http://j.mp/1rEUxeX)
+1. [The 7 Log Management Tools Java Developers Should Know](http://j.mp/1lMQNc4)
 1. [Jibx Jersey2 Integration](http://j.mp/RZTs59)
-RowSetProvider, RowSetFactory Example](http://j.mp/1rEUxeX)
 1. [Using Http Session with Spring based web applications](http://j.mp/1kdIwbF)
