@@ -1,0 +1,25 @@
+---
+layout: post
+title: "Reading List 2014-May-01"
+date: 2014-05-01 16:20:16 -0400
+comments: true
+categories: 
+  - reading list
+---
+
+### Announcements
+1. [New Release: Java Micro Edition (ME) 8](http://j.mp/1nKjAOg)
+1. [Spring Framework 4.0.4 released](http://j.mp/1jkSFFn)
+1. [Spring Integration 4.0 Released](http://j.mp/1nMxsaI)
+1. [New mobile apps for Docs, Sheets and Slides - work offline and on the go](http://j.mp/SaRzCK)
+
+
+### Software development
+1. [Java Me Embedded Documentation](http://j.mp/R7oKpK)
+1. [Manifest Merger](http://j.mp/1u5sPtV)
+1. [Recent File List | JavaSpecialists.eu](http://j.mp/R49GcO)
+1. [Small and Medium tests should never fail in Continuous Integration ( CI )](http://j.mp/1nMCWCl)
+1. [Spring 4.1's Upcoming JMS Improvements](http://j.mp/1iHAo0s)
+1. [Spring Boot and Scala with sbt as the build tool](http://j.mp/1iDIzL8)
+1. [Spring Integration - Configure web service client timeout](http://j.mp/1jkSHNM)
+1. [Subscribe to Web Content folders and types (structures)](http://j.mp/Sb04h1)
