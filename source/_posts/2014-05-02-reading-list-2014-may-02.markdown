@@ -1,0 +1,18 @@
+---
+layout: post
+title: "Reading List 2014-May-02"
+date: 2014-05-02 15:04:32 -0400
+comments: true
+categories: 
+  - reading list
+---
+
+1. [10 Features in Java 8 You Haven't Heard Of](http://j.mp/1pUf1mz)
+1. [69 Spring Interview Questions and Answers - The ULTIMATE List](http://j.mp/1iQUcnc)
+1. [DFS | XKCD](http://xkcd.com/761/)
+1. [Domain Name Health Checks for Route 53](http://j.mp/1nKjypt)
+1. [Feature Preview: Docker-Based Development Environments](http://j.mp/1lHqOQQ)
+1. [OOM relation to vm.swappiness=0 in new kernel](http://j.mp/1fykvid)
+1. [Places to hook into Liferay from OSGi](http://j.mp/1nOClAa)
+1. [Wikis: now with more love](http://j.mp/R8GBwo)
+1. [You can program bug free](http://j.mp/1i5AD5m)
