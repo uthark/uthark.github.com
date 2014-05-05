@@ -1,0 +1,22 @@
+---
+layout: post
+title: "Reading List 2014-May-05"
+date: 2014-05-05 16:03:09 -0400
+comments: true
+categories: 
+  - reading list
+---
+
+### Announcements
+1. [Groovy 2.3.0 is out!](http://j.mp/1uqGOL8)
+
+### General
+1. [A Eulogy for Twitter | Adrienne LaFrance and Robinson Meyer](http://j.mp/1fIpDQR)
+1. [How a hoax turned into the biggest Dutch crowdfunding success in history](http://j.mp/1ohnyLu)
+
+### Software development
+1. [Analyzing a large JSON in memory](http://j.mp/1nYC0ec)
+1. [Columnar Storage for Hadoop](http://parquet.io/)
+1. [How could Scala do a merge sort?](http://j.mp/1lPzwMZ)
+1. [Load inheritance tree into List by Spring](http://j.mp/1uq3fQq)
+1. [xkcd Phone | xkcd](http://j.mp/1q73SyF)
