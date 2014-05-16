@@ -1,0 +1,63 @@
+---
+layout: post
+title: "Reading List for 2014-May-16"
+date: 2014-05-16 11:02:55 -0400
+comments: true
+categories:
+  - reading list
+---
+
+### Announcements
+1. [1 Billion Saves to Pocket!](http://ift.tt/1lkzPge)
+1. [Spring for Apache Hadoop 2.0 RC3 released](http://j.mp/1ijEKuG)
+1. [Spring Integration Java DSL Milestone 1 Released](http://j.mp/1kY00YA)
+1. [Reactor 1.1.0.RELEASE now available](http://j.mp/1myY9QX)
+1. [Spring Tool Suite and Groovy/Grails Tool Suite 3.5.1 released](http://j.mp/1nlJcyp)
+1. [spring-projects/spring-hateoas at 0.11.0.RELEASE · GitHub](http://j.mp/1j2QEct)
+1. [Google Play services 4.4](http://j.mp/1s4lzdR)
+
+### Software development
+1. [ADAP Open Source REST API Layer For LDAP](http://j.mp/1nZNL41)
+1. [ADB Debugging: How to test your Android APK on Fire TV](http://j.mp/1gbzw4A)
+1. [Amazon CloudFront Joins the AWS Free Usage Tier](http://j.mp/1jath6X)
+1. [Amazon WorkSpaces Now Available in Europe](http://j.mp/1fPqxLE)
+1. [Android Explorations : Using KitKat verified boot](http://j.mp/1oau4Xe)
+1. [Announcing Google Cloud Storage JSON API General Availability](http://j.mp/1myY2Vv)
+1. [Atom: free and open source for everyone](http://j.mp/1o3op5d)
+1. [Background Task - a.k.a the secret weapon behind the new asynchronous staging | Liferay](http://j.mp/1s6B5WO)
+1. [Chrome's experiment of hiding the URL is awful](http://j.mp/1scTTFQ)
+1. [Classycle: Analysing Tools for Java Class and Package Dependencies](http://ift.tt/T4Vxgz)
+1. [Code Conventions for the JavaScript Programming Language](http://j.mp/1ob6GZU)
+1. [DuckDuckGo Reimagined and Redesigned](http://j.mp/1lZmEDP)
+1. [Facebook's App Links: The Good, the Bad and the Ugly](http://j.mp/1nZNI8o)
+1. [Four Million to One (Or How I Handle Trello Support)](http://j.mp/1slgZtX)
+1. [Guide to publish an aar to maven using gradle](http://j.mp/1gbzj14)
+1. [How Facebook Predicts Who You Know, Using Old Yahoo Code â Co.Labs â code + community](http://j.mp/1fNdTwN)
+1. [How I Organize Evernote: A Peek Inside My Personal System](http://j.mp/Rp2hEy)
+1. [I don't love the single responsibility principle](http://j.mp/1j4cZ9F)
+1. [In-browser RAW Processing: How We Did It](http://ift.tt/1ljkmvx)
+1. [Java 8 Elvis Operator](http://j.mp/1iYk7El)
+1. [Java 8 Friday: Let's Deprecate Those Legacy Libs](http://j.mp/1nlJ3eu)
+1. [Google Cast Receiver API Update | Leon Nicholls](http://j.mp/1s7vkrL)
+1. [Microsoft Leads The China Cloud War Into Episode II](http://ift.tt/1eNSlgD)
+1. [MongoDB’s New Bulk API | MongoDB Blog](http://j.mp/1qaybEA)
+1. [Nested task lists · GitHub](http://ift.tt/1lpqOkE)
+1. [Oracle SOA Suite for HealthCare â Using Remote JMS with Multiple Domains](http://j.mp/1gbzp90)
+1. [Pattern Matching - Make the Compiler Work for You](http://j.mp/1q74hB8)
+1. [Seamless migration from monolithic application to Finagle services (Part 1/2)](http://j.mp/1gxBdg2)
+1. [See, always told you: testing is just a waste of time](http://j.mp/Rv4TkG)
+1. [Spring Java Configuration: Session timeout](http://j.mp/1nycnkm)
+1. [TDD Is Dead? Let’s Kill The Messenger Instead!](http://ift.tt/1nCEI94)
+1. [The Journey From JEE to SPA](http://j.mp/1fYBsmi)
+1. [Three-State Booleans in Java](http://j.mp/1qeVD3N)
+1. [Trees as graphs vs. Trees as data structures](http://j.mp/1jatiYx)
+1. [Welcome Stackdriver to Google Cloud Platform](http://j.mp/1o7T814)
+1. [What every web developer must know about URL encoding](http://ift.tt/14zgLpr)
+1. [What’s new in Server Density – Apr 2014](http://ift.tt/QVnQg4)
+1. [When a bad day gets worse - getting hacked twice in one day](http://j.mp/1o7QLv7)
+1. [Why you should not work extra hours](http://j.mp/1nZNLB0)
+
+### Comics
+1. [Cyanide & Happiness #3550](http://j.mp/1slajKc)
+1. [Billion-Story Building | What if?](http://j.mp/RDUpzx)
+1. [Google Announcement | XKCD](http://j.mp/1oGbUds)
