@@ -28,28 +28,35 @@ First, update parent's `pom.xml`:
     <version>${unitils.version}</version>
     <scope>test</scope>
 </dependency>
+
 ```
 
 Then add dependency to the child module:
 
 ``` xml pom.xml changes in child module
+
 <dependency>
     <groupId>org.unitils</groupId>
     <artifactId>unitils-core</artifactId>
 </dependency>
+
 ```
 
 Usage is very simple:
 Add static import to the class.
 
-``` 
+``` java
+
 import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
+
 ```
 
 and use it instead of regular JUnit assert:
 
 ``` java
+
     assertReflectionEquals(expected, actual);
+    
 ```
 
 It is possible to pass reflection comparator modes as optional parameters to the above method.
@@ -57,6 +64,7 @@ It is possible to pass reflection comparator modes as optional parameters to the
 Be ware that this method is not very useful if you want to compare objects which has floating point or double parameters - ReflectionAssert compares `double` and `float` values using `==`, so it is not very useful. It is not possible to pass epsilon for comparison.
 
 ``` java excerpt from org.unitils.reflectionassert.comparator.impl.LenientNumberComparator#compare
+
 // ...
 Double leftDouble = getDoubleValue(left);
 Double rightDouble = getDoubleValue(right);
@@ -64,16 +72,19 @@ if (!leftDouble.equals(rightDouble)) {
     return new Difference(differenceMessage, left, right);
 }
 // ...
+
 ```
 
 If you need to compare double values in JUnit assertions then it is better to use [hamcrest library].
 
 ``` java
+
 import static org.hamcrest.number.IsCloseTo.closeTo;
 import static org.junit.Assert.assertThat;
 
 // in @Test method:
 assertThat(actual.getFederalIncomeTax(), closeTo(expected.getFederalIncomeTax(), EPSILON))
+
 ```
 
 Happy hacking!

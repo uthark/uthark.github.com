@@ -15,7 +15,8 @@ categories:
 
 Example of assertions written with `AssertJ`:
 
-``` java 
+``` java
+
 import io.github.uthark.blog.assertj.Assertions.assertThat;
 
 // ... within @Test
@@ -24,7 +25,7 @@ assertThat(result).
     isNotNull().
     isActive().
     hasLogin("username");
-
+    
 ```
 
 As you can see assertions look much more readable. 
@@ -33,6 +34,7 @@ The integration of assertj into Maven project is very easy:
 1. Update pom.xml in parent module
 
 ``` xml pom.xml changes in parent module.
+
 <properties>
     <assertj-core.version>1.6.0</assertj-core.version>
     <assertj-assertions-generator-maven-plugin.version>1.2.0</assertj-assertions-generator-maven-plugin.version>
@@ -64,10 +66,13 @@ The integration of assertj into Maven project is very easy:
     </plugin>
 
 </pluginManagement>
+
 ```
 
 2. Update pom.xml in child module
+
 ``` xml Changes in child module.
+
 <dependencies>
     <dependency>
         <groupId>org.assertj</groupId>
@@ -93,12 +98,15 @@ The integration of assertj into Maven project is very easy:
         </plugin>
     </plugins>
 </build>
+
 ```
 
 After this changes it is possible to generate assertions for the classes you want test:
 
 ``` sh
+
 mvn assertj:generate-assertions
+
 ```
 
 By default assertj will generate assertion classes in `target/generated-test-sources/assertj-assertions/`, it is possible to override this behaviour by passing configuration element `targetDir` to plugin.

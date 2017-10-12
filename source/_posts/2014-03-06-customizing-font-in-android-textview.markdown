@@ -13,6 +13,7 @@ Today I want to share with you custom [TextView] which allows to set font to be 
 First, we need to declare our custom styleable
 
 ``` xml attrs.xml
+
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
@@ -27,6 +28,7 @@ First, we need to declare our custom styleable
 Then we need to create subclass of `TextView` which will use custom attribute.
 
 ``` java TypefaceTextView
+
 public class TypefaceTextView extends TextView {
 
     public TypefaceTextView(Context context) {
@@ -56,20 +58,24 @@ public class TypefaceTextView extends TextView {
         }
     }
 }
+
 ```
 
 Also, above class allows to use default custom font, all is needed is to define its name in `strings.xml`
 
 ```
+
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="default_font_name" translatable="false">custom.ttf</string>
 </resources>
+
 ```
 
 Due to the [bug in Android][issue9904] we have to cache all created typefaces in cache:
 
 ``` java TypefaceCache
+
 public class TypefaceCache {
 
     private static final Map<String, Typeface> CACHE = new HashMap<String, Typeface>();
@@ -94,18 +100,20 @@ public class TypefaceCache {
 Basically, that's it. In order to use it is required to put TTF font in the `assets` folder and reference the font:
 
 ``` xml Example usage.
+
 <?xml version="1.0" encoding="utf-8"?>
 <com.example.android.widget.TypefaceTextView 
     xmlns:a="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     a:layout_width="match_parent"
     custom:typeface="custom-font.ttf"/>
-
+    
 ```
 
 And the last use case it to set custom font for the actionbar title. In this case we can implement custom [`android.text.style.CharacterStyle`][CharacterStyle]
 
 ``` java TypefaceSpan
+
 public class TypefaceSpan extends MetricAffectingSpan {
 
     private Typeface mTypeface;
@@ -138,6 +146,7 @@ public class TypefaceSpan extends MetricAffectingSpan {
 Then we can set actionbar title using the following code:
 
 ``` java
+
 public static void setActionBarTitle(Activity context, CharSequence title) {
     SpannableString s = new SpannableString(title);
     s.setSpan(new TypefaceSpan(context, context.getString(R.string.default_font_name)), 0, s.length(),
@@ -147,6 +156,7 @@ public static void setActionBarTitle(Activity context, CharSequence title) {
         context.getActionBar().setTitle(s);
     }
 }
+
 ```
 
 ### Additional information

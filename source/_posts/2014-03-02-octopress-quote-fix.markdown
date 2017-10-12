@@ -13,7 +13,9 @@ When I created [About Me](/about) page I found issue with rendering: for some re
 Investigation showed that content in `meta tag` description contained unquoted quotes, thus resulting in broken HTML.
 
 After searching within [octopress sources] I found the issue:
+
 {% raw %}
+
 ``` ruby Rendering of description tag, excerpt from _includes/head.html
 {% capture description %}
     {% if page.description %}
@@ -24,6 +26,7 @@ After searching within [octopress sources] I found the issue:
 {% endcapture %}
 <meta name="description" content="{{ description | strip_html | condense_spaces | truncate:150 }}">
 ```
+
 {% endraw %}
 
 After capturing, `description` is being processed with filters, defined in `plugins/octopress_filters.rb`. In this case, the following filter are applied:
@@ -39,24 +42,27 @@ In order to fix this I decided to add new filter, which will just remove quotes.
 So, let's add new function, `strip_quotes` in `plugins/octopress_filters.rb`:
 
 ``` ruby strip_quotes function
+
 # Strips quotes
 def strip_quotes(input)
     input.gsub(/[\'\""]/, '')
 end
+
 ```
 
 And then we need to update rendering of description tag - add newly created filter:
 
 {% raw %}
+
 ``` html
 <meta name="description" content="{{ description | strip_html | condense_spaces | strip_quotes | truncate:150 }}">
 ```
+
 {% endraw %}
 
 After this fix description is being rendered properly.
 
 {% raw %}
-
 P.S. In order to render properly `{{` and `}}` in the octopress it is required to put content you want to render within `raw` and `endraw` tags. See [StackOverflow][so1] [questions][so2] for details.
 {% endraw %}
 

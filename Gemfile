@@ -1,14 +1,12 @@
 source "https://rubygems.org"
 
 group :development do
-  gem 'rake', '~> 10.1'
+  gem 'rake', '~> 12.0'
   gem 'jekyll', '~> 2.0'
   gem 'rdiscount', '~> 2.0.7'
-  gem 'pygments.rb', '~> 0.3.4'
   gem 'octopress-hooks', '~> 2.2'
   gem 'octopress-date-format', '~> 2.0'
   gem 'jekyll-sitemap'
-  gem 'rdiscount', '~> 2.0'
   gem 'RedCloth', '~> 4.2.9'
   gem 'haml', '~> 4.0'
   gem 'compass', '~> 1.0.1'

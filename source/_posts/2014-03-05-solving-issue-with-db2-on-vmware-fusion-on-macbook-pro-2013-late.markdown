@@ -19,8 +19,10 @@ After some googling I found out that it is due to the fact that current version 
 The workaround is to update VMWare configuration file for the virtual machine.
 
 ``` ini Changes to *.vmx file
+
 monitor_control.enable_fullcpuid = TRUE
 cpuid.4.4.eax = "0000:0000:0000:0000:0000:0000:0000:0000"
+
 ```
 
 The answer was found on [VMWare Community Forums](https://communities.vmware.com/thread/461857)

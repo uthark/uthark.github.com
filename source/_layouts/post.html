@@ -12,7 +12,8 @@ single: true
   <footer>
     <p class="meta">
       {% include post/author.html %}
-      {% include post/date.html %}{% if updated %}{{ updated }}{% else %}{{ time }}{% endif %}
+      {% include post/date.html %}{{ time }}{% if updated %} {{ updated }}{% endif %}
+      {% include post/categories.html %}
     </p>
     {% unless page.sharing == false %}
       {% include post/sharing.html %}
@@ -32,13 +33,6 @@ single: true
     <h1>Comments</h1>
     <div id="disqus_thread" aria-live="polite">{% include post/disqus_thread.html %}</div>
   </section>
-{% endif %}
-{% if site.google_plus_comments == true and page.comments == true %}
-<section>
-    <h1>Comments</h1>
-
-    {% include post/google_plus_comments.html %}
-</section>
 {% endif %}
 </div>
 {% unless page.sidebar == false %}

@@ -16,6 +16,7 @@ But I found one small issue with this library - in case you send too many events
 The problem is lying in the used `ExecutorService`:
 
 ``` java
+
 package de.greenrobot.event;
 // imports
 public final class EventBus {
@@ -23,6 +24,7 @@ public final class EventBus {
 
     // class content skipped 
 }
+
 ```
 
 As you can see, it calls `newCachedThreadPool` method to create thread pool.
@@ -39,6 +41,7 @@ Thankfully, `executorService` is `static` but not `final`. And this will allow u
 Let's create our configurer class in package `de.greenrobot.event` so we will be able to access `executorService` property which is package-visible and override it with different thread pool:
 
 ``` java EventBusExecutorServiceConfigurer
+
 package de.greenrobot.event;
 
 import java.util.concurrent.Executors;
@@ -64,6 +67,7 @@ Android 3.0+ has special [THREAD_POOL_EXECUTOR] which is supposed to be used by 
 And then in Android application we configure `executorService`:
 
 ``` java 
+
 public class CustomApplication extends Application {
     @Override
     public void onCreate() {

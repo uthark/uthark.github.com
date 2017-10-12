@@ -20,6 +20,7 @@ By default, Mockito provides the following methods of mock initialization:
 1. Using [Mockito.mock]
 
 ``` java Initialize mocks with Mockito.mock
+
 public void FooTest {
     
     private Foo foo;
@@ -31,6 +32,7 @@ public void FooTest {
     }
 
 }
+
 ```
 
 This is the simplest case.
@@ -38,6 +40,7 @@ This is the simplest case.
 2. Using [MockitoAnnotations].
 
 ``` java Initialize mocks with MockitoAnnotations
+
 public void FooTest {
     
     private Foo foo;
@@ -51,12 +54,15 @@ public void FooTest {
         foo = new Foo(dep);
     }
 }
+
 ```
 
 This method is useful when you have a lot of mocks to inject.
 
 3. Using [MockitoJUnitRunner]
+
 ``` java Initialize mocks with MockitoJUnitRunner
+
 @RunWith(MockitoJUnitRunner.class)
 public void FooTest {
     
@@ -70,6 +76,7 @@ public void FooTest {
         foo = new Foo(dep);
     }
 }
+
 ```
 
 I want to show you another method, by using custom JUnit `@Rule`.
@@ -77,6 +84,7 @@ I want to show you another method, by using custom JUnit `@Rule`.
 First, we need to implement [TestRule] interface which allows to implement custom behaviour during test execution:
 
 ``` java MockitoInitializerRule
+
 public class MockitoInitializerRule implements TestRule {
     private Object test;
 
@@ -89,11 +97,13 @@ public class MockitoInitializerRule implements TestRule {
         return new MockitInitilizationStatement(base, test);
     }
 }
+
 ```
 
 We need to pass current test class instance to the rule, so it will be possible inject mocks into class instance. Actual implementation of our rule will go to new class - subclass of [Statement]:
 
 ``` java MockitInitilizationStatement
+
 class MockitInitilizationStatement extends Statement {
     private final Statement base;
     private Object test;
@@ -117,6 +127,7 @@ What we do is basically initialize mocks in the test class and then proceed with
 Now, let's take a look at the usage of newly created Rule:
 
 ``` java Example usage of MockitoInitializerRule
+
 public void FooTest {
     
     private Foo foo;
@@ -132,6 +143,7 @@ public void FooTest {
         foo = new Foo(dep);
     }
 }
+
 ```
 
 Comparing to variant with `MockitoJUnitRunner` this one provides ability to use custom [Runner], i.e. we can continue to use [SpringJUnit4ClassRunner]
