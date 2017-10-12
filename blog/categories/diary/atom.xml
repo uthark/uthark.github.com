@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Diary | Software Development and related activities]]></title>
+  <link href="http://uthark.github.io/blog/categories/diary/atom.xml" rel="self"/>
+  <link href="http://uthark.github.io/"/>
+  <updated>2017-10-12T19:01:44-04:00</updated>
+  <id>http://uthark.github.io/</id>
+  <author>
+    <name><![CDATA[Oleg Atamanenko]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Snowboarding]]></title>
+    <link href="http://uthark.github.io/blog/2014/03/04/snowboarding/"/>
+    <updated>2014-03-04T01:04:55-05:00</updated>
+    <id>http://uthark.github.io/blog/2014/03/04/snowboarding</id>
+    <content type="html"><![CDATA[<p>Today in the evening I got to <a href="http://www.skiwhitetail.com/winter">Whitetail Ski Resort</a>.</p>
+
+<iframe style="overflow: scroll; width: 100%; height: 600px" src="http://www.endomondo.com/embed/workouts?w=tmMEXnSDfDg&width=950&height=600" frameborder="0" scrolling="yes" ></iframe>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Сплин - Резонанс, часть 1.]]></title>
+    <link href="http://uthark.github.io/blog/2014/03/02/splean-resonance/"/>
+    <updated>2014-03-02T23:29:00-05:00</updated>
+    <id>http://uthark.github.io/blog/2014/03/02/splean-resonance</id>
+    <content type="html"><![CDATA[<p>Splean <a href="http://www.navigatorrecords.ru/showalbum.php?code=206">released new album</a> &ndash; Resonance, part 1.</p>
+
+<p>Good album, good texts.</p>
+
+<p>You can listen previews <a href="https://play.google.com/music/playpreview?preview=AE9vGKqOscNKDl7gMYDS126d1iINPIg449z4g_bwiXboIi8Qu74XsZRRzinlJnrN3NscIJS-_VgndoHTGYZFCl_l_TvPM2mwqVNg1BOW_rie_WOpZkqaubw%3D">here</a> or <a href="http://music.yandex.ru/#!/album/1801924">here (Russia only)</a>.</p>
+]]></content>
+  </entry>
+  
+</feed>

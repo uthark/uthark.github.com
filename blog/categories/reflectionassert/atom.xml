@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Reflectionassert | Software Development and related activities]]></title>
+  <link href="http://uthark.github.io/blog/categories/reflectionassert/atom.xml" rel="self"/>
+  <link href="http://uthark.github.io/"/>
+  <updated>2017-10-12T19:01:44-04:00</updated>
+  <id>http://uthark.github.io/</id>
+  <author>
+    <name><![CDATA[Oleg Atamanenko]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Using Unitils ReflectionAssert]]></title>
+    <link href="http://uthark.github.io/blog/2014/04/16/using-unitils-reflectionassert/"/>
+    <updated>2014-04-16T00:10:10-04:00</updated>
+    <id>http://uthark.github.io/blog/2014/04/16/using-unitils-reflectionassert</id>
+    <content type="html"><![CDATA[<p>Often it is needed to compare two different instances of the class inside test. I.e. we save object into database, then fetch it back from db and we want to be sure if nothing was lost during saving/reading.</p>
+
+<p>In order to make such assertions more easier and maintainable one can use great Unitils library which has useful class <a href="http://www.unitils.org/tutorial-reflectionassert.html">ReflectionAssert</a></p>
+
+<p>First, update parent&rsquo;s <code>pom.xml</code>:</p>
+
+<p>``` xml pom.xml changes in parent module
+<properties></p>
+
+<pre><code>&lt;unitils.version&gt;3.4&lt;/unitils.version&gt;
+</code></pre>
+
+<p></properties>
+<dependency></p>
+
+<pre><code>&lt;groupId&gt;org.unitils&lt;/groupId&gt;
+&lt;artifactId&gt;unitils-core&lt;/artifactId&gt;
+&lt;version&gt;${unitils.version}&lt;/version&gt;
+&lt;scope&gt;test&lt;/scope&gt;
+</code></pre>
+
+<p></dependency></p>
+
+<p>```</p>
+
+<p>Then add dependency to the child module:</p>
+
+<p>``` xml pom.xml changes in child module</p>
+
+<p><dependency></p>
+
+<pre><code>&lt;groupId&gt;org.unitils&lt;/groupId&gt;
+&lt;artifactId&gt;unitils-core&lt;/artifactId&gt;
+</code></pre>
+
+<p></dependency></p>
+
+<p>```</p>
+
+<p>Usage is very simple:
+Add static import to the class.</p>
+
+<p>``` java</p>
+
+<p>import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;</p>
+
+<p>```</p>
+
+<p>and use it instead of regular JUnit assert:</p>
+
+<p>``` java</p>
+
+<pre><code>assertReflectionEquals(expected, actual);
+</code></pre>
+
+<p>```</p>
+
+<p>It is possible to pass reflection comparator modes as optional parameters to the above method.</p>
+
+<p>Be ware that this method is not very useful if you want to compare objects which has floating point or double parameters &ndash; ReflectionAssert compares <code>double</code> and <code>float</code> values using <code>==</code>, so it is not very useful. It is not possible to pass epsilon for comparison.</p>
+
+<p>``` java excerpt from org.unitils.reflectionassert.comparator.impl.LenientNumberComparator#compare</p>
+
+<p>// &hellip;
+Double leftDouble = getDoubleValue(left);
+Double rightDouble = getDoubleValue(right);
+if (!leftDouble.equals(rightDouble)) {</p>
+
+<pre><code>return new Difference(differenceMessage, left, right);
+</code></pre>
+
+<p>}
+// &hellip;</p>
+
+<p>```</p>
+
+<p>If you need to compare double values in JUnit assertions then it is better to use <a href="https://code.google.com/p/hamcrest/">hamcrest library</a>.</p>
+
+<p>``` java</p>
+
+<p>import static org.hamcrest.number.IsCloseTo.closeTo;
+import static org.junit.Assert.assertThat;</p>
+
+<p>// in @Test method:
+assertThat(actual.getFederalIncomeTax(), closeTo(expected.getFederalIncomeTax(), EPSILON))</p>
+
+<p>```</p>
+
+<p>Happy hacking!</p>
+]]></content>
+  </entry>
+  
+</feed>

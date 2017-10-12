@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Android | Software Development and related activities]]></title>
+  <link href="http://uthark.github.io/blog/categories/android/atom.xml" rel="self"/>
+  <link href="http://uthark.github.io/"/>
+  <updated>2017-10-12T19:01:44-04:00</updated>
+  <id>http://uthark.github.io/</id>
+  <author>
+    <name><![CDATA[Oleg Atamanenko]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Limiting Threads Count for GreenRobot EventBus]]></title>
+    <link href="http://uthark.github.io/blog/2014/03/06/limiting-threads-count-for-greenrobot-eventbus/"/>
+    <updated>2014-03-06T22:38:54-05:00</updated>
+    <id>http://uthark.github.io/blog/2014/03/06/limiting-threads-count-for-greenrobot-eventbus</id>
+    <content type="html"><![CDATA[<p>In one of my projects I used <a href="https://github.com/greenrobot/EventBus">EventBus</a> library. The library is pretty cool and I would recommend everybody to use it.</p>
+
+<p>But I found one small issue with this library &ndash; in case you send too many events very fast (i.e. more than 1000 per second) you may face issue with application crash due to inability to create new thread.</p>
+
+<p>The problem is lying in the used <code>ExecutorService</code>:</p>
+
+<p>``` java</p>
+
+<p>package de.greenrobot.event;
+// imports
+public final class EventBus {</p>
+
+<pre><code>static ExecutorService executorService = Executors.newCachedThreadPool();
+
+// class content skipped 
+</code></pre>
+
+<p>}</p>
+
+<p>```</p>
+
+<p>As you can see, it calls <code>newCachedThreadPool</code> method to create thread pool.</p>
+
+<p>From <a href="http://developer.android.com/reference/java/util/concurrent/Executors.html#newCachedThreadPool()">javadoc</a> for this method:</p>
+
+<blockquote><p>Creates a thread pool that creates new threads as needed, but will reuse
+previously constructed threads when they are available.</p></blockquote>
+
+<p>This is where we hit the wall &ndash; if we send too many requests and each request is slow (i.e. saving into database or network request) then we will try to create too many threads and app will crash.</p>
+
+<p>Thankfully, <code>executorService</code> is <code>static</code> but not <code>final</code>. And this will allow us to solve the issue easily.</p>
+
+<p>Let&rsquo;s create our configurer class in package <code>de.greenrobot.event</code> so we will be able to access <code>executorService</code> property which is package-visible and override it with different thread pool:</p>
+
+<p>``` java EventBusExecutorServiceConfigurer</p>
+
+<p>package de.greenrobot.event;</p>
+
+<p>import java.util.concurrent.Executors;</p>
+
+<p>public class EventBusExecutorServiceConfigurer {</p>
+
+<pre><code>public void configureEventBus() {
+    ExecutorService executorServiceToUse;
+    if (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.HONEYCOMB) {
+        executorServiceToUse = (ExecutorService) AsyncTask.THREAD_POOL_EXECUTOR;
+    } else {
+        executorServiceToUse = Executors.newFixedThreadPool(
+            Runtime.getRuntime().availableProcessors());
+    }
+    EventBus.executorService = executorServiceToUse;
+}
+</code></pre>
+
+<p>}</p>
+
+<p>```</p>
+
+<p>Android 3.0+ has special <a href="http://developer.android.com/reference/android/os/AsyncTask.html#THREAD_POOL_EXECUTOR">THREAD_POOL_EXECUTOR</a> which is supposed to be used by asynchronous tasks, so we use it on newer devices. On older, pre-Honeycomb devices we create our own thread pool.</p>
+
+<p>And then in Android application we configure <code>executorService</code>:</p>
+
+<p>``` java</p>
+
+<p>public class CustomApplication extends Application {</p>
+
+<pre><code>@Override
+public void onCreate() {
+    super.onCreate();
+    new EventBusExecutorServiceConfigurer().configureEventBus();
+
+    // other initialization
+}
+</code></pre>
+
+<p>}</p>
+
+<p>```</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Using Custom Font in Android TextView]]></title>
+    <link href="http://uthark.github.io/blog/2014/03/06/customizing-font-in-android-textview/"/>
+    <updated>2014-03-06T19:13:17-05:00</updated>
+    <id>http://uthark.github.io/blog/2014/03/06/customizing-font-in-android-textview</id>
+    <content type="html"><![CDATA[<p>Today I want to share with you custom <a href="http://developer.android.com/reference/android/widget/TextView.html">TextView</a> which allows to set font to be used in xml layout.</p>
+
+<p>First, we need to declare our custom styleable</p>
+
+<p>``` xml attrs.xml</p>
+
+<p>&lt;?xml version=&ldquo;1.0&rdquo; encoding=&ldquo;utf-8&rdquo;?>
+<resources></p>
+
+<pre><code>&lt;declare-styleable name="TypefaceTextView"&gt;
+    &lt;attr name="typeface" format="string"/&gt;
+&lt;/declare-styleable&gt;
+</code></pre>
+
+<p></resources></p>
+
+<p>```</p>
+
+<p>Then we need to create subclass of <code>TextView</code> which will use custom attribute.</p>
+
+<p>``` java TypefaceTextView</p>
+
+<p>public class TypefaceTextView extends TextView {</p>
+
+<pre><code>public TypefaceTextView(Context context) {
+    this(context, null);
+}
+
+public TypefaceTextView(Context context, AttributeSet attrs) {
+    this(context, attrs, 0);
+}
+
+public TypefaceTextView(Context context, AttributeSet attrs, int defStyle) {
+    super(context, attrs, defStyle);
+
+    TypedArray ta = context.getTheme().obtainStyledAttributes(attrs, R.styleable.TypefaceTextView, 0, 0);
+    try {
+        String font = ta.getString(R.styleable.TypefaceTextView_typeface);
+        if (null == font) {
+            font = context.getString(R.string.default_font_name);
+        }
+        Typeface typeface = TypefaceCache.getTypeface(context, font);
+        if (null != typeface) {
+            setTypeface(typeface);
+        }
+
+    } finally {
+        ta.recycle();
+    }
+}
+</code></pre>
+
+<p>}</p>
+
+<p>```</p>
+
+<p>Also, above class allows to use default custom font, all is needed is to define its name in <code>strings.xml</code></p>
+
+<p>```</p>
+
+<p>&lt;?xml version=&ldquo;1.0&rdquo; encoding=&ldquo;utf-8&rdquo;?>
+<resources></p>
+
+<pre><code>&lt;string name="default_font_name" translatable="false"&gt;custom.ttf&lt;/string&gt;
+</code></pre>
+
+<p></resources></p>
+
+<p>```</p>
+
+<p>Due to the <a href="https://code.google.com/p/android/issues/detail?id=9904">bug in Android</a> we have to cache all created typefaces in cache:</p>
+
+<p>``` java TypefaceCache</p>
+
+<p>public class TypefaceCache {</p>
+
+<pre><code>private static final Map&lt;String, Typeface&gt; CACHE = new HashMap&lt;String, Typeface&gt;();
+
+public static Typeface getTypeface(Context context, String font) {
+    if (null == font) {
+        return null;
+    }
+    Typeface typeface = CACHE.get(font);
+    if (null == typeface) {
+
+        typeface = Typeface.createFromAsset(context.getAssets(), font);
+        CACHE.put(font, typeface);
+    }
+    return typeface;
+}
+</code></pre>
+
+<p>}</p>
+
+<p>```</p>
+
+<p>Basically, that&rsquo;s it. In order to use it is required to put TTF font in the <code>assets</code> folder and reference the font:</p>
+
+<p>``` xml Example usage.</p>
+
+<p>&lt;?xml version=&ldquo;1.0&rdquo; encoding=&ldquo;utf-8&rdquo;?>
+&lt;com.example.android.widget.TypefaceTextView</p>
+
+<pre><code>xmlns:a="http://schemas.android.com/apk/res/android"
+xmlns:custom="http://schemas.android.com/apk/res-auto"
+a:layout_width="match_parent"
+custom:typeface="custom-font.ttf"/&gt;
+</code></pre>
+
+<p>```</p>
+
+<p>And the last use case it to set custom font for the actionbar title. In this case we can implement custom <a href="http://developer.android.com/reference/android/text/style/CharacterStyle.html"><code>android.text.style.CharacterStyle</code></a></p>
+
+<p>``` java TypefaceSpan</p>
+
+<p>public class TypefaceSpan extends MetricAffectingSpan {</p>
+
+<pre><code>private Typeface mTypeface;
+
+/**
+ * Load the {@link Typeface} and apply to a {@link Spannable}.
+ */
+public TypefaceSpan(Context context, String typefaceName) {
+    mTypeface = TypefaceCache.getTypeface(context, typefaceName);
+}
+
+@Override
+public void updateMeasureState(TextPaint p) {
+    p.setTypeface(mTypeface);
+
+    // Note: This flag is required for proper typeface rendering
+    p.setFlags(p.getFlags() | Paint.SUBPIXEL_TEXT_FLAG);
+}
+
+@Override
+public void updateDrawState(TextPaint tp) {
+    tp.setTypeface(mTypeface);
+
+    // Note: This flag is required for proper typeface rendering
+    tp.setFlags(tp.getFlags() | Paint.SUBPIXEL_TEXT_FLAG);
+}
+</code></pre>
+
+<p>}
+```</p>
+
+<p>Then we can set actionbar title using the following code:</p>
+
+<p>``` java</p>
+
+<p>public static void setActionBarTitle(Activity context, CharSequence title) {</p>
+
+<pre><code>SpannableString s = new SpannableString(title);
+s.setSpan(new TypefaceSpan(context, context.getString(R.string.default_font_name)), 0, s.length(),
+    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+if (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.HONEYCOMB) {
+    context.getActionBar().setTitle(s);
+}
+</code></pre>
+
+<p>}</p>
+
+<p>```</p>
+
+<h3>Additional information</h3>
+
+<ol>
+<li><a href="http://developer.android.com/training/custom-views/#create-view.html">Creating a View Class | Android Developers</a></li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Lyne Game]]></title>
+    <link href="http://uthark.github.io/blog/2014/03/02/lyne-game/"/>
+    <updated>2014-03-02T21:51:00-05:00</updated>
+    <id>http://uthark.github.io/blog/2014/03/02/lyne-game</id>
+    <content type="html"><![CDATA[<p>Found very addictive and cool game: Lyne.</p>
+
+<p>The goal of the game is to connect all dots on the playboard. Worth every cent.</p>
+
+<div class="pb-app-box" data-theme="dark" data-lang="en"><a href="http://playboard.me/android/apps/com.thomasbowker.lynerelease">LYNE  (Playboard)</a> | <a href="https://play.google.com/store/apps/details?id=com.thomasbowker.lynerelease&hl=en" rel="nofollow" target="_blank">LYNE (Play Store)</a></div>
+
+
+<script type="text/javascript" src="//playboard.me/widgets/pb-app-box/1/pb_load_app_box.js"></script>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Сокращаем ссылки на андроиде]]></title>
+    <link href="http://uthark.github.io/blog/2010/12/06/blog-post/"/>
+    <updated>2010-12-06T23:11:00+06:00</updated>
+    <id>http://uthark.github.io/blog/2010/12/06/blog-post</id>
+    <content type="html"><![CDATA[<div class='post'>
+<h5>Вступление</h5>Встала передо мной задача - сокращать ссылки перед тем, как отправлять их в Twitter. Для решения этой задачи я решил использовать <a href="http://bit.ly">bit.ly</a>, благо, их API внятный и простой.  <h5>Программируем!</h5>Решение нарисовалось в виде следующего класса:  <br />
+<pre class="brush: java">
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URIUtils;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.util.Log;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+
+
+/**
+ * Helper class to work with bitly.
+ *
+ * @author Oleg Atamanenko
+ * @since 06-Dec-2010 12:49:36
+ */
+public class Bitly {
+
+    private static final String TAG = "Bitly";
+
+    private static final String SHORTEN = "/v3/shorten";
+    private static final String API_URL = "api.bit.ly";
+    private static final String RESPONSE_FORMAT = "json";
+
+    private String username;
+    private String apiKey;
+
+
+    public Bitly(String username, String apiKey) {
+        this.username = username;
+        this.apiKey = apiKey;
+    }
+
+    public String shorten(String longUrl) throws BitlyException {
+        DefaultHttpClient httpClient = new DefaultHttpClient();
+
+        try {
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            params.add(new BasicNameValuePair("login", username));
+            params.add(new BasicNameValuePair("apiKey", apiKey));
+            params.add(new BasicNameValuePair("longUrl", longUrl));
+            params.add(new BasicNameValuePair("format", RESPONSE_FORMAT));
+
+
+            URI uri = URIUtils.createURI("http", API_URL, -1, SHORTEN, URLEncodedUtils.format(params, "UTF-8"), null);
+            HttpGet request = new HttpGet(uri);
+
+            Log.d(TAG, "Sending request: " + request.getURI());
+
+            HttpResponse httpResponse = httpClient.execute(request);
+
+            HttpEntity httpEntity = httpResponse.getEntity();
+            String response = EntityUtils.toString(httpEntity);
+            Log.i(TAG, "Bitly response is: " + response);
+            httpResponse.getEntity().consumeContent();
+
+            JSONObject jsonResponse = new JSONObject(response);
+
+            checkForExceptions(jsonResponse);
+
+            JSONObject data = jsonResponse.getJSONObject("data");
+            return data.getString("url");
+
+        } catch (ClientProtocolException e) {
+            throw new BitlyException(e);
+        } catch (IOException e) {
+            throw new BitlyException(e);
+        } catch (JSONException e) {
+            throw new BitlyException(e);
+        } catch (URISyntaxException e) {
+            throw new BitlyException(e);
+        }
+    }
+
+    private void checkForExceptions(JSONObject jsonResponse) throws JSONException, BitlyException {
+        int statusCode = jsonResponse.getInt("status_code");
+        if (statusCode != 200) {
+            String message = jsonResponse.getString("status_txt");
+            throw new BitlyException(message);
+        }
+    }
+
+}
+</pre>  Конструктор класс принимает на вход следующие параметры: <ul><li><code>userName</code> - имя пользователя bit.ly.</li>
+<li><code>apiKey</code> - Ключ для доступа к API, его можно узнать на <a href="https://bit.ly/a/your_api_key">специальной страничке</a></li>
+</ul><a href="https://code.google.com/p/bitly-api/wiki/ApiDocumentation">Полная документация к Bit.ly API</a> расположена на отдельном проекте в Google Code  <h5>Использование</h5>Единственный метод, реализованный сейчас - это метод <code>shorten()</code>. На вход требуется подать полную ссылку <code>longUrl</code>, на выходе получается укороченная версия ссылки, либо кидается исключение с сообщением от bit.ly API.   <h6>Пример вызова</h6><pre class="brush: java">
+Bitly bitly = new Bitly(BITLY_USERNAME, BITLY_API_KEY);
+String shortLink = bitly.shorten(link);
+</pre><br />
+  <h6>Дальнейшие улучшения</h6>Если перед вами стоит задача быстренько сократить ссылку - то вышеприведённого кода достаточно. Но если вам нужно полноценное решение, со всеми возможностями bit.ly - то посмотрите в сторону <a href="https://code.google.com/p/bitlyj/">bitlyj</a>. Правда, я не уверен, что оно взведётся под андроидом.</div>
+
+]]></content>
+  </entry>
+  
+</feed>

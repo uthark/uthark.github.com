@@ -1,135 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
 
-<!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  <title>Software Development and related activities</title>
-  <meta name="author" content="Oleg Atamanenko">
-
-  
-  <meta name="description" content="Ok, hopefully I will start blog again soon.
-">
-  
-
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  
-  <link rel="canonical" href="http://uthark.github.io/">
-  <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="http://feeds.feedburner.com/atamanenko" rel="alternate" title="Software Development and related activities" type="application/atom+xml">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href='//fonts.googleapis.com/css?family=Roboto+Slab:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
-<link href='//fonts.googleapis.com/css?family=Roboto:300,700,900&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
-
-  
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-8688665-1']);
-    _gaq.push(['_trackPageview']);
-
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
-
-
-</head>
-
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">Software Development and related activities</a></h1>
-  
-    <h2>Something I want to share with you</h2>
-  
-</hgroup>
-
-</header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="http://feeds.feedburner.com/atamanenko" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="https://www.google.com/webhp" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="sitesearch" value="uthark.github.io">
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
-  <li><a href="/">Blog</a></li>
-  <li><a href="/blog/archives">Archives</a></li>
-</ul>
-
-</nav>
-  <div id="main">
-    <div id="content">
-      <div class="blog-index">
-  
-  
-  
-    <article>
-      
-  <header>
+  <title><![CDATA[Software Development and related activities]]></title>
+  <link href="http://uthark.github.io/atom.xml" rel="self"/>
+  <link href="http://uthark.github.io/"/>
+  <updated>2017-10-12T19:01:44-04:00</updated>
+  <id>http://uthark.github.io/</id>
+  <author>
+    <name><![CDATA[Oleg Atamanenko]]></name>
     
-      <h1 class="entry-title"><a href="/blog/2017/10/12/alive/">Refresh</a></h1>
-    
-    
-      <p class="meta">
-        
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
 
-
-
-
-<time class='entry-date' datetime='2017-10-12T17:02:55-04:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>5:02 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Ok, hopefully I will start blog again soon.</p>
-</div>
   
+  <entry>
+    <title type="html"><![CDATA[Refresh]]></title>
+    <link href="http://uthark.github.io/blog/2017/10/12/alive/"/>
+    <updated>2017-10-12T17:02:55-04:00</updated>
+    <id>http://uthark.github.io/blog/2017/10/12/alive</id>
+    <content type="html"><![CDATA[<p>Ok, hopefully I will start blog again soon.</p>
+]]></content>
+  </entry>
   
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/05/16/reading-list-2014-may-16/">Reading List for 2014-May-16</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-05-16T11:02:55-04:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>11:02 am</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>Announcements</h3>
+  <entry>
+    <title type="html"><![CDATA[Reading List for 2014-May-16]]></title>
+    <link href="http://uthark.github.io/blog/2014/05/16/reading-list-2014-may-16/"/>
+    <updated>2014-05-16T11:02:55-04:00</updated>
+    <id>http://uthark.github.io/blog/2014/05/16/reading-list-2014-may-16</id>
+    <content type="html"><![CDATA[<h3>Announcements</h3>
 
 <ol>
 <li><a href="http://ift.tt/1lkzPge">1 Billion Saves to Pocket!</a></li>
@@ -195,35 +93,15 @@
 <li><a href="http://j.mp/1oGbUds">Google Announcement | XKCD</a></li>
 </ol>
 
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/05/05/reading-list-2014-may-05/">Reading List 2014-May-05</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-05-05T16:03:09-04:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>4:03 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>Announcements</h3>
+  <entry>
+    <title type="html"><![CDATA[Reading List 2014-May-05]]></title>
+    <link href="http://uthark.github.io/blog/2014/05/05/reading-list-2014-may-05/"/>
+    <updated>2014-05-05T16:03:09-04:00</updated>
+    <id>http://uthark.github.io/blog/2014/05/05/reading-list-2014-may-05</id>
+    <content type="html"><![CDATA[<h3>Announcements</h3>
 
 <ol>
 <li><a href="http://j.mp/1uqGOL8">Groovy 2.3.0 is out!</a></li>
@@ -248,35 +126,15 @@
 <li><a href="http://j.mp/1q73SyF">xkcd Phone | xkcd</a></li>
 </ol>
 
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/05/02/reading-list-2014-may-02/">Reading List 2014-May-02</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-05-02T15:04:32-04:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>2</span><span class='date-suffix'>nd</span>, <span class='date-year'>2014</span></span> <span class='time'>3:04 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><ol>
+  <entry>
+    <title type="html"><![CDATA[Reading List 2014-May-02]]></title>
+    <link href="http://uthark.github.io/blog/2014/05/02/reading-list-2014-may-02/"/>
+    <updated>2014-05-02T15:04:32-04:00</updated>
+    <id>http://uthark.github.io/blog/2014/05/02/reading-list-2014-may-02</id>
+    <content type="html"><![CDATA[<ol>
 <li><a href="http://j.mp/1pUf1mz">10 Features in Java 8 You Haven&rsquo;t Heard Of</a></li>
 <li><a href="http://j.mp/1iQUcnc">69 Spring Interview Questions and Answers &ndash; The ULTIMATE List</a></li>
 <li><a href="http://xkcd.com/761/">DFS | XKCD</a></li>
@@ -288,35 +146,15 @@
 <li><a href="http://j.mp/1i5AD5m">You can program bug free</a></li>
 </ol>
 
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/05/01/reading-list-2014-may-01/">Reading List 2014-May-01</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-05-01T16:20:16-04:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>1</span><span class='date-suffix'>st</span>, <span class='date-year'>2014</span></span> <span class='time'>4:20 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>Announcements</h3>
+  <entry>
+    <title type="html"><![CDATA[Reading List 2014-May-01]]></title>
+    <link href="http://uthark.github.io/blog/2014/05/01/reading-list-2014-may-01/"/>
+    <updated>2014-05-01T16:20:16-04:00</updated>
+    <id>http://uthark.github.io/blog/2014/05/01/reading-list-2014-may-01</id>
+    <content type="html"><![CDATA[<h3>Announcements</h3>
 
 <ol>
 <li><a href="http://j.mp/1nKjAOg">New Release: Java Micro Edition (ME) 8</a></li>
@@ -339,35 +177,15 @@
 <li><a href="http://j.mp/Sb04h1">Subscribe to Web Content folders and types (structures)</a></li>
 </ol>
 
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/04/30/reading-list-2014-april-30/">Reading List 2014-April-30</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-04-30T13:32:16-04:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>30</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>1:32 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>Announcements</h3>
+  <entry>
+    <title type="html"><![CDATA[Reading List 2014-April-30]]></title>
+    <link href="http://uthark.github.io/blog/2014/04/30/reading-list-2014-april-30/"/>
+    <updated>2014-04-30T13:32:16-04:00</updated>
+    <id>http://uthark.github.io/blog/2014/04/30/reading-list-2014-april-30</id>
+    <content type="html"><![CDATA[<h3>Announcements</h3>
 
 <ol>
 <li><a href="http://j.mp/1u2oyYb">Gradle 1.12 released</a></li>
@@ -397,35 +215,15 @@
 <li><a href="http://j.mp/1lMQXQF">What Can Men Do?</a></li>
 </ol>
 
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/04/29/reading-list-2014-april-29/">Reading List 2014-April-29</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-04-29T11:28:53-04:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>29</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>11:28 am</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>Software development</h3>
+  <entry>
+    <title type="html"><![CDATA[Reading List 2014-April-29]]></title>
+    <link href="http://uthark.github.io/blog/2014/04/29/reading-list-2014-april-29/"/>
+    <updated>2014-04-29T11:28:53-04:00</updated>
+    <id>http://uthark.github.io/blog/2014/04/29/reading-list-2014-april-29</id>
+    <content type="html"><![CDATA[<h3>Software development</h3>
 
 <ol>
 <li><a href="http://j.mp/1fgg7EA">7 First Public Working Drafts of XQuery and XPath 3.1</a></li>
@@ -459,35 +257,15 @@
 <li><a href="http://j.mp/1fgg8bE">You Cannot Predict the Way You Die</a></li>
 </ol>
 
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/04/28/reading-list-2014-april-28/">Reading List 2014-April-28</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-04-28T16:37:56-04:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>28</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>4:37 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>Software development</h3>
+  <entry>
+    <title type="html"><![CDATA[Reading List 2014-April-28]]></title>
+    <link href="http://uthark.github.io/blog/2014/04/28/reading-list-2014-april-28/"/>
+    <updated>2014-04-28T16:37:56-04:00</updated>
+    <id>http://uthark.github.io/blog/2014/04/28/reading-list-2014-april-28</id>
+    <content type="html"><![CDATA[<h3>Software development</h3>
 
 <ol>
 <li><a href="http://j.mp/1fcEUtp">Telerik Open Sources Kendo UI</a></li>
@@ -511,35 +289,15 @@
 <li><a href="http://j.mp/1kdIwbF">Using Http Session with Spring based web applications</a></li>
 </ol>
 
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/04/25/reading-list-2014-april-25/">Reading List 2014-April-25</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-04-25T15:17:11-04:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>25</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>3:17 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>Announcements</h3>
+  <entry>
+    <title type="html"><![CDATA[Reading List 2014-April-25]]></title>
+    <link href="http://uthark.github.io/blog/2014/04/25/reading-list-2014-april-25/"/>
+    <updated>2014-04-25T15:17:11-04:00</updated>
+    <id>http://uthark.github.io/blog/2014/04/25/reading-list-2014-april-25</id>
+    <content type="html"><![CDATA[<h3>Announcements</h3>
 
 <ol>
 <li><a href="http://j.mp/1htxX1e">Spring Social 1.1.0 Released</a></li>
@@ -603,35 +361,15 @@
 <li><a href="http://j.mp/1rmNaGP">Spring MVC Exception Handling Example</a></li>
 </ol>
 
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/04/24/reading-list-2014-april-24/">Reading List 2014-April-24</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-04-24T13:21:05-04:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>24</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>1:21 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>Announcements</h3>
+  <entry>
+    <title type="html"><![CDATA[Reading List 2014-April-24]]></title>
+    <link href="http://uthark.github.io/blog/2014/04/24/reading-list-2014-april-24/"/>
+    <updated>2014-04-24T13:21:05-04:00</updated>
+    <id>http://uthark.github.io/blog/2014/04/24/reading-list-2014-april-24</id>
+    <content type="html"><![CDATA[<h3>Announcements</h3>
 
 <ol>
 <li><a href="http://j.mp/1iir9Ua">Spring Boot 1.0.2.RELEASE Available Now</a></li>
@@ -698,64 +436,24 @@
 <li><a href="http://j.mp/1id9144">Webinar: Data-Driven Applications with Spring and Neo4j</a></li>
 </ol>
 
-</div>
+]]></content>
+  </entry>
   
+  <entry>
+    <title type="html"><![CDATA[Pocket Is Down]]></title>
+    <link href="http://uthark.github.io/blog/2014/04/23/pocket-is-down/"/>
+    <updated>2014-04-23T12:09:10-04:00</updated>
+    <id>http://uthark.github.io/blog/2014/04/23/pocket-is-down</id>
+    <content type="html"><![CDATA[<p>Hi. <a href="https://twitter.com/Pocket/status/458989752432091136">Pocket is down</a> so it means there is no reading list for today. Everyone have a nice day.</p>
+]]></content>
+  </entry>
   
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/04/23/pocket-is-down/">Pocket Is Down</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-04-23T12:09:10-04:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2014</span></span> <span class='time'>12:09 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Hi. <a href="https://twitter.com/Pocket/status/458989752432091136">Pocket is down</a> so it means there is no reading list for today. Everyone have a nice day.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/04/22/reading-list-2014-april-22/">Reading List 2014-April-22</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-04-22T13:41:36-04:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2014</span></span> <span class='time'>1:41 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>Announcements</h3>
+  <entry>
+    <title type="html"><![CDATA[Reading List 2014-April-22]]></title>
+    <link href="http://uthark.github.io/blog/2014/04/22/reading-list-2014-april-22/"/>
+    <updated>2014-04-22T13:41:36-04:00</updated>
+    <id>http://uthark.github.io/blog/2014/04/22/reading-list-2014-april-22</id>
+    <content type="html"><![CDATA[<h3>Announcements</h3>
 
 <ol>
 <li><a href="http://j.mp/1hhT8TW">Scala 2.11.0 is now available!</a></li>
@@ -867,35 +565,15 @@
 <li><a href="http://j.mp/1bfS6vB">Snow Blind</a></li>
 </ol>
 
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/04/21/reading-list-2014-april-21/">Reading List 2014-April-21</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-04-21T10:12:00-04:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2014</span></span> <span class='time'>10:12 am</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>General</h3>
+  <entry>
+    <title type="html"><![CDATA[Reading List 2014-April-21]]></title>
+    <link href="http://uthark.github.io/blog/2014/04/21/reading-list-2014-april-21/"/>
+    <updated>2014-04-21T10:12:00-04:00</updated>
+    <id>http://uthark.github.io/blog/2014/04/21/reading-list-2014-april-21</id>
+    <content type="html"><![CDATA[<h3>General</h3>
 
 <ol>
 <li><a href="http://j.mp/1laMW8c">Lens Blur in the new Google Camera app</a></li>
@@ -978,35 +656,15 @@ Building Large-Scale Distributed Systems</a></li>
 <li><a href="http://j.mp/1fyj2Ss">Иван Васильевич и его профессия</a></li>
 </ol>
 
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/04/18/reading-list-2014-april-18/">Reading List 2014-April-18</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-04-18T12:35:34-04:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:35 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Death of Gabriel Garcia Marquez is definitely the worst yesterday&rsquo;s news.
+  <entry>
+    <title type="html"><![CDATA[Reading List 2014-April-18]]></title>
+    <link href="http://uthark.github.io/blog/2014/04/18/reading-list-2014-april-18/"/>
+    <updated>2014-04-18T12:35:34-04:00</updated>
+    <id>http://uthark.github.io/blog/2014/04/18/reading-list-2014-april-18</id>
+    <content type="html"><![CDATA[<p>Death of Gabriel Garcia Marquez is definitely the worst yesterday&rsquo;s news.
 Read more: <a href="http://j.mp/1hRvbIN">Gabriel Garcia Marquez dies at 87</a></p>
 
 <h3>Announcements</h3>
@@ -1079,35 +737,15 @@ Read more: <a href="http://j.mp/1hRvbIN">Gabriel Garcia Marquez dies at 87</a></
 <li><a href="http://j.mp/1j9LU6R">Новый метод позволил наложить рекордное ограничение на время жизни хиггсовского бозона</a></li>
 </ol>
 
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/04/17/reading-list-2014-april-17/">Reading List 2014-April-17</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-04-17T14:36:39-04:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>17</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>2:36 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>Software development</h3>
+  <entry>
+    <title type="html"><![CDATA[Reading List 2014-April-17]]></title>
+    <link href="http://uthark.github.io/blog/2014/04/17/reading-list-2014-april-17/"/>
+    <updated>2014-04-17T14:36:39-04:00</updated>
+    <id>http://uthark.github.io/blog/2014/04/17/reading-list-2014-april-17</id>
+    <content type="html"><![CDATA[<h3>Software development</h3>
 
 <ol>
 <li><a href="http://j.mp/1j6gher">Seven Databases in Seven Days – Riak</a></li>
@@ -1150,157 +788,449 @@ Read more: <a href="http://j.mp/1hRvbIN">Gabriel Garcia Marquez dies at 87</a></
 <li><a href="http://j.mp/1hJRYFI">Allow lambdas to implement abstract classes</a></li>
 </ol>
 
-</div>
+]]></content>
+  </entry>
   
+  <entry>
+    <title type="html"><![CDATA[Reading List 2014-April-16]]></title>
+    <link href="http://uthark.github.io/blog/2014/04/16/reading-list-2014-april-16/"/>
+    <updated>2014-04-16T13:56:20-04:00</updated>
+    <id>http://uthark.github.io/blog/2014/04/16/reading-list-2014-april-16</id>
+    <content type="html"><![CDATA[<h3>Announcements</h3>
+
+<ol>
+<li><a href="http://j.mp/1iXyE5g">Apache Hadoop 2.4.0</a></li>
+<li><a href="http://j.mp/1kWSvqS">Apache Tomcat Native 1.1.30 released | Mladen Turk</a></li>
+<li><a href="http://j.mp/1kWSjI9">Apache Tomcat Connectors 1.2.40 released | Mladen Turk</a></li>
+<li><a href="http://j.mp/1j0Cbyu">Second Service Release For Spring Data Release Train Codd Released</a></li>
+<li><a href="http://j.mp/1gCPwQj">Announcing the Release of Google App Engine 1.9.3</a></li>
+<li><a href="http://j.mp/1gXMHFj">Google Cloud Platform expands to Asia Pacific</a></li>
+<li><a href="http://j.mp/1j0BRzF">Announcing Google BigQuery and Datastore Connectors for Hadoop</a></li>
+<li><a href="http://j.mp/1in80F4">Spring Integration 4.0 Release Candidate Available</a></li>
+<li><a href="http://j.mp/1kWSFOS">Final Draft of OSGi Core Release 6 available for download</a></li>
+</ol>
+
+
+<h3>Software development</h3>
+
+<ol>
+<li><a href="http://j.mp/1j0C3z1">The Four Parts of a Minimal Viable Product</a></li>
+<li><a href="http://j.mp/1eIomZM">Better code through code reviews</a></li>
+<li><a href="http://j.mp/1ipA9LA">Social Processes and Heartbleed, Part 1</a></li>
+<li><a href="http://j.mp/1kTX5WL">Angular and Durandal Converge</a></li>
+<li><a href="http://j.mp/1iWPvnx">What Heartbleed Tells Us About the Need for IT Automation</a></li>
+<li><a href="http://j.mp/1iTJQQl">No More Passwords for Apps using Login with Amazon on Kindle Fire</a></li>
+<li><a href="http://j.mp/1eIooAR">Innodb redo log archiving</a></li>
+</ol>
+
+
+<h3>Java</h3>
+
+<ol>
+<li><a href="http://j.mp/1eN4LC5">10 Books Every Java Developer Should Read</a></li>
+<li><a href="http://j.mp/1ipAb68">New BigInteger Methods in Java 8</a></li>
+<li><a href="http://j.mp/1kWSzH4">Java 8 Friday: No More Need for ORMs</a></li>
+<li><a href="http://j.mp/1hEKJQj">Everything about Java 8</a></li>
+<li><a href="http://j.mp/1j0C8CR">Maven and Java multi-version modules</a></li>
+<li><a href="http://j.mp/1hEKMvd">JDK 8 Security Enhancements</a></li>
+<li><a href="http://j.mp/1iNU7NP">Java 8 Nashorn Tutorial</a></li>
+<li><a href="http://j.mp/1inCkiJ">10 Books Every Java Developer Should Read</a></li>
+<li><a href="http://j.mp/1iVQlRl">Using jOOQ with Spring: CRUD</a></li>
+<li><a href="http://j.mp/1iVQioK">trackr: An AngularJS app with a Java 8 backend – Part I</a></li>
+<li><a href="http://j.mp/1iVQggr">Spring expression language (spel) and Spring boot in action</a></li>
+<li><a href="http://j.mp/1iZawxX">TimeUnit Enum in Java</a></li>
+<li><a href="http://j.mp/1eIomsX">We hate/love lambda</a></li>
+<li><a href="http://j.mp/1iVQe8i">Inject any custom class or service into web content templates | Liferay blogs</a></li>
+<li><a href="http://j.mp/1kVZT5v">Covariant Blabbering : Damn smart idea (2) : DynamicVariable</a></li>
+</ol>
+
+
+<h3>In Russian</h3>
+
+<ol>
+<li><a href="http://j.mp/1ik6DqE">Эксперимент LHCb окончательно доказал реальность экзотического мезона Z(4430)</a></li>
+<li><a href="http://j.mp/1eIopF3">FAQ: Биоархеология и трепанация</a></li>
+<li><a href="http://j.mp/1j0Cc5s">Как открыли новую экзотическую частицу?</a></li>
+</ol>
+
+]]></content>
+  </entry>
   
+  <entry>
+    <title type="html"><![CDATA[Using Unitils ReflectionAssert]]></title>
+    <link href="http://uthark.github.io/blog/2014/04/16/using-unitils-reflectionassert/"/>
+    <updated>2014-04-16T00:10:10-04:00</updated>
+    <id>http://uthark.github.io/blog/2014/04/16/using-unitils-reflectionassert</id>
+    <content type="html"><![CDATA[<p>Often it is needed to compare two different instances of the class inside test. I.e. we save object into database, then fetch it back from db and we want to be sure if nothing was lost during saving/reading.</p>
+
+<p>In order to make such assertions more easier and maintainable one can use great Unitils library which has useful class <a href="http://www.unitils.org/tutorial-reflectionassert.html">ReflectionAssert</a></p>
+
+<p>First, update parent&rsquo;s <code>pom.xml</code>:</p>
+
+<figure class='code'><figcaption><span>pom.xml changes in parent module</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;properties&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;unitils.version&gt;</span>3.4<span class="nt">&lt;/unitils.version&gt;</span>
+</span><span class='line'><span class="nt">&lt;/properties&gt;</span>
+</span><span class='line'><span class="nt">&lt;dependency&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;groupId&gt;</span>org.unitils<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;artifactId&gt;</span>unitils-core<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;version&gt;</span>${unitils.version}<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
+</span><span class='line'><span class="nt">&lt;/dependency&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-    </article>
+<p>Then add dependency to the child module:</p>
+
+<figure class='code'><figcaption><span>pom.xml changes in child module</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;dependency&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;groupId&gt;</span>org.unitils<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;artifactId&gt;</span>unitils-core<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'><span class="nt">&lt;/dependency&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Usage is very simple:
+Add static import to the class.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">unitils</span><span class="o">.</span><span class="na">reflectionassert</span><span class="o">.</span><span class="na">ReflectionAssert</span><span class="o">.</span><span class="na">assertReflectionEquals</span><span class="o">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>and use it instead of regular JUnit assert:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'>    <span class="n">assertReflectionEquals</span><span class="o">(</span><span class="n">expected</span><span class="o">,</span> <span class="n">actual</span><span class="o">);</span>
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It is possible to pass reflection comparator modes as optional parameters to the above method.</p>
+
+<p>Be ware that this method is not very useful if you want to compare objects which has floating point or double parameters &ndash; ReflectionAssert compares <code>double</code> and <code>float</code> values using <code>==</code>, so it is not very useful. It is not possible to pass epsilon for comparison.</p>
+
+<figure class='code'><figcaption><span>excerpt from org.unitils.reflectionassert.comparator.impl.LenientNumberComparator#compare</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="c1">// ...</span>
+</span><span class='line'><span class="n">Double</span> <span class="n">leftDouble</span> <span class="o">=</span> <span class="n">getDoubleValue</span><span class="o">(</span><span class="n">left</span><span class="o">);</span>
+</span><span class='line'><span class="n">Double</span> <span class="n">rightDouble</span> <span class="o">=</span> <span class="n">getDoubleValue</span><span class="o">(</span><span class="n">right</span><span class="o">);</span>
+</span><span class='line'><span class="k">if</span> <span class="o">(!</span><span class="n">leftDouble</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">rightDouble</span><span class="o">))</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="k">new</span> <span class="nf">Difference</span><span class="o">(</span><span class="n">differenceMessage</span><span class="o">,</span> <span class="n">left</span><span class="o">,</span> <span class="n">right</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="c1">// ...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you need to compare double values in JUnit assertions then it is better to use <a href="https://code.google.com/p/hamcrest/">hamcrest library</a>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">hamcrest</span><span class="o">.</span><span class="na">number</span><span class="o">.</span><span class="na">IsCloseTo</span><span class="o">.</span><span class="na">closeTo</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">junit</span><span class="o">.</span><span class="na">Assert</span><span class="o">.</span><span class="na">assertThat</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// in @Test method:</span>
+</span><span class='line'><span class="n">assertThat</span><span class="o">(</span><span class="n">actual</span><span class="o">.</span><span class="na">getFederalIncomeTax</span><span class="o">(),</span> <span class="n">closeTo</span><span class="o">(</span><span class="n">expected</span><span class="o">.</span><span class="na">getFederalIncomeTax</span><span class="o">(),</span> <span class="n">EPSILON</span><span class="o">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Happy hacking!</p>
+]]></content>
+  </entry>
   
-  <div class="pagination">
-    
-      <a class="prev" href="/posts/2">&larr; Older</a>
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
-</div>
-<aside class="sidebar">
+  <entry>
+    <title type="html"><![CDATA[Using AssertJ]]></title>
+    <link href="http://uthark.github.io/blog/2014/04/15/using-assertj/"/>
+    <updated>2014-04-15T23:37:49-04:00</updated>
+    <id>http://uthark.github.io/blog/2014/04/15/using-assertj</id>
+    <content type="html"><![CDATA[<p><a href="https://github.com/joel-costigliola/assertj-core">AssertJ</a> is a library which provides fluent strongly-typed assertions to use in unit tests.</p>
+
+<p>Example of assertions written with <code>AssertJ</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kn">import</span> <span class="nn">io.github.uthark.blog.assertj.Assertions.assertThat</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// ... within @Test</span>
+</span><span class='line'><span class="n">User</span> <span class="n">result</span> <span class="o">=</span> <span class="n">userDao</span><span class="o">.</span><span class="na">findByLogin</span><span class="o">(</span><span class="s">&quot;username&quot;</span><span class="o">);</span>
+</span><span class='line'><span class="n">assertThat</span><span class="o">(</span><span class="n">result</span><span class="o">).</span>
+</span><span class='line'>    <span class="n">isNotNull</span><span class="o">().</span>
+</span><span class='line'>    <span class="n">isActive</span><span class="o">().</span>
+</span><span class='line'>    <span class="n">hasLogin</span><span class="o">(</span><span class="s">&quot;username&quot;</span><span class="o">);</span>
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see assertions look much more readable.
+The integration of assertj into Maven project is very easy:</p>
+
+<ol>
+<li>Update pom.xml in parent module</li>
+</ol>
+
+
+<figure class='code'><figcaption><span>pom.xml changes in parent module.</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;properties&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;assertj-core.version&gt;</span>1.6.0<span class="nt">&lt;/assertj-core.version&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;assertj-assertions-generator-maven-plugin.version&gt;</span>1.2.0<span class="nt">&lt;/assertj-assertions-generator-maven-plugin.version&gt;</span>
+</span><span class='line'><span class="nt">&lt;/properties&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;dependencyManagement&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;dependency&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;groupId&gt;</span>org.assertj<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;artifactId&gt;</span>assertj-core<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;version&gt;</span>${assertj-core.version}<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/dependency&gt;</span>
+</span><span class='line'><span class="nt">&lt;/dependencyManagement&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;pluginManagement&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;plugin&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;groupId&gt;</span>org.assertj<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;artifactId&gt;</span>assertj-assertions-generator-maven-plugin<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;version&gt;</span>${assertj-assertions-generator-maven-plugin.version}<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;executions&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;execution&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;id&gt;</span>generate-assertions<span class="nt">&lt;/id&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;phase&gt;</span>generate-test-sources<span class="nt">&lt;/phase&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;goals&gt;</span>
+</span><span class='line'>                    <span class="nt">&lt;goal&gt;</span>generate-assertions<span class="nt">&lt;/goal&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;/goals&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;/execution&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/executions&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/plugin&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;/pluginManagement&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>Update pom.xml in child module</li>
+</ol>
+
+
+<figure class='code'><figcaption><span>Changes in child module.</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;dependencies&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;dependency&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;groupId&gt;</span>org.assertj<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;artifactId&gt;</span>assertj-core<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/dependency&gt;</span>
+</span><span class='line'><span class="nt">&lt;/dependencies&gt;</span>
+</span><span class='line'><span class="nt">&lt;build&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;plugins&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;plugin&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;groupId&gt;</span>org.assertj<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;artifactId&gt;</span>assertj-assertions-generator-maven-plugin<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;configuration&gt;</span>
+</span><span class='line'>                <span class="c">&lt;!-- you can define collection packages: --&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;packages&gt;</span>
+</span><span class='line'>                    <span class="nt">&lt;param&gt;</span>io.github.uthark.blog.assertj<span class="nt">&lt;/param&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;/packages&gt;</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="c">&lt;!-- Or specify classes one by one. --&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;classes&gt;</span>
+</span><span class='line'>                    <span class="nt">&lt;param&gt;</span>io.github.uthark.blog.assertj.User<span class="nt">&lt;/param&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;/classes&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;/configuration&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/plugin&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/plugins&gt;</span>
+</span><span class='line'><span class="nt">&lt;/build&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After this changes it is possible to generate assertions for the classes you want test:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>mvn assertj:generate-assertions
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>By default assertj will generate assertion classes in <code>target/generated-test-sources/assertj-assertions/</code>, it is possible to override this behaviour by passing configuration element <code>targetDir</code> to plugin.</p>
+
+<p>Additonal documentation for Maven plugin can be <a href="http://joel-costigliola.github.io/assertj/assertj-assertions-generator-maven-plugin.html">found here</a></p>
+
+<p>Happy hacking!</p>
+]]></content>
+  </entry>
   
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
-    
-      <li class="post">
-        <a href="/blog/2017/10/12/alive/">Refresh</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/05/16/reading-list-2014-may-16/">Reading List for 2014-May-16</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/05/05/reading-list-2014-may-05/">Reading List 2014-May-05</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/05/02/reading-list-2014-may-02/">Reading List 2014-May-02</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/05/01/reading-list-2014-may-01/">Reading List 2014-May-01</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/04/30/reading-list-2014-april-30/">Reading List 2014-April-30</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/04/29/reading-list-2014-april-29/">Reading List 2014-April-29</a>
-      </li>
-    
-  </ul>
-</section>
+  <entry>
+    <title type="html"><![CDATA[Reading List 2014-April-15]]></title>
+    <link href="http://uthark.github.io/blog/2014/04/15/reading-list-2014-april-15/"/>
+    <updated>2014-04-15T13:06:12-04:00</updated>
+    <id>http://uthark.github.io/blog/2014/04/15/reading-list-2014-april-15</id>
+    <content type="html"><![CDATA[<h3>Software development</h3>
 
-<section>
-  <h1>GitHub Repos</h1>
-  <ul id="gh_repos">
-    <li class="loading">Status updating...</li>
-  </ul>
+<ol>
+<li><a href="http://j.mp/1qAB7Hs">Building Carousel, Part I: How we made our networked mobile app feel fast and local</a></li>
+<li><a href="http://j.mp/1qABqCj">Write line notes from your phone · GitHub</a></li>
+<li><a href="http://j.mp/1iNTKmv">Scaling the Facebook data warehouse to 300 PB</a></li>
+<li><a href="http://j.mp/1hEKq7Z">Why did we lose the XP Practices?</a></li>
+<li><a href="http://j.mp/1gB46HZ">EC2 Update &ndash; Previous Generation Instances | Amazon Web Services Blog</a></li>
+<li><a href="http://j.mp/1kWSDXn">Working with Google Analytics API v4 for Android</a></li>
+<li><a href="http://j.mp/1eKix8C">The Grails Depedency Injection Inheritance Pitfall</a></li>
+</ol>
+
+
+<h3>DevOps</h3>
+
+<ol>
+<li><a href="http://j.mp/1hEKqox">Adaptive IT — Why Vagrant is the Best DevOps Tool Ever</a></li>
+<li><a href="http://j.mp/1kTX59p">Using Chef to Automate Google Compute Engine</a></li>
+</ol>
+
+
+<h3>Java</h3>
+
+<ol>
+<li><a href="http://j.mp/1t5emxB">10 JDK 7 Features to Revisit, Before You Welcome Java 8</a></li>
+<li><a href="http://j.mp/1hEKGUC">5 Features In Java 8 That WILL Change How You Code</a></li>
+<li><a href="http://j.mp/1kSdk6X">Cache Abstraction: JCache (JSR-107) Annotations Support</a></li>
+<li><a href="http://j.mp/1kYl4jm">Oracle Nashorn: A Next-Generation JavaScript Engine for the JVM</a></li>
+<li><a href="http://j.mp/1hEKNzr">Use Nashorn and WebJars to execute Javascript server-side</a></li>
+<li><a href="http://j.mp/1eB3jsa">What’s New in Java 8: Lambdas</a></li>
+<li><a href="http://j.mp/1hEKOTO">JEP 180: Handle Frequent HashMap Collisions with Balanced Trees</a></li>
+<li><a href="http://j.mp/1p51GY4">JEP 155: Concurrency updates (jsr166e)</a></li>
+</ol>
+
+
+<h3>Scala</h3>
+
+<ol>
+<li><a href="http://j.mp/1gxBaAM">The other 99% — Monadic</a></li>
+<li><a href="http://j.mp/1iPxZCP">Reflections on Akka</a></li>
+</ol>
+
+]]></content>
+  </entry>
   
-  <a href="https://github.com/uthark">@uthark</a> on GitHub
+  <entry>
+    <title type="html"><![CDATA[Reading List 2014-April-14]]></title>
+    <link href="http://uthark.github.io/blog/2014/04/14/reading-list-2014-april-14/"/>
+    <updated>2014-04-14T13:48:11-04:00</updated>
+    <id>http://uthark.github.io/blog/2014/04/14/reading-list-2014-april-14</id>
+    <content type="html"><![CDATA[<h3>Releases</h3>
+
+<ol>
+<li><a href="http://j.mp/1hEqWdJ">Our New Reader View in Pocket 5.4 for Android</a></li>
+<li><a href="http://j.mp/1sOs9Zn">Spring Batch 2.2.6.RELEASE is now available</a></li>
+<li><a href="http://j.mp/1gszHIu">MongoDB 2.6 is out</a></li>
+</ol>
+
+
+<h3>Software development</h3>
+
+<ol>
+<li><a href="http://j.mp/RaD6pK">New user and sequence based segments in the Core Reporting API</a></li>
+<li><a href="http://j.mp/1hqgcEK">Looking for PostgreSQL Performance Issues</a></li>
+<li><a href="http://j.mp/1hqfLu7">Why Google Is Broken for Debugging</a></li>
+<li><a href="http://j.mp/1iJM7O3">13 | Joel on Software</a></li>
+<li><a href="http://j.mp/1igDiNW">Recursion: Dream Within a Dream</a></li>
+<li><a href="http://j.mp/1kMgZmz">What to Think About During Exercise</a></li>
+<li><a href="http://j.mp/1k8v4YK">ScaleArc: Benchmarking with sysbench</a></li>
+</ol>
+
+
+<h3>Java</h3>
+
+<ol>
+<li><a href="http://j.mp/1p1mjnW">Five Synchronizers in Java</a></li>
+<li><a href="http://j.mp/1gvqG4X">Oracle Drops Collection Literals in JDK 8</a></li>
+<li><a href="http://j.mp/1iNnvnj">Creating Object Pool in Java</a></li>
+<li><a href="http://j.mp/1iNU30J">Why JSR-310 isn&rsquo;t Joda-Time</a></li>
+<li><a href="http://j.mp/1glS01Q">Non-blocking IO in Servlet 3.1 By Example</a></li>
+<li><a href="http://j.mp/1sOsaMH">15 Must Read Java 8 Tutorials</a></li>
+<li><a href="http://j.mp/1kRMn3b">Open source Java projects</a></li>
+<li><a href="http://j.mp/1hEqV9D">JSF + AngularJS = AngularFaces? (The Aquarium)</a></li>
+<li><a href="http://j.mp/1jEt2yy">Lambda Expressions</a></li>
+<li><a href="http://j.mp/1iNnCzv">Attempt to map WCF to Java terms</a></li>
+<li><a href="http://j.mp/1p1miR2">Yet another way to handle exceptions in JUnit: catch-exception</a></li>
+<li><a href="http://j.mp/1qHbzqs">Non-blocking I/Os in Servlet 3.1 (The Aquarium)</a></li>
+<li><a href="http://j.mp/1sLizq2">Liferay CometD Ajax Push / Liferay Reverse Ajax</a></li>
+<li><a href="http://j.mp/1iLiNGK">Java Q&amp;A: The ultimate superclass, Part 2</a></li>
+</ol>
+
+]]></content>
+  </entry>
   
-  <script type="text/javascript">
-    $(document).ready(function(){
-        if (!window.jXHR){
-            var jxhr = document.createElement('script');
-            jxhr.type = 'text/javascript';
-            jxhr.src = '/javascripts/libs/jXHR.js';
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(jxhr, s);
-        }
-
-        github.showRepos({
-            user: 'uthark',
-            count: 3,
-            skip_forks: true,
-            target: '#gh_repos'
-        });
-    });
-  </script>
-  <script src="/javascripts/github.js" type="text/javascript"> </script>
-</section>
-
-
-
-<section class="googleplus">
-  <h1>
-    <a href="https://plus.google.com/112372998073079463630?rel=author">
-      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
-      Google+
-    </a>
-  </h1>
-</section>
-
-
-
-<section>
-  <h1>Stack Overflow</h1>
-  <a href="http://stackoverflow.com/users/216764/uthark" style="text-decoration:none">
-  <img src="http://stackoverflow.com/users/flair/216764.png" width="208" height="58" alt="profile for uthark at Stack Overflow, Q&amp;A for professional and enthusiast programmers" title="profile for uthark at Stack Overflow, Q&amp;A for professional and enthusiast programmers">
-  </a>
-</section>
-
-
-  
-</aside>
-
-    </div>
-  </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2017 - Oleg Atamanenko -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
-</p>
-
-</footer>
-  
-
-
-
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) {return;}
-  js = d.createElement(s); js.id = id; js.async = true;
-  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
-
-
-  <script type="text/javascript">
-    (function() {
-      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
-      script.src = 'https://apis.google.com/js/plusone.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
-    })();
-  </script>
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-
-
-
-</body>
-</html>
+</feed>
