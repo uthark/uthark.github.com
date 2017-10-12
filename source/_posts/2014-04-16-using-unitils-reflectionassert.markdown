@@ -17,6 +17,7 @@ Often it is needed to compare two different instances of the class inside test. 
 In order to make such assertions more easier and maintainable one can use great Unitils library which has useful class [ReflectionAssert]
 
 First, update parent's `pom.xml`:
+
 ``` xml pom.xml changes in parent module
 <properties>
     <unitils.version>3.4</unitils.version>
@@ -29,7 +30,8 @@ First, update parent's `pom.xml`:
 </dependency>
 ```
 
-Then, add dependency to the child module:   
+Then add dependency to the child module:
+
 ``` xml pom.xml changes in child module
 <dependency>
     <groupId>org.unitils</groupId>
@@ -39,6 +41,7 @@ Then, add dependency to the child module:
 
 Usage is very simple:
 Add static import to the class.
+
 ``` 
 import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
 ```
@@ -63,7 +66,7 @@ if (!leftDouble.equals(rightDouble)) {
 // ...
 ```
 
-If you need to compare double values in JUnit assertions then it is better to use [hamcrest library]:
+If you need to compare double values in JUnit assertions then it is better to use [hamcrest library].
 
 ``` java
 import static org.hamcrest.number.IsCloseTo.closeTo;
