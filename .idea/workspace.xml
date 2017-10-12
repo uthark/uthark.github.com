@@ -219,7 +219,7 @@
         <entry file="file://$PROJECT_DIR$/Rakefile">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="191">
-              <caret line="17" column="27" lean-forward="false" selection-start-line="17" selection-start-column="27" selection-end-line="17" selection-end-column="27" />
+              <caret line="17" column="24" lean-forward="false" selection-start-line="17" selection-start-column="24" selection-end-line="17" selection-end-column="24" />
               <folding />
             </state>
           </provider>
@@ -637,7 +637,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1507840348505</updated>
-      <workItem from="1507840350783" duration="7831000" />
+      <workItem from="1507840350783" duration="7956000" />
     </task>
     <task id="LOCAL-00001" summary="Merge branch 'octopress_master' into source&#10;&#10;# Conflicts:&#10;#&#9;Gemfile&#10;#&#9;Gemfile.lock&#10;#&#9;Rakefile&#10;#&#9;_config.yml&#10;#&#9;plugins/category_generator.rb">
       <created>1507848125772</created>
@@ -650,7 +650,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="7831000" />
+    <option name="totallyTimeSpent" value="7956000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="1440" height="878" extended-state="6" />
@@ -1231,7 +1231,7 @@
     <entry file="file://$PROJECT_DIR$/Rakefile">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="191">
-          <caret line="17" column="27" lean-forward="false" selection-start-line="17" selection-start-column="27" selection-end-line="17" selection-end-column="27" />
+          <caret line="17" column="24" lean-forward="false" selection-start-line="17" selection-start-column="24" selection-end-line="17" selection-end-column="24" />
           <folding />
         </state>
       </provider>
