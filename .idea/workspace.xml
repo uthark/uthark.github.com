@@ -1,83 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e722c379-18ec-4008-9af4-1aaebf0202c9" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/assets/jwplayer/glow/controlbar/background.png" afterPath="$PROJECT_DIR$/source/assets/jwplayer/glow/controlbar/background.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/assets/jwplayer/glow/controlbar/divider.png" afterPath="$PROJECT_DIR$/source/assets/jwplayer/glow/controlbar/divider.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/assets/jwplayer/glow/controlbar/fullscreenButtonOver.png" afterPath="$PROJECT_DIR$/source/assets/jwplayer/glow/controlbar/fullscreenButtonOver.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/assets/jwplayer/glow/controlbar/muteButton.png" afterPath="$PROJECT_DIR$/source/assets/jwplayer/glow/controlbar/muteButton.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/assets/jwplayer/glow/controlbar/muteButtonOver.png" afterPath="$PROJECT_DIR$/source/assets/jwplayer/glow/controlbar/muteButtonOver.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/assets/jwplayer/glow/controlbar/normalscreenButtonOver.png" afterPath="$PROJECT_DIR$/source/assets/jwplayer/glow/controlbar/normalscreenButtonOver.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/assets/jwplayer/glow/controlbar/pauseButton.png" afterPath="$PROJECT_DIR$/source/assets/jwplayer/glow/controlbar/pauseButton.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/assets/jwplayer/glow/controlbar/pauseButtonOver.png" afterPath="$PROJECT_DIR$/source/assets/jwplayer/glow/controlbar/pauseButtonOver.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/assets/jwplayer/glow/controlbar/playButton.png" afterPath="$PROJECT_DIR$/source/assets/jwplayer/glow/controlbar/playButton.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/assets/jwplayer/glow/controlbar/timeSliderBuffer.png" afterPath="$PROJECT_DIR$/source/assets/jwplayer/glow/controlbar/timeSliderBuffer.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/assets/jwplayer/glow/controlbar/timeSliderCapLeft.png" afterPath="$PROJECT_DIR$/source/assets/jwplayer/glow/controlbar/timeSliderCapLeft.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/assets/jwplayer/glow/controlbar/timeSliderCapRight.png" afterPath="$PROJECT_DIR$/source/assets/jwplayer/glow/controlbar/timeSliderCapRight.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/assets/jwplayer/glow/controlbar/timeSliderProgress.png" afterPath="$PROJECT_DIR$/source/assets/jwplayer/glow/controlbar/timeSliderProgress.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/assets/jwplayer/glow/controlbar/timeSliderRail.png" afterPath="$PROJECT_DIR$/source/assets/jwplayer/glow/controlbar/timeSliderRail.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/assets/jwplayer/glow/controlbar/unmuteButton.png" afterPath="$PROJECT_DIR$/source/assets/jwplayer/glow/controlbar/unmuteButton.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/assets/jwplayer/glow/controlbar/unmuteButtonOver.png" afterPath="$PROJECT_DIR$/source/assets/jwplayer/glow/controlbar/unmuteButtonOver.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/assets/jwplayer/glow/display/background.png" afterPath="$PROJECT_DIR$/source/assets/jwplayer/glow/display/background.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/assets/jwplayer/glow/display/bufferIcon.png" afterPath="$PROJECT_DIR$/source/assets/jwplayer/glow/display/bufferIcon.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/assets/jwplayer/glow/display/muteIcon.png" afterPath="$PROJECT_DIR$/source/assets/jwplayer/glow/display/muteIcon.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/assets/jwplayer/glow/display/playIcon.png" afterPath="$PROJECT_DIR$/source/assets/jwplayer/glow/display/playIcon.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/assets/jwplayer/glow/dock/button.png" afterPath="$PROJECT_DIR$/source/assets/jwplayer/glow/dock/button.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/assets/jwplayer/glow/playlist/item.png" afterPath="$PROJECT_DIR$/source/assets/jwplayer/glow/playlist/item.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/assets/jwplayer/glow/playlist/itemOver.png" afterPath="$PROJECT_DIR$/source/assets/jwplayer/glow/playlist/itemOver.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/assets/jwplayer/glow/playlist/sliderCapBottom.png" afterPath="$PROJECT_DIR$/source/assets/jwplayer/glow/playlist/sliderCapBottom.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/assets/jwplayer/glow/playlist/sliderCapTop.png" afterPath="$PROJECT_DIR$/source/assets/jwplayer/glow/playlist/sliderCapTop.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/assets/jwplayer/glow/playlist/sliderRail.png" afterPath="$PROJECT_DIR$/source/assets/jwplayer/glow/playlist/sliderRail.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/assets/jwplayer/glow/playlist/sliderThumb.png" afterPath="$PROJECT_DIR$/source/assets/jwplayer/glow/playlist/sliderThumb.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/assets/jwplayer/glow/sharing/embedIcon.png" afterPath="$PROJECT_DIR$/source/assets/jwplayer/glow/sharing/embedIcon.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/assets/jwplayer/glow/sharing/embedScreen.png" afterPath="$PROJECT_DIR$/source/assets/jwplayer/glow/sharing/embedScreen.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/assets/jwplayer/glow/sharing/shareIcon.png" afterPath="$PROJECT_DIR$/source/assets/jwplayer/glow/sharing/shareIcon.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/assets/jwplayer/glow/sharing/shareScreen.png" afterPath="$PROJECT_DIR$/source/assets/jwplayer/glow/sharing/shareScreen.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/favicon.png" afterPath="$PROJECT_DIR$/source/favicon.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/images/bird_32_gray.png" afterPath="$PROJECT_DIR$/source/images/bird_32_gray.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/images/bird_32_gray_fail.png" afterPath="$PROJECT_DIR$/source/images/bird_32_gray_fail.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/images/code_bg.png" afterPath="$PROJECT_DIR$/source/images/code_bg.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/images/dotted-border.png" afterPath="$PROJECT_DIR$/source/images/dotted-border.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/images/email.png" afterPath="$PROJECT_DIR$/source/images/email.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/images/line-tile.png" afterPath="$PROJECT_DIR$/source/images/line-tile.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/images/noise.png" afterPath="$PROJECT_DIR$/source/images/noise.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/images/rss.png" afterPath="$PROJECT_DIR$/source/images/rss.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/images/search.png" afterPath="$PROJECT_DIR$/source/images/search.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.themes/classic/source/_includes/head.html" afterPath="$PROJECT_DIR$/.themes/classic/source/_includes/head.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.themes/classic/source/_includes/post/date.html" afterPath="$PROJECT_DIR$/.themes/classic/source/_includes/post/date.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.themes/classic/source/_layouts/post.html" afterPath="$PROJECT_DIR$/.themes/classic/source/_layouts/post.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Gemfile" afterPath="$PROJECT_DIR$/Gemfile" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_config.yml" afterPath="$PROJECT_DIR$/_config.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugins/pygments_code.rb" afterPath="$PROJECT_DIR$/plugins/pygments_code.rb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sass/base/_theme.scss" afterPath="$PROJECT_DIR$/sass/base/_theme.scss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sass/base/_typography.scss" afterPath="$PROJECT_DIR$/sass/base/_typography.scss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sass/custom/_colors.scss" afterPath="$PROJECT_DIR$/sass/custom/_colors.scss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sass/custom/_layout.scss" afterPath="$PROJECT_DIR$/sass/custom/_layout.scss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sass/custom/_styles.scss" afterPath="$PROJECT_DIR$/sass/custom/_styles.scss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/_includes/custom/category_feed.xml" afterPath="$PROJECT_DIR$/source/_includes/custom/category_feed.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/_includes/custom/head.html" afterPath="$PROJECT_DIR$/source/_includes/custom/head.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/_includes/custom/navigation.html" afterPath="$PROJECT_DIR$/source/_includes/custom/navigation.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/_includes/google_analytics.html" afterPath="$PROJECT_DIR$/source/_includes/google_analytics.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/_includes/head.html" afterPath="$PROJECT_DIR$/source/_includes/head.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/_includes/navigation.html" afterPath="$PROJECT_DIR$/source/_includes/navigation.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/_includes/post/categories.html" afterPath="$PROJECT_DIR$/source/_includes/post/categories.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/_includes/post/date.html" afterPath="$PROJECT_DIR$/source/_includes/post/date.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/_includes/post/sharing.html" afterPath="$PROJECT_DIR$/source/_includes/post/sharing.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/_layouts/post.html" afterPath="$PROJECT_DIR$/source/_layouts/post.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/_posts/2014-03-01-restricting-mongo-template.markdown" afterPath="$PROJECT_DIR$/source/_posts/2014-03-01-restricting-mongo-template.markdown" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/_posts/2014-03-02-octopress-quote-fix.markdown" afterPath="$PROJECT_DIR$/source/_posts/2014-03-02-octopress-quote-fix.markdown" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/_posts/2014-03-05-solving-issue-with-db2-on-vmware-fusion-on-macbook-pro-2013-late.markdown" afterPath="$PROJECT_DIR$/source/_posts/2014-03-05-solving-issue-with-db2-on-vmware-fusion-on-macbook-pro-2013-late.markdown" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/_posts/2014-03-06-customizing-font-in-android-textview.markdown" afterPath="$PROJECT_DIR$/source/_posts/2014-03-06-customizing-font-in-android-textview.markdown" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/_posts/2014-03-06-limiting-threads-count-for-greenrobot-eventbus.markdown" afterPath="$PROJECT_DIR$/source/_posts/2014-03-06-limiting-threads-count-for-greenrobot-eventbus.markdown" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/_posts/2014-03-28-initializing-at-mocks-with-junit-at-rule.markdown" afterPath="$PROJECT_DIR$/source/_posts/2014-03-28-initializing-at-mocks-with-junit-at-rule.markdown" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/_posts/2014-04-15-using-assertj.markdown" afterPath="$PROJECT_DIR$/source/_posts/2014-04-15-using-assertj.markdown" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/_posts/2014-04-16-using-unitils-reflectionassert.markdown" afterPath="$PROJECT_DIR$/source/_posts/2014-04-16-using-unitils-reflectionassert.markdown" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/_posts/2017-10-12-alive.markdown" afterPath="$PROJECT_DIR$/source/_posts/2017-10-12-alive.markdown" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/atom.xml" afterPath="$PROJECT_DIR$/source/atom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/index.html" afterPath="$PROJECT_DIR$/source/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/javascripts/octopress.js" afterPath="$PROJECT_DIR$/source/javascripts/octopress.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/robots.txt" afterPath="$PROJECT_DIR$/source/robots.txt" />
-    </list>
+    <list default="true" id="e722c379-18ec-4008-9af4-1aaebf0202c9" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -708,7 +632,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1507840348505</updated>
-      <workItem from="1507840350783" duration="7690000" />
+      <workItem from="1507840350783" duration="7763000" />
     </task>
     <task id="LOCAL-00001" summary="Merge branch 'octopress_master' into source&#10;&#10;# Conflicts:&#10;#&#9;Gemfile&#10;#&#9;Gemfile.lock&#10;#&#9;Rakefile&#10;#&#9;_config.yml&#10;#&#9;plugins/category_generator.rb">
       <created>1507848125772</created>
@@ -721,7 +645,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="7690000" />
+    <option name="totallyTimeSpent" value="7763000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="1440" height="878" extended-state="6" />
