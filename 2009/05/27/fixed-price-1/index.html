@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+
+  
+  
+  <link href="//fonts.googleapis.com/css?family=Anonymous+Pro" rel="stylesheet" type="text/css">
+  
+
+  
+  <title>Сферический программист в вакууме и абстрактное понятие качества кода в условиях Fixed-Price проектов (часть 1)</title>
+
+  
+  
+  <link rel="stylesheet" href="https://uthark.github.io/css/hugo-octopress.css">
+
+  
+  
+
+  
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
+  
+  <link href="https://uthark.github.io/favicon.png" rel="icon">
+
+  
+  
+  
+
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <meta name="author" content="Oleg Atamanenko">
+
+  
+  <meta name="generator" content="Hugo 0.31" />
+
+  
+  
+
+</head>
+<body>
+
+
+<header role="banner"><hgroup>
+  
+  <h1><a href="https://uthark.github.io/">Software Development and related activities</a></h1>
+    <h2></h2>
+</hgroup></header>
+
+
+<nav role="navigation">
+
+<ul class="main-navigation">
+  
+  
+    
+      <li><a href="https://uthark.github.io/" title="Home">Home</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/categories/article/" title="Articles" >Articles</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/categories/reading-list/" title="Reading List" >Reading List</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/about/" title="About me" >About me</a></li>
+    
+  
+</ul>
+
+
+<ul class="subscription">
+  
+    
+        <a href="https://uthark.github.io/index.xml" target="_blank" type="application/rss+xml" title="RSS"><i class="fa fa-rss-square fa-lg"></i></a>
+    
+  
+
+</ul>
+
+
+<form action="https://www.google.com/search" method="get" target="_blank">
+  <fieldset role="search">
+  	<input class="search" type="text" name="q" results="0" placeholder="Search"/>
+    <input type="hidden" name="q" value="site:https://uthark.github.io/" />
+  </fieldset>
+</form>
+
+</nav>
+
+
+<div id="main">
+  <div id="content">
+    <div>
+      <article class="hentry" role="article">
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+         Сферический программист в вакууме и абстрактное понятие качества кода в условиях Fixed-Price проектов (часть 1) 
+    </h1>
+
+</header>
+
+
+        <div class="entry-content">
+          
+          
+          
+          
+          <p>В последнее время всё чаще задумываюсь о том, почему разработчики пишут плохой и некачественный код. Под кодом я подразумеваю не только сам код, но и, в том числе, архитектуру и дизайн.</p>
+
+<p>Плохим кодом я считаю следущий:
+<ol><li>Невыполняющий функциональные требования</li><li>Невыполняющий нефункциональные требования</li><li>Непокрытый тестами</li><li>Плохо тестируемый</li><li>Плохо поддерживаемый</li><li>С багами</li><li>Неоптимальный</li></ol>Если код не выполняет функциональные требования, то этот код вообще ничего не стоит. Заказчику такой код не нужен, именно поэтому этот код плохой. На него были потрачены ресурсы, но при этом сам код не имеет никакой ценности.</p>
+
+<p>Если код не выполняет нефункциональные требования, то это говорит о том, что либо дизайн, либо реализация, не учли требования и это тоже не добавляет удовлетворённости конечному пользователю. Часто здесь можно провести рефакторинг, но бывает и так, что архитектурные ошибки не дают в принципе выполнить нефункциональные требования, либо их реализация требует очень больших временных затрат.</p>
+
+<p>Если код не покрыт тестами, то этот код не работает. Эта аксиома должна всегда быть перед глазами разработчика. Как говорится, самая большая проблема с компьютерами это то, что они делают не то, что разработчик подразумевал, а то, что он написал. Именно поэтому тесты - гарантия того, что код выполняет то, что подразумевает разработчик. Хотя здесь тоже есть проблема, что разработчик не понимает, что именно ему нужно от кода, либо не знает, как протестировать нужную ему функциональность.</p>
+
+<p>Плохо тестируемый код. Такой код часто встречается, когда не используется TDD, в связи с этим разработчик не понимает или не знает, что именно он хочет от кода. Также, плохо тестируемый код это признак того, что код имеет не самую лучшую архитектуру (например, высокий coupling)</p>
+
+<p>Плохо поддерживаемый код это любой код, который сложно поддерживать. Сюда относятся любые ошибки в коде, которые осложняют поддержку - нет единого стиля форматирования, неясные имена переменных, методов, классов, плохая декомпозиция, отсутствие или наличие устаревших тестов, комментариев, документации, или, что ещё хуже ошибки в комментариях, документации, плохая архитектура (как её отсутствие, так и overdesigned). Все эти проблемы в конечном итоге влияют на качество проекта и на удовлетворённость заказчика.</p>
+
+<p>Код с багами. Логично, что это плохой код, и это, к сожалению, часто встречающийся код. По статистике, на 1000 строк кода приходится 10-12 багов. К сожалению, этот показатель меняется в зависимости от различных факторов (компетентность разработчика, сроки, сложность архитектуры, используемый язык и технологии и т.д.) и часто в сторону ухудшения.</p>
+
+<p>Неоптимальный код не всегда плохой, при условии, что он выполняет функциональные и нефункциональные требования, а также лёгок в поддерживании.</p>
+
+<p>Продолжение следует&hellip;</p>
+
+        </div>
+        
+
+<footer>
+
+  <p class="meta">
+    
+    
+
+    
+    
+    
+    Filed under: <a class="label" href="https://uthark.github.io/categories/%d1%80%d0%b0%d0%b7%d1%80%d0%b0%d0%b1%d0%be%d1%82%d0%ba%d0%b0/">разработка</a><a class="label" href="https://uthark.github.io/categories/%d0%ba%d0%b0%d1%87%d0%b5%d1%81%d1%82%d0%b2%d0%be-%d0%ba%d0%be%d0%b4%d0%b0/">качество кода</a><a class="label" href="https://uthark.github.io/categories/development/">development</a>
+    
+  </p>
+
+  <p class="meta">
+    
+    Last update: <time>May 27, 2009</time>
+    
+    </span>
+  </p>
+  
+  
+
+  
+
+  <p class="meta">
+    
+        <a class="basic-alignment left" href="https://uthark.github.io/2009/05/23/google-application-engine/" title="Google Application Engine">Google Application Engine</a>
+    
+
+    
+      <a class="basic-alignment right" href="https://uthark.github.io/2009/05/27/fixed-price-2/" title="Сферический программист в вакууме и абстрактное понятие качества кода в условиях Fixed-Price проектов (часть 2)">Сферический программист в вакууме и абстрактное понятие качества кода в условиях Fixed-Price проектов (часть 2)</a>
+    
+  </p>
+  
+</footer>
+
+      </article>
+    </div>
+    
+
+<aside class="sidebar thirds">
+  <section class="first odd">
+
+    
+
+    <p>
+      
+    </p>
+  </section>
+
+
+
+
+
+  
+
+  
+
+  
+  
+  
+
+</aside>
+
+  </div>
+</div>
+
+<footer role="contentinfo">
+    
+    <div class="center">
+        <ul class="sidebar-nav">
+            <li class="sidebar-nav-item">
+                <a target="_blank" href="https://github.com/uthark/" title="https://github.com/uthark/"><i
+                    class="fa fa-github fa-3x"></i></a></li>
+            <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
+                    class="fa fa-bitbucket fa-3x"></i></a>
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item"><a target="_blank" href="https://twitter.com/LinkageError/" title="https://twitter.com/LinkageError/"><i
+                    class="fa fa-twitter fa-3x"></i></a>
+            <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
+                    class="fa fa-key fa-3x"></i></a> 
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item"><a target="_blank" href="http://stackoverflow.com/users/216764/uthark" title="http://stackoverflow.com/users/216764/uthark"><i
+                    class="fa fa-stack-overflow fa-3x"></i></a>
+            <li class="sidebar-nav-item"><a target="_blank" href="https://plus.google.com/&#43;OlegAtamanenko" title="https://plus.google.com/&#43;OlegAtamanenko"><i
+                    class="fa fa-google-plus fa-3x"></i></a>
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item">
+                
+                
+            </li>
+        </ul>
+    </div>
+    <p>Copyright &copy; 2017 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+        <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a> and
+            <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.
+    </p>
+
+</footer>
+
+
+</body>
+</html>
+

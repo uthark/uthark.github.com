@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+
+  
+  
+  <link href="//fonts.googleapis.com/css?family=Anonymous+Pro" rel="stylesheet" type="text/css">
+  
+
+  
+  <title>Software Development and related activities</title>
+
+  
+  
+  <link rel="stylesheet" href="https://uthark.github.io/css/hugo-octopress.css">
+
+  
+  
+
+  
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
+  
+  <link href="https://uthark.github.io/favicon.png" rel="icon">
+
+  
+  
+  
+
+  <link href="https://uthark.github.io/index.xml" rel="alternate" type="application/rss+xml" title="Software Development and related activities" />
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <meta name="author" content="Oleg Atamanenko">
+
+  
+  <meta name="generator" content="Hugo 0.31" />
+
+  
+  
+
+</head>
+<body>
+
+
+<header role="banner"><hgroup>
+  
+  <h1><a href="https://uthark.github.io/">Software Development and related activities</a></h1>
+    <h2></h2>
+</hgroup></header>
+
+
+<nav role="navigation">
+
+<ul class="main-navigation">
+  
+  
+    
+      <li><a href="https://uthark.github.io/" title="Home">Home</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/categories/article/" title="Articles" >Articles</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/categories/reading-list/" title="Reading List" >Reading List</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/about/" title="About me" >About me</a></li>
+    
+  
+</ul>
+
+
+<ul class="subscription">
+  
+    
+        <a href="https://uthark.github.io/index.xml" target="_blank" type="application/rss+xml" title="RSS"><i class="fa fa-rss-square fa-lg"></i></a>
+    
+  
+
+</ul>
+
+
+<form action="https://www.google.com/search" method="get" target="_blank">
+  <fieldset role="search">
+  	<input class="search" type="text" name="q" results="0" placeholder="Search"/>
+    <input type="hidden" name="q" value="site:https://uthark.github.io/" />
+  </fieldset>
+</form>
+
+</nav>
+
+
+<div id="main">
+ <div id="content">
+  <div class="blog-index">
+    
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2009/05/03/eclipse/">Eclipse и его расширения</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>Многие ругают <a href="http://www.eclipse.org/">Eclipse</a> за то, что там нет многого из того, что есть в коробке у <a href="http://www.jetbrains.com/idea/">Jetbrains Intellij IDEA</a>. Мне всегда казалось это не очень корректным, так как Eclipse в первую очередь платформа, а уже потом - среда для Java разработки.<br />
+Решил собрать воедино весь список используемых мною расширений для Eclipse.<br />
+<ol><li><a href="http://subclipse.tigris.org/">Subclipse</a> - без этого никуда. Это расширение позволяет работать с системой контроля версий <a href="http://subversion.tigris.org/">Subversion</a> не выходя из Eclipse.</li>
+<li><a href="http://m2eclipse.codehaus.org/">m2eclipse</a> - Расширение для работы с <a href="http://maven.apache.org/">maven</a>. Графический редактор pom.xml позволяет избавиться от редактирования pom.xml вручную. В качестве приятного дополнения - возможность посмотреть графически список зависимостей проекта (вместе с транзитивными), а так же увидеть ситуации, когда 2 разные библиотеки зависят от разных версий одной и той же библиотеки.</li>
+<li><a href="http://code.google.com/eclipse/">Google Plugin for Eclipse</a> - официальное расширение от Google для работы с <a href="http://code.google.com/webtoolkit">Google Web Toolkit</a> и <a href="http://code.google.com/appengine">Google Application Engine</a>.</li>
+<li><a href="http://eclipse-cs.sourceforge.net/">Eclipse-CS</a> - Нет, это не запускалка Counter Strike, а всего лишь расширение, интегрирующее статический анализатор исходного кода <a href="http://checkstyle.sourceforge.net/">Checkstyle</a> в Eclipse. Проверяет правильность форматирования кода согласно заданным правилам. Обязательное расширение при работе в команде.</li>
+<li><a href="http://springide.org/project/wiki">Spring IDE</a> - расширение от команды SpringSource для работы с проектами, использующими Spring, в том числе Spring AOP и Spring Webflow.</li>
+<li><a href="http://www.xmind.net/">XMind</a> - отличное расширение, предоставляющее <a href="http://en.wikipedia.org/wiki/Mindmap">mind-mapping</a> возможности в Eclipse.</li>
+<li><a href="http://www.jboss.org/tools">JBoss Tools</a> - наборо расширений для работы с продуктами JBoss - Hibernate, JBoss AS, Drools, jBPM, JSF, (X)HTML, Seam, Smooks, JBoss ESB, JBoss Portal&hellip;</li>
+<li><a href="http://www.eclemma.org/">EclEmma</a> - интеграция отличной библиотеки <a href="http://emma.sourceforge.net/">EMMA</a> в Eclipse. EMMA - приложение для подсчёта покрытия кода тестами. Must-have расширение.</li>
+<li><a href="http://www.eclipse.org/tptp/">TPTP</a> - Под этой странной аббревиатурой скрывается Test &amp; Performance Tools Platform. Набор расширений для тестирования и профилирования приложений.</li>
+<li><a href="http://pmd.sourceforge.net/integrations.html#eclipse">PMD</a> - Интеграция библиотеки <a href="http://pmd.sourceforge.net/">PMD</a>, которая выполняет статический анализ кода на предмет возможных ошибок в коде.</li>
+<li><a href="http://www.eclipse.org/webtools/">WTP</a> - Web Tools Platform - официальный набор расширений для разработки Web и Java EE приложений.</li>
+<li><a href="http://groovy.codehaus.org/Eclipse+Plugin">Groovy &amp; Grails</a> - расширение для работы с языком <a href="http://groovy.codehaus.org/">Groovy</a> и фреймворком <a href="http://grails.org/">Grails</a>.</li>
+<li><a href="http://code.google.com/p/egit/">eGit</a> - расширение предоставляет возможность работы с распределенной системой контроля версий <a href="http://git-scm.com/">git</a>.</li>
+<li><a href="http://eclipsesql.sourceforge.net/">Eclipse SQL Explorer</a> - тонкий SQL-клиент, который позволяет просматривать различные JDBC-совместимые базы данных.</li>
+</ol>Очень много расширений есть на <a href="http://www.eclipseplugincentral.com/">Eclipse Plugin Central</a><br />
+<br />
+Также, все плагины, на которые я обращаю внимание можно найти на <a href="http://delicious.com/dark.schakal/EclipsePlugin">del.icio.us</a></p>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2009/04/26/blog-post_26/">Критерии выбора блокировок</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>Так как использование блокировок по-разному влияет на производительность, необходимо выбирать, в каких случаях какой вид блокировок лучше использовать.</p>
+
+<p><style type="text/css">.nobr br { display: none }</style>
+<div class="nobr">
+<table></p>
+
+<p><tbody><tr>
+<th>Условие</th>
+<th>Пессимистичная</th>
+<th>Оптимистичная</th>
+<th>Сверх-оптимистичная</th>
+</tr>
+<tr>
+<td>Конфликты часты
+</td>
+<td>+
+</td>
+<td>−
+</td>
+<td>−
+</td>
+</tr>
+<tr>
+<td>Конфликты редки
+</td>
+<td>−
+</td>
+<td>+
+</td>
+<td>−
+</td>
+</tr>
+<tr>
+<td>Данные только добавляются (например, журнал)
+</td>
+<td>−
+</td>
+<td>−
+</td>
+<td>+
+</td>
+</tr>
+<tr>
+<td>Данные только читаются (справочники)</td>
+<td>−</td>
+<td>−</td>
+<td>+</td>
+</tr></tbody>
+<caption>Критерии выбора блокировок</caption>
+</table>
+</div></p>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2009/04/25/blog-post_25/">Традиции академгородка</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>Сегодня была оказана помощь лягушкам, которых инстинкт гонит в озеро для размножения. Прогулка с ведром и фонарём, булькание лягушек в озере и их кваканье в ведре прохладным весенним вечером - это прекрасно.</p>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2009/04/24/blog-post_24/">Транзакции в реляционных базах данных</a>
+    </h1>
+
+</header>
+
+
+        
+        
+
+<p>При работе в многопользовательском окружении может возникнуть ситуация, когда разные пользователи или системы обновляют одни и те же данные. Это может привести к ситуации, когда один из пользователей изменит данные, которые уже изменял другой пользователь и приведёт либо к потере данных, либо к переводу данных в неконсистентное состояние.
+Для решения этой проблемы были придуманы транзакции. Целью транзакции является создание абстракции того, что каждый пользователь - единственный в системе.</p>
+
+<h3 id="характеристики-транзакций">Характеристики транзакций</h3>
+
+<p>В конце 1970-х <a href="http://en.wikipedia.org/wiki/Jim_Gray_%28computer_scientist%29">Джим Грей</a> выделил следующие характеристики транзакций:</p>
+
+<ul>
+<li>Атомарность (<strong>A</strong>tomicity)</li>
+<li>Непротиворечивость (<strong>C</strong>onsistency)</li>
+<li>Изолированность (<strong>I</strong>solation)</li>
+<li>Долговечность (<strong>D</strong>urability)</li>
+</ul>
+
+<p><strong>Атомарность</strong> означает, что все действия, производимые в рамках одной транзакции атомарны. Если транзакция заканчивается не успешно, то все изменения, сделанный в рамках этой транзакции откатываются назад. Если транзакция заканчивается успешно, то все её изменения сохраняются.</p>
+
+<p><strong>Непротиворечивость</strong> означает, что транзакция переводит базу данных из одного непротиворечивого состояния в другое непротиворечивое состояние. При этом, внутри транзакции база данных <strong>может</strong> находиться в противоречивом состоянии.</p>
+
+<p><strong>Изолированность</strong> означает, что во время работы одной транзакции ей недоступны (с поправками на уровень изоляции) изменения, происходящие в другой транзакции.</p>
+
+<p>Под <strong>долговечностью</strong> подразумевают, что после окончания транзакции все изменения, сделанные транзакцией фиксируется навсегда, то есть, если происходит программно-аппаратный сбой, то после восстановления системы в рабочее состояние нет потерянных изменений.</p>
+
+<h3 id="уровни-изоляции-транзакций">Уровни изоляции транзакций</h3>
+
+<p>При параллельном выполнении нескольких транзакций могут возникнуть следующие проблемы:</p>
+
+<ul>
+<li>Потерянное обновление</li>
+<li>&ldquo;Грязное&rdquo; чтение</li>
+<li>Неповторяющееся чтение</li>
+<li>Фантомная вставка</li>
+</ul>
+
+<p><strong>Потерянное обновление</strong> может возникнуть в ситуации, когда две транзакции обновляют одни и те же данные.</p>
+
+<p><strong>&ldquo;Грязное&rdquo; чтение</strong> возникает, когда одна транзакция видит несохранённые изменения, сделанные другой транзакцией.</p>
+
+<p><strong>Неповторяющееся чтение</strong> - это ситуация, когда в рамках одной транзакции один и тот же запрос на выборку возвращает разные результаты.</p>
+
+<p><strong>Фантомная вставка</strong> - ситуация, похожая на неповторяющее чтение - заключается в том, что результаты одной и той же выборки в рамках одной транзакции имеют разное количество возвращаемых строк.</p>
+
+<p><a href="http://www.contrib.andrew.cmu.edu/%7Eshadow/sql/sql1992.txt">Стандарт SQL-92</a> определяет следующие уровни изоляции транзакции:</p>
+
+<ol>
+<li>READ_UNCOMMITED</li>
+<li>READ_COMMITED</li>
+<li>REPEATABLE_READ</li>
+<li>SERIALIZABLE</li>
+</ol>
+
+<p><strong>READ_UNCOMMITED</strong> - позволяет другим транзакциям видеть несохранённые изменения</p>
+
+<p><strong>READ_COMMITED</strong> — транзакция во время выполенения видит только зафиксированные изменения. В большинстве баз данных это уровень изоляции по умолчанию.</p>
+
+<p><strong>REPEATABLE_READ</strong> — данный уровень изоляции решает проблему неповторяющего чтения.</p>
+
+<p><strong>SERIALIZABLE</strong> - данный уровень изоляции выполняет все транзакции последовательно. Это самый надёжный уровень изоляции, но, при этом, и наименее производительный.</p>
+
+<p>Каждый уровень решает часть вышеперечисленных проблем.</p>
+
+<div class="nobr">
+<table>
+<tbody><tr>
+<th>Проблема
+
+ Уровень изоляции</th>
+<th>Потерянное обновление</th>
+<th>Грязное чтение</th>
+<th>Неповторяющееся чтение</th>
+<th>Фантомная вставка</th>
+</tr><tr>
+<td>READ_UNCOMMITED</td>
+<td>невозможно</td>
+<td>возможно</td>
+<td>возможно</td>
+<td>возможна</td>
+</tr><tr>
+<td>READ_COMMITED</td>
+<td>невозможно</td>
+<td>невозможно</td>
+<td>возможно</td>
+<td>возможна</td>
+</tr>
+<tr>
+<td>REPEATABLE_READ</td>
+<td>невозможно</td>
+<td>невозможно</td>
+<td>невозможно</td>
+<td>возможна</td>
+</tr>
+<tr>
+<td>SERIALIZABLE</td>
+<td>невозможно</td>
+<td>невозможно</td>
+<td>невозможно</td>
+<td>невозможна</td>
+</tr></tbody></table>
+</div>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2009/04/22/blog-post_22/">Кратко о блокировках в БД</a>
+    </h1>
+
+</header>
+
+
+        
+        
+
+<p><strong>Блокировка</strong> - в реляционных базах данных это установка метки на запись, что запись заблокирована для изменений.</p>
+
+<p>Существует два вида блокировок - оптимистичная и пессимистичная.</p>
+
+<h3 id="оптимистичная-блокировка">Оптимистичная блокировка</h3>
+
+<p>При оптимистичной блокировке на базе данных реальной блокировки не происходит.
+Вместо этого используется следующий подход - если во время выполнения транзакции она изменяет данные, которые были изменены после её начала, то транзакция прерывается с исключением. Использование оптимистичных блокировок позволяет избежать взаимных блокировок (dead-lock). Для реализации оптимистичной блокировки часто используется версионирование данных - в таблицу добавляется колонка, которая хранит текущую версию. При выполнении <tt>update</tt> в запросе в секции <tt>where</tt> передается версия данных, которая была забрана на изменение. Если <tt>update</tt> вернул 0 изменённых строк, значит данные были уже изменены и транзакцию необходимо запускать заново. Вместо версии можно хранить время последнего изменения данных.</p>
+
+<h3 id="пессимистичная-блокировка">Пессимистичная блокировка</h3>
+
+<p>При пессимистичной блокировке для записи ставится эксклюзивная блокировка на уровне базы данных, запрещая таким образом доступ к данным из других транзакций. Существует несколько видов пессимистичных блокировок:</p>
+
+<ol>
+<li>блокировка при чтении</li>
+<li>блокировка при записи</li>
+</ol>
+
+<p>При <strong>блокировке при чтении</strong> запись блокируется когда она запрашивается из базы данных. Недостаток метода в том, что таким образом можно заблокировать даже те данные, которые не изменяются в рамках текущей транзакции.</p>
+
+<p>При <strong>блокировке при записи</strong> блокировка даных происходит при их обновлении в базе данных до конца текущей транзакции.</p>
+
+<p>Блокировка с данных снимается либо при коммите, либо при откате транзакции.</p>
+
+<h3 id="сравнение-оптимистичных-и-пессимистичных-блокировок">Сравнение оптимистичных и пессимистичных блокировок</h3>
+
+<p>При разработке программного обеспечения необходимо выбирать стратегию блокировок данных. При этом следует учитывать следующее:</p>
+
+<ol>
+<li>Если ситуация обновления одних и тех же данных в один момент времени относительно редка, то выгоднее использовать оптимистичную блокировку. В этом случае не будут происходить дорогая операция блокировки ресурсов.</li>
+<li>Если же возможность возникновения ситуации обновления одних и тех же данных достаточно высока, то лучше использовать пессимистичную блокировку, это снизит количество прерванных транзакций.</li>
+<li>Также следует учитывать, что при оптимистичной блокировке в случае прерывания транзакции её нужно запускать заново.</li>
+</ol>
+
+        
+
+    </article>
+    
+    
+    
+
+
+
+
+<div class="pagination">
+
+    
+        
+        
+        
+        <a href="/" aria-label="First" class="label-pagination"><i class="fa fa-angle-double-left fa-lg"></i></a>
+    
+
+    
+    
+        <a href="/page/22/" aria-label="Previous" class="label-pagination"><i class="fa fa-angle-left fa-lg"></i></a>
+    
+
+    
+        <a href="/" class="label-pagination">1</a>
+    
+        <a href="/page/2/" class="label-pagination">2</a>
+    
+        <a href="/page/3/" class="label-pagination">3</a>
+    
+        <a href="/page/4/" class="label-pagination">4</a>
+    
+        <a href="/page/5/" class="label-pagination">5</a>
+    
+        <a href="/page/6/" class="label-pagination">6</a>
+    
+        <a href="/page/7/" class="label-pagination">7</a>
+    
+        <a href="/page/8/" class="label-pagination">8</a>
+    
+        <a href="/page/9/" class="label-pagination">9</a>
+    
+        <a href="/page/10/" class="label-pagination">10</a>
+    
+        <a href="/page/11/" class="label-pagination">11</a>
+    
+        <a href="/page/12/" class="label-pagination">12</a>
+    
+        <a href="/page/13/" class="label-pagination">13</a>
+    
+        <a href="/page/14/" class="label-pagination">14</a>
+    
+        <a href="/page/15/" class="label-pagination">15</a>
+    
+        <a href="/page/16/" class="label-pagination">16</a>
+    
+        <a href="/page/17/" class="label-pagination">17</a>
+    
+        <a href="/page/18/" class="label-pagination">18</a>
+    
+        <a href="/page/19/" class="label-pagination">19</a>
+    
+        <a href="/page/20/" class="label-pagination">20</a>
+    
+        <a href="/page/21/" class="label-pagination">21</a>
+    
+        <a href="/page/22/" class="label-pagination">22</a>
+    
+        <a href="/page/23/" class="label-pagination">23</a>
+    
+        <a href="/page/24/" class="label-pagination">24</a>
+    
+        <a href="/page/25/" class="label-pagination">25</a>
+    
+        <a href="/page/26/" class="label-pagination">26</a>
+    
+
+    
+    
+        <a href="/page/24/" aria-label="Next" class="label-pagination"><i class="fa fa-angle-right fa-lg"></i></a>
+    
+
+    
+    
+        <a href="/page/26/" aria-label="Last"><i class="fa fa-angle-double-right fa-lg"></i></a>
+    
+
+</div>
+
+  
+
+  </div>
+
+  
+
+<aside class="sidebar thirds">
+  <section class="first odd">
+
+    
+
+    <p>
+      
+    </p>
+  </section>
+
+
+
+
+
+  
+
+  
+
+  
+  
+  
+
+</aside>
+    
+ </div>
+</div>
+
+<footer role="contentinfo">
+    
+    <div class="center">
+        <ul class="sidebar-nav">
+            <li class="sidebar-nav-item">
+                <a target="_blank" href="https://github.com/uthark/" title="https://github.com/uthark/"><i
+                    class="fa fa-github fa-3x"></i></a></li>
+            <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
+                    class="fa fa-bitbucket fa-3x"></i></a>
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item"><a target="_blank" href="https://twitter.com/LinkageError/" title="https://twitter.com/LinkageError/"><i
+                    class="fa fa-twitter fa-3x"></i></a>
+            <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
+                    class="fa fa-key fa-3x"></i></a> 
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item"><a target="_blank" href="http://stackoverflow.com/users/216764/uthark" title="http://stackoverflow.com/users/216764/uthark"><i
+                    class="fa fa-stack-overflow fa-3x"></i></a>
+            <li class="sidebar-nav-item"><a target="_blank" href="https://plus.google.com/&#43;OlegAtamanenko" title="https://plus.google.com/&#43;OlegAtamanenko"><i
+                    class="fa fa-google-plus fa-3x"></i></a>
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item">
+                
+                
+            </li>
+        </ul>
+    </div>
+    <p>Copyright &copy; 2017 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+        <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a> and
+            <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.
+    </p>
+
+</footer>
+
+
+</body>
+</html>
+   

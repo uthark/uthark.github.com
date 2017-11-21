@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Article on Software Development and related activities</title>
+    <link>https://uthark.github.io/categories/article/</link>
+    <description>Recent content in Article on Software Development and related activities</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 16 Apr 2014 00:10:10 +0000</lastBuildDate>
+    
+	<atom:link href="https://uthark.github.io/categories/article/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Using Unitils ReflectionAssert</title>
+      <link>https://uthark.github.io/2014/04/16/using-unitils-reflectionassert/</link>
+      <pubDate>Wed, 16 Apr 2014 00:10:10 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/04/16/using-unitils-reflectionassert/</guid>
+      <description>Often it is needed to compare two different instances of the class inside test. I.e. we save object into database, then fetch it back from db and we want to be sure if nothing was lost during saving/reading.
+In order to make such assertions more easier and maintainable one can use great Unitils library which has useful class ReflectionAssert
+First, update parent&amp;rsquo;s pom.xml:
+&amp;lt;properties&amp;gt; &amp;lt;unitils.version&amp;gt;3.4&amp;lt;/unitils.version&amp;gt; &amp;lt;/properties&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.unitils&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;unitils-core&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;${unitils.version}&amp;lt;/version&amp;gt; &amp;lt;scope&amp;gt;test&amp;lt;/scope&amp;gt; &amp;lt;/dependency&amp;gt; Then add dependency to the child module:</description>
+    </item>
+    
+    <item>
+      <title>Using AssertJ</title>
+      <link>https://uthark.github.io/2014/04/15/using-assertj/</link>
+      <pubDate>Tue, 15 Apr 2014 23:37:49 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/04/15/using-assertj/</guid>
+      <description>AssertJ is a library which provides fluent strongly-typed assertions to use in unit tests.
+Example of assertions written with AssertJ:
+import io.github.uthark.blog.assertj.Assertions.assertThat; // ... within @Test User result = userDao.findByLogin(&amp;#34;username&amp;#34;); assertThat(result). isNotNull(). isActive(). hasLogin(&amp;#34;username&amp;#34;); As you can see assertions look much more readable. The integration of assertj into Maven project is very easy:
+ Update pom.xml in parent module  &amp;lt;properties&amp;gt; &amp;lt;assertj-core.version&amp;gt;1.6.0&amp;lt;/assertj-core.version&amp;gt; &amp;lt;assertj-assertions-generator-maven-plugin.version&amp;gt;1.2.0&amp;lt;/assertj-assertions-generator-maven-plugin.version&amp;gt; &amp;lt;/properties&amp;gt; &amp;lt;dependencyManagement&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.assertj&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;assertj-core&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;${assertj-core.version}&amp;lt;/version&amp;gt; &amp;lt;scope&amp;gt;test&amp;lt;/scope&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;/dependencyManagement&amp;gt; &amp;lt;pluginManagement&amp;gt; &amp;lt;plugin&amp;gt; &amp;lt;groupId&amp;gt;org.</description>
+    </item>
+    
+    <item>
+      <title>Initializing Mockito @Mocks with JUnit @Rule</title>
+      <link>https://uthark.github.io/2014/03/28/initializing-at-mocks-with-junit-at-rule/</link>
+      <pubDate>Fri, 28 Mar 2014 13:24:45 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/28/initializing-at-mocks-with-junit-at-rule/</guid>
+      <description>In this post I will show how one can implement custom JUnit @Rule.
+As an example let&amp;rsquo;s take Mockito and implement custom rule which will initialize Mocks in test class.
+By default, Mockito provides the following methods of mock initialization:
+ Using Mockito.mock  Initialize mocks with Mockito.mock:
+public void FooTest { private Foo foo; @Before public void setUp() { FooDependency dep = Mockito.mock(FooDependency.class); foo = new Foo(dep); } } This is the simplest case.</description>
+    </item>
+    
+    <item>
+      <title>Atom.io invites</title>
+      <link>https://uthark.github.io/2014/03/28/atom-dot-io-invites/</link>
+      <pubDate>Fri, 28 Mar 2014 09:53:03 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/28/atom-dot-io-invites/</guid>
+      <description>If anyone needs invites to atom.io, text editor from github - ask me in comments. I do have 3 invites to share.</description>
+    </item>
+    
+    <item>
+      <title>Scala for the Intrigued</title>
+      <link>https://uthark.github.io/2014/03/25/scala-for-the-intrigued/</link>
+      <pubDate>Tue, 25 Mar 2014 16:09:42 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/25/scala-for-the-intrigued/</guid>
+      <description>This is a very nice series of posts about Scala by Venkat Subramaniam
+ The Elegance of Scala Sensible Typing and Optional Items Cute Classes and Pure OO Functional Style of Programming Working with Collections Creating Higher Order Functions Pattern Matching XML as First Class Citizen Recursions and Tail Call Optimization Using Traits Chaining Traits Concurrency in Scala  </description>
+    </item>
+    
+    <item>
+      <title>Расширение Delicious Bookmarks для Google Chrome/Chromium</title>
+      <link>https://uthark.github.io/2009/11/14/delicious-bookmarks-google/</link>
+      <pubDate>Sat, 14 Nov 2009 22:34:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/11/14/delicious-bookmarks-google/</guid>
+      <description>Введение
+Решил научиться писать собственные расширения для Google Chrome/Chromium.
+За идею взял официальное расширение от Yahoo! для Firefox - Delicious Bookmarks.
+Структура расширения
+Расширение - файл с расширением .crx. На самом деле это просто ZIP-архив с файлом манифеста внутри.
+Файл манифеста{ &amp;ldquo;name&amp;rdquo;: &amp;ldquo;Delicious plugin&amp;rdquo;, // 1 &amp;ldquo;version&amp;rdquo;: &amp;ldquo;0.2&amp;rdquo;, // 2 &amp;ldquo;background_page&amp;rdquo;: &amp;ldquo;background.html&amp;rdquo;, // 3 &amp;ldquo;permissions&amp;rdquo;: [ // 4 &amp;ldquo;bookmarks&amp;rdquo;, &amp;ldquo;tabs&amp;rdquo; ],
+&amp;ldquo;browser_action&amp;rdquo;: { // 5 &amp;ldquo;name&amp;rdquo;: &amp;ldquo;Save bookmark to delicious.com&amp;rdquo;, &amp;ldquo;default_title&amp;rdquo;: &amp;ldquo;Save bookmark to delicious.</description>
+    </item>
+    
+  </channel>
+</rss>

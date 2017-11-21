@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Reading List | Software Development and related activities]]></title>
+  <link href="http://uthark.github.io/blog/categories/reading-list/atom.xml" rel="self"/>
+  <link href="http://uthark.github.io/"/>
+  <updated>2017-10-12T19:01:44-04:00</updated>
+  <id>http://uthark.github.io/</id>
+  <author>
+    <name><![CDATA[Oleg Atamanenko]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Reading List for 2014-May-16]]></title>
+    <link href="http://uthark.github.io/blog/2014/05/16/reading-list-2014-may-16/"/>
+    <updated>2014-05-16T11:02:55-04:00</updated>
+    <id>http://uthark.github.io/blog/2014/05/16/reading-list-2014-may-16</id>
+    <content type="html"><![CDATA[<h3>Announcements</h3>
+
+<ol>
+<li><a href="http://ift.tt/1lkzPge">1 Billion Saves to Pocket!</a></li>
+<li><a href="http://j.mp/1ijEKuG">Spring for Apache Hadoop 2.0 RC3 released</a></li>
+<li><a href="http://j.mp/1kY00YA">Spring Integration Java DSL Milestone 1 Released</a></li>
+<li><a href="http://j.mp/1myY9QX">Reactor 1.1.0.RELEASE now available</a></li>
+<li><a href="http://j.mp/1nlJcyp">Spring Tool Suite and Groovy/Grails Tool Suite 3.5.1 released</a></li>
+<li><a href="http://j.mp/1j2QEct">spring-projects/spring-hateoas at 0.11.0.RELEASE · GitHub</a></li>
+<li><a href="http://j.mp/1s4lzdR">Google Play services 4.4</a></li>
+</ol>
+
+
+<h3>Software development</h3>
+
+<ol>
+<li><a href="http://j.mp/1nZNL41">ADAP Open Source REST API Layer For LDAP</a></li>
+<li><a href="http://j.mp/1gbzw4A">ADB Debugging: How to test your Android APK on Fire TV</a></li>
+<li><a href="http://j.mp/1jath6X">Amazon CloudFront Joins the AWS Free Usage Tier</a></li>
+<li><a href="http://j.mp/1fPqxLE">Amazon WorkSpaces Now Available in Europe</a></li>
+<li><a href="http://j.mp/1oau4Xe">Android Explorations : Using KitKat verified boot</a></li>
+<li><a href="http://j.mp/1myY2Vv">Announcing Google Cloud Storage JSON API General Availability</a></li>
+<li><a href="http://j.mp/1o3op5d">Atom: free and open source for everyone</a></li>
+<li><a href="http://j.mp/1s6B5WO">Background Task &ndash; a.k.a the secret weapon behind the new asynchronous staging | Liferay</a></li>
+<li><a href="http://j.mp/1scTTFQ">Chrome&rsquo;s experiment of hiding the URL is awful</a></li>
+<li><a href="http://ift.tt/T4Vxgz">Classycle: Analysing Tools for Java Class and Package Dependencies</a></li>
+<li><a href="http://j.mp/1ob6GZU">Code Conventions for the JavaScript Programming Language</a></li>
+<li><a href="http://j.mp/1lZmEDP">DuckDuckGo Reimagined and Redesigned</a></li>
+<li><a href="http://j.mp/1nZNI8o">Facebook&rsquo;s App Links: The Good, the Bad and the Ugly</a></li>
+<li><a href="http://j.mp/1slgZtX">Four Million to One (Or How I Handle Trello Support)</a></li>
+<li><a href="http://j.mp/1gbzj14">Guide to publish an aar to maven using gradle</a></li>
+<li><a href="http://j.mp/1fNdTwN">How Facebook Predicts Who You Know, Using Old Yahoo Code â Co.Labs â code + community</a></li>
+<li><a href="http://j.mp/Rp2hEy">How I Organize Evernote: A Peek Inside My Personal System</a></li>
+<li><a href="http://j.mp/1j4cZ9F">I don&rsquo;t love the single responsibility principle</a></li>
+<li><a href="http://ift.tt/1ljkmvx">In-browser RAW Processing: How We Did It</a></li>
+<li><a href="http://j.mp/1iYk7El">Java 8 Elvis Operator</a></li>
+<li><a href="http://j.mp/1nlJ3eu">Java 8 Friday: Let&rsquo;s Deprecate Those Legacy Libs</a></li>
+<li><a href="http://j.mp/1s7vkrL">Google Cast Receiver API Update | Leon Nicholls</a></li>
+<li><a href="http://ift.tt/1eNSlgD">Microsoft Leads The China Cloud War Into Episode II</a></li>
+<li><a href="http://j.mp/1qaybEA">MongoDB’s New Bulk API | MongoDB Blog</a></li>
+<li><a href="http://ift.tt/1lpqOkE">Nested task lists · GitHub</a></li>
+<li><a href="http://j.mp/1gbzp90">Oracle SOA Suite for HealthCare â Using Remote JMS with Multiple Domains</a></li>
+<li><a href="http://j.mp/1q74hB8">Pattern Matching &ndash; Make the Compiler Work for You</a></li>
+<li><a href="http://j.mp/1gxBdg2">Seamless migration from monolithic application to Finagle services (Part &frac12;)</a></li>
+<li><a href="http://j.mp/Rv4TkG">See, always told you: testing is just a waste of time</a></li>
+<li><a href="http://j.mp/1nycnkm">Spring Java Configuration: Session timeout</a></li>
+<li><a href="http://ift.tt/1nCEI94">TDD Is Dead? Let’s Kill The Messenger Instead!</a></li>
+<li><a href="http://j.mp/1fYBsmi">The Journey From JEE to SPA</a></li>
+<li><a href="http://j.mp/1qeVD3N">Three-State Booleans in Java</a></li>
+<li><a href="http://j.mp/1jatiYx">Trees as graphs vs. Trees as data structures</a></li>
+<li><a href="http://j.mp/1o7T814">Welcome Stackdriver to Google Cloud Platform</a></li>
+<li><a href="http://ift.tt/14zgLpr">What every web developer must know about URL encoding</a></li>
+<li><a href="http://ift.tt/QVnQg4">What’s new in Server Density – Apr 2014</a></li>
+<li><a href="http://j.mp/1o7QLv7">When a bad day gets worse &ndash; getting hacked twice in one day</a></li>
+<li><a href="http://j.mp/1nZNLB0">Why you should not work extra hours</a></li>
+</ol>
+
+
+<h3>Comics</h3>
+
+<ol>
+<li><a href="http://j.mp/1slajKc">Cyanide &amp; Happiness #3550</a></li>
+<li><a href="http://j.mp/RDUpzx">Billion-Story Building | What if?</a></li>
+<li><a href="http://j.mp/1oGbUds">Google Announcement | XKCD</a></li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Reading List 2014-May-05]]></title>
+    <link href="http://uthark.github.io/blog/2014/05/05/reading-list-2014-may-05/"/>
+    <updated>2014-05-05T16:03:09-04:00</updated>
+    <id>http://uthark.github.io/blog/2014/05/05/reading-list-2014-may-05</id>
+    <content type="html"><![CDATA[<h3>Announcements</h3>
+
+<ol>
+<li><a href="http://j.mp/1uqGOL8">Groovy 2.3.0 is out!</a></li>
+</ol>
+
+
+<h3>General</h3>
+
+<ol>
+<li><a href="http://j.mp/1fIpDQR">A Eulogy for Twitter | Adrienne LaFrance and Robinson Meyer</a></li>
+<li><a href="http://j.mp/1ohnyLu">How a hoax turned into the biggest Dutch crowdfunding success in history</a></li>
+</ol>
+
+
+<h3>Software development</h3>
+
+<ol>
+<li><a href="http://j.mp/1nYC0ec">Analyzing a large JSON in memory</a></li>
+<li><a href="http://parquet.io/">Columnar Storage for Hadoop</a></li>
+<li><a href="http://j.mp/1lPzwMZ">How could Scala do a merge sort?</a></li>
+<li><a href="http://j.mp/1uq3fQq">Load inheritance tree into List by Spring</a></li>
+<li><a href="http://j.mp/1q73SyF">xkcd Phone | xkcd</a></li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Reading List 2014-May-02]]></title>
+    <link href="http://uthark.github.io/blog/2014/05/02/reading-list-2014-may-02/"/>
+    <updated>2014-05-02T15:04:32-04:00</updated>
+    <id>http://uthark.github.io/blog/2014/05/02/reading-list-2014-may-02</id>
+    <content type="html"><![CDATA[<ol>
+<li><a href="http://j.mp/1pUf1mz">10 Features in Java 8 You Haven&rsquo;t Heard Of</a></li>
+<li><a href="http://j.mp/1iQUcnc">69 Spring Interview Questions and Answers &ndash; The ULTIMATE List</a></li>
+<li><a href="http://xkcd.com/761/">DFS | XKCD</a></li>
+<li><a href="http://j.mp/1nKjypt">Domain Name Health Checks for Route 53</a></li>
+<li><a href="http://j.mp/1lHqOQQ">Feature Preview: Docker-Based Development Environments</a></li>
+<li><a href="http://j.mp/1fykvid">OOM relation to vm.swappiness=0 in new kernel</a></li>
+<li><a href="http://j.mp/1nOClAa">Places to hook into Liferay from OSGi</a></li>
+<li><a href="http://j.mp/R8GBwo">Wikis: now with more love</a></li>
+<li><a href="http://j.mp/1i5AD5m">You can program bug free</a></li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Reading List 2014-May-01]]></title>
+    <link href="http://uthark.github.io/blog/2014/05/01/reading-list-2014-may-01/"/>
+    <updated>2014-05-01T16:20:16-04:00</updated>
+    <id>http://uthark.github.io/blog/2014/05/01/reading-list-2014-may-01</id>
+    <content type="html"><![CDATA[<h3>Announcements</h3>
+
+<ol>
+<li><a href="http://j.mp/1nKjAOg">New Release: Java Micro Edition (ME) 8</a></li>
+<li><a href="http://j.mp/1jkSFFn">Spring Framework 4.0.4 released</a></li>
+<li><a href="http://j.mp/1nMxsaI">Spring Integration 4.0 Released</a></li>
+<li><a href="http://j.mp/SaRzCK">New mobile apps for Docs, Sheets and Slides &ndash; work offline and on the go</a></li>
+</ol>
+
+
+<h3>Software development</h3>
+
+<ol>
+<li><a href="http://j.mp/R7oKpK">Java Me Embedded Documentation</a></li>
+<li><a href="http://j.mp/1u5sPtV">Manifest Merger</a></li>
+<li><a href="http://j.mp/R49GcO">Recent File List | JavaSpecialists.eu</a></li>
+<li><a href="http://j.mp/1nMCWCl">Small and Medium tests should never fail in Continuous Integration ( CI )</a></li>
+<li><a href="http://j.mp/1iHAo0s">Spring 4.1&rsquo;s Upcoming JMS Improvements</a></li>
+<li><a href="http://j.mp/1iDIzL8">Spring Boot and Scala with sbt as the build tool</a></li>
+<li><a href="http://j.mp/1jkSHNM">Spring Integration &ndash; Configure web service client timeout</a></li>
+<li><a href="http://j.mp/Sb04h1">Subscribe to Web Content folders and types (structures)</a></li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Reading List 2014-April-30]]></title>
+    <link href="http://uthark.github.io/blog/2014/04/30/reading-list-2014-april-30/"/>
+    <updated>2014-04-30T13:32:16-04:00</updated>
+    <id>http://uthark.github.io/blog/2014/04/30/reading-list-2014-april-30</id>
+    <content type="html"><![CDATA[<h3>Announcements</h3>
+
+<ol>
+<li><a href="http://j.mp/1u2oyYb">Gradle 1.12 released</a></li>
+<li><a href="http://j.mp/1rMGrrK">Gradle 1.12 Release Notes</a></li>
+</ol>
+
+
+<h3>Software development</h3>
+
+<ol>
+<li><a href="http://j.mp/1lRiUlT">Accelerate development of complex applications and Android mobile clients with Ravello on Google Compute Engine</a></li>
+<li><a href="http://j.mp/1mVzQcz">Android tricks</a></li>
+<li><a href="http://j.mp/1iIqu2X">Design Your Agile Project, Part 4</a></li>
+<li><a href="http://j.mp/1ifyau0">Fe[26]</a></li>
+<li><a href="http://j.mp/1nMv2pD">Groovy Goodness: Customize ToString Creation</a></li>
+<li><a href="http://j.mp/1nMv1SI">Groovy Goodness: Define Compilation Customizers With Builder Syntax</a></li>
+<li><a href="http://j.mp/1iirsOP">Here&rsquo;s a 1300 Year Old Solution to Resilience &ndash; Rebuild, Rebuild, Rebuild</a></li>
+<li><a href="http://j.mp/1iirh66">Higher Availability, Increased Scale and Enhanced Security on Apache HBase</a></li>
+<li><a href="http://j.mp/1fcEUJO">How I Tackle a Big Writing Project</a></li>
+<li><a href="http://j.mp/1mENa7y">Make magic with Ruby DSLs</a></li>
+<li><a href="http://j.mp/1mzY77Z">New Physical Phenomenon on Nanowires Seen for the First Time</a></li>
+<li><a href="http://j.mp/1lTbBdx">Non Functional Requirements should be sticky: Usability, Performance and Capacity</a></li>
+<li><a href="http://j.mp/1jGPsOb">Reporting Metrics to Apache Kafka and Monitoring with Consumers</a></li>
+<li><a href="http://j.mp/1mzY3oH">Should you be working at a startup?</a></li>
+<li><a href="http://j.mp/1fcETWg">Social Processes And Heartbleed, Part 2</a></li>
+<li><a href="http://j.mp/1jGPohp">The anatomy of Connection Pooling</a></li>
+<li><a href="http://j.mp/1lMQXQF">What Can Men Do?</a></li>
+</ol>
+
+]]></content>
+  </entry>
+  
+</feed>

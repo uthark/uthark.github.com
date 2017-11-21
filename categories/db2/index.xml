@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Db2 on Software Development and related activities</title>
+    <link>https://uthark.github.io/categories/db2/</link>
+    <description>Recent content in Db2 on Software Development and related activities</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 05 Mar 2014 14:41:54 +0000</lastBuildDate>
+    
+	<atom:link href="https://uthark.github.io/categories/db2/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Solving issue with DB2 on VMWare Fusion on MacBook Pro 2013 Late</title>
+      <link>https://uthark.github.io/2014/03/05/solving-issue-with-db2-on-vmware-fusion-on-macbook-pro-2013-late/</link>
+      <pubDate>Wed, 05 Mar 2014 14:41:54 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/05/solving-issue-with-db2-on-vmware-fusion-on-macbook-pro-2013-late/</guid>
+      <description>Today I found issue running DB2 10.1 under VMWare Fusion 6.0.2 on my MacBook - all management services for db2 are starting except for the db2 instance itself.
+When I tried to start DB2 using db2start it just crashed without any additional information.
+After some googling I found out that it is due to the fact that current version of DB2 can&amp;rsquo;t handle more than 4 responses to CPUID query.</description>
+    </item>
+    
+  </channel>
+</rss>

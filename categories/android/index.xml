@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Android on Software Development and related activities</title>
+    <link>https://uthark.github.io/categories/android/</link>
+    <description>Recent content in Android on Software Development and related activities</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 06 Mar 2014 22:38:54 +0000</lastBuildDate>
+    
+	<atom:link href="https://uthark.github.io/categories/android/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Limiting threads count for GreenRobot EventBus</title>
+      <link>https://uthark.github.io/2014/03/06/limiting-threads-count-for-greenrobot-eventbus/</link>
+      <pubDate>Thu, 06 Mar 2014 22:38:54 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/06/limiting-threads-count-for-greenrobot-eventbus/</guid>
+      <description>In one of my projects I used EventBus library. The library is pretty cool and I would recommend everybody to use it.
+But I found one small issue with this library - in case you send too many events very fast (i.e. more than 1000 per second) you may face issue with application crash due to inability to create new thread.
+The problem is lying in the used ExecutorService:
+package de.</description>
+    </item>
+    
+    <item>
+      <title>Using custom font in Android TextView</title>
+      <link>https://uthark.github.io/2014/03/06/customizing-font-in-android-textview/</link>
+      <pubDate>Thu, 06 Mar 2014 19:13:17 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/06/customizing-font-in-android-textview/</guid>
+      <description>Today I want to share with you custom TextView which allows to set font to be used in xml layout.
+First, we need to declare our custom styleable
+attrs.xml:
+&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt; &amp;lt;resources&amp;gt; &amp;lt;declare-styleable name=&amp;#34;TypefaceTextView&amp;#34;&amp;gt; &amp;lt;attr name=&amp;#34;typeface&amp;#34; format=&amp;#34;string&amp;#34;/&amp;gt; &amp;lt;/declare-styleable&amp;gt; &amp;lt;/resources&amp;gt; Then we need to create subclass of TextView which will use custom attribute.
+TypefaceTextView:
+public class TypefaceTextView extends TextView { public TypefaceTextView(Context context) { this(context, null); } public TypefaceTextView(Context context, AttributeSet attrs) { this(context, attrs, 0); } public TypefaceTextView(Context context, AttributeSet attrs, int defStyle) { super(context, attrs, defStyle); TypedArray ta = context.</description>
+    </item>
+    
+    <item>
+      <title>Lyne Game</title>
+      <link>https://uthark.github.io/2014/03/02/lyne-game/</link>
+      <pubDate>Sun, 02 Mar 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/02/lyne-game/</guid>
+      <description>Found very addictive and cool game: Lyne.
+The goal of the game is to connect all dots on the playboard. Worth every cent.
+LYNE (Playboard) | LYNE (Play Store)</description>
+    </item>
+    
+    <item>
+      <title>Сокращаем ссылки на андроиде</title>
+      <link>https://uthark.github.io/2010/12/06/blog-post/</link>
+      <pubDate>Mon, 06 Dec 2010 23:11:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2010/12/06/blog-post/</guid>
+      <description>ВступлениеВстала передо мной задача - сокращать ссылки перед тем, как отправлять их в Twitter. Для решения этой задачи я решил использовать bit.ly, благо, их API внятный и простой. Программируем!Решение нарисовалось в виде следующего класса: import org.apache.http.HttpEntity; import org.apache.http.HttpResponse; import org.apache.http.NameValuePair; import org.apache.http.client.ClientProtocolException; import org.apache.http.client.methods.HttpGet; import org.apache.http.client.utils.URIUtils; import org.apache.http.client.utils.URLEncodedUtils; import org.apache.http.impl.client.DefaultHttpClient; import org.apache.http.message.BasicNameValuePair; import org.apache.http.util.EntityUtils; import org.json.JSONException; import org.json.JSONObject; import android.util.Log; import java.io.IOException; import java.net.URI; import java.net.URISyntaxException; import java.util.ArrayList; import java.util.List; /** * Helper class to work with bitly.</description>
+    </item>
+    
+  </channel>
+</rss>

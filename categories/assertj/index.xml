@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Assertj on Software Development and related activities</title>
+    <link>https://uthark.github.io/categories/assertj/</link>
+    <description>Recent content in Assertj on Software Development and related activities</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 15 Apr 2014 23:37:49 +0000</lastBuildDate>
+    
+	<atom:link href="https://uthark.github.io/categories/assertj/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Using AssertJ</title>
+      <link>https://uthark.github.io/2014/04/15/using-assertj/</link>
+      <pubDate>Tue, 15 Apr 2014 23:37:49 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/04/15/using-assertj/</guid>
+      <description>AssertJ is a library which provides fluent strongly-typed assertions to use in unit tests.
+Example of assertions written with AssertJ:
+import io.github.uthark.blog.assertj.Assertions.assertThat; // ... within @Test User result = userDao.findByLogin(&amp;#34;username&amp;#34;); assertThat(result). isNotNull(). isActive(). hasLogin(&amp;#34;username&amp;#34;); As you can see assertions look much more readable. The integration of assertj into Maven project is very easy:
+ Update pom.xml in parent module  &amp;lt;properties&amp;gt; &amp;lt;assertj-core.version&amp;gt;1.6.0&amp;lt;/assertj-core.version&amp;gt; &amp;lt;assertj-assertions-generator-maven-plugin.version&amp;gt;1.2.0&amp;lt;/assertj-assertions-generator-maven-plugin.version&amp;gt; &amp;lt;/properties&amp;gt; &amp;lt;dependencyManagement&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.assertj&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;assertj-core&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;${assertj-core.version}&amp;lt;/version&amp;gt; &amp;lt;scope&amp;gt;test&amp;lt;/scope&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;/dependencyManagement&amp;gt; &amp;lt;pluginManagement&amp;gt; &amp;lt;plugin&amp;gt; &amp;lt;groupId&amp;gt;org.</description>
+    </item>
+    
+  </channel>
+</rss>

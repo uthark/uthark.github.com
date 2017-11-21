@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+
+  
+  
+  <link href="//fonts.googleapis.com/css?family=Anonymous+Pro" rel="stylesheet" type="text/css">
+  
+
+  
+  <title>Software Development and related activities</title>
+
+  
+  
+  <link rel="stylesheet" href="https://uthark.github.io/css/hugo-octopress.css">
+
+  
+  
+
+  
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
+  
+  <link href="https://uthark.github.io/favicon.png" rel="icon">
+
+  
+  
+  
+
+  <link href="https://uthark.github.io/index.xml" rel="alternate" type="application/rss+xml" title="Software Development and related activities" />
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <meta name="author" content="Oleg Atamanenko">
+
+  
+  <meta name="generator" content="Hugo 0.31" />
+
+  
+  
+
+</head>
+<body>
+
+
+<header role="banner"><hgroup>
+  
+  <h1><a href="https://uthark.github.io/">Software Development and related activities</a></h1>
+    <h2></h2>
+</hgroup></header>
+
+
+<nav role="navigation">
+
+<ul class="main-navigation">
+  
+  
+    
+      <li><a href="https://uthark.github.io/" title="Home">Home</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/categories/article/" title="Articles" >Articles</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/categories/reading-list/" title="Reading List" >Reading List</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/about/" title="About me" >About me</a></li>
+    
+  
+</ul>
+
+
+<ul class="subscription">
+  
+    
+        <a href="https://uthark.github.io/index.xml" target="_blank" type="application/rss+xml" title="RSS"><i class="fa fa-rss-square fa-lg"></i></a>
+    
+  
+
+</ul>
+
+
+<form action="https://www.google.com/search" method="get" target="_blank">
+  <fieldset role="search">
+  	<input class="search" type="text" name="q" results="0" placeholder="Search"/>
+    <input type="hidden" name="q" value="site:https://uthark.github.io/" />
+  </fieldset>
+</form>
+
+</nav>
+
+
+<div id="main">
+ <div id="content">
+  <div class="blog-index">
+    
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2014/03/01/google-plus-comments-fixed/">Fixed Google&#43; comments on the site</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>Fixed google+ comments disappearing on the site.</p>
+
+<p>Thanks to <a href="http://blog.code-infection.com/2013/04/google-comments-on-your-none-blogger.html">this blog post</a></p>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2013/06/29/spring-enable-annotation/">Пишем @Enable*-аннотацию для Spring</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>Начиная с версии 3.1 Spring поддерживает декларативное включение необходимой функциональности через, так называемые, <code>@Enable*</code> аннотации. Пример таких аннотаций:
+<a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/web/servlet/config/annotation/EnableWebMvc.html"><code>org.springframework.web.servlet.config.annotation.EnableWebMvc</code></a>, <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/cache/annotation/EnableCaching.html"><code>org.springframework.cache.annotation.EnableCaching</code></a>, <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/scheduling/annotation/EnableAsync.html"><code>org.springframework.scheduling.annotation.EnableAsync</code></a> и другие.</p>
+
+<p>В продолжение темы <a href="/blog/2013/06/28/jaxrs-spring-autowiring/">прошлого поста</a>, я хочу показать, как можно добавить собственную <code>@Enable</code> аннотацию.</p>
+
+<p>Для автоматического создания клиента для REST-ресурса нам необходима следующая информация:</p>
+
+<ol>
+<li>Пакет, в котором искать интерфейсы, проаннотированные аннотацией <a href="https://jax-rs-spec.java.net/nonav/2.0/apidocs/javax/ws/rs/Path.html"><code>@Path()</code></a></li>
+<li>Базовый адрес REST-приложения.</li>
+</ol>
+
+<p>Для того, чтобы передать эту информацию, мы создадим два атрибута в аннотации: <code>scanPackage()</code> и <code>endpoint()</code></p>
+
+<p>Кроме того, для обработки аннотации необходимо указать обработчик. Это можно сделать передав подкласс <a href="http://static.springsource.org/spring-framework/docs/3.2.x/javadoc-api/org/springframework/context/annotation/ImportBeanDefinitionRegistrar.html"><code>org.springframework.context.annotation.ImportBeanDefinitionRegistrar</code></a> через аннотацию <a href="http://static.springsource.org/spring-framework/docs/3.2.x/javadoc-api/org/springframework/context/annotation/Import.html"><code>@Import</code></a></p>
+
+<p>Пишем аннотацию:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Target</span><span style="color:#f92672">(</span>ElementType<span style="color:#f92672">.</span><span style="color:#a6e22e">TYPE</span><span style="color:#f92672">)</span>
+<span style="color:#a6e22e">@Retention</span><span style="color:#f92672">(</span>RetentionPolicy<span style="color:#f92672">.</span><span style="color:#a6e22e">RUNTIME</span><span style="color:#f92672">)</span>
+<span style="color:#a6e22e">@Documented</span>
+<span style="color:#a6e22e">@Inherited</span>
+<span style="color:#a6e22e">@Import</span><span style="color:#f92672">(</span>JaxRsRestClientRegistrar<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">)</span>
+<span style="color:#66d9ef">public</span> <span style="color:#a6e22e">@interface</span> EnableJaxRsRestClient <span style="color:#f92672">{</span>
+
+    String <span style="color:#a6e22e">scanPackage</span><span style="color:#f92672">();</span>
+
+    String <span style="color:#a6e22e">endpoint</span><span style="color:#f92672">();</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>Теперь осталось написать реализацию интерфейса <code>org.springframework.context.annotation.ImportBeanDefinitionRegistrar</code>. Так как у нас уже есть написанный ранее <a href="http://static.springsource.org/spring-framework/docs/3.2.x/javadoc-api/org/springframework/beans/factory/config/BeanFactoryPostProcessor.html">BeanFactoryPostProcessor</a> в виде <code>RestClientPostProcessor</code>, реализация интерфейса будет простой - мы создадим описание бина для Spring и зарегистрируем его в реестре бинов.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">JaxRsRestClientRegistrar</span> <span style="color:#66d9ef">implements</span> ImportBeanDefinitionRegistrar <span style="color:#f92672">{</span>
+
+    <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> String PROPERTY_ENDPOINT <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;endpoint&#34;</span><span style="color:#f92672">;</span>
+
+    <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> String PROPERTY_SCAN_PACKAGE <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;basePackage&#34;</span><span style="color:#f92672">;</span>
+
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">registerBeanDefinitions</span><span style="color:#f92672">(</span>AnnotationMetadata importingClassMetadata<span style="color:#f92672">,</span> BeanDefinitionRegistry registry<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        EnableJaxRsRestClient annotation <span style="color:#f92672">=</span>
+                <span style="color:#f92672">(</span>EnableJaxRsRestClient<span style="color:#f92672">)</span> <span style="color:#f92672">((</span>StandardClassMetadata<span style="color:#f92672">)</span> importingClassMetadata<span style="color:#f92672">).</span><span style="color:#a6e22e">getIntrospectedClass</span><span style="color:#f92672">()</span>
+                        <span style="color:#f92672">.</span><span style="color:#a6e22e">getAnnotation</span><span style="color:#f92672">(</span>EnableJaxRsRestClient<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
+        String scanPackage <span style="color:#f92672">=</span> annotation<span style="color:#f92672">.</span><span style="color:#a6e22e">scanPackage</span><span style="color:#f92672">();</span>
+        String endpoint <span style="color:#f92672">=</span> annotation<span style="color:#f92672">.</span><span style="color:#a6e22e">endpoint</span><span style="color:#f92672">();</span>
+
+        GenericBeanDefinition beanDefinition <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> GenericBeanDefinition<span style="color:#f92672">();</span>
+        beanDefinition<span style="color:#f92672">.</span><span style="color:#a6e22e">setAbstract</span><span style="color:#f92672">(</span><span style="color:#66d9ef">false</span><span style="color:#f92672">);</span>
+        beanDefinition<span style="color:#f92672">.</span><span style="color:#a6e22e">setBeanClass</span><span style="color:#f92672">(</span>RestClientPostProcessor<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
+        MutablePropertyValues propertyValues <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> MutablePropertyValues<span style="color:#f92672">();</span>
+        propertyValues<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>PROPERTY_ENDPOINT<span style="color:#f92672">,</span> endpoint<span style="color:#f92672">);</span>
+        propertyValues<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>PROPERTY_SCAN_PACKAGE<span style="color:#f92672">,</span> scanPackage<span style="color:#f92672">);</span>
+        beanDefinition<span style="color:#f92672">.</span><span style="color:#a6e22e">setPropertyValues</span><span style="color:#f92672">(</span>propertyValues<span style="color:#f92672">);</span>
+
+        registry<span style="color:#f92672">.</span><span style="color:#a6e22e">registerBeanDefinition</span><span style="color:#f92672">(</span>ClassUtils<span style="color:#f92672">.</span><span style="color:#a6e22e">getShortName</span><span style="color:#f92672">(</span>getClass<span style="color:#f92672">()),</span> beanDefinition<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>Теперь мы можем использовать аннотацию:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Configuration</span>
+<span style="color:#a6e22e">@EnableJaxRsRestClient</span><span style="color:#f92672">(</span>scanPackage <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&lt;base package&gt;&#34;</span><span style="color:#f92672">,</span> endpoint <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;${remote.rest.endpoint}&#34;</span><span style="color:#f92672">)</span>
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TestAutowiringConfiguration</span> <span style="color:#f92672">{</span>
+
+    <span style="color:#a6e22e">@Bean</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> PropertyPlaceholderConfigurer <span style="color:#a6e22e">configurer</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        PropertyPlaceholderConfigurer pph <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> PropertyPlaceholderConfigurer<span style="color:#f92672">();</span>
+        pph<span style="color:#f92672">.</span><span style="color:#a6e22e">setLocation</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> ClassPathResource<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;application.properties&#34;</span><span style="color:#f92672">));</span>
+        <span style="color:#66d9ef">return</span> pph<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+
+<span style="color:#f92672">}</span></code></pre></div>
+<p>Обратите внимание, что endpoint можно передавать с использованием подстановочных свойств.</p>
+
+<p>На этом всё, если есть вопросы - <a href="https://plus.google.com/112372998073079463630/posts">спрашивайте в Google+</a></p>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2013/06/28/jaxrs-spring-autowiring/">@Autowired JAX-RS Client API</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>Продолжая разговор о <a href="http://www.jcp.org/en/jsr/detail?id=339">JAX RS</a> <a href="https://jax-rs-spec.java.net/nonav/2.0/apidocs/javax/ws/rs/client/package-summary.html">Client API</a> - предположим, что мы уже <a href="/blog/2013/06/28/jaxrs/">используем JAX-RS клиент</a></p>
+
+<p>У нас есть класс, который умеет создавать прокси для любого REST-интерфейса в проекте. Теперь мы хотим сделать так, чтобы эти интерфейсы можно было автоматически создавать в контексте Spring и связывать с другими бинами.</p>
+
+<p>Первое решение, которое приходит в лоб - объявить бин в конфигурации для каждого интерфейса:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Configuration</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SpringConfiguration</span> <span style="color:#f92672">{</span>
+    <span style="color:#a6e22e">@Bean</span>
+    <span style="color:#66d9ef">public</span> UserRest <span style="color:#a6e22e">userRest</span><span style="color:#f92672">(){</span>
+        List<span style="color:#f92672">&lt;?&gt;</span> providers <span style="color:#f92672">=</span> Arrays<span style="color:#f92672">.</span><span style="color:#a6e22e">asList</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> JsonMessageHandler<span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> ObjectMapper<span style="color:#f92672">()));</span>
+        <span style="color:#66d9ef">return</span> JAXRSClientFactory<span style="color:#f92672">.</span><span style="color:#a6e22e">create</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;http://localhost:8080&#34;</span><span style="color:#f92672">,</span> UserRest<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">,</span> providers<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>Написав объявление нескольких таких бинов можно задуматься - &ldquo;Есть ли способ проще?&rdquo;.</p>
+
+<p>Есть, и я вам сейчас его покажу.</p>
+
+<p>Для того, чтобы добавлять собственные бины в Spring контекст, мы воспользуемся возможностью расширения Spring контекста с использованием <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/beans/factory/config/BeanFactoryPostProcessor.html"><code>BeanFactoryPostProcessor</code></a>.
+Метод <code>postProcessBeanFactory</code> данного класса позволяет выполнить дополнительную обработку фабрики бинов Spring, например, удалить, добавить, переопределить бин.
+Это именно то, что нам нужно - автоматически добавить новые бины в фабрику.</p>
+
+<p>Итак, что нам нужно сделать:</p>
+
+<ol>
+<li>Найти все доступные REST интерфейсы в текущем classpath.</li>
+<li>Для каждого из них создать прокси с использованием <code>JAXRSClientFactory</code> .</li>
+<li>Зарегистрировать каждый прокси в фабрике бинов для дальнейшего использования (например, для @Autowired).</li>
+</ol>
+
+<p>По спецификации JAX-RS, чтобы класс распознавался как REST-ресурс, у него должна быть аннотация <a href="https://jax-rs-spec.java.net/nonav/2.0/apidocs/javax/ws/rs/Path.html"><code>@Path()</code></a>.</p>
+
+<p>Для поиска всех возможных классов/интерфейсов воспользуемся классом <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/context/annotation/ClassPathScanningCandidateComponentProvider.html"><code>ClassPathScanningCandidateComponentProvider</code></a>, который умеет сканировать классы в выбранном пакете и применять фильтры, чтобы собрать только нужные. Также нам нужно учесть, что по умолчанию <code>ClassPathScanningCandidateComponentProvider</code> пытается определить, может ли найденный класс быть и бином (например, проверяет, что это не абстрактный класс и не интерфейс), поэтому нам нужно написать подкласс, который позволит нам работать с интерфейсами.</p>
+
+<p>Пишем класс:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">RestClientPostProcessor</span> <span style="color:#66d9ef">implements</span> BeanFactoryPostProcessor <span style="color:#f92672">{</span>
+
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> Logger LOGGER <span style="color:#f92672">=</span> LoggerFactory<span style="color:#f92672">.</span><span style="color:#a6e22e">getLogger</span><span style="color:#f92672">(</span>RestClientPostProcessor<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
+
+    <span style="color:#66d9ef">protected</span> String endpoint <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;http://localhost:8080&#34;</span><span style="color:#f92672">;</span>
+
+    <span style="color:#66d9ef">private</span> Class<span style="color:#f92672">&lt;?</span> <span style="color:#66d9ef">extends</span> Annotation<span style="color:#f92672">&gt;</span> requiredAnnotation <span style="color:#f92672">=</span> Path<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">;</span>
+
+    <span style="color:#66d9ef">private</span> String basePackage <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&lt;base package&gt;&#34;</span><span style="color:#f92672">;</span>
+
+    <span style="color:#66d9ef">private</span> ObjectMapper objectMapper<span style="color:#f92672">;</span>
+
+    <span style="color:#75715e">// getters/setters omitted.
+</span><span style="color:#75715e"></span>
+    <span style="color:#66d9ef">protected</span> Object <span style="color:#a6e22e">createBean</span><span style="color:#f92672">(</span>Class<span style="color:#f92672">&lt;?&gt;</span> clazz<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        List<span style="color:#f92672">&lt;?&gt;</span> providers <span style="color:#f92672">=</span> Arrays<span style="color:#f92672">.</span><span style="color:#a6e22e">asList</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> JsonMessageHandler<span style="color:#f92672">(</span>objectMapper<span style="color:#f92672">));</span>
+        <span style="color:#66d9ef">return</span> JAXRSClientFactory<span style="color:#f92672">.</span><span style="color:#a6e22e">create</span><span style="color:#f92672">(</span>endpoint<span style="color:#f92672">,</span> clazz<span style="color:#f92672">,</span> providers<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#a6e22e">@Override</span> 
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">postProcessBeanFactory</span><span style="color:#f92672">(</span>ConfigurableListableBeanFactory beanFactory<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> BeansException <span style="color:#f92672">{</span>
+
+        ClassPathScanningCandidateComponentProvider provider <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ClasspathScanner<span style="color:#f92672">();</span>
+        provider<span style="color:#f92672">.</span><span style="color:#a6e22e">addIncludeFilter</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> AnnotationTypeFilter<span style="color:#f92672">(</span>requiredAnnotation<span style="color:#f92672">));</span>
+        Set<span style="color:#f92672">&lt;</span>BeanDefinition<span style="color:#f92672">&gt;</span> components <span style="color:#f92672">=</span> provider<span style="color:#f92672">.</span><span style="color:#a6e22e">findCandidateComponents</span><span style="color:#f92672">(</span>basePackage<span style="color:#f92672">);</span>
+
+        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>BeanDefinition component <span style="color:#f92672">:</span> components<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            createAndRegisterBean<span style="color:#f92672">(</span>beanFactory<span style="color:#f92672">,</span> component<span style="color:#f92672">);</span>
+
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">createAndRegisterBean</span><span style="color:#f92672">(</span>ConfigurableListableBeanFactory beanFactory<span style="color:#f92672">,</span> BeanDefinition component<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+            String beanClassName <span style="color:#f92672">=</span> component<span style="color:#f92672">.</span><span style="color:#a6e22e">getBeanClassName</span><span style="color:#f92672">();</span>
+            Class<span style="color:#f92672">&lt;?&gt;</span> clazz <span style="color:#f92672">=</span> Class<span style="color:#f92672">.</span><span style="color:#a6e22e">forName</span><span style="color:#f92672">(</span>beanClassName<span style="color:#f92672">);</span>
+
+            Object o <span style="color:#f92672">=</span> createBean<span style="color:#f92672">(</span>clazz<span style="color:#f92672">);</span>
+
+            beanFactory<span style="color:#f92672">.</span><span style="color:#a6e22e">registerResolvableDependency</span><span style="color:#f92672">(</span>clazz<span style="color:#f92672">,</span> o<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>ClassNotFoundException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            LOGGER<span style="color:#f92672">.</span><span style="color:#a6e22e">warn</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Unable to find class: {}&#34;</span><span style="color:#f92672">,</span> component<span style="color:#f92672">.</span><span style="color:#a6e22e">getBeanClassName</span><span style="color:#f92672">(),</span> e<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ClasspathScanner</span> <span style="color:#66d9ef">extends</span> ClassPathScanningCandidateComponentProvider <span style="color:#f92672">{</span>
+
+        <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">ClasspathScanner</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">super</span><span style="color:#f92672">(</span><span style="color:#66d9ef">false</span><span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+
+        <span style="color:#a6e22e">@Override</span> <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">isCandidateComponent</span><span style="color:#f92672">(</span>AnnotatedBeanDefinition beanDefinition<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#75715e">// override this method, because our classes are interfaces, by default interfaces are
+</span><span style="color:#75715e"></span>            <span style="color:#75715e">// not allowed.
+</span><span style="color:#75715e"></span>            <span style="color:#66d9ef">return</span> beanDefinition<span style="color:#f92672">.</span><span style="color:#a6e22e">getMetadata</span><span style="color:#f92672">().</span><span style="color:#a6e22e">isIndependent</span><span style="color:#f92672">();</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>Теперь этот процессор необходимо зарегистрировать в контексте Spring:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Configuration</span>
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TestAutowiringConfiguration</span> <span style="color:#f92672">{</span>
+
+    <span style="color:#a6e22e">@Bean</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> RestClientPostProcessor <span style="color:#a6e22e">autowiringRestApiProcessor</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> RestClientPostProcessor<span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>И теперь можно использовать <code>UserRest</code> как обычный бин:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">    <span style="color:#a6e22e">@Autowired</span>
+    <span style="color:#66d9ef">private</span> UserShowRest userShowRest<span style="color:#f92672">;</span></code></pre></div>
+<p>Если есть вопросы - <a href="https://plus.google.com/112372998073079463630/posts">спрашивайте в Google+</a></p>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2013/06/28/jaxrs/">JAX-RS Client API</a>
+    </h1>
+
+</header>
+
+
+        
+        <p><a href="http://jcp.org/en/jsr/detail?id=339">JAX-RS</a> - набор Java API для работы с REST сервисами. Существует несколько реализаций, <a href="/blog/2012/02/08/java-rest/">о которых я уже писал раньше</a>.</p>
+
+<p>Предположим, что проект А выставляет наружу REST API, который мы хотим использовать в проекте Б. Очевидно, что сразу возникает вопрос - можно ли переиспользовать классы модели и интерфейс в другом проекте. Ответ - да, можно. Client API, появившийся в JAX RS 2.0, упрощает реализацию клиента, но это всё равно не самый оптимальный вариант.</p>
+
+<p>Есть более интересный способ - в замечательной библиотеке <a href="http://cxf.apache.org/">Apache CXF</a> есть класс <a href="http://cxf.apache.org/javadoc/latest/org/apache/cxf/jaxrs/client/JAXRSClientFactory.html"><code>org.apache.cxf.jaxrs.client.JAXRSClientFactory</code></a>, который позволяет автоматически получать прокси-клиент для работы с сервером.</p>
+
+<p>К сожалению, у меня не получилось завести его с JSON без JAXB - Проблема с Generic Collections - <a href="http://cxf.apache.org/javadoc/latest/org/apache/cxf/jaxrs/provider/json/JSONProvider.html"><code>org.apache.cxf.jaxrs.provider.json.JSONProvider</code></a> подразумевает, что в проекте используется JAXB, с помощью которого у нас проаннотирована модель. Поэтому пришлось написать собственную реализацию <a href="http://docs.oracle.com/javaee/6/api/javax/ws/rs/ext/MessageBodyReader.html"><code>javax.ws.rs.ext.MessageBodyReader&lt;T&gt;</code></a> и <a href="http://docs.oracle.com/javaee/6/api/javax/ws/rs/ext/MessageBodyWriter.html">javax.ws.rs.ext.MessageBodyWriter<T></a>.</p>
+
+<p>Основная проблема при работе с JSON - это то, что, в общем случае, у нас нет информации об используемых типах данных, а вкупе с тем, что в  Java Generics реализованы с <a href="http://docs.oracle.com/javase/tutorial/java/generics/erasure.html">Type Erasure</a> - ситуация усугубляется, если не предпринять каких-то действий.</p>
+
+<p>Для реализации чтения будем использовать <a href="http://jackson.codehaus.org/Home">Jackson Java JSON-processor</a> и его возможности <a href="http://fasterxml.github.io/jackson-databind/javadoc/2.2.0/com/fasterxml/jackson/databind/type/TypeFactory.html"><code>com.fasterxml.jackson.databind.type.TypeFactory</code></a></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">JsonMessageHandler</span> <span style="color:#66d9ef">implements</span> MessageBodyReader<span style="color:#f92672">&lt;</span>Object<span style="color:#f92672">&gt;,</span> MessageBodyWriter<span style="color:#f92672">&lt;</span>Object<span style="color:#f92672">&gt;</span> <span style="color:#f92672">{</span>
+
+    <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">final</span> ObjectMapper mapper<span style="color:#f92672">;</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">JsonMessageHandler</span><span style="color:#f92672">(</span>ObjectMapper mapper<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">mapper</span> <span style="color:#f92672">=</span> mapper<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">isReadable</span><span style="color:#f92672">(</span>Class<span style="color:#f92672">&lt;?&gt;</span> type<span style="color:#f92672">,</span> Type genericType<span style="color:#f92672">,</span> Annotation<span style="color:#f92672">[]</span> annotations<span style="color:#f92672">,</span> MediaType mediaType<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">public</span> Object <span style="color:#a6e22e">readFrom</span><span style="color:#f92672">(</span>Class<span style="color:#f92672">&lt;</span>Object<span style="color:#f92672">&gt;</span> type<span style="color:#f92672">,</span> Type genericType<span style="color:#f92672">,</span> Annotation<span style="color:#f92672">[]</span> annotations<span style="color:#f92672">,</span> MediaType mediaType<span style="color:#f92672">,</span> MultivaluedMap<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">,</span> String<span style="color:#f92672">&gt;</span> httpHeaders<span style="color:#f92672">,</span> InputStream entityStream<span style="color:#f92672">)</span>
+            <span style="color:#66d9ef">throws</span> IOException<span style="color:#f92672">,</span> WebApplicationException <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>genericType <span style="color:#66d9ef">instanceof</span> ParameterizedType<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>Collection<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">.</span><span style="color:#a6e22e">isAssignableFrom</span><span style="color:#f92672">(</span>type<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+                CollectionType collectionType <span style="color:#f92672">=</span> resolveCollectionType<span style="color:#f92672">(</span>type<span style="color:#f92672">,</span> <span style="color:#f92672">(</span>ParameterizedType<span style="color:#f92672">)</span> genericType<span style="color:#f92672">);</span>
+                <span style="color:#66d9ef">return</span> mapper<span style="color:#f92672">.</span><span style="color:#a6e22e">readValue</span><span style="color:#f92672">(</span>entityStream<span style="color:#f92672">,</span> collectionType<span style="color:#f92672">);</span>
+            <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>Map<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">.</span><span style="color:#a6e22e">isAssignableFrom</span><span style="color:#f92672">(</span>type<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+                MapType mapType <span style="color:#f92672">=</span> resolveMapType<span style="color:#f92672">(</span>type<span style="color:#f92672">,</span> <span style="color:#f92672">(</span>ParameterizedType<span style="color:#f92672">)</span> genericType<span style="color:#f92672">);</span>
+                <span style="color:#66d9ef">return</span> mapper<span style="color:#f92672">.</span><span style="color:#a6e22e">readValue</span><span style="color:#f92672">(</span>entityStream<span style="color:#f92672">,</span> mapType<span style="color:#f92672">);</span>
+            <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+                Type<span style="color:#f92672">[]</span> actualTypeArguments <span style="color:#f92672">=</span> <span style="color:#f92672">((</span>ParameterizedType<span style="color:#f92672">)</span> genericType<span style="color:#f92672">).</span><span style="color:#a6e22e">getActualTypeArguments</span><span style="color:#f92672">();</span>
+                Class<span style="color:#f92672">[]</span> typeArgs <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Class<span style="color:#f92672">[</span>actualTypeArguments<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">];</span>
+                <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;</span> actualTypeArguments<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">;</span> i<span style="color:#f92672">++)</span> <span style="color:#f92672">{</span>
+                    Type actualTypeArgument <span style="color:#f92672">=</span> actualTypeArguments<span style="color:#f92672">[</span>i<span style="color:#f92672">];</span>
+                    typeArgs<span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>Class<span style="color:#f92672">)</span> actualTypeArgument<span style="color:#f92672">;</span>
+                <span style="color:#f92672">}</span>
+                JavaType javaType <span style="color:#f92672">=</span>
+                        TypeFactory<span style="color:#f92672">.</span><span style="color:#a6e22e">defaultInstance</span><span style="color:#f92672">().</span><span style="color:#a6e22e">constructParametricType</span><span style="color:#f92672">(</span>type<span style="color:#f92672">,</span> typeArgs<span style="color:#f92672">);</span>
+                <span style="color:#66d9ef">return</span> mapper<span style="color:#f92672">.</span><span style="color:#a6e22e">readValue</span><span style="color:#f92672">(</span>entityStream<span style="color:#f92672">,</span> javaType<span style="color:#f92672">);</span>
+            <span style="color:#f92672">}</span>
+
+        <span style="color:#f92672">}</span>
+
+        <span style="color:#66d9ef">return</span> mapper<span style="color:#f92672">.</span><span style="color:#a6e22e">readValue</span><span style="color:#f92672">(</span>entityStream<span style="color:#f92672">,</span> type<span style="color:#f92672">);</span>
+
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">private</span> MapType <span style="color:#a6e22e">resolveMapType</span><span style="color:#f92672">(</span>Class<span style="color:#f92672">&lt;</span>Object<span style="color:#f92672">&gt;</span> type<span style="color:#f92672">,</span> ParameterizedType genericType<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        Type<span style="color:#f92672">[]</span> args <span style="color:#f92672">=</span> genericType<span style="color:#f92672">.</span><span style="color:#a6e22e">getActualTypeArguments</span><span style="color:#f92672">();</span>
+        Class<span style="color:#f92672">&lt;?</span> <span style="color:#66d9ef">extends</span> Map<span style="color:#f92672">&gt;</span> mapClass <span style="color:#f92672">=</span> type<span style="color:#f92672">.</span><span style="color:#a6e22e">asSubclass</span><span style="color:#f92672">(</span>Map<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">return</span> TypeFactory<span style="color:#f92672">.</span><span style="color:#a6e22e">defaultInstance</span><span style="color:#f92672">().</span><span style="color:#a6e22e">constructMapType</span><span style="color:#f92672">(</span>mapClass<span style="color:#f92672">,</span> <span style="color:#f92672">(</span>Class<span style="color:#f92672">)</span> args<span style="color:#f92672">[</span>0<span style="color:#f92672">],</span> <span style="color:#f92672">(</span>Class<span style="color:#f92672">)</span> args<span style="color:#f92672">[</span>1<span style="color:#f92672">]);</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">private</span> CollectionType <span style="color:#a6e22e">resolveCollectionType</span><span style="color:#f92672">(</span>Class<span style="color:#f92672">&lt;</span>Object<span style="color:#f92672">&gt;</span> type<span style="color:#f92672">,</span> ParameterizedType genericType<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        Type type1 <span style="color:#f92672">=</span> genericType<span style="color:#f92672">.</span><span style="color:#a6e22e">getActualTypeArguments</span><span style="color:#f92672">()[</span>0<span style="color:#f92672">];</span>
+        Class<span style="color:#f92672">&lt;?</span> <span style="color:#66d9ef">extends</span> Collection<span style="color:#f92672">&gt;</span> collectionClass <span style="color:#f92672">=</span> type<span style="color:#f92672">.</span><span style="color:#a6e22e">asSubclass</span><span style="color:#f92672">(</span>Collection<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">return</span> TypeFactory<span style="color:#f92672">.</span><span style="color:#a6e22e">defaultInstance</span><span style="color:#f92672">().</span><span style="color:#a6e22e">constructCollectionType</span><span style="color:#f92672">(</span>collectionClass<span style="color:#f92672">,</span> <span style="color:#f92672">(</span>Class<span style="color:#f92672">)</span> type1<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">isWriteable</span><span style="color:#f92672">(</span>Class<span style="color:#f92672">&lt;?&gt;</span> type<span style="color:#f92672">,</span> Type genericType<span style="color:#f92672">,</span> Annotation<span style="color:#f92672">[]</span> annotations<span style="color:#f92672">,</span> MediaType mediaType<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">long</span> <span style="color:#a6e22e">getSize</span><span style="color:#f92672">(</span>Object o<span style="color:#f92672">,</span> Class<span style="color:#f92672">&lt;?&gt;</span> type<span style="color:#f92672">,</span> Type genericType<span style="color:#f92672">,</span> Annotation<span style="color:#f92672">[]</span> annotations<span style="color:#f92672">,</span> MediaType mediaType<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span>1L<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">writeTo</span><span style="color:#f92672">(</span>Object o<span style="color:#f92672">,</span> Class<span style="color:#f92672">&lt;?&gt;</span> type<span style="color:#f92672">,</span> Type genericType<span style="color:#f92672">,</span> Annotation<span style="color:#f92672">[]</span> annotations<span style="color:#f92672">,</span> MediaType mediaType<span style="color:#f92672">,</span> MultivaluedMap<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">,</span> Object<span style="color:#f92672">&gt;</span> httpHeaders<span style="color:#f92672">,</span> OutputStream entityStream<span style="color:#f92672">)</span>
+            <span style="color:#66d9ef">throws</span> IOException<span style="color:#f92672">,</span> WebApplicationException <span style="color:#f92672">{</span>
+        mapper<span style="color:#f92672">.</span><span style="color:#a6e22e">writeValue</span><span style="color:#f92672">(</span>entityStream<span style="color:#f92672">,</span> o<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>Основной код класса сосредоточен в методе <code>readFrom</code>, который определяет типизацию класса и создаёт необходимый подкласс <code>com.fasterxml.jackson.databind.JavaType</code>, который будет использован во время десериализации.</p>
+
+<p>Теперь мы можем создать клиента следующим образом:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">List<span style="color:#f92672">&lt;?&gt;</span> providers <span style="color:#f92672">=</span> Arrays<span style="color:#f92672">.</span><span style="color:#a6e22e">asList</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> JsonMessageHandler<span style="color:#f92672">(</span>objectMapper<span style="color:#f92672">));</span>
+UserRest userRest <span style="color:#f92672">=</span> JAXRSClientFactory<span style="color:#f92672">.</span><span style="color:#a6e22e">create</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;http://localhost:8080&#34;</span><span style="color:#f92672">,</span> UserRest<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">,</span> providers<span style="color:#f92672">);</span>
+
+<span style="color:#75715e">// usage:
+</span><span style="color:#75715e"></span>User user <span style="color:#f92672">=</span> userRest<span style="color:#f92672">.</span><span style="color:#a6e22e">findByLogin</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;uthark&#34;</span><span style="color:#f92672">);</span></code></pre></div>
+<p>Когда вызывается метод <code>findByLogin</code> под капотом создаётся HTTP Request, дёргается сервер и полученный ответ десериализуется. От конечного пользотеля детали реализации API скрыты.</p>
+
+<p>В <a href="/blog/2013/06/28/jaxrs-spring-autowiring/">следующем посте</a> описано, как автоматически добавить полученные прокси в фабрику бинов Spring для дальнейшего использования.</p>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2013/06/19/autowiring-factorybean/">@Autowiring EJBs with Spring</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>Предположим, что у нас есть проект на Spring, в котором необходимо использовать внешние EJB. Для получения бинов необходимо создавать <a href="http://docs.oracle.com/javase/6/docs/api/javax/naming/InitialContext.html">InitialContext</a> и делать <code>lookup()</code> нужных ejb. Но эту задачу можно автоматизировать и пользоваться <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/beans/factory/annotation/Autowired.html">@Autowired</a>, то есть код будет выглядеть вот так:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Service</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">UserService</span> <span style="color:#f92672">{</span>
+
+  <span style="color:#a6e22e">@Autowired</span>
+  <span style="color:#66d9ef">private</span> UserRemoteBean userRemoteBean<span style="color:#f92672">;</span>
+
+<span style="color:#f92672">}</span></code></pre></div>
+<p>Для этого в Spring существует <a href="http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/htmlsingle/#beans-factory-extension-factorybean">FactoryBean</a> - класс, который знает, как создавать бины нужного типа. Собственно, нам необходимо написать такой класс (код на <a href="http://www.scala-lang.org/">Scala</a>):</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-scala" data-lang="scala"><span style="color:#a6e22e">@Component</span>
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">UserRemoteBeanFactoryBean</span> <span style="color:#66d9ef">extends</span> <span style="color:#a6e22e">FactoryBean</span><span style="color:#f92672">[</span><span style="color:#66d9ef">UserRemoteBean</span><span style="color:#f92672">]</span> <span style="color:#f92672">{</span>
+
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">ACCESS_BEAN_REMOTE_NAME</span><span style="color:#66d9ef">:</span> <span style="color:#66d9ef">String</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;our ejb name.&#34;</span>
+
+  <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">val</span> log<span style="color:#66d9ef">:</span> <span style="color:#66d9ef">Logger</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">LoggerFactory</span><span style="color:#f92672">.</span>getLogger<span style="color:#f92672">(</span>getObjectType<span style="color:#f92672">)</span>
+
+  <span style="color:#66d9ef">var</span> ctx<span style="color:#66d9ef">:</span> <span style="color:#66d9ef">Context</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>
+
+  <span style="color:#66d9ef">def</span> getObject<span style="color:#66d9ef">:</span> <span style="color:#66d9ef">UserRemoteBean</span> <span style="color:#f92672">=</span> <span style="color:#f92672">{</span>
+    log<span style="color:#f92672">.</span>debug<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Requesting new instance of {}&#34;</span><span style="color:#f92672">,</span> getObjectType<span style="color:#f92672">)</span>
+
+    <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+      ctx<span style="color:#f92672">.</span>lookup<span style="color:#f92672">(</span><span style="color:#a6e22e">ACCESS_BEAN_REMOTE_NAME</span><span style="color:#f92672">).</span>asInstanceOf<span style="color:#f92672">[</span><span style="color:#66d9ef">UserRemoteBean</span><span style="color:#f92672">]</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#66d9ef">catch</span> <span style="color:#f92672">{</span>
+      <span style="color:#66d9ef">case</span> e<span style="color:#66d9ef">:</span> <span style="color:#66d9ef">NamingException</span> <span style="color:#f92672">=&gt;</span> <span style="color:#f92672">{</span>
+        log<span style="color:#f92672">.</span>error<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Unable to get ejb: {}&#34;</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">Array</span><span style="color:#f92672">[</span><span style="color:#66d9ef">AnyRef</span><span style="color:#f92672">](</span>e<span style="color:#f92672">.</span>getMessage<span style="color:#f92672">,</span> e<span style="color:#f92672">)</span><span style="color:#66d9ef">:</span> <span style="color:#66d9ef">_</span><span style="color:#66d9ef">*</span><span style="color:#f92672">)</span>
+        <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">RuntimeException</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Unable to get UserRemoteBean bean &#34;</span> <span style="color:#f92672">+</span> e<span style="color:#f92672">.</span>getMessage<span style="color:#f92672">,</span> e<span style="color:#f92672">)</span>
+      <span style="color:#f92672">}</span>
+
+    <span style="color:#f92672">}</span>
+  <span style="color:#f92672">}</span>
+
+  <span style="color:#a6e22e">@PostConstruct</span>
+  <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">def</span> init<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">val</span> jndiProperties<span style="color:#66d9ef">:</span> <span style="color:#66d9ef">Hashtable</span><span style="color:#f92672">[</span><span style="color:#66d9ef">String</span>, <span style="color:#66d9ef">Object</span><span style="color:#f92672">]</span> <span style="color:#66d9ef">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Hashtable</span><span style="color:#f92672">[</span><span style="color:#66d9ef">String</span>, <span style="color:#66d9ef">Object</span><span style="color:#f92672">]</span>
+    jndiProperties<span style="color:#f92672">.</span>put<span style="color:#f92672">(</span><span style="color:#a6e22e">Context</span><span style="color:#f92672">.</span><span style="color:#a6e22e">URL_PKG_PREFIXES</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;org.jboss.ejb.client.naming&#34;</span><span style="color:#f92672">)</span>
+    jndiProperties<span style="color:#f92672">.</span>put<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;jboss.naming.client.ejb.context&#34;</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">new</span> java<span style="color:#f92672">.</span>lang<span style="color:#f92672">.</span><span style="color:#a6e22e">Boolean</span><span style="color:#f92672">(</span><span style="color:#66d9ef">true</span><span style="color:#f92672">))</span>
+    <span style="color:#66d9ef">try</span>
+      ctx <span style="color:#66d9ef">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">InitialContext</span><span style="color:#f92672">(</span>jndiProperties<span style="color:#f92672">)</span>
+    <span style="color:#66d9ef">catch</span> <span style="color:#f92672">{</span>
+      <span style="color:#66d9ef">case</span> e<span style="color:#66d9ef">:</span> <span style="color:#66d9ef">NamingException</span> <span style="color:#f92672">=&gt;</span> log<span style="color:#f92672">.</span>error<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Unable to create JNDI Context: {}&#34;</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">Array</span><span style="color:#f92672">[</span><span style="color:#66d9ef">AnyRef</span><span style="color:#f92672">](</span>e<span style="color:#f92672">.</span>getMessage<span style="color:#f92672">,</span> e<span style="color:#f92672">)</span><span style="color:#66d9ef">:</span> <span style="color:#66d9ef">_</span><span style="color:#66d9ef">*</span><span style="color:#f92672">)</span>
+    <span style="color:#f92672">}</span>
+  <span style="color:#f92672">}</span>
+
+  <span style="color:#66d9ef">def</span> isSingleton<span style="color:#66d9ef">:</span> <span style="color:#66d9ef">Boolean</span> <span style="color:#f92672">=</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">false</span>
+  <span style="color:#f92672">}</span>
+
+  <span style="color:#66d9ef">def</span> getObjectType<span style="color:#66d9ef">:</span> <span style="color:#66d9ef">Class</span><span style="color:#f92672">[</span><span style="color:#66d9ef">_</span><span style="color:#f92672">]</span> <span style="color:#66d9ef">=</span> classOf<span style="color:#f92672">[</span><span style="color:#66d9ef">UserRemoteBean</span><span style="color:#f92672">]</span>
+<span style="color:#f92672">}</span></code></pre></div>
+        
+
+    </article>
+    
+    
+    
+
+
+
+
+<div class="pagination">
+
+    
+        
+        
+        
+        <a href="/" aria-label="First" class="label-pagination"><i class="fa fa-angle-double-left fa-lg"></i></a>
+    
+
+    
+    
+        <a href="/page/13/" aria-label="Previous" class="label-pagination"><i class="fa fa-angle-left fa-lg"></i></a>
+    
+
+    
+        <a href="/" class="label-pagination">1</a>
+    
+        <a href="/page/2/" class="label-pagination">2</a>
+    
+        <a href="/page/3/" class="label-pagination">3</a>
+    
+        <a href="/page/4/" class="label-pagination">4</a>
+    
+        <a href="/page/5/" class="label-pagination">5</a>
+    
+        <a href="/page/6/" class="label-pagination">6</a>
+    
+        <a href="/page/7/" class="label-pagination">7</a>
+    
+        <a href="/page/8/" class="label-pagination">8</a>
+    
+        <a href="/page/9/" class="label-pagination">9</a>
+    
+        <a href="/page/10/" class="label-pagination">10</a>
+    
+        <a href="/page/11/" class="label-pagination">11</a>
+    
+        <a href="/page/12/" class="label-pagination">12</a>
+    
+        <a href="/page/13/" class="label-pagination">13</a>
+    
+        <a href="/page/14/" class="label-pagination">14</a>
+    
+        <a href="/page/15/" class="label-pagination">15</a>
+    
+        <a href="/page/16/" class="label-pagination">16</a>
+    
+        <a href="/page/17/" class="label-pagination">17</a>
+    
+        <a href="/page/18/" class="label-pagination">18</a>
+    
+        <a href="/page/19/" class="label-pagination">19</a>
+    
+        <a href="/page/20/" class="label-pagination">20</a>
+    
+        <a href="/page/21/" class="label-pagination">21</a>
+    
+        <a href="/page/22/" class="label-pagination">22</a>
+    
+        <a href="/page/23/" class="label-pagination">23</a>
+    
+        <a href="/page/24/" class="label-pagination">24</a>
+    
+        <a href="/page/25/" class="label-pagination">25</a>
+    
+        <a href="/page/26/" class="label-pagination">26</a>
+    
+
+    
+    
+        <a href="/page/15/" aria-label="Next" class="label-pagination"><i class="fa fa-angle-right fa-lg"></i></a>
+    
+
+    
+    
+        <a href="/page/26/" aria-label="Last"><i class="fa fa-angle-double-right fa-lg"></i></a>
+    
+
+</div>
+
+  
+
+  </div>
+
+  
+
+<aside class="sidebar thirds">
+  <section class="first odd">
+
+    
+
+    <p>
+      
+    </p>
+  </section>
+
+
+
+
+
+  
+
+  
+
+  
+  
+  
+
+</aside>
+    
+ </div>
+</div>
+
+<footer role="contentinfo">
+    
+    <div class="center">
+        <ul class="sidebar-nav">
+            <li class="sidebar-nav-item">
+                <a target="_blank" href="https://github.com/uthark/" title="https://github.com/uthark/"><i
+                    class="fa fa-github fa-3x"></i></a></li>
+            <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
+                    class="fa fa-bitbucket fa-3x"></i></a>
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item"><a target="_blank" href="https://twitter.com/LinkageError/" title="https://twitter.com/LinkageError/"><i
+                    class="fa fa-twitter fa-3x"></i></a>
+            <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
+                    class="fa fa-key fa-3x"></i></a> 
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item"><a target="_blank" href="http://stackoverflow.com/users/216764/uthark" title="http://stackoverflow.com/users/216764/uthark"><i
+                    class="fa fa-stack-overflow fa-3x"></i></a>
+            <li class="sidebar-nav-item"><a target="_blank" href="https://plus.google.com/&#43;OlegAtamanenko" title="https://plus.google.com/&#43;OlegAtamanenko"><i
+                    class="fa fa-google-plus fa-3x"></i></a>
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item">
+                
+                
+            </li>
+        </ul>
+    </div>
+    <p>Copyright &copy; 2017 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+        <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a> and
+            <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.
+    </p>
+
+</footer>
+
+
+</body>
+</html>
+   

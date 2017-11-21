@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Reflectionassert on Software Development and related activities</title>
+    <link>https://uthark.github.io/categories/reflectionassert/</link>
+    <description>Recent content in Reflectionassert on Software Development and related activities</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 16 Apr 2014 00:10:10 +0000</lastBuildDate>
+    
+	<atom:link href="https://uthark.github.io/categories/reflectionassert/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Using Unitils ReflectionAssert</title>
+      <link>https://uthark.github.io/2014/04/16/using-unitils-reflectionassert/</link>
+      <pubDate>Wed, 16 Apr 2014 00:10:10 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/04/16/using-unitils-reflectionassert/</guid>
+      <description>Often it is needed to compare two different instances of the class inside test. I.e. we save object into database, then fetch it back from db and we want to be sure if nothing was lost during saving/reading.
+In order to make such assertions more easier and maintainable one can use great Unitils library which has useful class ReflectionAssert
+First, update parent&amp;rsquo;s pom.xml:
+&amp;lt;properties&amp;gt; &amp;lt;unitils.version&amp;gt;3.4&amp;lt;/unitils.version&amp;gt; &amp;lt;/properties&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.unitils&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;unitils-core&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;${unitils.version}&amp;lt;/version&amp;gt; &amp;lt;scope&amp;gt;test&amp;lt;/scope&amp;gt; &amp;lt;/dependency&amp;gt; Then add dependency to the child module:</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+
+  
+  
+  <link href="//fonts.googleapis.com/css?family=Anonymous+Pro" rel="stylesheet" type="text/css">
+  
+
+  
+  <title>Software Development and related activities</title>
+
+  
+  
+  <link rel="stylesheet" href="https://uthark.github.io/css/hugo-octopress.css">
+
+  
+  
+
+  
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
+  
+  <link href="https://uthark.github.io/favicon.png" rel="icon">
+
+  
+  
+  
+
+  <link href="https://uthark.github.io/index.xml" rel="alternate" type="application/rss+xml" title="Software Development and related activities" />
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <meta name="author" content="Oleg Atamanenko">
+
+  
+  <meta name="generator" content="Hugo 0.31" />
+
+  
+  
+
+</head>
+<body>
+
+
+<header role="banner"><hgroup>
+  
+  <h1><a href="https://uthark.github.io/">Software Development and related activities</a></h1>
+    <h2></h2>
+</hgroup></header>
+
+
+<nav role="navigation">
+
+<ul class="main-navigation">
+  
+  
+    
+      <li><a href="https://uthark.github.io/" title="Home">Home</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/categories/article/" title="Articles" >Articles</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/categories/reading-list/" title="Reading List" >Reading List</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/about/" title="About me" >About me</a></li>
+    
+  
+</ul>
+
+
+<ul class="subscription">
+  
+    
+        <a href="https://uthark.github.io/index.xml" target="_blank" type="application/rss+xml" title="RSS"><i class="fa fa-rss-square fa-lg"></i></a>
+    
+  
+
+</ul>
+
+
+<form action="https://www.google.com/search" method="get" target="_blank">
+  <fieldset role="search">
+  	<input class="search" type="text" name="q" results="0" placeholder="Search"/>
+    <input type="hidden" name="q" value="site:https://uthark.github.io/" />
+  </fieldset>
+</form>
+
+</nav>
+
+
+<div id="main">
+ <div id="content">
+  <div class="blog-index">
+    
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2010/02/05/blog-post/">Вложенные транзакции в базах данных</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>Summary: Некоторые особенности вложенных транзакций.<br />
+<br />
+Иногда бывает так, что при обработке запроса необходимо открыть ещё одну транзакцию в рамках текущей транзакции. Это называется вложенной транзакцией. <br />
+<br />
+Очень многие базы данных не поддерживают вложенные транзакции вообще, например, MySQL и Oracle. А те, что поддерживают, делают это на минимальном уровне, например, Sybase поддерживает только псевдовложенные транзакции.<br />
+<br />
+Вложенные транзакции могут быть следующих видов:<br />
+<br />
+<ol><li>Псевдо-вложенные транзакции</li>
+<li>Вложенная субтранзакция</li>
+<li>Вложенная независимая транзакция</li>
+</ol><br />
+<h3>Псевдовложенные транзакции</h3><br />
+Этот тип транзакций поддерживается базой данных Sybase.<br />
+Псевдо-вложенные транзакции позволяют использовать транзакции одна внутри другой, при этом не реализуя механизм вложенных транзакций. Суть состоит в том, что имеется счётчик уровня вложенности транзакций, который увеличивается на 1 при каждом вызове <tt>BEGIN TRANSACTION</tt> и уменьшается на 1 при каждом вызове <tt>COMMIT</tt>. Когда счётчик становится равным 0 происходит коммит всех произведённых изменений.<br />
+<br />
+Если во время проведения транзакции происходит ошибка, то вызывается <tt>ROLLBACK</tt>, но здесь есть загвоздка - что делать с последующими вызовами <tt>BEGIN TRANSACTION</tt>  и <tt>COMMIT</tt>. Оптимальным решением является кидание исключения, но это необходимо отслеживать и учитывать на стадии проектирования и реализации, чтобы не возникло неприятных ситуаций при эксплуатации.<br />
+<br />
+Псевдовложенные транзакции являются самым простым способом реализации вложенных транзакций.<br />
+<br />
+Пример псевдотранзакции для базы данных Sybase:<br /></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">begin</span> tran
+    <span style="color:#66d9ef">select</span> <span style="color:#f92672">@@</span>trancount
+    <span style="color:#75715e">/* @@trancount = 1 */</span>
+    <span style="color:#66d9ef">begin</span> tran
+        <span style="color:#66d9ef">select</span> <span style="color:#f92672">@@</span>trancount
+        <span style="color:#75715e">/* @@trancount = 2 */</span>
+        <span style="color:#66d9ef">begin</span> tran
+            <span style="color:#66d9ef">select</span> <span style="color:#f92672">@@</span>trancount
+            <span style="color:#75715e">/* @@trancount = 3 */</span>
+        <span style="color:#66d9ef">commit</span> tran
+    <span style="color:#66d9ef">commit</span> tran
+<span style="color:#66d9ef">commit</span> tran
+<span style="color:#66d9ef">select</span> <span style="color:#f92672">@@</span>trancount
+<span style="color:#75715e">/* @@ trancount = 0 */</span></code></pre></div>
+<p><h3>Вложенная субтранзакция</h3><br />
+Данный вид вложенных транзакций решает проблему с обработкой ошибок при <tt>ROLLBACK</tt>. <br />
+При коммите вложенной транзакции происходит коммит, но он не обладает свойством <tt>Durability</tt> - окончательный результат зависит от результата внешней транзакции - если внешняя транзакция заканчивается успешно, то и результат внутренней транзакции также фиксируется. Если же при фиксации изменений внешней транзакции происходит ошибка, то внутренняя транзакция также откатывается. Кроме того, необходимо обратить внимание на то, что если внутренняя транзакция заканчивается неуспешно, то внешняя транзакция может закончиться успешно, если не выкинуть исключение наружу. Таким образом, для данного вида вложенных транзакций необходимо выкидывать исключение наружу, для того, чтобы прервать и откатить внешнюю транзакцию в случае ошибки.<br />
+<br />
+<h3>Вложенная независимая транзакция</h3>Особенность данного вида вложенных транзакций заключается в том, что после создания вложенной транзакции она является полностью независимой от транзакции, внутри которой она была создана. Её результаты фиксируются и откатываются независимо от внешней транзакции.<br />
+<br />
+<h3>Вложенные транзакции и принципы ACID</h3>Вложенные транзакции выглядят достаточно подозрительными в том смысле, что они могут нарушать принципы ACID: <br />
+1. Вложенная субтранзакция может нарушать принцип <tt>Durability</tt>, так как уже зафиксированные изменения могут откатиться в случае отката внешней транзакции.<br />
+2. Вложенная независимая транзакция может нарушать принципы <tt>Atomicity</tt> и <tt>Consistency</tt> при возникновении ошибок во внешней или вложенной транзакции.<br />
+<br />
+Подробнее о принципах <abbr title="Atomicity, Consistency, Isolation, Durability">ACID</abbr> можно прочитать в <a href="http://atamanenko.blogspot.com/2009/04/blog-post_24.html">этом посте</a>.<br />
+<br />
+<h3>Заключение</h3>Я считаю, что следует избегать ситуаций, когда нужны вложенные транзакции. Кроме того, спецификация Java EE <a href="http://java.sun.com/javaee/6/docs/api/javax/ejb/TransactionAttributeType.html">не поддерживает</a> вложенные транзакции.</p>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2009/12/14/autofs-nfs/">Настройка autofs для монтирования NFS-ресурсов</a>
+    </h1>
+
+</header>
+
+
+        
+        <div class='post'>
+Summary: В данной заметке описана настройка autofs для доступа к сетевым ресурсам, доступным по NFS.<br />
+<br />
+Последние несколько лет (с тех пор, как количество компьютеров дома стало больше одного) возникла проблема беспрепятственного доступа к данным, хранящимся на одном компьютере с другого.<br />
+<br />
+Было найдено самое простое решение - <a href="http://en.wikipedia.org/wiki/Network_File_System_(protocol)">NFS</a>.<br />
+<br />
+Как выяснилось позже это было не самое удачное решение - ноутбук не всегда находился дома, а, значит, домашние сетевые ресурсы не всегда доступны. Соответственно, при загрузке операционной системы происходили задержки из-за поиска компьютера с сетевыми ресурсами. Не очень удобно, но жить можно.<br />
+<br />
+Решил окончательно разобраться с этим и начал искать решение. Оно оказалось на поверхности и затронуло только клиента ресурсов, то есть ноутбук. Решение называется <tt><a href="http://www.autofs.org/">autofs</a></tt>.<br />
+<br />
+1. Устанавливаем <tt>autofs</tt>.<br />
+<pre class="brush: bash">sudo aptitude install autofs5 nfs-common
+</pre><br />
+2. Производим настройку.<br />
+Редактируем файл <tt>/etc/auto.master</tt>. Расскомментируем строку, содержащую строки <tt>/net -hosts</tt>:<br />
+<pre class="brush: bash">/net -hosts
++auto.master
+</pre><br />
+3. В файл <tt><a href="http://en.wikipedia.org/wiki/Hosts_file">/etc/hosts</a></tt> можно внести адреса серверов с NFS-ресурсами (для того, чтобы избежать <a href="http://en.wikipedia.org/wiki/Domain_Name_System">DNS</a>-запросов). В моём случае:<br />
+<pre class="brush: plain">192.168.18.1 server
+</pre><br />
+4. Перезапускаем сервис <tt>autofs</tt><br />
+<pre class="brush: plain">sudo service autofs restart
+</pre><br />
+5. Теперь открываем в файловом браузер адрес <tt>/net/server</tt> и видим его сетевые ресурсы, доступные для данного клиента.<br />
+<br />
+<div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/_y8p0_dtMJ38/SyZxDikTDxI/AAAAAAAAAvk/LTr3KsGATGk/s1600-h/Screenshot-media+-+administrilo+de+dosieroj.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/_y8p0_dtMJ38/SyZxDikTDxI/AAAAAAAAAvk/LTr3KsGATGk/s320/Screenshot-media+-+administrilo+de+dosieroj.png" /></a><br />
+</div><br />
+6. Пользуемся.</div>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2009/12/08/delicious-google-chrome/">Расширение для работы с Delicious доступно на сайте расширений Google Chrome</a>
+    </h1>
+
+</header>
+
+
+        
+        <div class='post'>
+Итак, <a href="code.google.com/p/chromium-delicious-extension/">расширение для работы с Delicious</a> доступно на <a href="https://chrome.google.com/extensions">сайте расширений Google Chrome</a>.<br />
+<br />
+<a href="https://chrome.google.com/extensions/detail/anlkjppofaicbdanhhpbbogknfodfhfm/">Посмотреть и установить</a><br />
+<br />
+Новые версии расширения буду закачить на этот сайт.</div>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2009/12/08/dropbox/">Использование Dropbox для хранения конфигурационных файлов</a>
+    </h1>
+
+</header>
+
+
+        
+        <div class='post'>
+Есть такой замечательный сервис - <a href="https://www.getdropbox.com/">Dropbox</a>. <br />
+<br />
+Этот сервис является онлайн-хранилищем ваших данных. Работает очень просто:<br />
+<br />
+1. Вы регистрируетесь в сервисе.<br />
+2. Устанавливаете клиент<br />
+3. Пользуетесь.<br />
+<br />
+Недавно я понял, что этот сервис можно легко и непринуждённо использовать не только для хранения различных документов и фотографий, а также и конфигурационных файлов приложений, что существенно упрощает жизнь, когда у вас несколько рабочих машин (например, у меня домашний компьютер, ноутбук, а также ещё и рабочий) - необходимо каким-то образом синхронизовать конфиги при изменении их на одной из машине с другими.<br />
+<br />
+Итак, что я сделал.<br />
+<br />
+Нижеприведённые действия я делал на одной машине:<br />
+1. Создал каталог <tt>ConfigFiles</tt><br />
+2. Переместил в него свои конфигурационные файлы (<tt>~/.zshrc</tt>, <tt>~/.zsh</tt>, <tt>~/.vimrc</tt>, <tt>~/.vim</tt>)<br />
+3. Из каталога Dropbox сделал соответствующие симлинки в домашнем каталоге.<br />
+<br />
+<div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/_y8p0_dtMJ38/Sx6K22h5KKI/AAAAAAAAAuU/DRIi7hO5oFw/s1600-h/Screenshot-Dropbox+-+administrilo+de+dosieroj.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/_y8p0_dtMJ38/Sx6K22h5KKI/AAAAAAAAAuU/DRIi7hO5oFw/s320/Screenshot-Dropbox+-+administrilo+de+dosieroj.png" /></a><br />
+</div><br />
+На каждой из машин<br />
+1. Удалил существовавшие конфигурационные файлы<br />
+2. Сделал симлинки файлов из Dropbox на соответствующие конфигурационные файлы.<br />
+<br />
+В случае с <a href="http://www.zsh.org/">ZSH</a> (впрочем, для любого другого шелла это тоже реализуется) есть ещё один приятный лайфхак - если на разных машинах должны быть немного разные конфиги (например, другая переменная PATH, CDPATH, то это тоже реализуется просто: <br />
+<br />
+Внесите в свой <tt>~/.zshrc</tt> следующий код.<br />
+<pre class="brush:bash;">LOCAL_ENVIRONMENT=~/.environment_`hostname`
+if [[ -a $LOCAL_ENVIRONMENT ]]
+then
+    source $LOCAL_ENVIRONMENT
+fi
+
+</pre><br />
+Теперь нужно создать в домашнем каталоге файл с локальной конфигурацией:<br />
+<pre class="brush:bash;">touch ~/.environment_`hostname`
+
+</pre><br />
+И внести в него конфигурацию, локальную для машины.<br />
+<br />
+Да, этот файл тоже может быть симлинком на файл из dropbox.<br />
+<br />
+P.S. Если вас заинтересовал сервис, то прошу вас регистироваться по <a href="https://www.dropbox.com/referrals/NTI4MDgzMjc5">реферальной ссылке</a>, тогда и вам и мне добавят +250 мегабайт бесплатно.<br />
+<br />
+P.P.S. Да, ещё забыл сказать, что сервис достаточно умный и отправляет дельты файлов во время синхронизации. Подробнее - <a href="https://www.dropbox.com/help/8">в официальной документации</a>.</div>
+<h2>Comments</h2>
+<div class='comments'>
+<div class='comment'>
+<div class='author'>kmmbvnr</div>
+<div class='content'>
+Да именно так и пользуюсь Dropbox&#39;ом, для хранения конфигов :)</div>
+</div>
+<div class='comment'>
+<div class='author'>uthark</div>
+<div class='content'>
+@karri Да, сложно вам. С другой стороны, в некоторых компаниях политика безопасности вообще запрещает подобные сервисы.</div>
+</div>
+<div class='comment'>
+<div class='author'>karri</div>
+<div class='content'>
+А у нас на работе тестерам не положен инет :&#39;(</div>
+</div>
+</div>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2009/12/07/rss_07/">Дайджест ссылок в RSS-ленте</a>
+    </h1>
+
+</header>
+
+
+        
+        <div class='post'>
+Решил убрать дайджест ссылок из RSS-ленты.<br />
+<br />
+Те, кому это нужно могут сделать следующее:<br />
+<br />
+1. Добавить в свой RSS-аггрегатор ленту <tt><a href="http://feeds.delicious.com/v2/rss/dark.schakal?count=15">http://feeds.delicious.com/v2/rss/dark.schakal?count=15</a></tt><br />
+2. Если вы используете сервис Delicious, то можете меня добавить меня в свою сеть по ссылке: <a href="http://delicious.com/settings/networkadd?networkadd=dark.schakal">http://delicious.com/settings/networkadd?networkadd=dark.schakal</a></div>
+
+        
+
+    </article>
+    
+    
+    
+
+
+
+
+<div class="pagination">
+
+    
+        
+        
+        
+        <a href="/" aria-label="First" class="label-pagination"><i class="fa fa-angle-double-left fa-lg"></i></a>
+    
+
+    
+    
+        <a href="/page/18/" aria-label="Previous" class="label-pagination"><i class="fa fa-angle-left fa-lg"></i></a>
+    
+
+    
+        <a href="/" class="label-pagination">1</a>
+    
+        <a href="/page/2/" class="label-pagination">2</a>
+    
+        <a href="/page/3/" class="label-pagination">3</a>
+    
+        <a href="/page/4/" class="label-pagination">4</a>
+    
+        <a href="/page/5/" class="label-pagination">5</a>
+    
+        <a href="/page/6/" class="label-pagination">6</a>
+    
+        <a href="/page/7/" class="label-pagination">7</a>
+    
+        <a href="/page/8/" class="label-pagination">8</a>
+    
+        <a href="/page/9/" class="label-pagination">9</a>
+    
+        <a href="/page/10/" class="label-pagination">10</a>
+    
+        <a href="/page/11/" class="label-pagination">11</a>
+    
+        <a href="/page/12/" class="label-pagination">12</a>
+    
+        <a href="/page/13/" class="label-pagination">13</a>
+    
+        <a href="/page/14/" class="label-pagination">14</a>
+    
+        <a href="/page/15/" class="label-pagination">15</a>
+    
+        <a href="/page/16/" class="label-pagination">16</a>
+    
+        <a href="/page/17/" class="label-pagination">17</a>
+    
+        <a href="/page/18/" class="label-pagination">18</a>
+    
+        <a href="/page/19/" class="label-pagination">19</a>
+    
+        <a href="/page/20/" class="label-pagination">20</a>
+    
+        <a href="/page/21/" class="label-pagination">21</a>
+    
+        <a href="/page/22/" class="label-pagination">22</a>
+    
+        <a href="/page/23/" class="label-pagination">23</a>
+    
+        <a href="/page/24/" class="label-pagination">24</a>
+    
+        <a href="/page/25/" class="label-pagination">25</a>
+    
+        <a href="/page/26/" class="label-pagination">26</a>
+    
+
+    
+    
+        <a href="/page/20/" aria-label="Next" class="label-pagination"><i class="fa fa-angle-right fa-lg"></i></a>
+    
+
+    
+    
+        <a href="/page/26/" aria-label="Last"><i class="fa fa-angle-double-right fa-lg"></i></a>
+    
+
+</div>
+
+  
+
+  </div>
+
+  
+
+<aside class="sidebar thirds">
+  <section class="first odd">
+
+    
+
+    <p>
+      
+    </p>
+  </section>
+
+
+
+
+
+  
+
+  
+
+  
+  
+  
+
+</aside>
+    
+ </div>
+</div>
+
+<footer role="contentinfo">
+    
+    <div class="center">
+        <ul class="sidebar-nav">
+            <li class="sidebar-nav-item">
+                <a target="_blank" href="https://github.com/uthark/" title="https://github.com/uthark/"><i
+                    class="fa fa-github fa-3x"></i></a></li>
+            <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
+                    class="fa fa-bitbucket fa-3x"></i></a>
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item"><a target="_blank" href="https://twitter.com/LinkageError/" title="https://twitter.com/LinkageError/"><i
+                    class="fa fa-twitter fa-3x"></i></a>
+            <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
+                    class="fa fa-key fa-3x"></i></a> 
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item"><a target="_blank" href="http://stackoverflow.com/users/216764/uthark" title="http://stackoverflow.com/users/216764/uthark"><i
+                    class="fa fa-stack-overflow fa-3x"></i></a>
+            <li class="sidebar-nav-item"><a target="_blank" href="https://plus.google.com/&#43;OlegAtamanenko" title="https://plus.google.com/&#43;OlegAtamanenko"><i
+                    class="fa fa-google-plus fa-3x"></i></a>
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item">
+                
+                
+            </li>
+        </ul>
+    </div>
+    <p>Copyright &copy; 2017 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+        <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a> and
+            <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.
+    </p>
+
+</footer>
+
+
+</body>
+</html>
+   

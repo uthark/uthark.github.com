@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: концерт | Software Development and related activities]]></title>
-  <link href="http://uthark.github.io/blog/categories/kontsiert/atom.xml" rel="self"/>
-  <link href="http://uthark.github.io/"/>
-  <updated>2017-10-12T19:01:44-04:00</updated>
-  <id>http://uthark.github.io/</id>
+  <title><![CDATA[Category: концерт | Блог о разработке ПО]]></title>
+  <link href="http://uthark.github.com/blog/categories/kontsiert/atom.xml" rel="self"/>
+  <link href="http://uthark.github.com/"/>
+  <updated>2013-06-29T23:40:55-04:00</updated>
+  <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Совок неистребим]]></title>
-    <link href="http://uthark.github.io/blog/2008/02/17/blog-post/"/>
-    <updated>2008-02-17T23:14:00+06:00</updated>
-    <id>http://uthark.github.io/blog/2008/02/17/blog-post</id>
+    <link href="http://uthark.github.com/blog/2008/02/17/blog-post/"/>
+    <updated>2008-02-17T12:14:00-05:00</updated>
+    <id>http://uthark.github.com/blog/2008/02/17/blog-post</id>
     <content type="html"><![CDATA[<div class='post'>
 Нет, в этой стране совок точно неистребим никакими путями.
 

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Tiddlywiki | Software Development and related activities]]></title>
-  <link href="http://uthark.github.io/blog/categories/tiddlywiki/atom.xml" rel="self"/>
-  <link href="http://uthark.github.io/"/>
-  <updated>2017-10-12T19:01:44-04:00</updated>
-  <id>http://uthark.github.io/</id>
+  <title><![CDATA[Category: tiddlywiki | Блог о разработке ПО]]></title>
+  <link href="http://uthark.github.com/blog/categories/tiddlywiki/atom.xml" rel="self"/>
+  <link href="http://uthark.github.com/"/>
+  <updated>2013-06-29T23:40:55-04:00</updated>
+  <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Разработка макроса для TiddlyWiki]]></title>
-    <link href="http://uthark.github.io/blog/2010/03/21/tiddlywiki/"/>
-    <updated>2010-03-21T20:54:00+06:00</updated>
-    <id>http://uthark.github.io/blog/2010/03/21/tiddlywiki</id>
+    <link href="http://uthark.github.com/blog/2010/03/21/tiddlywiki/"/>
+    <updated>2010-03-21T10:54:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2010/03/21/tiddlywiki</id>
     <content type="html"><![CDATA[<div class='post'>
 <p><b>Summary</b>: Пример разработки плагина для TiddlyWiki</p>
 <h4>Вступление</h4>

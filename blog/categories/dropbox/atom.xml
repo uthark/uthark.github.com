@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Dropbox | Software Development and related activities]]></title>
-  <link href="http://uthark.github.io/blog/categories/dropbox/atom.xml" rel="self"/>
-  <link href="http://uthark.github.io/"/>
-  <updated>2017-10-12T19:01:44-04:00</updated>
-  <id>http://uthark.github.io/</id>
+  <title><![CDATA[Category: dropbox | Блог о разработке ПО]]></title>
+  <link href="http://uthark.github.com/blog/categories/dropbox/atom.xml" rel="self"/>
+  <link href="http://uthark.github.com/"/>
+  <updated>2013-06-29T23:40:55-04:00</updated>
+  <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Использование Dropbox для хранения конфигурационных файлов]]></title>
-    <link href="http://uthark.github.io/blog/2009/12/08/dropbox/"/>
-    <updated>2009-12-08T23:17:00+06:00</updated>
-    <id>http://uthark.github.io/blog/2009/12/08/dropbox</id>
+    <link href="http://uthark.github.com/blog/2009/12/08/dropbox/"/>
+    <updated>2009-12-08T12:17:00-05:00</updated>
+    <id>http://uthark.github.com/blog/2009/12/08/dropbox</id>
     <content type="html"><![CDATA[<div class='post'>
 Есть такой замечательный сервис - <a href="https://www.getdropbox.com/">Dropbox</a>. <br />
 <br />

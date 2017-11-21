@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Siteupdate on Software Development and related activities</title>
+    <link>https://uthark.github.io/categories/siteupdate/</link>
+    <description>Recent content in Siteupdate on Software Development and related activities</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 01 Mar 2014 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://uthark.github.io/categories/siteupdate/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Fixed Google&#43; comments on the site</title>
+      <link>https://uthark.github.io/2014/03/01/google-plus-comments-fixed/</link>
+      <pubDate>Sat, 01 Mar 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/01/google-plus-comments-fixed/</guid>
+      <description>Fixed google+ comments disappearing on the site.
+Thanks to this blog post</description>
+    </item>
+    
+  </channel>
+</rss>

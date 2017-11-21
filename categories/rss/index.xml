@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rss on Software Development and related activities</title>
+    <link>https://uthark.github.io/categories/rss/</link>
+    <description>Recent content in Rss on Software Development and related activities</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 07 Dec 2009 19:25:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://uthark.github.io/categories/rss/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Дайджест ссылок в RSS-ленте</title>
+      <link>https://uthark.github.io/2009/12/07/rss_07/</link>
+      <pubDate>Mon, 07 Dec 2009 19:25:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/12/07/rss_07/</guid>
+      <description>Решил убрать дайджест ссылок из RSS-ленты.
+Те, кому это нужно могут сделать следующее:
+1. Добавить в свой RSS-аггрегатор ленту http://feeds.delicious.com/v2/rss/dark.schakal?count=15
+2. Если вы используете сервис Delicious, то можете меня добавить меня в свою сеть по ссылке: http://delicious.com/settings/networkadd?networkadd=dark.schakal </description>
+    </item>
+    
+  </channel>
+</rss>

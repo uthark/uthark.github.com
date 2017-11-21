@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Java on Software Development and related activities</title>
+    <link>https://uthark.github.io/categories/java/</link>
+    <description>Recent content in Java on Software Development and related activities</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 16 Apr 2014 00:10:10 +0000</lastBuildDate>
+    
+	<atom:link href="https://uthark.github.io/categories/java/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Using Unitils ReflectionAssert</title>
+      <link>https://uthark.github.io/2014/04/16/using-unitils-reflectionassert/</link>
+      <pubDate>Wed, 16 Apr 2014 00:10:10 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/04/16/using-unitils-reflectionassert/</guid>
+      <description>Often it is needed to compare two different instances of the class inside test. I.e. we save object into database, then fetch it back from db and we want to be sure if nothing was lost during saving/reading.
+In order to make such assertions more easier and maintainable one can use great Unitils library which has useful class ReflectionAssert
+First, update parent&amp;rsquo;s pom.xml:
+&amp;lt;properties&amp;gt; &amp;lt;unitils.version&amp;gt;3.4&amp;lt;/unitils.version&amp;gt; &amp;lt;/properties&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.unitils&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;unitils-core&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;${unitils.version}&amp;lt;/version&amp;gt; &amp;lt;scope&amp;gt;test&amp;lt;/scope&amp;gt; &amp;lt;/dependency&amp;gt; Then add dependency to the child module:</description>
+    </item>
+    
+    <item>
+      <title>Using AssertJ</title>
+      <link>https://uthark.github.io/2014/04/15/using-assertj/</link>
+      <pubDate>Tue, 15 Apr 2014 23:37:49 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/04/15/using-assertj/</guid>
+      <description>AssertJ is a library which provides fluent strongly-typed assertions to use in unit tests.
+Example of assertions written with AssertJ:
+import io.github.uthark.blog.assertj.Assertions.assertThat; // ... within @Test User result = userDao.findByLogin(&amp;#34;username&amp;#34;); assertThat(result). isNotNull(). isActive(). hasLogin(&amp;#34;username&amp;#34;); As you can see assertions look much more readable. The integration of assertj into Maven project is very easy:
+ Update pom.xml in parent module  &amp;lt;properties&amp;gt; &amp;lt;assertj-core.version&amp;gt;1.6.0&amp;lt;/assertj-core.version&amp;gt; &amp;lt;assertj-assertions-generator-maven-plugin.version&amp;gt;1.2.0&amp;lt;/assertj-assertions-generator-maven-plugin.version&amp;gt; &amp;lt;/properties&amp;gt; &amp;lt;dependencyManagement&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.assertj&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;assertj-core&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;${assertj-core.version}&amp;lt;/version&amp;gt; &amp;lt;scope&amp;gt;test&amp;lt;/scope&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;/dependencyManagement&amp;gt; &amp;lt;pluginManagement&amp;gt; &amp;lt;plugin&amp;gt; &amp;lt;groupId&amp;gt;org.</description>
+    </item>
+    
+    <item>
+      <title>Initializing Mockito @Mocks with JUnit @Rule</title>
+      <link>https://uthark.github.io/2014/03/28/initializing-at-mocks-with-junit-at-rule/</link>
+      <pubDate>Fri, 28 Mar 2014 13:24:45 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/28/initializing-at-mocks-with-junit-at-rule/</guid>
+      <description>In this post I will show how one can implement custom JUnit @Rule.
+As an example let&amp;rsquo;s take Mockito and implement custom rule which will initialize Mocks in test class.
+By default, Mockito provides the following methods of mock initialization:
+ Using Mockito.mock  Initialize mocks with Mockito.mock:
+public void FooTest { private Foo foo; @Before public void setUp() { FooDependency dep = Mockito.mock(FooDependency.class); foo = new Foo(dep); } } This is the simplest case.</description>
+    </item>
+    
+    <item>
+      <title>Automatic query modification with Spring Data Mongo</title>
+      <link>https://uthark.github.io/2014/03/01/restricting-mongo-template/</link>
+      <pubDate>Sat, 01 Mar 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/01/restricting-mongo-template/</guid>
+      <description>Introduction Today I want to show how one can automatically apply additional restrictions on MongoDB Queries with MongoTemplate or Spring Data Mongo.
+Implementation First, let&amp;rsquo;s introduce interface QueryModifier.
+import org.springframework.data.mongodb.core.query.Query; public interface QueryModifier { /** * Modifies source query according to the rules. * @param query Source query to modify. * @param collectionName name of the collection against which query will be executed. * @return Modified query. */ Query modify(Query query, String collectionName); } Implementations of this interface will pickup original query and modify it somehow.</description>
+    </item>
+    
+    <item>
+      <title>Собственная реализация методов в Spring Data JPA</title>
+      <link>https://uthark.github.io/2012/04/28/spring-data-jpa_28/</link>
+      <pubDate>Sat, 28 Apr 2012 15:03:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2012/04/28/spring-data-jpa_28/</guid>
+      <description>Очевидно, что мы не всегда можем воспользоваться автоматической генерацией кода, предоставляемой Spring Data JPA. Например, у нас слишком сложный запрос, или нам необходимо вызвать процедуру в базе данных, либо у нас сложная бизнес-логика.
+Рассмотрим следующий пример - например, нам нужна функциональность уникального счётчика, который мы решили реализовать с помощью последовательности (sequence).
+Сначала определим интерфейс, в котором опишем все методы, которые мы будем реализовывать самостоятельно. В нашем случае, это будет только один метод:</description>
+    </item>
+    
+    <item>
+      <title>Использование BeanPostProcessor на примере журналирования</title>
+      <link>https://uthark.github.io/2012/04/20/beanpostprocessor/</link>
+      <pubDate>Fri, 20 Apr 2012 15:51:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2012/04/20/beanpostprocessor/</guid>
+      <description>Сегодня я хочу рассказать, как можно сделать инициализацию логгера в классе с использованием аннотаций и BeanPostProcessor
+Очень часто мы инициализируем логгер следующим образом:
+public class MyClass { private static final Logger LOG = LoggerFactory.getLogger(MyClass.class); } &amp;lt;/pre&amp;gt; Я покажу, как сделать, чтобы можно было писать вот так: ```java @Log private Logger LOG; &amp;lt;/pre&amp;gt; Первым делом нам нужно объявить аннотацию: ```java @Retention(RUNTIME) @Target(FIELD) @Documented public @interface Log { String category() default &amp;#34;&amp;#34;; } &amp;lt;/pre&amp;gt; А вторым делом, написать собственный &amp;lt;tt&amp;gt;BeanPostProcessor&amp;lt;/tt&amp;gt;, который бы устанавливал нам логгер: ```java import org.</description>
+    </item>
+    
+    <item>
+      <title>Преобразуем строку в дату</title>
+      <link>https://uthark.github.io/2012/04/20/blog-post/</link>
+      <pubDate>Fri, 20 Apr 2012 15:25:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2012/04/20/blog-post/</guid>
+      <description>Казалось бы, есть простейшая задача - преобразовать строковое представление даты в объект класса java.util.Date.
+Как оказалось, иногда использование DateFormat не помогает. В случае, если строка - это заголовок Date из письма, то нам нужно использовать javax.mail.internet.MailDateFormat для преобразования такой строки.
+String dateStr = ... Date parsedDate = new MailDateFormat().</description>
+    </item>
+    
+    <item>
+      <title>Немного о виртуальных методах в Java</title>
+      <link>https://uthark.github.io/2011/07/21/java/</link>
+      <pubDate>Thu, 21 Jul 2011 12:06:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2011/07/21/java/</guid>
+      <description>Сегодня я хочу рассмотреть некоторые особенности переопределения методов в Java. В java нельзя переопределить: поля класса конструкторы, инициализаторы класса статические методы статические поля 
+Подробнее об этом можно прочитать в Java Language Specification, §8.4.8
+Итак, в java все нестатические неприватные (то есть, protected, package и public) методы являются виртуальными. Ключевое слово final запрещает возможность дальнейшего переопределения метода в подклассах. Рассмотрим следующий пример:
+public class A { int i = 3; int getI() {return i;} } public class B extends A{ int i = 5; int getI() {return i;} } A a = new B(); System.</description>
+    </item>
+    
+    <item>
+      <title>Удаление различных диакритических символов из строки</title>
+      <link>https://uthark.github.io/2010/05/22/blog-post/</link>
+      <pubDate>Sat, 22 May 2010 00:52:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2010/05/22/blog-post/</guid>
+      <description>Возникла проблема - каким образом заменить в строке символы из национальных кодировок на соответствующие им из латиницы.
+Например, из строки explicación получить explicacion.
+package com.blogspot.atamanenko; import java.text.Normalizer; import java.text.Normalizer.Form; public class StringNormalizer { public static String normalize(String string) { return Normalizer.normalize(string, Form.NFD) .replaceAll(&amp;#34;\\p{InCombiningDiacriticalMarks}+&amp;#34;, &amp;#34;&amp;#34;); } } Вызов Normalizer.normalize проводит нормализацию входной строки. Последующий вызов регулярного выражения удаляет все диакритические знаки, полученные после нормализации.</description>
+    </item>
+    
+    <item>
+      <title>Список для проверки при оптимизации Grails приложений</title>
+      <link>https://uthark.github.io/2010/02/06/grails/</link>
+      <pubDate>Sat, 06 Feb 2010 23:31:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2010/02/06/grails/</guid>
+      <description>Выкладываю ниже список задач, которые нужно/можно выполнить для оптимизации приложения, написанного на Grails, может кому пригодится.
+Тестирование проведённых оптимизаций Первым делом необходимо разработать критерии проверки, которые позволят оценить эффективность проведённых оптимизаций.
+Установить Java Melody плагин для Grails для проведения анализа.  Разработать скрипты для проведения нагрузочного тестирования.
+ Прогнать скрипты.
+ Проанализировать результаты Java Melody, выявить узкие места, произвести нужные оптимизации. Общие оптимизации Очень часто обновление до последней версии используемых библиотек попутно улучшает производительность.</description>
+    </item>
+    
+    <item>
+      <title>Spring Roo (часть 2)</title>
+      <link>https://uthark.github.io/2009/06/06/spring-roo-2/</link>
+      <pubDate>Sat, 06 Jun 2009 22:19:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/06/06/spring-roo-2/</guid>
+      <description>Архитектура сгенерированного приложения Spring Roo активно использует аспекты. В качестве реализации аспектов была взята библиотека aspectj. Большая часть сгенерированного кода попадает в отдельные файлы-аспекты. Создадим простой класс:
+new persistent class jpa -name ~.domain.Action -testAutomatically add field string name -notNull -sizeMin 1 -sizeMax 80 add field string description -sizeMax 1024 Spring Roo создаст нам следующие файлы:
+ Action.java Класс содержит только полезную с точки зрения назначения класса информацию. По сути, то, что вводит разработчик в консоль Roo аккумулируется здесь.</description>
+    </item>
+    
+    <item>
+      <title>Apache Ant и Metro</title>
+      <link>https://uthark.github.io/2009/06/02/apache-ant-metro/</link>
+      <pubDate>Tue, 02 Jun 2009 23:31:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/06/02/apache-ant-metro/</guid>
+      <description>Столкнулся с такой проблемой - в некоторых случаях приложение, собранное антом не работает. Конкретно - не работает десереализация запросов на веб-сервис. Получаемый запрос содержит null в значениях полей.
+Опытным путём было выяснено, что на это влияет используемая версия Java. Под 1.5 работает корректно, под 1.6 - не работает. Нашли ошибку в метро, связанную именно с версией JDK и на этом успокоились. Но было одно исключение из правил. У одного из разработчиков под 1.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Java | Software Development and related activities]]></title>
-  <link href="http://uthark.github.io/blog/categories/java/atom.xml" rel="self"/>
-  <link href="http://uthark.github.io/"/>
-  <updated>2017-10-12T19:01:44-04:00</updated>
-  <id>http://uthark.github.io/</id>
+  <title><![CDATA[Category: java | Блог о разработке ПО]]></title>
+  <link href="http://uthark.github.com/blog/categories/java/atom.xml" rel="self"/>
+  <link href="http://uthark.github.com/"/>
+  <updated>2013-06-29T23:40:55-04:00</updated>
+  <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
     
@@ -14,565 +14,17 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Using Unitils ReflectionAssert]]></title>
-    <link href="http://uthark.github.io/blog/2014/04/16/using-unitils-reflectionassert/"/>
-    <updated>2014-04-16T00:10:10-04:00</updated>
-    <id>http://uthark.github.io/blog/2014/04/16/using-unitils-reflectionassert</id>
-    <content type="html"><![CDATA[<p>Often it is needed to compare two different instances of the class inside test. I.e. we save object into database, then fetch it back from db and we want to be sure if nothing was lost during saving/reading.</p>
-
-<p>In order to make such assertions more easier and maintainable one can use great Unitils library which has useful class <a href="http://www.unitils.org/tutorial-reflectionassert.html">ReflectionAssert</a></p>
-
-<p>First, update parent&rsquo;s <code>pom.xml</code>:</p>
-
-<p>``` xml pom.xml changes in parent module
-<properties></p>
-
-<pre><code>&lt;unitils.version&gt;3.4&lt;/unitils.version&gt;
-</code></pre>
-
-<p></properties>
-<dependency></p>
-
-<pre><code>&lt;groupId&gt;org.unitils&lt;/groupId&gt;
-&lt;artifactId&gt;unitils-core&lt;/artifactId&gt;
-&lt;version&gt;${unitils.version}&lt;/version&gt;
-&lt;scope&gt;test&lt;/scope&gt;
-</code></pre>
-
-<p></dependency></p>
-
-<p>```</p>
-
-<p>Then add dependency to the child module:</p>
-
-<p>``` xml pom.xml changes in child module</p>
-
-<p><dependency></p>
-
-<pre><code>&lt;groupId&gt;org.unitils&lt;/groupId&gt;
-&lt;artifactId&gt;unitils-core&lt;/artifactId&gt;
-</code></pre>
-
-<p></dependency></p>
-
-<p>```</p>
-
-<p>Usage is very simple:
-Add static import to the class.</p>
-
-<p>``` java</p>
-
-<p>import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;</p>
-
-<p>```</p>
-
-<p>and use it instead of regular JUnit assert:</p>
-
-<p>``` java</p>
-
-<pre><code>assertReflectionEquals(expected, actual);
-</code></pre>
-
-<p>```</p>
-
-<p>It is possible to pass reflection comparator modes as optional parameters to the above method.</p>
-
-<p>Be ware that this method is not very useful if you want to compare objects which has floating point or double parameters &ndash; ReflectionAssert compares <code>double</code> and <code>float</code> values using <code>==</code>, so it is not very useful. It is not possible to pass epsilon for comparison.</p>
-
-<p>``` java excerpt from org.unitils.reflectionassert.comparator.impl.LenientNumberComparator#compare</p>
-
-<p>// &hellip;
-Double leftDouble = getDoubleValue(left);
-Double rightDouble = getDoubleValue(right);
-if (!leftDouble.equals(rightDouble)) {</p>
-
-<pre><code>return new Difference(differenceMessage, left, right);
-</code></pre>
-
-<p>}
-// &hellip;</p>
-
-<p>```</p>
-
-<p>If you need to compare double values in JUnit assertions then it is better to use <a href="https://code.google.com/p/hamcrest/">hamcrest library</a>.</p>
-
-<p>``` java</p>
-
-<p>import static org.hamcrest.number.IsCloseTo.closeTo;
-import static org.junit.Assert.assertThat;</p>
-
-<p>// in @Test method:
-assertThat(actual.getFederalIncomeTax(), closeTo(expected.getFederalIncomeTax(), EPSILON))</p>
-
-<p>```</p>
-
-<p>Happy hacking!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Using AssertJ]]></title>
-    <link href="http://uthark.github.io/blog/2014/04/15/using-assertj/"/>
-    <updated>2014-04-15T23:37:49-04:00</updated>
-    <id>http://uthark.github.io/blog/2014/04/15/using-assertj</id>
-    <content type="html"><![CDATA[<p><a href="https://github.com/joel-costigliola/assertj-core">AssertJ</a> is a library which provides fluent strongly-typed assertions to use in unit tests.</p>
-
-<p>Example of assertions written with <code>AssertJ</code>:</p>
-
-<p>``` java</p>
-
-<p>import io.github.uthark.blog.assertj.Assertions.assertThat;</p>
-
-<p>// &hellip; within @Test
-User result = userDao.findByLogin(&ldquo;username&rdquo;);
-assertThat(result).</p>
-
-<pre><code>isNotNull().
-isActive().
-hasLogin("username");
-</code></pre>
-
-<p>```</p>
-
-<p>As you can see assertions look much more readable.
-The integration of assertj into Maven project is very easy:</p>
-
-<ol>
-<li>Update pom.xml in parent module</li>
-</ol>
-
-
-<p>``` xml pom.xml changes in parent module.</p>
-
-<p><properties></p>
-
-<pre><code>&lt;assertj-core.version&gt;1.6.0&lt;/assertj-core.version&gt;
-&lt;assertj-assertions-generator-maven-plugin.version&gt;1.2.0&lt;/assertj-assertions-generator-maven-plugin.version&gt;
-</code></pre>
-
-<p></properties></p>
-
-<p><dependencyManagement></p>
-
-<pre><code>&lt;dependency&gt;
-    &lt;groupId&gt;org.assertj&lt;/groupId&gt;
-    &lt;artifactId&gt;assertj-core&lt;/artifactId&gt;
-    &lt;version&gt;${assertj-core.version}&lt;/version&gt;
-    &lt;scope&gt;test&lt;/scope&gt;
-&lt;/dependency&gt;
-</code></pre>
-
-<p></dependencyManagement></p>
-
-<p><pluginManagement></p>
-
-<pre><code>&lt;plugin&gt;
-    &lt;groupId&gt;org.assertj&lt;/groupId&gt;
-    &lt;artifactId&gt;assertj-assertions-generator-maven-plugin&lt;/artifactId&gt;
-    &lt;version&gt;${assertj-assertions-generator-maven-plugin.version}&lt;/version&gt;
-    &lt;executions&gt;
-        &lt;execution&gt;
-            &lt;id&gt;generate-assertions&lt;/id&gt;
-            &lt;phase&gt;generate-test-sources&lt;/phase&gt;
-            &lt;goals&gt;
-                &lt;goal&gt;generate-assertions&lt;/goal&gt;
-            &lt;/goals&gt;
-        &lt;/execution&gt;
-    &lt;/executions&gt;
-&lt;/plugin&gt;
-</code></pre>
-
-<p></pluginManagement></p>
-
-<p>```</p>
-
-<ol>
-<li>Update pom.xml in child module</li>
-</ol>
-
-
-<p>``` xml Changes in child module.</p>
-
-<p><dependencies></p>
-
-<pre><code>&lt;dependency&gt;
-    &lt;groupId&gt;org.assertj&lt;/groupId&gt;
-    &lt;artifactId&gt;assertj-core&lt;/artifactId&gt;
-&lt;/dependency&gt;
-</code></pre>
-
-<p></dependencies>
-<build></p>
-
-<pre><code>&lt;plugins&gt;
-    &lt;plugin&gt;
-        &lt;groupId&gt;org.assertj&lt;/groupId&gt;
-        &lt;artifactId&gt;assertj-assertions-generator-maven-plugin&lt;/artifactId&gt;
-        &lt;configuration&gt;
-            &lt;!-- you can define collection packages: --&gt;
-            &lt;packages&gt;
-                &lt;param&gt;io.github.uthark.blog.assertj&lt;/param&gt;
-            &lt;/packages&gt;
-
-            &lt;!-- Or specify classes one by one. --&gt;
-            &lt;classes&gt;
-                &lt;param&gt;io.github.uthark.blog.assertj.User&lt;/param&gt;
-            &lt;/classes&gt;
-        &lt;/configuration&gt;
-    &lt;/plugin&gt;
-&lt;/plugins&gt;
-</code></pre>
-
-<p></build></p>
-
-<p>```</p>
-
-<p>After this changes it is possible to generate assertions for the classes you want test:</p>
-
-<p>``` sh</p>
-
-<p>mvn assertj:generate-assertions</p>
-
-<p>```</p>
-
-<p>By default assertj will generate assertion classes in <code>target/generated-test-sources/assertj-assertions/</code>, it is possible to override this behaviour by passing configuration element <code>targetDir</code> to plugin.</p>
-
-<p>Additonal documentation for Maven plugin can be <a href="http://joel-costigliola.github.io/assertj/assertj-assertions-generator-maven-plugin.html">found here</a></p>
-
-<p>Happy hacking!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Initializing Mockito @Mocks With JUnit @Rule]]></title>
-    <link href="http://uthark.github.io/blog/2014/03/28/initializing-at-mocks-with-junit-at-rule/"/>
-    <updated>2014-03-28T13:24:45-04:00</updated>
-    <id>http://uthark.github.io/blog/2014/03/28/initializing-at-mocks-with-junit-at-rule</id>
-    <content type="html"><![CDATA[<p>In this post I will show how one can implement custom JUnit <a href="http://junit-team.github.io/junit/javadoc/4.11/org/junit/Rule.html">@Rule</a>.</p>
-
-<p>As an example let&rsquo;s take <a href="https://code.google.com/p/mockito/">Mockito</a> and implement custom rule which will initialize Mocks in  test class.</p>
-
-<p>By default, Mockito provides the following methods of mock initialization:</p>
-
-<ol>
-<li>Using <a href="http://docs.mockito.googlecode.com/hg/org/mockito/Mockito.html#mock(java.lang.Class)">Mockito.mock</a></li>
-</ol>
-
-
-<p>``` java Initialize mocks with Mockito.mock</p>
-
-<p>public void FooTest {</p>
-
-<pre><code>private Foo foo;
-
-@Before
-public void setUp() {
-    FooDependency dep = Mockito.mock(FooDependency.class);
-    foo = new Foo(dep);
-}
-</code></pre>
-
-<p>}</p>
-
-<p>```</p>
-
-<p>This is the simplest case.</p>
-
-<ol>
-<li>Using <a href="http://docs.mockito.googlecode.com/hg/org/mockito/MockitoAnnotations.html#initMocks(java.lang.Object)">MockitoAnnotations</a>.</li>
-</ol>
-
-
-<p>``` java Initialize mocks with MockitoAnnotations</p>
-
-<p>public void FooTest {</p>
-
-<pre><code>private Foo foo;
-
-@Mock
-private FooDependency dep;
-
-@Before
-public void setUp() {
-    MockitoAnnotations.initMocks(this);
-    foo = new Foo(dep);
-}
-</code></pre>
-
-<p>}</p>
-
-<p>```</p>
-
-<p>This method is useful when you have a lot of mocks to inject.</p>
-
-<ol>
-<li>Using <a href="http://docs.mockito.googlecode.com/hg/org/mockito/runners/MockitoJUnitRunner.html">MockitoJUnitRunner</a></li>
-</ol>
-
-
-<p>``` java Initialize mocks with MockitoJUnitRunner</p>
-
-<p>@RunWith(MockitoJUnitRunner.class)
-public void FooTest {</p>
-
-<pre><code>private Foo foo;
-
-@Mock
-private FooDependency dep;
-
-@Before
-public void setUp() {
-    foo = new Foo(dep);
-}
-</code></pre>
-
-<p>}</p>
-
-<p>```</p>
-
-<p>I want to show you another method, by using custom JUnit <code>@Rule</code>.</p>
-
-<p>First, we need to implement <a href="http://junit-team.github.io/junit/javadoc/4.11/org/junit/rules/TestRule.html">TestRule</a> interface which allows to implement custom behaviour during test execution:</p>
-
-<p>``` java MockitoInitializerRule</p>
-
-<p>public class MockitoInitializerRule implements TestRule {</p>
-
-<pre><code>private Object test;
-
-public MockitoInitializerRule(Object test) {
-    this.test = test;
-}
-
-@Override
-public Statement apply(Statement base, Description description) {
-    return new MockitInitilizationStatement(base, test);
-}
-</code></pre>
-
-<p>}</p>
-
-<p>```</p>
-
-<p>We need to pass current test class instance to the rule, so it will be possible inject mocks into class instance. Actual implementation of our rule will go to new class &ndash; subclass of <a href="http://junit-team.github.io/junit/javadoc/4.11/org/junit/runners/model/Statement.html">Statement</a>:</p>
-
-<p>``` java MockitInitilizationStatement</p>
-
-<p>class MockitInitilizationStatement extends Statement {</p>
-
-<pre><code>private final Statement base;
-private Object test;
-
-MockitInitilizationStatement(Statement base, Object test) {
-    this.base = base;
-    this.test = test;
-}
-
-@Override
-public void evaluate() throws Throwable {
-    MockitoAnnotations.initMocks(test);
-    base.evaluate();
-}
-</code></pre>
-
-<p>}</p>
-
-<p>```</p>
-
-<p>What we do is basically initialize mocks in the test class and then proceed with the test method execution.</p>
-
-<p>Now, let&rsquo;s take a look at the usage of newly created Rule:</p>
-
-<p>``` java Example usage of MockitoInitializerRule</p>
-
-<p>public void FooTest {</p>
-
-<pre><code>private Foo foo;
-
-@Mock
-private FooDependency dep;
-
-@Rule
-public TestRule mockitoInitializerRule = new MockitoInitializerRule(this);
-
-@Before
-public void setUp() {
-    foo = new Foo(dep);
-}
-</code></pre>
-
-<p>}</p>
-
-<p>```</p>
-
-<p>Comparing to variant with <code>MockitoJUnitRunner</code> this one provides ability to use custom <a href="http://junit-team.github.io/junit/javadoc/4.11/org/junit/runner/Runner.html">Runner</a>, i.e. we can continue to use <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/test/context/junit4/SpringJUnit4ClassRunner.html">SpringJUnit4ClassRunner</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Automatic Query Modification With Spring Data Mongo]]></title>
-    <link href="http://uthark.github.io/blog/2014/03/01/restricting-mongo-template/"/>
-    <updated>2014-03-01T00:19:00-05:00</updated>
-    <id>http://uthark.github.io/blog/2014/03/01/restricting-mongo-template</id>
-    <content type="html"><![CDATA[<h3>Introduction</h3>
-
-<p>Today I want to show how one can automatically apply additional restrictions on <a href="http://www.mongodb.org/">MongoDB</a> Queries with <a href="http://docs.spring.io/spring-data/mongodb/docs/current/api/org/springframework/data/mongodb/core/MongoTemplate.html">MongoTemplate</a> or <a href="http://docs.spring.io/spring-data/mongodb/docs/current/reference/htmlsingle/">Spring Data Mongo</a>.</p>
-
-<h3>Implementation</h3>
-
-<p>First, let&rsquo;s introduce interface <code>QueryModifier</code>.</p>
-
-<p>``` java Declaration of QueryModifier interface</p>
-
-<p>import org.springframework.data.mongodb.core.query.Query;</p>
-
-<p>public interface QueryModifier {</p>
-
-<pre><code>/**
- * Modifies source query according to the rules.
- * @param query Source query to modify.
- * @param collectionName name of the collection against which query will be executed.
- * @return Modified query.
- */
-Query modify(Query query, String collectionName);
-</code></pre>
-
-<p>}</p>
-
-<p>```</p>
-
-<p>Implementations of this interface will pickup original query and modify it somehow. In order to make it work we need inject this modification after query was generated by <code>Spring Data but before query is sent to the MongoDB instance. The perfect place for this is</code>MongoTemplate`.</p>
-
-<p>So, let&rsquo;s create subclass of <code>MongoTemplate</code> and override <code>find()</code> and <code>executeQuery()</code> methods.</p>
-
-<p>``` java RestrictingMongoTemplate</p>
-
-<p>import com.mongodb.<em>;
-import org.slf4j.</em>;
-import org.springframework.data.authentication.UserCredentials;
-import org.springframework.data.mongodb.MongoDbFactory;
-import org.springframework.data.mongodb.core.*;</p>
-
-<p>import java.util.*;</p>
-
-<p>public class RestrictingMongoTemplate extends MongoTemplate {</p>
-
-<pre><code>private List&lt;? extends QueryModifier&gt; queryModifiers = new ArrayList&lt;&gt;();
-
-/** omitting constructors */
-
-public void setQueryModifiers(List&lt;? extends QueryModifier&gt; queryModifiers) {
-    this.queryModifiers = queryModifiers;
-}
-
-@Override
-public void executeQuery(Query query, String collectionName, DocumentCallbackHandler dch) {
-    for (QueryModifier queryModifier : queryModifiers) {
-        query = queryModifier.modify(query, collectionName);
-    }
-
-    super.executeQuery(query, collectionName, dch);
-</code></pre>
-
-<p>   }</p>
-
-<pre><code>public &lt;T&gt; List&lt;T&gt; find(Query query, Class&lt;T&gt; entityClass, String collectionName) {
-    int limit = query.getLimit();
-
-    for (QueryModifier queryModifier : queryModifiers) {
-        query = queryModifier.modify(query, collectionName);
-    }
-
-    query.limit(limit);
-
-    return super.find(query, entityClass, collectionName);
-}
-</code></pre>
-
-<p>}</p>
-
-<p>```</p>
-
-<p>Let&rsquo;s implement simple QueryModifier which will add restriction to return only active documents from Mongo:</p>
-
-<p>``` java Sample implementation of QueryModifier interface</p>
-
-<p>import model.Document;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;</p>
-
-<p>public class ActiveQueryModifier implements QueryModifier {</p>
-
-<pre><code>@Override
-public Query modify(Query query, String collectionName) {
-    if (Document.COLLECTION_NAME.equals(collectionName)) {
-        return query.addCriteria(Criteria.where("active").is(Boolean.TRUE));
-    }
-    return query;
-}
-</code></pre>
-
-<p>}</p>
-
-<p>```</p>
-
-<p>Next step is to provide our custom implementation of <code>MongoTemplate</code> to Spring Data:</p>
-
-<p>``` java Example of Spring Configuration</p>
-
-<p>@PropertySource(&ldquo;classpath:application.properties&rdquo;)
-@EnableMongoRepositories(</p>
-
-<pre><code>    basePackages = "model",
-    mongoTemplateRef = "mongoTemplate")
-</code></pre>
-
-<p>@Configuration(&ldquo;configuration&rdquo;)
-public class ServiceConfiguration extends AbstractMongoConfiguration {</p>
-
-<pre><code>@Value("${mongo.db.name}")
-protected String mongoDatabaseName;
-
-@Override
-protected String getDatabaseName() {
-    return mongoDatabaseName;
-}
-
-@Override
-public RestrictingMongoTemplate mongoTemplate() throws UnknownHostException {
-    RestrictingMongoTemplate mongoTemplate =
-            new RestrictingMongoTemplate(mongo(), mongoDatabaseName);
-
-    mongoTemplate.setQueryModifiers(Arrays.asList(
-            new ActiveQueryModifier()
-    ));
-
-    return mongoTemplate;    
-}
-
-// creation of Mongo bean omitted.
-</code></pre>
-
-<p>}</p>
-
-<p>```</p>
-
-<p>That&rsquo;s all for today. If you have any questions &ndash; <a href="https://plus.google.com/112372998073079463630/posts">Ask me on Google+</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
     <title type="html"><![CDATA[Собственная реализация методов в Spring Data JPA]]></title>
-    <link href="http://uthark.github.io/blog/2012/04/28/spring-data-jpa_28/"/>
-    <updated>2012-04-28T15:03:00+07:00</updated>
-    <id>http://uthark.github.io/blog/2012/04/28/spring-data-jpa_28</id>
+    <link href="http://uthark.github.com/blog/2012/04/28/spring-data-jpa_28/"/>
+    <updated>2012-04-28T04:03:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2012/04/28/spring-data-jpa_28</id>
     <content type="html"><![CDATA[<p>Очевидно, что мы не всегда можем воспользоваться автоматической генерацией кода, предоставляемой <a href="http://www.springsource.org/spring-data/jpa">Spring Data JPA</a>. Например, у нас слишком сложный запрос, или нам необходимо вызвать процедуру в базе данных, либо у нас сложная бизнес-логика.</p>
 
 <p>Рассмотрим следующий пример &ndash; например, нам нужна функциональность уникального счётчика, который мы решили реализовать с помощью последовательности (sequence).</p>
 
 <p>Сначала определим интерфейс, в котором опишем все методы, которые мы будем реализовывать самостоятельно. В нашем случае, это будет только один метод:</p>
 
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -598,11 +50,11 @@ public RestrictingMongoTemplate mongoTemplate() throws UnknownHostException {
 </span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Затем обновим объявление репозитория, чтобы он унаследовал новый интерфейс <tt>UserRepositoryCustom</tt></p>
 
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -616,11 +68,11 @@ public RestrictingMongoTemplate mongoTemplate() throws UnknownHostException {
 </span><span class='line'><span class="o">}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Теперь напишем реализацию метода:</p>
 
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -666,11 +118,11 @@ public RestrictingMongoTemplate mongoTemplate() throws UnknownHostException {
 </span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
-</span></code></pre></td></tr></table></div></figure></p>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>И, наконец, укажем Spring Data JPA, чтобы в качестве класса для прокси использовался наш класс с реализацией собственных методов. Для этого нам нужна ещё одна секция <tt>repositories</tt> в конфигурационном файле:</p>
 
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -694,9 +146,214 @@ public RestrictingMongoTemplate mongoTemplate() throws UnknownHostException {
 </span><span class='line'><span class="nt">&lt;/code&gt;&lt;/pre&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="nt">&lt;p&gt;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Вот и всё.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Использование BeanPostProcessor на примере журналирования]]></title>
+    <link href="http://uthark.github.com/blog/2012/04/20/beanpostprocessor/"/>
+    <updated>2012-04-20T04:51:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2012/04/20/beanpostprocessor</id>
+    <content type="html"><![CDATA[<div class='post'>
+Сегодня я хочу рассказать, как можно сделать инициализацию логгера в классе с использованием аннотаций и <a href="http://static.springsource.org/spring/docs/current/javadoc-api/org/springframework/beans/factory/config/BeanPostProcessor.html">BeanPostProcessor</a>
+
+Очень часто мы инициализируем логгер следующим образом:
+<pre class="brush:java">
+public class MyClass {
+    private static final Logger LOG = LoggerFactory.getLogger(MyClass.class);
+}
+</pre>
+
+Я покажу, как сделать, чтобы можно было писать вот так: 
+<pre class="brush:java">
+    @Log
+    private Logger LOG;
+</pre>
+
+Первым делом нам нужно объявить аннотацию:
+
+<pre class="brush:java">
+@Retention(RUNTIME)
+@Target(FIELD)
+@Documented
+public @interface Log {
+    String category() default "";
+}
+</pre>
+
+А вторым делом, написать собственный <tt>BeanPostProcessor</tt>, который бы устанавливал нам логгер:
+
+<pre class="brush:java">
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.stereotype.Component;
+import org.springframework.util.ReflectionUtils;
+
+@Component
+public class LoggerPostProcessor implements BeanPostProcessor {
+    @Override
+    public Object postProcessAfterInitialization(Object bean, String beanName) {
+        return bean;
+    }
+
+    @Override
+    public Object postProcessBeforeInitialization(final Object bean, final String beanName) {
+        ReflectionUtils.doWithFields(bean.getClass(), new FieldProcessor(bean, beanName), new LoggerFieldFilter());
+        return bean;
+    }
+
+    private static class FieldProcessor implements ReflectionUtils.FieldCallback {
+        private final Object bean;
+        private final String beanName;
+
+        private FieldProcessor(Object bean, String beanName) {
+            this.bean = bean;
+            this.beanName = beanName;
+        }
+
+        @Override
+        public void doWith(Field field) throws IllegalAccessException {
+            Log loggerAnnot = field.getAnnotation(Log.class);
+
+            // Sanity check if annotation is on the field with correct type.
+            if (field.getType().equals(org.slf4j.Logger.class)) {
+                // As user can override logger category - check if it was done.
+                String loggerCategory = loggerAnnot.category();
+                if (StringUtils.isBlank(loggerCategory)) {
+                    // use default category instead.
+                    loggerCategory = bean.getClass().getName();
+                }
+                Logger logger = LoggerFactory.getLogger(loggerCategory);
+                ReflectionUtils.makeAccessible(field);
+                field.set(bean, logger);
+            } else {
+                throw new IllegalArgumentException(
+                    "Unable to set logger on field '" + field.getName() + "' in bean '" + beanName +
+                        "': field should have class " + Logger.class.getName());
+            }
+        }
+    }
+
+    private static class LoggerFieldFilter implements ReflectionUtils.FieldFilter {
+        @Override
+        public boolean matches(Field field) {
+            Log logger = field.getAnnotation(Log.class);
+            return null != logger;
+        }
+    }
+}
+</pre>
+
+Если вы используете не <a href="http://www.slf4j.org/">sfl4j</a>, а, например, <a href="http://logging.apache.org/log4j/1.2/">log4j</a>, или <a href="http://commons.apache.org/logging/">commons-logging</a>, то нужно немного поправить код внутри метода <tt>doWith</tt>
+
+Попутно, данный код показывает пример использования класса <a href="http://static.springsource.org/spring/docs/current/javadoc-api/org/springframework/util/ReflectionUtils.html">org.springframework.util.ReflectionUtils</a>.</div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Преобразуем строку в дату]]></title>
+    <link href="http://uthark.github.com/blog/2012/04/20/blog-post/"/>
+    <updated>2012-04-20T04:25:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2012/04/20/blog-post</id>
+    <content type="html"><![CDATA[<p>Казалось бы, есть простейшая задача &ndash; преобразовать строковое представление даты в объект класса <tt>java.util.Date</tt>.</p>
+
+<p>Как оказалось, иногда использование DateFormat не помогает. В случае, если строка &ndash; это заголовок <tt>Date</tt> из письма, то нам нужно использовать <tt><a href="http://docs.oracle.com/javaee/5/api/javax/mail/internet/MailDateFormat.html">javax.mail.internet.MailDateFormat</a></tt> для преобразования такой строки.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">String</span> <span class="n">dateStr</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">hellip</span><span class="o">;</span>
+</span><span class='line'><span class="n">Date</span> <span class="n">parsedDate</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MailDateFormat</span><span class="o">().</span><span class="na">parse</span><span class="o">(</span><span class="n">dateStr</span><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Немного о виртуальных методах в Java]]></title>
+    <link href="http://uthark.github.com/blog/2011/07/21/java/"/>
+    <updated>2011-07-21T01:06:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2011/07/21/java</id>
+    <content type="html"><![CDATA[<div class='post'>
+Сегодня я хочу рассмотреть некоторые особенности переопределения методов в Java.  В java нельзя переопределить:   <br />
+<ul><li>поля класса</li>
+<li>конструкторы, инициализаторы класса</li>
+<li>статические методы</li>
+<li>статические поля</li>
+</ul><br />
+Подробнее об этом можно прочитать в <a href="http://java.sun.com/docs/books/jls/third_edition/html/classes.html#228745">Java Language Specification, §8.4.8</a><br />
+<br />
+Итак, в java все нестатические неприватные (то есть, <tt>protected</tt>, <tt>package</tt> и <tt>public</tt>) методы являются виртуальными. Ключевое слово <tt>final</tt> запрещает возможность дальнейшего переопределения метода в подклассах.  Рассмотрим следующий пример:  <br />
+<br />
+<pre class="brush: java">public class A {
+     int i = 3;
+     int getI() {return i;}
+}
+
+public class B extends A{
+     int i = 5;
+     int getI() {return i;}
+}
+
+A a = new B();
+System.out.println(a.i);
+System.out.println(a.getI());
+
+</pre><br />
+Вопрос: что выведет данный код?<br />
+Ответ: <br />
+1. Так как поля класса не наследуются, то у класса A своё поле i и у класса B тоже своё поле i. Так как для полей полиморфизм не действует, то при обращении a.i мы обращаемся к классу A, поэтому на экран будет выведено 3.<br />
+2. При вызове метода a.getI() у нас в дело вступает полиморфизм, поэтому будет вызван метод от класса, инстанс которого был создан. Соответственно, мы получим на выходе 5.<br />
+<br />
+<br />
+Другой пример:<br />
+<br />
+<pre class="brush: java">public class A {
+     static int i = 3;
+     static int getI() {return i;} 
+}
+
+public class B extends A{
+     static int i = 5;
+     static int getI() {return i;}
+}
+
+A a = new B();
+System.out.println(a.i);
+System.out.println(a.getI());
+
+</pre><br />
+Статические поля и методы виртуальными не являются, поэтому оба вызова выведут нам 3.</div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Удаление различных диакритических символов из строки]]></title>
+    <link href="http://uthark.github.com/blog/2010/05/21/blog-post/"/>
+    <updated>2010-05-21T13:52:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2010/05/21/blog-post</id>
+    <content type="html"><![CDATA[<div class='post'>
+<p>Возникла проблема - каким образом заменить в строке символы из национальных кодировок на соответствующие им из латиницы.</p><p>Например, из строки explicación получить explicacion.</p><pre class="brush: java">
+package com.blogspot.atamanenko;
+
+import java.text.Normalizer;
+import java.text.Normalizer.Form;
+
+public class StringNormalizer {
+
+    public static String normalize(String string) {
+        return Normalizer.normalize(string, Form.NFD)
+            .replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+    }
+}
+
+</pre><p>Вызов <a href='http://java.sun.com/javase/6/docs/api/java/text/Normalizer.html#normalize%28java.lang.CharSequence,%20java.text.Normalizer.Form%29'>Normalizer.normalize</a> проводит <a href='http://www.unicode.org/reports/tr15/tr15-23.html'>нормализацию</a> входной строки. Последующий вызов регулярного выражения удаляет все диакритические знаки, полученные после нормализации.</p></div>
+
 ]]></content>
   </entry>
   

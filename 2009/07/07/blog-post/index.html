@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+
+  
+  
+  <link href="//fonts.googleapis.com/css?family=Anonymous+Pro" rel="stylesheet" type="text/css">
+  
+
+  
+  <title>Двунаправленная ссылочная целостность</title>
+
+  
+  
+  <link rel="stylesheet" href="https://uthark.github.io/css/hugo-octopress.css">
+
+  
+  
+
+  
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
+  
+  <link href="https://uthark.github.io/favicon.png" rel="icon">
+
+  
+  
+  
+
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <meta name="author" content="Oleg Atamanenko">
+
+  
+  <meta name="generator" content="Hugo 0.31" />
+
+  
+  
+
+</head>
+<body>
+
+
+<header role="banner"><hgroup>
+  
+  <h1><a href="https://uthark.github.io/">Software Development and related activities</a></h1>
+    <h2></h2>
+</hgroup></header>
+
+
+<nav role="navigation">
+
+<ul class="main-navigation">
+  
+  
+    
+      <li><a href="https://uthark.github.io/" title="Home">Home</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/categories/article/" title="Articles" >Articles</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/categories/reading-list/" title="Reading List" >Reading List</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/about/" title="About me" >About me</a></li>
+    
+  
+</ul>
+
+
+<ul class="subscription">
+  
+    
+        <a href="https://uthark.github.io/index.xml" target="_blank" type="application/rss+xml" title="RSS"><i class="fa fa-rss-square fa-lg"></i></a>
+    
+  
+
+</ul>
+
+
+<form action="https://www.google.com/search" method="get" target="_blank">
+  <fieldset role="search">
+  	<input class="search" type="text" name="q" results="0" placeholder="Search"/>
+    <input type="hidden" name="q" value="site:https://uthark.github.io/" />
+  </fieldset>
+</form>
+
+</nav>
+
+
+<div id="main">
+  <div id="content">
+    <div>
+      <article class="hentry" role="article">
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+         Двунаправленная ссылочная целостность 
+    </h1>
+
+</header>
+
+
+        <div class="entry-content">
+          
+          
+          
+          
+          
+
+<p>Здравствуйте.</p>
+
+<p>Я считаю, что разработчику всегда стоит иметь представление о том, как работают низлежащие абстракции. Хотя бы потому, что часто <a href="http://c2.com/cgi/wiki?LeakyAbstraction">абстракции</a> <a href="http://en.wikipedia.org/wiki/Leaky_abstraction">бывают</a> <a href="http://www.joelonsoftware.com/articles/LeakyAbstractions.html">протекающими</a>.</p>
+
+<p>А веду я это к тому, что когда фреймворк вываливает стектрейс с несколькими вложенными (и, часто, для непосвященных непонятными) исключениями, то бывает непонятно, что с этим делать, особенно, если не знаешь, как реализована абстракция.</p>
+
+<p>Иногда бывает нужно хранить двунаправленные связи между таблицами. Например, есть игрок и есть его статистика и нужно, чтобы каждая из сущностей знала про другую.</p>
+
+<p>Вопрос - каким образом вставлять в базу данных такие сущности?</p>
+
+<p>При вставке в таблицу в <code>Player</code> нам нужно уже иметь запись в таблице <code>Statistics</code>, а для вставки в таблицу <code>Statistics</code> нужно знать идентификатор игрока, к которому относится эта запись.</p>
+
+<p>Выглядит замкнутым кругом, но решение есть.</p>
+
+<p>Во-первых, вставки в обе таблицы должны происходить в рамках одной транзакции (как я <a href="http://www.blogger.com/2009/04/blog-post_24.html">уже писал</a>, транзакция обеспечивает перевод базы данных из одного непротиворечащего состояния в другое непротиворечащее состояние).</p>
+
+<p>К сожалению, этого недостаточно:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">BEGIN</span> TRANSACTION;
+
+<span style="color:#66d9ef">INSERT</span> <span style="color:#66d9ef">INTO</span> <span style="color:#e6db74">&#34;Player&#34;</span>  <span style="color:#66d9ef">VALUES</span> (<span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">20</span>);
+<span style="color:#66d9ef">INSERT</span> <span style="color:#66d9ef">INTO</span> <span style="color:#e6db74">&#34;Statistics&#34;</span>  <span style="color:#66d9ef">VALUES</span> (<span style="color:#ae81ff">20</span>, <span style="color:#ae81ff">10</span>);
+
+<span style="color:#66d9ef">COMMIT</span>;</code></pre></div>
+<p>выдаёт следующую ошибку:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">ERROR: insert or update on table <span style="color:#e6db74">&#34;Player&#34;</span> violates foreign key constraint <span style="color:#e6db74">&#34;statisticsId&#34;</span>
+SQL state: <span style="color:#ae81ff">23503</span>
+Detail: Key <span style="color:#f92672">(</span>statisticsId<span style="color:#f92672">)=(</span><span style="color:#ae81ff">20</span><span style="color:#f92672">)</span> is not present in table <span style="color:#e6db74">&#34;Statistics&#34;</span>.</code></pre></div>
+<p>И снова кажется, что замкнутый круг не разорвать</p>
+
+<p>Но решение всё же есть.</p>
+
+<p>Многие базы данных позволяют нарушать консистентность базы данных внутри транзакции. В данном случае можно &ldquo;попросить&rdquo; базу данных отложить проверку ссылочной целостности. На примере <code>PostgreSQL</code> рассмотрим, как это работает.</p>
+
+<h3 id="postgresql">PostgreSQL</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-postgresql" data-lang="postgresql"><span style="color:#66d9ef">begin</span> <span style="color:#66d9ef">transaction</span>;
+
+<span style="color:#66d9ef">set</span> <span style="color:#66d9ef">constraints</span> <span style="color:#66d9ef">all</span> <span style="color:#66d9ef">deferred</span>; <span style="color:#75715e">-- 1
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">INSERT</span> <span style="color:#66d9ef">INTO</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;Player&#34;</span>  <span style="color:#66d9ef">VALUES</span> (<span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">20</span>);
+<span style="color:#66d9ef">INSERT</span> <span style="color:#66d9ef">INTO</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;Statistics&#34;</span>  <span style="color:#66d9ef">VALUES</span> (<span style="color:#ae81ff">20</span>, <span style="color:#ae81ff">10</span>);
+
+<span style="color:#66d9ef">set</span> <span style="color:#66d9ef">constraints</span> <span style="color:#66d9ef">all</span> <span style="color:#66d9ef">immediate</span>; <span style="color:#75715e">-- 2
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">commit</span>; <span style="color:#75715e">-- 3</span></code></pre></div>
+<p>1 - Сделать все ограничения отложенными. Ограничения будут проверены в момент проведения фиксации транзакции (в строке 3)</p>
+
+<p>2 - Явно делаем все ограничения немедленными. В данном примере это необязательно, так как в 3) они всё равно будут проверены.</p>
+
+<p>После выполнения данного кода получаем:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">Query returned successfully with no result in <span style="color:#ae81ff">24</span> ms.</code></pre></div>
+<p>Это уже полностью рабочий пример, чтобы это заработало нужно явно сделать ограничения отложенными - они должны быть объявлены как <code>DEFERRED</code>. Официальная документация к PostgreSQL гласит:</p>
+
+<blockquote>
+<p>Upon creation, a constraint is given one of three characteristics: DEFERRABLE INITIALLY DEFERRED, DEFERRABLE INITIALLY IMMEDIATE, or NOT DEFERRABLE. The third class is always IMMEDIATE and is not affected by the SET CONSTRAINTS command. The first two classes start every transaction in the indicated mode, but their behavior can be changed within a transaction by SET CONSTRAINTS.</p>
+</blockquote>
+
+<p>Так что необходимо также модифицировать объявления ограничений:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">ALTER</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#e6db74">&#34;Player&#34;</span>
+<span style="color:#66d9ef">ADD</span> <span style="color:#66d9ef">CONSTRAINT</span> <span style="color:#e6db74">&#34;statisticsId&#34;</span> <span style="color:#66d9ef">FOREIGN</span> <span style="color:#66d9ef">KEY</span> (<span style="color:#e6db74">&#34;statisticsId&#34;</span>)
+<span style="color:#66d9ef">REFERENCES</span> <span style="color:#e6db74">&#34;Statistics&#34;</span> (<span style="color:#e6db74">&#34;statisticsId&#34;</span>) <span style="color:#66d9ef">MATCH</span> <span style="color:#66d9ef">SIMPLE</span>
+<span style="color:#66d9ef">ON</span> <span style="color:#66d9ef">UPDATE</span> <span style="color:#66d9ef">NO</span> ACTION <span style="color:#66d9ef">ON</span> <span style="color:#66d9ef">DELETE</span> <span style="color:#66d9ef">NO</span> ACTION <span style="color:#66d9ef">DEFERRABLE</span> <span style="color:#66d9ef">INITIALLY</span> <span style="color:#66d9ef">IMMEDIATE</span>;</code></pre></div>
+<p>Данный пример был приведён для PostgreSQL.</p>
+
+<p>Для других баз данных решения следующие:</p>
+
+<h3 id="sybase">Sybase</h3>
+
+<p>В Sybase есть переменная <a href="http://manuals.sybase.com/onlinebooks/group-sasarc/awg0600e/dbugen6/@Generic__BookTextView/26075;hf=0;pt=25811">WAIT_FOR_COMMIT</a>, которая управляет поведением проверки ограничений. По умолчанию она отключена. Кроме того, это поведение можно переопределить при объявлении можно указывать CHECK ON COMMIT. Подробнее можно посмотреть в <a href="http://manuals.sybase.com/onlinebooks/group-pbarc/conn5/sqlug/@Generic__BookTextView/39397%3Bpt=39951">официальной документации</a>.</p>
+
+<h3 id="oracle">Oracle</h3>
+
+<p>Также, как и в PostgreSQL:</p>
+
+<blockquote>
+<p>You can define constraints as either deferrable or not deferrable, and either initially deferred or initially immediate. These attributes can be different for each constraint. You specify them with keywords in the CONSTRAINT clause:
+DEFERRABLE or NOT DEFERRABLE
+INITIALLY DEFERRED or INITIALLY IMMEDIATE</p>
+
+<p>Constraints can be added, dropped, enabled, disabled, or validated. You can also modify a constraint&rsquo;s attributes.<br /></p>
+</blockquote>
+
+<p>Подробнее в <a href="http://download.oracle.com/docs/cd/B10501_01/server.920/a96524/c22integ.htm#4666">официльной документации</a>.</p>
+
+<h2 id="mysql">MySQL</h2>
+
+<p>К сожалению, mySQL не имеет возможности отложенной проверки ограничении, о чём в документации и сказано:</p>
+
+<blockquote>
+<p>Deviation from SQL standards: Like MySQL in general, in an SQL statement that inserts, deletes, or updates many rows, InnoDB checks UNIQUE and FOREIGN KEY constraints row-by-row. According to the SQL standard, the default behavior should be deferred checking. That is, constraints are only checked after the entire SQL statement has been processed. Until InnoDB implements deferred constraint checking, some things will be impossible, such as deleting a record that refers to itself via a foreign key.</p>
+</blockquote>
+
+<p>Но это не конец света, так как можно отключить проверку внешних ключей:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">SET</span> foreign_key_checks <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+<span style="color:#75715e">-- code goes here
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">SET</span> foreign_key_checks <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;</code></pre></div>
+<p>Чем эта информация может быть полезна для разработчика? Например, в случае, если ошибки и недоработки Hibernate покажут себя в виде стектрейса в логе(например, <a href="http://opensource.atlassian.com/projects/hibernate/browse/HHH-2248">HHH-2248</a>), то разработчик будет понимать причину ошибки и то, как реализовать work-around.</p>
+
+        </div>
+        
+
+<footer>
+
+  <p class="meta">
+    
+    
+
+    
+    
+    
+    Filed under: <a class="label" href="https://uthark.github.io/categories/foreign-key/">foreign key</a><a class="label" href="https://uthark.github.io/categories/constraint/">constraint</a><a class="label" href="https://uthark.github.io/categories/mysql/">mysql</a><a class="label" href="https://uthark.github.io/categories/sybase/">sybase</a><a class="label" href="https://uthark.github.io/categories/%d0%b1%d0%b0%d0%b7%d0%b0-%d0%b4%d0%b0%d0%bd%d0%bd%d1%8b%d1%85/">база данных</a><a class="label" href="https://uthark.github.io/categories/transaction/">transaction</a><a class="label" href="https://uthark.github.io/categories/%d1%80%d0%b0%d0%b7%d1%80%d0%b0%d0%b1%d0%be%d1%82%d0%ba%d0%b0/">разработка</a><a class="label" href="https://uthark.github.io/categories/postgresql/">postgresql</a><a class="label" href="https://uthark.github.io/categories/oracle/">oracle</a><a class="label" href="https://uthark.github.io/categories/development/">development</a>
+    
+  </p>
+
+  <p class="meta">
+    
+    Last update: <time>Jul 7, 2009</time>
+    
+    </span>
+  </p>
+  
+  
+
+  
+
+  <p class="meta">
+    
+        <a class="basic-alignment left" href="https://uthark.github.io/2009/07/04/opera-delicious/" title="Opera и del.icio.us">Opera и del.icio.us</a>
+    
+
+    
+      <a class="basic-alignment right" href="https://uthark.github.io/2009/11/02/google-wave/" title="Инвайты на Google Wave">Инвайты на Google Wave</a>
+    
+  </p>
+  
+</footer>
+
+      </article>
+    </div>
+    
+
+<aside class="sidebar thirds">
+  <section class="first odd">
+
+    
+
+    <p>
+      
+    </p>
+  </section>
+
+
+
+
+
+  
+
+  
+
+  
+  
+  
+
+</aside>
+
+  </div>
+</div>
+
+<footer role="contentinfo">
+    
+    <div class="center">
+        <ul class="sidebar-nav">
+            <li class="sidebar-nav-item">
+                <a target="_blank" href="https://github.com/uthark/" title="https://github.com/uthark/"><i
+                    class="fa fa-github fa-3x"></i></a></li>
+            <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
+                    class="fa fa-bitbucket fa-3x"></i></a>
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item"><a target="_blank" href="https://twitter.com/LinkageError/" title="https://twitter.com/LinkageError/"><i
+                    class="fa fa-twitter fa-3x"></i></a>
+            <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
+                    class="fa fa-key fa-3x"></i></a> 
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item"><a target="_blank" href="http://stackoverflow.com/users/216764/uthark" title="http://stackoverflow.com/users/216764/uthark"><i
+                    class="fa fa-stack-overflow fa-3x"></i></a>
+            <li class="sidebar-nav-item"><a target="_blank" href="https://plus.google.com/&#43;OlegAtamanenko" title="https://plus.google.com/&#43;OlegAtamanenko"><i
+                    class="fa fa-google-plus fa-3x"></i></a>
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item">
+                
+                
+            </li>
+        </ul>
+    </div>
+    <p>Copyright &copy; 2017 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+        <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a> and
+            <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.
+    </p>
+
+</footer>
+
+
+</body>
+</html>
+

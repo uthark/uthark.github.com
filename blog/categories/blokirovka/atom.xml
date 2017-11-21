@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: блокировка | Software Development and related activities]]></title>
-  <link href="http://uthark.github.io/blog/categories/blokirovka/atom.xml" rel="self"/>
-  <link href="http://uthark.github.io/"/>
-  <updated>2017-10-12T19:01:44-04:00</updated>
-  <id>http://uthark.github.io/</id>
+  <title><![CDATA[Category: блокировка | Блог о разработке ПО]]></title>
+  <link href="http://uthark.github.com/blog/categories/blokirovka/atom.xml" rel="self"/>
+  <link href="http://uthark.github.com/"/>
+  <updated>2013-06-29T23:40:55-04:00</updated>
+  <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Критерии выбора блокировок]]></title>
-    <link href="http://uthark.github.io/blog/2009/04/26/blog-post_26/"/>
-    <updated>2009-04-26T15:30:00+07:00</updated>
-    <id>http://uthark.github.io/blog/2009/04/26/blog-post_26</id>
+    <link href="http://uthark.github.com/blog/2009/04/26/blog-post_26/"/>
+    <updated>2009-04-26T04:30:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2009/04/26/blog-post_26</id>
     <content type="html"><![CDATA[<div class='post'>
 Так как использование блокировок по-разному влияет на производительность, необходимо выбирать, в каких случаях какой вид блокировок лучше использовать.
 
@@ -76,9 +76,9 @@
   
   <entry>
     <title type="html"><![CDATA[Кратко о блокировках]]></title>
-    <link href="http://uthark.github.io/blog/2009/04/22/blog-post_22/"/>
-    <updated>2009-04-22T23:58:00+07:00</updated>
-    <id>http://uthark.github.io/blog/2009/04/22/blog-post_22</id>
+    <link href="http://uthark.github.com/blog/2009/04/22/blog-post_22/"/>
+    <updated>2009-04-22T12:58:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2009/04/22/blog-post_22</id>
     <content type="html"><![CDATA[<div class='post'>
 <span style="font-weight: bold;">Блокировка</span> - в реляционных базах данных это установка метки на запись, что запись заблокирована для изменений.
 

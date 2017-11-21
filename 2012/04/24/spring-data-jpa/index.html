@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+
+  
+  
+  <link href="//fonts.googleapis.com/css?family=Anonymous+Pro" rel="stylesheet" type="text/css">
+  
+
+  
+  <title>Ищем с помощью Spring Data JPA</title>
+
+  
+  
+  <link rel="stylesheet" href="https://uthark.github.io/css/hugo-octopress.css">
+
+  
+  
+
+  
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
+  
+  <link href="https://uthark.github.io/favicon.png" rel="icon">
+
+  
+  
+  
+
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <meta name="author" content="Oleg Atamanenko">
+
+  
+  <meta name="generator" content="Hugo 0.31" />
+
+  
+  
+
+</head>
+<body>
+
+
+<header role="banner"><hgroup>
+  
+  <h1><a href="https://uthark.github.io/">Software Development and related activities</a></h1>
+    <h2></h2>
+</hgroup></header>
+
+
+<nav role="navigation">
+
+<ul class="main-navigation">
+  
+  
+    
+      <li><a href="https://uthark.github.io/" title="Home">Home</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/categories/article/" title="Articles" >Articles</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/categories/reading-list/" title="Reading List" >Reading List</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/about/" title="About me" >About me</a></li>
+    
+  
+</ul>
+
+
+<ul class="subscription">
+  
+    
+        <a href="https://uthark.github.io/index.xml" target="_blank" type="application/rss+xml" title="RSS"><i class="fa fa-rss-square fa-lg"></i></a>
+    
+  
+
+</ul>
+
+
+<form action="https://www.google.com/search" method="get" target="_blank">
+  <fieldset role="search">
+  	<input class="search" type="text" name="q" results="0" placeholder="Search"/>
+    <input type="hidden" name="q" value="site:https://uthark.github.io/" />
+  </fieldset>
+</form>
+
+</nav>
+
+
+<div id="main">
+  <div id="content">
+    <div>
+      <article class="hentry" role="article">
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+         Ищем с помощью Spring Data JPA 
+    </h1>
+
+</header>
+
+
+        <div class="entry-content">
+          
+          
+          
+          
+          <p>Рассмотрим подробнее одну из наиболее полезных вещей в Spring Data JPA - генерация JPQL-запросов на основе имени метода.</p>
+
+<p>Spring Data JPA умеет автоматически генерировать запросы используя для подсказки название метода.</p>
+
+<p>Например, метод <code>User.findByLoginAndPassword</code> сгенерирует примерно следующий код:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">FROM</span> <span style="color:#66d9ef">User</span> u <span style="color:#66d9ef">where</span> u.login <span style="color:#f92672">=</span> :login <span style="color:#66d9ef">and</span> password <span style="color:#f92672">=</span> :password</code></pre></div>
+<p>Вообще Spring Data JPA пытается быть умным, поэтому реализация <tt>findBy{&hellip;}</tt> методов ищется следующим образом:</p>
+
+<ol>
+<li>Сначала смотрится аннотация <a href="http://static.springsource.org/spring-data/data-jpa/docs/current/api/org/springframework/data/jpa/repository/Query.html">@Query</a> на объявлении метода, если она есть, то используется.</li>
+<li>Затем смотрится аннотация <a href="http://docs.oracle.com/javaee/5/api/javax/persistence/NamedQuery.html">@NamedQuery</a> с именем вида <tt>Entity.findMethodName</tt>, для вышеприведённого случая это будет <tt>User.findByLoginAndPassword</tt>. </li>
+<li>Если ничего не нашли. то по сигнатуре метода <a href="https://github.com/SpringSource/spring-data-jpa/blob/master/src/main/java/org/springframework/data/jpa/repository/query/JpaQueryCreator.java">генерируется запрос</a>.</li>
+</ol>
+
+<p>У <tt>@Query</tt> следующие плюсы:
+<ol>
+<li>Позволяет не засорять объявление доменной сущности.</li>
+<li>Сильно помогает, если у нас в запросе есть неявные джойны, потому что для таких запросов Spring Data JPA <a href="https://jira.springsource.org/browse/DATAJPA-35">не умеет корректно генерировать</a> запрос <tt>SELECT COUNT(*)</tt>, который нужен в тех случаях, когда метод должен вернуть <a href="http://static.springsource.org/spring-data/data-commons/docs/current/api/org/springframework/data/domain/Page.html">Page</a>. </li>
+</ol></p>
+
+<p>Очевидно, что при использовании запросов нам необходимо каким-то образом указывать параметры для запросов. Для этого есть аннотация <a href="http://static.springsource.org/spring-data/data-commons/docs/current/api/org/springframework/data/repository/query/Param.html">@Param</a>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Query</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;select u from User u where u.login = :login and u.password = :password&#34;</span><span style="color:#f92672">)</span>
+Page<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">findByLoginAndPassword</span><span style="color:#f92672">(</span><span style="color:#a6e22e">@Param</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;login&#34;</span><span style="color:#f92672">)</span> String login<span style="color:#f92672">,</span> <span style="color:#a6e22e">@Param</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;password&#34;</span><span style="color:#f92672">)</span> String password<span style="color:#f92672">);</span></code></pre></div>
+<p>Кроме того, Spring Data JPA поддерживает отличную <a href="http://www.martinfowler.com/apsupp/spec.pdf">концепцию спецификаций</a>.</p>
+
+<p>Спецификации позволяют делать составлять сложные запросы из набора простых.</p>
+
+<p>Для поддержки спецификаций необходимо объявить метод в репозитории:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">Page<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">findAll</span><span style="color:#f92672">(</span>Specification<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">&gt;</span> spec<span style="color:#f92672">,</span> Pageable pageable<span style="color:#f92672">);</span></code></pre></div>
+<p>Спецификация по сути является фильтром и позволяет комбинирование фильтров, что даёт мощный инструмент для построения запросов.</p>
+
+<p>Пример использования спецификаций:</p>
+
+<p>Объявляем наши спецификации:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> Specification<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">firstNameOrLastNameOrLoginLike</span><span style="color:#f92672">(</span><span style="color:#66d9ef">final</span> String search<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> Specification<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">&gt;()</span> <span style="color:#f92672">{</span>
+        <span style="color:#a6e22e">@Override</span>
+        <span style="color:#66d9ef">public</span> Predicate <span style="color:#a6e22e">toPredicate</span><span style="color:#f92672">(</span>Root<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">&gt;</span> root<span style="color:#f92672">,</span> CriteriaQuery<span style="color:#f92672">&lt;?&gt;</span> query<span style="color:#f92672">,</span> CriteriaBuilder builder<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+
+            Predicate loginPredicate <span style="color:#f92672">=</span> builder<span style="color:#f92672">.</span><span style="color:#a6e22e">like</span><span style="color:#f92672">(</span>root<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>User_<span style="color:#f92672">.</span><span style="color:#a6e22e">login</span><span style="color:#f92672">),</span> search<span style="color:#f92672">);</span>
+            Predicate firstnamePredicate <span style="color:#f92672">=</span> builder<span style="color:#f92672">.</span><span style="color:#a6e22e">like</span><span style="color:#f92672">(</span>root<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>User_<span style="color:#f92672">.</span><span style="color:#a6e22e">firstname</span><span style="color:#f92672">),</span> search<span style="color:#f92672">);</span>
+            Predicate lastnamePredicate <span style="color:#f92672">=</span> builder<span style="color:#f92672">.</span><span style="color:#a6e22e">like</span><span style="color:#f92672">(</span>root<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>User_<span style="color:#f92672">.</span><span style="color:#a6e22e">lastname</span><span style="color:#f92672">),</span> search<span style="color:#f92672">);</span>
+
+            <span style="color:#66d9ef">return</span> builder<span style="color:#f92672">.</span><span style="color:#a6e22e">or</span><span style="color:#f92672">(</span>loginPredicate<span style="color:#f92672">,</span> firstnamePredicate<span style="color:#f92672">,</span> lastnamePredicate<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">};</span>
+<span style="color:#f92672">}</span>
+
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> Specification<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">hasRole</span><span style="color:#f92672">(</span><span style="color:#66d9ef">final</span> Role role<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> Specification<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">&gt;()</span> <span style="color:#f92672">{</span>
+        <span style="color:#a6e22e">@Override</span>
+        <span style="color:#66d9ef">public</span> Predicate <span style="color:#a6e22e">toPredicate</span><span style="color:#f92672">(</span>Root<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">&gt;</span> root<span style="color:#f92672">,</span> CriteriaQuery<span style="color:#f92672">&lt;?&gt;</span> query<span style="color:#f92672">,</span> CriteriaBuilder builder<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> builder<span style="color:#f92672">.</span><span style="color:#a6e22e">equal</span><span style="color:#f92672">(</span>root<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>User_<span style="color:#f92672">.</span><span style="color:#a6e22e">role</span><span style="color:#f92672">),</span> role<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">};</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>И в нашем сервисе комбинируем их:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> Page<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">searchUser</span><span style="color:#f92672">(</span>Role role<span style="color:#f92672">,</span> String search<span style="color:#f92672">,</span> Pageable pageable<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    Specifications<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">&gt;</span> mainSpec <span style="color:#f92672">=</span> where<span style="color:#f92672">(</span>hasRole<span style="color:#f92672">(</span>role<span style="color:#f92672">));</span>
+
+    <span style="color:#75715e">// уточняем запрос, если была передана строка для поиска
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>StringUtils<span style="color:#f92672">.</span><span style="color:#a6e22e">isNotBlank</span><span style="color:#f92672">(</span>search<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+        mainSpec <span style="color:#f92672">=</span> mainSpec<span style="color:#f92672">.</span><span style="color:#a6e22e">and</span><span style="color:#f92672">(</span>firstNameOrLastNameOrLoginLike<span style="color:#f92672">(</span>search<span style="color:#f92672">));</span>
+    <span style="color:#f92672">}</span> 
+
+    <span style="color:#66d9ef">return</span> userRepository<span style="color:#f92672">.</span><span style="color:#a6e22e">findAll</span><span style="color:#f92672">(</span>mainSpec<span style="color:#f92672">,</span> pageable<span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span></code></pre></div>
+        </div>
+        
+
+<footer>
+
+  <p class="meta">
+    
+    
+
+    
+    
+    
+    Filed under: <a class="label" href="https://uthark.github.io/categories/development/">development</a><a class="label" href="https://uthark.github.io/categories/spring-data/">spring data</a><a class="label" href="https://uthark.github.io/categories/jpa/">jpa</a>
+    
+  </p>
+
+  <p class="meta">
+    
+    Last update: <time>Apr 24, 2012</time>
+    
+    </span>
+  </p>
+  
+  
+
+  
+
+  <p class="meta">
+    
+        <a class="basic-alignment left" href="https://uthark.github.io/2012/04/20/beanpostprocessor/" title="Использование BeanPostProcessor на примере журналирования">Использование BeanPostProcessor на примере журналирования</a>
+    
+
+    
+      <a class="basic-alignment right" href="https://uthark.github.io/2012/04/28/spring-data-jpa_28/" title="Собственная реализация методов в Spring Data JPA">Собственная реализация методов в Spring Data JPA</a>
+    
+  </p>
+  
+</footer>
+
+      </article>
+    </div>
+    
+
+<aside class="sidebar thirds">
+  <section class="first odd">
+
+    
+
+    <p>
+      
+    </p>
+  </section>
+
+
+
+
+
+  
+
+  
+
+  
+  
+  
+
+</aside>
+
+  </div>
+</div>
+
+<footer role="contentinfo">
+    
+    <div class="center">
+        <ul class="sidebar-nav">
+            <li class="sidebar-nav-item">
+                <a target="_blank" href="https://github.com/uthark/" title="https://github.com/uthark/"><i
+                    class="fa fa-github fa-3x"></i></a></li>
+            <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
+                    class="fa fa-bitbucket fa-3x"></i></a>
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item"><a target="_blank" href="https://twitter.com/LinkageError/" title="https://twitter.com/LinkageError/"><i
+                    class="fa fa-twitter fa-3x"></i></a>
+            <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
+                    class="fa fa-key fa-3x"></i></a> 
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item"><a target="_blank" href="http://stackoverflow.com/users/216764/uthark" title="http://stackoverflow.com/users/216764/uthark"><i
+                    class="fa fa-stack-overflow fa-3x"></i></a>
+            <li class="sidebar-nav-item"><a target="_blank" href="https://plus.google.com/&#43;OlegAtamanenko" title="https://plus.google.com/&#43;OlegAtamanenko"><i
+                    class="fa fa-google-plus fa-3x"></i></a>
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item">
+                
+                
+            </li>
+        </ul>
+    </div>
+    <p>Copyright &copy; 2017 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+        <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a> and
+            <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.
+    </p>
+
+</footer>
+
+
+</body>
+</html>
+

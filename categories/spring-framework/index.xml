@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Spring Framework on Software Development and related activities</title>
+    <link>https://uthark.github.io/categories/spring-framework/</link>
+    <description>Recent content in Spring Framework on Software Development and related activities</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 19 Jun 2013 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://uthark.github.io/categories/spring-framework/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>@Autowiring EJBs with Spring</title>
+      <link>https://uthark.github.io/2013/06/19/autowiring-factorybean/</link>
+      <pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2013/06/19/autowiring-factorybean/</guid>
+      <description>Предположим, что у нас есть проект на Spring, в котором необходимо использовать внешние EJB. Для получения бинов необходимо создавать InitialContext и делать lookup() нужных ejb. Но эту задачу можно автоматизировать и пользоваться @Autowired, то есть код будет выглядеть вот так:
+@Service public class UserService { @Autowired private UserRemoteBean userRemoteBean; } Для этого в Spring существует FactoryBean - класс, который знает, как создавать бины нужного типа. Собственно, нам необходимо написать такой класс (код на Scala):</description>
+    </item>
+    
+    <item>
+      <title>Валидация входных параметров с использованием Spring</title>
+      <link>https://uthark.github.io/2013/06/19/validation/</link>
+      <pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2013/06/19/validation/</guid>
+      <description>Очень часто возникает задача проверки входных параметров в сервис на корректность с точки зрения бизнес логики.
+Эту задачу можно решить в лоб, написав вручную код валидации в каждом из методов сервиса, например, вот так:
+public User save(User user) { if(user == null) { throw new IllegalArgumentException(&amp;#34;User is null&amp;#34;); } // other checks  //...  // business logic starts here...  //...  return savedUser; } Очевидно, что если в каждом методе делать такие проверки, то код бизнес-логики загрязняется проверками, что ухудшает читаемость кода.</description>
+    </item>
+    
+    <item>
+      <title>Использование memcached в качестве backend для Spring Caching Abstraction</title>
+      <link>https://uthark.github.io/2013/06/19/spring-caching/</link>
+      <pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2013/06/19/spring-caching/</guid>
+      <description>В Spring 3.1 появился замечательный модуль - Spring Cache, который является абстракцией над кэшированием, что позволяет декларативно реализовывать кэширование в приложении.
+Я не буду вдаваться в подробности работы, их можно прочитать в документации, но опишу, каким образом можно настроить memcached в качестве бэкэнда для работы.
+Подключение зависимостей &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;com.google.code.simple-spring-memcached&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spymemcached-provider&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;3.1.0&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;com.google.code.simple-spring-memcached&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-cache&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;3.1.0&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; spymemcached-provider - это библиотечка для работы с memcached из Java, а spring-cache - модуль интеграции со Spring.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+
+  
+  
+  <link href="//fonts.googleapis.com/css?family=Anonymous+Pro" rel="stylesheet" type="text/css">
+  
+
+  
+  <title>Software Development and related activities</title>
+
+  
+  
+  <link rel="stylesheet" href="https://uthark.github.io/css/hugo-octopress.css">
+
+  
+  
+
+  
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
+  
+  <link href="https://uthark.github.io/favicon.png" rel="icon">
+
+  
+  
+  
+
+  <link href="https://uthark.github.io/index.xml" rel="alternate" type="application/rss+xml" title="Software Development and related activities" />
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <meta name="author" content="Oleg Atamanenko">
+
+  
+  <meta name="generator" content="Hugo 0.31" />
+
+  
+  
+
+</head>
+<body>
+
+
+<header role="banner"><hgroup>
+  
+  <h1><a href="https://uthark.github.io/">Software Development and related activities</a></h1>
+    <h2></h2>
+</hgroup></header>
+
+
+<nav role="navigation">
+
+<ul class="main-navigation">
+  
+  
+    
+      <li><a href="https://uthark.github.io/" title="Home">Home</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/categories/article/" title="Articles" >Articles</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/categories/reading-list/" title="Reading List" >Reading List</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/about/" title="About me" >About me</a></li>
+    
+  
+</ul>
+
+
+<ul class="subscription">
+  
+    
+        <a href="https://uthark.github.io/index.xml" target="_blank" type="application/rss+xml" title="RSS"><i class="fa fa-rss-square fa-lg"></i></a>
+    
+  
+
+</ul>
+
+
+<form action="https://www.google.com/search" method="get" target="_blank">
+  <fieldset role="search">
+  	<input class="search" type="text" name="q" results="0" placeholder="Search"/>
+    <input type="hidden" name="q" value="site:https://uthark.github.io/" />
+  </fieldset>
+</form>
+
+</nav>
+
+
+<div id="main">
+ <div id="content">
+  <div class="blog-index">
+    
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2012/04/24/spring-data-jpa/">Ищем с помощью Spring Data JPA</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>Рассмотрим подробнее одну из наиболее полезных вещей в Spring Data JPA - генерация JPQL-запросов на основе имени метода.</p>
+
+<p>Spring Data JPA умеет автоматически генерировать запросы используя для подсказки название метода.</p>
+
+<p>Например, метод <code>User.findByLoginAndPassword</code> сгенерирует примерно следующий код:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">FROM</span> <span style="color:#66d9ef">User</span> u <span style="color:#66d9ef">where</span> u.login <span style="color:#f92672">=</span> :login <span style="color:#66d9ef">and</span> password <span style="color:#f92672">=</span> :password</code></pre></div>
+<p>Вообще Spring Data JPA пытается быть умным, поэтому реализация <tt>findBy{&hellip;}</tt> методов ищется следующим образом:</p>
+
+<ol>
+<li>Сначала смотрится аннотация <a href="http://static.springsource.org/spring-data/data-jpa/docs/current/api/org/springframework/data/jpa/repository/Query.html">@Query</a> на объявлении метода, если она есть, то используется.</li>
+<li>Затем смотрится аннотация <a href="http://docs.oracle.com/javaee/5/api/javax/persistence/NamedQuery.html">@NamedQuery</a> с именем вида <tt>Entity.findMethodName</tt>, для вышеприведённого случая это будет <tt>User.findByLoginAndPassword</tt>. </li>
+<li>Если ничего не нашли. то по сигнатуре метода <a href="https://github.com/SpringSource/spring-data-jpa/blob/master/src/main/java/org/springframework/data/jpa/repository/query/JpaQueryCreator.java">генерируется запрос</a>.</li>
+</ol>
+
+<p>У <tt>@Query</tt> следующие плюсы:
+<ol>
+<li>Позволяет не засорять объявление доменной сущности.</li>
+<li>Сильно помогает, если у нас в запросе есть неявные джойны, потому что для таких запросов Spring Data JPA <a href="https://jira.springsource.org/browse/DATAJPA-35">не умеет корректно генерировать</a> запрос <tt>SELECT COUNT(*)</tt>, который нужен в тех случаях, когда метод должен вернуть <a href="http://static.springsource.org/spring-data/data-commons/docs/current/api/org/springframework/data/domain/Page.html">Page</a>. </li>
+</ol></p>
+
+<p>Очевидно, что при использовании запросов нам необходимо каким-то образом указывать параметры для запросов. Для этого есть аннотация <a href="http://static.springsource.org/spring-data/data-commons/docs/current/api/org/springframework/data/repository/query/Param.html">@Param</a>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Query</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;select u from User u where u.login = :login and u.password = :password&#34;</span><span style="color:#f92672">)</span>
+Page<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">findByLoginAndPassword</span><span style="color:#f92672">(</span><span style="color:#a6e22e">@Param</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;login&#34;</span><span style="color:#f92672">)</span> String login<span style="color:#f92672">,</span> <span style="color:#a6e22e">@Param</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;password&#34;</span><span style="color:#f92672">)</span> String password<span style="color:#f92672">);</span></code></pre></div>
+<p>Кроме того, Spring Data JPA поддерживает отличную <a href="http://www.martinfowler.com/apsupp/spec.pdf">концепцию спецификаций</a>.</p>
+
+<p>Спецификации позволяют делать составлять сложные запросы из набора простых.</p>
+
+<p>Для поддержки спецификаций необходимо объявить метод в репозитории:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">Page<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">findAll</span><span style="color:#f92672">(</span>Specification<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">&gt;</span> spec<span style="color:#f92672">,</span> Pageable pageable<span style="color:#f92672">);</span></code></pre></div>
+<p>Спецификация по сути является фильтром и позволяет комбинирование фильтров, что даёт мощный инструмент для построения запросов.</p>
+
+<p>Пример использования спецификаций:</p>
+
+<p>Объявляем наши спецификации:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> Specification<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">firstNameOrLastNameOrLoginLike</span><span style="color:#f92672">(</span><span style="color:#66d9ef">final</span> String search<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> Specification<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">&gt;()</span> <span style="color:#f92672">{</span>
+        <span style="color:#a6e22e">@Override</span>
+        <span style="color:#66d9ef">public</span> Predicate <span style="color:#a6e22e">toPredicate</span><span style="color:#f92672">(</span>Root<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">&gt;</span> root<span style="color:#f92672">,</span> CriteriaQuery<span style="color:#f92672">&lt;?&gt;</span> query<span style="color:#f92672">,</span> CriteriaBuilder builder<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+
+            Predicate loginPredicate <span style="color:#f92672">=</span> builder<span style="color:#f92672">.</span><span style="color:#a6e22e">like</span><span style="color:#f92672">(</span>root<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>User_<span style="color:#f92672">.</span><span style="color:#a6e22e">login</span><span style="color:#f92672">),</span> search<span style="color:#f92672">);</span>
+            Predicate firstnamePredicate <span style="color:#f92672">=</span> builder<span style="color:#f92672">.</span><span style="color:#a6e22e">like</span><span style="color:#f92672">(</span>root<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>User_<span style="color:#f92672">.</span><span style="color:#a6e22e">firstname</span><span style="color:#f92672">),</span> search<span style="color:#f92672">);</span>
+            Predicate lastnamePredicate <span style="color:#f92672">=</span> builder<span style="color:#f92672">.</span><span style="color:#a6e22e">like</span><span style="color:#f92672">(</span>root<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>User_<span style="color:#f92672">.</span><span style="color:#a6e22e">lastname</span><span style="color:#f92672">),</span> search<span style="color:#f92672">);</span>
+
+            <span style="color:#66d9ef">return</span> builder<span style="color:#f92672">.</span><span style="color:#a6e22e">or</span><span style="color:#f92672">(</span>loginPredicate<span style="color:#f92672">,</span> firstnamePredicate<span style="color:#f92672">,</span> lastnamePredicate<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">};</span>
+<span style="color:#f92672">}</span>
+
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> Specification<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">hasRole</span><span style="color:#f92672">(</span><span style="color:#66d9ef">final</span> Role role<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> Specification<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">&gt;()</span> <span style="color:#f92672">{</span>
+        <span style="color:#a6e22e">@Override</span>
+        <span style="color:#66d9ef">public</span> Predicate <span style="color:#a6e22e">toPredicate</span><span style="color:#f92672">(</span>Root<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">&gt;</span> root<span style="color:#f92672">,</span> CriteriaQuery<span style="color:#f92672">&lt;?&gt;</span> query<span style="color:#f92672">,</span> CriteriaBuilder builder<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> builder<span style="color:#f92672">.</span><span style="color:#a6e22e">equal</span><span style="color:#f92672">(</span>root<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>User_<span style="color:#f92672">.</span><span style="color:#a6e22e">role</span><span style="color:#f92672">),</span> role<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">};</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>И в нашем сервисе комбинируем их:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> Page<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">searchUser</span><span style="color:#f92672">(</span>Role role<span style="color:#f92672">,</span> String search<span style="color:#f92672">,</span> Pageable pageable<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    Specifications<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">&gt;</span> mainSpec <span style="color:#f92672">=</span> where<span style="color:#f92672">(</span>hasRole<span style="color:#f92672">(</span>role<span style="color:#f92672">));</span>
+
+    <span style="color:#75715e">// уточняем запрос, если была передана строка для поиска
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>StringUtils<span style="color:#f92672">.</span><span style="color:#a6e22e">isNotBlank</span><span style="color:#f92672">(</span>search<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+        mainSpec <span style="color:#f92672">=</span> mainSpec<span style="color:#f92672">.</span><span style="color:#a6e22e">and</span><span style="color:#f92672">(</span>firstNameOrLastNameOrLoginLike<span style="color:#f92672">(</span>search<span style="color:#f92672">));</span>
+    <span style="color:#f92672">}</span> 
+
+    <span style="color:#66d9ef">return</span> userRepository<span style="color:#f92672">.</span><span style="color:#a6e22e">findAll</span><span style="color:#f92672">(</span>mainSpec<span style="color:#f92672">,</span> pageable<span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span></code></pre></div>
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2012/04/20/beanpostprocessor/">Использование BeanPostProcessor на примере журналирования</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>Сегодня я хочу рассказать, как можно сделать инициализацию логгера в классе с использованием аннотаций и <a href="http://static.springsource.org/spring/docs/current/javadoc-api/org/springframework/beans/factory/config/BeanPostProcessor.html">BeanPostProcessor</a></p>
+
+<p>Очень часто мы инициализируем логгер следующим образом:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MyClass</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> Logger LOG <span style="color:#f92672">=</span> LoggerFactory<span style="color:#f92672">.</span><span style="color:#a6e22e">getLogger</span><span style="color:#f92672">(</span>MyClass<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span>
+<span style="color:#f92672">&lt;/</span>pre<span style="color:#f92672">&gt;</span>
+
+Я покажу<span style="color:#f92672">,</span> как сделать<span style="color:#f92672">,</span> чтобы можно было писать вот так: 
+<span style="color:#960050;background-color:#1e0010">```</span>java
+    <span style="color:#a6e22e">@Log</span>
+    <span style="color:#66d9ef">private</span> Logger LOG<span style="color:#f92672">;</span>
+<span style="color:#f92672">&lt;/</span>pre<span style="color:#f92672">&gt;</span>
+
+Первым делом нам нужно объявить аннотацию:
+
+<span style="color:#960050;background-color:#1e0010">```</span>java
+<span style="color:#a6e22e">@Retention</span><span style="color:#f92672">(</span>RUNTIME<span style="color:#f92672">)</span>
+<span style="color:#a6e22e">@Target</span><span style="color:#f92672">(</span>FIELD<span style="color:#f92672">)</span>
+<span style="color:#a6e22e">@Documented</span>
+<span style="color:#66d9ef">public</span> <span style="color:#a6e22e">@interface</span> Log <span style="color:#f92672">{</span>
+    String <span style="color:#a6e22e">category</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">default</span> <span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">;</span>
+<span style="color:#f92672">}</span>
+<span style="color:#f92672">&lt;/</span>pre<span style="color:#f92672">&gt;</span>
+
+А вторым делом<span style="color:#f92672">,</span> написать собственный <span style="color:#f92672">&lt;</span>tt<span style="color:#f92672">&gt;</span>BeanPostProcessor<span style="color:#f92672">&lt;/</span>tt<span style="color:#f92672">&gt;,</span> который бы устанавливал нам логгер:
+
+<span style="color:#960050;background-color:#1e0010">```</span>java
+<span style="color:#f92672">import</span> org.apache.commons.lang.StringUtils<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.slf4j.Logger<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.slf4j.LoggerFactory<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.springframework.beans.factory.config.BeanPostProcessor<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.springframework.stereotype.Component<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.springframework.util.ReflectionUtils<span style="color:#f92672">;</span>
+
+<span style="color:#a6e22e">@Component</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">LoggerPostProcessor</span> <span style="color:#66d9ef">implements</span> BeanPostProcessor <span style="color:#f92672">{</span>
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">public</span> Object <span style="color:#a6e22e">postProcessAfterInitialization</span><span style="color:#f92672">(</span>Object bean<span style="color:#f92672">,</span> String beanName<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> bean<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">public</span> Object <span style="color:#a6e22e">postProcessBeforeInitialization</span><span style="color:#f92672">(</span><span style="color:#66d9ef">final</span> Object bean<span style="color:#f92672">,</span> <span style="color:#66d9ef">final</span> String beanName<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        ReflectionUtils<span style="color:#f92672">.</span><span style="color:#a6e22e">doWithFields</span><span style="color:#f92672">(</span>bean<span style="color:#f92672">.</span><span style="color:#a6e22e">getClass</span><span style="color:#f92672">(),</span> <span style="color:#66d9ef">new</span> FieldProcessor<span style="color:#f92672">(</span>bean<span style="color:#f92672">,</span> beanName<span style="color:#f92672">),</span> <span style="color:#66d9ef">new</span> LoggerFieldFilter<span style="color:#f92672">());</span>
+        <span style="color:#66d9ef">return</span> bean<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">FieldProcessor</span> <span style="color:#66d9ef">implements</span> ReflectionUtils<span style="color:#f92672">.</span><span style="color:#a6e22e">FieldCallback</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> Object bean<span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> String beanName<span style="color:#f92672">;</span>
+
+        <span style="color:#66d9ef">private</span> <span style="color:#a6e22e">FieldProcessor</span><span style="color:#f92672">(</span>Object bean<span style="color:#f92672">,</span> String beanName<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">bean</span> <span style="color:#f92672">=</span> bean<span style="color:#f92672">;</span>
+            <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">beanName</span> <span style="color:#f92672">=</span> beanName<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+
+        <span style="color:#a6e22e">@Override</span>
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">doWith</span><span style="color:#f92672">(</span>Field field<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> IllegalAccessException <span style="color:#f92672">{</span>
+            Log loggerAnnot <span style="color:#f92672">=</span> field<span style="color:#f92672">.</span><span style="color:#a6e22e">getAnnotation</span><span style="color:#f92672">(</span>Log<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
+
+            <span style="color:#75715e">// Sanity check if annotation is on the field with correct type.
+</span><span style="color:#75715e"></span>            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>field<span style="color:#f92672">.</span><span style="color:#a6e22e">getType</span><span style="color:#f92672">().</span><span style="color:#a6e22e">equals</span><span style="color:#f92672">(</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">slf4j</span><span style="color:#f92672">.</span><span style="color:#a6e22e">Logger</span><span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+                <span style="color:#75715e">// As user can override logger category - check if it was done.
+</span><span style="color:#75715e"></span>                String loggerCategory <span style="color:#f92672">=</span> loggerAnnot<span style="color:#f92672">.</span><span style="color:#a6e22e">category</span><span style="color:#f92672">();</span>
+                <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>StringUtils<span style="color:#f92672">.</span><span style="color:#a6e22e">isBlank</span><span style="color:#f92672">(</span>loggerCategory<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+                    <span style="color:#75715e">// use default category instead.
+</span><span style="color:#75715e"></span>                    loggerCategory <span style="color:#f92672">=</span> bean<span style="color:#f92672">.</span><span style="color:#a6e22e">getClass</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getName</span><span style="color:#f92672">();</span>
+                <span style="color:#f92672">}</span>
+                Logger logger <span style="color:#f92672">=</span> LoggerFactory<span style="color:#f92672">.</span><span style="color:#a6e22e">getLogger</span><span style="color:#f92672">(</span>loggerCategory<span style="color:#f92672">);</span>
+                ReflectionUtils<span style="color:#f92672">.</span><span style="color:#a6e22e">makeAccessible</span><span style="color:#f92672">(</span>field<span style="color:#f92672">);</span>
+                field<span style="color:#f92672">.</span><span style="color:#a6e22e">set</span><span style="color:#f92672">(</span>bean<span style="color:#f92672">,</span> logger<span style="color:#f92672">);</span>
+            <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+                <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IllegalArgumentException<span style="color:#f92672">(</span>
+                    <span style="color:#e6db74">&#34;Unable to set logger on field &#39;&#34;</span> <span style="color:#f92672">+</span> field<span style="color:#f92672">.</span><span style="color:#a6e22e">getName</span><span style="color:#f92672">()</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;&#39; in bean &#39;&#34;</span> <span style="color:#f92672">+</span> beanName <span style="color:#f92672">+</span>
+                        <span style="color:#e6db74">&#34;&#39;: field should have class &#34;</span> <span style="color:#f92672">+</span> Logger<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">.</span><span style="color:#a6e22e">getName</span><span style="color:#f92672">());</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">LoggerFieldFilter</span> <span style="color:#66d9ef">implements</span> ReflectionUtils<span style="color:#f92672">.</span><span style="color:#a6e22e">FieldFilter</span> <span style="color:#f92672">{</span>
+        <span style="color:#a6e22e">@Override</span>
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">matches</span><span style="color:#f92672">(</span>Field field<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            Log logger <span style="color:#f92672">=</span> field<span style="color:#f92672">.</span><span style="color:#a6e22e">getAnnotation</span><span style="color:#f92672">(</span>Log<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
+            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">!=</span> logger<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>Если вы используете не <a href="http://www.slf4j.org/">sfl4j</a>, а, например, <a href="http://logging.apache.org/log4j/1.2/">log4j</a>, или <a href="http://commons.apache.org/logging/">commons-logging</a>, то нужно немного поправить код внутри метода <tt>doWith</tt></p>
+
+<p>Попутно, данный код показывает пример использования класса <a href="http://static.springsource.org/spring/docs/current/javadoc-api/org/springframework/util/ReflectionUtils.html">org.springframework.util.ReflectionUtils</a>.</p>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2012/04/20/blog-post/">Преобразуем строку в дату</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>Казалось бы, есть простейшая задача - преобразовать строковое представление даты в объект класса <tt>java.util.Date</tt>.</p>
+
+<p>Как оказалось, иногда использование DateFormat не помогает. В случае, если строка - это заголовок <tt>Date</tt> из письма, то нам нужно использовать <tt><a href="http://docs.oracle.com/javaee/5/api/javax/mail/internet/MailDateFormat.html">javax.mail.internet.MailDateFormat</a></tt> для преобразования такой строки.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">String dateStr <span style="color:#f92672">=</span> <span style="color:#f92672">...</span>
+Date parsedDate <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> MailDateFormat<span style="color:#f92672">().</span><span style="color:#a6e22e">parse</span><span style="color:#f92672">(</span>dateStr<span style="color:#f92672">);</span></code></pre></div>
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2012/02/23/jpa-spring-data-jpa/">Упрощаем работу с JPA при помощи Spring Data JPA</a>
+    </h1>
+
+</header>
+
+
+        
+        <h3>Введение</h3>
+<p>Уже прошло несколько лет с тех пор, как появился JPA. Работа с <a href="http://docs.oracle.com/javaee/5/api/javax/persistence/EntityManager.html">EntityManager</a> увлекательна, но разработчики пишут красивый API, а подробности работы с базой данных скрывают. При этом частая проблема - дублирование имплементации, когда из одного DAO в другой у нас плавно перекочёвывает один и тот же код, в лучшем случае этот код переносится в абстрактный базовый DAO. <a href="http://www.springsource.org/spring-data/jpa">Spring Data</a>  коренным образом решает проблему - при  его использовании остаётся только API на уровне интерфейсов, вся имплементация создаётся автоматически с использованием <a href="http://en.wikipedia.org/wiki/Aspect-oriented_programming">AOP</a>.</p>
+<h3>История Spring Data</h3>
+
+<p>Несмотря на то, что проект только недавно достиг версии 1.0, у него достаточно богатая история - раньше он развивался в рамках проекта <a href="http://redmine.synyx.org/projects/show/hades">Hades</a>.</p>
+
+<h3>Объявление DAO-интерфейса</h3>
+
+<p>Итак, для начала нам необходимо объявить DAO-интерфейс, в котором мы будем объявлять методы для работы с сущностью.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">UserRepository</span> <span style="color:#66d9ef">extends</span> CrudRepository<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">,</span> Long<span style="color:#f92672">&gt;</span> <span style="color:#f92672">{</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>Данного кода достаточно для обычного DAO с <a href="http://en.wikipedia.org/wiki/Create,_read,_update_and_delete">CRUD</a>-методами.</p>
+
+<ul>
+  <li><b>save</b> - сохраняет или обновляет переданную сущность.</li>
+  <li><b>findOne</b> - ищет сущность по первичному ключу.</li>
+  <li><b>findAll</b> - возвращает коллекцию всех сущностей</li>
+  <li><b>count</b> - возвращает количество сущностей</li>
+  <li><b>delete</b> - удаляет сущность</li>
+  <li><b>exists</b> - проверяет, существует ли сущность с данным первичным ключом</li>
+ 
+</ul>
+
+<p>Полный список методов, объявленный в CrudRepository можно посмотреть в <a href="http://static.springsource.org/spring-data/data-commons/docs/current/api/org/springframework/data/repository/CrudRepository.html">javadoc</a>.</p>
+
+<p>В случае, если нам нужны не все методы, то есть возможность произвести наследование от интерфейса <a href="http://static.springsource.org/spring-data/data-commons/docs/current/api/org/springframework/data/repository/Repository.html">Repository</a> и перенести в наследника только те методы из интерфейса CrudRepository, которые нужны.</p>
+
+<p><h3>Поддержка сортировки и постраничного просмотра</h3>
+Очень часто требующаяся функциональность - это возможность возвращать только часть сущностей из БД, например, для реализации постраничного просмотра в пользовательском интерфейсе. Spring Data и тут хорош и предоставляет нам возможность добавить такую функциональность в наш DAO. Для этого достаточно добавить объявление следующего метода в наш DAO-интерфейс:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"> Page<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">findAll</span><span style="color:#f92672">(</span>Pageable pageable<span style="color:#f92672">);</span></code></pre></div>
+<p>Интерфейс <a href="http://static.springsource.org/spring-data/data-commons/docs/current/api/org/springframework/data/domain/Pageable.html">Pageable</a> инкапсулирует в себе сведения о номере запрашиваемой страницы, размере страницы, а также требуемой сортировке.</p>
+
+<p><h3>Ищем данные</h3>
+Как правило, на обычных CRUD-ах DAO не заканчиваются и часто требуются дополнительные методы, которые возвращают только те сущности, которые удовлетворяют заданным условиям. На мой взгляд, Spring Data сильно упрощает жизнь в данной области.</p>
+
+<p>Например, нам нужен методы для поиска пользователя по логину и по его e-mail адресу:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"> User <span style="color:#a6e22e">findByLogin</span><span style="color:#f92672">(</span>String login<span style="color:#f92672">);</span>
+ User <span style="color:#a6e22e">findByEmail</span><span style="color:#f92672">(</span>String email<span style="color:#f92672">);</span></code></pre></div>
+<p>Все просто.</p>
+
+<p>В случае, если нужны более сложные условия для поиска, то и это тоже реализовано.</p>
+
+<p>Spring Data поддерживает следующие операторы:</p>
+
+<p><ul>
+  <li>Between</li>
+  <li>IsNotNull</li>
+  <li>NotNull</li>
+  <li>IsNull</li>
+  <li>Null</li>
+  <li>LessThan</li>
+  <li>LessThanEqual</li>
+  <li>GreaterThan</li>
+  <li>GreaterThanEqual</li>
+  <li>NotLike</li>
+  <li>Like</li>
+  <li>NotIn</li>
+  <li>In</li>
+  <li>Near</li>
+  <li>Within</li>
+  <li>Regex</li>
+  <li>Exists</li>
+  <li>IsTrue</li>
+  <li>True</li>
+  <li>IsFalse</li>
+<li>False</li>
+<li>Not</li></p>
+
+<p></ul>
+Такой внушительный список открывает простор для фантазии, так что можно составить сколь угодно сложный запрос.</p>
+
+<p>Если необходимо, чтобы в результатах поиска было несколько сущностей, то необходимо называть метод find<b>All</b></p>
+
+<p><h3>Поддержка Spring MVC</h3>
+<i>Это часть основана на официальной документации.</i>
+Представьте, что вы разрабатываете веб-приложение с использованием <a href="http://static.springsource.org/spring/docs/current/spring-framework-reference/html/mvc.html">Spring MVC</a>. Тогда вам необходимо будет загружать сущность из базы данных используя параметры HTTP-запроса. Это может выглядеть следующим образом:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Controller</span>
+<span style="color:#a6e22e">@RequestMapping</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/users&#34;</span><span style="color:#f92672">)</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">UserController</span> <span style="color:#f92672">{</span>
+
+  <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> UserRepository userRepository<span style="color:#f92672">;</span>
+
+  <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">UserController</span><span style="color:#f92672">(</span>UserRepository userRepository<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    userRepository <span style="color:#f92672">=</span> userRepository<span style="color:#f92672">;</span>
+  <span style="color:#f92672">}</span>
+
+  <span style="color:#a6e22e">@RequestMapping</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/{id}&#34;</span><span style="color:#f92672">)</span>
+  <span style="color:#66d9ef">public</span> String <span style="color:#a6e22e">showUserForm</span><span style="color:#f92672">(</span><span style="color:#a6e22e">@PathVariable</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;id&#34;</span><span style="color:#f92672">)</span> Long id<span style="color:#f92672">,</span> Model model<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    
+    <span style="color:#75715e">// Do null check for id
+</span><span style="color:#75715e"></span>    User user <span style="color:#f92672">=</span> userRepository<span style="color:#f92672">.</span><span style="color:#a6e22e">findOne</span><span style="color:#f92672">(</span>id<span style="color:#f92672">);</span>
+    <span style="color:#75715e">// Do null check for user
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// Populate model
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;user&#34;</span><span style="color:#f92672">;</span>
+  <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>Во-первых, вы объявляете зависимость на DAO, а во-вторых всегда вызываете метод <tt>findOne()</tt> для загрузки сущности. К счастью, Spring позволяет нам преобразовывать строковые значения из HTTP-запросов в любой нужный тип используя либо <tt><a href="http://docs.oracle.com/javase/6/docs/api/java/beans/PropertyEditor.html">PropertyEditor</a></tt>, либо <tt><a href="http://static.springsource.org/spring/docs/current/javadoc-api/org/springframework/core/convert/ConversionService.html">ConversionService</a></tt>.</p>
+
+<p>Если вы используете Spring версии 3.0 и выше, то вам необходимо добавить следующую конфигурацию:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;mvc:annotation-driven</span> <span style="color:#a6e22e">conversion-service=</span><span style="color:#e6db74">&#34;conversionService&#34;</span> <span style="color:#f92672">/&gt;</span>
+<span style="color:#f92672">&lt;bean</span> <span style="color:#a6e22e">id=</span><span style="color:#e6db74">&#34;conversionService&#34;</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;….context.support.ConversionServiceFactoryBean&#34;</span><span style="color:#f92672">&gt;</span>
+  <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;converters&#34;</span><span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;list&gt;</span>
+      <span style="color:#f92672">&lt;bean</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;org.springframework.data.repository.support.DomainClassConverter&#34;</span><span style="color:#f92672">&gt;</span>
+        <span style="color:#f92672">&lt;constructor-arg</span> <span style="color:#a6e22e">ref=</span><span style="color:#e6db74">&#34;conversionService&#34;</span> <span style="color:#f92672">/&gt;</span>
+      <span style="color:#f92672">&lt;/bean&gt;</span>
+    <span style="color:#f92672">&lt;/list&gt;</span>
+  <span style="color:#f92672">&lt;/property&gt;</span>
+<span style="color:#f92672">&lt;/bean&gt;</span></code></pre></div>
+<p>Если же вы используете Spring более старой версии, то вам необходима вот такая конфигурация:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;bean</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;….web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter&#34;</span><span style="color:#f92672">&gt;</span>
+  <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;webBindingInitializer&#34;</span><span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;bean</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;….web.bind.support.ConfigurableWebBindingInitializer&#34;</span><span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;propertyEditorRegistrars&#34;</span><span style="color:#f92672">&gt;</span>
+        <span style="color:#f92672">&lt;bean</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;org.springframework.data.repository.support.DomainClassPropertyEditorRegistrar&#34;</span> <span style="color:#f92672">/&gt;</span>
+      <span style="color:#f92672">&lt;/property&gt;</span>
+    <span style="color:#f92672">&lt;/bean&gt;</span>
+  <span style="color:#f92672">&lt;/property&gt;</span>
+<span style="color:#f92672">&lt;/bean&gt;</span></code></pre></div>
+<p>После данных изменений в конфигурации можно переписать контроллер следующим образом:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Controller</span>
+<span style="color:#a6e22e">@RequestMapping</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/users&#34;</span><span style="color:#f92672">)</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">UserController</span> <span style="color:#f92672">{</span>
+
+  <span style="color:#a6e22e">@RequestMapping</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/{id}&#34;</span><span style="color:#f92672">)</span>
+  <span style="color:#66d9ef">public</span> String <span style="color:#a6e22e">showUserForm</span><span style="color:#f92672">(</span><span style="color:#a6e22e">@PathVariable</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;id&#34;</span><span style="color:#f92672">)</span> User user<span style="color:#f92672">,</span> Model model<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+
+    <span style="color:#75715e">// Do null check for user
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// Populate model
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;userForm&#34;</span><span style="color:#f92672">;</span>
+  <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>Обратите внимание на то, как упростился код и как мы красиво избавились от его дублирования.</p>
+
+<p><h3>Документация</h3>
+На данный момент документации по проекту не так уж и много, но, тем не менее, она есть:</p>
+
+<p><ul>
+<li><a href="http://static.springsource.org/spring-data/data-jpa/docs/current/reference/html/">Spring Data JPA - Reference Documentation</a></li>
+<li><a href="http://static.springsource.org/spring-data/data-commons/docs/current/reference/html/">Spring Data Commons - Reference Documentation</a></li>
+<li><a href="https://github.com/SpringSource/spring-data-jpa">исходники на github</a></li></p>
+
+<p></ul>
+<h3>Заключение</h3>
+Spring Data значительно упрощает жизнь при использовании JPA. Рекомендуется к использованию в своих проектах.</p>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2012/02/09/java-rest/">Разработка и тестирование Java REST веб-сервисов</a>
+    </h1>
+
+</header>
+
+
+        
+        <h4>Введение</h4>
+Для разработки <a href="http://restpatterns.org/">REST</a> веб-сервисов Java предлагает <a href="http://jcp.org/en/jsr/detail?id=311">JSR-311 - JAX-RS: The Java&trade; API for RESTful Web Services</a>
+Как это обычно бывает в мире Enterprise Java, существует несколько реализаций данной спецификации:
+<ul>
+<li><a href="http://jersey.java.net/">Jersey</a> - это эталонная реализация спецификации от компании <strike>Sun</strike> Oracle</li>
+<li><a href="http://cxf.apache.org/">Apache CXF</a></li>
+<li><a href="http://www.jboss.org/resteasy">JBoss RESTEasy</a></li>
+</ul>
+На примере последней реализации, я и расскажу, каким образом можно написать REST-сервис.
+
+<h4>Пишем REST-сервис</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">import</span> javax.ws.rs.*<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> javax.ws.rs.core.MediaType<span style="color:#f92672">;</span>
+
+<span style="color:#a6e22e">@Path</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/service/entity&#34;</span><span style="color:#f92672">)</span>
+<span style="color:#a6e22e">@Produces</span><span style="color:#f92672">({</span>MediaType<span style="color:#f92672">.</span><span style="color:#a6e22e">APPLICATION_XML</span><span style="color:#f92672">,</span> MediaType<span style="color:#f92672">.</span><span style="color:#a6e22e">APPLICATION_JSON</span><span style="color:#f92672">})</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">EntityRestService</span> <span style="color:#f92672">{</span>
+
+ <span style="color:#a6e22e">@GET</span>
+ <span style="color:#a6e22e">@Path</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/all&#34;</span><span style="color:#f92672">)</span>
+ EntityList <span style="color:#a6e22e">listAll</span><span style="color:#f92672">();</span>
+
+ <span style="color:#a6e22e">@GET</span>
+ <span style="color:#a6e22e">@Path</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/{id}&#34;</span><span style="color:#f92672">)</span>
+ Entity <span style="color:#a6e22e">findById</span><span style="color:#f92672">(</span><span style="color:#a6e22e">@PathParam</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;id&#34;</span><span style="color:#f92672">)</span> Integer id<span style="color:#f92672">);</span>
+
+
+<span style="color:#f92672">}</span></code></pre></div>
+<p>Создаём интерфейс, в котором расставляем JAX-RS аннотации. Аннотация <a href="http://jsr311.java.net/nonav/releases/1.1/javax/ws/rs/Path.html">@Path</a> указывает путь, по которому будет доступен наш сервис. Аннотация <a href="http://jsr311.java.net/nonav/releases/1.1/javax/ws/rs/GET.html">@GET</a> определяет, какой HTTP-запрос будет обрабатываться данным методом. Аннотация <a href="http://jsr311.java.net/nonav/releases/1.1/javax/ws/rs/Produces.html">@Produces</a> позволяет указать, в каком формате данный сервис предоставляет результаты.</p>
+
+<h4>Конфигурация JBoss RESTEasy</h4>
+
+<p>Конфигурация очень проста, во-первых, нам нужно добавить обновить <tt>pom.xml</tt> и добавить необходимые зависимости:</p>
+
+<h5>Обновляем <tt>pom.xml</tt></h5>
+
+<p>Добавляем compile-time зависимость на JAX-RS API</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;dependency&gt;</span>
+    <span style="color:#f92672">&lt;groupId&gt;</span>org.jboss.resteasy<span style="color:#f92672">&lt;/groupId&gt;</span>
+    <span style="color:#f92672">&lt;artifactId&gt;</span>jaxrs-api<span style="color:#f92672">&lt;/artifactId&gt;</span>
+<span style="color:#f92672">&lt;/dependency&gt;</span></code></pre></div>
+<p>и runtime зависимости на реализацию</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;dependency&gt;</span>
+    <span style="color:#f92672">&lt;groupId&gt;</span>org.jboss.resteasy<span style="color:#f92672">&lt;/groupId&gt;</span>
+    <span style="color:#f92672">&lt;artifactId&gt;</span>resteasy-jaxrs<span style="color:#f92672">&lt;/artifactId&gt;</span>
+    <span style="color:#f92672">&lt;version&gt;</span>${resteasy-jaxrs.version}<span style="color:#f92672">&lt;/version&gt;</span>
+    <span style="color:#f92672">&lt;scope&gt;</span>runtime<span style="color:#f92672">&lt;/scope&gt;</span>
+<span style="color:#f92672">&lt;/dependency&gt;</span>
+<span style="color:#f92672">&lt;dependency&gt;</span>
+    <span style="color:#f92672">&lt;groupId&gt;</span>org.jboss.resteasy<span style="color:#f92672">&lt;/groupId&gt;</span>
+    <span style="color:#f92672">&lt;artifactId&gt;</span>resteasy-jackson-provider<span style="color:#f92672">&lt;/artifactId&gt;</span>
+    <span style="color:#f92672">&lt;version&gt;</span>${resteasy-jaxrs.version}<span style="color:#f92672">&lt;/version&gt;</span>
+    <span style="color:#f92672">&lt;scope&gt;</span>runtime<span style="color:#f92672">&lt;/scope&gt;</span>
+<span style="color:#f92672">&lt;/dependency&gt;</span></code></pre></div>
+<p><h5>Обновляем конфигурацию веб-приложения в <tt>web.xml</tt></h5>
+Необходимо выполнить следующую модификацию <tt>web.xml</tt></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"> <span style="color:#f92672">&lt;listener&gt;</span>
+  <span style="color:#f92672">&lt;listener-class&gt;</span>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap<span style="color:#f92672">&lt;/listener-class&gt;</span>
+ <span style="color:#f92672">&lt;/listener&gt;</span>
+
+ <span style="color:#f92672">&lt;context-param&gt;</span>
+  <span style="color:#f92672">&lt;param-name&gt;</span>resteasy.servlet.mapping.prefix<span style="color:#f92672">&lt;/param-name&gt;</span>
+  <span style="color:#f92672">&lt;param-value&gt;</span>/rest<span style="color:#f92672">&lt;/param-value&gt;</span>
+ <span style="color:#f92672">&lt;/context-param&gt;</span>
+ <span style="color:#f92672">&lt;servlet&gt;</span>
+  <span style="color:#f92672">&lt;servlet-name&gt;</span>REST Easy<span style="color:#f92672">&lt;/servlet-name&gt;</span>
+  <span style="color:#f92672">&lt;servlet-class&gt;</span>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher<span style="color:#f92672">&lt;/servlet-class&gt;</span>
+ <span style="color:#f92672">&lt;/servlet&gt;</span>
+ <span style="color:#f92672">&lt;servlet-mapping&gt;</span>
+  <span style="color:#f92672">&lt;servlet-name&gt;</span>REST Easy<span style="color:#f92672">&lt;/servlet-name&gt;</span>
+  <span style="color:#f92672">&lt;url-pattern&gt;</span>/rest/*<span style="color:#f92672">&lt;/url-pattern&gt;</span>
+ <span style="color:#f92672">&lt;/servlet-mapping&gt;</span></code></pre></div>
+<p>Данный код объявляет <a href="http://docs.jboss.org/resteasy/docs/2.3.1.GA/javadocs/org/jboss/resteasy/plugins/server/servlet/HttpServletDispatcher.html">сервлет HttpServletDispatcher</a>, который будет обрабатывать все запросы, которые приходят на <tt>/rest/*</tt>. Слушатель <tt><a href="http://docs.jboss.org/resteasy/docs/2.3.1.GA/javadocs/org/jboss/resteasy/plugins/server/servlet/ResteasyBootstrap.html">ResteasyBootstrap</a></tt> выполняет всю необходимую инициализацию JBoss RESTEasy.</p>
+
+<p><h5>Поддержка Spring</h5>
+Для того, чтобы использовать <a href="http://www.springsource.org/spring-framework">Spring Framework</a>, нам необходимо сделать следующие изменения:</p>
+
+<ol>
+<li>Добавить зависимость в <tt>pom.xml</tt></li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;dependency&gt;</span>
+    <span style="color:#f92672">&lt;groupId&gt;</span>org.jboss.resteasy<span style="color:#f92672">&lt;/groupId&gt;</span>
+    <span style="color:#f92672">&lt;artifactId&gt;</span>resteasy-spring<span style="color:#f92672">&lt;/artifactId&gt;</span>
+    <span style="color:#f92672">&lt;version&gt;</span>${resteasy-jaxrs.version}<span style="color:#f92672">&lt;/version&gt;</span>
+    <span style="color:#f92672">&lt;scope&gt;</span>runtime<span style="color:#f92672">&lt;/scope&gt;</span>
+<span style="color:#f92672">&lt;/dependency&gt;</span></code></pre></div>
+<ol>
+<li>Добавить Spring-ового слушателя в <tt>web.xml</tt></li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"> <span style="color:#f92672">&lt;listener&gt;</span>
+  <span style="color:#f92672">&lt;listener-class&gt;</span>org.jboss.resteasy.plugins.spring.SpringContextLoaderListener<span style="color:#f92672">&lt;/listener-class&gt;</span>
+ <span style="color:#f92672">&lt;/listener&gt;</span></code></pre></div>
+<p>После этих изменений JBoss RESTEasy будет в курсе про Spring, это позволит в реализации REST-сервисов полноценно использовать все возможности, предоставляемые Spring Framework.</p>
+
+<p><h4>Пишем тесты</h4>
+Написание тестов - весьма полезная вещь, ниже я покажу пример теста для REST-сервиса.
+В рамках данного теста у нас будет подниматься <a href="http://docs.jboss.org/resteasy/docs/2.3.1.GA/javadocs/org/jboss/resteasy/plugins/server/tjws/TJWSEmbeddedJaxrsServer.html">встраиваемый веб-сервер TJWSEmbeddedJaxrsServer</a>, к которому мы будем обращаться для тестирования наших REST-сервисов.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@RunWith</span><span style="color:#f92672">(</span>SpringJUnit4ClassRunner<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">)</span>
+<span style="color:#a6e22e">@ContextConfiguration</span><span style="color:#f92672">({</span><span style="color:#e6db74">&#34;/applicationContext-test.xml&#34;</span><span style="color:#f92672">})</span>
+<span style="color:#a6e22e">@TestExecutionListeners</span><span style="color:#f92672">({</span>DependencyInjectionTestExecutionListener<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">,</span> DirtiesContextTestExecutionListener<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">})</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TestEntityServiceRest</span> <span style="color:#f92672">{</span>
+
+ <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">int</span> PORT <span style="color:#f92672">=</span> 8081<span style="color:#f92672">;</span>
+ <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> String BASE_URL <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;http://localhost:&#34;</span> <span style="color:#f92672">+</span> PORT<span style="color:#f92672">;</span>
+
+ <span style="color:#a6e22e">@Autowired</span>
+ EntityService entityService<span style="color:#f92672">;</span>
+
+ <span style="color:#a6e22e">@Autowired</span>
+ ConfigurableApplicationContext applicationContext<span style="color:#f92672">;</span>
+
+
+ <span style="color:#66d9ef">protected</span> HttpClient client<span style="color:#f92672">;</span>
+ <span style="color:#66d9ef">protected</span> TJWSEmbeddedJaxrsServer server<span style="color:#f92672">;</span>
+
+
+ <span style="color:#a6e22e">@Before</span>
+ <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">setUpClient</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">throws</span> Exception <span style="color:#f92672">{</span>
+  client <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> DefaultHttpClient<span style="color:#f92672">();</span>
+ <span style="color:#f92672">}</span>
+
+ <span style="color:#a6e22e">@Before</span>
+ <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">setUpServer</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">throws</span> Exception <span style="color:#f92672">{</span>
+  server <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> TJWSEmbeddedJaxrsServer<span style="color:#f92672">();</span>
+  server<span style="color:#f92672">.</span><span style="color:#a6e22e">setPort</span><span style="color:#f92672">(</span>PORT<span style="color:#f92672">);</span>
+  ResteasyDeployment deployment <span style="color:#f92672">=</span> server<span style="color:#f92672">.</span><span style="color:#a6e22e">getDeployment</span><span style="color:#f92672">();</span>
+
+  server<span style="color:#f92672">.</span><span style="color:#a6e22e">start</span><span style="color:#f92672">();</span>
+
+  Dispatcher dispatcher <span style="color:#f92672">=</span> deployment<span style="color:#f92672">.</span><span style="color:#a6e22e">getDispatcher</span><span style="color:#f92672">();</span>
+  SpringBeanProcessor processor <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> SpringBeanProcessor<span style="color:#f92672">(</span>dispatcher<span style="color:#f92672">,</span> deployment<span style="color:#f92672">.</span><span style="color:#a6e22e">getRegistry</span><span style="color:#f92672">(),</span> deployment<span style="color:#f92672">.</span><span style="color:#a6e22e">getProviderFactory</span><span style="color:#f92672">());</span>
+  applicationContext<span style="color:#f92672">.</span><span style="color:#a6e22e">addBeanFactoryPostProcessor</span><span style="color:#f92672">(</span>processor<span style="color:#f92672">);</span>
+
+  SpringResourceFactory noDefaults <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> SpringResourceFactory<span style="color:#f92672">(</span>
+    <span style="color:#e6db74">&#34;entityServiceRestImpl&#34;</span><span style="color:#f92672">,</span> applicationContext<span style="color:#f92672">,</span> EntityRestServiceImpl<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
+  dispatcher<span style="color:#f92672">.</span><span style="color:#a6e22e">getRegistry</span><span style="color:#f92672">().</span><span style="color:#a6e22e">addResourceFactory</span><span style="color:#f92672">(</span>noDefaults<span style="color:#f92672">);</span>
+ <span style="color:#f92672">}</span>
+
+ <span style="color:#a6e22e">@After</span>
+ <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">stop</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+  server<span style="color:#f92672">.</span><span style="color:#a6e22e">stop</span><span style="color:#f92672">();</span>
+ <span style="color:#f92672">}</span>
+
+ <span style="color:#a6e22e">@Test</span>
+ <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">testListAll</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">throws</span> Exception <span style="color:#f92672">{</span>
+
+  <span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span>
+  <span style="color:#66d9ef">final</span> List<span style="color:#f92672">&lt;</span>Entity<span style="color:#f92672">&gt;</span> returnedList <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ArrayList<span style="color:#f92672">&lt;</span>Entity<span style="color:#f92672">&gt;();</span>
+  <span style="color:#66d9ef">int</span> EXPECTED_SIZE <span style="color:#f92672">=</span> 6<span style="color:#f92672">;</span>
+  <span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span>i <span style="color:#f92672">&lt;</span> EXPECTED_SIZE<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+   i<span style="color:#f92672">++;</span>
+   <span style="color:#66d9ef">final</span> Entity entity <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Entity<span style="color:#f92672">();</span>
+   entity<span style="color:#f92672">.</span><span style="color:#a6e22e">setId</span><span style="color:#f92672">(</span>i<span style="color:#f92672">);</span>
+   entity<span style="color:#f92672">.</span><span style="color:#a6e22e">setName</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;test&#34;</span> <span style="color:#f92672">+</span> i<span style="color:#f92672">);</span>
+   returnedList<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>entity<span style="color:#f92672">);</span>
+  <span style="color:#f92672">}</span>
+  when<span style="color:#f92672">(</span>entityService<span style="color:#f92672">.</span><span style="color:#a6e22e">findAll</span><span style="color:#f92672">()).</span><span style="color:#a6e22e">thenReturn</span><span style="color:#f92672">(</span>returnedList<span style="color:#f92672">);</span>
+
+
+  HttpGet get <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> HttpGet<span style="color:#f92672">(</span>BASE_URL <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;/service/entity/&#34;</span><span style="color:#f92672">);</span>
+
+  HttpResponse response <span style="color:#f92672">=</span> client<span style="color:#f92672">.</span><span style="color:#a6e22e">execute</span><span style="color:#f92672">(</span>get<span style="color:#f92672">);</span>
+  InputStream content <span style="color:#f92672">=</span> response<span style="color:#f92672">.</span><span style="color:#a6e22e">getEntity</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getContent</span><span style="color:#f92672">();</span>
+
+  EntityList result <span style="color:#f92672">=</span> fromString<span style="color:#f92672">(</span>EntityList<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">,</span> content<span style="color:#f92672">);</span>
+  content<span style="color:#f92672">.</span><span style="color:#a6e22e">close</span><span style="color:#f92672">();</span>
+
+  Assert<span style="color:#f92672">.</span><span style="color:#a6e22e">assertNotNull</span><span style="color:#f92672">(</span>result<span style="color:#f92672">);</span>
+  Assert<span style="color:#f92672">.</span><span style="color:#a6e22e">assertEquals</span><span style="color:#f92672">(</span>EXPECTED_SIZE<span style="color:#f92672">,</span> result<span style="color:#f92672">.</span><span style="color:#a6e22e">getEntities</span><span style="color:#f92672">().</span><span style="color:#a6e22e">size</span><span style="color:#f92672">());</span>
+ <span style="color:#f92672">}</span>
+
+ <span style="color:#a6e22e">@Test</span>
+ <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">testFindById</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">throws</span> Exception <span style="color:#f92672">{</span>
+
+  <span style="color:#66d9ef">final</span> Entity validEntity <span style="color:#f92672">=</span> getValidEntity<span style="color:#f92672">();</span>
+  validEntity<span style="color:#f92672">.</span><span style="color:#a6e22e">setId</span><span style="color:#f92672">(</span>2<span style="color:#f92672">);</span>
+
+  when<span style="color:#f92672">(</span>entityService<span style="color:#f92672">.</span><span style="color:#a6e22e">findById</span><span style="color:#f92672">(</span>validEntity<span style="color:#f92672">.</span><span style="color:#a6e22e">getId</span><span style="color:#f92672">())).</span><span style="color:#a6e22e">thenAnswer</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Answer<span style="color:#f92672">&lt;</span>Object<span style="color:#f92672">&gt;()</span> <span style="color:#f92672">{</span>
+   <span style="color:#a6e22e">@Override</span>
+   <span style="color:#66d9ef">public</span> Object <span style="color:#a6e22e">answer</span><span style="color:#f92672">(</span>InvocationOnMock invocation<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> Throwable <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">return</span> validEntity<span style="color:#f92672">;</span>
+   <span style="color:#f92672">}</span>
+  <span style="color:#f92672">});</span>
+
+  HttpGet get <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> HttpGet<span style="color:#f92672">(</span>BASE_URL <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;/service/entity/2&#34;</span><span style="color:#f92672">);</span>
+
+  HttpResponse response <span style="color:#f92672">=</span> client<span style="color:#f92672">.</span><span style="color:#a6e22e">execute</span><span style="color:#f92672">(</span>get<span style="color:#f92672">);</span>
+  InputStream content <span style="color:#f92672">=</span> response<span style="color:#f92672">.</span><span style="color:#a6e22e">getEntity</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getContent</span><span style="color:#f92672">();</span>
+
+  Entity result <span style="color:#f92672">=</span> fromString<span style="color:#f92672">(</span>Entity<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">,</span> content<span style="color:#f92672">);</span>
+  content<span style="color:#f92672">.</span><span style="color:#a6e22e">close</span><span style="color:#f92672">();</span>
+
+  Assert<span style="color:#f92672">.</span><span style="color:#a6e22e">assertNotNull</span><span style="color:#f92672">(</span>result<span style="color:#f92672">);</span>
+
+  deepAssertEquals<span style="color:#f92672">(</span>validEntity<span style="color:#f92672">,</span> result<span style="color:#f92672">);</span>
+
+ <span style="color:#f92672">}</span>
+
+ <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">deepAssertEquals</span><span style="color:#f92672">(</span>Object expected<span style="color:#f92672">,</span> Object actual<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> IllegalAccessException<span style="color:#f92672">,</span> InvocationTargetException <span style="color:#f92672">{</span>
+  Assert<span style="color:#f92672">.</span><span style="color:#a6e22e">assertEquals</span><span style="color:#f92672">(</span>expected<span style="color:#f92672">.</span><span style="color:#a6e22e">getClass</span><span style="color:#f92672">(),</span> actual<span style="color:#f92672">.</span><span style="color:#a6e22e">getClass</span><span style="color:#f92672">());</span>
+  PropertyDescriptor<span style="color:#f92672">[]</span> propertyDescriptors <span style="color:#f92672">=</span> BeanUtils<span style="color:#f92672">.</span><span style="color:#a6e22e">getPropertyDescriptors</span><span style="color:#f92672">(</span>expected<span style="color:#f92672">.</span><span style="color:#a6e22e">getClass</span><span style="color:#f92672">());</span>
+  <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>PropertyDescriptor propertyDescriptor <span style="color:#f92672">:</span> propertyDescriptors<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+   Object expectedValue <span style="color:#f92672">=</span> propertyDescriptor<span style="color:#f92672">.</span><span style="color:#a6e22e">getReadMethod</span><span style="color:#f92672">().</span><span style="color:#a6e22e">invoke</span><span style="color:#f92672">(</span>expected<span style="color:#f92672">);</span>
+   Object actualValue <span style="color:#f92672">=</span> propertyDescriptor<span style="color:#f92672">.</span><span style="color:#a6e22e">getReadMethod</span><span style="color:#f92672">().</span><span style="color:#a6e22e">invoke</span><span style="color:#f92672">(</span>actual<span style="color:#f92672">);</span>
+   Assert<span style="color:#f92672">.</span><span style="color:#a6e22e">assertEquals</span><span style="color:#f92672">(</span>expectedValue<span style="color:#f92672">,</span> actualValue<span style="color:#f92672">);</span>
+  <span style="color:#f92672">}</span>
+ <span style="color:#f92672">}</span>
+
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> T <span style="color:#a6e22e">fromString</span><span style="color:#f92672">(</span>Class<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> clazz<span style="color:#f92672">,</span> String input<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> JAXBException <span style="color:#f92672">{</span>
+  JAXBContext ctx <span style="color:#f92672">=</span> JAXBContext<span style="color:#f92672">.</span><span style="color:#a6e22e">newInstance</span><span style="color:#f92672">(</span>clazz<span style="color:#f92672">);</span>
+  Unmarshaller unmarshaller <span style="color:#f92672">=</span> ctx<span style="color:#f92672">.</span><span style="color:#a6e22e">createUnmarshaller</span><span style="color:#f92672">();</span>
+  <span style="color:#a6e22e">@SuppressWarnings</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;unchecked&#34;</span><span style="color:#f92672">)</span>
+  T unmarshal <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>T<span style="color:#f92672">)</span> unmarshaller<span style="color:#f92672">.</span><span style="color:#a6e22e">unmarshal</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> StringReader<span style="color:#f92672">(</span>input<span style="color:#f92672">));</span>
+  <span style="color:#66d9ef">return</span> unmarshal<span style="color:#f92672">;</span>
+ <span style="color:#f92672">}</span>
+
+ <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> T <span style="color:#a6e22e">fromString</span><span style="color:#f92672">(</span>Class<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> clazz<span style="color:#f92672">,</span> InputStream input<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> JAXBException <span style="color:#f92672">{</span>
+  JAXBContext ctx <span style="color:#f92672">=</span> JAXBContext<span style="color:#f92672">.</span><span style="color:#a6e22e">newInstance</span><span style="color:#f92672">(</span>clazz<span style="color:#f92672">);</span>
+  <span style="color:#a6e22e">@SuppressWarnings</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;unchecked&#34;</span><span style="color:#f92672">)</span>
+  T unmarshal <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>T<span style="color:#f92672">)</span> ctx<span style="color:#f92672">.</span><span style="color:#a6e22e">createUnmarshaller</span><span style="color:#f92672">().</span><span style="color:#a6e22e">unmarshal</span><span style="color:#f92672">(</span>input<span style="color:#f92672">);</span>
+  <span style="color:#66d9ef">return</span> unmarshal<span style="color:#f92672">;</span>
+ <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p><h4>Запуск тестов</h4>
+Половина дела сделана, теперь нам необходимо настроить инфраструктуру для тестирования наших свеженаписанных REST-сервисов.</p>
+
+<p>Для этого нам необходимо внести следующие модификации в <tt>pom.xml</tt>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;plugin&gt;</span>
+    <span style="color:#f92672">&lt;groupId&gt;</span>org.apache.maven.plugins<span style="color:#f92672">&lt;/groupId&gt;</span>
+    <span style="color:#f92672">&lt;artifactId&gt;</span>maven-surefire-plugin<span style="color:#f92672">&lt;/artifactId&gt;</span>
+    <span style="color:#f92672">&lt;version&gt;</span>2.11<span style="color:#f92672">&lt;/version&gt;</span>
+
+    <span style="color:#f92672">&lt;executions&gt;</span>
+        <span style="color:#f92672">&lt;execution&gt;</span>
+     <span style="color:#f92672">&lt;id&gt;</span>Unit tests<span style="color:#f92672">&lt;/id&gt;</span>
+            <span style="color:#f92672">&lt;phase&gt;</span>test<span style="color:#f92672">&lt;/phase&gt;</span>
+            <span style="color:#f92672">&lt;goals&gt;</span>
+                <span style="color:#f92672">&lt;goal&gt;</span>test<span style="color:#f92672">&lt;/goal&gt;</span>
+            <span style="color:#f92672">&lt;/goals&gt;</span>
+            <span style="color:#f92672">&lt;configuration&gt;</span>
+                <span style="color:#f92672">&lt;excludes&gt;</span>
+                    <span style="color:#f92672">&lt;exclude&gt;</span>**/IT*.java<span style="color:#f92672">&lt;/exclude&gt;</span>
+                <span style="color:#f92672">&lt;/excludes&gt;</span>
+            <span style="color:#f92672">&lt;/configuration&gt;</span>
+        <span style="color:#f92672">&lt;/execution&gt;</span>
+        <span style="color:#f92672">&lt;execution&gt;</span>
+            <span style="color:#f92672">&lt;id&gt;</span>Integration tests<span style="color:#f92672">&lt;/id&gt;</span>
+            <span style="color:#f92672">&lt;phase&gt;</span>integration-test<span style="color:#f92672">&lt;/phase&gt;</span>
+            <span style="color:#f92672">&lt;goals&gt;</span>
+                <span style="color:#f92672">&lt;goal&gt;</span>test<span style="color:#f92672">&lt;/goal&gt;</span>
+            <span style="color:#f92672">&lt;/goals&gt;</span>
+            <span style="color:#f92672">&lt;configuration&gt;</span>
+                <span style="color:#f92672">&lt;includes&gt;</span>
+                    <span style="color:#f92672">&lt;include&gt;</span>**/IT*.java<span style="color:#f92672">&lt;/include&gt;</span>
+                <span style="color:#f92672">&lt;/includes&gt;</span>
+            <span style="color:#f92672">&lt;/configuration&gt;</span>
+        <span style="color:#f92672">&lt;/execution&gt;</span>
+    <span style="color:#f92672">&lt;/executions&gt;</span>
+<span style="color:#f92672">&lt;/plugin&gt;</span>
+
+<span style="color:#f92672">&lt;dependency&gt;</span>
+    <span style="color:#f92672">&lt;groupId&gt;</span>org.apache.httpcomponents<span style="color:#f92672">&lt;/groupId&gt;</span>
+    <span style="color:#f92672">&lt;artifactId&gt;</span>httpclient<span style="color:#f92672">&lt;/artifactId&gt;</span>
+    <span style="color:#f92672">&lt;version&gt;</span>4.1.2<span style="color:#f92672">&lt;/version&gt;</span>
+    <span style="color:#f92672">&lt;scope&gt;</span>test<span style="color:#f92672">&lt;/scope&gt;</span>
+<span style="color:#f92672">&lt;/dependency&gt;</span>
+<span style="color:#f92672">&lt;dependency&gt;</span>
+    <span style="color:#f92672">&lt;groupId&gt;</span>org.jboss.resteasy<span style="color:#f92672">&lt;/groupId&gt;</span>
+    <span style="color:#f92672">&lt;artifactId&gt;</span>resteasy-jaxrs<span style="color:#f92672">&lt;/artifactId&gt;</span>
+    <span style="color:#f92672">&lt;scope&gt;</span>test<span style="color:#f92672">&lt;/scope&gt;</span>
+<span style="color:#f92672">&lt;/dependency&gt;</span>
+<span style="color:#f92672">&lt;dependency&gt;</span>
+    <span style="color:#f92672">&lt;groupId&gt;</span>org.jboss.resteasy<span style="color:#f92672">&lt;/groupId&gt;</span>
+    <span style="color:#f92672">&lt;artifactId&gt;</span>resteasy-spring<span style="color:#f92672">&lt;/artifactId&gt;</span>
+    <span style="color:#f92672">&lt;scope&gt;</span>test<span style="color:#f92672">&lt;/scope&gt;</span>
+<span style="color:#f92672">&lt;/dependency&gt;</span>
+<span style="color:#f92672">&lt;dependency&gt;</span>
+    <span style="color:#f92672">&lt;groupId&gt;</span>org.jboss.resteasy<span style="color:#f92672">&lt;/groupId&gt;</span>
+    <span style="color:#f92672">&lt;artifactId&gt;</span>tjws<span style="color:#f92672">&lt;/artifactId&gt;</span>
+    <span style="color:#f92672">&lt;version&gt;</span>${resteasy-jaxrs.version}<span style="color:#f92672">&lt;/version&gt;</span>
+<span style="color:#f92672">&lt;/dependency&gt;</span>
+<span style="color:#f92672">&lt;dependency&gt;</span>
+    <span style="color:#f92672">&lt;groupId&gt;</span>javax.servlet<span style="color:#f92672">&lt;/groupId&gt;</span>
+    <span style="color:#f92672">&lt;artifactId&gt;</span>servlet-api<span style="color:#f92672">&lt;/artifactId&gt;</span>
+    <span style="color:#f92672">&lt;scope&gt;</span>test<span style="color:#f92672">&lt;/scope&gt;</span>
+<span style="color:#f92672">&lt;/dependency&gt;</span>
+<span style="color:#f92672">&lt;dependency&gt;</span>
+    <span style="color:#f92672">&lt;groupId&gt;</span>commons-io<span style="color:#f92672">&lt;/groupId&gt;</span>
+    <span style="color:#f92672">&lt;artifactId&gt;</span>commons-io<span style="color:#f92672">&lt;/artifactId&gt;</span>
+    <span style="color:#f92672">&lt;scope&gt;</span>test<span style="color:#f92672">&lt;/scope&gt;</span>
+<span style="color:#f92672">&lt;/dependency&gt;</span></code></pre></div>
+<p><h4>Заключение</h4>
+В целом, ничего сложного, главное делать всё аккуратно. Хорошего вам кода!</p>
+
+        
+
+    </article>
+    
+    
+    
+
+
+
+
+<div class="pagination">
+
+    
+        
+        
+        
+        <a href="/" aria-label="First" class="label-pagination"><i class="fa fa-angle-double-left fa-lg"></i></a>
+    
+
+    
+    
+        <a href="/page/15/" aria-label="Previous" class="label-pagination"><i class="fa fa-angle-left fa-lg"></i></a>
+    
+
+    
+        <a href="/" class="label-pagination">1</a>
+    
+        <a href="/page/2/" class="label-pagination">2</a>
+    
+        <a href="/page/3/" class="label-pagination">3</a>
+    
+        <a href="/page/4/" class="label-pagination">4</a>
+    
+        <a href="/page/5/" class="label-pagination">5</a>
+    
+        <a href="/page/6/" class="label-pagination">6</a>
+    
+        <a href="/page/7/" class="label-pagination">7</a>
+    
+        <a href="/page/8/" class="label-pagination">8</a>
+    
+        <a href="/page/9/" class="label-pagination">9</a>
+    
+        <a href="/page/10/" class="label-pagination">10</a>
+    
+        <a href="/page/11/" class="label-pagination">11</a>
+    
+        <a href="/page/12/" class="label-pagination">12</a>
+    
+        <a href="/page/13/" class="label-pagination">13</a>
+    
+        <a href="/page/14/" class="label-pagination">14</a>
+    
+        <a href="/page/15/" class="label-pagination">15</a>
+    
+        <a href="/page/16/" class="label-pagination">16</a>
+    
+        <a href="/page/17/" class="label-pagination">17</a>
+    
+        <a href="/page/18/" class="label-pagination">18</a>
+    
+        <a href="/page/19/" class="label-pagination">19</a>
+    
+        <a href="/page/20/" class="label-pagination">20</a>
+    
+        <a href="/page/21/" class="label-pagination">21</a>
+    
+        <a href="/page/22/" class="label-pagination">22</a>
+    
+        <a href="/page/23/" class="label-pagination">23</a>
+    
+        <a href="/page/24/" class="label-pagination">24</a>
+    
+        <a href="/page/25/" class="label-pagination">25</a>
+    
+        <a href="/page/26/" class="label-pagination">26</a>
+    
+
+    
+    
+        <a href="/page/17/" aria-label="Next" class="label-pagination"><i class="fa fa-angle-right fa-lg"></i></a>
+    
+
+    
+    
+        <a href="/page/26/" aria-label="Last"><i class="fa fa-angle-double-right fa-lg"></i></a>
+    
+
+</div>
+
+  
+
+  </div>
+
+  
+
+<aside class="sidebar thirds">
+  <section class="first odd">
+
+    
+
+    <p>
+      
+    </p>
+  </section>
+
+
+
+
+
+  
+
+  
+
+  
+  
+  
+
+</aside>
+    
+ </div>
+</div>
+
+<footer role="contentinfo">
+    
+    <div class="center">
+        <ul class="sidebar-nav">
+            <li class="sidebar-nav-item">
+                <a target="_blank" href="https://github.com/uthark/" title="https://github.com/uthark/"><i
+                    class="fa fa-github fa-3x"></i></a></li>
+            <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
+                    class="fa fa-bitbucket fa-3x"></i></a>
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item"><a target="_blank" href="https://twitter.com/LinkageError/" title="https://twitter.com/LinkageError/"><i
+                    class="fa fa-twitter fa-3x"></i></a>
+            <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
+                    class="fa fa-key fa-3x"></i></a> 
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item"><a target="_blank" href="http://stackoverflow.com/users/216764/uthark" title="http://stackoverflow.com/users/216764/uthark"><i
+                    class="fa fa-stack-overflow fa-3x"></i></a>
+            <li class="sidebar-nav-item"><a target="_blank" href="https://plus.google.com/&#43;OlegAtamanenko" title="https://plus.google.com/&#43;OlegAtamanenko"><i
+                    class="fa fa-google-plus fa-3x"></i></a>
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item">
+                
+                
+            </li>
+        </ul>
+    </div>
+    <p>Copyright &copy; 2017 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+        <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a> and
+            <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.
+    </p>
+
+</footer>
+
+
+</body>
+</html>
+   

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Chromium | Software Development and related activities]]></title>
-  <link href="http://uthark.github.io/blog/categories/chromium/atom.xml" rel="self"/>
-  <link href="http://uthark.github.io/"/>
-  <updated>2017-10-12T19:01:44-04:00</updated>
-  <id>http://uthark.github.io/</id>
+  <title><![CDATA[Category: chromium | Блог о разработке ПО]]></title>
+  <link href="http://uthark.github.com/blog/categories/chromium/atom.xml" rel="self"/>
+  <link href="http://uthark.github.com/"/>
+  <updated>2013-06-29T23:40:55-04:00</updated>
+  <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Расширение для работы с Delicious доступно на сайте расширений Google Chrome]]></title>
-    <link href="http://uthark.github.io/blog/2009/12/08/delicious-google-chrome/"/>
-    <updated>2009-12-08T23:43:00+06:00</updated>
-    <id>http://uthark.github.io/blog/2009/12/08/delicious-google-chrome</id>
+    <link href="http://uthark.github.com/blog/2009/12/08/delicious-google-chrome/"/>
+    <updated>2009-12-08T12:43:00-05:00</updated>
+    <id>http://uthark.github.com/blog/2009/12/08/delicious-google-chrome</id>
     <content type="html"><![CDATA[<div class='post'>
 Итак, <a href="code.google.com/p/chromium-delicious-extension/">расширение для работы с Delicious</a> доступно на <a href="https://chrome.google.com/extensions">сайте расширений Google Chrome</a>.<br />
 <br />
@@ -30,9 +30,9 @@
   
   <entry>
     <title type="html"><![CDATA[Расширение Delicious Plugin идёт в массы]]></title>
-    <link href="http://uthark.github.io/blog/2009/11/25/delicious-plugin/"/>
-    <updated>2009-11-25T23:16:00+06:00</updated>
-    <id>http://uthark.github.io/blog/2009/11/25/delicious-plugin</id>
+    <link href="http://uthark.github.com/blog/2009/11/25/delicious-plugin/"/>
+    <updated>2009-11-25T12:16:00-05:00</updated>
+    <id>http://uthark.github.com/blog/2009/11/25/delicious-plugin</id>
     <content type="html"><![CDATA[<div class='post'>
 Google запустил сайт <a href="https://chrome.google.com/extensions/" target="_blank">Chrome Extensions</a>.<br />
 <br />
@@ -49,9 +49,9 @@ P.P.S. У расширения появилась своя страничка в
   
   <entry>
     <title type="html"><![CDATA[Создание страницы настроек для расширений Google Chrome]]></title>
-    <link href="http://uthark.github.io/blog/2009/11/24/google-chrome/"/>
-    <updated>2009-11-24T23:09:00+06:00</updated>
-    <id>http://uthark.github.io/blog/2009/11/24/google-chrome</id>
+    <link href="http://uthark.github.com/blog/2009/11/24/google-chrome/"/>
+    <updated>2009-11-24T12:09:00-05:00</updated>
+    <id>http://uthark.github.com/blog/2009/11/24/google-chrome</id>
     <content type="html"><![CDATA[<div class='post'>
 В продолжение <a href="http://atamanenko.blogspot.com/2009/11/delicious-bookmarks-google.html">предыдущей заметки</a><br />
 <br />
@@ -145,9 +145,9 @@ P.P.S. У расширения появилась своя страничка в
   
   <entry>
     <title type="html"><![CDATA[Расширение Delicious Bookmarks для Google Chrome/Chromium]]></title>
-    <link href="http://uthark.github.io/blog/2009/11/14/delicious-bookmarks-google/"/>
-    <updated>2009-11-14T22:34:00+06:00</updated>
-    <id>http://uthark.github.io/blog/2009/11/14/delicious-bookmarks-google</id>
+    <link href="http://uthark.github.com/blog/2009/11/14/delicious-bookmarks-google/"/>
+    <updated>2009-11-14T11:34:00-05:00</updated>
+    <id>http://uthark.github.com/blog/2009/11/14/delicious-bookmarks-google</id>
     <content type="html"><![CDATA[<div class='post'>
 <h1>Введение</h1><br />
 Решил научиться писать собственные расширения для <a href="http://www.google.com/chrome">Google Chrome</a>/<a href="http://www.chromium.org/">Chromium</a>.<br />

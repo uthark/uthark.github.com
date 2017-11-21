@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+
+  
+  
+  <link href="//fonts.googleapis.com/css?family=Anonymous+Pro" rel="stylesheet" type="text/css">
+  
+
+  
+  <title>Введение в Spring Roo</title>
+
+  
+  
+  <link rel="stylesheet" href="https://uthark.github.io/css/hugo-octopress.css">
+
+  
+  
+
+  
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
+  
+  <link href="https://uthark.github.io/favicon.png" rel="icon">
+
+  
+  
+  
+
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <meta name="author" content="Oleg Atamanenko">
+
+  
+  <meta name="generator" content="Hugo 0.31" />
+
+  
+  
+
+</head>
+<body>
+
+
+<header role="banner"><hgroup>
+  
+  <h1><a href="https://uthark.github.io/">Software Development and related activities</a></h1>
+    <h2></h2>
+</hgroup></header>
+
+
+<nav role="navigation">
+
+<ul class="main-navigation">
+  
+  
+    
+      <li><a href="https://uthark.github.io/" title="Home">Home</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/categories/article/" title="Articles" >Articles</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/categories/reading-list/" title="Reading List" >Reading List</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/about/" title="About me" >About me</a></li>
+    
+  
+</ul>
+
+
+<ul class="subscription">
+  
+    
+        <a href="https://uthark.github.io/index.xml" target="_blank" type="application/rss+xml" title="RSS"><i class="fa fa-rss-square fa-lg"></i></a>
+    
+  
+
+</ul>
+
+
+<form action="https://www.google.com/search" method="get" target="_blank">
+  <fieldset role="search">
+  	<input class="search" type="text" name="q" results="0" placeholder="Search"/>
+    <input type="hidden" name="q" value="site:https://uthark.github.io/" />
+  </fieldset>
+</form>
+
+</nav>
+
+
+<div id="main">
+  <div id="content">
+    <div>
+      <article class="hentry" role="article">
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+         Введение в Spring Roo 
+    </h1>
+
+</header>
+
+
+        <div class="entry-content">
+          
+          
+          
+          
+          <p><a href="http://blog.springsource.com/2009/05/01/roo-part-1/">Недавно</a> компания <a href="http://springsource.com/">Spring Source</a> презентовала новый продукт - <a href="http://www.springsource.org/roo">Spring Roo</a>. <a href="http://jira.springframework.org/browse/ROO-1">Цель проекта</a> - повысить продуктивность Java-разработчиков. <a href="http://stsmedia.net/introducing-spring-roo/">Почитав</a> <a href="http://stsmedia.net/introducing-spring-roo-part-2-security-jms-email-support/">обзоры</a>, а также <a href="http://blog.springsource.com/2009/05/27/roo-part-2/">потрогав его руками</a> можно сделать вывод о том, что это, в некотором виде, альтернатива <a href="http://appfuse.org/">AppFuse</a> и <a href="http://grails.codehaus.org/">Grails</a>.</p>
+
+<p><h2>Описание Spring Roo</h2><li>100% программирование на Java, предлагающее разработчикам известную, развитую и популярную платформу разработки.</li><li>Прозрачные, надёжные и продуктивные сервисы среды разработки, такие как помощник кода, отладчики, визуальные отчёты об ошибка и т.д.</li><li>Экстремально эффективная производительность во время выполнения, безопасность типов и отсутствие зависимостей на Roo во время выполнения.</li><li>Автоматическая архитектура с использование лучших практик Spring Framework 3
+</li><li>Структура проекта основана на <a href="http://maven.apache.org/">Maven2</a>.</li><li>Работа с БД основана на <a href="http://java.sun.com/javaee/technologies/entapps/persistence.jsp">JPA</a> (например, через <a href="http://www.hibernate.org/">Hibernate</a>), 100% совместимость с JPA и переносимость реализации.</li><li>Встроенная поддержка конфигурирования баз данных, с автоматической настройкой JDBC для большинства популярных баз данных.</li><li>Прозрачная поддержка внедрения зависимостей (dependency injection) и методов сохранения для всех сущностей, включая полученные через JPA.</li><li>Поддержка валидации бинов (<a href="http://jcp.org/en/jsr/detail?id=303">JSR 303</a>), включая распространение ограничений вплость до DDL базы данных.</li><li>Автоматические интеграционные тесты на <a href="http://junit.org">JUnit</a>, которые создаются на базе возможностей интеграционного тестирования Spring Framework.</li><li>Автоматическая поддержка REST на уровне бэкэнда.</li><li>Автоматизированные тесты для веб-слоя с использованием <a href="http://seleniumhq.org/">Selenium</a>.</li><li>Динамическое создание finder-методов на JPA QL для сущностей безо всякого кодирования.</li><li>Интеграция <a href="http://static.springsource.org/spring-security/site/">Spring Security</a>, включая безопасность адресов с установкой в одну строку (&ldquo;install security&rdquo;)
+</li><li>Поддеркжа <a href="http://www.springsource.org/webflow">Spring Web Flow</a> одной командой (&ldquo;install web flow&rdquo;)</li><li>Поддержка мгновенной отправки почтовых сообщение - даже через удалённые SMTP сервера, как GMail.</li><li>Встроенная поддержка конфигурирования <a href="http://logging.apache.org/log4j">log4j</a></li><li>Использование URL rewriting которое позволяет оставаться ссылкам чистыми и поддерживающими REST.
+</li><li>Лёгкое ручное создание веб-контроллеров</li><li>Поддержка полного цикла жизни приложения с сохранением высокой продуктивности.</li><li>Использование встроенного сервлет контейнера <a href="http://tomcat.apache.org">Tomcat</a>.</li><li>Полная интеграция с <a href="http://eclipse.org">Eclipse</a> и <a href="http://www.springsource.com/products/sts">SpringSource Tool Suite</a></li><li>Лёгкая в использовании, с поддержка автодополнения, подсказок и контекста командная строка</li><li>Поддержка автоматизации через скрипты</li></p>
+
+        </div>
+        
+
+<footer>
+
+  <p class="meta">
+    
+    
+
+    
+    
+    
+    Filed under: <a class="label" href="https://uthark.github.io/categories/spring-roo/">spring roo</a><a class="label" href="https://uthark.github.io/categories/%d1%80%d0%b0%d0%b7%d1%80%d0%b0%d0%b1%d0%be%d1%82%d0%ba%d0%b0/">разработка</a><a class="label" href="https://uthark.github.io/categories/development/">development</a>
+    
+  </p>
+
+  <p class="meta">
+    
+    Last update: <time>Jun 3, 2009</time>
+    
+    </span>
+  </p>
+  
+  
+
+  
+
+  <p class="meta">
+    
+        <a class="basic-alignment left" href="https://uthark.github.io/2009/06/02/apache-ant-metro/" title="Apache Ant и Metro">Apache Ant и Metro</a>
+    
+
+    
+      <a class="basic-alignment right" href="https://uthark.github.io/2009/06/06/spring-roo-2/" title="Spring Roo (часть 2)">Spring Roo (часть 2)</a>
+    
+  </p>
+  
+</footer>
+
+      </article>
+    </div>
+    
+
+<aside class="sidebar thirds">
+  <section class="first odd">
+
+    
+
+    <p>
+      
+    </p>
+  </section>
+
+
+
+
+
+  
+
+  
+
+  
+  
+  
+
+</aside>
+
+  </div>
+</div>
+
+<footer role="contentinfo">
+    
+    <div class="center">
+        <ul class="sidebar-nav">
+            <li class="sidebar-nav-item">
+                <a target="_blank" href="https://github.com/uthark/" title="https://github.com/uthark/"><i
+                    class="fa fa-github fa-3x"></i></a></li>
+            <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
+                    class="fa fa-bitbucket fa-3x"></i></a>
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item"><a target="_blank" href="https://twitter.com/LinkageError/" title="https://twitter.com/LinkageError/"><i
+                    class="fa fa-twitter fa-3x"></i></a>
+            <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
+                    class="fa fa-key fa-3x"></i></a> 
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item"><a target="_blank" href="http://stackoverflow.com/users/216764/uthark" title="http://stackoverflow.com/users/216764/uthark"><i
+                    class="fa fa-stack-overflow fa-3x"></i></a>
+            <li class="sidebar-nav-item"><a target="_blank" href="https://plus.google.com/&#43;OlegAtamanenko" title="https://plus.google.com/&#43;OlegAtamanenko"><i
+                    class="fa fa-google-plus fa-3x"></i></a>
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item">
+                
+                
+            </li>
+        </ul>
+    </div>
+    <p>Copyright &copy; 2017 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+        <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a> and
+            <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.
+    </p>
+
+</footer>
+
+
+</body>
+</html>
+

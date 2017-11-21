@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Apache Ant on Software Development and related activities</title>
+    <link>https://uthark.github.io/categories/apache-ant/</link>
+    <description>Recent content in Apache Ant on Software Development and related activities</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 02 Jun 2009 23:31:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://uthark.github.io/categories/apache-ant/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Apache Ant и Metro</title>
+      <link>https://uthark.github.io/2009/06/02/apache-ant-metro/</link>
+      <pubDate>Tue, 02 Jun 2009 23:31:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/06/02/apache-ant-metro/</guid>
+      <description>Столкнулся с такой проблемой - в некоторых случаях приложение, собранное антом не работает. Конкретно - не работает десереализация запросов на веб-сервис. Получаемый запрос содержит null в значениях полей.
+Опытным путём было выяснено, что на это влияет используемая версия Java. Под 1.5 работает корректно, под 1.6 - не работает. Нашли ошибку в метро, связанную именно с версией JDK и на этом успокоились. Но было одно исключение из правил. У одного из разработчиков под 1.</description>
+    </item>
+    
+  </channel>
+</rss>

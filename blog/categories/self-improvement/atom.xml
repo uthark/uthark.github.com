@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Self-improvement | Software Development and related activities]]></title>
-  <link href="http://uthark.github.io/blog/categories/self-improvement/atom.xml" rel="self"/>
-  <link href="http://uthark.github.io/"/>
-  <updated>2017-10-12T19:01:44-04:00</updated>
-  <id>http://uthark.github.io/</id>
+  <title><![CDATA[Category: self-improvement | Блог о разработке ПО]]></title>
+  <link href="http://uthark.github.com/blog/categories/self-improvement/atom.xml" rel="self"/>
+  <link href="http://uthark.github.com/"/>
+  <updated>2013-06-29T23:40:55-04:00</updated>
+  <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Борьба с убийцами производительности]]></title>
-    <link href="http://uthark.github.io/blog/2010/03/16/blog-post/"/>
-    <updated>2010-03-16T21:52:00+06:00</updated>
-    <id>http://uthark.github.io/blog/2010/03/16/blog-post</id>
+    <link href="http://uthark.github.com/blog/2010/03/16/blog-post/"/>
+    <updated>2010-03-16T11:52:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2010/03/16/blog-post</id>
     <content type="html"><![CDATA[<div class='post'>
 <p><strong>Summary</strong>: Мой опыт борьбы с &quot;убийцами производительности&quot;.</p>
 <h3>Постановка проблемы</h3>

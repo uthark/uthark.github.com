@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Unit Testing | Software Development and related activities]]></title>
+  <link href="http://uthark.github.io/blog/categories/unit-testing/atom.xml" rel="self"/>
+  <link href="http://uthark.github.io/"/>
+  <updated>2017-10-12T19:01:44-04:00</updated>
+  <id>http://uthark.github.io/</id>
+  <author>
+    <name><![CDATA[Oleg Atamanenko]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Using Unitils ReflectionAssert]]></title>
+    <link href="http://uthark.github.io/blog/2014/04/16/using-unitils-reflectionassert/"/>
+    <updated>2014-04-16T00:10:10-04:00</updated>
+    <id>http://uthark.github.io/blog/2014/04/16/using-unitils-reflectionassert</id>
+    <content type="html"><![CDATA[<p>Often it is needed to compare two different instances of the class inside test. I.e. we save object into database, then fetch it back from db and we want to be sure if nothing was lost during saving/reading.</p>
+
+<p>In order to make such assertions more easier and maintainable one can use great Unitils library which has useful class <a href="http://www.unitils.org/tutorial-reflectionassert.html">ReflectionAssert</a></p>
+
+<p>First, update parent&rsquo;s <code>pom.xml</code>:</p>
+
+<p>``` xml pom.xml changes in parent module
+<properties></p>
+
+<pre><code>&lt;unitils.version&gt;3.4&lt;/unitils.version&gt;
+</code></pre>
+
+<p></properties>
+<dependency></p>
+
+<pre><code>&lt;groupId&gt;org.unitils&lt;/groupId&gt;
+&lt;artifactId&gt;unitils-core&lt;/artifactId&gt;
+&lt;version&gt;${unitils.version}&lt;/version&gt;
+&lt;scope&gt;test&lt;/scope&gt;
+</code></pre>
+
+<p></dependency></p>
+
+<p>```</p>
+
+<p>Then add dependency to the child module:</p>
+
+<p>``` xml pom.xml changes in child module</p>
+
+<p><dependency></p>
+
+<pre><code>&lt;groupId&gt;org.unitils&lt;/groupId&gt;
+&lt;artifactId&gt;unitils-core&lt;/artifactId&gt;
+</code></pre>
+
+<p></dependency></p>
+
+<p>```</p>
+
+<p>Usage is very simple:
+Add static import to the class.</p>
+
+<p>``` java</p>
+
+<p>import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;</p>
+
+<p>```</p>
+
+<p>and use it instead of regular JUnit assert:</p>
+
+<p>``` java</p>
+
+<pre><code>assertReflectionEquals(expected, actual);
+</code></pre>
+
+<p>```</p>
+
+<p>It is possible to pass reflection comparator modes as optional parameters to the above method.</p>
+
+<p>Be ware that this method is not very useful if you want to compare objects which has floating point or double parameters &ndash; ReflectionAssert compares <code>double</code> and <code>float</code> values using <code>==</code>, so it is not very useful. It is not possible to pass epsilon for comparison.</p>
+
+<p>``` java excerpt from org.unitils.reflectionassert.comparator.impl.LenientNumberComparator#compare</p>
+
+<p>// &hellip;
+Double leftDouble = getDoubleValue(left);
+Double rightDouble = getDoubleValue(right);
+if (!leftDouble.equals(rightDouble)) {</p>
+
+<pre><code>return new Difference(differenceMessage, left, right);
+</code></pre>
+
+<p>}
+// &hellip;</p>
+
+<p>```</p>
+
+<p>If you need to compare double values in JUnit assertions then it is better to use <a href="https://code.google.com/p/hamcrest/">hamcrest library</a>.</p>
+
+<p>``` java</p>
+
+<p>import static org.hamcrest.number.IsCloseTo.closeTo;
+import static org.junit.Assert.assertThat;</p>
+
+<p>// in @Test method:
+assertThat(actual.getFederalIncomeTax(), closeTo(expected.getFederalIncomeTax(), EPSILON))</p>
+
+<p>```</p>
+
+<p>Happy hacking!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Using AssertJ]]></title>
+    <link href="http://uthark.github.io/blog/2014/04/15/using-assertj/"/>
+    <updated>2014-04-15T23:37:49-04:00</updated>
+    <id>http://uthark.github.io/blog/2014/04/15/using-assertj</id>
+    <content type="html"><![CDATA[<p><a href="https://github.com/joel-costigliola/assertj-core">AssertJ</a> is a library which provides fluent strongly-typed assertions to use in unit tests.</p>
+
+<p>Example of assertions written with <code>AssertJ</code>:</p>
+
+<p>``` java</p>
+
+<p>import io.github.uthark.blog.assertj.Assertions.assertThat;</p>
+
+<p>// &hellip; within @Test
+User result = userDao.findByLogin(&ldquo;username&rdquo;);
+assertThat(result).</p>
+
+<pre><code>isNotNull().
+isActive().
+hasLogin("username");
+</code></pre>
+
+<p>```</p>
+
+<p>As you can see assertions look much more readable.
+The integration of assertj into Maven project is very easy:</p>
+
+<ol>
+<li>Update pom.xml in parent module</li>
+</ol>
+
+
+<p>``` xml pom.xml changes in parent module.</p>
+
+<p><properties></p>
+
+<pre><code>&lt;assertj-core.version&gt;1.6.0&lt;/assertj-core.version&gt;
+&lt;assertj-assertions-generator-maven-plugin.version&gt;1.2.0&lt;/assertj-assertions-generator-maven-plugin.version&gt;
+</code></pre>
+
+<p></properties></p>
+
+<p><dependencyManagement></p>
+
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.assertj&lt;/groupId&gt;
+    &lt;artifactId&gt;assertj-core&lt;/artifactId&gt;
+    &lt;version&gt;${assertj-core.version}&lt;/version&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<p></dependencyManagement></p>
+
+<p><pluginManagement></p>
+
+<pre><code>&lt;plugin&gt;
+    &lt;groupId&gt;org.assertj&lt;/groupId&gt;
+    &lt;artifactId&gt;assertj-assertions-generator-maven-plugin&lt;/artifactId&gt;
+    &lt;version&gt;${assertj-assertions-generator-maven-plugin.version}&lt;/version&gt;
+    &lt;executions&gt;
+        &lt;execution&gt;
+            &lt;id&gt;generate-assertions&lt;/id&gt;
+            &lt;phase&gt;generate-test-sources&lt;/phase&gt;
+            &lt;goals&gt;
+                &lt;goal&gt;generate-assertions&lt;/goal&gt;
+            &lt;/goals&gt;
+        &lt;/execution&gt;
+    &lt;/executions&gt;
+&lt;/plugin&gt;
+</code></pre>
+
+<p></pluginManagement></p>
+
+<p>```</p>
+
+<ol>
+<li>Update pom.xml in child module</li>
+</ol>
+
+
+<p>``` xml Changes in child module.</p>
+
+<p><dependencies></p>
+
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.assertj&lt;/groupId&gt;
+    &lt;artifactId&gt;assertj-core&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<p></dependencies>
+<build></p>
+
+<pre><code>&lt;plugins&gt;
+    &lt;plugin&gt;
+        &lt;groupId&gt;org.assertj&lt;/groupId&gt;
+        &lt;artifactId&gt;assertj-assertions-generator-maven-plugin&lt;/artifactId&gt;
+        &lt;configuration&gt;
+            &lt;!-- you can define collection packages: --&gt;
+            &lt;packages&gt;
+                &lt;param&gt;io.github.uthark.blog.assertj&lt;/param&gt;
+            &lt;/packages&gt;
+
+            &lt;!-- Or specify classes one by one. --&gt;
+            &lt;classes&gt;
+                &lt;param&gt;io.github.uthark.blog.assertj.User&lt;/param&gt;
+            &lt;/classes&gt;
+        &lt;/configuration&gt;
+    &lt;/plugin&gt;
+&lt;/plugins&gt;
+</code></pre>
+
+<p></build></p>
+
+<p>```</p>
+
+<p>After this changes it is possible to generate assertions for the classes you want test:</p>
+
+<p>``` sh</p>
+
+<p>mvn assertj:generate-assertions</p>
+
+<p>```</p>
+
+<p>By default assertj will generate assertion classes in <code>target/generated-test-sources/assertj-assertions/</code>, it is possible to override this behaviour by passing configuration element <code>targetDir</code> to plugin.</p>
+
+<p>Additonal documentation for Maven plugin can be <a href="http://joel-costigliola.github.io/assertj/assertj-assertions-generator-maven-plugin.html">found here</a></p>
+
+<p>Happy hacking!</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Article | Software Development and related activities]]></title>
-  <link href="http://uthark.github.io/blog/categories/article/atom.xml" rel="self"/>
-  <link href="http://uthark.github.io/"/>
-  <updated>2017-10-12T19:01:44-04:00</updated>
-  <id>http://uthark.github.io/</id>
+  <title><![CDATA[Category: article | Блог о разработке ПО]]></title>
+  <link href="http://uthark.github.com/blog/categories/article/atom.xml" rel="self"/>
+  <link href="http://uthark.github.com/"/>
+  <updated>2013-06-29T23:40:55-04:00</updated>
+  <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
     
@@ -14,431 +14,281 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Using Unitils ReflectionAssert]]></title>
-    <link href="http://uthark.github.io/blog/2014/04/16/using-unitils-reflectionassert/"/>
-    <updated>2014-04-16T00:10:10-04:00</updated>
-    <id>http://uthark.github.io/blog/2014/04/16/using-unitils-reflectionassert</id>
-    <content type="html"><![CDATA[<p>Often it is needed to compare two different instances of the class inside test. I.e. we save object into database, then fetch it back from db and we want to be sure if nothing was lost during saving/reading.</p>
-
-<p>In order to make such assertions more easier and maintainable one can use great Unitils library which has useful class <a href="http://www.unitils.org/tutorial-reflectionassert.html">ReflectionAssert</a></p>
-
-<p>First, update parent&rsquo;s <code>pom.xml</code>:</p>
-
-<p>``` xml pom.xml changes in parent module
-<properties></p>
-
-<pre><code>&lt;unitils.version&gt;3.4&lt;/unitils.version&gt;
-</code></pre>
-
-<p></properties>
-<dependency></p>
-
-<pre><code>&lt;groupId&gt;org.unitils&lt;/groupId&gt;
-&lt;artifactId&gt;unitils-core&lt;/artifactId&gt;
-&lt;version&gt;${unitils.version}&lt;/version&gt;
-&lt;scope&gt;test&lt;/scope&gt;
-</code></pre>
-
-<p></dependency></p>
-
-<p>```</p>
-
-<p>Then add dependency to the child module:</p>
-
-<p>``` xml pom.xml changes in child module</p>
-
-<p><dependency></p>
-
-<pre><code>&lt;groupId&gt;org.unitils&lt;/groupId&gt;
-&lt;artifactId&gt;unitils-core&lt;/artifactId&gt;
-</code></pre>
-
-<p></dependency></p>
-
-<p>```</p>
-
-<p>Usage is very simple:
-Add static import to the class.</p>
-
-<p>``` java</p>
-
-<p>import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;</p>
-
-<p>```</p>
-
-<p>and use it instead of regular JUnit assert:</p>
-
-<p>``` java</p>
-
-<pre><code>assertReflectionEquals(expected, actual);
-</code></pre>
-
-<p>```</p>
-
-<p>It is possible to pass reflection comparator modes as optional parameters to the above method.</p>
-
-<p>Be ware that this method is not very useful if you want to compare objects which has floating point or double parameters &ndash; ReflectionAssert compares <code>double</code> and <code>float</code> values using <code>==</code>, so it is not very useful. It is not possible to pass epsilon for comparison.</p>
-
-<p>``` java excerpt from org.unitils.reflectionassert.comparator.impl.LenientNumberComparator#compare</p>
-
-<p>// &hellip;
-Double leftDouble = getDoubleValue(left);
-Double rightDouble = getDoubleValue(right);
-if (!leftDouble.equals(rightDouble)) {</p>
-
-<pre><code>return new Difference(differenceMessage, left, right);
-</code></pre>
-
-<p>}
-// &hellip;</p>
-
-<p>```</p>
-
-<p>If you need to compare double values in JUnit assertions then it is better to use <a href="https://code.google.com/p/hamcrest/">hamcrest library</a>.</p>
-
-<p>``` java</p>
-
-<p>import static org.hamcrest.number.IsCloseTo.closeTo;
-import static org.junit.Assert.assertThat;</p>
-
-<p>// in @Test method:
-assertThat(actual.getFederalIncomeTax(), closeTo(expected.getFederalIncomeTax(), EPSILON))</p>
-
-<p>```</p>
-
-<p>Happy hacking!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Using AssertJ]]></title>
-    <link href="http://uthark.github.io/blog/2014/04/15/using-assertj/"/>
-    <updated>2014-04-15T23:37:49-04:00</updated>
-    <id>http://uthark.github.io/blog/2014/04/15/using-assertj</id>
-    <content type="html"><![CDATA[<p><a href="https://github.com/joel-costigliola/assertj-core">AssertJ</a> is a library which provides fluent strongly-typed assertions to use in unit tests.</p>
-
-<p>Example of assertions written with <code>AssertJ</code>:</p>
-
-<p>``` java</p>
-
-<p>import io.github.uthark.blog.assertj.Assertions.assertThat;</p>
-
-<p>// &hellip; within @Test
-User result = userDao.findByLogin(&ldquo;username&rdquo;);
-assertThat(result).</p>
-
-<pre><code>isNotNull().
-isActive().
-hasLogin("username");
-</code></pre>
-
-<p>```</p>
-
-<p>As you can see assertions look much more readable.
-The integration of assertj into Maven project is very easy:</p>
-
-<ol>
-<li>Update pom.xml in parent module</li>
-</ol>
-
-
-<p>``` xml pom.xml changes in parent module.</p>
-
-<p><properties></p>
-
-<pre><code>&lt;assertj-core.version&gt;1.6.0&lt;/assertj-core.version&gt;
-&lt;assertj-assertions-generator-maven-plugin.version&gt;1.2.0&lt;/assertj-assertions-generator-maven-plugin.version&gt;
-</code></pre>
-
-<p></properties></p>
-
-<p><dependencyManagement></p>
-
-<pre><code>&lt;dependency&gt;
-    &lt;groupId&gt;org.assertj&lt;/groupId&gt;
-    &lt;artifactId&gt;assertj-core&lt;/artifactId&gt;
-    &lt;version&gt;${assertj-core.version}&lt;/version&gt;
-    &lt;scope&gt;test&lt;/scope&gt;
-&lt;/dependency&gt;
-</code></pre>
-
-<p></dependencyManagement></p>
-
-<p><pluginManagement></p>
-
-<pre><code>&lt;plugin&gt;
-    &lt;groupId&gt;org.assertj&lt;/groupId&gt;
-    &lt;artifactId&gt;assertj-assertions-generator-maven-plugin&lt;/artifactId&gt;
-    &lt;version&gt;${assertj-assertions-generator-maven-plugin.version}&lt;/version&gt;
-    &lt;executions&gt;
-        &lt;execution&gt;
-            &lt;id&gt;generate-assertions&lt;/id&gt;
-            &lt;phase&gt;generate-test-sources&lt;/phase&gt;
-            &lt;goals&gt;
-                &lt;goal&gt;generate-assertions&lt;/goal&gt;
-            &lt;/goals&gt;
-        &lt;/execution&gt;
-    &lt;/executions&gt;
-&lt;/plugin&gt;
-</code></pre>
-
-<p></pluginManagement></p>
-
-<p>```</p>
-
-<ol>
-<li>Update pom.xml in child module</li>
-</ol>
-
-
-<p>``` xml Changes in child module.</p>
-
-<p><dependencies></p>
-
-<pre><code>&lt;dependency&gt;
-    &lt;groupId&gt;org.assertj&lt;/groupId&gt;
-    &lt;artifactId&gt;assertj-core&lt;/artifactId&gt;
-&lt;/dependency&gt;
-</code></pre>
-
-<p></dependencies>
-<build></p>
-
-<pre><code>&lt;plugins&gt;
-    &lt;plugin&gt;
-        &lt;groupId&gt;org.assertj&lt;/groupId&gt;
-        &lt;artifactId&gt;assertj-assertions-generator-maven-plugin&lt;/artifactId&gt;
-        &lt;configuration&gt;
-            &lt;!-- you can define collection packages: --&gt;
-            &lt;packages&gt;
-                &lt;param&gt;io.github.uthark.blog.assertj&lt;/param&gt;
-            &lt;/packages&gt;
-
-            &lt;!-- Or specify classes one by one. --&gt;
-            &lt;classes&gt;
-                &lt;param&gt;io.github.uthark.blog.assertj.User&lt;/param&gt;
-            &lt;/classes&gt;
-        &lt;/configuration&gt;
-    &lt;/plugin&gt;
-&lt;/plugins&gt;
-</code></pre>
-
-<p></build></p>
-
-<p>```</p>
-
-<p>After this changes it is possible to generate assertions for the classes you want test:</p>
-
-<p>``` sh</p>
-
-<p>mvn assertj:generate-assertions</p>
-
-<p>```</p>
-
-<p>By default assertj will generate assertion classes in <code>target/generated-test-sources/assertj-assertions/</code>, it is possible to override this behaviour by passing configuration element <code>targetDir</code> to plugin.</p>
-
-<p>Additonal documentation for Maven plugin can be <a href="http://joel-costigliola.github.io/assertj/assertj-assertions-generator-maven-plugin.html">found here</a></p>
-
-<p>Happy hacking!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Initializing Mockito @Mocks With JUnit @Rule]]></title>
-    <link href="http://uthark.github.io/blog/2014/03/28/initializing-at-mocks-with-junit-at-rule/"/>
-    <updated>2014-03-28T13:24:45-04:00</updated>
-    <id>http://uthark.github.io/blog/2014/03/28/initializing-at-mocks-with-junit-at-rule</id>
-    <content type="html"><![CDATA[<p>In this post I will show how one can implement custom JUnit <a href="http://junit-team.github.io/junit/javadoc/4.11/org/junit/Rule.html">@Rule</a>.</p>
-
-<p>As an example let&rsquo;s take <a href="https://code.google.com/p/mockito/">Mockito</a> and implement custom rule which will initialize Mocks in  test class.</p>
-
-<p>By default, Mockito provides the following methods of mock initialization:</p>
-
-<ol>
-<li>Using <a href="http://docs.mockito.googlecode.com/hg/org/mockito/Mockito.html#mock(java.lang.Class)">Mockito.mock</a></li>
-</ol>
-
-
-<p>``` java Initialize mocks with Mockito.mock</p>
-
-<p>public void FooTest {</p>
-
-<pre><code>private Foo foo;
-
-@Before
-public void setUp() {
-    FooDependency dep = Mockito.mock(FooDependency.class);
-    foo = new Foo(dep);
+    <title type="html"><![CDATA[Расширение Delicious Bookmarks для Google Chrome/Chromium]]></title>
+    <link href="http://uthark.github.com/blog/2009/11/14/delicious-bookmarks-google/"/>
+    <updated>2009-11-14T11:34:00-05:00</updated>
+    <id>http://uthark.github.com/blog/2009/11/14/delicious-bookmarks-google</id>
+    <content type="html"><![CDATA[<div class='post'>
+<h1>Введение</h1><br />
+Решил научиться писать собственные расширения для <a href="http://www.google.com/chrome">Google Chrome</a>/<a href="http://www.chromium.org/">Chromium</a>.<br />
+<br />
+За идею взял официальное расширение от <a href="http://m.www.yahoo.com/">Yahoo!</a> для <a href="http://www.mozilla.com/en-US/firefox/firefox.html">Firefox</a> - <a href="https://addons.mozilla.org/en-US/firefox/addon/3615">Delicious Bookmarks</a>.<br />
+<br />
+<h1>Структура расширения</h1><br />
+Расширение - файл с расширением <tt>.crx</tt>. На самом деле это просто <tt>ZIP</tt>-архив с файлом манифеста внутри.<br />
+<br />
+<h1>Файл манифеста</h1><pre class="brush:js; highlight: [2, 3, 4, 5, 10, 16, 23]">{
+"name": "Delicious plugin", // 1
+"version": "0.2", // 2
+"background_page": "background.html", // 3
+"permissions": [ // 4
+"bookmarks",
+"tabs"
+],
+
+"browser_action": { // 5
+"name": "Save bookmark to delicious.com",
+"default_title": "Save bookmark to delicious.com",
+"default_icon": "delicious.20.gif" // optional
+},
+
+"content_scripts": [ // 6
+{
+"matches": ["http://*/*", "https://*/*"],
+"js": ["getDocumentSelection.js"]
 }
-</code></pre>
+],
 
-<p>}</p>
-
-<p>```</p>
-
-<p>This is the simplest case.</p>
-
-<ol>
-<li>Using <a href="http://docs.mockito.googlecode.com/hg/org/mockito/MockitoAnnotations.html#initMocks(java.lang.Object)">MockitoAnnotations</a>.</li>
-</ol>
-
-
-<p>``` java Initialize mocks with MockitoAnnotations</p>
-
-<p>public void FooTest {</p>
-
-<pre><code>private Foo foo;
-
-@Mock
-private FooDependency dep;
-
-@Before
-public void setUp() {
-    MockitoAnnotations.initMocks(this);
-    foo = new Foo(dep);
+"options_page": "options.html" // 7
 }
-</code></pre>
+</pre><br />
+Манифест - файл в формате <a href="http://json.org/">JSON</a>.<br />
+<br />
+Манифест состоит из следующих частей:<br />
+<br />
+1. <span style="font-weight:bold;"><tt>name</tt></span> - Имя расширения<br />
+2. <span style="font-weight:bold;"><tt>version</tt></span> - Версия расширения<br />
+3. <span style="font-weight:bold;"><tt>background_page</tt></span> - основной файл с расширением. Это обычный HTML-файл с разметкой.<br />
+4. <span style="font-weight:bold;"><tt>permissions</tt></span> - разрешения для расширения. Указываем, что нам нужен доступ к вкладкам (tabs) и закладкам (bookmarks).<br />
+5. <span style="font-weight:bold;"><tt>browser_action</tt></span> - указываем, что нужно отобразить на панели инструментов браузера.<br />
+6. <span style="font-weight:bold;"><tt>content_scripts</tt></span> - Для доступа к DOM отображаемой страницы необходимы content scripts, данный блок регистрирует скрипт <tt>getDocumentSelection.js</tt> для всех <tt>http</tt> и <tt>https</tt> страниц.<br />
+7. <span style="font-weight:bold;"><tt>options_page</tt></span> - страница с настройками.<br />
+<br />
+Подробное описание файла манифеста есть <a href="http://code.google.com/chrome/extensions/manifest.html">на официальном сайте</a>. <br />
+<br />
+<h1>Описание работы расширения</h1><br />
+<br />
+Расширение работает следующим образом:<br />
+1. При клике на значок расширения вызывается обработчик <tt>addBookmark</tt><br />
+2. Обработчик открывает коммуникационный порт и отправляет сообщение скрипту содержимого.<br />
+3. Скрипт содержимого забирает выделенный текст и отправляет назад расширению выделенный текст.<br />
+4. Расширение забирает выделенный текст, определяет настройки сохранения (Private/Public) и вызывает окно сохранения <span style="font-style:italic;">Delicious</span>.<br />
+<br />
+<h1>Реализация расширения</h1><br />
+<br />
+<span style="font-weight:bold;">background.html</span>:<br />
+<pre class="brush:js; html-script: true">&lt;html&gt;
+&lt;head&gt;
+&lt;script&nbsp;type=&quot;text/javascript&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;function&nbsp;saveBookmark()&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Send&nbsp;our&nbsp;password&nbsp;to&nbsp;the&nbsp;current&nbsp;tab&nbsp;when&nbsp;clicked.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;chrome.tabs.getSelected(null,&nbsp;function(tab)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;port&nbsp;=&nbsp;chrome.tabs.connect(tab.id,&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;:&nbsp;&quot;deliciousBookmark&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;port.postMessage(&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;action&nbsp;:&nbsp;'getSelection'
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});
+&nbsp;&nbsp;&nbsp;&nbsp;}
 
-<p>}</p>
+&nbsp;&nbsp;&nbsp;&nbsp;function&nbsp;addBookmark(id,&nbsp;bookmark)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(&quot;added&nbsp;bookmark:&nbsp;&nbsp;&quot;&nbsp;+&nbsp;bookmark);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;saveBookmark();
+&nbsp;&nbsp;&nbsp;&nbsp;}
 
-<p>```</p>
+&nbsp;&nbsp;&nbsp;&nbsp;chrome.bookmarks.onCreated.addListener(addBookmark);
+&nbsp;&nbsp;&nbsp;&nbsp;console.log(&quot;Registered&nbsp;listener&quot;);
 
-<p>This method is useful when you have a lot of mocks to inject.</p>
+&nbsp;&nbsp;&nbsp;&nbsp;function&nbsp;getShareStatus()&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;markPrivate&nbsp;=&nbsp;localStorage[&quot;markPrivate&quot;];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;share&nbsp;=&nbsp;&quot;yes&quot;;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(markPrivate&nbsp;==&nbsp;&quot;true&quot;)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;share&nbsp;=&nbsp;&quot;no&quot;;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;share;
+&nbsp;&nbsp;&nbsp;&nbsp;}
 
-<ol>
-<li>Using <a href="http://docs.mockito.googlecode.com/hg/org/mockito/runners/MockitoJUnitRunner.html">MockitoJUnitRunner</a></li>
-</ol>
+&nbsp;&nbsp;&nbsp;&nbsp;chrome.extension.onConnect.addListener(function(port)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.assert(port.name&nbsp;==&nbsp;&quot;deliciousBookmark&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;port.onMessage.addListener(function(msg)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;selection&nbsp;=&nbsp;msg.selection;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;chrome.tabs.getSelected(null,&nbsp;function(tab)&nbsp;{
 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;url&nbsp;=&nbsp;encodeURIComponent(tab.url);
 
-<p>``` java Initialize mocks with MockitoJUnitRunner</p>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(!url&nbsp;||&nbsp;url&nbsp;===&nbsp;&quot;&quot;)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
 
-<p>@RunWith(MockitoJUnitRunner.class)
-public void FooTest {</p>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;title&nbsp;=&nbsp;encodeURIComponent(tab.title);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;description&nbsp;=&nbsp;encodeURIComponent(selection);
 
-<pre><code>private Foo foo;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;share&nbsp;=&nbsp;getShareStatus();
 
-@Mock
-private FooDependency dep;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;f&nbsp;=&nbsp;'http://delicious.com/save?url='&nbsp;+&nbsp;url&nbsp;+&nbsp;'&amp;title='&nbsp;+&nbsp;title&nbsp;+&nbsp;'&amp;notes='&nbsp;+&nbsp;description
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+&nbsp;'&amp;share='&nbsp;+&nbsp;share&nbsp;+&nbsp;'&amp;v=5&amp;';
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window.open(f&nbsp;+&nbsp;'noui=1&amp;jump=doclose',&nbsp;'deliciousuiv5',
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'location=yes,links=no,scrollbars=no,toolbar=no,width=550,height=550');
 
-@Before
-public void setUp() {
-    foo = new Foo(dep);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});
+&nbsp;&nbsp;&nbsp;&nbsp;});
+
+&nbsp;&nbsp;&nbsp;&nbsp;chrome.browserAction.onClicked.addListener(saveBookmark);
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;/html&gt;
+
+</pre><br />
+<br />
+<span style="font-weight:bold;">getDocumentSelection.js</span><br />
+<br />
+<pre class="brush:js">var port = chrome.extension.connect( {
+name : "deliciousBookmark"
+});
+
+// Also listen for new channels from the extension for when the button is
+// pressed.
+chrome.extension.onConnect.addListener(function(port) {
+console.assert(port.name == "deliciousBookmark");
+port.onMessage.addListener(function(msg) {
+if (msg.action == 'getSelection') {
+var responsePort = chrome.extension.connect( {
+name : "deliciousBookmark"
+});
+var description = document.getSelection() ? '' + document.getSelection() : '';
+responsePort.postMessage( {
+selection : description
+});
 }
-</code></pre>
+});
+});
 
-<p>}</p>
 
-<p>```</p>
+</pre><br />
+<br />
+<span style="font-weight:bold;">options.html</span><br />
+<br />
+<pre class="brush:js; html-script: true">&lt;html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Delicious Bookmarks Options&lt;/title&gt;
+&lt;/head&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+    // Saves options to localStorage.
+    function saveOptions() {
+        var share = document.getElementById(&quot;share&quot;);
+        localStorage[&quot;markPrivate&quot;] = share.checked;
 
-<p>I want to show you another method, by using custom JUnit <code>@Rule</code>.</p>
+        // Update status to let user know options were saved.
+        var status = document.getElementById(&quot;status&quot;);
+        status.innerHTML = &quot;Options Saved.&quot;;
+        setTimeout(function() {
+            status.innerHTML = &quot;&quot;;
+        }, 1500);
+    }
 
-<p>First, we need to implement <a href="http://junit-team.github.io/junit/javadoc/4.11/org/junit/rules/TestRule.html">TestRule</a> interface which allows to implement custom behaviour during test execution:</p>
+    // Restores select box state to saved value from localStorage.
+    function restoreOptions() {
+        var share = localStorage[&quot;markPrivate&quot;];
 
-<p>``` java MockitoInitializerRule</p>
+        if (!share) {
+            return;
+        }
+        var shareCheckbox = document.getElementById(&quot;share&quot;);
 
-<p>public class MockitoInitializerRule implements TestRule {</p>
+        shareCheckbox.checked = share;
+        
+    }
+&lt;/script&gt;
 
-<pre><code>private Object test;
+&lt;body onload=&quot;restoreOptions()&quot;&gt;
 
-public MockitoInitializerRule(Object test) {
-    this.test = test;
-}
+&lt;label for=&quot;share&quot;&gt;Mark as Private&lt;/label&gt;
+&lt;input type=&quot;checkbox&quot; class=&quot;checkbox&quot; name=&quot;share&quot; id=&quot;share&quot; /&gt;
 
-@Override
-public Statement apply(Statement base, Description description) {
-    return new MockitInitilizationStatement(base, test);
-}
-</code></pre>
 
-<p>}</p>
+&lt;br&gt;
+&lt;button onclick=&quot;saveOptions();&quot;&gt;Save&lt;/button&gt;
+&lt;div id=&quot;status&quot;&gt;&amp;nbsp;&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre><br />
+<br />
+<h1>Сборка расширения</h1><br />
+В Chromium есть возможность собрать расширение.<br />
+1. Открываем адрес <tt>chrome://extensions/</tt><br />
+2. В правом верхнем углу нажимаем Developer Mode.<br />
+3. На появившейся панели инструментов кликаем Pack Extension<br />
+4. Выбираем каталог, в котором находится расширение<br />
+5. Chromium автоматически собирает расширение в каталоге с исходниками расширения.<br />
+<br />
+<h1>Заключение</h1><br />
+Писать расширения для Google Chrome не просто, а очень просто. <br />
+<br />
+Готовое и собранное расширение можно <a href="http://bit.ly/2KYnr8">скачать здесь</a>.<br />
+<br />
+<h1>Дополнительная информация</h1><br />
+<ol><li><a href="http://code.google.com/chrome/extensions/devguide.html">Google Chrome Extensions Developer's Guide</a></li>
+<li><a href="http://code.google.com/chrome/extensions/manifest.html">Manifest file description</a></li>
+<li><a href="http://code.google.com/chrome/extensions/api_index.html">Chrome Extensions API</a></li>
+<li><a href="http://code.google.com/chrome/extensions/packaging.html">Extension Packaging</a></li>
+</ol><br />
+<br />
+В следующей заметке опишу работу messaging для коммуникации расширения со скриптами содержимого.</div>
 
-<p>```</p>
 
-<p>We need to pass current test class instance to the rule, so it will be possible inject mocks into class instance. Actual implementation of our rule will go to new class &ndash; subclass of <a href="http://junit-team.github.io/junit/javadoc/4.11/org/junit/runners/model/Statement.html">Statement</a>:</p>
+<h2>Comments</h2>
 
-<p>``` java MockitInitilizationStatement</p>
 
-<p>class MockitInitilizationStatement extends Statement {</p>
-
-<pre><code>private final Statement base;
-private Object test;
-
-MockitInitilizationStatement(Statement base, Object test) {
-    this.base = base;
-    this.test = test;
-}
-
-@Override
-public void evaluate() throws Throwable {
-    MockitoAnnotations.initMocks(test);
-    base.evaluate();
-}
-</code></pre>
-
-<p>}</p>
-
-<p>```</p>
-
-<p>What we do is basically initialize mocks in the test class and then proceed with the test method execution.</p>
-
-<p>Now, let&rsquo;s take a look at the usage of newly created Rule:</p>
-
-<p>``` java Example usage of MockitoInitializerRule</p>
-
-<p>public void FooTest {</p>
-
-<pre><code>private Foo foo;
-
-@Mock
-private FooDependency dep;
-
-@Rule
-public TestRule mockitoInitializerRule = new MockitoInitializerRule(this);
-
-@Before
-public void setUp() {
-    foo = new Foo(dep);
-}
-</code></pre>
-
-<p>}</p>
-
-<p>```</p>
-
-<p>Comparing to variant with <code>MockitoJUnitRunner</code> this one provides ability to use custom <a href="http://junit-team.github.io/junit/javadoc/4.11/org/junit/runner/Runner.html">Runner</a>, i.e. we can continue to use <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/test/context/junit4/SpringJUnit4ClassRunner.html">SpringJUnit4ClassRunner</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Atom.io Invites]]></title>
-    <link href="http://uthark.github.io/blog/2014/03/28/atom-dot-io-invites/"/>
-    <updated>2014-03-28T09:53:03-04:00</updated>
-    <id>http://uthark.github.io/blog/2014/03/28/atom-dot-io-invites</id>
-    <content type="html"><![CDATA[<p>If anyone needs invites to <a href="http://atom.io">atom.io</a>, text editor from github &ndash; ask me in comments. I do have 3 invites to share.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Scala for the Intrigued]]></title>
-    <link href="http://uthark.github.io/blog/2014/03/25/scala-for-the-intrigued/"/>
-    <updated>2014-03-25T16:09:42-04:00</updated>
-    <id>http://uthark.github.io/blog/2014/03/25/scala-for-the-intrigued</id>
-    <content type="html"><![CDATA[<p>This is a very nice series of posts about Scala by <a href="http://blog.agiledeveloper.com/">Venkat Subramaniam</a></p>
-
-<ol>
-<li><a href="http://pragprog.com/magazines/2011-09/scala-for-the-intrigued">The Elegance of Scala</a></li>
-<li><a href="http://pragprog.com/magazines/2011-10/scala-for-the-intrigued">Sensible Typing and Optional Items</a></li>
-<li><a href="http://pragprog.com/magazines/2011-11/scala-for-the-intrigued">Cute Classes and Pure OO</a></li>
-<li><a href="http://pragprog.com/magazines/2011-12/scala-for-the-intrigued">Functional Style of Programming</a></li>
-<li><a href="http://pragprog.com/magazines/2012-01/scala-for-the-intrigued">Working with Collections</a></li>
-<li><a href="http://pragprog.com/magazines/2012-02/scala-for-the-intrigued">Creating Higher Order Functions</a></li>
-<li><a href="http://pragprog.com/magazines/2012-03/scala-for-the-intrigued">Pattern Matching</a></li>
-<li><a href="http://pragprog.com/magazines/2012-04/scala-for-the-intrigued">XML as First Class Citizen</a></li>
-<li><a href="http://pragprog.com/magazines/2012-05/scala-for-the-intrigued">Recursions and Tail Call Optimization</a></li>
-<li><a href="http://pragprog.com/magazines/2012-06/scala-for-the-intrigued">Using Traits</a></li>
-<li><a href="http://pragprog.com/magazines/2012-07/scala-for-the-intrigued">Chaining Traits</a></li>
-<li><a href="http://pragprog.com/magazines/2012-08/scala-for-the-intrigued">Concurrency in Scala</a></li>
-</ol>
+<div class='comments'>
+<div class='comment'>
+<div class='author'>Juev</div>
+<div class='content'>
+Очень много расширений уже реализуют добавление закладок в социальные закладки, но пока не встретил ни одного, которое реализует синхронизацию локальных закладок с сервером... Как это делает например расширение делисиоус для огнелиса. Если сумеете реализовать, цены расширению не будет!</div>
+</div>
+<div class='comment'>
+<div class='author'>uthark</div>
+<div class='content'>
+@karri<br />Подпишитесь :). Правда, пишу я нерегулярно.</div>
+</div>
+<div class='comment'>
+<div class='author'>karri</div>
+<div class='content'>
+А у вас тут интересно, хоть я и неважный ITтишник =) Пожалуй, подпишусь на вас! =)</div>
+</div>
+<div class='comment'>
+<div class='author'>uthark</div>
+<div class='content'>
+@karri Надеюсь, больше вам этого не придётся делать и расширение сослужит для вас хорошую службу. В следующей версии расширения будет возможность получить быстрый доступ к своему аккаунту на delicious, а также возможность быстрого доступа к закладкам с определённой меткой. Для чего это может быть полезно - читайте  <a href="http://atamanenko.blogspot.com/2009/04/blog-post.html" rel="nofollow">этот</a> и <a href="http://atamanenko.blogspot.com/2009/04/2.html" rel="nofollow">этот</a> посты.</div>
+</div>
+<div class='comment'>
+<div class='author'>karri</div>
+<div class='content'>
+Спасибо! =) Все-таки вчера не дождалась ответа и руками подабовляла в delicious на delicious.com =)</div>
+</div>
+<div class='comment'>
+<div class='author'>uthark</div>
+<div class='content'>
+Достаточно обновить страницу, которую вы хотите сохранить.<br /><br />Кроме того, нужна версия браузера выше 4.0.227.0</div>
+</div>
+<div class='comment'>
+<div class='author'>karri</div>
+<div class='content'>
+А браузер нужно перезапускать? Сорри за такой глупый вопрос, у меня тут дилема: куча нужных вкладок открыто, а Chrome, как FF не спрашивает сохранить ли их при закрытии :( По крайней мере что-то не нашла такой галочки :( Сижу думаю, что делать, delicious не вызывается и закрывать не хоцца ...</div>
+</div>
+<div class='comment'>
+<div class='author'>uthark</div>
+<div class='content'>
+@Denis <br />На здоровье. О найденных ошибках и своих предложениях можешь сообщать в комментариях к этому посту.</div>
+</div>
+<div class='comment'>
+<div class='author'>Denis</div>
+<div class='content'>
+Спасибо. Статья очень понравилась а расширением уже пользуюсь ;)</div>
+</div>
+</div>
 
 ]]></content>
   </entry>

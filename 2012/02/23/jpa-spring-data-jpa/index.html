@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+
+  
+  
+  <link href="//fonts.googleapis.com/css?family=Anonymous+Pro" rel="stylesheet" type="text/css">
+  
+
+  
+  <title>Упрощаем работу с JPA при помощи Spring Data JPA</title>
+
+  
+  
+  <link rel="stylesheet" href="https://uthark.github.io/css/hugo-octopress.css">
+
+  
+  
+
+  
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
+  
+  <link href="https://uthark.github.io/favicon.png" rel="icon">
+
+  
+  
+  
+
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <meta name="author" content="Oleg Atamanenko">
+
+  
+  <meta name="generator" content="Hugo 0.31" />
+
+  
+  
+
+</head>
+<body>
+
+
+<header role="banner"><hgroup>
+  
+  <h1><a href="https://uthark.github.io/">Software Development and related activities</a></h1>
+    <h2></h2>
+</hgroup></header>
+
+
+<nav role="navigation">
+
+<ul class="main-navigation">
+  
+  
+    
+      <li><a href="https://uthark.github.io/" title="Home">Home</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/categories/article/" title="Articles" >Articles</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/categories/reading-list/" title="Reading List" >Reading List</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/about/" title="About me" >About me</a></li>
+    
+  
+</ul>
+
+
+<ul class="subscription">
+  
+    
+        <a href="https://uthark.github.io/index.xml" target="_blank" type="application/rss+xml" title="RSS"><i class="fa fa-rss-square fa-lg"></i></a>
+    
+  
+
+</ul>
+
+
+<form action="https://www.google.com/search" method="get" target="_blank">
+  <fieldset role="search">
+  	<input class="search" type="text" name="q" results="0" placeholder="Search"/>
+    <input type="hidden" name="q" value="site:https://uthark.github.io/" />
+  </fieldset>
+</form>
+
+</nav>
+
+
+<div id="main">
+  <div id="content">
+    <div>
+      <article class="hentry" role="article">
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+         Упрощаем работу с JPA при помощи Spring Data JPA 
+    </h1>
+
+</header>
+
+
+        <div class="entry-content">
+          
+          
+          
+          
+          <h3>Введение</h3>
+<p>Уже прошло несколько лет с тех пор, как появился JPA. Работа с <a href="http://docs.oracle.com/javaee/5/api/javax/persistence/EntityManager.html">EntityManager</a> увлекательна, но разработчики пишут красивый API, а подробности работы с базой данных скрывают. При этом частая проблема - дублирование имплементации, когда из одного DAO в другой у нас плавно перекочёвывает один и тот же код, в лучшем случае этот код переносится в абстрактный базовый DAO. <a href="http://www.springsource.org/spring-data/jpa">Spring Data</a>  коренным образом решает проблему - при  его использовании остаётся только API на уровне интерфейсов, вся имплементация создаётся автоматически с использованием <a href="http://en.wikipedia.org/wiki/Aspect-oriented_programming">AOP</a>.</p>
+<h3>История Spring Data</h3>
+
+<p>Несмотря на то, что проект только недавно достиг версии 1.0, у него достаточно богатая история - раньше он развивался в рамках проекта <a href="http://redmine.synyx.org/projects/show/hades">Hades</a>.</p>
+
+<h3>Объявление DAO-интерфейса</h3>
+
+<p>Итак, для начала нам необходимо объявить DAO-интерфейс, в котором мы будем объявлять методы для работы с сущностью.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">UserRepository</span> <span style="color:#66d9ef">extends</span> CrudRepository<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">,</span> Long<span style="color:#f92672">&gt;</span> <span style="color:#f92672">{</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>Данного кода достаточно для обычного DAO с <a href="http://en.wikipedia.org/wiki/Create,_read,_update_and_delete">CRUD</a>-методами.</p>
+
+<ul>
+  <li><b>save</b> - сохраняет или обновляет переданную сущность.</li>
+  <li><b>findOne</b> - ищет сущность по первичному ключу.</li>
+  <li><b>findAll</b> - возвращает коллекцию всех сущностей</li>
+  <li><b>count</b> - возвращает количество сущностей</li>
+  <li><b>delete</b> - удаляет сущность</li>
+  <li><b>exists</b> - проверяет, существует ли сущность с данным первичным ключом</li>
+ 
+</ul>
+
+<p>Полный список методов, объявленный в CrudRepository можно посмотреть в <a href="http://static.springsource.org/spring-data/data-commons/docs/current/api/org/springframework/data/repository/CrudRepository.html">javadoc</a>.</p>
+
+<p>В случае, если нам нужны не все методы, то есть возможность произвести наследование от интерфейса <a href="http://static.springsource.org/spring-data/data-commons/docs/current/api/org/springframework/data/repository/Repository.html">Repository</a> и перенести в наследника только те методы из интерфейса CrudRepository, которые нужны.</p>
+
+<p><h3>Поддержка сортировки и постраничного просмотра</h3>
+Очень часто требующаяся функциональность - это возможность возвращать только часть сущностей из БД, например, для реализации постраничного просмотра в пользовательском интерфейсе. Spring Data и тут хорош и предоставляет нам возможность добавить такую функциональность в наш DAO. Для этого достаточно добавить объявление следующего метода в наш DAO-интерфейс:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"> Page<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">findAll</span><span style="color:#f92672">(</span>Pageable pageable<span style="color:#f92672">);</span></code></pre></div>
+<p>Интерфейс <a href="http://static.springsource.org/spring-data/data-commons/docs/current/api/org/springframework/data/domain/Pageable.html">Pageable</a> инкапсулирует в себе сведения о номере запрашиваемой страницы, размере страницы, а также требуемой сортировке.</p>
+
+<p><h3>Ищем данные</h3>
+Как правило, на обычных CRUD-ах DAO не заканчиваются и часто требуются дополнительные методы, которые возвращают только те сущности, которые удовлетворяют заданным условиям. На мой взгляд, Spring Data сильно упрощает жизнь в данной области.</p>
+
+<p>Например, нам нужен методы для поиска пользователя по логину и по его e-mail адресу:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"> User <span style="color:#a6e22e">findByLogin</span><span style="color:#f92672">(</span>String login<span style="color:#f92672">);</span>
+ User <span style="color:#a6e22e">findByEmail</span><span style="color:#f92672">(</span>String email<span style="color:#f92672">);</span></code></pre></div>
+<p>Все просто.</p>
+
+<p>В случае, если нужны более сложные условия для поиска, то и это тоже реализовано.</p>
+
+<p>Spring Data поддерживает следующие операторы:</p>
+
+<p><ul>
+  <li>Between</li>
+  <li>IsNotNull</li>
+  <li>NotNull</li>
+  <li>IsNull</li>
+  <li>Null</li>
+  <li>LessThan</li>
+  <li>LessThanEqual</li>
+  <li>GreaterThan</li>
+  <li>GreaterThanEqual</li>
+  <li>NotLike</li>
+  <li>Like</li>
+  <li>NotIn</li>
+  <li>In</li>
+  <li>Near</li>
+  <li>Within</li>
+  <li>Regex</li>
+  <li>Exists</li>
+  <li>IsTrue</li>
+  <li>True</li>
+  <li>IsFalse</li>
+<li>False</li>
+<li>Not</li></p>
+
+<p></ul>
+Такой внушительный список открывает простор для фантазии, так что можно составить сколь угодно сложный запрос.</p>
+
+<p>Если необходимо, чтобы в результатах поиска было несколько сущностей, то необходимо называть метод find<b>All</b></p>
+
+<p><h3>Поддержка Spring MVC</h3>
+<i>Это часть основана на официальной документации.</i>
+Представьте, что вы разрабатываете веб-приложение с использованием <a href="http://static.springsource.org/spring/docs/current/spring-framework-reference/html/mvc.html">Spring MVC</a>. Тогда вам необходимо будет загружать сущность из базы данных используя параметры HTTP-запроса. Это может выглядеть следующим образом:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Controller</span>
+<span style="color:#a6e22e">@RequestMapping</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/users&#34;</span><span style="color:#f92672">)</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">UserController</span> <span style="color:#f92672">{</span>
+
+  <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> UserRepository userRepository<span style="color:#f92672">;</span>
+
+  <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">UserController</span><span style="color:#f92672">(</span>UserRepository userRepository<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    userRepository <span style="color:#f92672">=</span> userRepository<span style="color:#f92672">;</span>
+  <span style="color:#f92672">}</span>
+
+  <span style="color:#a6e22e">@RequestMapping</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/{id}&#34;</span><span style="color:#f92672">)</span>
+  <span style="color:#66d9ef">public</span> String <span style="color:#a6e22e">showUserForm</span><span style="color:#f92672">(</span><span style="color:#a6e22e">@PathVariable</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;id&#34;</span><span style="color:#f92672">)</span> Long id<span style="color:#f92672">,</span> Model model<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    
+    <span style="color:#75715e">// Do null check for id
+</span><span style="color:#75715e"></span>    User user <span style="color:#f92672">=</span> userRepository<span style="color:#f92672">.</span><span style="color:#a6e22e">findOne</span><span style="color:#f92672">(</span>id<span style="color:#f92672">);</span>
+    <span style="color:#75715e">// Do null check for user
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// Populate model
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;user&#34;</span><span style="color:#f92672">;</span>
+  <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>Во-первых, вы объявляете зависимость на DAO, а во-вторых всегда вызываете метод <tt>findOne()</tt> для загрузки сущности. К счастью, Spring позволяет нам преобразовывать строковые значения из HTTP-запросов в любой нужный тип используя либо <tt><a href="http://docs.oracle.com/javase/6/docs/api/java/beans/PropertyEditor.html">PropertyEditor</a></tt>, либо <tt><a href="http://static.springsource.org/spring/docs/current/javadoc-api/org/springframework/core/convert/ConversionService.html">ConversionService</a></tt>.</p>
+
+<p>Если вы используете Spring версии 3.0 и выше, то вам необходимо добавить следующую конфигурацию:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;mvc:annotation-driven</span> <span style="color:#a6e22e">conversion-service=</span><span style="color:#e6db74">&#34;conversionService&#34;</span> <span style="color:#f92672">/&gt;</span>
+<span style="color:#f92672">&lt;bean</span> <span style="color:#a6e22e">id=</span><span style="color:#e6db74">&#34;conversionService&#34;</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;….context.support.ConversionServiceFactoryBean&#34;</span><span style="color:#f92672">&gt;</span>
+  <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;converters&#34;</span><span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;list&gt;</span>
+      <span style="color:#f92672">&lt;bean</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;org.springframework.data.repository.support.DomainClassConverter&#34;</span><span style="color:#f92672">&gt;</span>
+        <span style="color:#f92672">&lt;constructor-arg</span> <span style="color:#a6e22e">ref=</span><span style="color:#e6db74">&#34;conversionService&#34;</span> <span style="color:#f92672">/&gt;</span>
+      <span style="color:#f92672">&lt;/bean&gt;</span>
+    <span style="color:#f92672">&lt;/list&gt;</span>
+  <span style="color:#f92672">&lt;/property&gt;</span>
+<span style="color:#f92672">&lt;/bean&gt;</span></code></pre></div>
+<p>Если же вы используете Spring более старой версии, то вам необходима вот такая конфигурация:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;bean</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;….web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter&#34;</span><span style="color:#f92672">&gt;</span>
+  <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;webBindingInitializer&#34;</span><span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;bean</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;….web.bind.support.ConfigurableWebBindingInitializer&#34;</span><span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;propertyEditorRegistrars&#34;</span><span style="color:#f92672">&gt;</span>
+        <span style="color:#f92672">&lt;bean</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;org.springframework.data.repository.support.DomainClassPropertyEditorRegistrar&#34;</span> <span style="color:#f92672">/&gt;</span>
+      <span style="color:#f92672">&lt;/property&gt;</span>
+    <span style="color:#f92672">&lt;/bean&gt;</span>
+  <span style="color:#f92672">&lt;/property&gt;</span>
+<span style="color:#f92672">&lt;/bean&gt;</span></code></pre></div>
+<p>После данных изменений в конфигурации можно переписать контроллер следующим образом:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Controller</span>
+<span style="color:#a6e22e">@RequestMapping</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/users&#34;</span><span style="color:#f92672">)</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">UserController</span> <span style="color:#f92672">{</span>
+
+  <span style="color:#a6e22e">@RequestMapping</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/{id}&#34;</span><span style="color:#f92672">)</span>
+  <span style="color:#66d9ef">public</span> String <span style="color:#a6e22e">showUserForm</span><span style="color:#f92672">(</span><span style="color:#a6e22e">@PathVariable</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;id&#34;</span><span style="color:#f92672">)</span> User user<span style="color:#f92672">,</span> Model model<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+
+    <span style="color:#75715e">// Do null check for user
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// Populate model
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;userForm&#34;</span><span style="color:#f92672">;</span>
+  <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>Обратите внимание на то, как упростился код и как мы красиво избавились от его дублирования.</p>
+
+<p><h3>Документация</h3>
+На данный момент документации по проекту не так уж и много, но, тем не менее, она есть:</p>
+
+<p><ul>
+<li><a href="http://static.springsource.org/spring-data/data-jpa/docs/current/reference/html/">Spring Data JPA - Reference Documentation</a></li>
+<li><a href="http://static.springsource.org/spring-data/data-commons/docs/current/reference/html/">Spring Data Commons - Reference Documentation</a></li>
+<li><a href="https://github.com/SpringSource/spring-data-jpa">исходники на github</a></li></p>
+
+<p></ul>
+<h3>Заключение</h3>
+Spring Data значительно упрощает жизнь при использовании JPA. Рекомендуется к использованию в своих проектах.</p>
+
+        </div>
+        
+
+<footer>
+
+  <p class="meta">
+    
+    
+
+    
+    
+    
+    Filed under: <a class="label" href="https://uthark.github.io/categories/spring/">spring</a><a class="label" href="https://uthark.github.io/categories/%d1%80%d0%b0%d0%b7%d1%80%d0%b0%d0%b1%d0%be%d1%82%d0%ba%d0%b0/">разработка</a><a class="label" href="https://uthark.github.io/categories/spring-data/">spring data</a><a class="label" href="https://uthark.github.io/categories/development/">development</a>
+    
+  </p>
+
+  <p class="meta">
+    
+    Last update: <time>Feb 23, 2012</time>
+    
+    </span>
+  </p>
+  
+  
+
+  
+
+  <p class="meta">
+    
+        <a class="basic-alignment left" href="https://uthark.github.io/2012/02/09/java-rest/" title="Разработка и тестирование Java REST веб-сервисов">Разработка и тестирование Java REST веб-сервисов</a>
+    
+
+    
+      <a class="basic-alignment right" href="https://uthark.github.io/2012/04/20/blog-post/" title="Преобразуем строку в дату">Преобразуем строку в дату</a>
+    
+  </p>
+  
+</footer>
+
+      </article>
+    </div>
+    
+
+<aside class="sidebar thirds">
+  <section class="first odd">
+
+    
+
+    <p>
+      
+    </p>
+  </section>
+
+
+
+
+
+  
+
+  
+
+  
+  
+  
+
+</aside>
+
+  </div>
+</div>
+
+<footer role="contentinfo">
+    
+    <div class="center">
+        <ul class="sidebar-nav">
+            <li class="sidebar-nav-item">
+                <a target="_blank" href="https://github.com/uthark/" title="https://github.com/uthark/"><i
+                    class="fa fa-github fa-3x"></i></a></li>
+            <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
+                    class="fa fa-bitbucket fa-3x"></i></a>
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item"><a target="_blank" href="https://twitter.com/LinkageError/" title="https://twitter.com/LinkageError/"><i
+                    class="fa fa-twitter fa-3x"></i></a>
+            <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
+                    class="fa fa-key fa-3x"></i></a> 
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item"><a target="_blank" href="http://stackoverflow.com/users/216764/uthark" title="http://stackoverflow.com/users/216764/uthark"><i
+                    class="fa fa-stack-overflow fa-3x"></i></a>
+            <li class="sidebar-nav-item"><a target="_blank" href="https://plus.google.com/&#43;OlegAtamanenko" title="https://plus.google.com/&#43;OlegAtamanenko"><i
+                    class="fa fa-google-plus fa-3x"></i></a>
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item">
+                
+                
+            </li>
+        </ul>
+    </div>
+    <p>Copyright &copy; 2017 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+        <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a> and
+            <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.
+    </p>
+
+</footer>
+
+
+</body>
+</html>
+

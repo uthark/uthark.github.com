@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Octopress | Software Development and related activities]]></title>
+  <link href="http://uthark.github.io/blog/categories/octopress/atom.xml" rel="self"/>
+  <link href="http://uthark.github.io/"/>
+  <updated>2017-10-12T19:01:44-04:00</updated>
+  <id>http://uthark.github.io/</id>
+  <author>
+    <name><![CDATA[Oleg Atamanenko]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Fixing Unescaped Quotes in Page Rendering in Octopress]]></title>
+    <link href="http://uthark.github.io/blog/2014/03/02/octopress-quote-fix/"/>
+    <updated>2014-03-02T22:11:00-05:00</updated>
+    <id>http://uthark.github.io/blog/2014/03/02/octopress-quote-fix</id>
+    <content type="html"><![CDATA[<p>When I created <a href="/about">About Me</a> page I found issue with rendering: for some reason styles and some javascripts were missing on the page.</p>
+
+<p>Investigation showed that content in <code>meta tag</code> description contained unquoted quotes, thus resulting in broken HTML.</p>
+
+<p>After searching within <a href="https://github.com/imathis/octopress/">octopress sources</a> I found the issue:</p>
+
+<p></p>
+
+<p>``` ruby Rendering of description tag, excerpt from _includes/head.html
+{% capture description %}</p>
+
+<pre><code>{% if page.description %}
+    {{ page.description }}
+{% else %}
+    {{ content | raw_content }}
+{% endif %}
+</code></pre>
+
+<p>{% endcapture %}
+<meta name="description" content="{{ description | strip_html | condense_spaces | truncate:150 }}">
+```</p>
+
+<p></p>
+
+<p>After capturing, <code>description</code> is being processed with filters, defined in <code>plugins/octopress_filters.rb</code>. In this case, the following filter are applied:</p>
+
+<ul>
+<li>strip_html</li>
+<li>condense_spaces</li>
+<li>truncate</li>
+</ul>
+
+
+<p>So, as you can see, if description contains quotes, then it will be rendered as is, without any escaping and quotes will break resulting page.</p>
+
+<p>In order to fix this I decided to add new filter, which will just remove quotes.</p>
+
+<p>So, let&rsquo;s add new function, <code>strip_quotes</code> in <code>plugins/octopress_filters.rb</code>:</p>
+
+<p>``` ruby strip_quotes function</p>
+
+<h1>Strips quotes</h1>
+
+<p>def strip_quotes(input)</p>
+
+<pre><code>input.gsub(/[\'\""]/, '')
+</code></pre>
+
+<p>end</p>
+
+<p>```</p>
+
+<p>And then we need to update rendering of description tag &ndash; add newly created filter:</p>
+
+<p></p>
+
+<p><code>html
+&lt;meta name="description" content="{{ description | strip_html | condense_spaces | strip_quotes | truncate:150 }}"&gt;
+</code></p>
+
+<p></p>
+
+<p>After this fix description is being rendered properly.</p>
+
+<p>
+P.S. In order to render properly <code>{{</code> and <code>}}</code> in the octopress it is required to put content you want to render within <code>raw</code> and <code>endraw</code> tags. See <a href="http://stackoverflow.com/questions/15786144/how-to-escape-in-markdown-on-octopress">StackOverflow</a> <a href="http://stackoverflow.com/questions/3426182/how-to-escape-liquid-template-tags/13582517#13582517">questions</a> for details.
+</p>
+]]></content>
+  </entry>
+  
+</feed>

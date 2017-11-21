@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Sybase | Software Development and related activities]]></title>
-  <link href="http://uthark.github.io/blog/categories/sybase/atom.xml" rel="self"/>
-  <link href="http://uthark.github.io/"/>
-  <updated>2017-10-12T19:01:44-04:00</updated>
-  <id>http://uthark.github.io/</id>
+  <title><![CDATA[Category: sybase | Блог о разработке ПО]]></title>
+  <link href="http://uthark.github.com/blog/categories/sybase/atom.xml" rel="self"/>
+  <link href="http://uthark.github.com/"/>
+  <updated>2013-06-29T23:40:55-04:00</updated>
+  <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Вложенные транзакции в базах данных]]></title>
-    <link href="http://uthark.github.io/blog/2010/02/05/blog-post/"/>
-    <updated>2010-02-05T01:20:00+06:00</updated>
-    <id>http://uthark.github.io/blog/2010/02/05/blog-post</id>
+    <link href="http://uthark.github.com/blog/2010/02/04/blog-post/"/>
+    <updated>2010-02-04T14:20:00-05:00</updated>
+    <id>http://uthark.github.com/blog/2010/02/04/blog-post</id>
     <content type="html"><![CDATA[<div class='post'>
 Summary: Некоторые особенности вложенных транзакций.<br />
 <br />
@@ -126,9 +126,9 @@ This comment has been removed by the author.</div>
   
   <entry>
     <title type="html"><![CDATA[Двунаправленная ссылочная целостность]]></title>
-    <link href="http://uthark.github.io/blog/2009/07/07/blog-post/"/>
-    <updated>2009-07-07T22:11:00+07:00</updated>
-    <id>http://uthark.github.io/blog/2009/07/07/blog-post</id>
+    <link href="http://uthark.github.com/blog/2009/07/07/blog-post/"/>
+    <updated>2009-07-07T11:11:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2009/07/07/blog-post</id>
     <content type="html"><![CDATA[<div class='post'>
 Здравствуйте.<br />
 <br />

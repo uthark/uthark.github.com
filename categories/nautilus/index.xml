@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Nautilus on Software Development and related activities</title>
+    <link>https://uthark.github.io/categories/nautilus/</link>
+    <description>Recent content in Nautilus on Software Development and related activities</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 06 Dec 2009 01:03:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://uthark.github.io/categories/nautilus/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>RabbitVCS - расширение для Nautilus для работы с Subversion</title>
+      <link>https://uthark.github.io/2009/12/06/nautilus-subversion/</link>
+      <pubDate>Sun, 06 Dec 2009 01:03:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/12/06/nautilus-subversion/</guid>
+      <description>Раньше я использовал коллекцию скриптов nautilussvn, весьма неудобную в использовании.
+Бродя по просторам сети наткнулся на отличную замену. Встречайте - RabbitVCS.
+ВозможностиИнтеграция с Nautilus Поддержка Subversion Полная локализация Поддержка командной строки Доступны пакеты для различных дистрибутивов Установка
+Для Ubuntu Hardy, Intepid, Jaunty
+deb http://ppa.launchpad.net/rabbitvcs/ppa/ubuntu hardy main 
+Для Ubuntu Karmic
+sudo add-apt-repository ppa:rabbitvcs/ppa 
+Установка для других дистрибутивов описана на официальном сайте.
+РаботаНесмотря на очень маленький номер версии работает достаточно стабильно, не падает.</description>
+    </item>
+    
+  </channel>
+</rss>

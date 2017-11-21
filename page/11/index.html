@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+
+  
+  
+  <link href="//fonts.googleapis.com/css?family=Anonymous+Pro" rel="stylesheet" type="text/css">
+  
+
+  
+  <title>Software Development and related activities</title>
+
+  
+  
+  <link rel="stylesheet" href="https://uthark.github.io/css/hugo-octopress.css">
+
+  
+  
+
+  
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
+  
+  <link href="https://uthark.github.io/favicon.png" rel="icon">
+
+  
+  
+  
+
+  <link href="https://uthark.github.io/index.xml" rel="alternate" type="application/rss+xml" title="Software Development and related activities" />
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <meta name="author" content="Oleg Atamanenko">
+
+  
+  <meta name="generator" content="Hugo 0.31" />
+
+  
+  
+
+</head>
+<body>
+
+
+<header role="banner"><hgroup>
+  
+  <h1><a href="https://uthark.github.io/">Software Development and related activities</a></h1>
+    <h2></h2>
+</hgroup></header>
+
+
+<nav role="navigation">
+
+<ul class="main-navigation">
+  
+  
+    
+      <li><a href="https://uthark.github.io/" title="Home">Home</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/categories/article/" title="Articles" >Articles</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/categories/reading-list/" title="Reading List" >Reading List</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/about/" title="About me" >About me</a></li>
+    
+  
+</ul>
+
+
+<ul class="subscription">
+  
+    
+        <a href="https://uthark.github.io/index.xml" target="_blank" type="application/rss+xml" title="RSS"><i class="fa fa-rss-square fa-lg"></i></a>
+    
+  
+
+</ul>
+
+
+<form action="https://www.google.com/search" method="get" target="_blank">
+  <fieldset role="search">
+  	<input class="search" type="text" name="q" results="0" placeholder="Search"/>
+    <input type="hidden" name="q" value="site:https://uthark.github.io/" />
+  </fieldset>
+</form>
+
+</nav>
+
+
+<div id="main">
+ <div id="content">
+  <div class="blog-index">
+    
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2014/03/06/limiting-threads-count-for-greenrobot-eventbus/">Limiting threads count for GreenRobot EventBus</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>In one of my projects I used <a href="https://github.com/greenrobot/EventBus">EventBus</a> library. The library is pretty cool and I would recommend everybody to use it.</p>
+
+<p>But I found one small issue with this library - in case you send too many events very fast (i.e. more than 1000 per second) you may face issue with application crash due to inability to create new thread.</p>
+
+<p>The problem is lying in the used <code>ExecutorService</code>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">package</span> de.greenrobot.event<span style="color:#f92672">;</span>
+<span style="color:#75715e">// imports
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">EventBus</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">static</span> ExecutorService executorService <span style="color:#f92672">=</span> Executors<span style="color:#f92672">.</span><span style="color:#a6e22e">newCachedThreadPool</span><span style="color:#f92672">();</span>
+
+    <span style="color:#75715e">// class content skipped 
+</span><span style="color:#75715e"></span><span style="color:#f92672">}</span></code></pre></div>
+<p>As you can see, it calls <code>newCachedThreadPool</code> method to create thread pool.</p>
+
+<p>From <a href="http://developer.android.com/reference/java/util/concurrent/Executors.html#newCachedThreadPool()">javadoc</a> for this method:</p>
+
+<blockquote>
+<p>Creates a thread pool that creates new threads as needed, but will reuse
+previously constructed threads when they are available.</p>
+</blockquote>
+
+<p>This is where we hit the wall - if we send too many requests and each request is slow (i.e. saving into database or network request) then we will try to create too many threads and app will crash.</p>
+
+<p>Thankfully, <code>executorService</code> is <code>static</code> but not <code>final</code>. And this will allow us to solve the issue easily.</p>
+
+<p>Let&rsquo;s create our configurer class in package <code>de.greenrobot.event</code> so we will be able to access <code>executorService</code> property which is package-visible and override it with different thread pool:</p>
+
+<p>EventBusExecutorServiceConfigurer:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">package</span> de.greenrobot.event<span style="color:#f92672">;</span>
+
+<span style="color:#f92672">import</span> java.util.concurrent.Executors<span style="color:#f92672">;</span>
+
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">EventBusExecutorServiceConfigurer</span> <span style="color:#f92672">{</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">configureEventBus</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        ExecutorService executorServiceToUse<span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>Build<span style="color:#f92672">.</span><span style="color:#a6e22e">VERSION</span><span style="color:#f92672">.</span><span style="color:#a6e22e">SDK_INT</span> <span style="color:#f92672">&gt;=</span> Build<span style="color:#f92672">.</span><span style="color:#a6e22e">VERSION_CODES</span><span style="color:#f92672">.</span><span style="color:#a6e22e">HONEYCOMB</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            executorServiceToUse <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>ExecutorService<span style="color:#f92672">)</span> AsyncTask<span style="color:#f92672">.</span><span style="color:#a6e22e">THREAD_POOL_EXECUTOR</span><span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+            executorServiceToUse <span style="color:#f92672">=</span> Executors<span style="color:#f92672">.</span><span style="color:#a6e22e">newFixedThreadPool</span><span style="color:#f92672">(</span>
+                Runtime<span style="color:#f92672">.</span><span style="color:#a6e22e">getRuntime</span><span style="color:#f92672">().</span><span style="color:#a6e22e">availableProcessors</span><span style="color:#f92672">());</span>
+        <span style="color:#f92672">}</span>
+        EventBus<span style="color:#f92672">.</span><span style="color:#a6e22e">executorService</span> <span style="color:#f92672">=</span> executorServiceToUse<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>Android 3.0+ has special <a href="http://developer.android.com/reference/android/os/AsyncTask.html#THREAD_POOL_EXECUTOR">THREAD_POOL_EXECUTOR</a> which is supposed to be used by asynchronous tasks, so we use it on newer devices. On older, pre-Honeycomb devices we create our own thread pool.</p>
+
+<p>And then in Android application we configure <code>executorService</code>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CustomApplication</span> <span style="color:#66d9ef">extends</span> Application <span style="color:#f92672">{</span>
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onCreate</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">super</span><span style="color:#f92672">.</span><span style="color:#a6e22e">onCreate</span><span style="color:#f92672">();</span>
+        <span style="color:#66d9ef">new</span> EventBusExecutorServiceConfigurer<span style="color:#f92672">().</span><span style="color:#a6e22e">configureEventBus</span><span style="color:#f92672">();</span>
+
+        <span style="color:#75715e">// other initialization
+</span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2014/03/06/customizing-font-in-android-textview/">Using custom font in Android TextView</a>
+    </h1>
+
+</header>
+
+
+        
+        
+
+<p>Today I want to share with you custom <a href="http://developer.android.com/reference/android/widget/TextView.html">TextView</a> which allows to set font to be used in xml layout.</p>
+
+<p>First, we need to declare our custom styleable</p>
+
+<p>attrs.xml:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#75715e">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span>
+<span style="color:#f92672">&lt;resources&gt;</span>
+
+    <span style="color:#f92672">&lt;declare-styleable</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;TypefaceTextView&#34;</span><span style="color:#f92672">&gt;</span>
+        <span style="color:#f92672">&lt;attr</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;typeface&#34;</span> <span style="color:#a6e22e">format=</span><span style="color:#e6db74">&#34;string&#34;</span><span style="color:#f92672">/&gt;</span>
+    <span style="color:#f92672">&lt;/declare-styleable&gt;</span>
+
+<span style="color:#f92672">&lt;/resources&gt;</span></code></pre></div>
+<p>Then we need to create subclass of <code>TextView</code> which will use custom attribute.</p>
+
+<p>TypefaceTextView:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TypefaceTextView</span> <span style="color:#66d9ef">extends</span> TextView <span style="color:#f92672">{</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">TypefaceTextView</span><span style="color:#f92672">(</span>Context context<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">this</span><span style="color:#f92672">(</span>context<span style="color:#f92672">,</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">TypefaceTextView</span><span style="color:#f92672">(</span>Context context<span style="color:#f92672">,</span> AttributeSet attrs<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">this</span><span style="color:#f92672">(</span>context<span style="color:#f92672">,</span> attrs<span style="color:#f92672">,</span> 0<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">TypefaceTextView</span><span style="color:#f92672">(</span>Context context<span style="color:#f92672">,</span> AttributeSet attrs<span style="color:#f92672">,</span> <span style="color:#66d9ef">int</span> defStyle<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">super</span><span style="color:#f92672">(</span>context<span style="color:#f92672">,</span> attrs<span style="color:#f92672">,</span> defStyle<span style="color:#f92672">);</span>
+
+        TypedArray ta <span style="color:#f92672">=</span> context<span style="color:#f92672">.</span><span style="color:#a6e22e">getTheme</span><span style="color:#f92672">().</span><span style="color:#a6e22e">obtainStyledAttributes</span><span style="color:#f92672">(</span>attrs<span style="color:#f92672">,</span> R<span style="color:#f92672">.</span><span style="color:#a6e22e">styleable</span><span style="color:#f92672">.</span><span style="color:#a6e22e">TypefaceTextView</span><span style="color:#f92672">,</span> 0<span style="color:#f92672">,</span> 0<span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+            String font <span style="color:#f92672">=</span> ta<span style="color:#f92672">.</span><span style="color:#a6e22e">getString</span><span style="color:#f92672">(</span>R<span style="color:#f92672">.</span><span style="color:#a6e22e">styleable</span><span style="color:#f92672">.</span><span style="color:#a6e22e">TypefaceTextView_typeface</span><span style="color:#f92672">);</span>
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">null</span> <span style="color:#f92672">==</span> font<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                font <span style="color:#f92672">=</span> context<span style="color:#f92672">.</span><span style="color:#a6e22e">getString</span><span style="color:#f92672">(</span>R<span style="color:#f92672">.</span><span style="color:#a6e22e">string</span><span style="color:#f92672">.</span><span style="color:#a6e22e">default_font_name</span><span style="color:#f92672">);</span>
+            <span style="color:#f92672">}</span>
+            Typeface typeface <span style="color:#f92672">=</span> TypefaceCache<span style="color:#f92672">.</span><span style="color:#a6e22e">getTypeface</span><span style="color:#f92672">(</span>context<span style="color:#f92672">,</span> font<span style="color:#f92672">);</span>
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">null</span> <span style="color:#f92672">!=</span> typeface<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                setTypeface<span style="color:#f92672">(</span>typeface<span style="color:#f92672">);</span>
+            <span style="color:#f92672">}</span>
+
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">finally</span> <span style="color:#f92672">{</span>
+            ta<span style="color:#f92672">.</span><span style="color:#a6e22e">recycle</span><span style="color:#f92672">();</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>Also, above class allows to use default custom font, all is needed is to define its name in <code>strings.xml</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#75715e">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span>
+<span style="color:#f92672">&lt;resources&gt;</span>
+    <span style="color:#f92672">&lt;string</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;default_font_name&#34;</span> <span style="color:#a6e22e">translatable=</span><span style="color:#e6db74">&#34;false&#34;</span><span style="color:#f92672">&gt;</span>custom.ttf<span style="color:#f92672">&lt;/string&gt;</span>
+<span style="color:#f92672">&lt;/resources&gt;</span></code></pre></div>
+<p>Due to the <a href="https://code.google.com/p/android/issues/detail?id=9904">bug in Android</a> we have to cache all created typefaces in cache:</p>
+
+<p>TypefaceCache:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TypefaceCache</span> <span style="color:#f92672">{</span>
+
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> Map<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">,</span> Typeface<span style="color:#f92672">&gt;</span> CACHE <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> HashMap<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">,</span> Typeface<span style="color:#f92672">&gt;();</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> Typeface <span style="color:#a6e22e">getTypeface</span><span style="color:#f92672">(</span>Context context<span style="color:#f92672">,</span> String font<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">null</span> <span style="color:#f92672">==</span> font<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+        Typeface typeface <span style="color:#f92672">=</span> CACHE<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>font<span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">null</span> <span style="color:#f92672">==</span> typeface<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+
+            typeface <span style="color:#f92672">=</span> Typeface<span style="color:#f92672">.</span><span style="color:#a6e22e">createFromAsset</span><span style="color:#f92672">(</span>context<span style="color:#f92672">.</span><span style="color:#a6e22e">getAssets</span><span style="color:#f92672">(),</span> font<span style="color:#f92672">);</span>
+            CACHE<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>font<span style="color:#f92672">,</span> typeface<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+        <span style="color:#66d9ef">return</span> typeface<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>Basically, that&rsquo;s it. In order to use it is required to put TTF font in the <code>assets</code> folder and reference the font:</p>
+
+<p>Example usage:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#75715e">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span>
+<span style="color:#f92672">&lt;com.example.android.widget.TypefaceTextView</span> 
+    <span style="color:#a6e22e">xmlns:a=</span><span style="color:#e6db74">&#34;http://schemas.android.com/apk/res/android&#34;</span>
+    <span style="color:#a6e22e">xmlns:custom=</span><span style="color:#e6db74">&#34;http://schemas.android.com/apk/res-auto&#34;</span>
+    <span style="color:#a6e22e">a:layout_width=</span><span style="color:#e6db74">&#34;match_parent&#34;</span>
+    <span style="color:#a6e22e">custom:typeface=</span><span style="color:#e6db74">&#34;custom-font.ttf&#34;</span><span style="color:#f92672">/&gt;</span></code></pre></div>
+<p>And the last use case it to set custom font for the actionbar title. In this case we can implement custom <a href="http://developer.android.com/reference/android/text/style/CharacterStyle.html"><code>android.text.style.CharacterStyle</code></a></p>
+
+<p>TypefaceSpan:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TypefaceSpan</span> <span style="color:#66d9ef">extends</span> MetricAffectingSpan <span style="color:#f92672">{</span>
+
+    <span style="color:#66d9ef">private</span> Typeface mTypeface<span style="color:#f92672">;</span>
+
+    <span style="color:#75715e">/**
+</span><span style="color:#75715e">     * Load the {@link Typeface} and apply to a {@link Spannable}.
+</span><span style="color:#75715e">     */</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">TypefaceSpan</span><span style="color:#f92672">(</span>Context context<span style="color:#f92672">,</span> String typefaceName<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        mTypeface <span style="color:#f92672">=</span> TypefaceCache<span style="color:#f92672">.</span><span style="color:#a6e22e">getTypeface</span><span style="color:#f92672">(</span>context<span style="color:#f92672">,</span> typefaceName<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">updateMeasureState</span><span style="color:#f92672">(</span>TextPaint p<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        p<span style="color:#f92672">.</span><span style="color:#a6e22e">setTypeface</span><span style="color:#f92672">(</span>mTypeface<span style="color:#f92672">);</span>
+
+        <span style="color:#75715e">// Note: This flag is required for proper typeface rendering
+</span><span style="color:#75715e"></span>        p<span style="color:#f92672">.</span><span style="color:#a6e22e">setFlags</span><span style="color:#f92672">(</span>p<span style="color:#f92672">.</span><span style="color:#a6e22e">getFlags</span><span style="color:#f92672">()</span> <span style="color:#f92672">|</span> Paint<span style="color:#f92672">.</span><span style="color:#a6e22e">SUBPIXEL_TEXT_FLAG</span><span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">updateDrawState</span><span style="color:#f92672">(</span>TextPaint tp<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        tp<span style="color:#f92672">.</span><span style="color:#a6e22e">setTypeface</span><span style="color:#f92672">(</span>mTypeface<span style="color:#f92672">);</span>
+
+        <span style="color:#75715e">// Note: This flag is required for proper typeface rendering
+</span><span style="color:#75715e"></span>        tp<span style="color:#f92672">.</span><span style="color:#a6e22e">setFlags</span><span style="color:#f92672">(</span>tp<span style="color:#f92672">.</span><span style="color:#a6e22e">getFlags</span><span style="color:#f92672">()</span> <span style="color:#f92672">|</span> Paint<span style="color:#f92672">.</span><span style="color:#a6e22e">SUBPIXEL_TEXT_FLAG</span><span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>Then we can set actionbar title using the following code:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">setActionBarTitle</span><span style="color:#f92672">(</span>Activity context<span style="color:#f92672">,</span> CharSequence title<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    SpannableString s <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> SpannableString<span style="color:#f92672">(</span>title<span style="color:#f92672">);</span>
+    s<span style="color:#f92672">.</span><span style="color:#a6e22e">setSpan</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> TypefaceSpan<span style="color:#f92672">(</span>context<span style="color:#f92672">,</span> context<span style="color:#f92672">.</span><span style="color:#a6e22e">getString</span><span style="color:#f92672">(</span>R<span style="color:#f92672">.</span><span style="color:#a6e22e">string</span><span style="color:#f92672">.</span><span style="color:#a6e22e">default_font_name</span><span style="color:#f92672">)),</span> 0<span style="color:#f92672">,</span> s<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">(),</span>
+        Spannable<span style="color:#f92672">.</span><span style="color:#a6e22e">SPAN_EXCLUSIVE_EXCLUSIVE</span><span style="color:#f92672">);</span>
+
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>Build<span style="color:#f92672">.</span><span style="color:#a6e22e">VERSION</span><span style="color:#f92672">.</span><span style="color:#a6e22e">SDK_INT</span> <span style="color:#f92672">&gt;=</span> Build<span style="color:#f92672">.</span><span style="color:#a6e22e">VERSION_CODES</span><span style="color:#f92672">.</span><span style="color:#a6e22e">HONEYCOMB</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        context<span style="color:#f92672">.</span><span style="color:#a6e22e">getActionBar</span><span style="color:#f92672">().</span><span style="color:#a6e22e">setTitle</span><span style="color:#f92672">(</span>s<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<h3 id="additional-information">Additional information</h3>
+
+<ol>
+<li><a href="http://developer.android.com/training/custom-views/#create-view.html">Creating a View Class | Android Developers</a></li>
+</ol>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2014/03/06/reading-list-2014-march-06/">Reading List 2014-March-06</a>
+    </h1>
+
+</header>
+
+
+        
+        
+
+<p>Reading list for today:</p>
+
+<h3 id="software-development">Software development</h3>
+
+<ol>
+<li><a href="http://j.mp/1pYGdhm">The myth of the fall</a></li>
+<li><a href="http://j.mp/1mdCFZa">The Technologies that Drive Lob</a></li>
+<li><a href="http://j.mp/1erUM3z">AngularJS meets Marvel Comics</a></li>
+<li><a href="http://j.mp/1kzb9Ut">Handwriting Arrives in Evernote for Android</a></li>
+<li><a href="http://j.mp/1e5sEnW">How do I find out what application elements can be scripted with AppleScript?</a></li>
+</ol>
+
+<h3 id="productivity">Productivity</h3>
+
+<ol>
+<li><a href="http://j.mp/1bLunhs">Writing sensible email messages</a></li>
+<li><a href="http://j.mp/1m62bj1">Inbox Zero: Better Practices for staying (near) zero</a></li>
+<li><a href="http://j.mp/1bLueKR">Inbox Zero: Processing to zero</a></li>
+</ol>
+
+<h3 id="agile">Agile</h3>
+
+<ol>
+<li><a href="http://j.mp/1hIDTaD">Compensation Strategies for Agile Teams</a></li>
+<li><a href="http://j.mp/1erUPwm">The Top Five Agile Methodology PPTs</a></li>
+<li><a href="http://j.mp/1m8AhCV">Structure, Governance, and Metrics on Large Scale Agile Teams</a></li>
+<li><a href="http://j.mp/1gEfpwA">Goals of a Retrospective</a></li>
+</ol>
+
+<h3 id="cloud">Cloud</h3>
+
+<ol>
+<li><a href="http://j.mp/1iatLWp">Announcing updates to the Google Cloud Platform Partner Program</a></li>
+<li><a href="http://j.mp/1ewmZqa">The PaaS shakeup and what it means for OpenStack</a></li>
+<li><a href="http://j.mp/1kzbcQi">Drupal on Google App Engine</a></li>
+<li><a href="http://j.mp/1kzb6YN">VM Import/Export Now Supports Windows 2012</a></li>
+</ol>
+
+<h3 id="java">Java</h3>
+
+<ol>
+<li><a href="http://j.mp/1cc2wga">Using RESTFul services with Liferay</a></li>
+<li><a href="http://j.mp/1dlRJ0O">Tweaking xUnit</a></li>
+<li><a href="http://j.mp/1ewU7OB">An XMPP Server for Google Cloud Messaging</a></li>
+<li><a href="http://j.mp/1bQ3snB">Activate Framework Architecture</a></li>
+<li><a href="http://j.mp/OWVVM5">Swagger All The Way Into RESTful Services</a></li>
+</ol>
+
+<h3 id="scala">Scala</h3>
+
+<ol>
+<li><a href="http://j.mp/1lBqAff">Akka 2.3.0 Major Release – Blog</a></li>
+<li><a href="http://j.mp/1e5p1hE">Scala 2.11.0-RC1 is now available!</a></li>
+</ol>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2014/03/05/solving-issue-with-db2-on-vmware-fusion-on-macbook-pro-2013-late/">Solving issue with DB2 on VMWare Fusion on MacBook Pro 2013 Late</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>Today I found issue running DB2 10.1 under VMWare Fusion 6.0.2 on my MacBook - all management services for <code>db2</code> are starting except for the db2 instance itself.</p>
+
+<p>When I tried to start DB2 using <code>db2start</code> it just crashed without any additional information.</p>
+
+<p>After some googling I found out that it is due to the fact that current version of DB2 can&rsquo;t handle more than 4 responses to CPUID query.</p>
+
+<p>The workaround is to update VMWare configuration file for the virtual machine.</p>
+
+<p>``` ini Changes to *.vmx file</p>
+
+<p>monitor_control.enable_fullcpuid = TRUE
+cpuid.4.4.eax = &ldquo;0000:0000:0000:0000:0000:0000:0000:0000&rdquo;</p>
+
+<p>```</p>
+
+<p>The answer was found on <a href="https://communities.vmware.com/thread/461857">VMWare Community Forums</a></p>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2014/03/05/reading-list-2014-march-05/">Reading List 2014-March-05</a>
+    </h1>
+
+</header>
+
+
+        
+        
+
+<p>Reading list for today:</p>
+
+<h3 id="general">General</h3>
+
+<ol>
+<li><a href="http://j.mp/1eFiNnW">Cheap Words</a></li>
+<li><a href="http://j.mp/MMcBEe">5-Year-Olds Can Learn Calculus</a></li>
+<li><a href="http://j.mp/1pYG7q2">At the RSA Security Conference, Things Get Testy and Then They Get Awkward</a></li>
+</ol>
+
+<h3 id="software-development">Software development</h3>
+
+<ol>
+<li><a href="http://j.mp/1pYGcdl">How to Eliminate Bugs Through High Cohesion</a></li>
+<li><a href="http://j.mp/1i1BAxB">Stupid Mistakes Devs Make, Part I: Taking App Messages at Face Value</a></li>
+<li><a href="http://j.mp/1kNN9wW">A beginner&rsquo;s guide to Git feature branches</a></li>
+<li><a href="http://j.mp/1eKslym">How to Get a Job at Google</a></li>
+<li><a href="http://j.mp/1hIDPaA">Essential Characteristics of PaaS</a></li>
+<li><a href="http://j.mp/MMcCrM">Which hypervisor? Why not all of them!</a></li>
+<li><a href="http://j.mp/1c7eoj0">Building Successful Web APIs</a></li>
+<li><a href="http://j.mp/1hIDNzL">TLS Triple Handshakes</a></li>
+<li><a href="http://j.mp/MMczMD">Don&rsquo;t Get Lost in Agile Ceremonies</a></li>
+<li><a href="http://j.mp/1eU064Z">Haskell Functions Take One Argument</a></li>
+<li><a href="http://j.mp/1dncw4h">Dave Gilbert&rsquo;s Weblog</a></li>
+<li><a href="http://j.mp/1dXFowR">FPG, Eh?</a></li>
+<li><a href="http://j.mp/1n75wLN">June Software Grows Audience and Revenue with Expansion to Android</a></li>
+<li><a href="http://j.mp/1ePoHb4">Don&rsquo;t build the best REST API, build the best HTTP API. — John Sheehan</a></li>
+<li><a href="http://j.mp/1kLR7Di">Web Analytics Consulting: A Simple Framework For Smarter Decisions</a></li>
+<li><a href="http://j.mp/MMcAA8">The “Four Hamiltons” Framework for Mitigating Faults in the Cloud: Avoid it, Mask it, Bound it, Fix it Fast</a></li>
+<li><a href="http://j.mp/1nZQar9">Should You Be Squatting At Your Desk?</a></li>
+<li><a href="http://j.mp/1fui7qf">API Versioning</a></li>
+<li><a href="http://j.mp/1fui5i4">Versioning RESTful Services</a></li>
+<li><a href="http://j.mp/1gUKwFA">ZeroMQ: The Design of Messaging Middleware</a></li>
+</ol>
+
+<h3 id="scala">Scala</h3>
+
+<ol>
+<li><a href="http://j.mp/1kVn7VJ">Akka 2.2.4 Maintenance Release – Blog</a></li>
+<li><a href="http://j.mp/1eVQWVy">Scalala - A numerical linear algebra library for Scala</a></li>
+</ol>
+
+<h3 id="java">Java</h3>
+
+<ol>
+<li><a href="http://j.mp/1f1XltB">Spring Data Redis 1.2 GA Released</a></li>
+<li><a href="http://j.mp/1f7teks">Spring Boot 1.0.0.RC4 Available Now</a></li>
+<li><a href="http://j.mp/1f1Xmhn">Red Hats announces JBoss BPM Suite 6 and JBoss BRMS 6</a></li>
+<li><a href="http://j.mp/N85RB5">Webinar Replay: Introduction to Apache Tomcat 8</a></li>
+<li><a href="http://j.mp/1n75xzs">How to avoid ruining your world with lambdas in Java 8</a></li>
+<li><a href="http://j.mp/1eXhoz3">State of the Lambda: Libraries Edition</a></li>
+<li><a href="http://j.mp/1cmXcAX">Lambda examples and Effectively Final in Java 8</a></li>
+<li><a href="http://j.mp/1f5r8ln">How (Not) to Create a Permgen Leak</a></li>
+<li><a href="http://j.mp/OWjGnJ">Caching Best Practices</a></li>
+<li><a href="http://j.mp/MMcDff">Java Enterprise Software Versus What it Should Be</a></li>
+<li><a href="http://j.mp/1i8SUkl">Second milestone towards Hibernate Search 5: introducing MoreLikeThis Queries</a></li>
+<li><a href="http://j.mp/1ky3wO5">Recommendations for your portal-ext.properties</a></li>
+<li><a href="http://j.mp/1dncsS8">Survey: Developers eager for Java 8</a></li>
+<li><a href="http://j.mp/1dXFqVv">Liferay Auto Complete List with Ajax</a></li>
+<li><a href="http://j.mp/1dlRG59">An open source JVM Sampling Profiler</a></li>
+<li><a href="http://j.mp/MMcCIg">Lessons Learned: ActiveMQ, Apache Camel and Connection Pooling</a></li>
+<li><a href="http://j.mp/1ePoFQm">Cassandra: tuning the JVM for read heavy workloads</a></li>
+<li><a href="http://j.mp/1ky3w0F">Top 10 MQ Series Interview Questions Answers - WebSphere and Active MQ</a></li>
+</ol>
+
+<h3 id="frontent-development">Frontent development</h3>
+
+<ol>
+<li><a href="http://j.mp/1q3OQr0">Knockout.js 3.1 Released</a></li>
+<li><a href="http://j.mp/1fFEkxk">The JavaScript Alternatives</a></li>
+<li><a href="http://j.mp/1e0ZOVB">Javascript without the this</a></li>
+<li><a href="http://j.mp/1fFnvTc">Node.js arrives for the JVM</a></li>
+<li><a href="http://j.mp/1drpoX8">Why The Hell Would I Use Node.js? A Case-by-Case Introduction</a></li>
+</ol>
+
+        
+
+    </article>
+    
+    
+    
+
+
+
+
+<div class="pagination">
+
+    
+        
+        
+        
+        <a href="/" aria-label="First" class="label-pagination"><i class="fa fa-angle-double-left fa-lg"></i></a>
+    
+
+    
+    
+        <a href="/page/10/" aria-label="Previous" class="label-pagination"><i class="fa fa-angle-left fa-lg"></i></a>
+    
+
+    
+        <a href="/" class="label-pagination">1</a>
+    
+        <a href="/page/2/" class="label-pagination">2</a>
+    
+        <a href="/page/3/" class="label-pagination">3</a>
+    
+        <a href="/page/4/" class="label-pagination">4</a>
+    
+        <a href="/page/5/" class="label-pagination">5</a>
+    
+        <a href="/page/6/" class="label-pagination">6</a>
+    
+        <a href="/page/7/" class="label-pagination">7</a>
+    
+        <a href="/page/8/" class="label-pagination">8</a>
+    
+        <a href="/page/9/" class="label-pagination">9</a>
+    
+        <a href="/page/10/" class="label-pagination">10</a>
+    
+        <a href="/page/11/" class="label-pagination">11</a>
+    
+        <a href="/page/12/" class="label-pagination">12</a>
+    
+        <a href="/page/13/" class="label-pagination">13</a>
+    
+        <a href="/page/14/" class="label-pagination">14</a>
+    
+        <a href="/page/15/" class="label-pagination">15</a>
+    
+        <a href="/page/16/" class="label-pagination">16</a>
+    
+        <a href="/page/17/" class="label-pagination">17</a>
+    
+        <a href="/page/18/" class="label-pagination">18</a>
+    
+        <a href="/page/19/" class="label-pagination">19</a>
+    
+        <a href="/page/20/" class="label-pagination">20</a>
+    
+        <a href="/page/21/" class="label-pagination">21</a>
+    
+        <a href="/page/22/" class="label-pagination">22</a>
+    
+        <a href="/page/23/" class="label-pagination">23</a>
+    
+        <a href="/page/24/" class="label-pagination">24</a>
+    
+        <a href="/page/25/" class="label-pagination">25</a>
+    
+        <a href="/page/26/" class="label-pagination">26</a>
+    
+
+    
+    
+        <a href="/page/12/" aria-label="Next" class="label-pagination"><i class="fa fa-angle-right fa-lg"></i></a>
+    
+
+    
+    
+        <a href="/page/26/" aria-label="Last"><i class="fa fa-angle-double-right fa-lg"></i></a>
+    
+
+</div>
+
+  
+
+  </div>
+
+  
+
+<aside class="sidebar thirds">
+  <section class="first odd">
+
+    
+
+    <p>
+      
+    </p>
+  </section>
+
+
+
+
+
+  
+
+  
+
+  
+  
+  
+
+</aside>
+    
+ </div>
+</div>
+
+<footer role="contentinfo">
+    
+    <div class="center">
+        <ul class="sidebar-nav">
+            <li class="sidebar-nav-item">
+                <a target="_blank" href="https://github.com/uthark/" title="https://github.com/uthark/"><i
+                    class="fa fa-github fa-3x"></i></a></li>
+            <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
+                    class="fa fa-bitbucket fa-3x"></i></a>
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item"><a target="_blank" href="https://twitter.com/LinkageError/" title="https://twitter.com/LinkageError/"><i
+                    class="fa fa-twitter fa-3x"></i></a>
+            <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
+                    class="fa fa-key fa-3x"></i></a> 
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item"><a target="_blank" href="http://stackoverflow.com/users/216764/uthark" title="http://stackoverflow.com/users/216764/uthark"><i
+                    class="fa fa-stack-overflow fa-3x"></i></a>
+            <li class="sidebar-nav-item"><a target="_blank" href="https://plus.google.com/&#43;OlegAtamanenko" title="https://plus.google.com/&#43;OlegAtamanenko"><i
+                    class="fa fa-google-plus fa-3x"></i></a>
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item">
+                
+                
+            </li>
+        </ul>
+    </div>
+    <p>Copyright &copy; 2017 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+        <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a> and
+            <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.
+    </p>
+
+</footer>
+
+
+</body>
+</html>
+   

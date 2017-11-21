@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Basics on Software Development and related activities</title>
+    <link>https://uthark.github.io/categories/basics/</link>
+    <description>Recent content in Basics on Software Development and related activities</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 21 Jul 2011 12:06:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://uthark.github.io/categories/basics/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Немного о виртуальных методах в Java</title>
+      <link>https://uthark.github.io/2011/07/21/java/</link>
+      <pubDate>Thu, 21 Jul 2011 12:06:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2011/07/21/java/</guid>
+      <description>Сегодня я хочу рассмотреть некоторые особенности переопределения методов в Java. В java нельзя переопределить: поля класса конструкторы, инициализаторы класса статические методы статические поля 
+Подробнее об этом можно прочитать в Java Language Specification, §8.4.8
+Итак, в java все нестатические неприватные (то есть, protected, package и public) методы являются виртуальными. Ключевое слово final запрещает возможность дальнейшего переопределения метода в подклассах. Рассмотрим следующий пример:
+public class A { int i = 3; int getI() {return i;} } public class B extends A{ int i = 5; int getI() {return i;} } A a = new B(); System.</description>
+    </item>
+    
+  </channel>
+</rss>

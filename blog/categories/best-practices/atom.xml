@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Best Practices | Software Development and related activities]]></title>
-  <link href="http://uthark.github.io/blog/categories/best-practices/atom.xml" rel="self"/>
-  <link href="http://uthark.github.io/"/>
-  <updated>2017-10-12T19:01:44-04:00</updated>
-  <id>http://uthark.github.io/</id>
+  <title><![CDATA[Category: best practices | Блог о разработке ПО]]></title>
+  <link href="http://uthark.github.com/blog/categories/best-practices/atom.xml" rel="self"/>
+  <link href="http://uthark.github.com/"/>
+  <updated>2013-06-29T23:40:55-04:00</updated>
+  <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Несколько слов о GORM]]></title>
-    <link href="http://uthark.github.io/blog/2010/04/11/gorm/"/>
-    <updated>2010-04-11T11:45:00+07:00</updated>
-    <id>http://uthark.github.io/blog/2010/04/11/gorm</id>
+    <link href="http://uthark.github.com/blog/2010/04/11/gorm/"/>
+    <updated>2010-04-11T00:45:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2010/04/11/gorm</id>
     <content type="html"><![CDATA[<div class='post'>
 <p>В данной заметке хочу поделиться некоторыми моментами использования GORM.</p>
 <p><a href="http://grails.org/doc/latest/guide/5.%20Object%20Relational%20Mapping%20%28GORM%29.html">GORM</a> - это <a href="http://en.wikipedia.org/wiki/Object-relational_mapping">ORM</a>-фреймворк, используемый в <a href="http://grails.org/">Grails</a>. Реализован он поверх <a href="http://hibernate.org/">Hibernate</a>, но, при этом, с некоторыми отличными умолчаниями.</p>

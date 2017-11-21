@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Dbus | Software Development and related activities]]></title>
-  <link href="http://uthark.github.io/blog/categories/dbus/atom.xml" rel="self"/>
-  <link href="http://uthark.github.io/"/>
-  <updated>2017-10-12T19:01:44-04:00</updated>
-  <id>http://uthark.github.io/</id>
+  <title><![CDATA[Category: dbus | Блог о разработке ПО]]></title>
+  <link href="http://uthark.github.com/blog/categories/dbus/atom.xml" rel="self"/>
+  <link href="http://uthark.github.com/"/>
+  <updated>2013-06-29T23:40:55-04:00</updated>
+  <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Общение со Skype через D-Bus на Python]]></title>
-    <link href="http://uthark.github.io/blog/2010/03/22/skype-d-bus-python/"/>
-    <updated>2010-03-22T23:50:00+06:00</updated>
-    <id>http://uthark.github.io/blog/2010/03/22/skype-d-bus-python</id>
+    <link href="http://uthark.github.com/blog/2010/03/22/skype-d-bus-python/"/>
+    <updated>2010-03-22T13:50:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2010/03/22/skype-d-bus-python</id>
     <content type="html"><![CDATA[<div class='post'>
 <p><b>Summary</b>: в данной заметке описывается работа с программой Skype через D-Bus на Python.</p>
 

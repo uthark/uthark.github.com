@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Spring Data on Software Development and related activities</title>
+    <link>https://uthark.github.io/categories/spring-data/</link>
+    <description>Recent content in Spring Data on Software Development and related activities</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 01 Mar 2014 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://uthark.github.io/categories/spring-data/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Automatic query modification with Spring Data Mongo</title>
+      <link>https://uthark.github.io/2014/03/01/restricting-mongo-template/</link>
+      <pubDate>Sat, 01 Mar 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/01/restricting-mongo-template/</guid>
+      <description>Introduction Today I want to show how one can automatically apply additional restrictions on MongoDB Queries with MongoTemplate or Spring Data Mongo.
+Implementation First, let&amp;rsquo;s introduce interface QueryModifier.
+import org.springframework.data.mongodb.core.query.Query; public interface QueryModifier { /** * Modifies source query according to the rules. * @param query Source query to modify. * @param collectionName name of the collection against which query will be executed. * @return Modified query. */ Query modify(Query query, String collectionName); } Implementations of this interface will pickup original query and modify it somehow.</description>
+    </item>
+    
+    <item>
+      <title>Собственная реализация методов в Spring Data JPA</title>
+      <link>https://uthark.github.io/2012/04/28/spring-data-jpa_28/</link>
+      <pubDate>Sat, 28 Apr 2012 15:03:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2012/04/28/spring-data-jpa_28/</guid>
+      <description>Очевидно, что мы не всегда можем воспользоваться автоматической генерацией кода, предоставляемой Spring Data JPA. Например, у нас слишком сложный запрос, или нам необходимо вызвать процедуру в базе данных, либо у нас сложная бизнес-логика.
+Рассмотрим следующий пример - например, нам нужна функциональность уникального счётчика, который мы решили реализовать с помощью последовательности (sequence).
+Сначала определим интерфейс, в котором опишем все методы, которые мы будем реализовывать самостоятельно. В нашем случае, это будет только один метод:</description>
+    </item>
+    
+    <item>
+      <title>Ищем с помощью Spring Data JPA</title>
+      <link>https://uthark.github.io/2012/04/24/spring-data-jpa/</link>
+      <pubDate>Tue, 24 Apr 2012 14:04:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2012/04/24/spring-data-jpa/</guid>
+      <description>Рассмотрим подробнее одну из наиболее полезных вещей в Spring Data JPA - генерация JPQL-запросов на основе имени метода.
+Spring Data JPA умеет автоматически генерировать запросы используя для подсказки название метода.
+Например, метод User.findByLoginAndPassword сгенерирует примерно следующий код:
+FROM User u where u.login = :login and password = :password Вообще Spring Data JPA пытается быть умным, поэтому реализация findBy{&amp;hellip;} методов ищется следующим образом:
+ Сначала смотрится аннотация @Query на объявлении метода, если она есть, то используется.</description>
+    </item>
+    
+    <item>
+      <title>Упрощаем работу с JPA при помощи Spring Data JPA</title>
+      <link>https://uthark.github.io/2012/02/23/jpa-spring-data-jpa/</link>
+      <pubDate>Thu, 23 Feb 2012 02:17:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2012/02/23/jpa-spring-data-jpa/</guid>
+      <description>Введение Уже прошло несколько лет с тех пор, как появился JPA. Работа с EntityManager увлекательна, но разработчики пишут красивый API, а подробности работы с базой данных скрывают. При этом частая проблема - дублирование имплементации, когда из одного DAO в другой у нас плавно перекочёвывает один и тот же код, в лучшем случае этот код переносится в абстрактный базовый DAO. Spring Data коренным образом решает проблему - при его использовании остаётся только API на уровне интерфейсов, вся имплементация создаётся автоматически с использованием AOP.</description>
+    </item>
+    
+  </channel>
+</rss>

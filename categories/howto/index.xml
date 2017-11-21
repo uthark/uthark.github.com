@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Howto on Software Development and related activities</title>
+    <link>https://uthark.github.io/categories/howto/</link>
+    <description>Recent content in Howto on Software Development and related activities</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 21 Mar 2010 20:54:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://uthark.github.io/categories/howto/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Разработка макроса для TiddlyWiki</title>
+      <link>https://uthark.github.io/2010/03/21/tiddlywiki/</link>
+      <pubDate>Sun, 21 Mar 2010 20:54:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2010/03/21/tiddlywiki/</guid>
+      <description>Summary: Пример разработки плагина для TiddlyWiki
+Вступление TiddlyWiki - это вики-движок, полностью написанный на JavaScript и хранящийся в одном файле (как сам движок, так и содержимое). Создатели позиционируют его как &amp;quot;переиспользуемую нелинейную персональную веб записную книжку&amp;quot;.
+Я давно использую TiddlyWiki в различных целях:
+По прямому назначению. Как систему GTD. Как домашнюю страницу на компьютере.  Моя домашняя страница на компьютере - это, если говорить терминами TiddlyWiki, тиддлер, содержащий ссылки на страницы, которые я часто посещаю.</description>
+    </item>
+    
+    <item>
+      <title>Настройка autofs для монтирования NFS-ресурсов</title>
+      <link>https://uthark.github.io/2009/12/14/autofs-nfs/</link>
+      <pubDate>Mon, 14 Dec 2009 23:14:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/12/14/autofs-nfs/</guid>
+      <description>Summary: В данной заметке описана настройка autofs для доступа к сетевым ресурсам, доступным по NFS.
+Последние несколько лет (с тех пор, как количество компьютеров дома стало больше одного) возникла проблема беспрепятственного доступа к данным, хранящимся на одном компьютере с другого.
+Было найдено самое простое решение - NFS.
+Как выяснилось позже это было не самое удачное решение - ноутбук не всегда находился дома, а, значит, домашние сетевые ресурсы не всегда доступны. Соответственно, при загрузке операционной системы происходили задержки из-за поиска компьютера с сетевыми ресурсами.</description>
+    </item>
+    
+    <item>
+      <title>Расширение Delicious Bookmarks для Google Chrome/Chromium</title>
+      <link>https://uthark.github.io/2009/11/14/delicious-bookmarks-google/</link>
+      <pubDate>Sat, 14 Nov 2009 22:34:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/11/14/delicious-bookmarks-google/</guid>
+      <description>Введение
+Решил научиться писать собственные расширения для Google Chrome/Chromium.
+За идею взял официальное расширение от Yahoo! для Firefox - Delicious Bookmarks.
+Структура расширения
+Расширение - файл с расширением .crx. На самом деле это просто ZIP-архив с файлом манифеста внутри.
+Файл манифеста{ &amp;ldquo;name&amp;rdquo;: &amp;ldquo;Delicious plugin&amp;rdquo;, // 1 &amp;ldquo;version&amp;rdquo;: &amp;ldquo;0.2&amp;rdquo;, // 2 &amp;ldquo;background_page&amp;rdquo;: &amp;ldquo;background.html&amp;rdquo;, // 3 &amp;ldquo;permissions&amp;rdquo;: [ // 4 &amp;ldquo;bookmarks&amp;rdquo;, &amp;ldquo;tabs&amp;rdquo; ],
+&amp;ldquo;browser_action&amp;rdquo;: { // 5 &amp;ldquo;name&amp;rdquo;: &amp;ldquo;Save bookmark to delicious.com&amp;rdquo;, &amp;ldquo;default_title&amp;rdquo;: &amp;ldquo;Save bookmark to delicious.</description>
+    </item>
+    
+  </channel>
+</rss>

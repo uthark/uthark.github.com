@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: аспекты | Software Development and related activities]]></title>
-  <link href="http://uthark.github.io/blog/categories/aspiekty/atom.xml" rel="self"/>
-  <link href="http://uthark.github.io/"/>
-  <updated>2017-10-12T19:01:44-04:00</updated>
-  <id>http://uthark.github.io/</id>
+  <title><![CDATA[Category: аспекты | Блог о разработке ПО]]></title>
+  <link href="http://uthark.github.com/blog/categories/aspiekty/atom.xml" rel="self"/>
+  <link href="http://uthark.github.com/"/>
+  <updated>2013-06-29T23:40:55-04:00</updated>
+  <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Немножко магии от AspectJ]]></title>
-    <link href="http://uthark.github.io/blog/2012/01/28/aspectj/"/>
-    <updated>2012-01-28T02:43:00+07:00</updated>
-    <id>http://uthark.github.io/blog/2012/01/28/aspectj</id>
+    <link href="http://uthark.github.com/blog/2012/01/27/aspectj/"/>
+    <updated>2012-01-27T14:43:00-05:00</updated>
+    <id>http://uthark.github.com/blog/2012/01/27/aspectj</id>
     <content type="html"><![CDATA[<p>Наверно, вы уже сталкивались с таким понятием, как AOП &ndash; <a href="http://en.wikipedia.org/wiki/Aspect-oriented_programming">аспектно-ориентированное программирование</a>.<br /></p>
 
 <br />
@@ -306,7 +306,7 @@ public @interface SuppressExceptions {
 <div class='comment'>
 <div class='author'>Anonymous</div>
 <div class='content'>
-Добрый день, прочитал Вашу статью &ndash; интересно! =) На данный момент пытаюсь вникнуть в АОП в БД, но не совсем понимаю как можно реализовать аспекты при работе с БД (именно с точки зрения системы &ndash; код, компиляция и пр. т.к. теоретически все прозрачно и ясно). Не подскажите &ndash; где можно найти, для наглядности, простенькую БД с реализованным аспектами и хоть какое-то пояснение по реализованному &quot;проекту&quot; &ndash; на чем писали, как внедряли аспекты и пр. Мэйл для связи &ndash; <a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#58;&#117;&#116;&#x6f;&#x70;&#x69;&#x61;&#x32;&#48;&#x30;&#53;&#x40;&#x79;&#x61;&#110;&#100;&#x65;&#x78;&#x2e;&#x72;&#x75;">&#117;&#x74;&#x6f;&#112;&#105;&#x61;&#x32;&#48;&#48;&#53;&#64;&#x79;&#97;&#110;&#100;&#101;&#x78;&#x2e;&#114;&#117;</a></div>
+Добрый день, прочитал Вашу статью &ndash; интересно! =) На данный момент пытаюсь вникнуть в АОП в БД, но не совсем понимаю как можно реализовать аспекты при работе с БД (именно с точки зрения системы &ndash; код, компиляция и пр. т.к. теоретически все прозрачно и ясно). Не подскажите &ndash; где можно найти, для наглядности, простенькую БД с реализованным аспектами и хоть какое-то пояснение по реализованному &quot;проекту&quot; &ndash; на чем писали, как внедряли аспекты и пр. Мэйл для связи &ndash; <a href="&#109;&#97;&#105;&#x6c;&#116;&#x6f;&#x3a;&#117;&#x74;&#x6f;&#x70;&#x69;&#x61;&#50;&#x30;&#x30;&#53;&#x40;&#121;&#x61;&#110;&#x64;&#x65;&#x78;&#46;&#114;&#117;">&#x75;&#116;&#111;&#x70;&#105;&#97;&#x32;&#x30;&#x30;&#53;&#64;&#x79;&#97;&#x6e;&#100;&#x65;&#x78;&#46;&#114;&#117;</a></div>
 </div></p>
 ]]></content>
   </entry>

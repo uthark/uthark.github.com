@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Beanvalidation | Software Development and related activities]]></title>
-  <link href="http://uthark.github.io/blog/categories/beanvalidation/atom.xml" rel="self"/>
-  <link href="http://uthark.github.io/"/>
-  <updated>2017-10-12T19:01:44-04:00</updated>
-  <id>http://uthark.github.io/</id>
+  <title><![CDATA[Category: beanvalidation | Блог о разработке ПО]]></title>
+  <link href="http://uthark.github.com/blog/categories/beanvalidation/atom.xml" rel="self"/>
+  <link href="http://uthark.github.com/"/>
+  <updated>2013-06-29T23:40:55-04:00</updated>
+  <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
     
@@ -15,16 +15,16 @@
   
   <entry>
     <title type="html"><![CDATA[Пишем валидатор для Bean Validation API]]></title>
-    <link href="http://uthark.github.io/blog/2013/06/19/custom-bean-validator/"/>
+    <link href="http://uthark.github.com/blog/2013/06/19/custom-bean-validator/"/>
     <updated>2013-06-19T08:00:00-04:00</updated>
-    <id>http://uthark.github.io/blog/2013/06/19/custom-bean-validator</id>
+    <id>http://uthark.github.com/blog/2013/06/19/custom-bean-validator</id>
     <content type="html"><![CDATA[<p><a href="http://jcp.org/en/jsr/detail?id=303">JSR-303</a> предоставляет удобный API для проверки валидности объектов, а также входных параметров. Очевидно, что <a href="http://docs.oracle.com/javaee/6/tutorial/doc/gircz.html">стандартных валидаторов</a> в какой-то момент может быть недостаточно, поэтому необходимо писать собственный.</p>
 
 <p>Хочу показать на примере валидации запроса к <a href="http://www.mongodb.org/">MongoDB</a>, как легко это делается.</p>
 
 <h2>Создание аннотации</h2>
 
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -52,13 +52,13 @@
 </span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
-</span></code></pre></td></tr></table></div></figure></p>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Обратите внимание на аннотацию <a href="http://docs.oracle.com/javaee/7/api/javax/validation/Constraint.html">@Constraint</a> &ndash; она описывает, какой класс будет проводить реальную валидацию. Атрибуты <code>groups()</code> и <code>payload()</code> являются обязательными.</p>
 
 <h2>Написание валидатора</h2>
 
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -106,13 +106,13 @@
 </span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
-</span></code></pre></td></tr></table></div></figure></p>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>В данном случае, валидатор у нас простой &ndash; мы пытаемся создать Mongo Query из переданной строки, если это не удаётся, то считаем, что строка не является корректным запросом к Mongo и возвращаем <code>false</code>.</p>
 
 <p>Если есть желание возвращать динамическое сообщение об ошибке, то это можно сделать следующим образом:</p>
 
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -126,13 +126,13 @@
 </span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <h2>Использование</h2>
 
 <p>На этом всё, теперь нам остаётся только добавить валидацию на нашу модель или входной параметр.</p>
 
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -146,20 +146,20 @@
 </span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
-</span></code></pre></td></tr></table></div></figure></p>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[Валидация входных параметров с использованием Spring]]></title>
-    <link href="http://uthark.github.io/blog/2013/06/19/validation/"/>
+    <link href="http://uthark.github.com/blog/2013/06/19/validation/"/>
     <updated>2013-06-19T07:00:00-04:00</updated>
-    <id>http://uthark.github.io/blog/2013/06/19/validation</id>
+    <id>http://uthark.github.com/blog/2013/06/19/validation</id>
     <content type="html"><![CDATA[<p>Очень часто возникает задача проверки входных параметров в сервис на корректность с точки зрения бизнес логики.</p>
 
 <p>Эту задачу можно решить в лоб, написав вручную код валидации в каждом из методов сервиса, например, вот так:</p>
 
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -187,13 +187,13 @@
 </span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></p>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Очевидно, что если в каждом методе делать такие проверки, то код бизнес-логики загрязняется проверками, что ухудшает читаемость кода. Решить эту проблему можно следующим образом:</p>
 
 <ol>
 <li>Добавляем аннотации для валидации входных параметров.
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -203,7 +203,7 @@
 </span><span class='line'> <span class="c1">//&amp;hellip;</span>
 </span><span class='line'> <span class="k">return</span> <span class="n">savedUser</span><span class="o">;</span>
 </span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></li>
+</span></code></pre></td></tr></table></div></figure></notextile></div></li>
 </ol>
 
 
@@ -212,7 +212,7 @@
 <ol>
 <li>Spring предоставляет аннотацию <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/validation/annotation/Validated.html">@Validated</a>, которая в отличие от <a href="http://docs.oracle.com/javaee/7/api/javax/validation/Valid.html">@javax.validation.Valid</a> позволяет определять группу валидации.</li>
 <li><p>Этой аннотацией необходимо проаннотировать бин, методы которого необходимо валидировать.
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -230,12 +230,12 @@
 </span><span class='line'>         <span class="k">return</span> <span class="n">savedUser</span><span class="o">;</span>
 </span><span class='line'>     <span class="o">}</span>
 </span><span class='line'> <span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></p></li>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p></li>
 <li><p>Для реализации самой валидации нам необходим валидатор. В качестве реализации <a href="http://jcp.org/en/jsr/detail?id=303">JSR-303</a> можно использовать, например, <a href="http://www.hibernate.org/subprojects/validator.html">Hibernate Validator</a>. Для этого в <code>pom.xml</code> необходимо добавить требуемые зависимости:</p></li>
 </ol>
 
 
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -267,7 +267,7 @@
 </span><span class='line'><span class="nt">&lt;/code&gt;&lt;/pre&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="nt">&lt;p&gt;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Обращаю внимание, что текущей на данный момент является <a href="http://beanvalidation.org/1.1/spec">спецификация</a> <a href="http://jcp.org/en/jsr/detail?id=349">JSR-349 Bean Validation 1.1</a>, которая поддерживает валидацию методов из коробки, но текущая версия Spring 3.2 &ndash; не поддерживает новый API, поэтому необходимо использовать старую версию API, и, соответственно, реализацию. Релевантный баг в Spring <a href="https://jira.springsource.org/browse/SPR-8199">SPR-8199</a>, поддержка нового API ожидается в Spring Framework 4.0.</p>
 
@@ -276,7 +276,7 @@
 </ol>
 
 
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -318,7 +318,7 @@
 </span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <ol>
 <li>На этом всё. Как видно, декларативная валидация входных параметров реализуется очень просто.</li>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Textview on Software Development and related activities</title>
+    <link>https://uthark.github.io/categories/textview/</link>
+    <description>Recent content in Textview on Software Development and related activities</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 06 Mar 2014 19:13:17 +0000</lastBuildDate>
+    
+	<atom:link href="https://uthark.github.io/categories/textview/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Using custom font in Android TextView</title>
+      <link>https://uthark.github.io/2014/03/06/customizing-font-in-android-textview/</link>
+      <pubDate>Thu, 06 Mar 2014 19:13:17 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/06/customizing-font-in-android-textview/</guid>
+      <description>Today I want to share with you custom TextView which allows to set font to be used in xml layout.
+First, we need to declare our custom styleable
+attrs.xml:
+&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt; &amp;lt;resources&amp;gt; &amp;lt;declare-styleable name=&amp;#34;TypefaceTextView&amp;#34;&amp;gt; &amp;lt;attr name=&amp;#34;typeface&amp;#34; format=&amp;#34;string&amp;#34;/&amp;gt; &amp;lt;/declare-styleable&amp;gt; &amp;lt;/resources&amp;gt; Then we need to create subclass of TextView which will use custom attribute.
+TypefaceTextView:
+public class TypefaceTextView extends TextView { public TypefaceTextView(Context context) { this(context, null); } public TypefaceTextView(Context context, AttributeSet attrs) { this(context, attrs, 0); } public TypefaceTextView(Context context, AttributeSet attrs, int defStyle) { super(context, attrs, defStyle); TypedArray ta = context.</description>
+    </item>
+    
+  </channel>
+</rss>

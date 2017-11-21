@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Automatization | Software Development and related activities]]></title>
-  <link href="http://uthark.github.io/blog/categories/automatization/atom.xml" rel="self"/>
-  <link href="http://uthark.github.io/"/>
-  <updated>2017-10-12T19:01:44-04:00</updated>
-  <id>http://uthark.github.io/</id>
+  <title><![CDATA[Category: automatization | Блог о разработке ПО]]></title>
+  <link href="http://uthark.github.com/blog/categories/automatization/atom.xml" rel="self"/>
+  <link href="http://uthark.github.com/"/>
+  <updated>2013-06-29T23:40:55-04:00</updated>
+  <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Автоматизируем работу с виртуальными машинами с помощью Vagrant]]></title>
-    <link href="http://uthark.github.io/blog/2012/10/24/vagrant/"/>
+    <link href="http://uthark.github.com/blog/2012/10/24/vagrant/"/>
     <updated>2012-10-24T12:07:00-04:00</updated>
-    <id>http://uthark.github.io/blog/2012/10/24/vagrant</id>
+    <id>http://uthark.github.com/blog/2012/10/24/vagrant</id>
     <content type="html"><![CDATA[<p>Современные enterprise проекты очень часто имеют очень сложную инфраструктуру для развёртывания. Кроме того, во время разработки часто используются виртуальные машины. Например, может использоваться несколько виртуальных машин, на которых развёрнуты различные конфигурации софта.</p>
 
 <p><a href="http://vagrantup.com/">Vagrant</a> &ndash; это средство для управления виртуальными машинами на базе <a href="https://www.virtualbox.org/">Virtualbox</a>.</p>
@@ -34,7 +34,7 @@
 <h2>Работа с Vagrant</h2>
 
 <p>Для начала необходимо установить Virtualbox и Vagrant.
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -46,11 +46,11 @@
 </span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
 </span><span class='line'>
 </span><span class='line'>&lt;p&gt;
-</span></code></pre></td></tr></table></div></figure></p>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>После этого нам нужен образ, из которого мы можем создавать виртуальные машины. Его можно сделать самим или взять уже готовый с сайта Vagrant. Упростим себе жизнь и скачаем образ с сайта:</p>
 
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -62,13 +62,13 @@
 </span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
 </span><span class='line'>
 </span><span class='line'>&lt;p&gt;
-</span></code></pre></td></tr></table></div></figure></p>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>После этого, мы можем начать пользоваться Vagrant.</p>
 
 <p>Для этого нам нужно создать папку, в которой мы будем работать, например:</p>
 
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -82,11 +82,11 @@
 </span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
 </span><span class='line'>
 </span><span class='line'>&lt;p&gt;
-</span></code></pre></td></tr></table></div></figure></p>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>И инициализировать Vagrant:</p>
 
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -98,13 +98,13 @@
 </span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
 </span><span class='line'>
 </span><span class='line'>&lt;p&gt;
-</span></code></pre></td></tr></table></div></figure></p>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Результатом работы этой команды будет файлик <code>Vagrantfile</code>, который содержит конфигурацию виртуальной машины для использования.</p>
 
 <p>Пример сгенерированного файла:</p>
 
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -312,13 +312,13 @@
 </span><span class='line'><span class="s2">end&lt;/p&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="s2">&lt;p&gt;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Подробнее о том, что этот файл может содержать можно почитать в <a href="http://vagrantup.com/v1/docs/vagrantfile.html">документации</a></p>
 
 <p>Например, можно изменить размер RAM, доступный операционной системе:</p>
 
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -330,13 +330,13 @@
 </span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="sr">&lt;p&gt;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Так как очень часто мы хотим взаимодействовать с виртуальной машиной снаружи, там нам необходима возможность пробросить порты из виртуальной машины в хост-систему.</p>
 
 <p>Это достигается следующим изменением конфигурации:</p>
 
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -348,7 +348,7 @@
 </span><span class='line'><span class="sr">&lt;p&gt;  # Пробрасываем порты &amp;lt;порт на виртуальной машине&gt; &amp;lt;порт на хост-системе&gt;</span>
 </span><span class='line'><span class="sr">  config.vm.forward_port 80, 8080</span>
 </span><span class='line'><span class="sr">  config.vm.forward_port 443, 8443</span>
-</span></code></pre></td></tr></table></div></figure></p>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <h2>Provisioning</h2>
 

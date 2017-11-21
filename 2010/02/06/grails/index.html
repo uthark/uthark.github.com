@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+
+  
+  
+  <link href="//fonts.googleapis.com/css?family=Anonymous+Pro" rel="stylesheet" type="text/css">
+  
+
+  
+  <title>Список для проверки при оптимизации Grails приложений</title>
+
+  
+  
+  <link rel="stylesheet" href="https://uthark.github.io/css/hugo-octopress.css">
+
+  
+  
+
+  
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
+  
+  <link href="https://uthark.github.io/favicon.png" rel="icon">
+
+  
+  
+  
+
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <meta name="author" content="Oleg Atamanenko">
+
+  
+  <meta name="generator" content="Hugo 0.31" />
+
+  
+  
+
+</head>
+<body>
+
+
+<header role="banner"><hgroup>
+  
+  <h1><a href="https://uthark.github.io/">Software Development and related activities</a></h1>
+    <h2></h2>
+</hgroup></header>
+
+
+<nav role="navigation">
+
+<ul class="main-navigation">
+  
+  
+    
+      <li><a href="https://uthark.github.io/" title="Home">Home</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/categories/article/" title="Articles" >Articles</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/categories/reading-list/" title="Reading List" >Reading List</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/about/" title="About me" >About me</a></li>
+    
+  
+</ul>
+
+
+<ul class="subscription">
+  
+    
+        <a href="https://uthark.github.io/index.xml" target="_blank" type="application/rss+xml" title="RSS"><i class="fa fa-rss-square fa-lg"></i></a>
+    
+  
+
+</ul>
+
+
+<form action="https://www.google.com/search" method="get" target="_blank">
+  <fieldset role="search">
+  	<input class="search" type="text" name="q" results="0" placeholder="Search"/>
+    <input type="hidden" name="q" value="site:https://uthark.github.io/" />
+  </fieldset>
+</form>
+
+</nav>
+
+
+<div id="main">
+  <div id="content">
+    <div>
+      <article class="hentry" role="article">
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+         Список для проверки при оптимизации Grails приложений 
+    </h1>
+
+</header>
+
+
+        <div class="entry-content">
+          
+          
+          
+          
+          <p>Выкладываю ниже список задач, которые нужно/можно выполнить для оптимизации приложения, написанного на Grails, может кому пригодится.<br />
+<h4>Тестирование проведённых оптимизаций </h4>Первым делом необходимо разработать критерии проверки, которые позволят оценить эффективность проведённых оптимизаций.<br />
+<ol><li>Установить <a href="http://code.google.com/p/javamelody/">Java Melody</a> <a href="http://www.grails.org/plugin/grails-melody">плагин</a> для Grails для проведения анализа. <br />
+</li>
+<li>Разработать скрипты для проведения нагрузочного тестирования.<br />
+</li>
+<li>Прогнать скрипты.<br />
+</li>
+<li>Проанализировать результаты Java Melody, выявить узкие места, произвести нужные оптимизации.</li>
+</ol><h4>Общие оптимизации </h4>Очень часто обновление до последней версии используемых библиотек попутно улучшает производительность.<br />
+<ol><li>Обновить Java до последней версии<br />
+</li>
+<li>Обновить Groovy до последней версии.<br />
+</li>
+<li>Обновить Grails до последней версии.<br />
+</li>
+<li>Обновить jQuery до последней версии.<br />
+</li>
+<li>Оптимизировать настройки виртуальной машины Java (например, -server -Xmx270m -Xms270m -XX:MaxPermSize=80m -Xverify:none -XX:+UseParallelGC -XX:+UseParallelOldGC -XX:+UseAdaptiveSizePolicy -XX:SurvivorRatio=4 -XX:TargetSurvivorRatio=90 -XX:MaxTenuringThreshold=31 -XX:+AggressiveOpts)<br />
+a. <a href="http://java.sun.com/javase/technologies/hotspot/gc/gc_tuning_6.html">http://java.sun.com/javase/technologies/hotspot/gc/gc_tuning_6.html</a><br />
+Вообще, по оптимизации JVM написаны целые книги, так что не буду здесь останавливаться.<br />
+</li>
+</ol><h4>Оптимизация клиентской части </h4><ol><li>Настроить <a href="http://tomcat.apache.org/tomcat-5.5-doc/config/context.html">кэширование статических ресурсов</a> в Томкате.<br />
+</li>
+<li>Настроить <a href="http://tomcat.apache.org/tomcat-5.5-doc/config/http.html">сжатие статических ресурсов</a> в Томкате.<br />
+</li>
+<li>(поставить прокси на nginx для кэширования статических ресурсов ?)<br />
+</li>
+<li>Установить плагины для Firebug, которые оценят производительность клиентской части.<br />
+<ul><li><a href="http://code.google.com/speed/page-speed">PageSpeed</a> </li>
+<li><a href="http://developer.yahoo.com/yslow/">YSlow</a> </li>
+</ul></li>
+<li>Проанализировать страницы веб-сайта с их помощью<br />
+</li>
+<li>Провести предлагаемые оптимизации.<br />
+</li>
+</ol><h4>Оптимизация клиентской части приложений, написанных на Grails </h4><ol><li>Установить плагин <a href="http://www.grails.org/plugin/ui-performance">UI Performance</a><br />
+</li>
+<li>Провести оптимизацию с использованием плагина UI Performance <br />
+</li>
+</ol><h4>Оптимизация базы данных </h4><ol><li>Оптимизировать производительность сервера базы данных (SQL Server) <br />
+a. <a href="http://www.sql-server-performance.com/tips/all_main.aspx">http://www.sql-server-performance.com/tips/all_main.aspx</a> <br />
+a. <a href="http://msdn.microsoft.com/en-us/library/ms998577.aspx">http://msdn.microsoft.com/en-us/library/ms998577.aspx</a><br />
+</li>
+<li>Проверить наличие индексов в базе данных, добавить необходимые<br />
+</li>
+<li>Найти неоптимальные запросы в БД, оптимизировать</li>
+</ol><h4>Оптимизация работы с базой данных </h4><ol><li>Обновить версию JDBC-драйвера<br />
+</li>
+<li>Настроить кэширование в Hibernate.<br />
+Ресурсов в сети предостаточно, навскидку <a href="http://docs.jboss.org/hibernate/core/3.3/reference/en/html/performance.html">вот</a> <a href="http://www.devx.com/dbzone/Article/29685/1954"> парочка</a>.<br />
+</li>
+</ol><h4>Оптимизация серверной части приложения </h4><ol><li>Произвести профилирование приложения (использовать Visual VM, YJP Profiler), найти узкие места и оптимизировать их.</li>
+</ol><h4>Оптимизация серверной части приложения (опционально) </h4><ol><li>Установить плагин <a href="http://www.grails.org/plugin/perf4j">Perf4J</a> для грэйлза <br />
+</li>
+<li>Добавить необходимые счётчики в код<br />
+</li>
+<li>Прогнать нагрузочные тесты, найти узкие места, оптимизировать.</li>
+</ol><h4>Заключение</h4>В целом, в данном списке нет ничего нового, это всего лишь компиляция публично доступных материалов. Тем не менее, решил это опубликовать, чтобы сэкономить время другим.</p>
+
+        </div>
+        
+
+<footer>
+
+  <p class="meta">
+    
+    
+
+    
+    
+    
+    Filed under: <a class="label" href="https://uthark.github.io/categories/%d0%bf%d1%80%d0%be%d0%b8%d0%b7%d0%b2%d0%be%d0%b4%d0%b8%d1%82%d0%b5%d0%bb%d1%8c%d0%bd%d0%be%d1%81%d1%82%d1%8c/">производительность</a><a class="label" href="https://uthark.github.io/categories/java/">java</a><a class="label" href="https://uthark.github.io/categories/performance-optimization/">performance optimization</a><a class="label" href="https://uthark.github.io/categories/%d0%b1%d0%b0%d0%b7%d0%b0-%d0%b4%d0%b0%d0%bd%d0%bd%d1%8b%d1%85/">база данных</a><a class="label" href="https://uthark.github.io/categories/grails/">grails</a><a class="label" href="https://uthark.github.io/categories/groovy/">groovy</a><a class="label" href="https://uthark.github.io/categories/development/">development</a>
+    
+  </p>
+
+  <p class="meta">
+    
+    Last update: <time>Feb 6, 2010</time>
+    
+    </span>
+  </p>
+  
+  
+
+  
+
+  <p class="meta">
+    
+        <a class="basic-alignment left" href="https://uthark.github.io/2010/02/05/blog-post/" title="Вложенные транзакции в базах данных">Вложенные транзакции в базах данных</a>
+    
+
+    
+      <a class="basic-alignment right" href="https://uthark.github.io/2010/03/16/blog-post/" title="Борьба с убийцами производительности">Борьба с убийцами производительности</a>
+    
+  </p>
+  
+</footer>
+
+      </article>
+    </div>
+    
+
+<aside class="sidebar thirds">
+  <section class="first odd">
+
+    
+
+    <p>
+      
+    </p>
+  </section>
+
+
+
+
+
+  
+
+  
+
+  
+  
+  
+
+</aside>
+
+  </div>
+</div>
+
+<footer role="contentinfo">
+    
+    <div class="center">
+        <ul class="sidebar-nav">
+            <li class="sidebar-nav-item">
+                <a target="_blank" href="https://github.com/uthark/" title="https://github.com/uthark/"><i
+                    class="fa fa-github fa-3x"></i></a></li>
+            <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
+                    class="fa fa-bitbucket fa-3x"></i></a>
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item"><a target="_blank" href="https://twitter.com/LinkageError/" title="https://twitter.com/LinkageError/"><i
+                    class="fa fa-twitter fa-3x"></i></a>
+            <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
+                    class="fa fa-key fa-3x"></i></a> 
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item"><a target="_blank" href="http://stackoverflow.com/users/216764/uthark" title="http://stackoverflow.com/users/216764/uthark"><i
+                    class="fa fa-stack-overflow fa-3x"></i></a>
+            <li class="sidebar-nav-item"><a target="_blank" href="https://plus.google.com/&#43;OlegAtamanenko" title="https://plus.google.com/&#43;OlegAtamanenko"><i
+                    class="fa fa-google-plus fa-3x"></i></a>
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item">
+                
+                
+            </li>
+        </ul>
+    </div>
+    <p>Copyright &copy; 2017 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+        <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a> and
+            <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.
+    </p>
+
+</footer>
+
+
+</body>
+</html>
+

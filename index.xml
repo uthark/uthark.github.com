@@ -1,0 +1,1370 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Software Development and related activities</title>
+    <link>https://uthark.github.io/</link>
+    <description>Recent content on Software Development and related activities</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 12 Oct 2017 17:02:55 +0000</lastBuildDate>
+    
+	<atom:link href="https://uthark.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Refresh</title>
+      <link>https://uthark.github.io/2017/10/12/alive/</link>
+      <pubDate>Thu, 12 Oct 2017 17:02:55 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2017/10/12/alive/</guid>
+      <description>Ok, hopefully I will start blog again soon.</description>
+    </item>
+    
+    <item>
+      <title>Reading List for 2014-May-16</title>
+      <link>https://uthark.github.io/2014/05/16/reading-list-2014-may-16/</link>
+      <pubDate>Fri, 16 May 2014 11:02:55 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/05/16/reading-list-2014-may-16/</guid>
+      <description>Announcements  1 Billion Saves to Pocket! Spring for Apache Hadoop 2.0 RC3 released Spring Integration Java DSL Milestone 1 Released Reactor 1.1.0.RELEASE now available Spring Tool Suite and Groovy/Grails Tool Suite 3.5.1 released spring-projects/spring-hateoas at 0.11.0.RELEASE · GitHub Google Play services 4.4  Software development  ADAP Open Source REST API Layer For LDAP ADB Debugging: How to test your Android APK on Fire TV Amazon CloudFront Joins the AWS Free Usage Tier Amazon WorkSpaces Now Available in Europe Android Explorations : Using KitKat verified boot Announcing Google Cloud Storage JSON API General Availability Atom: free and open source for everyone Background Task - a.</description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-May-05</title>
+      <link>https://uthark.github.io/2014/05/05/reading-list-2014-may-05/</link>
+      <pubDate>Mon, 05 May 2014 16:03:09 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/05/05/reading-list-2014-may-05/</guid>
+      <description> Announcements  Groovy 2.3.0 is out!  General  A Eulogy for Twitter | Adrienne LaFrance and Robinson Meyer How a hoax turned into the biggest Dutch crowdfunding success in history  Software development  Analyzing a large JSON in memory Columnar Storage for Hadoop How could Scala do a merge sort? Load inheritance tree into List by Spring xkcd Phone | xkcd  </description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-May-02</title>
+      <link>https://uthark.github.io/2014/05/02/reading-list-2014-may-02/</link>
+      <pubDate>Fri, 02 May 2014 15:04:32 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/05/02/reading-list-2014-may-02/</guid>
+      <description> 10 Features in Java 8 You Haven&amp;rsquo;t Heard Of 69 Spring Interview Questions and Answers - The ULTIMATE List DFS | XKCD Domain Name Health Checks for Route 53 Feature Preview: Docker-Based Development Environments OOM relation to vm.swappiness=0 in new kernel Places to hook into Liferay from OSGi Wikis: now with more love You can program bug free  </description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-May-01</title>
+      <link>https://uthark.github.io/2014/05/01/reading-list-2014-may-01/</link>
+      <pubDate>Thu, 01 May 2014 16:20:16 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/05/01/reading-list-2014-may-01/</guid>
+      <description> Announcements  New Release: Java Micro Edition (ME) 8 Spring Framework 4.0.4 released Spring Integration 4.0 Released New mobile apps for Docs, Sheets and Slides - work offline and on the go  Software development  Java Me Embedded Documentation Manifest Merger Recent File List | JavaSpecialists.eu Small and Medium tests should never fail in Continuous Integration ( CI ) Spring 4.1&amp;rsquo;s Upcoming JMS Improvements Spring Boot and Scala with sbt as the build tool Spring Integration - Configure web service client timeout Subscribe to Web Content folders and types (structures)  </description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-April-30</title>
+      <link>https://uthark.github.io/2014/04/30/reading-list-2014-april-30/</link>
+      <pubDate>Wed, 30 Apr 2014 13:32:16 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/04/30/reading-list-2014-april-30/</guid>
+      <description>Announcements  Gradle 1.12 released Gradle 1.12 Release Notes  Software development  Accelerate development of complex applications and Android mobile clients with Ravello on Google Compute Engine Android tricks Design Your Agile Project, Part 4 Fe[26] Groovy Goodness: Customize ToString Creation Groovy Goodness: Define Compilation Customizers With Builder Syntax Here&amp;rsquo;s a 1300 Year Old Solution to Resilience - Rebuild, Rebuild, Rebuild Higher Availability, Increased Scale and Enhanced Security on Apache HBase How I Tackle a Big Writing Project Make magic with Ruby DSLs New Physical Phenomenon on Nanowires Seen for the First Time Non Functional Requirements should be sticky: Usability, Performance and Capacity Reporting Metrics to Apache Kafka and Monitoring with Consumers Should you be working at a startup?</description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-April-29</title>
+      <link>https://uthark.github.io/2014/04/29/reading-list-2014-april-29/</link>
+      <pubDate>Tue, 29 Apr 2014 11:28:53 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/04/29/reading-list-2014-april-29/</guid>
+      <description>Software development  7 First Public Working Drafts of XQuery and XPath 3.1 All About SSL Amazon&amp;rsquo;s Glacier secret: BDXL Blog: Very Short Blog Posts (17): Regression Obsession Creating defensive objects with ES6 proxies Dashboarding with Open Source Tools Follow up to the investigation results | GitHub Go Faster - More SaltStack automation for Google Cloud Platform Google+ won (or why Google never needed a social network) | John Battelle&amp;rsquo;s Search Blog How Burrowing Owls Lead To Vomiting Anarchists (Or SFâs Housing Crisis Explained) Improving Angular Dirty Checking Performance Linux /dev/urandom and concurrency Network performance at AWS, Google, Rackspace and Softlayer Reinventing explanation The CAP FAQ What Can Men Do?</description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-April-28</title>
+      <link>https://uthark.github.io/2014/04/28/reading-list-2014-april-28/</link>
+      <pubDate>Mon, 28 Apr 2014 16:37:56 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/04/28/reading-list-2014-april-28/</guid>
+      <description> Software development  Telerik Open Sources Kendo UI Richardson Maturity Model Network performance at AWS, Google, Rackspace and Softlayer Development &amp;ldquo;Methodologies&amp;rdquo; An Introduction to the Web Notifications API Mithril Is this what it&amp;rsquo;s supposed to feel like? One Year Later. This hilarious graph of Netflix speeds shows the importance of net neutrality  Java  JAX-RS 2.0: Custom Content Handling Difference between Connected vs Disconnected RowSet in Java JDBC RowSetProvider, RowSetFactory Example The 7 Log Management Tools Java Developers Should Know Jibx Jersey2 Integration Using Http Session with Spring based web applications  </description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-April-25</title>
+      <link>https://uthark.github.io/2014/04/25/reading-list-2014-april-25/</link>
+      <pubDate>Fri, 25 Apr 2014 15:17:11 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/04/25/reading-list-2014-april-25/</guid>
+      <description>Announcements  Spring Social 1.1.0 Released  Cloud  MySQL 5.5 to MySQL 5.6 Upgrade Support for Amazon RDS  General  A Note On This Week&amp;rsquo;s Server Maintenance | Pocket Blog Apple Designer Jonathan Ive on What&amp;rsquo;s Next AT&amp;amp;T creates $500M joint venture for a Netflix-style TV service â Tech News and Analysis The Change My Son Brought, Seen Through Personal Data  Software development  Ameba Teams and Amoeba Management Automate with Grunt Beyond the Product Demo: Choosing the Right Validation Technique in Scrum Code Like a Fighter Pilot, Design Like an Engineer and Measure What?</description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-April-24</title>
+      <link>https://uthark.github.io/2014/04/24/reading-list-2014-april-24/</link>
+      <pubDate>Thu, 24 Apr 2014 13:21:05 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/04/24/reading-list-2014-april-24/</guid>
+      <description>Announcements  Spring Boot 1.0.2.RELEASE Available Now Groovy 2.3 introduces traits GitLab CE 6.8 released  Software development  No, don&amp;rsquo;t enable revocation checking Productive Developers are Smart and Lazy Managers and Individual Contributors in Code Blogging and Sharing - Diversifying New Security Measures Will Affect Older (non-OAuth 2.0) Applications trigger vs triggerHandler in jQuery Bad Password Policies Why Dart Comes with a Virtual Machine Introduction to Backbone.js What to Think About During Exercise Confessions of a Full Stack DevOp Consumer-Driven Contracts: A Service Evolution Pattern IronWASP - Iron Web application Advanced Security testing Platform How &amp;lsquo;DevOps&amp;rsquo; is Killing the Developer You Don&amp;rsquo;t Read Code, You Explore It 10 Ways to Do What You Don&amp;rsquo;t Want to Do  MongoDB  Why the clock is ticking for MongoDB MongoDB is growing up maxTimeMS() and Query Optimizer Introspection in MongoDB 2.</description>
+    </item>
+    
+    <item>
+      <title>Pocket is down</title>
+      <link>https://uthark.github.io/2014/04/23/pocket-is-down/</link>
+      <pubDate>Wed, 23 Apr 2014 12:09:10 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/04/23/pocket-is-down/</guid>
+      <description>Hi. Pocket is down so it means there is no reading list for today. Everyone have a nice day.</description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-April-22</title>
+      <link>https://uthark.github.io/2014/04/22/reading-list-2014-april-22/</link>
+      <pubDate>Tue, 22 Apr 2014 13:41:36 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/04/22/reading-list-2014-april-22/</guid>
+      <description>Announcements  Scala 2.11.0 is now available! Scala 2.11 Has Arrived! sqltyped 0.4.0 Release version 1.0.8 · skinny-framework/skinny-framework · GitHub Finatra 1.5.3 Released  Cloud  Using Puppet to Automate Google Compute Engine No IaaS? No Problem. PeopleFun chooses Google App Engine to offload infrastructure tasks and build games people love to play  Android  Butter Knife Android Interface Definition Language (AIDL) Security Tips | Android Developers Scheduling Repeated Tasks in Android  Security  Heartbleed disclosure timeline: who knew what and when Please Put OpenSSL Out of Its Misery Detecting and Fixing XSS using OWASP tools  General  Results of the GitHub Investigation · GitHub This is why Microsoft won.</description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-April-21</title>
+      <link>https://uthark.github.io/2014/04/21/reading-list-2014-april-21/</link>
+      <pubDate>Mon, 21 Apr 2014 10:12:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/04/21/reading-list-2014-april-21/</guid>
+      <description>General  Lens Blur in the new Google Camera app SV150: Apple, Inc. earns more than HP, Google, Intel &amp;amp; Cisco combined Chrome Remote Desktop goes mobile  Software development  Software Engineering Advice from Building Large-Scale Distributed Systems Brian Goetz &amp;gt; Quotes Easter Hack: Even More Critical Bugs in SSL/TLS Implementations This Advice From IDEO&amp;rsquo;s Nicole Kahn Will Transform the Way You Give Presentations Quick tip: Improve developer habits by showing time cost of DB queries TolerantReader Go Performance Tales Beware the bandwidth gap - speeding up optimization paperplanes.</description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-April-18</title>
+      <link>https://uthark.github.io/2014/04/18/reading-list-2014-april-18/</link>
+      <pubDate>Fri, 18 Apr 2014 12:35:34 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/04/18/reading-list-2014-april-18/</guid>
+      <description>Death of Gabriel Garcia Marquez is definitely the worst yesterday&amp;rsquo;s news. Read more: Gabriel Garcia Marquez dies at 87
+Announcements  CDI 1.2 Released (The Aquarium) CDI 1.2 is released | Contexts and Dependency Injection AlloyUI 2.5.0 Released AngularDart 0.10.0 (ostemad-teleportation) : breaking changes and versioning Spring XD 1.0.0.M6 Released Spring Security OAuth 2.0.0.RC1 Available The New Linode Cloud: SSDs, Double RAM &amp;amp; much more | Linode Blog  Software development  The Heartbleed Aftermath: all CloudFlare certificates revoked and reissued Starbucks Does Not Use Two-Phase Commit When two-factor authentication is not enough Big Data Quality: Certify or Govern?</description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-April-17</title>
+      <link>https://uthark.github.io/2014/04/17/reading-list-2014-april-17/</link>
+      <pubDate>Thu, 17 Apr 2014 14:36:39 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/04/17/reading-list-2014-april-17/</guid>
+      <description> Software development  Seven Databases in Seven Days – Riak Design, Develop, and Distribute at I/O 2014 | Google Developers Blog Coloring Different Data Sources in IntelliJ IDEA Todon&amp;rsquo;t How to Level Up  Video  Fireside Chat: Android Design  Java  List of all JEPs for JDK8 JEP 174: Nashorn JavaScript Engine Asynchronous CDI Events? (The Aquarium) Conway’s Game of Life and the Flyweight Pattern We’re Hacking JDBC, so You Don’t Have To The Real Cost of Logging JSON Schema (The Aquarium) Spring MVC Test with Geb Some new Guava classes targeted for release 10 | Google Groups  Some background discussions on Java 8 Lambda, Optional and default methods in interfaces  Optional require(s) NonNull When lambdas become objects Allow default methods to override Object&amp;rsquo;s methods Checked exceptions within Block Allow lambdas to implement abstract classes  </description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-April-16</title>
+      <link>https://uthark.github.io/2014/04/16/reading-list-2014-april-16/</link>
+      <pubDate>Wed, 16 Apr 2014 13:56:20 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/04/16/reading-list-2014-april-16/</guid>
+      <description>Announcements  Apache Hadoop 2.4.0 Apache Tomcat Native 1.1.30 released | Mladen Turk Apache Tomcat Connectors 1.2.40 released | Mladen Turk Second Service Release For Spring Data Release Train Codd Released Announcing the Release of Google App Engine 1.9.3 Google Cloud Platform expands to Asia Pacific Announcing Google BigQuery and Datastore Connectors for Hadoop Spring Integration 4.0 Release Candidate Available Final Draft of OSGi Core Release 6 available for download  Software development  The Four Parts of a Minimal Viable Product Better code through code reviews Social Processes and Heartbleed, Part 1 Angular and Durandal Converge What Heartbleed Tells Us About the Need for IT Automation No More Passwords for Apps using Login with Amazon on Kindle Fire Innodb redo log archiving  Java  10 Books Every Java Developer Should Read New BigInteger Methods in Java 8 Java 8 Friday: No More Need for ORMs Everything about Java 8 Maven and Java multi-version modules JDK 8 Security Enhancements Java 8 Nashorn Tutorial 10 Books Every Java Developer Should Read Using jOOQ with Spring: CRUD trackr: An AngularJS app with a Java 8 backend – Part I Spring expression language (spel) and Spring boot in action TimeUnit Enum in Java We hate/love lambda Inject any custom class or service into web content templates | Liferay blogs Covariant Blabbering : Damn smart idea (2) : DynamicVariable  In Russian  Эксперимент LHCb окончательно доказал реальность экзотического мезона Z(4430) FAQ: Биоархеология и трепанация Как открыли новую экзотическую частицу?</description>
+    </item>
+    
+    <item>
+      <title>Using Unitils ReflectionAssert</title>
+      <link>https://uthark.github.io/2014/04/16/using-unitils-reflectionassert/</link>
+      <pubDate>Wed, 16 Apr 2014 00:10:10 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/04/16/using-unitils-reflectionassert/</guid>
+      <description>Often it is needed to compare two different instances of the class inside test. I.e. we save object into database, then fetch it back from db and we want to be sure if nothing was lost during saving/reading.
+In order to make such assertions more easier and maintainable one can use great Unitils library which has useful class ReflectionAssert
+First, update parent&amp;rsquo;s pom.xml:
+&amp;lt;properties&amp;gt; &amp;lt;unitils.version&amp;gt;3.4&amp;lt;/unitils.version&amp;gt; &amp;lt;/properties&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.unitils&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;unitils-core&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;${unitils.version}&amp;lt;/version&amp;gt; &amp;lt;scope&amp;gt;test&amp;lt;/scope&amp;gt; &amp;lt;/dependency&amp;gt; Then add dependency to the child module:</description>
+    </item>
+    
+    <item>
+      <title>Using AssertJ</title>
+      <link>https://uthark.github.io/2014/04/15/using-assertj/</link>
+      <pubDate>Tue, 15 Apr 2014 23:37:49 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/04/15/using-assertj/</guid>
+      <description>AssertJ is a library which provides fluent strongly-typed assertions to use in unit tests.
+Example of assertions written with AssertJ:
+import io.github.uthark.blog.assertj.Assertions.assertThat; // ... within @Test User result = userDao.findByLogin(&amp;#34;username&amp;#34;); assertThat(result). isNotNull(). isActive(). hasLogin(&amp;#34;username&amp;#34;); As you can see assertions look much more readable. The integration of assertj into Maven project is very easy:
+ Update pom.xml in parent module  &amp;lt;properties&amp;gt; &amp;lt;assertj-core.version&amp;gt;1.6.0&amp;lt;/assertj-core.version&amp;gt; &amp;lt;assertj-assertions-generator-maven-plugin.version&amp;gt;1.2.0&amp;lt;/assertj-assertions-generator-maven-plugin.version&amp;gt; &amp;lt;/properties&amp;gt; &amp;lt;dependencyManagement&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.assertj&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;assertj-core&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;${assertj-core.version}&amp;lt;/version&amp;gt; &amp;lt;scope&amp;gt;test&amp;lt;/scope&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;/dependencyManagement&amp;gt; &amp;lt;pluginManagement&amp;gt; &amp;lt;plugin&amp;gt; &amp;lt;groupId&amp;gt;org.</description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-April-15</title>
+      <link>https://uthark.github.io/2014/04/15/reading-list-2014-april-15/</link>
+      <pubDate>Tue, 15 Apr 2014 13:06:12 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/04/15/reading-list-2014-april-15/</guid>
+      <description> Software development  Building Carousel, Part I: How we made our networked mobile app feel fast and local Write line notes from your phone · GitHub Scaling the Facebook data warehouse to 300 PB Why did we lose the XP Practices? EC2 Update - Previous Generation Instances | Amazon Web Services Blog Working with Google Analytics API v4 for Android The Grails Depedency Injection Inheritance Pitfall  DevOps  Adaptive IT — Why Vagrant is the Best DevOps Tool Ever Using Chef to Automate Google Compute Engine  Java  10 JDK 7 Features to Revisit, Before You Welcome Java 8 5 Features In Java 8 That WILL Change How You Code Cache Abstraction: JCache (JSR-107) Annotations Support Oracle Nashorn: A Next-Generation JavaScript Engine for the JVM Use Nashorn and WebJars to execute Javascript server-side What’s New in Java 8: Lambdas JEP 180: Handle Frequent HashMap Collisions with Balanced Trees JEP 155: Concurrency updates (jsr166e)  Scala  The other 99% — Monadic Reflections on Akka  </description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-April-14</title>
+      <link>https://uthark.github.io/2014/04/14/reading-list-2014-april-14/</link>
+      <pubDate>Mon, 14 Apr 2014 13:48:11 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/04/14/reading-list-2014-april-14/</guid>
+      <description>Releases  Our New Reader View in Pocket 5.4 for Android Spring Batch 2.2.6.RELEASE is now available MongoDB 2.6 is out  Software development  New user and sequence based segments in the Core Reporting API Looking for PostgreSQL Performance Issues Why Google Is Broken for Debugging 13 | Joel on Software Recursion: Dream Within a Dream What to Think About During Exercise ScaleArc: Benchmarking with sysbench  Java  Five Synchronizers in Java Oracle Drops Collection Literals in JDK 8 Creating Object Pool in Java Why JSR-310 isn&amp;rsquo;t Joda-Time Non-blocking IO in Servlet 3.</description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-April-11</title>
+      <link>https://uthark.github.io/2014/04/11/reading-list-2014-april-11/</link>
+      <pubDate>Fri, 11 Apr 2014 12:57:41 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/04/11/reading-list-2014-april-11/</guid>
+      <description> Software development  Dart improves async and server-side performance Federal Government Releases Health Care Provider Reference Architecture The Cost of Context Switching How Overloading Interacts With C Compatibility Write Code Every Day Consumer Release Testing Google Finds: Centralized Control, Distributed Data Architectures Work Better than Fully Decentralized Architectures Do Developers Love To Build On MongoDB? 10 Reasons Not To Use Infinite Scroll On Your Website First look: MongoDB 2.6, the all-grown-up version  Cloud  Now Available - New Memory-Optimized EC2 Instances (R3)  Java  JEP 169: Value Objects A Docker Maven Plugin for Integration Testing Reactive Programming Patterns in Akka using Java 8 Executing Diagnostic Commands Using Attach Final Results from our Java EE 8 Community Survey (Linda DeMichiel&amp;rsquo;s Blog) CSRF protection in Spring MVC, Thymeleaf, Spring Security application  Android  Anti-Malware Monitoring for Android Apps Expanding Google’s security services for Android  Scala  Memoization of Scala Streams  </description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-April-10</title>
+      <link>https://uthark.github.io/2014/04/10/reading-list-2014-april-10/</link>
+      <pubDate>Thu, 10 Apr 2014 15:35:04 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/04/10/reading-list-2014-april-10/</guid>
+      <description>General  The Job After Steve Jobs: Tim Cook and Apple In depth: Descriptive Search in Evernote A Powerful New Way to Edit DNA XKCD What if? | Faucet Power Expanding Google’s security services for Android  Cloud  The New Cost Explorer for AWS  Software development  Dart improves async and server-side performance Don’t Estimate Spikes Heartbleed What To Return: IEnumerable or IList?  Java  For Each loop Puzzle in Java Constructor/Method Parameters Metadata Available Via Reflection in JDK 8 How much faster is Java 8?</description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-April-09</title>
+      <link>https://uthark.github.io/2014/04/09/reading-list-2014-april-09/</link>
+      <pubDate>Wed, 09 Apr 2014 14:46:14 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/04/09/reading-list-2014-april-09/</guid>
+      <description>Security  Security Release of omnibus-gitlab due to CVE-2014-0160 (&amp;lsquo;Heartbleed&amp;rsquo;) Heartbleed Security Bug: Update for Puppet Users Dealing with OpenSSL bug CVE-2014-0160 (Heartbleed) Secure DevOps - Seems Simple  Announcements  Hibernate ORM 4.2.12.Final Released Akka 2.3.2 Released! New book: EJB 3 in Action, Second Edition  Scala  Scala Style Guide — Scala Style Guide v1.3.1 documentation  General  DynDNS: Why We Decided To Stop Offering Free Accounts Yahoo breaks every mailing list in the world including the IETF&amp;rsquo;s The Prototype of Future Knowledge Workers  Software development  Software Estimation: How Misperceptions Mean We Almost Always Get It Wrong Performance Tuning On Android — The Venmo Blog Spring Test Context Caching + AspectJ @Transactional + Ehcache pain Liferay: Searching entities through custom attribute value.</description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-April-08</title>
+      <link>https://uthark.github.io/2014/04/08/reading-list-2014-april-08/</link>
+      <pubDate>Tue, 08 Apr 2014 14:25:34 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/04/08/reading-list-2014-april-08/</guid>
+      <description>Announces  Spring Boot 1.0.1.RELEASE Available Now Scala 2.11.0-RC4 is now available! MongoDB 2.6: Our Biggest Release Ever | MongoDB Blog Announcing Play 2.3-M1 | Google Groups  General  Fire TV: Amazon gets into the set-top box fray with a powerful media and gaming box How Gmail Happened: The Inside Story of Its Launch 10 Years Ago Can you hear me now? No, I don&amp;rsquo;t have that app.  General Software development  Handling multiple branches in continuous integration If you want fast code, don&amp;rsquo;t use assembly Using Android Location API in Weather App – Search city Numbers Every Programmer Should Know By Year How (NOT TO) measure latency Who Solves Which Problems?</description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-April-07</title>
+      <link>https://uthark.github.io/2014/04/07/reading-list-2014-april-07/</link>
+      <pubDate>Mon, 07 Apr 2014 10:56:03 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/04/07/reading-list-2014-april-07/</guid>
+      <description>Software development  Why Hire Older Engineers Am I really a developer or just a good googler? Facebook open sources code for managing A/B tests — Tech News and Analysis AngularJS Tip - Avoid Multiple Variables in ng-src Introducing Pyston: an upcoming, JIT-based Python implementation The Power of HTML Microsoft TypeScript 1.0 Arrives BlueGreenDeployment Five Funny Moments in Developer History Domain-Driven Design Revisited Application Security – Can you Rely on the Honeymoon Effect?</description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-April-04</title>
+      <link>https://uthark.github.io/2014/04/04/reading-list-2014-april-04/</link>
+      <pubDate>Fri, 04 Apr 2014 12:00:56 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/04/04/reading-list-2014-april-04/</guid>
+      <description>Software development  How WhatsApp Grew to Nearly 500 Million Users, 11,000 cores, and 70 Million Messages a Second MongoDB on Google Compute Engine – tips and benchmarks Going Reactive - Asynchronous JavaScript at Netflix Greenpeace Blasts &amp;lsquo;Dirty&amp;rsquo; Amazon Web Services Eclipse is dead for Android development and I helped kill it — Infinum  Java  How to process stream and read text file in Java 8 Integration Testing for Spring Applications with JNDI Connection Pools Project Sagan: zero-downtime deployments Java: How to Schedule a task to run in an interval Understanding the JDBC architecture.</description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-April-03</title>
+      <link>https://uthark.github.io/2014/04/03/reading-list-2014-april-03/</link>
+      <pubDate>Thu, 03 Apr 2014 11:23:19 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/04/03/reading-list-2014-april-03/</guid>
+      <description>General  Introducing the Coursera App for Android First Asteroid-Like Object Discovered With Rings Why is Warren Buffett Offering a Billion Dollar Bracket? This video creates natural hallucinations for a&amp;hellip;  Software development  Getters and setters gone wrong Don&amp;rsquo;t &amp;ldquo;Control&amp;rdquo; Agile Projects Use Frequent Branches to Tell a Story and Simplify Code Reviews Custom Git Commands in 3 Steps Collaborating with Lists · GitHub Adding properties to domain classes on the fly using groovy propertyMissing feature How to Cache Stored Procedure Results Basic Concepts of High Availability Linux Chris&amp;rsquo;s Wiki : blog/linux/KillAllNotRecoverable Just what we need…another package manager Good Vs Evil Bringing together the best of PaaS and IaaS Fail SAFe ~ Geek Out of Water Adding properties to domain classes on the fly using groovy propertyMissing feature Continuous integration on Liferay: running your Selenium 2 tests on the Tomcat 6 bundle Transforming the Web (through transformation) db.</description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-April-02</title>
+      <link>https://uthark.github.io/2014/04/02/reading-list-2014-april-02/</link>
+      <pubDate>Wed, 02 Apr 2014 12:37:17 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/04/02/reading-list-2014-april-02/</guid>
+      <description> Software development  IAM Best Practices Every Great Product Owner Needs a Great ScrumMaster Manhattan, our real-time, multi-tenant distributed database for Twitter scale The Cache and Multithreading  Android  Useful Tools for Android Apps Test Automation Fixing The Android Camera API  Java  Apache Tomcat 7.0.53 Released Spring Boot 1.0 GA Released Java 8 Friday: Optional Will Remain an Option in Java Eclipse Foundation Announces Java 8 Support Method 2 of N for crashing your JVM :-) Abstract Class Versus Interface in the JDK 8 Era Add Java 8 support to Eclipse Kepler Difference between Stub and Mock object in Java Unit testing - JUnit Introduction to Nashorn  Scala  IntelliJ, Scala and Gradle: Revisiting Hell Spring-boot and Scala  In Russian  Новости Большого адронного коллайдера Одиночное рождение топ-кварка позволило еще тщательнее проверить Стандартную модель  </description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-April-01</title>
+      <link>https://uthark.github.io/2014/04/01/reading-list-2014-april-1/</link>
+      <pubDate>Tue, 01 Apr 2014 13:41:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/04/01/reading-list-2014-april-1/</guid>
+      <description>Software development  We lost a customer. This is how we found out… New Linux version will reduce suspend and resume times The Stress Of Being A Computer Programmer Is Literally Driving Many Of Them Crazy Amazing approximation to e raj bala — Amazon Is Downloading Apps From Google Play and Inspecting Them coreos/etcd · GitHub The Python Paradox The Lucene disk format Git smart! 20 essential tips for Git and GitHub users Six Degrees of Kevin Bacon in six languages Why I Don’t Inherit from Collection Types  Java  Spring Integration 3.</description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-March-31</title>
+      <link>https://uthark.github.io/2014/03/31/reading-list-2014-march-31/</link>
+      <pubDate>Mon, 31 Mar 2014 11:53:51 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/31/reading-list-2014-march-31/</guid>
+      <description>General  Do All People React To The Same Persuasion Strategies? Apps with millions of Google Play downloads covertly mine cryptocurrency Before the Internet | XKCD  Software development  Signs you might be in survival mode Announcing Google Cloud DNS Gold Plating How times have changed for PostgreSQL  Java  Project Sagan: open-sourcing spring.io How to run a standalone OSGi server The Illuminating Javadoc of JDK 8 JDK 8 Javadoc Tweaked For Methods Listings The Builder pattern and the Spring framework Java 8 Default Methods: What Can and Can Not Do?</description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-March-28</title>
+      <link>https://uthark.github.io/2014/03/28/reading-list-2014-march-28/</link>
+      <pubDate>Fri, 28 Mar 2014 16:33:34 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/28/reading-list-2014-march-28/</guid>
+      <description>General  How To Reboot A Bad Day In 10 Minutes Or Less  Software development  Taking Chrome Experiments to the TV  Cloud  AWS OpsWorks Now Supports Chef 11.10 Amazon Linux AMI 2014.03 is Now Available  Java  Initializing Mockito @Mocks With JUnit @Rule Apache Tomcat 8.0.5 (beta) available | Mark Thomas Spring Data Redis 1.2.1 Released Spring AMQP 1.3.0 Released Spring Framework 4.0.3 released - with Java 8 support now production-ready 3 ways of handling exceptions in JUnit.</description>
+    </item>
+    
+    <item>
+      <title>Initializing Mockito @Mocks with JUnit @Rule</title>
+      <link>https://uthark.github.io/2014/03/28/initializing-at-mocks-with-junit-at-rule/</link>
+      <pubDate>Fri, 28 Mar 2014 13:24:45 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/28/initializing-at-mocks-with-junit-at-rule/</guid>
+      <description>In this post I will show how one can implement custom JUnit @Rule.
+As an example let&amp;rsquo;s take Mockito and implement custom rule which will initialize Mocks in test class.
+By default, Mockito provides the following methods of mock initialization:
+ Using Mockito.mock  Initialize mocks with Mockito.mock:
+public void FooTest { private Foo foo; @Before public void setUp() { FooDependency dep = Mockito.mock(FooDependency.class); foo = new Foo(dep); } } This is the simplest case.</description>
+    </item>
+    
+    <item>
+      <title>Atom.io invites</title>
+      <link>https://uthark.github.io/2014/03/28/atom-dot-io-invites/</link>
+      <pubDate>Fri, 28 Mar 2014 09:53:03 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/28/atom-dot-io-invites/</guid>
+      <description>If anyone needs invites to atom.io, text editor from github - ask me in comments. I do have 3 invites to share.</description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-March-27</title>
+      <link>https://uthark.github.io/2014/03/27/reading-list-2014-march-27/</link>
+      <pubDate>Thu, 27 Mar 2014 12:00:09 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/27/reading-list-2014-march-27/</guid>
+      <description>General  Verizon Knows Your WiFi SSID and Key at WLAN Book.com and @WLANBook.com Bright Lights, Big Data | The New Yorker  Cloud  AWS Price Reduction #42 - EC2, S3, RDS, ElastiCache, and Elastic MapReduce | Amazon Web Services Blog AWS Achieves DoD Provisional Authorization Amazon WorkSpaces is Now Available New VPC Peering for the Amazon Virtual Private Cloud  Software development  Google I/O 2014 | Google Developers Blog Disturbing Misinterpretations: No One Knows What the F*** They’re Doing Microsoft open-sources MS-DOS.</description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-March-26</title>
+      <link>https://uthark.github.io/2014/03/26/reading-list-2014-march-26/</link>
+      <pubDate>Wed, 26 Mar 2014 11:21:55 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/26/reading-list-2014-march-26/</guid>
+      <description>General  Skitch for Android Update: New Toolbars and More | Evernote blog New Pocket for Firefox: Simplified Saving, Auto-Complete Tagging, and More Microsoft Researcher Wins the “Nobel Prize” of Computer Science  Software development  The Microservice Architecture Sounds Like Service-Oriented Architecture Implementing Static Analysis isn&amp;rsquo;t that easy Google Tag Manager | Android  Cloud  Google Announces Massive Price Drops For Its Cloud Computing Services And Storage, Introduces Sustained-Use Discounts Cassandra Hits One Million Writes Per Second on Google Compute Engine  Java  Oracle Announces Java 8 Spring Security 3.</description>
+    </item>
+    
+    <item>
+      <title>Scala for the Intrigued</title>
+      <link>https://uthark.github.io/2014/03/25/scala-for-the-intrigued/</link>
+      <pubDate>Tue, 25 Mar 2014 16:09:42 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/25/scala-for-the-intrigued/</guid>
+      <description>This is a very nice series of posts about Scala by Venkat Subramaniam
+ The Elegance of Scala Sensible Typing and Optional Items Cute Classes and Pure OO Functional Style of Programming Working with Collections Creating Higher Order Functions Pattern Matching XML as First Class Citizen Recursions and Tail Call Optimization Using Traits Chaining Traits Concurrency in Scala  </description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-March-25</title>
+      <link>https://uthark.github.io/2014/03/25/reading-list-2014-march-25/</link>
+      <pubDate>Tue, 25 Mar 2014 11:31:11 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/25/reading-list-2014-march-25/</guid>
+      <description>Software development  BLAKE2: “Harder, Better, Faster, Stronger” Than MD5 | Least Authority WebP improves while rolling out across Google Automated Testing with Docker  Java  Solr 4.7 – Efficient Deep Paging Tyrus 1.5 released! Just in time for Java 8 (The Aquarium) Liferay 6.2 CE GA2 Now Available Top 5 Reasons to Choose ScalaTest Over JUnit What I miss in Java 8 lambda functions  Android  Report : What content makes up an Android Game?</description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-March-24</title>
+      <link>https://uthark.github.io/2014/03/24/reading-list-2014-march-24/</link>
+      <pubDate>Mon, 24 Mar 2014 10:48:15 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/24/reading-list-2014-march-24/</guid>
+      <description>General  A Startlingly Simple Theory About the Missing Malaysia Airlines Jet The Problem and Future of Education | Arsalan Bashir No One Knows What the F*** They&amp;rsquo;re Doing (or &amp;ldquo;The 3 Types of Knowledge&amp;rdquo;) How Google Does Fundamental Research Without a Separate Research Lab  Cloud  ELB Connection Draining - Remove Instances From Service With Care | Amazon Web Services Blog  Java  Apache Camel 2.13.0 released 5 Features In Java 8 That WILL Change How You Code Spring MVC Test with HtmlUnit Reality check: Java 8 finally catches a multi-core break Getting JUnit Test Names Right Java 8 Friday Goodies: Lean Concurrency  Scala  Scala 2.</description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-March-21</title>
+      <link>https://uthark.github.io/2014/03/21/reading-list-2014-march-21/</link>
+      <pubDate>Fri, 21 Mar 2014 13:53:47 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/21/reading-list-2014-march-21/</guid>
+      <description>Hi. Take a look at today&amp;rsquo;s articles on mutation testing.
+General  Google? Evil? You have no idea  Software development  Mutation Testing With PIT: A Step Beyond Normal Code Coverage Mutation Testing Concurrency torture: testing your code within the Java Memory Model Recent activity for authentication credentials · GitHub Rich Object Models and Angular.js: Getter Methods Mule Unit Tests with Inbound Message Properties in Session or Invocation Scope Feature-based development Object-oriented design principles and the 5 ways of creating SOLID applications Android Wear Prototype: Quick Sharing to Pocket  Java  3 Reasons to choose Vert.</description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-March-20</title>
+      <link>https://uthark.github.io/2014/03/20/reading-list-2014-march-20/</link>
+      <pubDate>Thu, 20 Mar 2014 12:19:02 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/20/reading-list-2014-march-20/</guid>
+      <description>General  Please Read The Comments Google Geometry Calculator When Should You Think? Getting up in the morning without snoozing for hours  Software development  Never Use a Warning When you Mean Undo Preview: Google&amp;rsquo;s tantalizing Mobile Chrome App SDK 18 Mar 2014 I don&amp;rsquo;t want to be a Real Programmer How to be a sane programmer Building Software Is Nothing Like Building Houses Why Ruby blocks exist, part II Creating beautiful release notes with git, gradle and markdown Your Code Sucks  Java  JCache is final!</description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-March-19</title>
+      <link>https://uthark.github.io/2014/03/19/reading-list-2014-march-19/</link>
+      <pubDate>Wed, 19 Mar 2014 11:06:41 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/19/reading-list-2014-march-19/</guid>
+      <description>I would like to conratulate everyone with Java 8 release.
+Java 8 announces  JDK 8: General Availability Java 8 officially arrives at last Go Reactive with Java 8 Java 8, now what? JDK 8 Is Released! (The Java Tutorials Blog) Java 8 is now released! ~ Java EE Support Patterns Create the Future with Java 8 (The Java Source) Java SE Embedded 8 is Now Available (The Java Source) [#JDK-8036100] Default method returns true for a while, and then returns false java.</description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-March-18</title>
+      <link>https://uthark.github.io/2014/03/18/reading-list-2014-march-18/</link>
+      <pubDate>Tue, 18 Mar 2014 13:59:16 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/18/reading-list-2014-march-18/</guid>
+      <description>Software Development  The Help Vampire: A Spotter’s Guide Go for Java Programmers: Introduction rm is dangerous What&amp;rsquo;s the opposite of duplication? What do developers spend all that time on? Myths about /dev/urandom How to Make Python Faster Without Trying That Much Mighty Spring — Adventures in Dogfooding : Engineers as Recruiters Choosing a Templating Language in Clojure XKCD | Manuals  Java  Spring Test MVC HtmlUnit 1.0.0.M1 Released The Java HotSpot Performance Engine: Method Inlining Example Integration testing with Maven and Docker A quick introduction to Apache Mesos  Scala  The Ultimate Guide to Getting Started with the Play Framework  Android  Google Play services 4.</description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-March-17</title>
+      <link>https://uthark.github.io/2014/03/17/reading-list-2014-march-17/</link>
+      <pubDate>Mon, 17 Mar 2014 12:14:09 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/17/reading-list-2014-march-17/</guid>
+      <description>General  Life is a game. This is your strategy guide Happy 25th Birthday, Web! or: Honoring the web by embracing It Is the Internet good or bad? Yes.  Josh Timonen — My Brain Has No Space For Your User Interface Inside DuckDuckGo, Google&amp;rsquo;s Tiniest, Fiercest Competitor ⚙ Co.Labs ⚙ code + community 7 Data Presentation Tips: Think, Focus, Simplify, Calibrate, Visualize++  Agile  Agile Best Practice: Executable Specifications  Software development  The 10 Commandments of Programming How to write good software The Git Object Model Git for Computer Scientists Database Versioning: The ignored aspect of version control.</description>
+    </item>
+    
+    <item>
+      <title>Life fee</title>
+      <link>https://uthark.github.io/2014/03/14/life-fee/</link>
+      <pubDate>Fri, 14 Mar 2014 23:42:10 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/14/life-fee/</guid>
+      <description>Found in sources:
+try { // do some business logic. } catch (Exception e) { errorBean.addError(&amp;#34;System exception. Unable to locate life fee.&amp;#34;); } This is just awesome!</description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-March-14</title>
+      <link>https://uthark.github.io/2014/03/14/reading-list-2014-march-14/</link>
+      <pubDate>Fri, 14 Mar 2014 14:56:55 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/14/reading-list-2014-march-14/</guid>
+      <description>General  How much are you worth to your employer? Denial of Service Attacks · GitHub Cheap Words  Software development  Atom, Hackable Text Editor By GitHub Brendan Eich: Web development is tough, developers are tougher Your quick guide to better JavaScript testing Mediator Parallel Routing Rules  NoSQL  Processing 2 Billion Documents A Day And 30TB A Month With MongoDB | The MongoDB Blog  Java  First service release for Spring Data release train Codd released Spring Data Couchbase 1.</description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-March-13</title>
+      <link>https://uthark.github.io/2014/03/13/reading-list-2014-march-13/</link>
+      <pubDate>Thu, 13 Mar 2014 10:42:46 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/13/reading-list-2014-march-13/</guid>
+      <description>General  How to survive a job you absolutely hate 10 Obama Proposes the End of Pennies What if I wrote a book? | XKCD  Software development  Is goto Still Considered Harmful? The Configuration File – “remote” Section – Git Config The Web API Checklist — 43 Things To Think About When Designing, Testing, and Releasing your API  Agile  Choosing a leader like an agilist It’s Far Too Easy To Measure Agile’s Value In The Wrong Way Definition of Done: A Reference  Cloud  Securing your AWS Infrastructure with IAM  Java  JEP 192: String Deduplication in G1 JPA 2.</description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-March-12</title>
+      <link>https://uthark.github.io/2014/03/12/reading-list-2014-march-12/</link>
+      <pubDate>Wed, 12 Mar 2014 10:46:27 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/12/reading-list-2014-march-12/</guid>
+      <description>General  Nano Workouts help you get in shape and life healthy during everyday activities. How to survive a job you absolutely hate 10  Software development  SoftwareDevelopmentAttitude Updated Amazon Appstore Badges Software is disrupting Industries: are you Trendwatcher or Trendsetter? Because my friend works here… Labeling Ourselves for Others Is goto Still Considered Harmful? Why Puppet/Chef/Ansible aren&amp;rsquo;t good enough (and we can do better) | Domen Kožar&amp;rsquo;s thoughts  Agile  Choosing a leader like an agilist Don’t Estimate Software Defects It’s Far Too Easy To Measure Agile’s Value In The Wrong Way  Project management  The Change Management Challenge Cost of Delay: Why You Should Care, Part 6  Cloud  Common Building Blocks of Cloud APIs Improvements for managing Persistent Disks Help For Moving From Physical Servers to the Cloud  Java  Apache Tomcat Connectors 1.</description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-March-11</title>
+      <link>https://uthark.github.io/2014/03/11/reading-list-2014-march-11/</link>
+      <pubDate>Tue, 11 Mar 2014 08:25:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/11/reading-list-2014-march-11/</guid>
+      <description>General  What is the purpose of incremental reading? Incremental reading Cloze test The 20 rules of formulating knowledge in learning Link: Bad brains: some people are physically incapable of enjoying music Clue To Mysterious Lights That Appear Before Earthquakes How in-app purchase is not really destroying the games industry XKCD | When You Assume Decision making, problem solving, introducing ideas, being influencial Helvetica: one font to rule them all  Software development  Timezone-aware contribution graphs · GitHub GitLab CI 4.</description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-March-10</title>
+      <link>https://uthark.github.io/2014/03/10/reading-list-2014-march-10/</link>
+      <pubDate>Mon, 10 Mar 2014 10:40:51 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/10/reading-list-2014-march-10/</guid>
+      <description>General  Evernote on the Go: Introducing Evernote for Pebble Noteworthy this Week: Handwriting &amp;amp; Smartwatches Clever Ways to Get Some Exercise at the Office (or Any Small Space) Jumpstarter launches “next-gen hosting platform”, promising sub-second server spin-up — Tech News and Analysis How Can I Best Absorb Information While Reading? The Command-Line Office What the Heck is Happening to Windows? The Solution to Technical Debt 9 Things to Remove From Your Resume Right Now  Cloud  STH Colocation – 1 Year Review with Lessons Learned Amazon EC2 grows 62% in 2 years  Scala  In Defense of Scala: Part 2 The Neophyte&amp;rsquo;s Guide to Scala Part 5: The Option Type The Neophyte&amp;rsquo;s Guide to Scala Part 6: Error Handling With Try When can Liskov be lifted?</description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-March-07</title>
+      <link>https://uthark.github.io/2014/03/07/reading-list-2014-march-07/</link>
+      <pubDate>Fri, 07 Mar 2014 10:17:52 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/07/reading-list-2014-march-07/</guid>
+      <description>It is a pretty long reading list for today, but remember the weekend is coming.
+General  Roku Introduces A New Entry-Level Streaming Stick For $49, Shipping In April  Software development  Use all your favorite tools with GitHub · GitHub Why vacation at tech companies should be mandatory: better code, happier people How two men delivered a baby in 4.5 months — Infinum Throwing in the towel on becomming a programmer Cargo-cult typing, or: Objective-C&amp;rsquo;s default type is id Redneck Conditional Anti-pattern 7 Secret Ingredients to Making Ideas Happen Creating Software for Sysops - Make Sure You Do Not Suck Advice for the New Tech Lead: The Realities of Distributed Development The Magic Testing Challenge: Part 2 The Difference Between Impossible and Really, Really Hard Why I Eat Lunch at My Desk Cost of Delay Due to Indecision, Part 3 A deeper look at Competence debt  Agile  Agile Mindset During Programming Don’t sell me agile, solve my problem  Cloud  Ten Features that make Google Compute Engine (GCE) better than AWS New Features for Amazon CloudFront: Server Name Indication (SNI) and HTTP Redirection Access Logs for Elastic Load Balancers Five features Amazon Web Services must fix — Gigaom Research Say no to SaaS vanity metrics — Tech News and Analysis Modeling Business Transactions – 1 (For SaaS Pricing)  Frontend development  CSS Animated Hamburger Icon Enterprise JavaScript &amp;ndash; Not the best idea Understand the four layers of JavaScript OOP in one short lesson  Android  Android Studio 0.</description>
+    </item>
+    
+    <item>
+      <title>Limiting threads count for GreenRobot EventBus</title>
+      <link>https://uthark.github.io/2014/03/06/limiting-threads-count-for-greenrobot-eventbus/</link>
+      <pubDate>Thu, 06 Mar 2014 22:38:54 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/06/limiting-threads-count-for-greenrobot-eventbus/</guid>
+      <description>In one of my projects I used EventBus library. The library is pretty cool and I would recommend everybody to use it.
+But I found one small issue with this library - in case you send too many events very fast (i.e. more than 1000 per second) you may face issue with application crash due to inability to create new thread.
+The problem is lying in the used ExecutorService:
+package de.</description>
+    </item>
+    
+    <item>
+      <title>Using custom font in Android TextView</title>
+      <link>https://uthark.github.io/2014/03/06/customizing-font-in-android-textview/</link>
+      <pubDate>Thu, 06 Mar 2014 19:13:17 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/06/customizing-font-in-android-textview/</guid>
+      <description>Today I want to share with you custom TextView which allows to set font to be used in xml layout.
+First, we need to declare our custom styleable
+attrs.xml:
+&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt; &amp;lt;resources&amp;gt; &amp;lt;declare-styleable name=&amp;#34;TypefaceTextView&amp;#34;&amp;gt; &amp;lt;attr name=&amp;#34;typeface&amp;#34; format=&amp;#34;string&amp;#34;/&amp;gt; &amp;lt;/declare-styleable&amp;gt; &amp;lt;/resources&amp;gt; Then we need to create subclass of TextView which will use custom attribute.
+TypefaceTextView:
+public class TypefaceTextView extends TextView { public TypefaceTextView(Context context) { this(context, null); } public TypefaceTextView(Context context, AttributeSet attrs) { this(context, attrs, 0); } public TypefaceTextView(Context context, AttributeSet attrs, int defStyle) { super(context, attrs, defStyle); TypedArray ta = context.</description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-March-06</title>
+      <link>https://uthark.github.io/2014/03/06/reading-list-2014-march-06/</link>
+      <pubDate>Thu, 06 Mar 2014 10:57:55 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/06/reading-list-2014-march-06/</guid>
+      <description>Reading list for today:
+Software development  The myth of the fall The Technologies that Drive Lob AngularJS meets Marvel Comics Handwriting Arrives in Evernote for Android How do I find out what application elements can be scripted with AppleScript?  Productivity  Writing sensible email messages Inbox Zero: Better Practices for staying (near) zero Inbox Zero: Processing to zero  Agile  Compensation Strategies for Agile Teams The Top Five Agile Methodology PPTs Structure, Governance, and Metrics on Large Scale Agile Teams Goals of a Retrospective  Cloud  Announcing updates to the Google Cloud Platform Partner Program The PaaS shakeup and what it means for OpenStack Drupal on Google App Engine VM Import/Export Now Supports Windows 2012  Java  Using RESTFul services with Liferay Tweaking xUnit An XMPP Server for Google Cloud Messaging Activate Framework Architecture Swagger All The Way Into RESTful Services  Scala  Akka 2.</description>
+    </item>
+    
+    <item>
+      <title>Solving issue with DB2 on VMWare Fusion on MacBook Pro 2013 Late</title>
+      <link>https://uthark.github.io/2014/03/05/solving-issue-with-db2-on-vmware-fusion-on-macbook-pro-2013-late/</link>
+      <pubDate>Wed, 05 Mar 2014 14:41:54 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/05/solving-issue-with-db2-on-vmware-fusion-on-macbook-pro-2013-late/</guid>
+      <description>Today I found issue running DB2 10.1 under VMWare Fusion 6.0.2 on my MacBook - all management services for db2 are starting except for the db2 instance itself.
+When I tried to start DB2 using db2start it just crashed without any additional information.
+After some googling I found out that it is due to the fact that current version of DB2 can&amp;rsquo;t handle more than 4 responses to CPUID query.</description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-March-05</title>
+      <link>https://uthark.github.io/2014/03/05/reading-list-2014-march-05/</link>
+      <pubDate>Wed, 05 Mar 2014 11:29:54 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/05/reading-list-2014-march-05/</guid>
+      <description>Reading list for today:
+General  Cheap Words 5-Year-Olds Can Learn Calculus At the RSA Security Conference, Things Get Testy and Then They Get Awkward  Software development  How to Eliminate Bugs Through High Cohesion Stupid Mistakes Devs Make, Part I: Taking App Messages at Face Value A beginner&amp;rsquo;s guide to Git feature branches How to Get a Job at Google Essential Characteristics of PaaS Which hypervisor? Why not all of them!</description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-March-04</title>
+      <link>https://uthark.github.io/2014/03/04/reading-list-2014-march-04/</link>
+      <pubDate>Tue, 04 Mar 2014 10:13:06 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/04/reading-list-2014-march-04/</guid>
+      <description>Reading list for today:
+General  Tesla Is a Car, Not a Revolution Unemployment in America Listen while you work: What music does to your brain  Software development  Announcement: Sync Desktop 1.2 Released for Liferay Portal 6.2 Etsy’s Journey to Continuous Integration for Mobile Apps ASP.NET Web API Versioning with Media Types AirPair Launches Evernote Community Powered API Live Help
+ Dependency inversion: the structure logarithm. Failure is an option - Andreas M.</description>
+    </item>
+    
+    <item>
+      <title>Snowboarding</title>
+      <link>https://uthark.github.io/2014/03/04/snowboarding/</link>
+      <pubDate>Tue, 04 Mar 2014 01:04:55 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/04/snowboarding/</guid>
+      <description>Today in the evening I got to Whitetail Ski Resort.
+ </description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-March-03</title>
+      <link>https://uthark.github.io/2014/03/03/reading-list-2014-march-03/</link>
+      <pubDate>Mon, 03 Mar 2014 14:57:23 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/03/reading-list-2014-march-03/</guid>
+      <description>General  The internet is f*cked Comcast makes absurd argument that Google Fiber is a serious competitor Do You Have the Wrong Job Title?  Product Management  Complaint-Driven Development Cost of Delay Due to Indecision, Part 3 Product Roadmaps Are Anti-Agile Splitting User Stories Are You Agile When You&amp;rsquo;re Going Fast?  Software Development  StackOverflow - Best practices for API versioning? [closed] Atlassian Champions Git With Essentials XKCD Now Don’t Play ‘Schedule Chicken’ You shouldn&amp;rsquo;t have to worry about front end optimization Amazon Web Services Blog Fast Remote Service Tests Least Significant Bit - hunting bugs with git bisect and submodules The Art of AngularJS Geoip geolocation with Google BigQuery  Java  Announcement: Liferay Faces 4.</description>
+    </item>
+    
+    <item>
+      <title>Fixing unescaped quotes in page rendering in Octopress</title>
+      <link>https://uthark.github.io/2014/03/02/octopress-quote-fix/</link>
+      <pubDate>Sun, 02 Mar 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/02/octopress-quote-fix/</guid>
+      <description>When I created About Me page I found issue with rendering: for some reason styles and some javascripts were missing on the page.
+Investigation showed that content in meta tag description contained unquoted quotes, thus resulting in broken HTML.
+After searching within octopress sources I found the issue:
+Rendering of description tag, excerpt from _includes/head.html:
+{% capture  description %} {% if page.description %} {{ page.description }} {% else  %} {{ content | raw_content }} {% endif  %} {% endcapture %} &amp;lt;meta name=&amp;#34;description&amp;#34; content=&amp;#34;{{ description | strip_html | condense_spaces | truncate:150 }}&amp;#34;&amp;gt; After capturing, description is being processed with filters, defined in plugins/octopress_filters.</description>
+    </item>
+    
+    <item>
+      <title>Lyne Game</title>
+      <link>https://uthark.github.io/2014/03/02/lyne-game/</link>
+      <pubDate>Sun, 02 Mar 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/02/lyne-game/</guid>
+      <description>Found very addictive and cool game: Lyne.
+The goal of the game is to connect all dots on the playboard. Worth every cent.
+LYNE (Playboard) | LYNE (Play Store)</description>
+    </item>
+    
+    <item>
+      <title>PhotoStream #1. Sunset</title>
+      <link>https://uthark.github.io/2014/03/02/sunset/</link>
+      <pubDate>Sun, 02 Mar 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/02/sunset/</guid>
+      <description>Sunset on M St.</description>
+    </item>
+    
+    <item>
+      <title>Reading List 2014-March-02</title>
+      <link>https://uthark.github.io/2014/03/02/reading-list-2014-march-02/</link>
+      <pubDate>Sun, 02 Mar 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/02/reading-list-2014-march-02/</guid>
+      <description>Reading list for today:
+ The Hipper Element - Daily UX Crash Course Developers working in Production. Of course! Maybe, sometimes. What, are you nuts? Database patterns in Scala  </description>
+    </item>
+    
+    <item>
+      <title>Using iTerm triggers</title>
+      <link>https://uthark.github.io/2014/03/02/iterm-triggers/</link>
+      <pubDate>Sun, 02 Mar 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/02/iterm-triggers/</guid>
+      <description>I want to share one of the cool features which iTerm.app has - triggers. The idea behind triggers is simple - it allows to perform arbitrary action based on the output in console window. For example, it can colorize specified content (based on regular expressions).
+Start iTerm, open settings (⌘+,), go to Profiles, then tab Advanced. Click on Edit button in Triggers section.
+ iTerm Settings   Then you can define your own triggers:</description>
+    </item>
+    
+    <item>
+      <title>Сплин - Резонанс, часть 1.</title>
+      <link>https://uthark.github.io/2014/03/02/splean-resonance/</link>
+      <pubDate>Sun, 02 Mar 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/02/splean-resonance/</guid>
+      <description>Splean released new album - Resonance, part 1.
+Good album, good texts.
+You can listen previews here or here (Russia only).</description>
+    </item>
+    
+    <item>
+      <title>Automatic query modification with Spring Data Mongo</title>
+      <link>https://uthark.github.io/2014/03/01/restricting-mongo-template/</link>
+      <pubDate>Sat, 01 Mar 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/01/restricting-mongo-template/</guid>
+      <description>Introduction Today I want to show how one can automatically apply additional restrictions on MongoDB Queries with MongoTemplate or Spring Data Mongo.
+Implementation First, let&amp;rsquo;s introduce interface QueryModifier.
+import org.springframework.data.mongodb.core.query.Query; public interface QueryModifier { /** * Modifies source query according to the rules. * @param query Source query to modify. * @param collectionName name of the collection against which query will be executed. * @return Modified query. */ Query modify(Query query, String collectionName); } Implementations of this interface will pickup original query and modify it somehow.</description>
+    </item>
+    
+    <item>
+      <title>Fixed Google&#43; comments on the site</title>
+      <link>https://uthark.github.io/2014/03/01/google-plus-comments-fixed/</link>
+      <pubDate>Sat, 01 Mar 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/01/google-plus-comments-fixed/</guid>
+      <description>Fixed google+ comments disappearing on the site.
+Thanks to this blog post</description>
+    </item>
+    
+    <item>
+      <title>Пишем @Enable*-аннотацию для Spring</title>
+      <link>https://uthark.github.io/2013/06/29/spring-enable-annotation/</link>
+      <pubDate>Sat, 29 Jun 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2013/06/29/spring-enable-annotation/</guid>
+      <description>Начиная с версии 3.1 Spring поддерживает декларативное включение необходимой функциональности через, так называемые, @Enable* аннотации. Пример таких аннотаций: org.springframework.web.servlet.config.annotation.EnableWebMvc, org.springframework.cache.annotation.EnableCaching, org.springframework.scheduling.annotation.EnableAsync и другие.
+В продолжение темы прошлого поста, я хочу показать, как можно добавить собственную @Enable аннотацию.
+Для автоматического создания клиента для REST-ресурса нам необходима следующая информация:
+ Пакет, в котором искать интерфейсы, проаннотированные аннотацией @Path() Базовый адрес REST-приложения.  Для того, чтобы передать эту информацию, мы создадим два атрибута в аннотации: scanPackage() и endpoint()</description>
+    </item>
+    
+    <item>
+      <title>@Autowired JAX-RS Client API</title>
+      <link>https://uthark.github.io/2013/06/28/jaxrs-spring-autowiring/</link>
+      <pubDate>Fri, 28 Jun 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2013/06/28/jaxrs-spring-autowiring/</guid>
+      <description>Продолжая разговор о JAX RS Client API - предположим, что мы уже используем JAX-RS клиент
+У нас есть класс, который умеет создавать прокси для любого REST-интерфейса в проекте. Теперь мы хотим сделать так, чтобы эти интерфейсы можно было автоматически создавать в контексте Spring и связывать с другими бинами.
+Первое решение, которое приходит в лоб - объявить бин в конфигурации для каждого интерфейса:
+@Configuration public class SpringConfiguration { @Bean public UserRest userRest(){ List&amp;lt;?</description>
+    </item>
+    
+    <item>
+      <title>JAX-RS Client API</title>
+      <link>https://uthark.github.io/2013/06/28/jaxrs/</link>
+      <pubDate>Fri, 28 Jun 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2013/06/28/jaxrs/</guid>
+      <description>JAX-RS - набор Java API для работы с REST сервисами. Существует несколько реализаций, о которых я уже писал раньше.
+Предположим, что проект А выставляет наружу REST API, который мы хотим использовать в проекте Б. Очевидно, что сразу возникает вопрос - можно ли переиспользовать классы модели и интерфейс в другом проекте. Ответ - да, можно. Client API, появившийся в JAX RS 2.0, упрощает реализацию клиента, но это всё равно не самый оптимальный вариант.</description>
+    </item>
+    
+    <item>
+      <title>@Autowiring EJBs with Spring</title>
+      <link>https://uthark.github.io/2013/06/19/autowiring-factorybean/</link>
+      <pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2013/06/19/autowiring-factorybean/</guid>
+      <description>Предположим, что у нас есть проект на Spring, в котором необходимо использовать внешние EJB. Для получения бинов необходимо создавать InitialContext и делать lookup() нужных ejb. Но эту задачу можно автоматизировать и пользоваться @Autowired, то есть код будет выглядеть вот так:
+@Service public class UserService { @Autowired private UserRemoteBean userRemoteBean; } Для этого в Spring существует FactoryBean - класс, который знает, как создавать бины нужного типа. Собственно, нам необходимо написать такой класс (код на Scala):</description>
+    </item>
+    
+    <item>
+      <title>Валидация входных параметров с использованием Spring</title>
+      <link>https://uthark.github.io/2013/06/19/validation/</link>
+      <pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2013/06/19/validation/</guid>
+      <description>Очень часто возникает задача проверки входных параметров в сервис на корректность с точки зрения бизнес логики.
+Эту задачу можно решить в лоб, написав вручную код валидации в каждом из методов сервиса, например, вот так:
+public User save(User user) { if(user == null) { throw new IllegalArgumentException(&amp;#34;User is null&amp;#34;); } // other checks  //...  // business logic starts here...  //...  return savedUser; } Очевидно, что если в каждом методе делать такие проверки, то код бизнес-логики загрязняется проверками, что ухудшает читаемость кода.</description>
+    </item>
+    
+    <item>
+      <title>Использование memcached в качестве backend для Spring Caching Abstraction</title>
+      <link>https://uthark.github.io/2013/06/19/spring-caching/</link>
+      <pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2013/06/19/spring-caching/</guid>
+      <description>В Spring 3.1 появился замечательный модуль - Spring Cache, который является абстракцией над кэшированием, что позволяет декларативно реализовывать кэширование в приложении.
+Я не буду вдаваться в подробности работы, их можно прочитать в документации, но опишу, каким образом можно настроить memcached в качестве бэкэнда для работы.
+Подключение зависимостей &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;com.google.code.simple-spring-memcached&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spymemcached-provider&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;3.1.0&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;com.google.code.simple-spring-memcached&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-cache&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;3.1.0&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; spymemcached-provider - это библиотечка для работы с memcached из Java, а spring-cache - модуль интеграции со Spring.</description>
+    </item>
+    
+    <item>
+      <title>Пишем валидатор для Bean Validation API</title>
+      <link>https://uthark.github.io/2013/06/19/custom-bean-validator/</link>
+      <pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2013/06/19/custom-bean-validator/</guid>
+      <description>JSR-303 предоставляет удобный API для проверки валидности объектов, а также входных параметров. Очевидно, что стандартных валидаторов в какой-то момент может быть недостаточно, поэтому необходимо писать собственный.
+Хочу показать на примере валидации запроса к MongoDB, как легко это делается.
+Создание аннотации @Target({FIELD, PARAMETER}) @Retention(RUNTIME) @Documented @Constraint(validatedBy = {MongoQueryValidator.class}) public @interface MongoQuery { String message() default &amp;#34;Invalid mongo query&amp;#34;; Class&amp;lt;?&amp;gt;[] groups() default {}; Class&amp;lt;? extends Payload&amp;gt;[] payload() default {}; } Обратите внимание на аннотацию @Constraint - она описывает, какой класс будет проводить реальную валидацию.</description>
+    </item>
+    
+    <item>
+      <title>Автоматизируем работу с виртуальными машинами с помощью Vagrant</title>
+      <link>https://uthark.github.io/2012/10/24/vagrant/</link>
+      <pubDate>Wed, 24 Oct 2012 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2012/10/24/vagrant/</guid>
+      <description>Современные enterprise проекты очень часто имеют очень сложную инфраструктуру для развёртывания. Кроме того, во время разработки часто используются виртуальные машины. Например, может использоваться несколько виртуальных машин, на которых развёрнуты различные конфигурации софта.
+Vagrant - это средство для управления виртуальными машинами на базе Virtualbox.
+Возможности  Создание виртуальных машин с определённой, заранее заданной, конфигурацией. Лёгкое создание копии виртуальной машины, используя заранее подготовленный образ. Осуществление provisioning для новых виртуальных машин.  Работа с Vagrant Для начала необходимо установить Virtualbox и Vagrant.</description>
+    </item>
+    
+    <item>
+      <title>Собственная реализация методов в Spring Data JPA</title>
+      <link>https://uthark.github.io/2012/04/28/spring-data-jpa_28/</link>
+      <pubDate>Sat, 28 Apr 2012 15:03:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2012/04/28/spring-data-jpa_28/</guid>
+      <description>Очевидно, что мы не всегда можем воспользоваться автоматической генерацией кода, предоставляемой Spring Data JPA. Например, у нас слишком сложный запрос, или нам необходимо вызвать процедуру в базе данных, либо у нас сложная бизнес-логика.
+Рассмотрим следующий пример - например, нам нужна функциональность уникального счётчика, который мы решили реализовать с помощью последовательности (sequence).
+Сначала определим интерфейс, в котором опишем все методы, которые мы будем реализовывать самостоятельно. В нашем случае, это будет только один метод:</description>
+    </item>
+    
+    <item>
+      <title>Ищем с помощью Spring Data JPA</title>
+      <link>https://uthark.github.io/2012/04/24/spring-data-jpa/</link>
+      <pubDate>Tue, 24 Apr 2012 14:04:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2012/04/24/spring-data-jpa/</guid>
+      <description>Рассмотрим подробнее одну из наиболее полезных вещей в Spring Data JPA - генерация JPQL-запросов на основе имени метода.
+Spring Data JPA умеет автоматически генерировать запросы используя для подсказки название метода.
+Например, метод User.findByLoginAndPassword сгенерирует примерно следующий код:
+FROM User u where u.login = :login and password = :password Вообще Spring Data JPA пытается быть умным, поэтому реализация findBy{&amp;hellip;} методов ищется следующим образом:
+ Сначала смотрится аннотация @Query на объявлении метода, если она есть, то используется.</description>
+    </item>
+    
+    <item>
+      <title>Использование BeanPostProcessor на примере журналирования</title>
+      <link>https://uthark.github.io/2012/04/20/beanpostprocessor/</link>
+      <pubDate>Fri, 20 Apr 2012 15:51:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2012/04/20/beanpostprocessor/</guid>
+      <description>Сегодня я хочу рассказать, как можно сделать инициализацию логгера в классе с использованием аннотаций и BeanPostProcessor
+Очень часто мы инициализируем логгер следующим образом:
+public class MyClass { private static final Logger LOG = LoggerFactory.getLogger(MyClass.class); } &amp;lt;/pre&amp;gt; Я покажу, как сделать, чтобы можно было писать вот так: ```java @Log private Logger LOG; &amp;lt;/pre&amp;gt; Первым делом нам нужно объявить аннотацию: ```java @Retention(RUNTIME) @Target(FIELD) @Documented public @interface Log { String category() default &amp;#34;&amp;#34;; } &amp;lt;/pre&amp;gt; А вторым делом, написать собственный &amp;lt;tt&amp;gt;BeanPostProcessor&amp;lt;/tt&amp;gt;, который бы устанавливал нам логгер: ```java import org.</description>
+    </item>
+    
+    <item>
+      <title>Преобразуем строку в дату</title>
+      <link>https://uthark.github.io/2012/04/20/blog-post/</link>
+      <pubDate>Fri, 20 Apr 2012 15:25:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2012/04/20/blog-post/</guid>
+      <description>Казалось бы, есть простейшая задача - преобразовать строковое представление даты в объект класса java.util.Date.
+Как оказалось, иногда использование DateFormat не помогает. В случае, если строка - это заголовок Date из письма, то нам нужно использовать javax.mail.internet.MailDateFormat для преобразования такой строки.
+String dateStr = ... Date parsedDate = new MailDateFormat().</description>
+    </item>
+    
+    <item>
+      <title>Упрощаем работу с JPA при помощи Spring Data JPA</title>
+      <link>https://uthark.github.io/2012/02/23/jpa-spring-data-jpa/</link>
+      <pubDate>Thu, 23 Feb 2012 02:17:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2012/02/23/jpa-spring-data-jpa/</guid>
+      <description>Введение Уже прошло несколько лет с тех пор, как появился JPA. Работа с EntityManager увлекательна, но разработчики пишут красивый API, а подробности работы с базой данных скрывают. При этом частая проблема - дублирование имплементации, когда из одного DAO в другой у нас плавно перекочёвывает один и тот же код, в лучшем случае этот код переносится в абстрактный базовый DAO. Spring Data коренным образом решает проблему - при его использовании остаётся только API на уровне интерфейсов, вся имплементация создаётся автоматически с использованием AOP.</description>
+    </item>
+    
+    <item>
+      <title>Разработка и тестирование Java REST веб-сервисов</title>
+      <link>https://uthark.github.io/2012/02/09/java-rest/</link>
+      <pubDate>Thu, 09 Feb 2012 01:05:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2012/02/09/java-rest/</guid>
+      <description>Введение Для разработки REST веб-сервисов Java предлагает JSR-311 - JAX-RS: The Java&amp;trade; API for RESTful Web Services Как это обычно бывает в мире Enterprise Java, существует несколько реализаций данной спецификации:  Jersey - это эталонная реализация спецификации от компании Sun Oracle Apache CXF JBoss RESTEasy  На примере последней реализации, я и расскажу, каким образом можно написать REST-сервис. Пишем REST-сервис import javax.ws.rs.*; import javax.ws.rs.core.MediaType; @Path(&amp;#34;/service/entity&amp;#34;) @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON}) public interface EntityRestService { @GET @Path(&amp;#34;/all&amp;#34;) EntityList listAll(); @GET @Path(&amp;#34;/{id}&amp;#34;) Entity findById(@PathParam(&amp;#34;id&amp;#34;) Integer id); } Создаём интерфейс, в котором расставляем JAX-RS аннотации.</description>
+    </item>
+    
+    <item>
+      <title>Немножко магии от AspectJ</title>
+      <link>https://uthark.github.io/2012/01/28/aspectj/</link>
+      <pubDate>Sat, 28 Jan 2012 02:43:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2012/01/28/aspectj/</guid>
+      <description>Наверно, вы уже сталкивались с таким понятием, как AOП - аспектно-ориентированное программирование.
+Обычно, про него вспоминают, когда говорят про декларативное использование транзакций, про проверку прав доступа, либо про реализацию журналирования.
+Но это не единственные области применения АОП.
+Я хочу показать ещё пару областей применения из реальных проектов:
+1. Модификация исходного кода для реализации дополнительных возможностей.
+2. Принудительная проверка контракта между модулями.
+Модификация исходного кода для реализации дополнительных возможностейПредположим, что у нас есть модуль в приложении, который предоставляет нужную нам функциональность.</description>
+    </item>
+    
+    <item>
+      <title>Немного о виртуальных методах в Java</title>
+      <link>https://uthark.github.io/2011/07/21/java/</link>
+      <pubDate>Thu, 21 Jul 2011 12:06:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2011/07/21/java/</guid>
+      <description>Сегодня я хочу рассмотреть некоторые особенности переопределения методов в Java. В java нельзя переопределить: поля класса конструкторы, инициализаторы класса статические методы статические поля 
+Подробнее об этом можно прочитать в Java Language Specification, §8.4.8
+Итак, в java все нестатические неприватные (то есть, protected, package и public) методы являются виртуальными. Ключевое слово final запрещает возможность дальнейшего переопределения метода в подклассах. Рассмотрим следующий пример:
+public class A { int i = 3; int getI() {return i;} } public class B extends A{ int i = 5; int getI() {return i;} } A a = new B(); System.</description>
+    </item>
+    
+    <item>
+      <title>Сокращаем ссылки на андроиде</title>
+      <link>https://uthark.github.io/2010/12/06/blog-post/</link>
+      <pubDate>Mon, 06 Dec 2010 23:11:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2010/12/06/blog-post/</guid>
+      <description>ВступлениеВстала передо мной задача - сокращать ссылки перед тем, как отправлять их в Twitter. Для решения этой задачи я решил использовать bit.ly, благо, их API внятный и простой. Программируем!Решение нарисовалось в виде следующего класса: import org.apache.http.HttpEntity; import org.apache.http.HttpResponse; import org.apache.http.NameValuePair; import org.apache.http.client.ClientProtocolException; import org.apache.http.client.methods.HttpGet; import org.apache.http.client.utils.URIUtils; import org.apache.http.client.utils.URLEncodedUtils; import org.apache.http.impl.client.DefaultHttpClient; import org.apache.http.message.BasicNameValuePair; import org.apache.http.util.EntityUtils; import org.json.JSONException; import org.json.JSONObject; import android.util.Log; import java.io.IOException; import java.net.URI; import java.net.URISyntaxException; import java.util.ArrayList; import java.util.List; /** * Helper class to work with bitly.</description>
+    </item>
+    
+    <item>
+      <title>Удаление различных диакритических символов из строки</title>
+      <link>https://uthark.github.io/2010/05/22/blog-post/</link>
+      <pubDate>Sat, 22 May 2010 00:52:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2010/05/22/blog-post/</guid>
+      <description>Возникла проблема - каким образом заменить в строке символы из национальных кодировок на соответствующие им из латиницы.
+Например, из строки explicación получить explicacion.
+package com.blogspot.atamanenko; import java.text.Normalizer; import java.text.Normalizer.Form; public class StringNormalizer { public static String normalize(String string) { return Normalizer.normalize(string, Form.NFD) .replaceAll(&amp;#34;\\p{InCombiningDiacriticalMarks}+&amp;#34;, &amp;#34;&amp;#34;); } } Вызов Normalizer.normalize проводит нормализацию входной строки. Последующий вызов регулярного выражения удаляет все диакритические знаки, полученные после нормализации.</description>
+    </item>
+    
+    <item>
+      <title>Создание больших объёмов тестовых данных с помощью Databene Benerator</title>
+      <link>https://uthark.github.io/2010/05/22/databene-benerator/</link>
+      <pubDate>Sat, 22 May 2010 00:26:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2010/05/22/databene-benerator/</guid>
+      <description>Периодически необходимо решать задачу создания больших ( и не очень) объёмов тестовых данных для проведения различных видов тестирования - функционального, нагрузочного (тестирование стабильности и производительности). При этом часто получается так, что система на тестовых данных ведёт себя совсем иначе, чем на реальных данных. Причина кроется в том, что создать правдоподобные тестовые данные всегда достаточно сложно.
+Изучая данный вопрос я наткнулся на замечательный фреймворк - Databene Benerator, основной целью создания которого как раз и является создание правдоподобных тестовых данных для проведения различных видов тестирования.</description>
+    </item>
+    
+    <item>
+      <title>Несколько слов о GORM</title>
+      <link>https://uthark.github.io/2010/04/11/gorm/</link>
+      <pubDate>Sun, 11 Apr 2010 11:45:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2010/04/11/gorm/</guid>
+      <description>В данной заметке хочу поделиться некоторыми моментами использования GORM.
+GORM - это ORM-фреймворк, используемый в Grails. Реализован он поверх Hibernate, но, при этом, с некоторыми отличными умолчаниями.
+Для разработчиков, знающих Hibernate, рекомендую тщательно изучить GORM, так как его поведение в некоторых случаях отлично от Hibernate, что может приводить к различным сюрпризам.
+ Маппинг один-ко-многим По умолчанию GORM для связей один ко многим (one-to-many) создаёт таблицу-связку, которая обычно нужна только при связях между сущностями вида многие ко многим.</description>
+    </item>
+    
+    <item>
+      <title>Общение со Skype через D-Bus на Python</title>
+      <link>https://uthark.github.io/2010/03/22/skype-d-bus-python/</link>
+      <pubDate>Mon, 22 Mar 2010 23:50:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2010/03/22/skype-d-bus-python/</guid>
+      <description>Summary: в данной заметке описывается работа с программой Skype через D-Bus на Python.
+Введение Захотелось мне странного - когда я ухожу домой, мне нужно выключить amarok, kopete и Skype. Собственно, решено было через D-Bus отправлять вышеперечисленным приложениям релевантные сообщения.
+Используем dbus-send Сначала я использовал обычный dbus-send, что оформилось в виде следующего скрипта go2home:
+#!/bin/sh  # Stop amarok dbus-send --session --type=method_call --dest=org.kde.amarok /Player org.freedesktop.MediaPlayer.Stop # Logout from kopete dbus-send --session --type=method_call --dest=org.</description>
+    </item>
+    
+    <item>
+      <title>Разработка макроса для TiddlyWiki</title>
+      <link>https://uthark.github.io/2010/03/21/tiddlywiki/</link>
+      <pubDate>Sun, 21 Mar 2010 20:54:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2010/03/21/tiddlywiki/</guid>
+      <description>Summary: Пример разработки плагина для TiddlyWiki
+Вступление TiddlyWiki - это вики-движок, полностью написанный на JavaScript и хранящийся в одном файле (как сам движок, так и содержимое). Создатели позиционируют его как &amp;quot;переиспользуемую нелинейную персональную веб записную книжку&amp;quot;.
+Я давно использую TiddlyWiki в различных целях:
+По прямому назначению. Как систему GTD. Как домашнюю страницу на компьютере.  Моя домашняя страница на компьютере - это, если говорить терминами TiddlyWiki, тиддлер, содержащий ссылки на страницы, которые я часто посещаю.</description>
+    </item>
+    
+    <item>
+      <title>Борьба с убийцами производительности</title>
+      <link>https://uthark.github.io/2010/03/16/blog-post/</link>
+      <pubDate>Tue, 16 Mar 2010 21:52:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2010/03/16/blog-post/</guid>
+      <description>Summary: Мой опыт борьбы с &amp;quot;убийцами производительности&amp;quot;.
+Постановка проблемы  Иногда бывает так, что хочется отвлечься от работы, от поставленной задачи на какую-нибудь фигню, лишь бы не заниматься текущей задачей. У меня это чаще всего сводилось к тому, что я начинал читать что-нибудь в сети (Google Reader, Habrahabr, LOR, etc). Истоки проблемы могут быть абсолютно разными, например: Долгий запуск среды разработки  Долгая сборка проекта Нудная задача Неинтересная задача  Все эти причины спокойно могут приводить к потере производительности, причём неявным образом, например - &amp;quot;А посижу пока я на хабре, пока полная сборка идёт&amp;quot;, в итоге после 20 минут обнаруживается, что сборка закончилась уже 15 минут назад.</description>
+    </item>
+    
+    <item>
+      <title>Список для проверки при оптимизации Grails приложений</title>
+      <link>https://uthark.github.io/2010/02/06/grails/</link>
+      <pubDate>Sat, 06 Feb 2010 23:31:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2010/02/06/grails/</guid>
+      <description>Выкладываю ниже список задач, которые нужно/можно выполнить для оптимизации приложения, написанного на Grails, может кому пригодится.
+Тестирование проведённых оптимизаций Первым делом необходимо разработать критерии проверки, которые позволят оценить эффективность проведённых оптимизаций.
+Установить Java Melody плагин для Grails для проведения анализа.  Разработать скрипты для проведения нагрузочного тестирования.
+ Прогнать скрипты.
+ Проанализировать результаты Java Melody, выявить узкие места, произвести нужные оптимизации. Общие оптимизации Очень часто обновление до последней версии используемых библиотек попутно улучшает производительность.</description>
+    </item>
+    
+    <item>
+      <title>Вложенные транзакции в базах данных</title>
+      <link>https://uthark.github.io/2010/02/05/blog-post/</link>
+      <pubDate>Fri, 05 Feb 2010 01:20:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2010/02/05/blog-post/</guid>
+      <description>Summary: Некоторые особенности вложенных транзакций.
+Иногда бывает так, что при обработке запроса необходимо открыть ещё одну транзакцию в рамках текущей транзакции. Это называется вложенной транзакцией. Очень многие базы данных не поддерживают вложенные транзакции вообще, например, MySQL и Oracle. А те, что поддерживают, делают это на минимальном уровне, например, Sybase поддерживает только псевдовложенные транзакции.
+Вложенные транзакции могут быть следующих видов:
+Псевдо-вложенные транзакции Вложенная субтранзакция Вложенная независимая транзакция 
+Псевдовложенные транзакции
+Этот тип транзакций поддерживается базой данных Sybase.</description>
+    </item>
+    
+    <item>
+      <title>Настройка autofs для монтирования NFS-ресурсов</title>
+      <link>https://uthark.github.io/2009/12/14/autofs-nfs/</link>
+      <pubDate>Mon, 14 Dec 2009 23:14:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/12/14/autofs-nfs/</guid>
+      <description>Summary: В данной заметке описана настройка autofs для доступа к сетевым ресурсам, доступным по NFS.
+Последние несколько лет (с тех пор, как количество компьютеров дома стало больше одного) возникла проблема беспрепятственного доступа к данным, хранящимся на одном компьютере с другого.
+Было найдено самое простое решение - NFS.
+Как выяснилось позже это было не самое удачное решение - ноутбук не всегда находился дома, а, значит, домашние сетевые ресурсы не всегда доступны. Соответственно, при загрузке операционной системы происходили задержки из-за поиска компьютера с сетевыми ресурсами.</description>
+    </item>
+    
+    <item>
+      <title>Расширение для работы с Delicious доступно на сайте расширений Google Chrome</title>
+      <link>https://uthark.github.io/2009/12/08/delicious-google-chrome/</link>
+      <pubDate>Tue, 08 Dec 2009 23:43:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/12/08/delicious-google-chrome/</guid>
+      <description>Итак, расширение для работы с Delicious доступно на сайте расширений Google Chrome.
+Посмотреть и установить
+Новые версии расширения буду закачить на этот сайт. </description>
+    </item>
+    
+    <item>
+      <title>Использование Dropbox для хранения конфигурационных файлов</title>
+      <link>https://uthark.github.io/2009/12/08/dropbox/</link>
+      <pubDate>Tue, 08 Dec 2009 23:17:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/12/08/dropbox/</guid>
+      <description>Есть такой замечательный сервис - Dropbox. Этот сервис является онлайн-хранилищем ваших данных. Работает очень просто:
+1. Вы регистрируетесь в сервисе.
+2. Устанавливаете клиент
+3. Пользуетесь.
+Недавно я понял, что этот сервис можно легко и непринуждённо использовать не только для хранения различных документов и фотографий, а также и конфигурационных файлов приложений, что существенно упрощает жизнь, когда у вас несколько рабочих машин (например, у меня домашний компьютер, ноутбук, а также ещё и рабочий) - необходимо каким-то образом синхронизовать конфиги при изменении их на одной из машине с другими.</description>
+    </item>
+    
+    <item>
+      <title>Дайджест ссылок в RSS-ленте</title>
+      <link>https://uthark.github.io/2009/12/07/rss_07/</link>
+      <pubDate>Mon, 07 Dec 2009 19:25:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/12/07/rss_07/</guid>
+      <description>Решил убрать дайджест ссылок из RSS-ленты.
+Те, кому это нужно могут сделать следующее:
+1. Добавить в свой RSS-аггрегатор ленту http://feeds.delicious.com/v2/rss/dark.schakal?count=15
+2. Если вы используете сервис Delicious, то можете меня добавить меня в свою сеть по ссылке: http://delicious.com/settings/networkadd?networkadd=dark.schakal </description>
+    </item>
+    
+    <item>
+      <title>RSS лента блога и дайджест ссылок за предыдущий день</title>
+      <link>https://uthark.github.io/2009/12/06/rss/</link>
+      <pubDate>Sun, 06 Dec 2009 01:32:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/12/06/rss/</guid>
+      <description>Как вы уже могли заметить, RSS теперь содержит дайджест интересных мне ссылок, которые я нашёл в сети за последнее время.
+Отпишитесь в комментариях стоит ли это оставить, или убрать дайджест ссылок из ленты?</description>
+    </item>
+    
+    <item>
+      <title>RabbitVCS - расширение для Nautilus для работы с Subversion</title>
+      <link>https://uthark.github.io/2009/12/06/nautilus-subversion/</link>
+      <pubDate>Sun, 06 Dec 2009 01:03:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/12/06/nautilus-subversion/</guid>
+      <description>Раньше я использовал коллекцию скриптов nautilussvn, весьма неудобную в использовании.
+Бродя по просторам сети наткнулся на отличную замену. Встречайте - RabbitVCS.
+ВозможностиИнтеграция с Nautilus Поддержка Subversion Полная локализация Поддержка командной строки Доступны пакеты для различных дистрибутивов Установка
+Для Ubuntu Hardy, Intepid, Jaunty
+deb http://ppa.launchpad.net/rabbitvcs/ppa/ubuntu hardy main 
+Для Ubuntu Karmic
+sudo add-apt-repository ppa:rabbitvcs/ppa 
+Установка для других дистрибутивов описана на официальном сайте.
+РаботаНесмотря на очень маленький номер версии работает достаточно стабильно, не падает.</description>
+    </item>
+    
+    <item>
+      <title>Расширение Delicious Plugin идёт в массы</title>
+      <link>https://uthark.github.io/2009/11/25/delicious-plugin/</link>
+      <pubDate>Wed, 25 Nov 2009 23:16:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/11/25/delicious-plugin/</guid>
+      <description>Google запустил сайт Chrome Extensions.
+В данный момент сайт доступен только разработчикам расширений. Залил расширение, написал кратенькое описание. Жду запуска сайта. :)
+А пока сайт закрыт для рядовых пользователей последнюю версию можно скачать тут.
+P.S. А тем временем работа над расширением продолжается.
+P.P.S. У расширения появилась своя страничка в сети: Project Home Page </description>
+    </item>
+    
+    <item>
+      <title>Создание страницы настроек для расширений Google Chrome</title>
+      <link>https://uthark.github.io/2009/11/24/google-chrome/</link>
+      <pubDate>Tue, 24 Nov 2009 23:09:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/11/24/google-chrome/</guid>
+      <description>В продолжение предыдущей заметки
+Логично предположить, что у расширений могут быть настройки. В Google Chrome/Chromium для этого есть специальный API.
+Для того, чтобы создать собственную страницу настроек необходимо сделать следующее:
+1. Объявить в манифесте страницу настроек
+{ &#34;name&#34;: &#34;Delicious plugin&#34;, &#34;version&#34;: &#34;0.2&#34;, &#34;background_page&#34;: &#34;background.html&#34;, &#34;options_page&#34;: &#34;options.html&#34; } 
+2. Реализовать страницу с настройками.
+Страница с настройками - это обычная HTML-страничка. Для доступа к настройкам Google Chrome предоставляет объект localStorage, который умеет сохранять и возвращать значения.</description>
+    </item>
+    
+    <item>
+      <title>Расширение Delicious Bookmarks для Google Chrome/Chromium</title>
+      <link>https://uthark.github.io/2009/11/14/delicious-bookmarks-google/</link>
+      <pubDate>Sat, 14 Nov 2009 22:34:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/11/14/delicious-bookmarks-google/</guid>
+      <description>Введение
+Решил научиться писать собственные расширения для Google Chrome/Chromium.
+За идею взял официальное расширение от Yahoo! для Firefox - Delicious Bookmarks.
+Структура расширения
+Расширение - файл с расширением .crx. На самом деле это просто ZIP-архив с файлом манифеста внутри.
+Файл манифеста{ &amp;ldquo;name&amp;rdquo;: &amp;ldquo;Delicious plugin&amp;rdquo;, // 1 &amp;ldquo;version&amp;rdquo;: &amp;ldquo;0.2&amp;rdquo;, // 2 &amp;ldquo;background_page&amp;rdquo;: &amp;ldquo;background.html&amp;rdquo;, // 3 &amp;ldquo;permissions&amp;rdquo;: [ // 4 &amp;ldquo;bookmarks&amp;rdquo;, &amp;ldquo;tabs&amp;rdquo; ],
+&amp;ldquo;browser_action&amp;rdquo;: { // 5 &amp;ldquo;name&amp;rdquo;: &amp;ldquo;Save bookmark to delicious.com&amp;rdquo;, &amp;ldquo;default_title&amp;rdquo;: &amp;ldquo;Save bookmark to delicious.</description>
+    </item>
+    
+    <item>
+      <title>Инвайты на Google Wave</title>
+      <link>https://uthark.github.io/2009/11/02/google-wave/</link>
+      <pubDate>Mon, 02 Nov 2009 23:26:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/11/02/google-wave/</guid>
+      <description>Кому нужны инвайты на Google Wave, отписываемся в комментариях - поделюсь.
+UPD. Инвайты закончились, всем спасибо.</description>
+    </item>
+    
+    <item>
+      <title>Двунаправленная ссылочная целостность</title>
+      <link>https://uthark.github.io/2009/07/07/blog-post/</link>
+      <pubDate>Tue, 07 Jul 2009 22:11:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/07/07/blog-post/</guid>
+      <description>Здравствуйте.
+Я считаю, что разработчику всегда стоит иметь представление о том, как работают низлежащие абстракции. Хотя бы потому, что часто абстракции бывают протекающими.
+А веду я это к тому, что когда фреймворк вываливает стектрейс с несколькими вложенными (и, часто, для непосвященных непонятными) исключениями, то бывает непонятно, что с этим делать, особенно, если не знаешь, как реализована абстракция.
+Иногда бывает нужно хранить двунаправленные связи между таблицами. Например, есть игрок и есть его статистика и нужно, чтобы каждая из сущностей знала про другую.</description>
+    </item>
+    
+    <item>
+      <title>Opera и del.icio.us</title>
+      <link>https://uthark.github.io/2009/07/04/opera-delicious/</link>
+      <pubDate>Sat, 04 Jul 2009 01:13:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/07/04/opera-delicious/</guid>
+      <description>Так получилось, что в последнее время я стал пользоваться небезызвестной оперой.
+В связи с этим я стал искать замену часто используемым расширениям, одно из них - delicious bookmarks. Сервис del.icio.us предоставляет букмарклеты для различных браузеров, которые позволяют сохранять закладки быстро и удобно. Вот только есть один недостаток - официальный плагин для Firefox в свойство Notes новой закладки добавляет выделенный текст со страницы, чего букмарклет не делает.
+Посмотрев исходник букмарклета, а это обычный javascript, я добавил небольшой кусочек кода, который восстанавливает справедливость и тоже добавляет в поле Notes текст, выделенный на странице.</description>
+    </item>
+    
+    <item>
+      <title>Spring Roo (часть 2)</title>
+      <link>https://uthark.github.io/2009/06/06/spring-roo-2/</link>
+      <pubDate>Sat, 06 Jun 2009 22:19:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/06/06/spring-roo-2/</guid>
+      <description>Архитектура сгенерированного приложения Spring Roo активно использует аспекты. В качестве реализации аспектов была взята библиотека aspectj. Большая часть сгенерированного кода попадает в отдельные файлы-аспекты. Создадим простой класс:
+new persistent class jpa -name ~.domain.Action -testAutomatically add field string name -notNull -sizeMin 1 -sizeMax 80 add field string description -sizeMax 1024 Spring Roo создаст нам следующие файлы:
+ Action.java Класс содержит только полезную с точки зрения назначения класса информацию. По сути, то, что вводит разработчик в консоль Roo аккумулируется здесь.</description>
+    </item>
+    
+    <item>
+      <title>Введение в Spring Roo</title>
+      <link>https://uthark.github.io/2009/06/03/spring-roo/</link>
+      <pubDate>Wed, 03 Jun 2009 00:06:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/06/03/spring-roo/</guid>
+      <description>Недавно компания Spring Source презентовала новый продукт - Spring Roo. Цель проекта - повысить продуктивность Java-разработчиков. Почитав обзоры, а также потрогав его руками можно сделать вывод о том, что это, в некотором виде, альтернатива AppFuse и Grails.
+Описание Spring Roo100% программирование на Java, предлагающее разработчикам известную, развитую и популярную платформу разработки.Прозрачные, надёжные и продуктивные сервисы среды разработки, такие как помощник кода, отладчики, визуальные отчёты об ошибка и т.д.Экстремально эффективная производительность во время выполнения, безопасность типов и отсутствие зависимостей на Roo во время выполнения.</description>
+    </item>
+    
+    <item>
+      <title>Apache Ant и Metro</title>
+      <link>https://uthark.github.io/2009/06/02/apache-ant-metro/</link>
+      <pubDate>Tue, 02 Jun 2009 23:31:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/06/02/apache-ant-metro/</guid>
+      <description>Столкнулся с такой проблемой - в некоторых случаях приложение, собранное антом не работает. Конкретно - не работает десереализация запросов на веб-сервис. Получаемый запрос содержит null в значениях полей.
+Опытным путём было выяснено, что на это влияет используемая версия Java. Под 1.5 работает корректно, под 1.6 - не работает. Нашли ошибку в метро, связанную именно с версией JDK и на этом успокоились. Но было одно исключение из правил. У одного из разработчиков под 1.</description>
+    </item>
+    
+    <item>
+      <title>Использование модификатора protected на полях в базовом классе</title>
+      <link>https://uthark.github.io/2009/05/30/protected/</link>
+      <pubDate>Sat, 30 May 2009 23:45:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/05/30/protected/</guid>
+      <description>Недавно задали мне вопрос - что я думаю об использовании модификатора protected для членов базового класса? Под этим вопросом кроются более серьёзные вещи.
+Например, любой член класса, имеющий модификатор protected, расширяет интерфейс базового класса для подклассов - подклассы имеют доступ ко всем protected и public методам этого поля. Иногда это сделано специально, например, для того, чтобы подклассы могли иметь доступ к какой-либо функциональности. Однако, если подкласс будет использовать protected поля неправильно (например, он может установить его в null, нарушив, таким образом, поведение базового класса), то это не принесёт пользы.</description>
+    </item>
+    
+    <item>
+      <title>Сферический программист в вакууме и абстрактное понятие качества кода в условиях Fixed-Price проектов (часть 2)</title>
+      <link>https://uthark.github.io/2009/05/27/fixed-price-2/</link>
+      <pubDate>Wed, 27 May 2009 01:26:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/05/27/fixed-price-2/</guid>
+      <description>Причин для написания плохого кода может быть несколько. Некоторые из них лежат на поверхности:
+ Отсутствие опытаНевнимательность Некомпетентность Немотивированность Отсутствие опыта - казалось бы, самая простая причина проблемы; решение проблемы выглядит очевидным - со временем, разработчик будет писать код лучше. Но это ошибочное мнение. Бывает, люди с опытом более 5-10 лет разработки коммерческих приложений пишут настолько плохой код, что иногда кажется, что они это нарочно. Решать эту проблему необходимо постоянным указанием на ошибки.</description>
+    </item>
+    
+    <item>
+      <title>Сферический программист в вакууме и абстрактное понятие качества кода в условиях Fixed-Price проектов (часть 1)</title>
+      <link>https://uthark.github.io/2009/05/27/fixed-price-1/</link>
+      <pubDate>Wed, 27 May 2009 00:36:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/05/27/fixed-price-1/</guid>
+      <description>В последнее время всё чаще задумываюсь о том, почему разработчики пишут плохой и некачественный код. Под кодом я подразумеваю не только сам код, но и, в том числе, архитектуру и дизайн.
+Плохим кодом я считаю следущий: Невыполняющий функциональные требованияНевыполняющий нефункциональные требованияНепокрытый тестамиПлохо тестируемыйПлохо поддерживаемыйС багамиНеоптимальныйЕсли код не выполняет функциональные требования, то этот код вообще ничего не стоит. Заказчику такой код не нужен, именно поэтому этот код плохой. На него были потрачены ресурсы, но при этом сам код не имеет никакой ценности.</description>
+    </item>
+    
+    <item>
+      <title>Google Application Engine</title>
+      <link>https://uthark.github.io/2009/05/23/google-application-engine/</link>
+      <pubDate>Sat, 23 May 2009 23:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/05/23/google-application-engine/</guid>
+      <description>Посмотрел на Google App Engine (GAE).
+При своей цене (= бесплатно) это очень хороший сервис.
+GAE - это инфраструктура для запуска веб-приложений на серверах Google. То, что сейчас модно называть cloud computing.
+На презентации платформы в 2008 году Google объявил только о поддержке Python. Год спустя, в апреле 2009 года Google заявил о поддержке Java, правда с ограничениями. Собственно, поддержка Java и была тем самым толчком, что я решил поближе посмотреть на платформу.</description>
+    </item>
+    
+    <item>
+      <title>Eclipse и его расширения</title>
+      <link>https://uthark.github.io/2009/05/03/eclipse/</link>
+      <pubDate>Sun, 03 May 2009 00:18:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/05/03/eclipse/</guid>
+      <description>Многие ругают Eclipse за то, что там нет многого из того, что есть в коробке у Jetbrains Intellij IDEA. Мне всегда казалось это не очень корректным, так как Eclipse в первую очередь платформа, а уже потом - среда для Java разработки.
+Решил собрать воедино весь список используемых мною расширений для Eclipse.
+Subclipse - без этого никуда. Это расширение позволяет работать с системой контроля версий Subversion не выходя из Eclipse. m2eclipse - Расширение для работы с maven.</description>
+    </item>
+    
+    <item>
+      <title>Критерии выбора блокировок</title>
+      <link>https://uthark.github.io/2009/04/26/blog-post_26/</link>
+      <pubDate>Sun, 26 Apr 2009 15:30:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/04/26/blog-post_26/</guid>
+      <description>Так как использование блокировок по-разному влияет на производительность, необходимо выбирать, в каких случаях какой вид блокировок лучше использовать.
+.nobr br { display: none } 
+ Условие Пессимистичная Оптимистичная Сверх-оптимистичная   Конфликты часты  +  −  −    Конфликты редки  −  +  −    Данные только добавляются (например, журнал)  −  −  +    Данные только читаются (справочники) − − +  Критерии выбора блокировок</description>
+    </item>
+    
+    <item>
+      <title>Традиции академгородка</title>
+      <link>https://uthark.github.io/2009/04/25/blog-post_25/</link>
+      <pubDate>Sat, 25 Apr 2009 00:19:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/04/25/blog-post_25/</guid>
+      <description>Сегодня была оказана помощь лягушкам, которых инстинкт гонит в озеро для размножения. Прогулка с ведром и фонарём, булькание лягушек в озере и их кваканье в ведре прохладным весенним вечером - это прекрасно.</description>
+    </item>
+    
+    <item>
+      <title>Транзакции в реляционных базах данных</title>
+      <link>https://uthark.github.io/2009/04/24/blog-post_24/</link>
+      <pubDate>Fri, 24 Apr 2009 21:49:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/04/24/blog-post_24/</guid>
+      <description>При работе в многопользовательском окружении может возникнуть ситуация, когда разные пользователи или системы обновляют одни и те же данные. Это может привести к ситуации, когда один из пользователей изменит данные, которые уже изменял другой пользователь и приведёт либо к потере данных, либо к переводу данных в неконсистентное состояние. Для решения этой проблемы были придуманы транзакции. Целью транзакции является создание абстракции того, что каждый пользователь - единственный в системе.
+Характеристики транзакций В конце 1970-х Джим Грей выделил следующие характеристики транзакций:</description>
+    </item>
+    
+    <item>
+      <title>Кратко о блокировках в БД</title>
+      <link>https://uthark.github.io/2009/04/22/blog-post_22/</link>
+      <pubDate>Wed, 22 Apr 2009 23:58:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/04/22/blog-post_22/</guid>
+      <description>Блокировка - в реляционных базах данных это установка метки на запись, что запись заблокирована для изменений.
+Существует два вида блокировок - оптимистичная и пессимистичная.
+Оптимистичная блокировка При оптимистичной блокировке на базе данных реальной блокировки не происходит. Вместо этого используется следующий подход - если во время выполнения транзакции она изменяет данные, которые были изменены после её начала, то транзакция прерывается с исключением. Использование оптимистичных блокировок позволяет избежать взаимных блокировок (dead-lock). Для реализации оптимистичной блокировки часто используется версионирование данных - в таблицу добавляется колонка, которая хранит текущую версию.</description>
+    </item>
+    
+    <item>
+      <title>Практический опыт использования фолксономии в условиях неограниченной свободы расстановки меток  (часть 2)</title>
+      <link>https://uthark.github.io/2009/04/22/2/</link>
+      <pubDate>Wed, 22 Apr 2009 00:14:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/04/22/2/</guid>
+      <description>В продолжение предыдущей заметки.
+Для работы с del.icio.us я использую официальный плагин от Yahoo!.
+Он предоставляет следующие возможности:
+ Синхронизация закладок из Firefox с del.icio.us Переопределение стандартного менеджера закладок. Отслеживание изменений на del.icio.us. Интерфейс для отображения и поиска закладок в панели браузера. Панель инструментов для работы с закладками.  Из всех вышеперечисленных возможностей раньше пользовался только вторым пунктом. Это очень удобно - выделяешь на странице кусок текста и клацаешь ctrl+b. Появляется окошечко с уже заполненной ссылкой, заголовком и описанием ссылки.</description>
+    </item>
+    
+    <item>
+      <title>Практический опыт использования фолксономии в условиях неограниченной свободы расстановки меток</title>
+      <link>https://uthark.github.io/2009/04/19/blog-post/</link>
+      <pubDate>Sun, 19 Apr 2009 12:48:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/04/19/blog-post/</guid>
+      <description>Уже более двух лет я использую del.icio.us.
+Недавно возник вопрос - а вот каким образом можно наиболее эффективно использовать теги? Для себя я придумал вот такой вариант использования - сделал tag bundle Actions, в который поместил теги, диктующие дальнейшие действия.
+Для себя я выделил следующие теги: 2rss - закладки с этим тегом я позже добавляю в свою RSS-читалку.
+2check - этим тегом я помечаю софт или библиотеки, которые хотелось бы изучить и попробовать на деле.</description>
+    </item>
+    
+    <item>
+      <title>Нау</title>
+      <link>https://uthark.github.io/2009/03/26/blog-post_26/</link>
+      <pubDate>Thu, 26 Mar 2009 23:14:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/03/26/blog-post_26/</guid>
+      <description>Очень сильно люблю тексты Ильи Кормильцева</description>
+    </item>
+    
+    <item>
+      <title>Александр Блок</title>
+      <link>https://uthark.github.io/2009/03/23/blog-post_23/</link>
+      <pubDate>Mon, 23 Mar 2009 11:14:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/03/23/blog-post_23/</guid>
+      <description>Ночь, улица, фонарь, аптека,
+Бессмысленный и тусклый свет.
+Живи еще хоть четверть века -
+Все будет так. Исхода нет.
+Умрешь - начнешь опять сначала
+И повторится все, как встарь:
+Ночь, ледяная рябь канала,
+Аптека, улица, фонарь.</description>
+    </item>
+    
+    <item>
+      <title>Кнут Гамсун</title>
+      <link>https://uthark.github.io/2009/03/20/blog-post_20/</link>
+      <pubDate>Fri, 20 Mar 2009 01:44:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/03/20/blog-post_20/</guid>
+      <description>Кнут Гамсун хорош. Очень понравился его &amp;ldquo;Голод&amp;rdquo;.</description>
+    </item>
+    
+    <item>
+      <title>identi.ca</title>
+      <link>https://uthark.github.io/2009/03/20/blog-post/</link>
+      <pubDate>Fri, 20 Mar 2009 01:02:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/03/20/blog-post/</guid>
+      <description>Завёл аккаунт на иденти.ке identi.ca</description>
+    </item>
+    
+    <item>
+      <title>Велосезон открыт</title>
+      <link>https://uthark.github.io/2009/01/17/blog-post/</link>
+      <pubDate>Sat, 17 Jan 2009 23:40:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/01/17/blog-post/</guid>
+      <description>Не дождался тепла и открыл велосезон в начале января. Прогулки на велосипеде по заснеженным тропкам - это незабываемый экстрим и повышение уровня адреналина в крови.</description>
+    </item>
+    
+    <item>
+      <title>OpenID</title>
+      <link>https://uthark.github.io/2009/01/06/openid/</link>
+      <pubDate>Tue, 06 Jan 2009 21:36:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/01/06/openid/</guid>
+      <description>Завёл себе отдельный OpenID аккаунт. Так что теперь буду везде пользоваться им вместо аккаунта с блоггера.
+Для любопытных: http://uthark.myopenid.com/</description>
+    </item>
+    
+    <item>
+      <title>Тренажёр для рук</title>
+      <link>https://uthark.github.io/2008/12/27/blog-post/</link>
+      <pubDate>Sat, 27 Dec 2008 22:15:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2008/12/27/blog-post/</guid>
+      <description>Купили сегодня вещицу под названием Powerball. После первого получаса тренировок уже получается раскрутить на 8500 оборотов в минуту.
+Приятная истома в сухожилиях после, немного трясущиеся руки и желание раскручивать снова и снова.
+Мне довольно.</description>
+    </item>
+    
+    <item>
+      <title>Таинственное пламя царицы Лоаны</title>
+      <link>https://uthark.github.io/2008/09/22/blog-post/</link>
+      <pubDate>Mon, 22 Sep 2008 10:19:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2008/09/22/blog-post/</guid>
+      <description>Новый роман Умберто прекрасен!</description>
+    </item>
+    
+    <item>
+      <title>Умберто Эко - полныЙ !назаД</title>
+      <link>https://uthark.github.io/2008/02/25/blog-post_9712/</link>
+      <pubDate>Mon, 25 Feb 2008 13:18:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2008/02/25/blog-post_9712/</guid>
+      <description>На злобу дня. Рекомендую всем к обязательному прочтению.
+Детали на озоне</description>
+    </item>
+    
+    <item>
+      <title>Работа пятницавечер</title>
+      <link>https://uthark.github.io/2008/02/25/blog-post_4049/</link>
+      <pubDate>Mon, 25 Feb 2008 13:10:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2008/02/25/blog-post_4049/</guid>
+      <description>В пятницу на работе был фан.
+С утра наши девочки отожгли - заставили преодолевать различные препятствия по пути до рабочего места - сначала ходьба на резиновых подстилках не заступая на пол, потом проползание сквозь мешок, прыжки на скакалке, перелезания через перекладину, ходьба по узкой дощечке и кидание мяча в корзину. Было весело.
+Вечером фан продолжился и были конкурсы. В одном из которых мне и вручили &amp;ldquo;оффигительный набор отверток&amp;rdquo; (с). А точнее - шестигранников.</description>
+    </item>
+    
+    <item>
+      <title>Собеседования</title>
+      <link>https://uthark.github.io/2008/02/25/blog-post_25/</link>
+      <pubDate>Mon, 25 Feb 2008 12:50:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2008/02/25/blog-post_25/</guid>
+      <description>Волею судеб я побывал на другой стороне баррикад во время собеседований. В целом - довольно забавно. Но на самом деле - это просто ужасно.
+Читаешь резюме кандидата. Вроде всё здорово - это знает, то знает, с вот этим работал, вот с тем сталкивался. Но на собеседовании - это полный амбец. Единственная мысль по поводу профпригодности большинства кандидатов: &amp;ldquo;Ну тупые!&amp;rdquo;
+Просто ужас. Люди, которые позиционируют себя не ниже чем Senior Java Developer не знают элементарных вещей&amp;hellip; Как наследуются конструкторы, что такое аннотации, Что в конструкции try/catch/finally блок catch может отсутствовать.</description>
+    </item>
+    
+    <item>
+      <title>Совок неистребим</title>
+      <link>https://uthark.github.io/2008/02/17/blog-post/</link>
+      <pubDate>Sun, 17 Feb 2008 23:14:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2008/02/17/blog-post/</guid>
+      <description>Нет, в этой стране совок точно неистребим никакими путями.
+Сегодня, в свой законный и чуть ли не единственный выходной поехал в клуб &amp;ldquo;Отдых&amp;rdquo;, за билетам на Diary of Dreams, которые в рамках своего тура решили почтить серый и унылый Новосибирск.
+Как оказалось, не всё так просто. Мало того, что касса, оказывается, не работает по выходным (чего я по простоте душевной даже и подумать не мог, потому и не позвонил заранее), так у них, как оказалось, билеты ещё даже и не поступили в продажу.</description>
+    </item>
+    
+    <item>
+      <title>Осень</title>
+      <link>https://uthark.github.io/2007/09/28/blog-post/</link>
+      <pubDate>Fri, 28 Sep 2007 19:29:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2007/09/28/blog-post/</guid>
+      <description>Люблю осень. Прекрасное время года.</description>
+    </item>
+    
+  </channel>
+</rss>

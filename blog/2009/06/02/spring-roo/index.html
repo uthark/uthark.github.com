@@ -1,0 +1,329 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Введение в Spring Roo - Блог о разработке ПО</title>
+  <meta name="author" content="Oleg Atamanenko">
+
+  
+  <meta name="description" content="Недавно компания Spring Source презентовала новый продукт - Spring Roo. Цель проекта - повысить продуктивность Java-разработчиков. Почитав обзоры, а &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://uthark.github.com/blog/2009/06/02/spring-roo/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feeds.feedburner.com/atamanenko" rel="alternate" title="Блог о разработке ПО" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=Roboto+Slab:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Roboto:300,700,900&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+<link rel="author" href="https://plus.google.com/112372998073079463630/?rel=author" />
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-8688665-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Блог о разработке ПО</a></h1>
+  
+    <h2>Cтруктурированные нерегулярные заметки о разработке программного обеспечения</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="http://feeds.feedburner.com/atamanenko" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:uthark.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Введение в Spring Roo</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-06-02T13:06:00-04:00" pubdate data-updated="true">Jun 2<span>nd</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><div class='post'>
+<a href="http://blog.springsource.com/2009/05/01/roo-part-1/">Недавно</a> компания <a href="http://springsource.com/">Spring Source</a> презентовала новый продукт - <a href="http://www.springsource.org/roo">Spring Roo</a>. <a href="http://jira.springframework.org/browse/ROO-1">Цель проекта</a> - повысить продуктивность Java-разработчиков. <a href="http://stsmedia.net/introducing-spring-roo/">Почитав</a> <a href="http://stsmedia.net/introducing-spring-roo-part-2-security-jms-email-support/">обзоры</a>, а также <a href="http://blog.springsource.com/2009/05/27/roo-part-2/">потрогав его руками</a> можно сделать вывод о том, что это, в некотором виде, альтернатива <a href="http://appfuse.org/">AppFuse</a> и <a href="http://grails.codehaus.org/">Grails</a>.
+
+<h2>Описание Spring Roo</h2><li>100% программирование на Java, предлагающее разработчикам известную, развитую и популярную платформу разработки.</li><li>Прозрачные, надёжные и продуктивные сервисы среды разработки, такие как помощник кода, отладчики, визуальные отчёты об ошибка и т.д.</li><li>Экстремально эффективная производительность во время выполнения, безопасность типов и отсутствие зависимостей на Roo во время выполнения.</li><li>Автоматическая архитектура с использование лучших практик Spring Framework 3
+</li><li>Структура проекта основана на <a href="http://maven.apache.org/">Maven2</a>.</li><li>Работа с БД основана на <a href="http://java.sun.com/javaee/technologies/entapps/persistence.jsp">JPA</a> (например, через <a href="http://www.hibernate.org/">Hibernate</a>), 100% совместимость с JPA и переносимость реализации.</li><li>Встроенная поддержка конфигурирования баз данных, с автоматической настройкой JDBC для большинства популярных баз данных.</li><li>Прозрачная поддержка внедрения зависимостей (dependency injection) и методов сохранения для всех сущностей, включая полученные через JPA.</li><li>Поддержка валидации бинов (<a href="http://jcp.org/en/jsr/detail?id=303">JSR 303</a>), включая распространение ограничений вплость до DDL базы данных.</li><li>Автоматические интеграционные тесты на <a href="http://junit.org">JUnit</a>, которые создаются на базе возможностей интеграционного тестирования Spring Framework.</li><li>Автоматическая поддержка REST на уровне бэкэнда.</li><li>Автоматизированные тесты для веб-слоя с использованием <a href="http://seleniumhq.org/">Selenium</a>.</li><li>Динамическое создание finder-методов на JPA QL для сущностей безо всякого кодирования.</li><li>Интеграция <a href="http://static.springsource.org/spring-security/site/">Spring Security</a>, включая безопасность адресов с установкой в одну строку (&#8220;install security&#8221;)
+</li><li>Поддеркжа <a href="http://www.springsource.org/webflow">Spring Web Flow</a> одной командой (&#8220;install web flow&#8221;)</li><li>Поддержка мгновенной отправки почтовых сообщение - даже через удалённые SMTP сервера, как GMail.</li><li>Встроенная поддержка конфигурирования <a href="http://logging.apache.org/log4j">log4j</a></li><li>Использование URL rewriting которое позволяет оставаться ссылкам чистыми и поддерживающими REST.
+</li><li>Лёгкое ручное создание веб-контроллеров</li><li>Поддержка полного цикла жизни приложения с сохранением высокой продуктивности.</li><li>Использование встроенного сервлет контейнера <a href="http://tomcat.apache.org">Tomcat</a>.</li><li>Полная интеграция с <a href="http://eclipse.org">Eclipse</a> и <a href="http://www.springsource.com/products/sts">SpringSource Tool Suite</a></li><li>Лёгкая в использовании, с поддержка автодополнения, подсказок и контекста командная строка</li><li>Поддержка автоматизации через скрипты</li></div>
+
+
+<h2>Comments</h2>
+
+
+<div class='comments'>
+<div class='comment'>
+<div class='author'>liosha</div>
+<div class='content'>
+Поддерживаю оба коммента.</div>
+</div>
+<div class='comment'>
+<div class='author'>VolchaRa</div>
+<div class='content'>
+чертов эклипс)) а как же нетбинс?</div>
+</div>
+<div class='comment'>
+<div class='author'>starodubtsevss</div>
+<div class='content'>
+кульно, надо попробовать заюзать однозначно</div>
+</div>
+</div>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Oleg Atamanenko</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-06-02T13:06:00-04:00" pubdate data-updated="true">Jun 2<span>nd</span>, 2009</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/spring-roo/'>spring roo</a>, <a class='category' href='/blog/categories/razrabotka/'>разработка</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://uthark.github.com/blog/2009/06/02/spring-roo/" data-via="" data-counturl="http://uthark.github.com/blog/2009/06/02/spring-roo/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2009/06/02/apache-ant-metro/" title="Previous Post: Apache Ant и Metro">&laquo; Apache Ant и Metro</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2009/06/06/spring-roo-2/" title="Next Post: Spring Roo (часть 2)">Spring Roo (часть 2) &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/06/29/spring-enable-annotation/">Пишем @Enable*-аннотацию для Spring</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/28/jaxrs-spring-autowiring/">@Autowired JAX-RS Client API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/28/jaxrs/">JAX-RS Client API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/19/autowiring-factorybean/">@Autowiring EJBs with Spring</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/19/spring-caching/">Использование memcached в качестве backend для Spring Caching Abstraction</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/uthark">@uthark</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'uthark',
+            count: 3,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+<section class="googleplus googleplus-hidden">
+  <h1>
+    <a href="https://plus.google.com/112372998073079463630?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+<section>
+  <h1>Stack Overflow</h1>
+  <a href="http://stackoverflow.com/users/216764/uthark" style="text-decoration:none">
+  <img src="http://stackoverflow.com/users/flair/216764.png" width="208" height="58" alt="profile for uthark at Stack Overflow, Q&amp;A for professional and enthusiast programmers" title="profile for uthark at Stack Overflow, Q&amp;A for professional and enthusiast programmers">
+  </a>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Oleg Atamanenko -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

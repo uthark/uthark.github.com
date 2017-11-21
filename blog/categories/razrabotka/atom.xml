@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: разработка | Software Development and related activities]]></title>
-  <link href="http://uthark.github.io/blog/categories/razrabotka/atom.xml" rel="self"/>
-  <link href="http://uthark.github.io/"/>
-  <updated>2017-10-12T19:01:44-04:00</updated>
-  <id>http://uthark.github.io/</id>
+  <title><![CDATA[Category: разработка | Блог о разработке ПО]]></title>
+  <link href="http://uthark.github.com/blog/categories/razrabotka/atom.xml" rel="self"/>
+  <link href="http://uthark.github.com/"/>
+  <updated>2013-06-29T23:40:55-04:00</updated>
+  <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
     
@@ -15,16 +15,16 @@
   
   <entry>
     <title type="html"><![CDATA[Собственная реализация методов в Spring Data JPA]]></title>
-    <link href="http://uthark.github.io/blog/2012/04/28/spring-data-jpa_28/"/>
-    <updated>2012-04-28T15:03:00+07:00</updated>
-    <id>http://uthark.github.io/blog/2012/04/28/spring-data-jpa_28</id>
+    <link href="http://uthark.github.com/blog/2012/04/28/spring-data-jpa_28/"/>
+    <updated>2012-04-28T04:03:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2012/04/28/spring-data-jpa_28</id>
     <content type="html"><![CDATA[<p>Очевидно, что мы не всегда можем воспользоваться автоматической генерацией кода, предоставляемой <a href="http://www.springsource.org/spring-data/jpa">Spring Data JPA</a>. Например, у нас слишком сложный запрос, или нам необходимо вызвать процедуру в базе данных, либо у нас сложная бизнес-логика.</p>
 
 <p>Рассмотрим следующий пример &ndash; например, нам нужна функциональность уникального счётчика, который мы решили реализовать с помощью последовательности (sequence).</p>
 
 <p>Сначала определим интерфейс, в котором опишем все методы, которые мы будем реализовывать самостоятельно. В нашем случае, это будет только один метод:</p>
 
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -50,11 +50,11 @@
 </span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Затем обновим объявление репозитория, чтобы он унаследовал новый интерфейс <tt>UserRepositoryCustom</tt></p>
 
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -68,11 +68,11 @@
 </span><span class='line'><span class="o">}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Теперь напишем реализацию метода:</p>
 
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -118,11 +118,11 @@
 </span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
-</span></code></pre></td></tr></table></div></figure></p>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>И, наконец, укажем Spring Data JPA, чтобы в качестве класса для прокси использовался наш класс с реализацией собственных методов. Для этого нам нужна ещё одна секция <tt>repositories</tt> в конфигурационном файле:</p>
 
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -146,7 +146,7 @@
 </span><span class='line'><span class="nt">&lt;/code&gt;&lt;/pre&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="nt">&lt;p&gt;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Вот и всё.</p>
 ]]></content>
@@ -154,9 +154,9 @@
   
   <entry>
     <title type="html"><![CDATA[Использование BeanPostProcessor на примере журналирования]]></title>
-    <link href="http://uthark.github.io/blog/2012/04/20/beanpostprocessor/"/>
-    <updated>2012-04-20T15:51:00+07:00</updated>
-    <id>http://uthark.github.io/blog/2012/04/20/beanpostprocessor</id>
+    <link href="http://uthark.github.com/blog/2012/04/20/beanpostprocessor/"/>
+    <updated>2012-04-20T04:51:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2012/04/20/beanpostprocessor</id>
     <content type="html"><![CDATA[<div class='post'>
 Сегодня я хочу рассказать, как можно сделать инициализацию логгера в классе с использованием аннотаций и <a href="http://static.springsource.org/spring/docs/current/javadoc-api/org/springframework/beans/factory/config/BeanPostProcessor.html">BeanPostProcessor</a>
 
@@ -258,26 +258,26 @@ public class LoggerPostProcessor implements BeanPostProcessor {
   
   <entry>
     <title type="html"><![CDATA[Преобразуем строку в дату]]></title>
-    <link href="http://uthark.github.io/blog/2012/04/20/blog-post/"/>
-    <updated>2012-04-20T15:25:00+07:00</updated>
-    <id>http://uthark.github.io/blog/2012/04/20/blog-post</id>
+    <link href="http://uthark.github.com/blog/2012/04/20/blog-post/"/>
+    <updated>2012-04-20T04:25:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2012/04/20/blog-post</id>
     <content type="html"><![CDATA[<p>Казалось бы, есть простейшая задача &ndash; преобразовать строковое представление даты в объект класса <tt>java.util.Date</tt>.</p>
 
 <p>Как оказалось, иногда использование DateFormat не помогает. В случае, если строка &ndash; это заголовок <tt>Date</tt> из письма, то нам нужно использовать <tt><a href="http://docs.oracle.com/javaee/5/api/javax/mail/internet/MailDateFormat.html">javax.mail.internet.MailDateFormat</a></tt> для преобразования такой строки.</p>
 
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">String</span> <span class="n">dateStr</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">hellip</span><span class="o">;</span>
 </span><span class='line'><span class="n">Date</span> <span class="n">parsedDate</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MailDateFormat</span><span class="o">().</span><span class="na">parse</span><span class="o">(</span><span class="n">dateStr</span><span class="o">);</span>
-</span></code></pre></td></tr></table></div></figure></p>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[Упрощаем работу с JPA при помощи Spring Data JPA]]></title>
-    <link href="http://uthark.github.io/blog/2012/02/23/jpa-spring-data-jpa/"/>
-    <updated>2012-02-23T02:17:00+07:00</updated>
-    <id>http://uthark.github.io/blog/2012/02/23/jpa-spring-data-jpa</id>
+    <link href="http://uthark.github.com/blog/2012/02/22/jpa-spring-data-jpa/"/>
+    <updated>2012-02-22T14:17:00-05:00</updated>
+    <id>http://uthark.github.com/blog/2012/02/22/jpa-spring-data-jpa</id>
     <content type="html"><![CDATA[<div class='post'>
 <h3>Введение</h3>
 <p>Уже прошло несколько лет с тех пор, как появился JPA. Работа с <a href="http://docs.oracle.com/javaee/5/api/javax/persistence/EntityManager.html">EntityManager</a> увлекательна, но разработчики пишут красивый API, а подробности работы с базой данных скрывают. При этом частая проблема - дублирование имплементации, когда из одного DAO в другой у нас плавно перекочёвывает один и тот же код, в лучшем случае этот код переносится в абстрактный базовый DAO. <a href="http://www.springsource.org/spring-data/jpa">Spring Data</a>  коренным образом решает проблему - при  его использовании остаётся только API на уровне интерфейсов, вся имплементация создаётся автоматически с использованием <a href="http://en.wikipedia.org/wiki/Aspect-oriented_programming">AOP</a>.</p>
@@ -471,9 +471,9 @@ Spring Data значительно упрощает жизнь при испол
   
   <entry>
     <title type="html"><![CDATA[Разработка и тестирование Java REST веб-сервисов]]></title>
-    <link href="http://uthark.github.io/blog/2012/02/09/java-rest/"/>
-    <updated>2012-02-09T01:05:00+07:00</updated>
-    <id>http://uthark.github.io/blog/2012/02/09/java-rest</id>
+    <link href="http://uthark.github.com/blog/2012/02/08/java-rest/"/>
+    <updated>2012-02-08T13:05:00-05:00</updated>
+    <id>http://uthark.github.com/blog/2012/02/08/java-rest</id>
     <content type="html"><![CDATA[<div class='post'>
 <h4>Введение</h4>
 Для разработки <a href="http://restpatterns.org/">REST</a> веб-сервисов Java предлагает <a href="http://jcp.org/en/jsr/detail?id=311">JSR-311 - JAX-RS: The Java&trade; API for RESTful Web Services</a>

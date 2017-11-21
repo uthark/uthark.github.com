@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Apache Ant | Software Development and related activities]]></title>
-  <link href="http://uthark.github.io/blog/categories/apache-ant/atom.xml" rel="self"/>
-  <link href="http://uthark.github.io/"/>
-  <updated>2017-10-12T19:01:44-04:00</updated>
-  <id>http://uthark.github.io/</id>
+  <title><![CDATA[Category: apache ant | Блог о разработке ПО]]></title>
+  <link href="http://uthark.github.com/blog/categories/apache-ant/atom.xml" rel="self"/>
+  <link href="http://uthark.github.com/"/>
+  <updated>2013-06-29T23:40:55-04:00</updated>
+  <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Apache Ant и Metro]]></title>
-    <link href="http://uthark.github.io/blog/2009/06/02/apache-ant-metro/"/>
-    <updated>2009-06-02T23:31:00+07:00</updated>
-    <id>http://uthark.github.io/blog/2009/06/02/apache-ant-metro</id>
+    <link href="http://uthark.github.com/blog/2009/06/02/apache-ant-metro/"/>
+    <updated>2009-06-02T12:31:00-04:00</updated>
+    <id>http://uthark.github.com/blog/2009/06/02/apache-ant-metro</id>
     <content type="html"><![CDATA[<div class='post'>
 Столкнулся с такой проблемой - в некоторых случаях приложение, собранное антом не работает. Конкретно - не работает десереализация запросов на веб-сервис. Получаемый запрос содержит <tt>null</tt> в значениях полей.
 

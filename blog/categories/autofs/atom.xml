@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Autofs | Software Development and related activities]]></title>
-  <link href="http://uthark.github.io/blog/categories/autofs/atom.xml" rel="self"/>
-  <link href="http://uthark.github.io/"/>
-  <updated>2017-10-12T19:01:44-04:00</updated>
-  <id>http://uthark.github.io/</id>
+  <title><![CDATA[Category: autofs | Блог о разработке ПО]]></title>
+  <link href="http://uthark.github.com/blog/categories/autofs/atom.xml" rel="self"/>
+  <link href="http://uthark.github.com/"/>
+  <updated>2013-06-29T23:40:55-04:00</updated>
+  <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
     
@@ -14,10 +14,10 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Настройка Autofs для монтирования NFS-ресурсов]]></title>
-    <link href="http://uthark.github.io/blog/2009/12/14/autofs-nfs/"/>
-    <updated>2009-12-14T23:14:00+06:00</updated>
-    <id>http://uthark.github.io/blog/2009/12/14/autofs-nfs</id>
+    <title type="html"><![CDATA[Настройка autofs для монтирования NFS-ресурсов]]></title>
+    <link href="http://uthark.github.com/blog/2009/12/14/autofs-nfs/"/>
+    <updated>2009-12-14T12:14:00-05:00</updated>
+    <id>http://uthark.github.com/blog/2009/12/14/autofs-nfs</id>
     <content type="html"><![CDATA[<div class='post'>
 Summary: В данной заметке описана настройка autofs для доступа к сетевым ресурсам, доступным по NFS.<br />
 <br />

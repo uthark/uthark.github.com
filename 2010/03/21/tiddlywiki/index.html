@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+
+  
+  
+  <link href="//fonts.googleapis.com/css?family=Anonymous+Pro" rel="stylesheet" type="text/css">
+  
+
+  
+  <title>Разработка макроса для TiddlyWiki</title>
+
+  
+  
+  <link rel="stylesheet" href="https://uthark.github.io/css/hugo-octopress.css">
+
+  
+  
+
+  
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
+  
+  <link href="https://uthark.github.io/favicon.png" rel="icon">
+
+  
+  
+  
+
+  
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <meta name="author" content="Oleg Atamanenko">
+
+  
+  <meta name="generator" content="Hugo 0.31" />
+
+  
+  
+
+</head>
+<body>
+
+
+<header role="banner"><hgroup>
+  
+  <h1><a href="https://uthark.github.io/">Software Development and related activities</a></h1>
+    <h2></h2>
+</hgroup></header>
+
+
+<nav role="navigation">
+
+<ul class="main-navigation">
+  
+  
+    
+      <li><a href="https://uthark.github.io/" title="Home">Home</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/categories/article/" title="Articles" >Articles</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/categories/reading-list/" title="Reading List" >Reading List</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/about/" title="About me" >About me</a></li>
+    
+  
+</ul>
+
+
+<ul class="subscription">
+  
+    
+        <a href="https://uthark.github.io/index.xml" target="_blank" type="application/rss+xml" title="RSS"><i class="fa fa-rss-square fa-lg"></i></a>
+    
+  
+
+</ul>
+
+
+<form action="https://www.google.com/search" method="get" target="_blank">
+  <fieldset role="search">
+  	<input class="search" type="text" name="q" results="0" placeholder="Search"/>
+    <input type="hidden" name="q" value="site:https://uthark.github.io/" />
+  </fieldset>
+</form>
+
+</nav>
+
+
+<div id="main">
+  <div id="content">
+    <div>
+      <article class="hentry" role="article">
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+         Разработка макроса для TiddlyWiki 
+    </h1>
+
+</header>
+
+
+        <div class="entry-content">
+          
+          
+          
+          
+          <p><b>Summary</b>: Пример разработки плагина для TiddlyWiki</p>
+<h4>Вступление</h4>
+<p><a href="http://www.tiddlywiki.com/">TiddlyWiki</a> - это вики-движок, полностью написанный на <a href="http://en.wikipedia.org/wiki/JavaScript">JavaScript</a> и хранящийся в одном файле (как сам движок, так и содержимое). Создатели позиционируют его как &quot;переиспользуемую нелинейную персональную веб записную книжку&quot;.</p>
+<p>Я давно использую TiddlyWiki в различных целях:</p>
+<ol><li>По прямому назначению.</li>
+<li>Как систему <a href="http://mgsd.tiddlyspot.com/#mGSD">GTD</a>.</li>
+<li>Как домашнюю страницу на компьютере.</li>
+</ol>
+<p>Моя домашняя страница на компьютере - это, если говорить терминами TiddlyWiki, <a href="http://en.wikipedia.org/wiki/Tiddler">тиддлер</a>, содержащий ссылки на страницы, которые я часто посещаю.</p>
+<p>Для удобства использования я разработал пару стилей CSS, так что ссылки были крупными.</p>
+<a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://2.bp.blogspot.com/_y8p0_dtMJ38/S6Y0rP2J0eI/AAAAAAAAA9I/xrZhzZf2ad0/s1600-h/tiddly-before.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;width: 172px; height: 132px;" src="http://2.bp.blogspot.com/_y8p0_dtMJ38/S6Y0rP2J0eI/AAAAAAAAA9I/xrZhzZf2ad0/s400/tiddly-before.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5451102316571251170" /></a>
+<h4>Исходный код плагина</h4>
+<p>После длительного использования tiddlywiki в качестве домашней страницы я понял, что мне хочется, чтобы с каждой ссылкой была иконка сайта. Вручную вставлять картинки мне не хотелось, поэтому было решено написать собственный плагин.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#75715e">/*{{{*/</span>
+<span style="color:#a6e22e">version</span>.<span style="color:#a6e22e">extensions</span>.<span style="color:#a6e22e">faviconLinkMacro</span> <span style="color:#f92672">=</span> {<span style="color:#a6e22e">major</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">0</span>, <span style="color:#a6e22e">minor</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>, <span style="color:#a6e22e">revision</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">0</span>, <span style="color:#a6e22e">date</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">new</span> Date(<span style="color:#ae81ff">2010</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">21</span>)};
+<span style="color:#75715e">// Author: Oleg Atamanenko
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">config</span>.<span style="color:#a6e22e">macros</span>.<span style="color:#a6e22e">faviconLink</span> <span style="color:#f92672">=</span> {}
+<span style="color:#a6e22e">config</span>.<span style="color:#a6e22e">macros</span>.<span style="color:#a6e22e">faviconLink</span>.<span style="color:#a6e22e">handler</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">place</span>, <span style="color:#a6e22e">macroName</span>,  <span style="color:#a6e22e">params</span>, <span style="color:#a6e22e">wikifier</span>, <span style="color:#a6e22e">paramString</span>) {
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">linkBox</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">createTiddlyElement</span>(<span style="color:#a6e22e">place</span>, <span style="color:#e6db74">&#34;span&#34;</span>, <span style="color:#66d9ef">null</span>, <span style="color:#e6db74">&#34;favIcon&#34;</span>, <span style="color:#e6db74">&#34;&#34;</span>);
+
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">args</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">paramString</span>.<span style="color:#a6e22e">parseParams</span>(<span style="color:#e6db74">&#34;list&#34;</span>,<span style="color:#66d9ef">null</span>,<span style="color:#66d9ef">true</span>);
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">link</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">getParam</span>(<span style="color:#a6e22e">args</span>, <span style="color:#e6db74">&#34;link&#34;</span>, <span style="color:#e6db74">&#39;false&#39;</span>);
+
+  <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">link</span> <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;false&#39;</span>){
+    <span style="color:#a6e22e">urlParts</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">link</span>.<span style="color:#a6e22e">split</span>(<span style="color:#e6db74">&#39;/&#39;</span>);
+    <span style="color:#a6e22e">imgLink</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">urlParts</span>[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;//&#34;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">urlParts</span>[<span style="color:#ae81ff">2</span>] <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;/favicon.ico&#34;</span>;
+
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">imgElement</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">createTiddlyElement</span>(<span style="color:#a6e22e">linkBox</span>, <span style="color:#e6db74">&#34;img&#34;</span>, <span style="color:#66d9ef">null</span>, <span style="color:#e6db74">&#34;faviconImage&#34;</span>, <span style="color:#e6db74">&#34;&#34;</span>);
+    <span style="color:#a6e22e">imgElement</span>.<span style="color:#a6e22e">src</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">imgLink</span>;
+    <span style="color:#a6e22e">imgElement</span>.<span style="color:#a6e22e">width</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">16</span>;
+    <span style="color:#a6e22e">imgElement</span>.<span style="color:#a6e22e">height</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">16</span>;
+
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">linkTitle</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">getParam</span>(<span style="color:#a6e22e">args</span>, <span style="color:#e6db74">&#34;title&#34;</span>, <span style="color:#e6db74">&#39;false&#39;</span>);
+
+    <span style="color:#66d9ef">if</span>(<span style="color:#a6e22e">linkTitle</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;false&#39;</span>){
+      <span style="color:#a6e22e">linkTitle</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">link</span>;
+    }
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">linkElement</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">createTiddlyElement</span>(<span style="color:#a6e22e">linkBox</span>, <span style="color:#e6db74">&#34;a&#34;</span>, <span style="color:#66d9ef">null</span>, <span style="color:#e6db74">&#34;faviconLink&#34;</span>, <span style="color:#a6e22e">linkTitle</span>);
+    <span style="color:#a6e22e">linkElement</span>.<span style="color:#a6e22e">href</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">link</span>;
+    <span style="color:#a6e22e">linkElement</span>.<span style="color:#a6e22e">target</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;_blank&#39;</span>;
+  }
+}
+
+<span style="color:#75715e">/*} } }*/</span></code></pre></div>
+<h4> Установка плагина</h4>
+<ol><li>Создаём новый тиддлер, называем его faviconLinkMacro</li>
+<li>Помечаем тиддлер тегом systemConfig, тогда TiddlyWiki при открытии страницы его подгрузит.</li>
+</ol>
+<h4>Использование плагина</h4>
+<ol><li>Плагин создаёт новый макрос, faviconLink, с двумя параметрами link и title.</li>
+<li>Вызов <tt>&lt;&lt;faviconLink link:'https://mail.google.com/mail' title:'mail'&gt;&gt;</tt> создаёт ссылку с картинкой с GMail</li>
+</ol>
+<a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://1.bp.blogspot.com/_y8p0_dtMJ38/S6Y0qnki7nI/AAAAAAAAA9A/Ic3skFoirY8/s1600-h/favicon-sample.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;width: 161px; height: 64px;" src="http://1.bp.blogspot.com/_y8p0_dtMJ38/S6Y0qnki7nI/AAAAAAAAA9A/Ic3skFoirY8/s400/favicon-sample.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5451102305759981170" /></a>
+
+<h4>Настройка визульных стилей плагина</h4>
+<p>Макрос создаёт следующие классы:</p>
+<ol><li>span.favIcon</li>
+<li>img.faviconImage</li>
+<li>a.faviconLink</li>
+</ol>
+<h4> Пример стилей</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">.<span style="color:#a6e22e">links</span> <span style="color:#f92672">span</span> {
+  <span style="color:#66d9ef">display</span>: <span style="color:#66d9ef">block</span>;
+  <span style="color:#66d9ef">position</span>: <span style="color:#66d9ef">relative</span>;
+  <span style="color:#66d9ef">padding</span>: <span style="color:#ae81ff">0.7</span><span style="color:#66d9ef">em</span>;
+  <span style="color:#66d9ef">margin</span>: <span style="color:#ae81ff">0.3</span><span style="color:#66d9ef">em</span>;
+  <span style="color:#66d9ef">min-width</span>: <span style="color:#ae81ff">6</span><span style="color:#66d9ef">em</span>;
+  <span style="color:#66d9ef">float</span>:<span style="color:#66d9ef">left</span>;
+  <span style="color:#66d9ef">text-align</span>: <span style="color:#66d9ef">center</span>;
+  <span style="color:#66d9ef">font-weight</span>: <span style="color:#66d9ef">bold</span>;
+  <span style="color:#66d9ef">font-size</span>: <span style="color:#ae81ff">1.5</span><span style="color:#66d9ef">em</span>;
+  <span style="color:#66d9ef">font-family</span>: <span style="color:#e6db74">&#34;Gill Sans MT&#34;</span>, <span style="color:#e6db74">&#34;Candara&#34;</span>, <span style="color:#e6db74">&#34;Arial&#34;</span>;
+  <span style="color:#66d9ef">border</span>: <span style="color:#ae81ff">2</span><span style="color:#66d9ef">px</span> <span style="color:#66d9ef">solid</span> [[ColorPalette<span style="color:#f92672">::</span>SecondaryLight]];
+  <span style="color:#66d9ef">background-color</span>: [[ColorPalette<span style="color:#f92672">::</span>SecondaryPale]];
+}
+
+.<span style="color:#a6e22e">links</span> <span style="color:#f92672">span</span>:<span style="color:#a6e22e">hover</span> {
+  <span style="color:#66d9ef">border</span>: <span style="color:#ae81ff">2</span><span style="color:#66d9ef">px</span> <span style="color:#66d9ef">solid</span> [[ColorPalette<span style="color:#f92672">::</span>SecondaryMid]];
+  <span style="color:#66d9ef">background-color</span>: [[ColorPalette<span style="color:#f92672">::</span>SecondaryLight]];
+  <span style="color:#66d9ef">color</span>: [[ColorPalette<span style="color:#f92672">::</span>PrimaryMid]];
+}
+
+.<span style="color:#a6e22e">links</span> <span style="color:#f92672">img</span>.<span style="color:#a6e22e">faviconImage</span> {
+  <span style="color:#66d9ef">position</span>: <span style="color:#66d9ef">relative</span>;
+  <span style="color:#66d9ef">padding-right</span>: <span style="color:#ae81ff">10</span><span style="color:#66d9ef">px</span>;
+}</code></pre></div>
+<p><p> Данный CSS необходимо добавить в тиддлер с именем StyleSheet</p>
+<h4>Пример тиддлера со ссылками</h4></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">{{links{
+<span style="color:#960050;background-color:#1e0010">&lt;</span>&lt;<span style="color:#f92672">faviconLink</span> <span style="color:#a6e22e">link:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">http:</span><span style="color:#960050;background-color:#1e0010">//</span><span style="color:#a6e22e">delicious</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">com</span><span style="color:#960050;background-color:#1e0010">/</span><span style="color:#a6e22e">dark</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">schakal</span><span style="color:#960050;background-color:#1e0010">/</span><span style="color:#a6e22e">2read</span><span style="color:#960050;background-color:#1e0010">&#39;</span> <span style="color:#a6e22e">title:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">2read</span><span style="color:#960050;background-color:#1e0010">&#39;</span>&gt;&gt; <span style="color:#960050;background-color:#1e0010">&lt;</span>&lt;<span style="color:#f92672">faviconLink</span> <span style="color:#a6e22e">link:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">https:</span><span style="color:#960050;background-color:#1e0010">//</span><span style="color:#a6e22e">mail</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">google</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">com</span><span style="color:#960050;background-color:#1e0010">/</span><span style="color:#a6e22e">mail</span><span style="color:#960050;background-color:#1e0010">&#39;</span> <span style="color:#a6e22e">title:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">mail</span><span style="color:#960050;background-color:#1e0010">&#39;</span>&gt;&gt; <span style="color:#960050;background-color:#1e0010">&lt;</span>&lt;<span style="color:#f92672">faviconLink</span> <span style="color:#a6e22e">link:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">http:</span><span style="color:#960050;background-color:#1e0010">//</span><span style="color:#a6e22e">www</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">google</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">com</span><span style="color:#960050;background-color:#1e0010">/</span><span style="color:#a6e22e">reader</span><span style="color:#960050;background-color:#1e0010">/</span><span style="color:#a6e22e">view</span><span style="color:#960050;background-color:#1e0010">&#39;</span> <span style="color:#a6e22e">title:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">rss</span><span style="color:#960050;background-color:#1e0010">&#39;</span>&gt;&gt; <span style="color:#960050;background-color:#1e0010">&lt;</span>&lt;<span style="color:#f92672">faviconLink</span> <span style="color:#a6e22e">link:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">http:</span><span style="color:#960050;background-color:#1e0010">//</span><span style="color:#a6e22e">atamanenko</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">blogspot</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">com</span><span style="color:#960050;background-color:#1e0010">/&#39;</span> <span style="color:#a6e22e">title:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">blog</span><span style="color:#960050;background-color:#1e0010">&#39;</span>&gt;&gt; <span style="color:#960050;background-color:#1e0010">&lt;</span>&lt;<span style="color:#f92672">faviconLink</span> <span style="color:#a6e22e">link:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">http:</span><span style="color:#960050;background-color:#1e0010">//</span><span style="color:#a6e22e">feedburner</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">google</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">com</span><span style="color:#960050;background-color:#1e0010">/</span><span style="color:#a6e22e">fb</span><span style="color:#960050;background-color:#1e0010">/</span><span style="color:#a6e22e">a</span><span style="color:#960050;background-color:#1e0010">/</span><span style="color:#a6e22e">myfeeds</span><span style="color:#960050;background-color:#1e0010">&#39;</span> <span style="color:#a6e22e">title:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">feedburner</span><span style="color:#960050;background-color:#1e0010">&#39;</span>&gt;&gt; <span style="color:#960050;background-color:#1e0010">&lt;</span>&lt;<span style="color:#f92672">faviconLink</span> <span style="color:#a6e22e">link:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">https:</span><span style="color:#960050;background-color:#1e0010">//</span><span style="color:#a6e22e">www</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">google</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">com</span><span style="color:#960050;background-color:#1e0010">/</span><span style="color:#a6e22e">analytics</span><span style="color:#960050;background-color:#1e0010">/</span><span style="color:#a6e22e">settings</span><span style="color:#960050;background-color:#1e0010">/&#39;</span> <span style="color:#a6e22e">title:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">analytics</span><span style="color:#960050;background-color:#1e0010">&#39;</span>&gt;&gt; <span style="color:#960050;background-color:#1e0010">&lt;</span>&lt;<span style="color:#f92672">faviconLink</span> <span style="color:#a6e22e">link:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">http:</span><span style="color:#960050;background-color:#1e0010">//</span><span style="color:#a6e22e">wave</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">google</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">com</span><span style="color:#960050;background-color:#1e0010">&#39;</span> <span style="color:#a6e22e">title:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">wave</span><span style="color:#960050;background-color:#1e0010">&#39;</span>&gt;&gt; <span style="color:#960050;background-color:#1e0010">&lt;</span>&lt;<span style="color:#f92672">faviconLink</span> <span style="color:#a6e22e">link:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">http:</span><span style="color:#960050;background-color:#1e0010">//</span><span style="color:#a6e22e">www</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">blogger</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">com</span><span style="color:#960050;background-color:#1e0010">/</span><span style="color:#a6e22e">home</span><span style="color:#960050;background-color:#1e0010">&#39;</span> <span style="color:#a6e22e">title:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">blogger</span><span style="color:#960050;background-color:#1e0010">&#39;</span>&gt;&gt; <span style="color:#960050;background-color:#1e0010">&lt;</span>&lt;<span style="color:#f92672">faviconLink</span> <span style="color:#a6e22e">link:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">http:</span><span style="color:#960050;background-color:#1e0010">//</span><span style="color:#a6e22e">twitter</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">com</span><span style="color:#960050;background-color:#1e0010">/&#39;</span> <span style="color:#a6e22e">title:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">twitter</span><span style="color:#960050;background-color:#1e0010">&#39;</span>&gt;&gt; <span style="color:#960050;background-color:#1e0010">&lt;</span>&lt;<span style="color:#f92672">faviconLink</span> <span style="color:#a6e22e">link:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">https:</span><span style="color:#960050;background-color:#1e0010">//</span><span style="color:#a6e22e">www</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">dropbox</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">com</span><span style="color:#960050;background-color:#1e0010">/</span><span style="color:#a6e22e">home</span><span style="color:#960050;background-color:#1e0010">#/&#39;</span> <span style="color:#a6e22e">title:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">dropbox</span><span style="color:#960050;background-color:#1e0010">&#39;</span>&gt;&gt; <span style="color:#960050;background-color:#1e0010">&lt;</span>&lt;<span style="color:#f92672">faviconLink</span> <span style="color:#a6e22e">link:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">http:</span><span style="color:#960050;background-color:#1e0010">//</span><span style="color:#a6e22e">translate</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">google</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">com</span><span style="color:#960050;background-color:#1e0010">/</span><span style="color:#a6e22e">toolkit</span><span style="color:#960050;background-color:#1e0010">/&#39;</span> <span style="color:#a6e22e">title:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">translator</span><span style="color:#960050;background-color:#1e0010">&#39;</span>&gt;&gt; <span style="color:#960050;background-color:#1e0010">&lt;</span>&lt;<span style="color:#f92672">faviconLink</span> <span style="color:#a6e22e">link:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">http:</span><span style="color:#960050;background-color:#1e0010">//</span><span style="color:#a6e22e">sibir</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">megafon</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">ru</span><span style="color:#960050;background-color:#1e0010">/</span><span style="color:#a6e22e">sendsms</span><span style="color:#960050;background-color:#1e0010">/&#39;</span> <span style="color:#a6e22e">title:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">SendSMS</span><span style="color:#960050;background-color:#1e0010">&#39;</span>&gt;&gt;
+}}}</code></pre></div>
+<p>Вышеприведённый код тиддлера создаёт следующую страницу:</p>
+
+<p><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://1.bp.blogspot.com/_y8p0_dtMJ38/S6Y0qOLAO4I/AAAAAAAAA84/DFkORdMO8gE/s1600-h/favicon-sample-big.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;width: 400px; height: 157px;" src="http://1.bp.blogspot.com/_y8p0_dtMJ38/S6Y0qOLAO4I/AAAAAAAAA84/DFkORdMO8gE/s400/favicon-sample-big.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5451102298941963138" /></a></p>
+
+        </div>
+        
+
+<footer>
+
+  <p class="meta">
+    
+    
+
+    
+    
+    
+    Filed under: <a class="label" href="https://uthark.github.io/categories/howto/">howto</a><a class="label" href="https://uthark.github.io/categories/%d1%80%d0%b0%d0%b7%d1%80%d0%b0%d0%b1%d0%be%d1%82%d0%ba%d0%b0/">разработка</a><a class="label" href="https://uthark.github.io/categories/tiddlywiki/">tiddlywiki</a><a class="label" href="https://uthark.github.io/categories/development/">development</a>
+    
+  </p>
+
+  <p class="meta">
+    
+    Last update: <time>Mar 21, 2010</time>
+    
+    </span>
+  </p>
+  
+  
+
+  
+
+  <p class="meta">
+    
+        <a class="basic-alignment left" href="https://uthark.github.io/2010/03/16/blog-post/" title="Борьба с убийцами производительности">Борьба с убийцами производительности</a>
+    
+
+    
+      <a class="basic-alignment right" href="https://uthark.github.io/2010/03/22/skype-d-bus-python/" title="Общение со Skype через D-Bus на Python">Общение со Skype через D-Bus на Python</a>
+    
+  </p>
+  
+</footer>
+
+      </article>
+    </div>
+    
+
+<aside class="sidebar thirds">
+  <section class="first odd">
+
+    
+
+    <p>
+      
+    </p>
+  </section>
+
+
+
+
+
+  
+
+  
+
+  
+  
+  
+
+</aside>
+
+  </div>
+</div>
+
+<footer role="contentinfo">
+    
+    <div class="center">
+        <ul class="sidebar-nav">
+            <li class="sidebar-nav-item">
+                <a target="_blank" href="https://github.com/uthark/" title="https://github.com/uthark/"><i
+                    class="fa fa-github fa-3x"></i></a></li>
+            <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
+                    class="fa fa-bitbucket fa-3x"></i></a>
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item"><a target="_blank" href="https://twitter.com/LinkageError/" title="https://twitter.com/LinkageError/"><i
+                    class="fa fa-twitter fa-3x"></i></a>
+            <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
+                    class="fa fa-key fa-3x"></i></a> 
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item"><a target="_blank" href="http://stackoverflow.com/users/216764/uthark" title="http://stackoverflow.com/users/216764/uthark"><i
+                    class="fa fa-stack-overflow fa-3x"></i></a>
+            <li class="sidebar-nav-item"><a target="_blank" href="https://plus.google.com/&#43;OlegAtamanenko" title="https://plus.google.com/&#43;OlegAtamanenko"><i
+                    class="fa fa-google-plus fa-3x"></i></a>
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item">
+                
+                
+            </li>
+        </ul>
+    </div>
+    <p>Copyright &copy; 2017 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+        <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a> and
+            <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.
+    </p>
+
+</footer>
+
+
+</body>
+</html>
+

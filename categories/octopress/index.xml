@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Octopress on Software Development and related activities</title>
+    <link>https://uthark.github.io/categories/octopress/</link>
+    <description>Recent content in Octopress on Software Development and related activities</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 Mar 2014 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://uthark.github.io/categories/octopress/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Fixing unescaped quotes in page rendering in Octopress</title>
+      <link>https://uthark.github.io/2014/03/02/octopress-quote-fix/</link>
+      <pubDate>Sun, 02 Mar 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2014/03/02/octopress-quote-fix/</guid>
+      <description>When I created About Me page I found issue with rendering: for some reason styles and some javascripts were missing on the page.
+Investigation showed that content in meta tag description contained unquoted quotes, thus resulting in broken HTML.
+After searching within octopress sources I found the issue:
+Rendering of description tag, excerpt from _includes/head.html:
+{% capture  description %} {% if page.description %} {{ page.description }} {% else  %} {{ content | raw_content }} {% endif  %} {% endcapture %} &amp;lt;meta name=&amp;#34;description&amp;#34; content=&amp;#34;{{ description | strip_html | condense_spaces | truncate:150 }}&amp;#34;&amp;gt; After capturing, description is being processed with filters, defined in plugins/octopress_filters.</description>
+    </item>
+    
+  </channel>
+</rss>

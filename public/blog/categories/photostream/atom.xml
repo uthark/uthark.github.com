@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Photostream | Software Development and related activities]]></title>
+  <link href="http://uthark.github.io/blog/categories/photostream/atom.xml" rel="self"/>
+  <link href="http://uthark.github.io/"/>
+  <updated>2017-10-12T19:01:44-04:00</updated>
+  <id>http://uthark.github.io/</id>
+  <author>
+    <name><![CDATA[Oleg Atamanenko]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[PhotoStream #1. Sunset]]></title>
+    <link href="http://uthark.github.io/blog/2014/03/02/sunset/"/>
+    <updated>2014-03-02T22:03:00-05:00</updated>
+    <id>http://uthark.github.io/blog/2014/03/02/sunset</id>
+    <content type="html"><![CDATA[<p>Sunset on M St.</p>
+
+<p><a href="https://plus.google.com/photos/112372998073079463630/albums/5986392506066477233/5986392511862419154"><img src="https://lh3.googleusercontent.com/-UdxK_gs0ol0/UxPwRbOeLtI/AAAAAAAAPd4/OatnIV3Z5t0/w1012-h760/IMG_20140226_174149.jpg"></a></p>
+]]></content>
+  </entry>
+  
+</feed>

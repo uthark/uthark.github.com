@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Аспекты on Software Development and related activities</title>
+    <link>https://uthark.github.io/categories/%D0%B0%D1%81%D0%BF%D0%B5%D0%BA%D1%82%D1%8B/</link>
+    <description>Recent content in Аспекты on Software Development and related activities</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 28 Jan 2012 02:43:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://uthark.github.io/categories/%D0%B0%D1%81%D0%BF%D0%B5%D0%BA%D1%82%D1%8B/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Немножко магии от AspectJ</title>
+      <link>https://uthark.github.io/2012/01/28/aspectj/</link>
+      <pubDate>Sat, 28 Jan 2012 02:43:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2012/01/28/aspectj/</guid>
+      <description>Наверно, вы уже сталкивались с таким понятием, как AOП - аспектно-ориентированное программирование.
+Обычно, про него вспоминают, когда говорят про декларативное использование транзакций, про проверку прав доступа, либо про реализацию журналирования.
+Но это не единственные области применения АОП.
+Я хочу показать ещё пару областей применения из реальных проектов:
+1. Модификация исходного кода для реализации дополнительных возможностей.
+2. Принудительная проверка контракта между модулями.
+Модификация исходного кода для реализации дополнительных возможностейПредположим, что у нас есть модуль в приложении, который предоставляет нужную нам функциональность.</description>
+    </item>
+    
+  </channel>
+</rss>

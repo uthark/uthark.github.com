@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+
+  
+  
+  <link href="//fonts.googleapis.com/css?family=Anonymous+Pro" rel="stylesheet" type="text/css">
+  
+
+  
+  <title>Software Development and related activities</title>
+
+  
+  
+  <link rel="stylesheet" href="https://uthark.github.io/css/hugo-octopress.css">
+
+  
+  
+
+  
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
+  
+  <link href="https://uthark.github.io/favicon.png" rel="icon">
+
+  
+  
+  
+
+  <link href="https://uthark.github.io/index.xml" rel="alternate" type="application/rss+xml" title="Software Development and related activities" />
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <meta name="author" content="Oleg Atamanenko">
+
+  
+  <meta name="generator" content="Hugo 0.31" />
+
+  
+  
+
+</head>
+<body>
+
+
+<header role="banner"><hgroup>
+  
+  <h1><a href="https://uthark.github.io/">Software Development and related activities</a></h1>
+    <h2></h2>
+</hgroup></header>
+
+
+<nav role="navigation">
+
+<ul class="main-navigation">
+  
+  
+    
+      <li><a href="https://uthark.github.io/" title="Home">Home</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/categories/article/" title="Articles" >Articles</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/categories/reading-list/" title="Reading List" >Reading List</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/about/" title="About me" >About me</a></li>
+    
+  
+</ul>
+
+
+<ul class="subscription">
+  
+    
+        <a href="https://uthark.github.io/index.xml" target="_blank" type="application/rss+xml" title="RSS"><i class="fa fa-rss-square fa-lg"></i></a>
+    
+  
+
+</ul>
+
+
+<form action="https://www.google.com/search" method="get" target="_blank">
+  <fieldset role="search">
+  	<input class="search" type="text" name="q" results="0" placeholder="Search"/>
+    <input type="hidden" name="q" value="site:https://uthark.github.io/" />
+  </fieldset>
+</form>
+
+</nav>
+
+
+<div id="main">
+ <div id="content">
+  <div class="blog-index">
+    
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2009/06/02/apache-ant-metro/">Apache Ant и Metro</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>Столкнулся с такой проблемой - в некоторых случаях приложение, собранное антом не работает. Конкретно - не работает десереализация запросов на веб-сервис. Получаемый запрос содержит <tt>null</tt> в значениях полей.</p>
+
+<p>Опытным путём было выяснено, что на это влияет используемая версия Java. Под 1.5 работает корректно, под 1.6 - не работает. Нашли <a href="https://jaxb.dev.java.net/guide/Runtime_Errors.html#Illegal_class_modifiers_for_package_info__0x1600">ошибку в метро</a>, связанную именно с версией JDK и на этом успокоились. Но было одно исключение из правил. У одного из разработчиков под 1.5 тоже не работало.</p>
+
+<p>Как выяснилось позже, виноват был во всё Ant.
+Metro создавал файл package-info.java, в котором было примерно следующее содержание:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@javax.xml.bind.annotation.XmlSchema</span><span style="color:#f92672">(</span>
+    namespace <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;http://z.y.x.com&#34;</span><span style="color:#f92672">,</span> 
+    elementFormDefault<span style="color:#f92672">=</span>javax<span style="color:#f92672">.</span><span style="color:#a6e22e">xml</span><span style="color:#f92672">.</span><span style="color:#a6e22e">bind</span><span style="color:#f92672">.</span><span style="color:#a6e22e">annotation</span><span style="color:#f92672">.</span><span style="color:#a6e22e">XmlNsForm</span><span style="color:#f92672">.</span><span style="color:#a6e22e">UNQUALIFIED</span><span style="color:#f92672">)</span>
+<span style="color:#f92672">package</span> com.x.y.z<span style="color:#f92672">;</span></code></pre></div>
+<p>Ант, в свою очередь, должен был этот файл компилировать. А <a href="http://ant.apache.org/manual/CoreTasks/javac.html">в реальности этого не происходило</a>, поэтому Metro не мог корректно отобразить XML-запрос на объекты доменной области.</p>
+
+<p>Решение было немного кривым, но при этом поразительно простым - принудительный вызов javac на файлах <code>package-info.java</code>.</p>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2009/05/30/protected/">Использование модификатора protected на полях в базовом классе</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>Недавно задали мне вопрос - что я думаю об использовании модификатора protected для членов базового класса? Под этим вопросом кроются более серьёзные вещи.</p>
+
+<p>Например, любой член класса, имеющий модификатор protected, расширяет интерфейс базового класса для подклассов - подклассы имеют доступ ко всем protected и public методам этого поля. Иногда это сделано специально, например, для того, чтобы подклассы могли иметь доступ к какой-либо функциональности. Однако, если подкласс будет использовать protected поля неправильно (например, он может установить его в null, нарушив, таким образом, поведение базового класса), то это не принесёт пользы.</p>
+
+<p>Поразмыслив над вопросом я пришел к следующему, достаточно логичному и широкоизвестному выводу - необходимо давать наиболее закрытый доступ, какой можно. То есть, если можно объявить член класса как private, то необходимо сделать его private. Если в подклассах необходим доступ к члену класса, то необходимо проанализировать, какие методы нужны в подклассах и открыть только их через делегирование. Если набор методов заранее неизвестен, то можно сделать protected getter для поля.</p>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2009/05/27/fixed-price-2/">Сферический программист в вакууме и абстрактное понятие качества кода в условиях Fixed-Price проектов (часть 2)</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>Причин для написания плохого кода может быть несколько. Некоторые из них лежат на поверхности:</p>
+
+<p><ol><li>  Отсутствие опыта</li><li>Невнимательность</li><li>  Некомпетентность</li><li>  Немотивированность
+</li></ol><span style="font-weight: bold;">Отсутствие опыта</span> - казалось бы, самая простая причина проблемы; решение проблемы выглядит очевидным - со временем, разработчик будет писать код лучше. Но это ошибочное мнение. Бывает, люди с опытом более 5-10 лет разработки коммерческих приложений пишут настолько плохой код, что иногда кажется, что они это нарочно. Решать эту проблему необходимо постоянным указанием на ошибки. Но это решит только часть проблемы - человек узнает, как писать код в конкретных ситуациях. Но не всякий разработчик (к сожалению, по опыту знаю) сможет экстраполировать знание на все подобные проблемы способ решения.</p>
+
+<p><span style="font-weight: bold;">Невнимательность</span> - через это проходят почти все. Почти каждый сможет вспомнить случай, когда не был сделан <tt>svn add</tt> перед коммитом. Эта проблема решается обычно самомотивацией человека на хороший код. Впрочем, команда и сервер непрерывной интеграции тоже прилагают усилия для того, чтобы человек проверил ещё раз то, что он хочет выложить в репозиторий.</p>
+
+<p><span style="font-weight: bold;">Некомпетентность</span> - эта причина пересекается с недостатком опыта, но, при этом отлична от неё. Адекватный разработчик, на мой взгляд, должен стремиться к компетентности в той области, в которой он работает. Но этого, к сожалению часто не происходит. На мой взгляд это из-за следующей причины.</p>
+
+<p><span style="font-weight: bold;">Немотивированность</span>. Самое большое зло, которое может быть. Причины недостаточной мотивации разработчика могут быть весьма разнообразными - не выспался, дома проблемы, зарплата низкая, задача скучная и неинтересная. Список можно продолжать до бесконечности. Решение этой проблемы кроется, в первую очередь, в качественном управлении. Менеджер должен быть тонким и хорошим психологом, чтобы видеть или чувствовать все эти проблемы и предотвращать их.</div>
+<h2>Comments</h2>
+<div class='comments'>
+<div class='comment'>
+<div class='author'>uthark</div>
+<div class='content'>
+Увы, далеко не всякая это делает. Например, ни Eclipse, ни Jetbrains IDEA не предлагают тебе этого. Хотя и могут показать файлы, которые не были добавлены. В случае с idea у неё есть ещё один неприятный момент - не показывает в момент коммита библиотеки, которые не были добавлены. Пару раз натыкался на такую проблему. Правда, сервер непрерывной интеграции быстро нотифицировал о ней. :)</div>
+</div>
+<div class='comment'>
+<div class='author'>Ivan</div>
+<div class='content'>
+&gt;Почти каждый сможет вспомнить случай, <br />&gt;когда не был сделан svn add перед коммитом. <br /><br />хорошая среда разработки предупреждает разработчика о том, что он хочет сделать хуйню %)</div>
+</div></p>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2009/05/27/fixed-price-1/">Сферический программист в вакууме и абстрактное понятие качества кода в условиях Fixed-Price проектов (часть 1)</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>В последнее время всё чаще задумываюсь о том, почему разработчики пишут плохой и некачественный код. Под кодом я подразумеваю не только сам код, но и, в том числе, архитектуру и дизайн.</p>
+
+<p>Плохим кодом я считаю следущий:
+<ol><li>Невыполняющий функциональные требования</li><li>Невыполняющий нефункциональные требования</li><li>Непокрытый тестами</li><li>Плохо тестируемый</li><li>Плохо поддерживаемый</li><li>С багами</li><li>Неоптимальный</li></ol>Если код не выполняет функциональные требования, то этот код вообще ничего не стоит. Заказчику такой код не нужен, именно поэтому этот код плохой. На него были потрачены ресурсы, но при этом сам код не имеет никакой ценности.</p>
+
+<p>Если код не выполняет нефункциональные требования, то это говорит о том, что либо дизайн, либо реализация, не учли требования и это тоже не добавляет удовлетворённости конечному пользователю. Часто здесь можно провести рефакторинг, но бывает и так, что архитектурные ошибки не дают в принципе выполнить нефункциональные требования, либо их реализация требует очень больших временных затрат.</p>
+
+<p>Если код не покрыт тестами, то этот код не работает. Эта аксиома должна всегда быть перед глазами разработчика. Как говорится, самая большая проблема с компьютерами это то, что они делают не то, что разработчик подразумевал, а то, что он написал. Именно поэтому тесты - гарантия того, что код выполняет то, что подразумевает разработчик. Хотя здесь тоже есть проблема, что разработчик не понимает, что именно ему нужно от кода, либо не знает, как протестировать нужную ему функциональность.</p>
+
+<p>Плохо тестируемый код. Такой код часто встречается, когда не используется TDD, в связи с этим разработчик не понимает или не знает, что именно он хочет от кода. Также, плохо тестируемый код это признак того, что код имеет не самую лучшую архитектуру (например, высокий coupling)</p>
+
+<p>Плохо поддерживаемый код это любой код, который сложно поддерживать. Сюда относятся любые ошибки в коде, которые осложняют поддержку - нет единого стиля форматирования, неясные имена переменных, методов, классов, плохая декомпозиция, отсутствие или наличие устаревших тестов, комментариев, документации, или, что ещё хуже ошибки в комментариях, документации, плохая архитектура (как её отсутствие, так и overdesigned). Все эти проблемы в конечном итоге влияют на качество проекта и на удовлетворённость заказчика.</p>
+
+<p>Код с багами. Логично, что это плохой код, и это, к сожалению, часто встречающийся код. По статистике, на 1000 строк кода приходится 10-12 багов. К сожалению, этот показатель меняется в зависимости от различных факторов (компетентность разработчика, сроки, сложность архитектуры, используемый язык и технологии и т.д.) и часто в сторону ухудшения.</p>
+
+<p>Неоптимальный код не всегда плохой, при условии, что он выполняет функциональные и нефункциональные требования, а также лёгок в поддерживании.</p>
+
+<p>Продолжение следует&hellip;</p>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2009/05/23/google-application-engine/">Google Application Engine</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>Посмотрел на <a href="http://code.google.com/appengine/">Google App Engine </a>(GAE).</p>
+
+<p>При своей цене (= бесплатно) это очень хороший сервис.</p>
+
+<p>GAE - это <a href="http://code.google.com/appengine/docs/whatisgoogleappengine.html">инфраструктура для запуска веб-приложений на серверах Google</a>. То, что сейчас модно называть <a href="http://en.wikipedia.org/wiki/Cloud_computing">cloud computing</a>.</p>
+
+<p>На <a href="http://www.google.com/intl/en/press/annc/20080407_app_engine.html">презентации платформы в 2008 году</a> Google объявил только о поддержке Python. <a href="http://googleappengine.blogspot.com/2009/04/seriously-this-time-new-language-on-app.html">Год спустя, в апреле 2009 года Google заявил о поддержке Java</a>, правда <a href="http://code.google.com/appengine/docs/java/jrewhitelist.html">с ограничениями</a>.
+Собственно, <a href="http://code.google.com/appengine/docs/java/overview.html">поддержка Java</a> и была тем самым толчком, что я решил поближе посмотреть на платформу.</p>
+
+<p><h2>Возможности</h2>
+Google App Engine предоставляет <a href="http://code.google.com/appengine/whyappengine.html">следующие возможности</a> как платформа:
+<ul><li>масштабируемость</li><li>кластеризация</li><li>он-лайн мониторинг</li><li>балансировку нагрузки</li><li>безопасность</li><li>горизонтальное масштабирование базы данных</li><li>отказоустойчивость</li></ul></p>
+
+<p><h2>Ограничения</h2>Как и любое бесплатное решение у платформы есть ограничения. На данный момент эти ограничения следующие:
+<ul><li>Ограниченный набор Java API</li><li>Нереляционное хранилище данных</li><li>Ограничение доступа к другим компьютерам</li><li>Из доступных языков: Python, Java и JVM-based</li><li>Ограничения на используемые ресурсы
+</li></ul><h2>Технологии</h2><h2><a href="http://code.google.com/appengine/docs/java/apis.html">App Engine Services</a></h2><ul><li><a href="http://code.google.com/appengine/docs/java/urlfetch/">URL Fetch</a></li><li><a href="http://code.google.com/appengine/docs/java/mail/">Mail</a></li><li><a href="http://code.google.com/appengine/docs/java/memcache/">Memcache</a></li><li><a href="http://code.google.com/appengine/docs/java/images/">Image Manipulation</a></li><li><a href="http://code.google.com/appengine/docs/java/config/cron.html">Scheduled Tasks (Cron Jobs)</a></li><li>Secure Data Connector</li><li><a href="http://code.google.com/appengine/docs/java/users/">User Service API</a></li></ul><h3>База данных</h3>Это <a href="http://en.wikipedia.org/wiki/BigTable">небезызвестный</a> <a href="http://labs.google.com/papers/bigtable.html">BigTable</a>. Для работы с ним используется <a href="http://code.google.com/appengine/docs/python/datastore/gqlreference.html">GQL</a>. Для Java-реализации используется <a href="http://code.google.com/appengine/docs/java/datastore/usingjdo.html">JDO</a> с ограниченной поддержкой JPA.</p>
+
+<p><h2>Применение</h2>
+Уже сейчас существует много приложений, которые размещены на серверах Google. Многие из них доступны в <a href="http://appgallery.appspot.com/">галерее приложений App Engine</a>
+На мой взгляд, использование нереляционной модели данных накладывает свои ограничения на тип проектируемых приложений, так как не всегда возможна полная денормализация данных.</p>
+
+<p><h2>Впечатления от использования SDK</h2>Обзор не был бы полным, если бы я не попробовал написать простенькое приложение для платформы. Для этого необходимо зарегистрироваться на App Engine и запросить поддержку Java. Google объявил, что попробовать платформу можно только первым 10000 разработчикам. Судя по всему, ещё можно успеть, так как я получил доступ в течении 15 минут (приходит ключ по SMS). Подтверждение на поддержку Java пришло в течении суток.</p>
+
+<p>Google предоставляе SDK для работы с платформой. В SDK входят скрипты для создания приложения, загрузки их на сервера Google и API для доступа к вышеперечисленным сервисам платформы. Кроме того, при разработке используются заглушки для сервисов (например, для User Service API), которые позволяют локально писать и отлаживать приложение.</p>
+
+<p>Компания SpringSource объявила о <a href="http://blog.springsource.com/2009/05/14/grails-111-released-with-google-appengine-support/">поддержке Grails</a> на платформе Google App Engine. Это не может не радовать, но первые впечатления были смазаны, так как <a href="http://grails.org/plugin/app-engine">плагин appengine для Grails</a> ещё нужно дорабатывать. Например, кодогенератор заточен для gorm, который сделан поверх hibernate, но так как appengine не поддерживает hibernate, для генерации CRUD приходится делать следующие пассы: включать hibernate плагин, генерировать CRUD, отключать hibernate плагин. Надеюсь, в следующей версии appengine плагина эта проблема будет решена. Остальные проблемы можно почитать как в комментариях к анонсу, так и в <a href="http://jira.codehaus.org/secure/IssueNavigator.jspa?reset=true&amp;&amp;query=appengine&amp;summary=true&amp;description=true&amp;body=true">джире проекта</a>.</p>
+
+<p><h2>Альтернативные платформы</h2>Самым известным, наверно, является <a href="http://aws.amazon.com/ec2/">Amazon EC2</a>, а замыкает тройку Microsoft с их <a href="http://www.microsoft.com/azure/windowsazure.mspx">Windows Azure</a>.
+Amazon не предоставляет бесплатной дозы, в отличии от Microsoft и Google. При этом Amazon предоставляет shell-доступ к серверам. Сравнивать в целом платформы не имеет смысла, поэтому не буду.</p>
+
+        
+
+    </article>
+    
+    
+    
+
+
+
+
+<div class="pagination">
+
+    
+        
+        
+        
+        <a href="/" aria-label="First" class="label-pagination"><i class="fa fa-angle-double-left fa-lg"></i></a>
+    
+
+    
+    
+        <a href="/page/21/" aria-label="Previous" class="label-pagination"><i class="fa fa-angle-left fa-lg"></i></a>
+    
+
+    
+        <a href="/" class="label-pagination">1</a>
+    
+        <a href="/page/2/" class="label-pagination">2</a>
+    
+        <a href="/page/3/" class="label-pagination">3</a>
+    
+        <a href="/page/4/" class="label-pagination">4</a>
+    
+        <a href="/page/5/" class="label-pagination">5</a>
+    
+        <a href="/page/6/" class="label-pagination">6</a>
+    
+        <a href="/page/7/" class="label-pagination">7</a>
+    
+        <a href="/page/8/" class="label-pagination">8</a>
+    
+        <a href="/page/9/" class="label-pagination">9</a>
+    
+        <a href="/page/10/" class="label-pagination">10</a>
+    
+        <a href="/page/11/" class="label-pagination">11</a>
+    
+        <a href="/page/12/" class="label-pagination">12</a>
+    
+        <a href="/page/13/" class="label-pagination">13</a>
+    
+        <a href="/page/14/" class="label-pagination">14</a>
+    
+        <a href="/page/15/" class="label-pagination">15</a>
+    
+        <a href="/page/16/" class="label-pagination">16</a>
+    
+        <a href="/page/17/" class="label-pagination">17</a>
+    
+        <a href="/page/18/" class="label-pagination">18</a>
+    
+        <a href="/page/19/" class="label-pagination">19</a>
+    
+        <a href="/page/20/" class="label-pagination">20</a>
+    
+        <a href="/page/21/" class="label-pagination">21</a>
+    
+        <a href="/page/22/" class="label-pagination">22</a>
+    
+        <a href="/page/23/" class="label-pagination">23</a>
+    
+        <a href="/page/24/" class="label-pagination">24</a>
+    
+        <a href="/page/25/" class="label-pagination">25</a>
+    
+        <a href="/page/26/" class="label-pagination">26</a>
+    
+
+    
+    
+        <a href="/page/23/" aria-label="Next" class="label-pagination"><i class="fa fa-angle-right fa-lg"></i></a>
+    
+
+    
+    
+        <a href="/page/26/" aria-label="Last"><i class="fa fa-angle-double-right fa-lg"></i></a>
+    
+
+</div>
+
+  
+
+  </div>
+
+  
+
+<aside class="sidebar thirds">
+  <section class="first odd">
+
+    
+
+    <p>
+      
+    </p>
+  </section>
+
+
+
+
+
+  
+
+  
+
+  
+  
+  
+
+</aside>
+    
+ </div>
+</div>
+
+<footer role="contentinfo">
+    
+    <div class="center">
+        <ul class="sidebar-nav">
+            <li class="sidebar-nav-item">
+                <a target="_blank" href="https://github.com/uthark/" title="https://github.com/uthark/"><i
+                    class="fa fa-github fa-3x"></i></a></li>
+            <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
+                    class="fa fa-bitbucket fa-3x"></i></a>
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item"><a target="_blank" href="https://twitter.com/LinkageError/" title="https://twitter.com/LinkageError/"><i
+                    class="fa fa-twitter fa-3x"></i></a>
+            <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
+                    class="fa fa-key fa-3x"></i></a> 
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item"><a target="_blank" href="http://stackoverflow.com/users/216764/uthark" title="http://stackoverflow.com/users/216764/uthark"><i
+                    class="fa fa-stack-overflow fa-3x"></i></a>
+            <li class="sidebar-nav-item"><a target="_blank" href="https://plus.google.com/&#43;OlegAtamanenko" title="https://plus.google.com/&#43;OlegAtamanenko"><i
+                    class="fa fa-google-plus fa-3x"></i></a>
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item">
+                
+                
+            </li>
+        </ul>
+    </div>
+    <p>Copyright &copy; 2017 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+        <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a> and
+            <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.
+    </p>
+
+</footer>
+
+
+</body>
+</html>
+   

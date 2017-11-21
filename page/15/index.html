@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+
+  
+  
+  <link href="//fonts.googleapis.com/css?family=Anonymous+Pro" rel="stylesheet" type="text/css">
+  
+
+  
+  <title>Software Development and related activities</title>
+
+  
+  
+  <link rel="stylesheet" href="https://uthark.github.io/css/hugo-octopress.css">
+
+  
+  
+
+  
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
+  
+  <link href="https://uthark.github.io/favicon.png" rel="icon">
+
+  
+  
+  
+
+  <link href="https://uthark.github.io/index.xml" rel="alternate" type="application/rss+xml" title="Software Development and related activities" />
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <meta name="author" content="Oleg Atamanenko">
+
+  
+  <meta name="generator" content="Hugo 0.31" />
+
+  
+  
+
+</head>
+<body>
+
+
+<header role="banner"><hgroup>
+  
+  <h1><a href="https://uthark.github.io/">Software Development and related activities</a></h1>
+    <h2></h2>
+</hgroup></header>
+
+
+<nav role="navigation">
+
+<ul class="main-navigation">
+  
+  
+    
+      <li><a href="https://uthark.github.io/" title="Home">Home</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/categories/article/" title="Articles" >Articles</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/categories/reading-list/" title="Reading List" >Reading List</a></li>
+    
+  
+    
+      <li><a href="https://uthark.github.io/about/" title="About me" >About me</a></li>
+    
+  
+</ul>
+
+
+<ul class="subscription">
+  
+    
+        <a href="https://uthark.github.io/index.xml" target="_blank" type="application/rss+xml" title="RSS"><i class="fa fa-rss-square fa-lg"></i></a>
+    
+  
+
+</ul>
+
+
+<form action="https://www.google.com/search" method="get" target="_blank">
+  <fieldset role="search">
+  	<input class="search" type="text" name="q" results="0" placeholder="Search"/>
+    <input type="hidden" name="q" value="site:https://uthark.github.io/" />
+  </fieldset>
+</form>
+
+</nav>
+
+
+<div id="main">
+ <div id="content">
+  <div class="blog-index">
+    
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2013/06/19/validation/">Валидация входных параметров с использованием Spring</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>Очень часто возникает задача проверки входных параметров в сервис на корректность с точки зрения бизнес логики.</p>
+
+<p>Эту задачу можно решить в лоб, написав вручную код валидации в каждом из методов сервиса, например, вот так:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">  <span style="color:#66d9ef">public</span> User <span style="color:#a6e22e">save</span><span style="color:#f92672">(</span>User user<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>user <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IllegalArgumentException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;User is null&#34;</span><span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#75715e">// other checks
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//...
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// business logic starts here...
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//...
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">return</span> savedUser<span style="color:#f92672">;</span>
+  <span style="color:#f92672">}</span></code></pre></div>
+<p>Очевидно, что если в каждом методе делать такие проверки, то код бизнес-логики загрязняется проверками, что ухудшает читаемость кода. Решить эту проблему можно следующим образом:</p>
+
+<ol>
+<li>Добавляем аннотации для валидации входных параметров.</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">  <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">@NotNull</span> User <span style="color:#a6e22e">save</span><span style="color:#f92672">(</span><span style="color:#a6e22e">@NotNull</span> User user<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    <span style="color:#75715e">// business logic starts here...
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//...
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">return</span> savedUser<span style="color:#f92672">;</span>
+  <span style="color:#f92672">}</span></code></pre></div>
+<p>Чтобы заставить этот код работать, мы будем использовать возможности Spring Validation.</p>
+
+<ol>
+<li>Spring предоставляет аннотацию <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/validation/annotation/Validated.html">@Validated</a>, которая в отличие от <a href="http://docs.oracle.com/javaee/7/api/javax/validation/Valid.html">@javax.validation.Valid</a> позволяет определять группу валидации.</li>
+<li>Этой аннотацией необходимо проаннотировать бин, методы которого необходимо валидировать.</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Validated</span>
+<span style="color:#a6e22e">@Service</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">UserService</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">@NotNull</span> User <span style="color:#a6e22e">save</span><span style="color:#f92672">(</span><span style="color:#a6e22e">@NotNull</span> User user<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#75715e">// business logic starts here...
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">//...
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">return</span> savedUser<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<ol>
+<li>Для реализации самой валидации нам необходим валидатор. В качестве реализации <a href="http://jcp.org/en/jsr/detail?id=303">JSR-303</a> можно использовать, например, <a href="http://www.hibernate.org/subprojects/validator.html">Hibernate Validator</a>. Для этого в <code>pom.xml</code> необходимо добавить требуемые зависимости:</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;dependency&gt;</span>
+    <span style="color:#f92672">&lt;groupId&gt;</span>javax.validation<span style="color:#f92672">&lt;/groupId&gt;</span>
+    <span style="color:#f92672">&lt;artifactId&gt;</span>validation-api<span style="color:#f92672">&lt;/artifactId&gt;</span>
+    <span style="color:#f92672">&lt;version&gt;</span>1.0.0.GA<span style="color:#f92672">&lt;/version&gt;</span>
+<span style="color:#f92672">&lt;/dependency&gt;</span>
+
+<span style="color:#f92672">&lt;dependency&gt;</span>
+    <span style="color:#f92672">&lt;groupId&gt;</span>org.hibernate<span style="color:#f92672">&lt;/groupId&gt;</span>
+    <span style="color:#f92672">&lt;artifactId&gt;</span>hibernate-validator<span style="color:#f92672">&lt;/artifactId&gt;</span>
+    <span style="color:#f92672">&lt;version&gt;</span>4.3.1.Final<span style="color:#f92672">&lt;/version&gt;</span>
+<span style="color:#f92672">&lt;/dependency&gt;</span></code></pre></div>
+<p>Обращаю внимание, что текущей на данный момент является <a href="http://beanvalidation.org/1.1/spec">спецификация</a> <a href="http://jcp.org/en/jsr/detail?id=349">JSR-349 Bean Validation 1.1</a>, которая поддерживает валидацию методов из коробки, но текущая версия Spring 3.2 - не поддерживает новый API, поэтому необходимо использовать старую версию API, и, соответственно, реализацию. Релевантный баг в Spring <a href="https://jira.springsource.org/browse/SPR-8199">SPR-8199</a>, поддержка нового API ожидается в Spring Framework 4.0.</p>
+
+<ol>
+<li>Необходимо объявить необходимые бины в конфигурации Spring:</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">    <span style="color:#a6e22e">@Bean</span>
+    <span style="color:#66d9ef">public</span> LocalValidatorFactoryBean <span style="color:#a6e22e">validatorFactory</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        LocalValidatorFactoryBean factoryBean <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LocalValidatorFactoryBean<span style="color:#f92672">();</span>
+        factoryBean<span style="color:#f92672">.</span><span style="color:#a6e22e">afterPropertiesSet</span><span style="color:#f92672">();</span>
+        <span style="color:#66d9ef">return</span> factoryBean<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#a6e22e">@Bean</span>
+    <span style="color:#66d9ef">public</span> Validator <span style="color:#a6e22e">validator</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> validatorFactory<span style="color:#f92672">().</span><span style="color:#a6e22e">getValidator</span><span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#a6e22e">@Bean</span>
+    <span style="color:#66d9ef">public</span> MethodValidationPostProcessor <span style="color:#a6e22e">methodValidationPostProcessor</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> MethodValidationPostProcessor<span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span></code></pre></div>
+<ol>
+<li>На этом всё. Как видно, декларативная валидация входных параметров реализуется очень просто.</li>
+</ol>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2013/06/19/spring-caching/">Использование memcached в качестве backend для Spring Caching Abstraction</a>
+    </h1>
+
+</header>
+
+
+        
+        
+
+<p>В <a href="http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/html/new-in-3.1.html">Spring 3.1</a> появился замечательный модуль - <a href="http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/html/cache.html">Spring Cache</a>, который является абстракцией над кэшированием, что позволяет декларативно реализовывать кэширование в приложении.</p>
+
+<p>Я не буду вдаваться в подробности работы, их можно прочитать в документации, но опишу, каким образом можно настроить <a href="http://memcached.org/">memcached</a> в качестве бэкэнда для работы.</p>
+
+<h2 id="подключение-зависимостей">Подключение зависимостей</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;dependency&gt;</span>
+    <span style="color:#f92672">&lt;groupId&gt;</span>com.google.code.simple-spring-memcached<span style="color:#f92672">&lt;/groupId&gt;</span>
+    <span style="color:#f92672">&lt;artifactId&gt;</span>spymemcached-provider<span style="color:#f92672">&lt;/artifactId&gt;</span>
+    <span style="color:#f92672">&lt;version&gt;</span>3.1.0<span style="color:#f92672">&lt;/version&gt;</span>
+<span style="color:#f92672">&lt;/dependency&gt;</span>
+<span style="color:#f92672">&lt;dependency&gt;</span>
+    <span style="color:#f92672">&lt;groupId&gt;</span>com.google.code.simple-spring-memcached<span style="color:#f92672">&lt;/groupId&gt;</span>
+    <span style="color:#f92672">&lt;artifactId&gt;</span>spring-cache<span style="color:#f92672">&lt;/artifactId&gt;</span>
+    <span style="color:#f92672">&lt;version&gt;</span>3.1.0<span style="color:#f92672">&lt;/version&gt;</span>
+<span style="color:#f92672">&lt;/dependency&gt;</span></code></pre></div>
+<p><code>spymemcached-provider</code> - это библиотечка для работы с <code>memcached</code> из Java, а <code>spring-cache</code> - модуль интеграции со Spring.</p>
+
+<h2 id="включение-кэширования">Включение кэширования</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Configuration</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;serviceConfiguration&#34;</span><span style="color:#f92672">)</span>
+<span style="color:#a6e22e">@EnableCaching</span><span style="color:#f92672">(</span>proxyTargetClass <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">,</span> mode <span style="color:#f92672">=</span> AdviceMode<span style="color:#f92672">.</span><span style="color:#a6e22e">PROXY</span><span style="color:#f92672">)</span>
+<span style="color:#a6e22e">@Import</span><span style="color:#f92672">(</span>CacheConfiguration<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">)</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ServiceConfiguration</span> <span style="color:#f92672">{</span>
+  <span style="color:#75715e">// bean declarations goes here.
+</span><span style="color:#75715e"></span><span style="color:#f92672">}</span></code></pre></div>
+<p>Аннотация <code>@EnableCaching</code> включает кэширование. Конфигурацию бинов для кэширования мы выносим в отдельный класс, <code>CacheConfiguration</code>, чтобы не смешивать бины, отвечающие за кэширование с бинами, отвечающими за бизнес-логику.</p>
+
+<p>Объявляем необходимые для работы бины:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Configuration</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CacheConfiguration</span> <span style="color:#f92672">{</span>
+
+    <span style="color:#a6e22e">@Value</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;${memcached.url}&#34;</span><span style="color:#f92672">)</span>
+    <span style="color:#66d9ef">private</span> String memcachedUrl<span style="color:#f92672">;</span>
+
+    <span style="color:#a6e22e">@Bean</span>
+    <span style="color:#66d9ef">public</span> CacheManager <span style="color:#a6e22e">cacheManager</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">throws</span> Exception <span style="color:#f92672">{</span>
+        SSMCacheManager result <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> SSMCacheManager<span style="color:#f92672">();</span>
+        result<span style="color:#f92672">.</span><span style="color:#a6e22e">setCaches</span><span style="color:#f92672">(</span>Arrays<span style="color:#f92672">.</span><span style="color:#a6e22e">asList</span><span style="color:#f92672">(</span>
+                <span style="color:#66d9ef">new</span> SSMCache<span style="color:#f92672">(</span>defaultCacheFactory<span style="color:#f92672">().</span><span style="color:#a6e22e">getObject</span><span style="color:#f92672">(),</span> 45<span style="color:#f92672">)</span>
+        <span style="color:#f92672">));</span>
+        <span style="color:#66d9ef">return</span> result<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#a6e22e">@Bean</span>
+    <span style="color:#66d9ef">public</span> CacheFactory <span style="color:#a6e22e">defaultCacheFactory</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        CacheFactory factory <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> CacheFactory<span style="color:#f92672">();</span>
+        factory<span style="color:#f92672">.</span><span style="color:#a6e22e">setCacheName</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;defaultCache&#34;</span><span style="color:#f92672">);</span>
+        factory<span style="color:#f92672">.</span><span style="color:#a6e22e">setAddressProvider</span><span style="color:#f92672">(</span>addressProvider<span style="color:#f92672">());</span>
+        factory<span style="color:#f92672">.</span><span style="color:#a6e22e">setCacheClientFactory</span><span style="color:#f92672">(</span>cacheClientFactory<span style="color:#f92672">());</span>
+        factory<span style="color:#f92672">.</span><span style="color:#a6e22e">setConfiguration</span><span style="color:#f92672">(</span>cacheConfiguration<span style="color:#f92672">());</span>
+        <span style="color:#66d9ef">return</span> factory<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#a6e22e">@Bean</span>
+    <span style="color:#a6e22e">@Scope</span><span style="color:#f92672">(</span>ConfigurableBeanFactory<span style="color:#f92672">.</span><span style="color:#a6e22e">SCOPE_PROTOTYPE</span><span style="color:#f92672">)</span>
+    <span style="color:#66d9ef">public</span> CacheClientFactory <span style="color:#a6e22e">cacheClientFactory</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> MemcacheClientFactoryImpl<span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#a6e22e">@Bean</span>
+    <span style="color:#66d9ef">public</span> AddressProvider <span style="color:#a6e22e">addressProvider</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> DefaultAddressProvider<span style="color:#f92672">(</span>memcachedUrl<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#a6e22e">@Bean</span>
+    <span style="color:#a6e22e">@Scope</span><span style="color:#f92672">(</span>ConfigurableBeanFactory<span style="color:#f92672">.</span><span style="color:#a6e22e">SCOPE_PROTOTYPE</span><span style="color:#f92672">)</span>
+    <span style="color:#66d9ef">public</span> com<span style="color:#f92672">.</span><span style="color:#a6e22e">google</span><span style="color:#f92672">.</span><span style="color:#a6e22e">code</span><span style="color:#f92672">.</span><span style="color:#a6e22e">ssm</span><span style="color:#f92672">.</span><span style="color:#a6e22e">providers</span><span style="color:#f92672">.</span><span style="color:#a6e22e">CacheConfiguration</span> <span style="color:#a6e22e">cacheConfiguration</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        com<span style="color:#f92672">.</span><span style="color:#a6e22e">google</span><span style="color:#f92672">.</span><span style="color:#a6e22e">code</span><span style="color:#f92672">.</span><span style="color:#a6e22e">ssm</span><span style="color:#f92672">.</span><span style="color:#a6e22e">providers</span><span style="color:#f92672">.</span><span style="color:#a6e22e">CacheConfiguration</span> configuration <span style="color:#f92672">=</span>
+                <span style="color:#66d9ef">new</span> com<span style="color:#f92672">.</span><span style="color:#a6e22e">google</span><span style="color:#f92672">.</span><span style="color:#a6e22e">code</span><span style="color:#f92672">.</span><span style="color:#a6e22e">ssm</span><span style="color:#f92672">.</span><span style="color:#a6e22e">providers</span><span style="color:#f92672">.</span><span style="color:#a6e22e">CacheConfiguration</span><span style="color:#f92672">();</span>
+        configuration<span style="color:#f92672">.</span><span style="color:#a6e22e">setConsistentHashing</span><span style="color:#f92672">(</span><span style="color:#66d9ef">true</span><span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">return</span> configuration<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<h2 id="использование">Использование</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Cacheable</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;defaultCache&#34;</span><span style="color:#f92672">)</span>
+<span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">getUser</span><span style="color:#f92672">(</span><span style="color:#a6e22e">@NotNull</span> String username<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> IOException <span style="color:#f92672">{</span>
+    <span style="color:#75715e">// ...
+</span><span style="color:#75715e"></span><span style="color:#f92672">}</span></code></pre></div>
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2013/06/19/custom-bean-validator/">Пишем валидатор для Bean Validation API</a>
+    </h1>
+
+</header>
+
+
+        
+        
+
+<p><a href="http://jcp.org/en/jsr/detail?id=303">JSR-303</a> предоставляет удобный API для проверки валидности объектов, а также входных параметров. Очевидно, что <a href="http://docs.oracle.com/javaee/6/tutorial/doc/gircz.html">стандартных валидаторов</a> в какой-то момент может быть недостаточно, поэтому необходимо писать собственный.</p>
+
+<p>Хочу показать на примере валидации запроса к <a href="http://www.mongodb.org/">MongoDB</a>, как легко это делается.</p>
+
+<h2 id="создание-аннотации">Создание аннотации</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Target</span><span style="color:#f92672">({</span>FIELD<span style="color:#f92672">,</span> PARAMETER<span style="color:#f92672">})</span>
+<span style="color:#a6e22e">@Retention</span><span style="color:#f92672">(</span>RUNTIME<span style="color:#f92672">)</span>
+<span style="color:#a6e22e">@Documented</span>
+<span style="color:#a6e22e">@Constraint</span><span style="color:#f92672">(</span>validatedBy <span style="color:#f92672">=</span> <span style="color:#f92672">{</span>MongoQueryValidator<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">})</span>
+<span style="color:#66d9ef">public</span> <span style="color:#a6e22e">@interface</span> MongoQuery <span style="color:#f92672">{</span>
+
+    String <span style="color:#a6e22e">message</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">default</span> <span style="color:#e6db74">&#34;Invalid mongo query&#34;</span><span style="color:#f92672">;</span>
+
+    Class<span style="color:#f92672">&lt;?&gt;[]</span> groups<span style="color:#f92672">()</span> <span style="color:#66d9ef">default</span> <span style="color:#f92672">{};</span>
+
+    Class<span style="color:#f92672">&lt;?</span> <span style="color:#66d9ef">extends</span> Payload<span style="color:#f92672">&gt;[]</span> <span style="color:#a6e22e">payload</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">default</span> <span style="color:#f92672">{};</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>Обратите внимание на аннотацию <a href="http://docs.oracle.com/javaee/7/api/javax/validation/Constraint.html">@Constraint</a> - она описывает, какой класс будет проводить реальную валидацию. Атрибуты <code>groups()</code> и <code>payload()</code> являются обязательными.</p>
+
+<h2 id="написание-валидатора">Написание валидатора</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MongoQueryValidator</span> <span style="color:#66d9ef">implements</span> ConstraintValidator<span style="color:#f92672">&lt;</span>MongoQuery<span style="color:#f92672">,</span> CharSequence<span style="color:#f92672">&gt;</span> <span style="color:#f92672">{</span>
+
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">initialize</span><span style="color:#f92672">(</span>MongoQuery constraintAnnotation<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">isValid</span><span style="color:#f92672">(</span>CharSequence value<span style="color:#f92672">,</span> ConstraintValidatorContext context<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#75715e">// ignore null and empty strings.
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">null</span> <span style="color:#f92672">==</span> value <span style="color:#f92672">||</span> value<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">()</span> <span style="color:#f92672">==</span> 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+
+        <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+            Query query <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> BasicQuery<span style="color:#f92672">(</span>value<span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">());</span>
+            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>Exception e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>В данном случае, валидатор у нас простой - мы пытаемся создать Mongo Query из переданной строки, если это не удаётся, то считаем, что строка не является корректным запросом к Mongo и возвращаем <code>false</code>.</p>
+
+<p>Если есть желание возвращать динамическое сообщение об ошибке, то это можно сделать следующим образом:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">    context<span style="color:#f92672">.</span><span style="color:#a6e22e">disableDefaultConstraintViolation</span><span style="color:#f92672">();</span>
+    context<span style="color:#f92672">.</span><span style="color:#a6e22e">buildConstraintViolationWithTemplate</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;&lt;Custom error message&gt;&#34;</span><span style="color:#f92672">).</span><span style="color:#a6e22e">addConstraintViolation</span><span style="color:#f92672">();</span></code></pre></div>
+<h2 id="использование">Использование</h2>
+
+<p>На этом всё, теперь нам остаётся только добавить валидацию на нашу модель или входной параметр.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Model</span> <span style="color:#f92672">{</span>
+    <span style="color:#a6e22e">@MongoQuery</span>
+    <span style="color:#66d9ef">private</span> String queryCriteria<span style="color:#f92672">;</span>
+
+<span style="color:#f92672">}</span></code></pre></div>
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2012/10/24/vagrant/">Автоматизируем работу с виртуальными машинами с помощью Vagrant</a>
+    </h1>
+
+</header>
+
+
+        
+        
+
+<p>Современные enterprise проекты очень часто имеют очень сложную инфраструктуру для развёртывания. Кроме того, во время разработки часто используются виртуальные машины. Например, может использоваться несколько виртуальных машин, на которых развёрнуты различные конфигурации софта.</p>
+
+<p><a href="http://vagrantup.com/">Vagrant</a> - это средство для управления виртуальными машинами на базе <a href="https://www.virtualbox.org/">Virtualbox</a>.</p>
+
+<h2 id="возможности">Возможности</h2>
+
+<ul>
+<li>Создание виртуальных машин с определённой, заранее заданной, конфигурацией.</li>
+<li>Лёгкое создание копии виртуальной машины, используя заранее подготовленный образ.</li>
+<li>Осуществление provisioning для новых виртуальных машин.</li>
+</ul>
+
+<h2 id="работа-с-vagrant">Работа с Vagrant</h2>
+
+<p>Для начала необходимо установить Virtualbox и Vagrant.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">sudo aptitude install virtualbox vagrant</code></pre></div>
+<p>После этого нам нужен образ, из которого мы можем создавать виртуальные машины. Его можно сделать самим или взять уже готовый с сайта Vagrant. Упростим себе жизнь и скачаем образ с сайта:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">    vagrant box add lucid32 http://files.vagrantup.com/lucid32.box</code></pre></div>
+<p>После этого, мы можем начать пользоваться Vagrant.</p>
+
+<p>Для этого нам нужно создать папку, в которой мы будем работать, например:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">    mkdir vagrant-test
+    cd vagrant-test</code></pre></div>
+<p>И инициализировать Vagrant:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">    vagrant init</code></pre></div>
+<p>Результатом работы этой команды будет файлик <code>Vagrantfile</code>, который содержит конфигурацию виртуальной машины для использования.</p>
+
+<p>Пример сгенерированного файла:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># -*- mode: ruby -*-</span>
+<span style="color:#75715e"># vi: set ft=ruby :</span>
+
+<span style="color:#66d9ef">Vagrant</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Config</span><span style="color:#f92672">.</span>run <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
+  <span style="color:#75715e"># All Vagrant configuration is done here. The most common configuration</span>
+  <span style="color:#75715e"># options are documented and commented below. For a complete reference,</span>
+  <span style="color:#75715e"># please see the online documentation at vagrantup.com.</span>
+
+  <span style="color:#75715e"># Every Vagrant virtual environment requires a box to build off of.</span>
+  config<span style="color:#f92672">.</span>vm<span style="color:#f92672">.</span>box <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;base&#34;</span>
+
+  <span style="color:#75715e"># The url from where the &#39;config.vm.box&#39; box will be fetched if it</span>
+  <span style="color:#75715e"># doesn&#39;t already exist on the user&#39;s system.</span>
+  <span style="color:#75715e"># config.vm.box_url = &#34;http://domain.com/path/to/above.box&#34;</span>
+
+  <span style="color:#75715e"># Boot with a GUI so you can see the screen. (Default is headless)</span>
+  <span style="color:#75715e"># config.vm.boot_mode = :gui</span>
+
+  <span style="color:#75715e"># Assign this VM to a host-only network IP, allowing you to access it</span>
+  <span style="color:#75715e"># via the IP. Host-only networks can talk to the host machine as well as</span>
+  <span style="color:#75715e"># any other machines on the same network, but cannot be accessed (through this</span>
+  <span style="color:#75715e"># network interface) by any external networks.</span>
+  <span style="color:#75715e"># config.vm.network :hostonly, &#34;192.168.33.10&#34;</span>
+
+  <span style="color:#75715e"># Assign this VM to a bridged network, allowing you to connect directly to a</span>
+  <span style="color:#75715e"># network using the host&#39;s network device. This makes the VM appear as another</span>
+  <span style="color:#75715e"># physical device on your network.</span>
+  <span style="color:#75715e"># config.vm.network :bridged</span>
+
+  <span style="color:#75715e"># Forward a port from the guest to the host, which allows for outside</span>
+  <span style="color:#75715e"># computers to access the VM, whereas host only networking does not.</span>
+  <span style="color:#75715e"># config.vm.forward_port 80, 8080</span>
+
+  <span style="color:#75715e"># Share an additional folder to the guest VM. The first argument is</span>
+  <span style="color:#75715e"># an identifier, the second is the path on the guest to mount the</span>
+  <span style="color:#75715e"># folder, and the third is the path on the host to the actual folder.</span>
+  <span style="color:#75715e"># config.vm.share_folder &#34;v-data&#34;, &#34;/vagrant_data&#34;, &#34;../data&#34;</span>
+
+  <span style="color:#75715e"># Enable provisioning with Puppet stand alone.  Puppet manifests</span>
+  <span style="color:#75715e"># are contained in a directory path relative to this Vagrantfile.</span>
+  <span style="color:#75715e"># You will need to create the manifests directory and a manifest in</span>
+  <span style="color:#75715e"># the file base.pp in the manifests_path directory.</span>
+  <span style="color:#75715e">#</span>
+  <span style="color:#75715e"># An example Puppet manifest to provision the message of the day:</span>
+  <span style="color:#75715e">#</span>
+  <span style="color:#75715e"># # group { &#34;puppet&#34;:</span>
+  <span style="color:#75715e"># #   ensure =&gt; &#34;present&#34;,</span>
+  <span style="color:#75715e"># # }</span>
+  <span style="color:#75715e"># #</span>
+  <span style="color:#75715e"># # File { owner =&gt; 0, group =&gt; 0, mode =&gt; 0644 }</span>
+  <span style="color:#75715e"># #</span>
+  <span style="color:#75715e"># # file { &#39;/etc/motd&#39;:</span>
+  <span style="color:#75715e"># #   content =&gt; &#34;Welcome to your Vagrant-built virtual machine!</span>
+  <span style="color:#75715e"># #               Managed by Puppet.\n&#34;</span>
+  <span style="color:#75715e"># # }</span>
+  <span style="color:#75715e">#</span>
+  <span style="color:#75715e"># config.vm.provision :puppet do |puppet|</span>
+  <span style="color:#75715e">#   puppet.manifests_path = &#34;manifests&#34;</span>
+  <span style="color:#75715e">#   puppet.manifest_file  = &#34;base.pp&#34;</span>
+  <span style="color:#75715e"># end</span>
+
+  <span style="color:#75715e"># Enable provisioning with chef solo, specifying a cookbooks path, roles</span>
+  <span style="color:#75715e"># path, and data_bags path (all relative to this Vagrantfile), and adding</span>
+  <span style="color:#75715e"># some recipes and/or roles.</span>
+  <span style="color:#75715e">#</span>
+  <span style="color:#75715e"># config.vm.provision :chef_solo do |chef|</span>
+  <span style="color:#75715e">#   chef.cookbooks_path = &#34;../my-recipes/cookbooks&#34;</span>
+  <span style="color:#75715e">#   chef.roles_path = &#34;../my-recipes/roles&#34;</span>
+  <span style="color:#75715e">#   chef.data_bags_path = &#34;../my-recipes/data_bags&#34;</span>
+  <span style="color:#75715e">#   chef.add_recipe &#34;mysql&#34;</span>
+  <span style="color:#75715e">#   chef.add_role &#34;web&#34;</span>
+  <span style="color:#75715e">#</span>
+  <span style="color:#75715e">#   # You may also specify custom JSON attributes:</span>
+  <span style="color:#75715e">#   chef.json = { :mysql_password =&gt; &#34;foo&#34; }</span>
+  <span style="color:#75715e"># end</span>
+
+  <span style="color:#75715e"># Enable provisioning with chef server, specifying the chef server URL,</span>
+  <span style="color:#75715e"># and the path to the validation key (relative to this Vagrantfile).</span>
+  <span style="color:#75715e">#</span>
+  <span style="color:#75715e"># The Opscode Platform uses HTTPS. Substitute your organization for</span>
+  <span style="color:#75715e"># ORGNAME in the URL and validation key.</span>
+  <span style="color:#75715e">#</span>
+  <span style="color:#75715e"># If you have your own Chef Server, use the appropriate URL, which may be</span>
+  <span style="color:#75715e"># HTTP instead of HTTPS depending on your configuration. Also change the</span>
+  <span style="color:#75715e"># validation key to validation.pem.</span>
+  <span style="color:#75715e">#</span>
+  <span style="color:#75715e"># config.vm.provision :chef_client do |chef|</span>
+  <span style="color:#75715e">#   chef.chef_server_url = &#34;https://api.opscode.com/organizations/ORGNAME&#34;</span>
+  <span style="color:#75715e">#   chef.validation_key_path = &#34;ORGNAME-validator.pem&#34;</span>
+  <span style="color:#75715e"># end</span>
+  <span style="color:#75715e">#</span>
+  <span style="color:#75715e"># If you&#39;re using the Opscode platform, your validator client is</span>
+  <span style="color:#75715e"># ORGNAME-validator, replacing ORGNAME with your organization name.</span>
+  <span style="color:#75715e">#</span>
+  <span style="color:#75715e"># IF you have your own Chef Server, the default validation client name is</span>
+  <span style="color:#75715e"># chef-validator, unless you changed the configuration.</span>
+  <span style="color:#75715e">#</span>
+  <span style="color:#75715e">#   chef.validation_client_name = &#34;ORGNAME-validator&#34;</span>
+<span style="color:#66d9ef">end</span></code></pre></div>
+<p>Подробнее о том, что этот файл может содержать можно почитать в <a href="http://vagrantup.com/v1/docs/vagrantfile.html">документации</a></p>
+
+<p>Например, можно изменить размер RAM, доступный операционной системе:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">    config<span style="color:#f92672">.</span>vm<span style="color:#f92672">.</span>customize <span style="color:#f92672">[</span><span style="color:#e6db74">&#34;modifyvm&#34;</span>, <span style="color:#e6db74">:id</span>, <span style="color:#e6db74">&#34;--memory&#34;</span>, <span style="color:#ae81ff">1536</span><span style="color:#f92672">]</span></code></pre></div>
+<p>Так как очень часто мы хотим взаимодействовать с виртуальной машиной снаружи, там нам необходима возможность пробросить порты из виртуальной машины в хост-систему.</p>
+
+<p>Это достигается следующим изменением конфигурации:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">  <span style="color:#75715e"># Включаем bridged network в виртуальной машине.</span>
+  config<span style="color:#f92672">.</span>vm<span style="color:#f92672">.</span>network <span style="color:#e6db74">:bridged</span>
+
+  <span style="color:#75715e"># Пробрасываем порты &lt;порт на виртуальной машине&gt; &lt;порт на хост-системе&gt;</span>
+  config<span style="color:#f92672">.</span>vm<span style="color:#f92672">.</span>forward_port <span style="color:#ae81ff">80</span><span style="color:#f92672"></span>, <span style="color:#ae81ff">8080</span>
+  <span style="color:#f92672"></span>config<span style="color:#f92672">.</span>vm<span style="color:#f92672">.</span>forward_port <span style="color:#ae81ff">443</span><span style="color:#f92672"></span>, <span style="color:#ae81ff">8443</span><span style="color:#f92672"></span></code></pre></div>
+<h2 id="provisioning">Provisioning</h2>
+
+<p>Vagrant не был бы столь успешен, если бы не позволял управляеть конфигурацией создаваемой виртуальной машины.</p>
+
+<p>Vagrant поддерживает следующие приложения, управляющие конфигурацией:</p>
+
+<ul>
+<li><a href="http://wiki.opscode.com/display/chef/Home">Chef</a></li>
+<li><a href="http://puppetlabs.com/puppet/puppet-open-source/">Puppet</a></li>
+<li><a href="http://www.gnu.org/software/bash/manual/bashref.html">Shell</a></li>
+</ul>
+
+<p>А также позволяет использовать написать <a href="http://vagrantup.com/v1/docs/provisioners/others.html">собственное расширение</a>.</p>
+
+<h2 id="управление-виртуальной-машиной">Управление виртуальной машиной</h2>
+
+<p>Управление виртуальной машиной осуществляется командой <code>vagrant</code> с переданным аргументом-действием. Полный список можно получить, выполнив <code>vagrant help</code>.</p>
+
+<p>Список наиболее часто используемых действий:</p>
+
+<ul>
+<li><code>up</code> - поднимает виртуальную машину. Если она не была создана, то создаёт её, используя информацию из файла <code>Vagrantfile</code>.</li>
+<li><code>halt</code> - останавливает виртуальную машину.</li>
+<li><code>provision</code> - обновляет конфигурацию софта на виртуальной машине.</li>
+<li><code>reload</code> - перезагружает виртуальную машину.</li>
+<li><code>ssh</code> - запускает SSH-соединение к машине.</li>
+</ul>
+
+<h2 id="документация-и-ссылки">Документация и ссылки</h2>
+
+<ul>
+<li><a href="http://vagrantup.com/">Официальный сайт</a></li>
+<li><a href="http://vagrantup.com/v1/docs/index.html">Документация</a></li>
+<li><a href="https://github.com/mitchellh/vagrant">Исходный код</a></li>
+</ul>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2012/04/28/spring-data-jpa_28/">Собственная реализация методов в Spring Data JPA</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>Очевидно, что мы не всегда можем воспользоваться автоматической генерацией кода, предоставляемой <a href="http://www.springsource.org/spring-data/jpa">Spring Data JPA</a>. Например, у нас слишком сложный запрос, или нам необходимо вызвать процедуру в базе данных, либо у нас сложная бизнес-логика.</p>
+
+<p>Рассмотрим следующий пример - например, нам нужна функциональность уникального счётчика, который мы решили реализовать с помощью последовательности (sequence).</p>
+
+<p>Сначала определим интерфейс, в котором опишем все методы, которые мы будем реализовывать самостоятельно. В нашем случае, это будет только один метод:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">UserRepositoryCustom</span> <span style="color:#f92672">{</span>
+    <span style="color:#75715e">/**
+</span><span style="color:#75715e">     * Returns next unique id.
+</span><span style="color:#75715e">     *
+</span><span style="color:#75715e">     * @return next unique id.
+</span><span style="color:#75715e">     */</span>
+    Integer <span style="color:#a6e22e">getNextUniqueId</span><span style="color:#f92672">();</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>Затем обновим объявление репозитория, чтобы он унаследовал новый интерфейс <tt>UserRepositoryCustom</tt></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">UserRepository</span> <span style="color:#66d9ef">extends</span> JpaRepository<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">,</span> Integer<span style="color:#f92672">&gt;,</span> UserRepositoryCustom <span style="color:#f92672">{</span>
+   <span style="color:#f92672">...</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>Теперь напишем реализацию метода:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">UserRepositoryImpl</span> <span style="color:#66d9ef">implements</span> UserRepositoryCustom <span style="color:#f92672">{</span>
+
+    <span style="color:#a6e22e">@PersistenceContext</span>
+    <span style="color:#66d9ef">private</span> EntityManager entityManager<span style="color:#f92672">;</span>
+
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">public</span> Integer <span style="color:#a6e22e">getNextUniqueId</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+
+        <span style="color:#75715e">// When using Hibernate via JPA native queries fails with mapping exception, so just use Hibernate directly:
+</span><span style="color:#75715e"></span>        Session session <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>Session<span style="color:#f92672">)</span> entityManager<span style="color:#f92672">.</span><span style="color:#a6e22e">getDelegate</span><span style="color:#f92672">();</span>
+        SQLQuery nativeQuery <span style="color:#f92672">=</span> session<span style="color:#f92672">.</span><span style="color:#a6e22e">createSQLQuery</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;SELECT \&#34;nextval\&#34;(&#39;unique_id_seq&#39;) &#34;</span><span style="color:#f92672">);</span>
+        List<span style="color:#f92672">&lt;</span>BigInteger<span style="color:#f92672">&gt;</span> list <span style="color:#f92672">=</span> nativeQuery<span style="color:#f92672">.</span><span style="color:#a6e22e">list</span><span style="color:#f92672">();</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>list<span style="color:#f92672">.</span><span style="color:#a6e22e">isEmpty</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IncorrectResultSizeDataAccessException<span style="color:#f92672">(</span>1<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+
+        BigInteger result <span style="color:#f92672">=</span> list<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>0<span style="color:#f92672">);</span>
+
+        <span style="color:#66d9ef">return</span> result<span style="color:#f92672">.</span><span style="color:#a6e22e">intValue</span><span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>И, наконец, укажем Spring Data JPA, чтобы в качестве класса для прокси использовался наш класс с реализацией собственных методов. Для этого нам нужна ещё одна секция <tt>repositories</tt> в конфигурационном файле:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml">    <span style="color:#f92672">&lt;repositories</span> <span style="color:#a6e22e">base-package=</span><span style="color:#e6db74">&#34;[base.repository.package]&#34;</span><span style="color:#f92672">/&gt;</span>
+
+    <span style="color:#f92672">&lt;repositories</span> <span style="color:#a6e22e">base-package=</span><span style="color:#e6db74">&#34;[base.repository.package]&#34;</span><span style="color:#f92672">&gt;</span>
+        <span style="color:#f92672">&lt;repository</span> <span style="color:#a6e22e">id=</span><span style="color:#e6db74">&#34;userRepository&#34;</span> <span style="color:#a6e22e">custom-impl-ref=</span><span style="color:#e6db74">&#34;userRepositoryImpl&#34;</span><span style="color:#f92672">/&gt;</span>
+    <span style="color:#f92672">&lt;/repositories&gt;</span>
+
+    <span style="color:#f92672">&lt;beans:bean</span> <span style="color:#a6e22e">id=</span><span style="color:#e6db74">&#34;userRepositoryImpl&#34;</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;...UserRepositoryImpl&#34;</span><span style="color:#f92672">/&gt;</span></code></pre></div>
+<p>Вот и всё.</p>
+
+        
+
+    </article>
+    
+    
+    
+
+
+
+
+<div class="pagination">
+
+    
+        
+        
+        
+        <a href="/" aria-label="First" class="label-pagination"><i class="fa fa-angle-double-left fa-lg"></i></a>
+    
+
+    
+    
+        <a href="/page/14/" aria-label="Previous" class="label-pagination"><i class="fa fa-angle-left fa-lg"></i></a>
+    
+
+    
+        <a href="/" class="label-pagination">1</a>
+    
+        <a href="/page/2/" class="label-pagination">2</a>
+    
+        <a href="/page/3/" class="label-pagination">3</a>
+    
+        <a href="/page/4/" class="label-pagination">4</a>
+    
+        <a href="/page/5/" class="label-pagination">5</a>
+    
+        <a href="/page/6/" class="label-pagination">6</a>
+    
+        <a href="/page/7/" class="label-pagination">7</a>
+    
+        <a href="/page/8/" class="label-pagination">8</a>
+    
+        <a href="/page/9/" class="label-pagination">9</a>
+    
+        <a href="/page/10/" class="label-pagination">10</a>
+    
+        <a href="/page/11/" class="label-pagination">11</a>
+    
+        <a href="/page/12/" class="label-pagination">12</a>
+    
+        <a href="/page/13/" class="label-pagination">13</a>
+    
+        <a href="/page/14/" class="label-pagination">14</a>
+    
+        <a href="/page/15/" class="label-pagination">15</a>
+    
+        <a href="/page/16/" class="label-pagination">16</a>
+    
+        <a href="/page/17/" class="label-pagination">17</a>
+    
+        <a href="/page/18/" class="label-pagination">18</a>
+    
+        <a href="/page/19/" class="label-pagination">19</a>
+    
+        <a href="/page/20/" class="label-pagination">20</a>
+    
+        <a href="/page/21/" class="label-pagination">21</a>
+    
+        <a href="/page/22/" class="label-pagination">22</a>
+    
+        <a href="/page/23/" class="label-pagination">23</a>
+    
+        <a href="/page/24/" class="label-pagination">24</a>
+    
+        <a href="/page/25/" class="label-pagination">25</a>
+    
+        <a href="/page/26/" class="label-pagination">26</a>
+    
+
+    
+    
+        <a href="/page/16/" aria-label="Next" class="label-pagination"><i class="fa fa-angle-right fa-lg"></i></a>
+    
+
+    
+    
+        <a href="/page/26/" aria-label="Last"><i class="fa fa-angle-double-right fa-lg"></i></a>
+    
+
+</div>
+
+  
+
+  </div>
+
+  
+
+<aside class="sidebar thirds">
+  <section class="first odd">
+
+    
+
+    <p>
+      
+    </p>
+  </section>
+
+
+
+
+
+  
+
+  
+
+  
+  
+  
+
+</aside>
+    
+ </div>
+</div>
+
+<footer role="contentinfo">
+    
+    <div class="center">
+        <ul class="sidebar-nav">
+            <li class="sidebar-nav-item">
+                <a target="_blank" href="https://github.com/uthark/" title="https://github.com/uthark/"><i
+                    class="fa fa-github fa-3x"></i></a></li>
+            <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
+                    class="fa fa-bitbucket fa-3x"></i></a>
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item"><a target="_blank" href="https://twitter.com/LinkageError/" title="https://twitter.com/LinkageError/"><i
+                    class="fa fa-twitter fa-3x"></i></a>
+            <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
+                    class="fa fa-key fa-3x"></i></a> 
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item"><a target="_blank" href="http://stackoverflow.com/users/216764/uthark" title="http://stackoverflow.com/users/216764/uthark"><i
+                    class="fa fa-stack-overflow fa-3x"></i></a>
+            <li class="sidebar-nav-item"><a target="_blank" href="https://plus.google.com/&#43;OlegAtamanenko" title="https://plus.google.com/&#43;OlegAtamanenko"><i
+                    class="fa fa-google-plus fa-3x"></i></a>
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item">
+            <li class="sidebar-nav-item">
+                
+                
+            </li>
+        </ul>
+    </div>
+    <p>Copyright &copy; 2017 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+        <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a> and
+            <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.
+    </p>
+
+</footer>
+
+
+</body>
+</html>
+   

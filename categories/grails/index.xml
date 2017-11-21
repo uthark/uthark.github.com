@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Grails on Software Development and related activities</title>
+    <link>https://uthark.github.io/categories/grails/</link>
+    <description>Recent content in Grails on Software Development and related activities</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 11 Apr 2010 11:45:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://uthark.github.io/categories/grails/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Несколько слов о GORM</title>
+      <link>https://uthark.github.io/2010/04/11/gorm/</link>
+      <pubDate>Sun, 11 Apr 2010 11:45:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2010/04/11/gorm/</guid>
+      <description>В данной заметке хочу поделиться некоторыми моментами использования GORM.
+GORM - это ORM-фреймворк, используемый в Grails. Реализован он поверх Hibernate, но, при этом, с некоторыми отличными умолчаниями.
+Для разработчиков, знающих Hibernate, рекомендую тщательно изучить GORM, так как его поведение в некоторых случаях отлично от Hibernate, что может приводить к различным сюрпризам.
+ Маппинг один-ко-многим По умолчанию GORM для связей один ко многим (one-to-many) создаёт таблицу-связку, которая обычно нужна только при связях между сущностями вида многие ко многим.</description>
+    </item>
+    
+    <item>
+      <title>Список для проверки при оптимизации Grails приложений</title>
+      <link>https://uthark.github.io/2010/02/06/grails/</link>
+      <pubDate>Sat, 06 Feb 2010 23:31:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2010/02/06/grails/</guid>
+      <description>Выкладываю ниже список задач, которые нужно/можно выполнить для оптимизации приложения, написанного на Grails, может кому пригодится.
+Тестирование проведённых оптимизаций Первым делом необходимо разработать критерии проверки, которые позволят оценить эффективность проведённых оптимизаций.
+Установить Java Melody плагин для Grails для проведения анализа.  Разработать скрипты для проведения нагрузочного тестирования.
+ Прогнать скрипты.
+ Проанализировать результаты Java Melody, выявить узкие места, произвести нужные оптимизации. Общие оптимизации Очень часто обновление до последней версии используемых библиотек попутно улучшает производительность.</description>
+    </item>
+    
+  </channel>
+</rss>

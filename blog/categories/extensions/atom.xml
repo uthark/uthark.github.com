@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Extensions | Software Development and related activities]]></title>
-  <link href="http://uthark.github.io/blog/categories/extensions/atom.xml" rel="self"/>
-  <link href="http://uthark.github.io/"/>
-  <updated>2017-10-12T19:01:44-04:00</updated>
-  <id>http://uthark.github.io/</id>
+  <title><![CDATA[Category: extensions | Блог о разработке ПО]]></title>
+  <link href="http://uthark.github.com/blog/categories/extensions/atom.xml" rel="self"/>
+  <link href="http://uthark.github.com/"/>
+  <updated>2013-06-29T23:40:55-04:00</updated>
+  <id>http://uthark.github.com/</id>
   <author>
     <name><![CDATA[Oleg Atamanenko]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Расширение Delicious Plugin идёт в массы]]></title>
-    <link href="http://uthark.github.io/blog/2009/11/25/delicious-plugin/"/>
-    <updated>2009-11-25T23:16:00+06:00</updated>
-    <id>http://uthark.github.io/blog/2009/11/25/delicious-plugin</id>
+    <link href="http://uthark.github.com/blog/2009/11/25/delicious-plugin/"/>
+    <updated>2009-11-25T12:16:00-05:00</updated>
+    <id>http://uthark.github.com/blog/2009/11/25/delicious-plugin</id>
     <content type="html"><![CDATA[<div class='post'>
 Google запустил сайт <a href="https://chrome.google.com/extensions/" target="_blank">Chrome Extensions</a>.<br />
 <br />
