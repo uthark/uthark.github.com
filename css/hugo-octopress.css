@@ -214,7 +214,7 @@ li code {
     font-family: "Anonymous Pro","Fira Mono", "DejaVu Sans Mono", Menlo, Consolas, "Liberation Mono", Monaco, "Lucida Console", monospace;
 }
 body>header h1 {
-    font-size: 2.2em;
+    font-size: 1.8em;
     font-family: "Anonymous Pro","Fira Mono", "DejaVu Sans Mono", Menlo, Consolas, "Liberation Mono", Monaco, "Lucida Console", monospace;
     font-weight: normal;
     line-height: 1.2em;
@@ -228,7 +228,7 @@ body {
     /*color: #222*/
 }
 h1 {
-    font-size: 2.2em;
+    font-size: 1.8em;
     line-height: 1.2em
 }
 @media only screen and (min-width: 992px) {
@@ -236,7 +236,7 @@ h1 {
         font-size: 1.15em
     }
     h1 {
-        font-size: 2.6em;
+        font-size: 2.4em;
         line-height: 1.2em
     }
 }
@@ -1191,7 +1191,7 @@ article>footer p.meta {
     padding-bottom: 0
 }
 #content .blog-index article h1 {
-    font-size: 2.2em
+    font-size: 1.8em
 }
 #content .blog-index article h1 a {
     color: inherit

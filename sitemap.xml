@@ -1125,6 +1125,12 @@
   </url>
   
   <url>
+    <loc>https://uthark.github.io/</loc>
+    <lastmod>2017-10-12T17:02:55+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://uthark.github.io/categories/siteupdate/</loc>
     <lastmod>2014-03-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -1133,12 +1139,6 @@
   <url>
     <loc>https://uthark.github.io/categories/skype/</loc>
     <lastmod>2010-03-22T23:50:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://uthark.github.io/</loc>
-    <lastmod>2017-10-12T17:02:55+00:00</lastmod>
     <priority>0</priority>
   </url>
   
