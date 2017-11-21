@@ -114,6 +114,139 @@
 
 <header>
     <h1 class="entry-title">
+        <a href="https://uthark.github.io/2010/05/22/databene-benerator/">Создание больших объёмов тестовых данных с помощью Databene Benerator</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>Периодически необходимо решать задачу создания больших ( и не очень) объёмов тестовых данных для проведения различных видов тестирования - функционального, нагрузочного (тестирование стабильности и производительности). При этом часто получается так, что система на тестовых данных ведёт себя совсем иначе, чем на реальных данных. Причина кроется в том, что создать правдоподобные тестовые данные всегда достаточно сложно.</p>
+<p>Изучая данный вопрос я наткнулся на замечательный фреймворк - <a href="http://databene.org/databene-benerator">Databene Benerator</a>, основной целью создания которого как раз и является создание правдоподобных тестовых данных для проведения различных видов тестирования.</p>
+<h4>Установка</h4>
+<p>Установка фреймворка осуществляется двумя способами - как отдельное приложение и как плагин для Maven.</p>
+<h5>Установка под Maven</h5>
+<p>Для использования Databene benerator в проектах, использующих для сборки Apache Maven необходимо добавить в зависимости databene-benerator и сконфигурировать его.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;project</span> <span style="color:#a6e22e">xmlns=</span><span style="color:#e6db74">&#34;http://maven.apache.org/POM/4.0.0&#34;</span> <span style="color:#a6e22e">xmlns:xsi=</span><span style="color:#e6db74">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+         <span style="color:#a6e22e">xsi:schemaLocation=</span><span style="color:#e6db74">&#34;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd&#34;</span><span style="color:#f92672">&gt;</span>
+  <span style="color:#f92672">&lt;modelVersion&gt;</span>4.0.0<span style="color:#f92672">&lt;/modelVersion&gt;</span>
+  <span style="color:#f92672">&lt;groupId&gt;</span>com.myorganization<span style="color:#f92672">&lt;/groupId&gt;</span>
+  <span style="color:#f92672">&lt;artifactId&gt;</span>databene-benerator-test<span style="color:#f92672">&lt;/artifactId&gt;</span>
+  <span style="color:#f92672">&lt;version&gt;</span>1.0<span style="color:#f92672">&lt;/version&gt;</span>
+  <span style="color:#f92672">&lt;packaging&gt;</span>jar<span style="color:#f92672">&lt;/packaging&gt;</span>
+  <span style="color:#f92672">&lt;name&gt;</span>data generation project<span style="color:#f92672">&lt;/name&gt;</span>
+  <span style="color:#f92672">&lt;dependencies&gt;</span>
+    <span style="color:#f92672">&lt;dependency&gt;</span>
+      <span style="color:#f92672">&lt;groupId&gt;</span>org.databene<span style="color:#f92672">&lt;/groupId&gt;</span>
+      <span style="color:#f92672">&lt;artifactId&gt;</span>databene-benerator<span style="color:#f92672">&lt;/artifactId&gt;</span>
+      <span style="color:#f92672">&lt;version&gt;</span>0.5.9<span style="color:#f92672">&lt;/version&gt;</span>
+    <span style="color:#f92672">&lt;/dependency&gt;</span>
+    <span style="color:#f92672">&lt;dependency&gt;</span>
+      <span style="color:#f92672">&lt;groupId&gt;</span>org.databene<span style="color:#f92672">&lt;/groupId&gt;</span>
+      <span style="color:#f92672">&lt;artifactId&gt;</span>databene-webdecs<span style="color:#f92672">&lt;/artifactId&gt;</span>
+      <span style="color:#f92672">&lt;version&gt;</span>0.4.9<span style="color:#f92672">&lt;/version&gt;</span>
+    <span style="color:#f92672">&lt;/dependency&gt;</span>
+    <span style="color:#f92672">&lt;dependency&gt;</span>
+      <span style="color:#f92672">&lt;groupId&gt;</span>org.databene<span style="color:#f92672">&lt;/groupId&gt;</span>
+      <span style="color:#f92672">&lt;artifactId&gt;</span>databene-commons<span style="color:#f92672">&lt;/artifactId&gt;</span>
+      <span style="color:#f92672">&lt;version&gt;</span>0.4.9<span style="color:#f92672">&lt;/version&gt;</span>
+    <span style="color:#f92672">&lt;/dependency&gt;</span>
+    <span style="color:#f92672">&lt;dependency&gt;</span>
+      <span style="color:#f92672">&lt;groupId&gt;</span>mysql<span style="color:#f92672">&lt;/groupId&gt;</span>
+      <span style="color:#f92672">&lt;artifactId&gt;</span>mysql-connector-java<span style="color:#f92672">&lt;/artifactId&gt;</span>
+      <span style="color:#f92672">&lt;version&gt;</span>5.1.6<span style="color:#f92672">&lt;/version&gt;</span>
+    <span style="color:#f92672">&lt;/dependency&gt;</span>
+  <span style="color:#f92672">&lt;/dependencies&gt;</span>
+  <span style="color:#f92672">&lt;build&gt;</span>
+    <span style="color:#f92672">&lt;resources&gt;</span>
+      <span style="color:#f92672">&lt;resource&gt;</span>
+        <span style="color:#f92672">&lt;directory&gt;</span>src/main/resources<span style="color:#f92672">&lt;/directory&gt;</span>
+        <span style="color:#f92672">&lt;filtering&gt;</span>true<span style="color:#f92672">&lt;/filtering&gt;</span>
+      <span style="color:#f92672">&lt;/resource&gt;</span>
+    <span style="color:#f92672">&lt;/resources&gt;</span>
+    <span style="color:#f92672">&lt;plugins&gt;</span>
+      <span style="color:#f92672">&lt;plugin&gt;</span>
+        <span style="color:#f92672">&lt;groupId&gt;</span>org.apache.maven.plugins<span style="color:#f92672">&lt;/groupId&gt;</span>
+        <span style="color:#f92672">&lt;artifactId&gt;</span>maven-compiler-plugin<span style="color:#f92672">&lt;/artifactId&gt;</span>
+        <span style="color:#f92672">&lt;configuration&gt;</span>
+          <span style="color:#f92672">&lt;encoding&gt;</span>UTF-8<span style="color:#f92672">&lt;/encoding&gt;</span>
+          <span style="color:#f92672">&lt;source&gt;</span>1.5<span style="color:#f92672">&lt;/source&gt;</span>
+          <span style="color:#f92672">&lt;target&gt;</span>1.5<span style="color:#f92672">&lt;/target&gt;</span>
+        <span style="color:#f92672">&lt;/configuration&gt;</span>
+      <span style="color:#f92672">&lt;/plugin&gt;</span>
+      <span style="color:#f92672">&lt;plugin&gt;</span>
+        <span style="color:#f92672">&lt;groupId&gt;</span>org.databene<span style="color:#f92672">&lt;/groupId&gt;</span>
+        <span style="color:#f92672">&lt;artifactId&gt;</span>maven-benerator-plugin<span style="color:#f92672">&lt;/artifactId&gt;</span>
+        <span style="color:#f92672">&lt;version&gt;</span>0.5.9<span style="color:#f92672">&lt;/version&gt;</span>
+        <span style="color:#f92672">&lt;executions&gt;</span>
+          <span style="color:#f92672">&lt;execution&gt;</span>
+            <span style="color:#f92672">&lt;phase&gt;</span>compile<span style="color:#f92672">&lt;/phase&gt;</span>
+            <span style="color:#f92672">&lt;goals&gt;</span>
+              <span style="color:#f92672">&lt;goal&gt;</span>generate<span style="color:#f92672">&lt;/goal&gt;</span>
+            <span style="color:#f92672">&lt;/goals&gt;</span>
+          <span style="color:#f92672">&lt;/execution&gt;</span>
+        <span style="color:#f92672">&lt;/executions&gt;</span>
+        <span style="color:#f92672">&lt;configuration&gt;</span>
+          <span style="color:#f92672">&lt;descriptor&gt;</span>src/main/resources/benerator.ben.xml<span style="color:#f92672">&lt;/descriptor&gt;</span>
+          <span style="color:#f92672">&lt;encoding&gt;</span>UTF-8<span style="color:#f92672">&lt;/encoding&gt;</span>
+          <span style="color:#f92672">&lt;validate&gt;</span>true<span style="color:#f92672">&lt;/validate&gt;</span>
+          <span style="color:#f92672">&lt;dbUrl&gt;</span>jdbc:mysql://localhost:3306/hrtool?useUnicode=true<span style="color:#960050;background-color:#1e0010">&amp;</span>characterEncoding=UTF-8<span style="color:#f92672">&lt;/dbUrl&gt;</span>
+          <span style="color:#f92672">&lt;dbDriver&gt;</span>com.mysql.jdbc.Driver<span style="color:#f92672">&lt;/dbDriver&gt;</span>
+          <span style="color:#f92672">&lt;dbSchema&gt;</span>database<span style="color:#f92672">&lt;/dbSchema&gt;</span>
+          <span style="color:#f92672">&lt;dbUser&gt;</span>user<span style="color:#f92672">&lt;/dbUser&gt;</span>
+          <span style="color:#f92672">&lt;dbPassword&gt;</span>password<span style="color:#f92672">&lt;/dbPassword&gt;</span>
+        <span style="color:#f92672">&lt;/configuration&gt;</span>
+        <span style="color:#f92672">&lt;dependencies&gt;</span>
+        <span style="color:#f92672">&lt;dependency&gt;</span>
+            <span style="color:#f92672">&lt;groupId&gt;</span>log4j<span style="color:#f92672">&lt;/groupId&gt;</span>
+            <span style="color:#f92672">&lt;artifactId&gt;</span>log4j<span style="color:#f92672">&lt;/artifactId&gt;</span>
+            <span style="color:#f92672">&lt;version&gt;</span>1.2.13<span style="color:#f92672">&lt;/version&gt;</span>
+            <span style="color:#f92672">&lt;scope&gt;</span>runtime<span style="color:#f92672">&lt;/scope&gt;</span>
+          <span style="color:#f92672">&lt;/dependency&gt;</span>
+          <span style="color:#f92672">&lt;dependency&gt;</span>
+            <span style="color:#f92672">&lt;groupId&gt;</span>org.apache.poi<span style="color:#f92672">&lt;/groupId&gt;</span>
+            <span style="color:#f92672">&lt;artifactId&gt;</span>poi<span style="color:#f92672">&lt;/artifactId&gt;</span>
+            <span style="color:#f92672">&lt;version&gt;</span>3.5-beta5<span style="color:#f92672">&lt;/version&gt;</span>
+            <span style="color:#f92672">&lt;scope&gt;</span>runtime<span style="color:#f92672">&lt;/scope&gt;</span>
+          <span style="color:#f92672">&lt;/dependency&gt;</span>
+        <span style="color:#f92672">&lt;/dependencies&gt;</span>
+      <span style="color:#f92672">&lt;/plugin&gt;</span>
+    <span style="color:#f92672">&lt;/plugins&gt;</span>
+  <span style="color:#f92672">&lt;/build&gt;</span>
+<span style="color:#f92672">&lt;/project&gt;</span></code></pre></div>
+<p>В конфигурации необходимо указать как минимум следующие параметры:</p>
+<ol><li><span style=" font-family:'Courier New,courier';">dbUrl</span> - строка подключения к базе данных в формате JDBC</li>
+<li><span style=" font-family:'Courier New,courier';">dbDriver</span> - используемый драйвер базы данных</li>
+<li><span style=" font-family:'Courier New,courier';">dbSchema</span> - имя схемы базы данных</li>
+<li><span style=" font-family:'Courier New,courier';">dbUser</span> - имя пользователя, под которым подключаемся к базе данных</li>
+<li><span style=" font-family:'Courier New,courier';">dbPassword</span> - пароль пользователя для подключения к базе данных</li>
+</ol>
+<p>Кроме использования файла pom.xml databene поддерживает возможность указания параметров в файле benerator.properties, что может быть удобно.</p>
+<p>Databene benerator обладает следующими возможностями:</p>
+<ol><li>Решение проблемы создания данных в общем виде. На данный момент поддерживаются XML и реляционные базы данных, но не за горами поддержка веб-сервисов, SAP и любых других систем через механизм расширений.</li>
+<li>Юзабилити. Databene-benerator позволяет упростить создание тестовых данных для сложной модели прикладной области.</li>
+<li>Обработка больших объёмов данных.</li>
+<li>Высокая производительность.</li>
+<li>Поддержка доменных областей.</li>
+<li>Качество данных. Фреймворк поддерживает проверку ограничений модели прикладной области.</li>
+<li>Компонентная, легкорасширяемая архитектура.</li>
+<li>Широкие возможности изменения и настройки генерации тестовых данных</li>
+<li>Создание тестовых данных с нуля.</li>
+<li>Импорт и анонимизация реальных данных.</li>
+</ol>
+<p>В комплекте идёт толковая, но, к сожалению, неполная <a href="http://databene.org/download/databene-benerator-manual-0.6.0.pdf">документация</a> по возможностям.</p>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
         <a href="https://uthark.github.io/2010/04/11/gorm/">Несколько слов о GORM</a>
     </h1>
 
@@ -436,84 +569,6 @@
 
     </article>
     
-    <article>
-
-        
-        
-
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2010/02/06/grails/">Список для проверки при оптимизации Grails приложений</a>
-    </h1>
-
-</header>
-
-
-        
-        <p>Выкладываю ниже список задач, которые нужно/можно выполнить для оптимизации приложения, написанного на Grails, может кому пригодится.<br />
-<h4>Тестирование проведённых оптимизаций </h4>Первым делом необходимо разработать критерии проверки, которые позволят оценить эффективность проведённых оптимизаций.<br />
-<ol><li>Установить <a href="http://code.google.com/p/javamelody/">Java Melody</a> <a href="http://www.grails.org/plugin/grails-melody">плагин</a> для Grails для проведения анализа. <br />
-</li>
-<li>Разработать скрипты для проведения нагрузочного тестирования.<br />
-</li>
-<li>Прогнать скрипты.<br />
-</li>
-<li>Проанализировать результаты Java Melody, выявить узкие места, произвести нужные оптимизации.</li>
-</ol><h4>Общие оптимизации </h4>Очень часто обновление до последней версии используемых библиотек попутно улучшает производительность.<br />
-<ol><li>Обновить Java до последней версии<br />
-</li>
-<li>Обновить Groovy до последней версии.<br />
-</li>
-<li>Обновить Grails до последней версии.<br />
-</li>
-<li>Обновить jQuery до последней версии.<br />
-</li>
-<li>Оптимизировать настройки виртуальной машины Java (например, -server -Xmx270m -Xms270m -XX:MaxPermSize=80m -Xverify:none -XX:+UseParallelGC -XX:+UseParallelOldGC -XX:+UseAdaptiveSizePolicy -XX:SurvivorRatio=4 -XX:TargetSurvivorRatio=90 -XX:MaxTenuringThreshold=31 -XX:+AggressiveOpts)<br />
-a. <a href="http://java.sun.com/javase/technologies/hotspot/gc/gc_tuning_6.html">http://java.sun.com/javase/technologies/hotspot/gc/gc_tuning_6.html</a><br />
-Вообще, по оптимизации JVM написаны целые книги, так что не буду здесь останавливаться.<br />
-</li>
-</ol><h4>Оптимизация клиентской части </h4><ol><li>Настроить <a href="http://tomcat.apache.org/tomcat-5.5-doc/config/context.html">кэширование статических ресурсов</a> в Томкате.<br />
-</li>
-<li>Настроить <a href="http://tomcat.apache.org/tomcat-5.5-doc/config/http.html">сжатие статических ресурсов</a> в Томкате.<br />
-</li>
-<li>(поставить прокси на nginx для кэширования статических ресурсов ?)<br />
-</li>
-<li>Установить плагины для Firebug, которые оценят производительность клиентской части.<br />
-<ul><li><a href="http://code.google.com/speed/page-speed">PageSpeed</a> </li>
-<li><a href="http://developer.yahoo.com/yslow/">YSlow</a> </li>
-</ul></li>
-<li>Проанализировать страницы веб-сайта с их помощью<br />
-</li>
-<li>Провести предлагаемые оптимизации.<br />
-</li>
-</ol><h4>Оптимизация клиентской части приложений, написанных на Grails </h4><ol><li>Установить плагин <a href="http://www.grails.org/plugin/ui-performance">UI Performance</a><br />
-</li>
-<li>Провести оптимизацию с использованием плагина UI Performance <br />
-</li>
-</ol><h4>Оптимизация базы данных </h4><ol><li>Оптимизировать производительность сервера базы данных (SQL Server) <br />
-a. <a href="http://www.sql-server-performance.com/tips/all_main.aspx">http://www.sql-server-performance.com/tips/all_main.aspx</a> <br />
-a. <a href="http://msdn.microsoft.com/en-us/library/ms998577.aspx">http://msdn.microsoft.com/en-us/library/ms998577.aspx</a><br />
-</li>
-<li>Проверить наличие индексов в базе данных, добавить необходимые<br />
-</li>
-<li>Найти неоптимальные запросы в БД, оптимизировать</li>
-</ol><h4>Оптимизация работы с базой данных </h4><ol><li>Обновить версию JDBC-драйвера<br />
-</li>
-<li>Настроить кэширование в Hibernate.<br />
-Ресурсов в сети предостаточно, навскидку <a href="http://docs.jboss.org/hibernate/core/3.3/reference/en/html/performance.html">вот</a> <a href="http://www.devx.com/dbzone/Article/29685/1954"> парочка</a>.<br />
-</li>
-</ol><h4>Оптимизация серверной части приложения </h4><ol><li>Произвести профилирование приложения (использовать Visual VM, YJP Profiler), найти узкие места и оптимизировать их.</li>
-</ol><h4>Оптимизация серверной части приложения (опционально) </h4><ol><li>Установить плагин <a href="http://www.grails.org/plugin/perf4j">Perf4J</a> для грэйлза <br />
-</li>
-<li>Добавить необходимые счётчики в код<br />
-</li>
-<li>Прогнать нагрузочные тесты, найти узкие места, оптимизировать.</li>
-</ol><h4>Заключение</h4>В целом, в данном списке нет ничего нового, это всего лишь компиляция публично доступных материалов. Тем не менее, решил это опубликовать, чтобы сэкономить время другим.</p>
-
-        
-
-    </article>
-    
     
     
 
@@ -587,6 +642,8 @@ a. <a href="http://msdn.microsoft.com/en-us/library/ms998577.aspx">http://msdn.m
     
         <a href="/page/26/" class="label-pagination">26</a>
     
+        <a href="/page/27/" class="label-pagination">27</a>
+    
 
     
     
@@ -595,7 +652,7 @@ a. <a href="http://msdn.microsoft.com/en-us/library/ms998577.aspx">http://msdn.m
 
     
     
-        <a href="/page/26/" aria-label="Last"><i class="fa fa-angle-double-right fa-lg"></i></a>
+        <a href="/page/27/" aria-label="Last"><i class="fa fa-angle-double-right fa-lg"></i></a>
     
 
 </div>

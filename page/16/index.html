@@ -114,6 +114,73 @@
 
 <header>
     <h1 class="entry-title">
+        <a href="https://uthark.github.io/2012/04/28/spring-data-jpa_28/">Собственная реализация методов в Spring Data JPA</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>Очевидно, что мы не всегда можем воспользоваться автоматической генерацией кода, предоставляемой <a href="http://www.springsource.org/spring-data/jpa">Spring Data JPA</a>. Например, у нас слишком сложный запрос, или нам необходимо вызвать процедуру в базе данных, либо у нас сложная бизнес-логика.</p>
+
+<p>Рассмотрим следующий пример - например, нам нужна функциональность уникального счётчика, который мы решили реализовать с помощью последовательности (sequence).</p>
+
+<p>Сначала определим интерфейс, в котором опишем все методы, которые мы будем реализовывать самостоятельно. В нашем случае, это будет только один метод:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">UserRepositoryCustom</span> <span style="color:#f92672">{</span>
+    <span style="color:#75715e">/**
+</span><span style="color:#75715e">     * Returns next unique id.
+</span><span style="color:#75715e">     *
+</span><span style="color:#75715e">     * @return next unique id.
+</span><span style="color:#75715e">     */</span>
+    Integer <span style="color:#a6e22e">getNextUniqueId</span><span style="color:#f92672">();</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>Затем обновим объявление репозитория, чтобы он унаследовал новый интерфейс <tt>UserRepositoryCustom</tt></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">UserRepository</span> <span style="color:#66d9ef">extends</span> JpaRepository<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">,</span> Integer<span style="color:#f92672">&gt;,</span> UserRepositoryCustom <span style="color:#f92672">{</span>
+   <span style="color:#f92672">...</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>Теперь напишем реализацию метода:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">UserRepositoryImpl</span> <span style="color:#66d9ef">implements</span> UserRepositoryCustom <span style="color:#f92672">{</span>
+
+    <span style="color:#a6e22e">@PersistenceContext</span>
+    <span style="color:#66d9ef">private</span> EntityManager entityManager<span style="color:#f92672">;</span>
+
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">public</span> Integer <span style="color:#a6e22e">getNextUniqueId</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+
+        <span style="color:#75715e">// When using Hibernate via JPA native queries fails with mapping exception, so just use Hibernate directly:
+</span><span style="color:#75715e"></span>        Session session <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>Session<span style="color:#f92672">)</span> entityManager<span style="color:#f92672">.</span><span style="color:#a6e22e">getDelegate</span><span style="color:#f92672">();</span>
+        SQLQuery nativeQuery <span style="color:#f92672">=</span> session<span style="color:#f92672">.</span><span style="color:#a6e22e">createSQLQuery</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;SELECT \&#34;nextval\&#34;(&#39;unique_id_seq&#39;) &#34;</span><span style="color:#f92672">);</span>
+        List<span style="color:#f92672">&lt;</span>BigInteger<span style="color:#f92672">&gt;</span> list <span style="color:#f92672">=</span> nativeQuery<span style="color:#f92672">.</span><span style="color:#a6e22e">list</span><span style="color:#f92672">();</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>list<span style="color:#f92672">.</span><span style="color:#a6e22e">isEmpty</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IncorrectResultSizeDataAccessException<span style="color:#f92672">(</span>1<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+
+        BigInteger result <span style="color:#f92672">=</span> list<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>0<span style="color:#f92672">);</span>
+
+        <span style="color:#66d9ef">return</span> result<span style="color:#f92672">.</span><span style="color:#a6e22e">intValue</span><span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>И, наконец, укажем Spring Data JPA, чтобы в качестве класса для прокси использовался наш класс с реализацией собственных методов. Для этого нам нужна ещё одна секция <tt>repositories</tt> в конфигурационном файле:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml">    <span style="color:#f92672">&lt;repositories</span> <span style="color:#a6e22e">base-package=</span><span style="color:#e6db74">&#34;[base.repository.package]&#34;</span><span style="color:#f92672">/&gt;</span>
+
+    <span style="color:#f92672">&lt;repositories</span> <span style="color:#a6e22e">base-package=</span><span style="color:#e6db74">&#34;[base.repository.package]&#34;</span><span style="color:#f92672">&gt;</span>
+        <span style="color:#f92672">&lt;repository</span> <span style="color:#a6e22e">id=</span><span style="color:#e6db74">&#34;userRepository&#34;</span> <span style="color:#a6e22e">custom-impl-ref=</span><span style="color:#e6db74">&#34;userRepositoryImpl&#34;</span><span style="color:#f92672">/&gt;</span>
+    <span style="color:#f92672">&lt;/repositories&gt;</span>
+
+    <span style="color:#f92672">&lt;beans:bean</span> <span style="color:#a6e22e">id=</span><span style="color:#e6db74">&#34;userRepositoryImpl&#34;</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;...UserRepositoryImpl&#34;</span><span style="color:#f92672">/&gt;</span></code></pre></div>
+<p>Вот и всё.</p>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
         <a href="https://uthark.github.io/2012/04/24/spring-data-jpa/">Ищем с помощью Spring Data JPA</a>
     </h1>
 
@@ -478,318 +545,6 @@ Spring Data значительно упрощает жизнь при испол
 
     </article>
     
-    <article>
-
-        
-        
-
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2012/02/09/java-rest/">Разработка и тестирование Java REST веб-сервисов</a>
-    </h1>
-
-</header>
-
-
-        
-        <h4>Введение</h4>
-Для разработки <a href="http://restpatterns.org/">REST</a> веб-сервисов Java предлагает <a href="http://jcp.org/en/jsr/detail?id=311">JSR-311 - JAX-RS: The Java&trade; API for RESTful Web Services</a>
-Как это обычно бывает в мире Enterprise Java, существует несколько реализаций данной спецификации:
-<ul>
-<li><a href="http://jersey.java.net/">Jersey</a> - это эталонная реализация спецификации от компании <strike>Sun</strike> Oracle</li>
-<li><a href="http://cxf.apache.org/">Apache CXF</a></li>
-<li><a href="http://www.jboss.org/resteasy">JBoss RESTEasy</a></li>
-</ul>
-На примере последней реализации, я и расскажу, каким образом можно написать REST-сервис.
-
-<h4>Пишем REST-сервис</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">import</span> javax.ws.rs.*<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> javax.ws.rs.core.MediaType<span style="color:#f92672">;</span>
-
-<span style="color:#a6e22e">@Path</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/service/entity&#34;</span><span style="color:#f92672">)</span>
-<span style="color:#a6e22e">@Produces</span><span style="color:#f92672">({</span>MediaType<span style="color:#f92672">.</span><span style="color:#a6e22e">APPLICATION_XML</span><span style="color:#f92672">,</span> MediaType<span style="color:#f92672">.</span><span style="color:#a6e22e">APPLICATION_JSON</span><span style="color:#f92672">})</span>
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">EntityRestService</span> <span style="color:#f92672">{</span>
-
- <span style="color:#a6e22e">@GET</span>
- <span style="color:#a6e22e">@Path</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/all&#34;</span><span style="color:#f92672">)</span>
- EntityList <span style="color:#a6e22e">listAll</span><span style="color:#f92672">();</span>
-
- <span style="color:#a6e22e">@GET</span>
- <span style="color:#a6e22e">@Path</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/{id}&#34;</span><span style="color:#f92672">)</span>
- Entity <span style="color:#a6e22e">findById</span><span style="color:#f92672">(</span><span style="color:#a6e22e">@PathParam</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;id&#34;</span><span style="color:#f92672">)</span> Integer id<span style="color:#f92672">);</span>
-
-
-<span style="color:#f92672">}</span></code></pre></div>
-<p>Создаём интерфейс, в котором расставляем JAX-RS аннотации. Аннотация <a href="http://jsr311.java.net/nonav/releases/1.1/javax/ws/rs/Path.html">@Path</a> указывает путь, по которому будет доступен наш сервис. Аннотация <a href="http://jsr311.java.net/nonav/releases/1.1/javax/ws/rs/GET.html">@GET</a> определяет, какой HTTP-запрос будет обрабатываться данным методом. Аннотация <a href="http://jsr311.java.net/nonav/releases/1.1/javax/ws/rs/Produces.html">@Produces</a> позволяет указать, в каком формате данный сервис предоставляет результаты.</p>
-
-<h4>Конфигурация JBoss RESTEasy</h4>
-
-<p>Конфигурация очень проста, во-первых, нам нужно добавить обновить <tt>pom.xml</tt> и добавить необходимые зависимости:</p>
-
-<h5>Обновляем <tt>pom.xml</tt></h5>
-
-<p>Добавляем compile-time зависимость на JAX-RS API</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;dependency&gt;</span>
-    <span style="color:#f92672">&lt;groupId&gt;</span>org.jboss.resteasy<span style="color:#f92672">&lt;/groupId&gt;</span>
-    <span style="color:#f92672">&lt;artifactId&gt;</span>jaxrs-api<span style="color:#f92672">&lt;/artifactId&gt;</span>
-<span style="color:#f92672">&lt;/dependency&gt;</span></code></pre></div>
-<p>и runtime зависимости на реализацию</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;dependency&gt;</span>
-    <span style="color:#f92672">&lt;groupId&gt;</span>org.jboss.resteasy<span style="color:#f92672">&lt;/groupId&gt;</span>
-    <span style="color:#f92672">&lt;artifactId&gt;</span>resteasy-jaxrs<span style="color:#f92672">&lt;/artifactId&gt;</span>
-    <span style="color:#f92672">&lt;version&gt;</span>${resteasy-jaxrs.version}<span style="color:#f92672">&lt;/version&gt;</span>
-    <span style="color:#f92672">&lt;scope&gt;</span>runtime<span style="color:#f92672">&lt;/scope&gt;</span>
-<span style="color:#f92672">&lt;/dependency&gt;</span>
-<span style="color:#f92672">&lt;dependency&gt;</span>
-    <span style="color:#f92672">&lt;groupId&gt;</span>org.jboss.resteasy<span style="color:#f92672">&lt;/groupId&gt;</span>
-    <span style="color:#f92672">&lt;artifactId&gt;</span>resteasy-jackson-provider<span style="color:#f92672">&lt;/artifactId&gt;</span>
-    <span style="color:#f92672">&lt;version&gt;</span>${resteasy-jaxrs.version}<span style="color:#f92672">&lt;/version&gt;</span>
-    <span style="color:#f92672">&lt;scope&gt;</span>runtime<span style="color:#f92672">&lt;/scope&gt;</span>
-<span style="color:#f92672">&lt;/dependency&gt;</span></code></pre></div>
-<p><h5>Обновляем конфигурацию веб-приложения в <tt>web.xml</tt></h5>
-Необходимо выполнить следующую модификацию <tt>web.xml</tt></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"> <span style="color:#f92672">&lt;listener&gt;</span>
-  <span style="color:#f92672">&lt;listener-class&gt;</span>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap<span style="color:#f92672">&lt;/listener-class&gt;</span>
- <span style="color:#f92672">&lt;/listener&gt;</span>
-
- <span style="color:#f92672">&lt;context-param&gt;</span>
-  <span style="color:#f92672">&lt;param-name&gt;</span>resteasy.servlet.mapping.prefix<span style="color:#f92672">&lt;/param-name&gt;</span>
-  <span style="color:#f92672">&lt;param-value&gt;</span>/rest<span style="color:#f92672">&lt;/param-value&gt;</span>
- <span style="color:#f92672">&lt;/context-param&gt;</span>
- <span style="color:#f92672">&lt;servlet&gt;</span>
-  <span style="color:#f92672">&lt;servlet-name&gt;</span>REST Easy<span style="color:#f92672">&lt;/servlet-name&gt;</span>
-  <span style="color:#f92672">&lt;servlet-class&gt;</span>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher<span style="color:#f92672">&lt;/servlet-class&gt;</span>
- <span style="color:#f92672">&lt;/servlet&gt;</span>
- <span style="color:#f92672">&lt;servlet-mapping&gt;</span>
-  <span style="color:#f92672">&lt;servlet-name&gt;</span>REST Easy<span style="color:#f92672">&lt;/servlet-name&gt;</span>
-  <span style="color:#f92672">&lt;url-pattern&gt;</span>/rest/*<span style="color:#f92672">&lt;/url-pattern&gt;</span>
- <span style="color:#f92672">&lt;/servlet-mapping&gt;</span></code></pre></div>
-<p>Данный код объявляет <a href="http://docs.jboss.org/resteasy/docs/2.3.1.GA/javadocs/org/jboss/resteasy/plugins/server/servlet/HttpServletDispatcher.html">сервлет HttpServletDispatcher</a>, который будет обрабатывать все запросы, которые приходят на <tt>/rest/*</tt>. Слушатель <tt><a href="http://docs.jboss.org/resteasy/docs/2.3.1.GA/javadocs/org/jboss/resteasy/plugins/server/servlet/ResteasyBootstrap.html">ResteasyBootstrap</a></tt> выполняет всю необходимую инициализацию JBoss RESTEasy.</p>
-
-<p><h5>Поддержка Spring</h5>
-Для того, чтобы использовать <a href="http://www.springsource.org/spring-framework">Spring Framework</a>, нам необходимо сделать следующие изменения:</p>
-
-<ol>
-<li>Добавить зависимость в <tt>pom.xml</tt></li>
-</ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;dependency&gt;</span>
-    <span style="color:#f92672">&lt;groupId&gt;</span>org.jboss.resteasy<span style="color:#f92672">&lt;/groupId&gt;</span>
-    <span style="color:#f92672">&lt;artifactId&gt;</span>resteasy-spring<span style="color:#f92672">&lt;/artifactId&gt;</span>
-    <span style="color:#f92672">&lt;version&gt;</span>${resteasy-jaxrs.version}<span style="color:#f92672">&lt;/version&gt;</span>
-    <span style="color:#f92672">&lt;scope&gt;</span>runtime<span style="color:#f92672">&lt;/scope&gt;</span>
-<span style="color:#f92672">&lt;/dependency&gt;</span></code></pre></div>
-<ol>
-<li>Добавить Spring-ового слушателя в <tt>web.xml</tt></li>
-</ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"> <span style="color:#f92672">&lt;listener&gt;</span>
-  <span style="color:#f92672">&lt;listener-class&gt;</span>org.jboss.resteasy.plugins.spring.SpringContextLoaderListener<span style="color:#f92672">&lt;/listener-class&gt;</span>
- <span style="color:#f92672">&lt;/listener&gt;</span></code></pre></div>
-<p>После этих изменений JBoss RESTEasy будет в курсе про Spring, это позволит в реализации REST-сервисов полноценно использовать все возможности, предоставляемые Spring Framework.</p>
-
-<p><h4>Пишем тесты</h4>
-Написание тестов - весьма полезная вещь, ниже я покажу пример теста для REST-сервиса.
-В рамках данного теста у нас будет подниматься <a href="http://docs.jboss.org/resteasy/docs/2.3.1.GA/javadocs/org/jboss/resteasy/plugins/server/tjws/TJWSEmbeddedJaxrsServer.html">встраиваемый веб-сервер TJWSEmbeddedJaxrsServer</a>, к которому мы будем обращаться для тестирования наших REST-сервисов.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@RunWith</span><span style="color:#f92672">(</span>SpringJUnit4ClassRunner<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">)</span>
-<span style="color:#a6e22e">@ContextConfiguration</span><span style="color:#f92672">({</span><span style="color:#e6db74">&#34;/applicationContext-test.xml&#34;</span><span style="color:#f92672">})</span>
-<span style="color:#a6e22e">@TestExecutionListeners</span><span style="color:#f92672">({</span>DependencyInjectionTestExecutionListener<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">,</span> DirtiesContextTestExecutionListener<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">})</span>
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TestEntityServiceRest</span> <span style="color:#f92672">{</span>
-
- <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">int</span> PORT <span style="color:#f92672">=</span> 8081<span style="color:#f92672">;</span>
- <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> String BASE_URL <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;http://localhost:&#34;</span> <span style="color:#f92672">+</span> PORT<span style="color:#f92672">;</span>
-
- <span style="color:#a6e22e">@Autowired</span>
- EntityService entityService<span style="color:#f92672">;</span>
-
- <span style="color:#a6e22e">@Autowired</span>
- ConfigurableApplicationContext applicationContext<span style="color:#f92672">;</span>
-
-
- <span style="color:#66d9ef">protected</span> HttpClient client<span style="color:#f92672">;</span>
- <span style="color:#66d9ef">protected</span> TJWSEmbeddedJaxrsServer server<span style="color:#f92672">;</span>
-
-
- <span style="color:#a6e22e">@Before</span>
- <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">setUpClient</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">throws</span> Exception <span style="color:#f92672">{</span>
-  client <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> DefaultHttpClient<span style="color:#f92672">();</span>
- <span style="color:#f92672">}</span>
-
- <span style="color:#a6e22e">@Before</span>
- <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">setUpServer</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">throws</span> Exception <span style="color:#f92672">{</span>
-  server <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> TJWSEmbeddedJaxrsServer<span style="color:#f92672">();</span>
-  server<span style="color:#f92672">.</span><span style="color:#a6e22e">setPort</span><span style="color:#f92672">(</span>PORT<span style="color:#f92672">);</span>
-  ResteasyDeployment deployment <span style="color:#f92672">=</span> server<span style="color:#f92672">.</span><span style="color:#a6e22e">getDeployment</span><span style="color:#f92672">();</span>
-
-  server<span style="color:#f92672">.</span><span style="color:#a6e22e">start</span><span style="color:#f92672">();</span>
-
-  Dispatcher dispatcher <span style="color:#f92672">=</span> deployment<span style="color:#f92672">.</span><span style="color:#a6e22e">getDispatcher</span><span style="color:#f92672">();</span>
-  SpringBeanProcessor processor <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> SpringBeanProcessor<span style="color:#f92672">(</span>dispatcher<span style="color:#f92672">,</span> deployment<span style="color:#f92672">.</span><span style="color:#a6e22e">getRegistry</span><span style="color:#f92672">(),</span> deployment<span style="color:#f92672">.</span><span style="color:#a6e22e">getProviderFactory</span><span style="color:#f92672">());</span>
-  applicationContext<span style="color:#f92672">.</span><span style="color:#a6e22e">addBeanFactoryPostProcessor</span><span style="color:#f92672">(</span>processor<span style="color:#f92672">);</span>
-
-  SpringResourceFactory noDefaults <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> SpringResourceFactory<span style="color:#f92672">(</span>
-    <span style="color:#e6db74">&#34;entityServiceRestImpl&#34;</span><span style="color:#f92672">,</span> applicationContext<span style="color:#f92672">,</span> EntityRestServiceImpl<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
-  dispatcher<span style="color:#f92672">.</span><span style="color:#a6e22e">getRegistry</span><span style="color:#f92672">().</span><span style="color:#a6e22e">addResourceFactory</span><span style="color:#f92672">(</span>noDefaults<span style="color:#f92672">);</span>
- <span style="color:#f92672">}</span>
-
- <span style="color:#a6e22e">@After</span>
- <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">stop</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-  server<span style="color:#f92672">.</span><span style="color:#a6e22e">stop</span><span style="color:#f92672">();</span>
- <span style="color:#f92672">}</span>
-
- <span style="color:#a6e22e">@Test</span>
- <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">testListAll</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">throws</span> Exception <span style="color:#f92672">{</span>
-
-  <span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span>
-  <span style="color:#66d9ef">final</span> List<span style="color:#f92672">&lt;</span>Entity<span style="color:#f92672">&gt;</span> returnedList <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ArrayList<span style="color:#f92672">&lt;</span>Entity<span style="color:#f92672">&gt;();</span>
-  <span style="color:#66d9ef">int</span> EXPECTED_SIZE <span style="color:#f92672">=</span> 6<span style="color:#f92672">;</span>
-  <span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span>i <span style="color:#f92672">&lt;</span> EXPECTED_SIZE<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-   i<span style="color:#f92672">++;</span>
-   <span style="color:#66d9ef">final</span> Entity entity <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Entity<span style="color:#f92672">();</span>
-   entity<span style="color:#f92672">.</span><span style="color:#a6e22e">setId</span><span style="color:#f92672">(</span>i<span style="color:#f92672">);</span>
-   entity<span style="color:#f92672">.</span><span style="color:#a6e22e">setName</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;test&#34;</span> <span style="color:#f92672">+</span> i<span style="color:#f92672">);</span>
-   returnedList<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>entity<span style="color:#f92672">);</span>
-  <span style="color:#f92672">}</span>
-  when<span style="color:#f92672">(</span>entityService<span style="color:#f92672">.</span><span style="color:#a6e22e">findAll</span><span style="color:#f92672">()).</span><span style="color:#a6e22e">thenReturn</span><span style="color:#f92672">(</span>returnedList<span style="color:#f92672">);</span>
-
-
-  HttpGet get <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> HttpGet<span style="color:#f92672">(</span>BASE_URL <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;/service/entity/&#34;</span><span style="color:#f92672">);</span>
-
-  HttpResponse response <span style="color:#f92672">=</span> client<span style="color:#f92672">.</span><span style="color:#a6e22e">execute</span><span style="color:#f92672">(</span>get<span style="color:#f92672">);</span>
-  InputStream content <span style="color:#f92672">=</span> response<span style="color:#f92672">.</span><span style="color:#a6e22e">getEntity</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getContent</span><span style="color:#f92672">();</span>
-
-  EntityList result <span style="color:#f92672">=</span> fromString<span style="color:#f92672">(</span>EntityList<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">,</span> content<span style="color:#f92672">);</span>
-  content<span style="color:#f92672">.</span><span style="color:#a6e22e">close</span><span style="color:#f92672">();</span>
-
-  Assert<span style="color:#f92672">.</span><span style="color:#a6e22e">assertNotNull</span><span style="color:#f92672">(</span>result<span style="color:#f92672">);</span>
-  Assert<span style="color:#f92672">.</span><span style="color:#a6e22e">assertEquals</span><span style="color:#f92672">(</span>EXPECTED_SIZE<span style="color:#f92672">,</span> result<span style="color:#f92672">.</span><span style="color:#a6e22e">getEntities</span><span style="color:#f92672">().</span><span style="color:#a6e22e">size</span><span style="color:#f92672">());</span>
- <span style="color:#f92672">}</span>
-
- <span style="color:#a6e22e">@Test</span>
- <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">testFindById</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">throws</span> Exception <span style="color:#f92672">{</span>
-
-  <span style="color:#66d9ef">final</span> Entity validEntity <span style="color:#f92672">=</span> getValidEntity<span style="color:#f92672">();</span>
-  validEntity<span style="color:#f92672">.</span><span style="color:#a6e22e">setId</span><span style="color:#f92672">(</span>2<span style="color:#f92672">);</span>
-
-  when<span style="color:#f92672">(</span>entityService<span style="color:#f92672">.</span><span style="color:#a6e22e">findById</span><span style="color:#f92672">(</span>validEntity<span style="color:#f92672">.</span><span style="color:#a6e22e">getId</span><span style="color:#f92672">())).</span><span style="color:#a6e22e">thenAnswer</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Answer<span style="color:#f92672">&lt;</span>Object<span style="color:#f92672">&gt;()</span> <span style="color:#f92672">{</span>
-   <span style="color:#a6e22e">@Override</span>
-   <span style="color:#66d9ef">public</span> Object <span style="color:#a6e22e">answer</span><span style="color:#f92672">(</span>InvocationOnMock invocation<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> Throwable <span style="color:#f92672">{</span>
-    <span style="color:#66d9ef">return</span> validEntity<span style="color:#f92672">;</span>
-   <span style="color:#f92672">}</span>
-  <span style="color:#f92672">});</span>
-
-  HttpGet get <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> HttpGet<span style="color:#f92672">(</span>BASE_URL <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;/service/entity/2&#34;</span><span style="color:#f92672">);</span>
-
-  HttpResponse response <span style="color:#f92672">=</span> client<span style="color:#f92672">.</span><span style="color:#a6e22e">execute</span><span style="color:#f92672">(</span>get<span style="color:#f92672">);</span>
-  InputStream content <span style="color:#f92672">=</span> response<span style="color:#f92672">.</span><span style="color:#a6e22e">getEntity</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getContent</span><span style="color:#f92672">();</span>
-
-  Entity result <span style="color:#f92672">=</span> fromString<span style="color:#f92672">(</span>Entity<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">,</span> content<span style="color:#f92672">);</span>
-  content<span style="color:#f92672">.</span><span style="color:#a6e22e">close</span><span style="color:#f92672">();</span>
-
-  Assert<span style="color:#f92672">.</span><span style="color:#a6e22e">assertNotNull</span><span style="color:#f92672">(</span>result<span style="color:#f92672">);</span>
-
-  deepAssertEquals<span style="color:#f92672">(</span>validEntity<span style="color:#f92672">,</span> result<span style="color:#f92672">);</span>
-
- <span style="color:#f92672">}</span>
-
- <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">deepAssertEquals</span><span style="color:#f92672">(</span>Object expected<span style="color:#f92672">,</span> Object actual<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> IllegalAccessException<span style="color:#f92672">,</span> InvocationTargetException <span style="color:#f92672">{</span>
-  Assert<span style="color:#f92672">.</span><span style="color:#a6e22e">assertEquals</span><span style="color:#f92672">(</span>expected<span style="color:#f92672">.</span><span style="color:#a6e22e">getClass</span><span style="color:#f92672">(),</span> actual<span style="color:#f92672">.</span><span style="color:#a6e22e">getClass</span><span style="color:#f92672">());</span>
-  PropertyDescriptor<span style="color:#f92672">[]</span> propertyDescriptors <span style="color:#f92672">=</span> BeanUtils<span style="color:#f92672">.</span><span style="color:#a6e22e">getPropertyDescriptors</span><span style="color:#f92672">(</span>expected<span style="color:#f92672">.</span><span style="color:#a6e22e">getClass</span><span style="color:#f92672">());</span>
-  <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>PropertyDescriptor propertyDescriptor <span style="color:#f92672">:</span> propertyDescriptors<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-   Object expectedValue <span style="color:#f92672">=</span> propertyDescriptor<span style="color:#f92672">.</span><span style="color:#a6e22e">getReadMethod</span><span style="color:#f92672">().</span><span style="color:#a6e22e">invoke</span><span style="color:#f92672">(</span>expected<span style="color:#f92672">);</span>
-   Object actualValue <span style="color:#f92672">=</span> propertyDescriptor<span style="color:#f92672">.</span><span style="color:#a6e22e">getReadMethod</span><span style="color:#f92672">().</span><span style="color:#a6e22e">invoke</span><span style="color:#f92672">(</span>actual<span style="color:#f92672">);</span>
-   Assert<span style="color:#f92672">.</span><span style="color:#a6e22e">assertEquals</span><span style="color:#f92672">(</span>expectedValue<span style="color:#f92672">,</span> actualValue<span style="color:#f92672">);</span>
-  <span style="color:#f92672">}</span>
- <span style="color:#f92672">}</span>
-
-        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> T <span style="color:#a6e22e">fromString</span><span style="color:#f92672">(</span>Class<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> clazz<span style="color:#f92672">,</span> String input<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> JAXBException <span style="color:#f92672">{</span>
-  JAXBContext ctx <span style="color:#f92672">=</span> JAXBContext<span style="color:#f92672">.</span><span style="color:#a6e22e">newInstance</span><span style="color:#f92672">(</span>clazz<span style="color:#f92672">);</span>
-  Unmarshaller unmarshaller <span style="color:#f92672">=</span> ctx<span style="color:#f92672">.</span><span style="color:#a6e22e">createUnmarshaller</span><span style="color:#f92672">();</span>
-  <span style="color:#a6e22e">@SuppressWarnings</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;unchecked&#34;</span><span style="color:#f92672">)</span>
-  T unmarshal <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>T<span style="color:#f92672">)</span> unmarshaller<span style="color:#f92672">.</span><span style="color:#a6e22e">unmarshal</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> StringReader<span style="color:#f92672">(</span>input<span style="color:#f92672">));</span>
-  <span style="color:#66d9ef">return</span> unmarshal<span style="color:#f92672">;</span>
- <span style="color:#f92672">}</span>
-
- <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> T <span style="color:#a6e22e">fromString</span><span style="color:#f92672">(</span>Class<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> clazz<span style="color:#f92672">,</span> InputStream input<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> JAXBException <span style="color:#f92672">{</span>
-  JAXBContext ctx <span style="color:#f92672">=</span> JAXBContext<span style="color:#f92672">.</span><span style="color:#a6e22e">newInstance</span><span style="color:#f92672">(</span>clazz<span style="color:#f92672">);</span>
-  <span style="color:#a6e22e">@SuppressWarnings</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;unchecked&#34;</span><span style="color:#f92672">)</span>
-  T unmarshal <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>T<span style="color:#f92672">)</span> ctx<span style="color:#f92672">.</span><span style="color:#a6e22e">createUnmarshaller</span><span style="color:#f92672">().</span><span style="color:#a6e22e">unmarshal</span><span style="color:#f92672">(</span>input<span style="color:#f92672">);</span>
-  <span style="color:#66d9ef">return</span> unmarshal<span style="color:#f92672">;</span>
- <span style="color:#f92672">}</span>
-<span style="color:#f92672">}</span></code></pre></div>
-<p><h4>Запуск тестов</h4>
-Половина дела сделана, теперь нам необходимо настроить инфраструктуру для тестирования наших свеженаписанных REST-сервисов.</p>
-
-<p>Для этого нам необходимо внести следующие модификации в <tt>pom.xml</tt>:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;plugin&gt;</span>
-    <span style="color:#f92672">&lt;groupId&gt;</span>org.apache.maven.plugins<span style="color:#f92672">&lt;/groupId&gt;</span>
-    <span style="color:#f92672">&lt;artifactId&gt;</span>maven-surefire-plugin<span style="color:#f92672">&lt;/artifactId&gt;</span>
-    <span style="color:#f92672">&lt;version&gt;</span>2.11<span style="color:#f92672">&lt;/version&gt;</span>
-
-    <span style="color:#f92672">&lt;executions&gt;</span>
-        <span style="color:#f92672">&lt;execution&gt;</span>
-     <span style="color:#f92672">&lt;id&gt;</span>Unit tests<span style="color:#f92672">&lt;/id&gt;</span>
-            <span style="color:#f92672">&lt;phase&gt;</span>test<span style="color:#f92672">&lt;/phase&gt;</span>
-            <span style="color:#f92672">&lt;goals&gt;</span>
-                <span style="color:#f92672">&lt;goal&gt;</span>test<span style="color:#f92672">&lt;/goal&gt;</span>
-            <span style="color:#f92672">&lt;/goals&gt;</span>
-            <span style="color:#f92672">&lt;configuration&gt;</span>
-                <span style="color:#f92672">&lt;excludes&gt;</span>
-                    <span style="color:#f92672">&lt;exclude&gt;</span>**/IT*.java<span style="color:#f92672">&lt;/exclude&gt;</span>
-                <span style="color:#f92672">&lt;/excludes&gt;</span>
-            <span style="color:#f92672">&lt;/configuration&gt;</span>
-        <span style="color:#f92672">&lt;/execution&gt;</span>
-        <span style="color:#f92672">&lt;execution&gt;</span>
-            <span style="color:#f92672">&lt;id&gt;</span>Integration tests<span style="color:#f92672">&lt;/id&gt;</span>
-            <span style="color:#f92672">&lt;phase&gt;</span>integration-test<span style="color:#f92672">&lt;/phase&gt;</span>
-            <span style="color:#f92672">&lt;goals&gt;</span>
-                <span style="color:#f92672">&lt;goal&gt;</span>test<span style="color:#f92672">&lt;/goal&gt;</span>
-            <span style="color:#f92672">&lt;/goals&gt;</span>
-            <span style="color:#f92672">&lt;configuration&gt;</span>
-                <span style="color:#f92672">&lt;includes&gt;</span>
-                    <span style="color:#f92672">&lt;include&gt;</span>**/IT*.java<span style="color:#f92672">&lt;/include&gt;</span>
-                <span style="color:#f92672">&lt;/includes&gt;</span>
-            <span style="color:#f92672">&lt;/configuration&gt;</span>
-        <span style="color:#f92672">&lt;/execution&gt;</span>
-    <span style="color:#f92672">&lt;/executions&gt;</span>
-<span style="color:#f92672">&lt;/plugin&gt;</span>
-
-<span style="color:#f92672">&lt;dependency&gt;</span>
-    <span style="color:#f92672">&lt;groupId&gt;</span>org.apache.httpcomponents<span style="color:#f92672">&lt;/groupId&gt;</span>
-    <span style="color:#f92672">&lt;artifactId&gt;</span>httpclient<span style="color:#f92672">&lt;/artifactId&gt;</span>
-    <span style="color:#f92672">&lt;version&gt;</span>4.1.2<span style="color:#f92672">&lt;/version&gt;</span>
-    <span style="color:#f92672">&lt;scope&gt;</span>test<span style="color:#f92672">&lt;/scope&gt;</span>
-<span style="color:#f92672">&lt;/dependency&gt;</span>
-<span style="color:#f92672">&lt;dependency&gt;</span>
-    <span style="color:#f92672">&lt;groupId&gt;</span>org.jboss.resteasy<span style="color:#f92672">&lt;/groupId&gt;</span>
-    <span style="color:#f92672">&lt;artifactId&gt;</span>resteasy-jaxrs<span style="color:#f92672">&lt;/artifactId&gt;</span>
-    <span style="color:#f92672">&lt;scope&gt;</span>test<span style="color:#f92672">&lt;/scope&gt;</span>
-<span style="color:#f92672">&lt;/dependency&gt;</span>
-<span style="color:#f92672">&lt;dependency&gt;</span>
-    <span style="color:#f92672">&lt;groupId&gt;</span>org.jboss.resteasy<span style="color:#f92672">&lt;/groupId&gt;</span>
-    <span style="color:#f92672">&lt;artifactId&gt;</span>resteasy-spring<span style="color:#f92672">&lt;/artifactId&gt;</span>
-    <span style="color:#f92672">&lt;scope&gt;</span>test<span style="color:#f92672">&lt;/scope&gt;</span>
-<span style="color:#f92672">&lt;/dependency&gt;</span>
-<span style="color:#f92672">&lt;dependency&gt;</span>
-    <span style="color:#f92672">&lt;groupId&gt;</span>org.jboss.resteasy<span style="color:#f92672">&lt;/groupId&gt;</span>
-    <span style="color:#f92672">&lt;artifactId&gt;</span>tjws<span style="color:#f92672">&lt;/artifactId&gt;</span>
-    <span style="color:#f92672">&lt;version&gt;</span>${resteasy-jaxrs.version}<span style="color:#f92672">&lt;/version&gt;</span>
-<span style="color:#f92672">&lt;/dependency&gt;</span>
-<span style="color:#f92672">&lt;dependency&gt;</span>
-    <span style="color:#f92672">&lt;groupId&gt;</span>javax.servlet<span style="color:#f92672">&lt;/groupId&gt;</span>
-    <span style="color:#f92672">&lt;artifactId&gt;</span>servlet-api<span style="color:#f92672">&lt;/artifactId&gt;</span>
-    <span style="color:#f92672">&lt;scope&gt;</span>test<span style="color:#f92672">&lt;/scope&gt;</span>
-<span style="color:#f92672">&lt;/dependency&gt;</span>
-<span style="color:#f92672">&lt;dependency&gt;</span>
-    <span style="color:#f92672">&lt;groupId&gt;</span>commons-io<span style="color:#f92672">&lt;/groupId&gt;</span>
-    <span style="color:#f92672">&lt;artifactId&gt;</span>commons-io<span style="color:#f92672">&lt;/artifactId&gt;</span>
-    <span style="color:#f92672">&lt;scope&gt;</span>test<span style="color:#f92672">&lt;/scope&gt;</span>
-<span style="color:#f92672">&lt;/dependency&gt;</span></code></pre></div>
-<p><h4>Заключение</h4>
-В целом, ничего сложного, главное делать всё аккуратно. Хорошего вам кода!</p>
-
-        
-
-    </article>
-    
     
     
 
@@ -863,6 +618,8 @@ Spring Data значительно упрощает жизнь при испол
     
         <a href="/page/26/" class="label-pagination">26</a>
     
+        <a href="/page/27/" class="label-pagination">27</a>
+    
 
     
     
@@ -871,7 +628,7 @@ Spring Data значительно упрощает жизнь при испол
 
     
     
-        <a href="/page/26/" aria-label="Last"><i class="fa fa-angle-double-right fa-lg"></i></a>
+        <a href="/page/27/" aria-label="Last"><i class="fa fa-angle-double-right fa-lg"></i></a>
     
 
 </div>

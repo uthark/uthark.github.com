@@ -6,10 +6,19 @@
     <description>Recent content in Posts on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 12 Oct 2017 17:02:55 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 21 Nov 2017 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://uthark.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Migrate to hugo completed</title>
+      <link>https://uthark.github.io/2017/11/21/migrate-to-hugo/</link>
+      <pubDate>Tue, 21 Nov 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2017/11/21/migrate-to-hugo/</guid>
+      <description>Good news, everyone. Migration from octopress to hugo completed. If you find broken layout in some of the pages, do not hesitate to contact me.</description>
+    </item>
     
     <item>
       <title>Refresh</title>
@@ -1019,7 +1028,7 @@ sudo add-apt-repository ppa:rabbitvcs/ppa
 В данный момент сайт доступен только разработчикам расширений. Залил расширение, написал кратенькое описание. Жду запуска сайта. :)
 А пока сайт закрыт для рядовых пользователей последнюю версию можно скачать тут.
 P.S. А тем временем работа над расширением продолжается.
-P.P.S. У расширения появилась своя страничка в сети: Project Home Page </description>
+P.P.S. У расширения появилась своя страничка в сети: Project Home Page</description>
     </item>
     
     <item>
@@ -1032,7 +1041,7 @@ P.P.S. У расширения появилась своя страничка в
 Логично предположить, что у расширений могут быть настройки. В Google Chrome/Chromium для этого есть специальный API.
 Для того, чтобы создать собственную страницу настроек необходимо сделать следующее:
 1. Объявить в манифесте страницу настроек
-{ &#34;name&#34;: &#34;Delicious plugin&#34;, &#34;version&#34;: &#34;0.2&#34;, &#34;background_page&#34;: &#34;background.html&#34;, &#34;options_page&#34;: &#34;options.html&#34; } 
+{ &amp;ldquo;name&amp;rdquo;: &amp;ldquo;Delicious plugin&amp;rdquo;, &amp;ldquo;version&amp;rdquo;: &amp;ldquo;0.2&amp;rdquo;, &amp;ldquo;background_page&amp;rdquo;: &amp;ldquo;background.html&amp;rdquo;, &amp;ldquo;options_page&amp;rdquo;: &amp;ldquo;options.html&amp;rdquo; } 
 2. Реализовать страницу с настройками.
 Страница с настройками - это обычная HTML-страничка. Для доступа к настройкам Google Chrome предоставляет объект localStorage, который умеет сохранять и возвращать значения.</description>
     </item>

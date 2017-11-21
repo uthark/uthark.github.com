@@ -114,6 +114,75 @@
 
 <header>
     <h1 class="entry-title">
+        <a href="https://uthark.github.io/2013/06/19/autowiring-factorybean/">@Autowiring EJBs with Spring</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>Предположим, что у нас есть проект на Spring, в котором необходимо использовать внешние EJB. Для получения бинов необходимо создавать <a href="http://docs.oracle.com/javase/6/docs/api/javax/naming/InitialContext.html">InitialContext</a> и делать <code>lookup()</code> нужных ejb. Но эту задачу можно автоматизировать и пользоваться <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/beans/factory/annotation/Autowired.html">@Autowired</a>, то есть код будет выглядеть вот так:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Service</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">UserService</span> <span style="color:#f92672">{</span>
+
+  <span style="color:#a6e22e">@Autowired</span>
+  <span style="color:#66d9ef">private</span> UserRemoteBean userRemoteBean<span style="color:#f92672">;</span>
+
+<span style="color:#f92672">}</span></code></pre></div>
+<p>Для этого в Spring существует <a href="http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/htmlsingle/#beans-factory-extension-factorybean">FactoryBean</a> - класс, который знает, как создавать бины нужного типа. Собственно, нам необходимо написать такой класс (код на <a href="http://www.scala-lang.org/">Scala</a>):</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-scala" data-lang="scala"><span style="color:#a6e22e">@Component</span>
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">UserRemoteBeanFactoryBean</span> <span style="color:#66d9ef">extends</span> <span style="color:#a6e22e">FactoryBean</span><span style="color:#f92672">[</span><span style="color:#66d9ef">UserRemoteBean</span><span style="color:#f92672">]</span> <span style="color:#f92672">{</span>
+
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">ACCESS_BEAN_REMOTE_NAME</span><span style="color:#66d9ef">:</span> <span style="color:#66d9ef">String</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;our ejb name.&#34;</span>
+
+  <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">val</span> log<span style="color:#66d9ef">:</span> <span style="color:#66d9ef">Logger</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">LoggerFactory</span><span style="color:#f92672">.</span>getLogger<span style="color:#f92672">(</span>getObjectType<span style="color:#f92672">)</span>
+
+  <span style="color:#66d9ef">var</span> ctx<span style="color:#66d9ef">:</span> <span style="color:#66d9ef">Context</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>
+
+  <span style="color:#66d9ef">def</span> getObject<span style="color:#66d9ef">:</span> <span style="color:#66d9ef">UserRemoteBean</span> <span style="color:#f92672">=</span> <span style="color:#f92672">{</span>
+    log<span style="color:#f92672">.</span>debug<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Requesting new instance of {}&#34;</span><span style="color:#f92672">,</span> getObjectType<span style="color:#f92672">)</span>
+
+    <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+      ctx<span style="color:#f92672">.</span>lookup<span style="color:#f92672">(</span><span style="color:#a6e22e">ACCESS_BEAN_REMOTE_NAME</span><span style="color:#f92672">).</span>asInstanceOf<span style="color:#f92672">[</span><span style="color:#66d9ef">UserRemoteBean</span><span style="color:#f92672">]</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#66d9ef">catch</span> <span style="color:#f92672">{</span>
+      <span style="color:#66d9ef">case</span> e<span style="color:#66d9ef">:</span> <span style="color:#66d9ef">NamingException</span> <span style="color:#f92672">=&gt;</span> <span style="color:#f92672">{</span>
+        log<span style="color:#f92672">.</span>error<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Unable to get ejb: {}&#34;</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">Array</span><span style="color:#f92672">[</span><span style="color:#66d9ef">AnyRef</span><span style="color:#f92672">](</span>e<span style="color:#f92672">.</span>getMessage<span style="color:#f92672">,</span> e<span style="color:#f92672">)</span><span style="color:#66d9ef">:</span> <span style="color:#66d9ef">_</span><span style="color:#66d9ef">*</span><span style="color:#f92672">)</span>
+        <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">RuntimeException</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Unable to get UserRemoteBean bean &#34;</span> <span style="color:#f92672">+</span> e<span style="color:#f92672">.</span>getMessage<span style="color:#f92672">,</span> e<span style="color:#f92672">)</span>
+      <span style="color:#f92672">}</span>
+
+    <span style="color:#f92672">}</span>
+  <span style="color:#f92672">}</span>
+
+  <span style="color:#a6e22e">@PostConstruct</span>
+  <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">def</span> init<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">val</span> jndiProperties<span style="color:#66d9ef">:</span> <span style="color:#66d9ef">Hashtable</span><span style="color:#f92672">[</span><span style="color:#66d9ef">String</span>, <span style="color:#66d9ef">Object</span><span style="color:#f92672">]</span> <span style="color:#66d9ef">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Hashtable</span><span style="color:#f92672">[</span><span style="color:#66d9ef">String</span>, <span style="color:#66d9ef">Object</span><span style="color:#f92672">]</span>
+    jndiProperties<span style="color:#f92672">.</span>put<span style="color:#f92672">(</span><span style="color:#a6e22e">Context</span><span style="color:#f92672">.</span><span style="color:#a6e22e">URL_PKG_PREFIXES</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;org.jboss.ejb.client.naming&#34;</span><span style="color:#f92672">)</span>
+    jndiProperties<span style="color:#f92672">.</span>put<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;jboss.naming.client.ejb.context&#34;</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">new</span> java<span style="color:#f92672">.</span>lang<span style="color:#f92672">.</span><span style="color:#a6e22e">Boolean</span><span style="color:#f92672">(</span><span style="color:#66d9ef">true</span><span style="color:#f92672">))</span>
+    <span style="color:#66d9ef">try</span>
+      ctx <span style="color:#66d9ef">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">InitialContext</span><span style="color:#f92672">(</span>jndiProperties<span style="color:#f92672">)</span>
+    <span style="color:#66d9ef">catch</span> <span style="color:#f92672">{</span>
+      <span style="color:#66d9ef">case</span> e<span style="color:#66d9ef">:</span> <span style="color:#66d9ef">NamingException</span> <span style="color:#f92672">=&gt;</span> log<span style="color:#f92672">.</span>error<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Unable to create JNDI Context: {}&#34;</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">Array</span><span style="color:#f92672">[</span><span style="color:#66d9ef">AnyRef</span><span style="color:#f92672">](</span>e<span style="color:#f92672">.</span>getMessage<span style="color:#f92672">,</span> e<span style="color:#f92672">)</span><span style="color:#66d9ef">:</span> <span style="color:#66d9ef">_</span><span style="color:#66d9ef">*</span><span style="color:#f92672">)</span>
+    <span style="color:#f92672">}</span>
+  <span style="color:#f92672">}</span>
+
+  <span style="color:#66d9ef">def</span> isSingleton<span style="color:#66d9ef">:</span> <span style="color:#66d9ef">Boolean</span> <span style="color:#f92672">=</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">false</span>
+  <span style="color:#f92672">}</span>
+
+  <span style="color:#66d9ef">def</span> getObjectType<span style="color:#66d9ef">:</span> <span style="color:#66d9ef">Class</span><span style="color:#f92672">[</span><span style="color:#66d9ef">_</span><span style="color:#f92672">]</span> <span style="color:#66d9ef">=</span> classOf<span style="color:#f92672">[</span><span style="color:#66d9ef">UserRemoteBean</span><span style="color:#f92672">]</span>
+<span style="color:#f92672">}</span></code></pre></div>
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
         <a href="https://uthark.github.io/2013/06/19/validation/">Валидация входных параметров с использованием Spring</a>
     </h1>
 
@@ -570,73 +639,6 @@
 
     </article>
     
-    <article>
-
-        
-        
-
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2012/04/28/spring-data-jpa_28/">Собственная реализация методов в Spring Data JPA</a>
-    </h1>
-
-</header>
-
-
-        
-        <p>Очевидно, что мы не всегда можем воспользоваться автоматической генерацией кода, предоставляемой <a href="http://www.springsource.org/spring-data/jpa">Spring Data JPA</a>. Например, у нас слишком сложный запрос, или нам необходимо вызвать процедуру в базе данных, либо у нас сложная бизнес-логика.</p>
-
-<p>Рассмотрим следующий пример - например, нам нужна функциональность уникального счётчика, который мы решили реализовать с помощью последовательности (sequence).</p>
-
-<p>Сначала определим интерфейс, в котором опишем все методы, которые мы будем реализовывать самостоятельно. В нашем случае, это будет только один метод:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">UserRepositoryCustom</span> <span style="color:#f92672">{</span>
-    <span style="color:#75715e">/**
-</span><span style="color:#75715e">     * Returns next unique id.
-</span><span style="color:#75715e">     *
-</span><span style="color:#75715e">     * @return next unique id.
-</span><span style="color:#75715e">     */</span>
-    Integer <span style="color:#a6e22e">getNextUniqueId</span><span style="color:#f92672">();</span>
-<span style="color:#f92672">}</span></code></pre></div>
-<p>Затем обновим объявление репозитория, чтобы он унаследовал новый интерфейс <tt>UserRepositoryCustom</tt></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">UserRepository</span> <span style="color:#66d9ef">extends</span> JpaRepository<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">,</span> Integer<span style="color:#f92672">&gt;,</span> UserRepositoryCustom <span style="color:#f92672">{</span>
-   <span style="color:#f92672">...</span>
-<span style="color:#f92672">}</span></code></pre></div>
-<p>Теперь напишем реализацию метода:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">UserRepositoryImpl</span> <span style="color:#66d9ef">implements</span> UserRepositoryCustom <span style="color:#f92672">{</span>
-
-    <span style="color:#a6e22e">@PersistenceContext</span>
-    <span style="color:#66d9ef">private</span> EntityManager entityManager<span style="color:#f92672">;</span>
-
-    <span style="color:#a6e22e">@Override</span>
-    <span style="color:#66d9ef">public</span> Integer <span style="color:#a6e22e">getNextUniqueId</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-
-        <span style="color:#75715e">// When using Hibernate via JPA native queries fails with mapping exception, so just use Hibernate directly:
-</span><span style="color:#75715e"></span>        Session session <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>Session<span style="color:#f92672">)</span> entityManager<span style="color:#f92672">.</span><span style="color:#a6e22e">getDelegate</span><span style="color:#f92672">();</span>
-        SQLQuery nativeQuery <span style="color:#f92672">=</span> session<span style="color:#f92672">.</span><span style="color:#a6e22e">createSQLQuery</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;SELECT \&#34;nextval\&#34;(&#39;unique_id_seq&#39;) &#34;</span><span style="color:#f92672">);</span>
-        List<span style="color:#f92672">&lt;</span>BigInteger<span style="color:#f92672">&gt;</span> list <span style="color:#f92672">=</span> nativeQuery<span style="color:#f92672">.</span><span style="color:#a6e22e">list</span><span style="color:#f92672">();</span>
-        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>list<span style="color:#f92672">.</span><span style="color:#a6e22e">isEmpty</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
-            <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IncorrectResultSizeDataAccessException<span style="color:#f92672">(</span>1<span style="color:#f92672">);</span>
-        <span style="color:#f92672">}</span>
-
-        BigInteger result <span style="color:#f92672">=</span> list<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>0<span style="color:#f92672">);</span>
-
-        <span style="color:#66d9ef">return</span> result<span style="color:#f92672">.</span><span style="color:#a6e22e">intValue</span><span style="color:#f92672">();</span>
-    <span style="color:#f92672">}</span>
-<span style="color:#f92672">}</span></code></pre></div>
-<p>И, наконец, укажем Spring Data JPA, чтобы в качестве класса для прокси использовался наш класс с реализацией собственных методов. Для этого нам нужна ещё одна секция <tt>repositories</tt> в конфигурационном файле:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml">    <span style="color:#f92672">&lt;repositories</span> <span style="color:#a6e22e">base-package=</span><span style="color:#e6db74">&#34;[base.repository.package]&#34;</span><span style="color:#f92672">/&gt;</span>
-
-    <span style="color:#f92672">&lt;repositories</span> <span style="color:#a6e22e">base-package=</span><span style="color:#e6db74">&#34;[base.repository.package]&#34;</span><span style="color:#f92672">&gt;</span>
-        <span style="color:#f92672">&lt;repository</span> <span style="color:#a6e22e">id=</span><span style="color:#e6db74">&#34;userRepository&#34;</span> <span style="color:#a6e22e">custom-impl-ref=</span><span style="color:#e6db74">&#34;userRepositoryImpl&#34;</span><span style="color:#f92672">/&gt;</span>
-    <span style="color:#f92672">&lt;/repositories&gt;</span>
-
-    <span style="color:#f92672">&lt;beans:bean</span> <span style="color:#a6e22e">id=</span><span style="color:#e6db74">&#34;userRepositoryImpl&#34;</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;...UserRepositoryImpl&#34;</span><span style="color:#f92672">/&gt;</span></code></pre></div>
-<p>Вот и всё.</p>
-
-        
-
-    </article>
-    
     
     
 
@@ -710,6 +712,8 @@
     
         <a href="/page/26/" class="label-pagination">26</a>
     
+        <a href="/page/27/" class="label-pagination">27</a>
+    
 
     
     
@@ -718,7 +722,7 @@
 
     
     
-        <a href="/page/26/" aria-label="Last"><i class="fa fa-angle-double-right fa-lg"></i></a>
+        <a href="/page/27/" aria-label="Last"><i class="fa fa-angle-double-right fa-lg"></i></a>
     
 
 </div>

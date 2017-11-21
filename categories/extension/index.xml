@@ -21,7 +21,7 @@
 Логично предположить, что у расширений могут быть настройки. В Google Chrome/Chromium для этого есть специальный API.
 Для того, чтобы создать собственную страницу настроек необходимо сделать следующее:
 1. Объявить в манифесте страницу настроек
-{ &#34;name&#34;: &#34;Delicious plugin&#34;, &#34;version&#34;: &#34;0.2&#34;, &#34;background_page&#34;: &#34;background.html&#34;, &#34;options_page&#34;: &#34;options.html&#34; } 
+{ &amp;ldquo;name&amp;rdquo;: &amp;ldquo;Delicious plugin&amp;rdquo;, &amp;ldquo;version&amp;rdquo;: &amp;ldquo;0.2&amp;rdquo;, &amp;ldquo;background_page&amp;rdquo;: &amp;ldquo;background.html&amp;rdquo;, &amp;ldquo;options_page&amp;rdquo;: &amp;ldquo;options.html&amp;rdquo; } 
 2. Реализовать страницу с настройками.
 Страница с настройками - это обычная HTML-страничка. Для доступа к настройкам Google Chrome предоставляет объект localStorage, который умеет сохранять и возвращать значения.</description>
     </item>

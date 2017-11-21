@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://uthark.github.io/2017/11/21/migrate-to-hugo/</loc>
+    <lastmod>2017-11-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://uthark.github.io/license/</loc>
     <lastmod>2017-11-20T00:00:00+00:00</lastmod>
   </url>
@@ -669,6 +674,12 @@
   </url>
   
   <url>
+    <loc>https://uthark.github.io/categories/announcements/</loc>
+    <lastmod>2017-11-21T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://uthark.github.io/categories/apache-ant/</loc>
     <lastmod>2009-06-02T23:31:00+00:00</lastmod>
     <priority>0</priority>
@@ -1060,7 +1071,7 @@
   
   <url>
     <loc>https://uthark.github.io/post/</loc>
-    <lastmod>2017-10-12T17:02:55+00:00</lastmod>
+    <lastmod>2017-11-21T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1126,7 +1137,7 @@
   
   <url>
     <loc>https://uthark.github.io/</loc>
-    <lastmod>2017-10-12T17:02:55+00:00</lastmod>
+    <lastmod>2017-11-21T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

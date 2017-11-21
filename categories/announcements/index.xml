@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Announcements on Sharing knowledge</title>
+    <link>https://uthark.github.io/categories/announcements/</link>
+    <description>Recent content in Announcements on Sharing knowledge</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 21 Nov 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://uthark.github.io/categories/announcements/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Migrate to hugo completed</title>
+      <link>https://uthark.github.io/2017/11/21/migrate-to-hugo/</link>
+      <pubDate>Tue, 21 Nov 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2017/11/21/migrate-to-hugo/</guid>
+      <description>Good news, everyone. Migration from octopress to hugo completed. If you find broken layout in some of the pages, do not hesitate to contact me.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -183,6 +183,17 @@ public User save(User user) { if(user == null) { throw new IllegalArgumentExcept
     </item>
     
     <item>
+      <title>Использование memcached в качестве backend для Spring Caching Abstraction</title>
+      <link>https://uthark.github.io/2013/06/19/spring-caching/</link>
+      <pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2013/06/19/spring-caching/</guid>
+      <description>В Spring 3.1 появился замечательный модуль - Spring Cache, который является абстракцией над кэшированием, что позволяет декларативно реализовывать кэширование в приложении.
+Я не буду вдаваться в подробности работы, их можно прочитать в документации, но опишу, каким образом можно настроить memcached в качестве бэкэнда для работы.
+Подключение зависимостей &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;com.google.code.simple-spring-memcached&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spymemcached-provider&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;3.1.0&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;com.google.code.simple-spring-memcached&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-cache&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;3.1.0&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; spymemcached-provider - это библиотечка для работы с memcached из Java, а spring-cache - модуль интеграции со Spring.</description>
+    </item>
+    
+    <item>
       <title>Пишем валидатор для Bean Validation API</title>
       <link>https://uthark.github.io/2013/06/19/custom-bean-validator/</link>
       <pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate>
@@ -426,6 +437,36 @@ GORM - это ORM-фреймворк, используемый в Grails. Реа
     </item>
     
     <item>
+      <title>RabbitVCS - расширение для Nautilus для работы с Subversion</title>
+      <link>https://uthark.github.io/2009/12/06/nautilus-subversion/</link>
+      <pubDate>Sun, 06 Dec 2009 01:03:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/12/06/nautilus-subversion/</guid>
+      <description>Раньше я использовал коллекцию скриптов nautilussvn, весьма неудобную в использовании.
+Бродя по просторам сети наткнулся на отличную замену. Встречайте - RabbitVCS.
+ВозможностиИнтеграция с Nautilus Поддержка Subversion Полная локализация Поддержка командной строки Доступны пакеты для различных дистрибутивов Установка
+Для Ubuntu Hardy, Intepid, Jaunty
+deb http://ppa.launchpad.net/rabbitvcs/ppa/ubuntu hardy main 
+Для Ubuntu Karmic
+sudo add-apt-repository ppa:rabbitvcs/ppa 
+Установка для других дистрибутивов описана на официальном сайте.
+РаботаНесмотря на очень маленький номер версии работает достаточно стабильно, не падает.</description>
+    </item>
+    
+    <item>
+      <title>Расширение Delicious Plugin идёт в массы</title>
+      <link>https://uthark.github.io/2009/11/25/delicious-plugin/</link>
+      <pubDate>Wed, 25 Nov 2009 23:16:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/11/25/delicious-plugin/</guid>
+      <description>Google запустил сайт Chrome Extensions.
+В данный момент сайт доступен только разработчикам расширений. Залил расширение, написал кратенькое описание. Жду запуска сайта. :)
+А пока сайт закрыт для рядовых пользователей последнюю версию можно скачать тут.
+P.S. А тем временем работа над расширением продолжается.
+P.P.S. У расширения появилась своя страничка в сети: Project Home Page</description>
+    </item>
+    
+    <item>
       <title>Создание страницы настроек для расширений Google Chrome</title>
       <link>https://uthark.github.io/2009/11/24/google-chrome/</link>
       <pubDate>Tue, 24 Nov 2009 23:09:00 +0000</pubDate>
@@ -435,7 +476,7 @@ GORM - это ORM-фреймворк, используемый в Grails. Реа
 Логично предположить, что у расширений могут быть настройки. В Google Chrome/Chromium для этого есть специальный API.
 Для того, чтобы создать собственную страницу настроек необходимо сделать следующее:
 1. Объявить в манифесте страницу настроек
-{ &#34;name&#34;: &#34;Delicious plugin&#34;, &#34;version&#34;: &#34;0.2&#34;, &#34;background_page&#34;: &#34;background.html&#34;, &#34;options_page&#34;: &#34;options.html&#34; } 
+{ &amp;ldquo;name&amp;rdquo;: &amp;ldquo;Delicious plugin&amp;rdquo;, &amp;ldquo;version&amp;rdquo;: &amp;ldquo;0.2&amp;rdquo;, &amp;ldquo;background_page&amp;rdquo;: &amp;ldquo;background.html&amp;rdquo;, &amp;ldquo;options_page&amp;rdquo;: &amp;ldquo;options.html&amp;rdquo; } 
 2. Реализовать страницу с настройками.
 Страница с настройками - это обычная HTML-страничка. Для доступа к настройкам Google Chrome предоставляет объект localStorage, который умеет сохранять и возвращать значения.</description>
     </item>
@@ -537,6 +578,29 @@ new persistent class jpa -name ~.domain.Action -testAutomatically add field stri
       <guid>https://uthark.github.io/2009/05/27/fixed-price-1/</guid>
       <description>В последнее время всё чаще задумываюсь о том, почему разработчики пишут плохой и некачественный код. Под кодом я подразумеваю не только сам код, но и, в том числе, архитектуру и дизайн.
 Плохим кодом я считаю следущий: Невыполняющий функциональные требованияНевыполняющий нефункциональные требованияНепокрытый тестамиПлохо тестируемыйПлохо поддерживаемыйС багамиНеоптимальныйЕсли код не выполняет функциональные требования, то этот код вообще ничего не стоит. Заказчику такой код не нужен, именно поэтому этот код плохой. На него были потрачены ресурсы, но при этом сам код не имеет никакой ценности.</description>
+    </item>
+    
+    <item>
+      <title>Google Application Engine</title>
+      <link>https://uthark.github.io/2009/05/23/google-application-engine/</link>
+      <pubDate>Sat, 23 May 2009 23:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/05/23/google-application-engine/</guid>
+      <description>Посмотрел на Google App Engine (GAE).
+При своей цене (= бесплатно) это очень хороший сервис.
+GAE - это инфраструктура для запуска веб-приложений на серверах Google. То, что сейчас модно называть cloud computing.
+На презентации платформы в 2008 году Google объявил только о поддержке Python. Год спустя, в апреле 2009 года Google заявил о поддержке Java, правда с ограничениями. Собственно, поддержка Java и была тем самым толчком, что я решил поближе посмотреть на платформу.</description>
+    </item>
+    
+    <item>
+      <title>Eclipse и его расширения</title>
+      <link>https://uthark.github.io/2009/05/03/eclipse/</link>
+      <pubDate>Sun, 03 May 2009 00:18:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/05/03/eclipse/</guid>
+      <description>Многие ругают Eclipse за то, что там нет многого из того, что есть в коробке у Jetbrains Intellij IDEA. Мне всегда казалось это не очень корректным, так как Eclipse в первую очередь платформа, а уже потом - среда для Java разработки.
+Решил собрать воедино весь список используемых мною расширений для Eclipse.
+Subclipse - без этого никуда. Это расширение позволяет работать с системой контроля версий Subversion не выходя из Eclipse. m2eclipse - Расширение для работы с maven.</description>
     </item>
     
     <item>

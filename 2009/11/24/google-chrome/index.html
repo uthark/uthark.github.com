@@ -123,8 +123,7 @@
           
           
           
-          <div class='post'>
-В продолжение <a href="http://atamanenko.blogspot.com/2009/11/delicious-bookmarks-google.html">предыдущей заметки</a><br />
+          <p>В продолжение <a href="http://atamanenko.blogspot.com/2009/11/delicious-bookmarks-google.html">предыдущей заметки</a><br />
 <br />
 Логично предположить, что у расширений могут быть настройки. В Google Chrome/Chromium для этого есть специальный API.<br />
 <br />
@@ -132,10 +131,10 @@
 <br />
 1. Объявить в манифесте страницу настроек<br />
 <pre class="brush:js; highlight: [5]">{
-  "name": "Delicious plugin", 
-  "version": "0.2", 
-  "background_page": "background.html", 
-  "options_page": "options.html"
+  &ldquo;name&rdquo;: &ldquo;Delicious plugin&rdquo;,
+  &ldquo;version&rdquo;: &ldquo;0.2&rdquo;,
+  &ldquo;background_page&rdquo;: &ldquo;background.html&rdquo;,
+  &ldquo;options_page&rdquo;: &ldquo;options.html&rdquo;
 }
 </pre><br />
 2. Реализовать страницу с настройками.<br />
@@ -152,37 +151,38 @@
     // Saves options to localStorage.
     function saveOptions() {
         var share = document.getElementById(&quot;share&quot;);
-        localStorage[&quot;markPrivate&quot;] = share.checked;
+        localStorage[&quot;markPrivate&quot;] = share.checked;</p>
 
-        // Update status to let user know options were saved.
-        var status = document.getElementById(&quot;status&quot;);
-        status.innerHTML = &quot;Options Saved.&quot;;
-        setTimeout(function() {
-            status.innerHTML = &quot;&quot;;
-        }, 1500);
+<pre><code>    // Update status to let user know options were saved.
+    var status = document.getElementById(&amp;quot;status&amp;quot;);
+    status.innerHTML = &amp;quot;Options Saved.&amp;quot;;
+    setTimeout(function() {
+        status.innerHTML = &amp;quot;&amp;quot;;
+    }, 1500);
+}
+
+// Restores select box state to saved value from localStorage.
+function restoreOptions() {
+    var share = localStorage[&amp;quot;markPrivate&amp;quot;];
+
+    if (!share) {
+        return;
     }
+    var shareCheckbox = document.getElementById(&amp;quot;share&amp;quot;);
 
-    // Restores select box state to saved value from localStorage.
-    function restoreOptions() {
-        var share = localStorage[&quot;markPrivate&quot;];
+    shareCheckbox.checked = share;
 
-        if (!share) {
-            return;
-        }
-        var shareCheckbox = document.getElementById(&quot;share&quot;);
+}
+</code></pre>
 
-        shareCheckbox.checked = share;
-        
-    }
-&lt;/script&gt;
+<p>&lt;/script&gt;</p>
 
-&lt;body onload=&quot;restoreOptions()&quot;&gt;
+<p>&lt;body onload=&quot;restoreOptions()&quot;&gt;</p>
 
-&lt;label for=&quot;share&quot;&gt;Mark as Private&lt;/label&gt;
-&lt;input type=&quot;checkbox&quot; class=&quot;checkbox&quot; name=&quot;share&quot; id=&quot;share&quot; /&gt;
+<p>&lt;label for=&quot;share&quot;&gt;Mark as Private&lt;/label&gt;
+&lt;input type=&quot;checkbox&quot; class=&quot;checkbox&quot; name=&quot;share&quot; id=&quot;share&quot; /&gt;</p>
 
-
-&lt;br&gt;
+<p>&lt;br&gt;
 &lt;button onclick=&quot;saveOptions();&quot;&gt;Save&lt;/button&gt;
 &lt;div id=&quot;status&quot;&gt;&amp;nbsp;&lt;/div&gt;
 &lt;/body&gt;
@@ -203,9 +203,8 @@
 <div class='comment'>
 <div class='author'>karri</div>
 <div class='content'>
-Мне вот тут понадобилось поставить Flash player для Chromium&#39;a, перерыла кучу ссылок в инете и наткнулась на классный блог http://www.ubuntugeek.com/<br />Он, судя по всему, для таких чайников как я(все было понятно даже на английском), поставила player без проблем и терь сижу довольная до невозможности :) Оч рекомендую начинающим линуксоидам, может кому пригодится :)</div>
-</div>
-</div>
+Мне вот тут понадобилось поставить Flash player для Chromium&#39;a, перерыла кучу ссылок в инете и наткнулась на классный блог <a href="http://www.ubuntugeek.com/">http://www.ubuntugeek.com/</a><br />Он, судя по всему, для таких чайников как я(все было понятно даже на английском), поставила player без проблем и терь сижу довольная до невозможности :) Оч рекомендую начинающим линуксоидам, может кому пригодится :)</div>
+</div></p>
 
         </div>
         
