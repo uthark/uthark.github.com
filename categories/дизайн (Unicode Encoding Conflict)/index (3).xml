@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Дизайн on Sharing knowledge</title>
+    <link>https://uthark.github.io/categories/%D0%B4%D0%B8%D0%B7%D0%B0%D0%B9%D0%BD/</link>
+    <description>Recent content in Дизайн on Sharing knowledge</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 30 May 2009 23:45:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://uthark.github.io/categories/%D0%B4%D0%B8%D0%B7%D0%B0%D0%B9%D0%BD/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Использование модификатора protected на полях в базовом классе</title>
+      <link>https://uthark.github.io/2009/05/30/protected/</link>
+      <pubDate>Sat, 30 May 2009 23:45:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2009/05/30/protected/</guid>
+      <description>Недавно задали мне вопрос - что я думаю об использовании модификатора protected для членов базового класса? Под этим вопросом кроются более серьёзные вещи.
+Например, любой член класса, имеющий модификатор protected, расширяет интерфейс базового класса для подклассов - подклассы имеют доступ ко всем protected и public методам этого поля. Иногда это сделано специально, например, для того, чтобы подклассы могли иметь доступ к какой-либо функциональности. Однако, если подкласс будет использовать protected поля неправильно (например, он может установить его в null, нарушив, таким образом, поведение базового класса), то это не принесёт пользы.</description>
+    </item>
+    
+  </channel>
+</rss>

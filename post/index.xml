@@ -770,7 +770,9 @@ FROM User u where u.login = :login and password = :password Вообще Spring 
       <guid>https://uthark.github.io/2012/04/20/beanpostprocessor/</guid>
       <description>Сегодня я хочу рассказать, как можно сделать инициализацию логгера в классе с использованием аннотаций и BeanPostProcessor
 Очень часто мы инициализируем логгер следующим образом:
-public class MyClass { private static final Logger LOG = LoggerFactory.getLogger(MyClass.class); } &amp;lt;/pre&amp;gt; Я покажу, как сделать, чтобы можно было писать вот так: ```java @Log private Logger LOG; &amp;lt;/pre&amp;gt; Первым делом нам нужно объявить аннотацию: ```java @Retention(RUNTIME) @Target(FIELD) @Documented public @interface Log { String category() default &amp;#34;&amp;#34;; } &amp;lt;/pre&amp;gt; А вторым делом, написать собственный &amp;lt;tt&amp;gt;BeanPostProcessor&amp;lt;/tt&amp;gt;, который бы устанавливал нам логгер: ```java import org.</description>
+public class MyClass { private static final Logger LOG = LoggerFactory.getLogger(MyClass.class); } Я покажу, как сделать, чтобы можно было писать вот так:
+@Log private Logger LOG; Первым делом нам нужно объявить аннотацию:
+@Retention(RUNTIME) @Target(FIELD) @Documented public @interface Log { String category() default &amp;#34;&amp;#34;; } А вторым делом, написать собственный BeanPostProcessor, который бы устанавливал нам логгер:</description>
     </item>
     
     <item>

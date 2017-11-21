@@ -128,30 +128,19 @@
 <p>Очень часто мы инициализируем логгер следующим образом:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MyClass</span> <span style="color:#f92672">{</span>
     <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> Logger LOG <span style="color:#f92672">=</span> LoggerFactory<span style="color:#f92672">.</span><span style="color:#a6e22e">getLogger</span><span style="color:#f92672">(</span>MyClass<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
-<span style="color:#f92672">}</span>
-<span style="color:#f92672">&lt;/</span>pre<span style="color:#f92672">&gt;</span>
-
-Я покажу<span style="color:#f92672">,</span> как сделать<span style="color:#f92672">,</span> чтобы можно было писать вот так: 
-<span style="color:#960050;background-color:#1e0010">```</span>java
-    <span style="color:#a6e22e">@Log</span>
-    <span style="color:#66d9ef">private</span> Logger LOG<span style="color:#f92672">;</span>
-<span style="color:#f92672">&lt;/</span>pre<span style="color:#f92672">&gt;</span>
-
-Первым делом нам нужно объявить аннотацию:
-
-<span style="color:#960050;background-color:#1e0010">```</span>java
-<span style="color:#a6e22e">@Retention</span><span style="color:#f92672">(</span>RUNTIME<span style="color:#f92672">)</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>Я покажу, как сделать, чтобы можно было писать вот так:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Log</span>
+<span style="color:#66d9ef">private</span> Logger LOG<span style="color:#f92672">;</span></code></pre></div>
+<p>Первым делом нам нужно объявить аннотацию:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Retention</span><span style="color:#f92672">(</span>RUNTIME<span style="color:#f92672">)</span>
 <span style="color:#a6e22e">@Target</span><span style="color:#f92672">(</span>FIELD<span style="color:#f92672">)</span>
 <span style="color:#a6e22e">@Documented</span>
 <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">@interface</span> Log <span style="color:#f92672">{</span>
     String <span style="color:#a6e22e">category</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">default</span> <span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">;</span>
-<span style="color:#f92672">}</span>
-<span style="color:#f92672">&lt;/</span>pre<span style="color:#f92672">&gt;</span>
-
-А вторым делом<span style="color:#f92672">,</span> написать собственный <span style="color:#f92672">&lt;</span>tt<span style="color:#f92672">&gt;</span>BeanPostProcessor<span style="color:#f92672">&lt;/</span>tt<span style="color:#f92672">&gt;,</span> который бы устанавливал нам логгер:
-
-<span style="color:#960050;background-color:#1e0010">```</span>java
-<span style="color:#f92672">import</span> org.apache.commons.lang.StringUtils<span style="color:#f92672">;</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>А вторым делом, написать собственный <tt>BeanPostProcessor</tt>, который бы устанавливал нам логгер:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">import</span> org.apache.commons.lang.StringUtils<span style="color:#f92672">;</span>
 <span style="color:#f92672">import</span> org.slf4j.Logger<span style="color:#f92672">;</span>
 <span style="color:#f92672">import</span> org.slf4j.LoggerFactory<span style="color:#f92672">;</span>
 <span style="color:#f92672">import</span> org.springframework.beans.factory.config.BeanPostProcessor<span style="color:#f92672">;</span>
