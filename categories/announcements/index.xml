@@ -12,12 +12,12 @@
     
     
     <item>
-      <title>Migrate to hugo completed</title>
+      <title>Migration to hugo completed</title>
       <link>https://uthark.github.io/2017/11/21/migrate-to-hugo/</link>
       <pubDate>Tue, 21 Nov 2017 00:00:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2017/11/21/migrate-to-hugo/</guid>
-      <description>Good news, everyone. Migration from octopress to hugo completed. If you find broken layout in some of the pages, do not hesitate to contact me.</description>
+      <description>Good news, everyone. Migration from octopress to hugo was completed. If you find any broken layout and/or links, please contact me.</description>
     </item>
     
   </channel>
