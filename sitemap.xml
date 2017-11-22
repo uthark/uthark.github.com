@@ -1154,6 +1154,12 @@
   </url>
   
   <url>
+    <loc>https://uthark.github.io/categories/softwaredesign/</loc>
+    <lastmod>2009-05-30T23:45:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://uthark.github.io/categories/spring/</loc>
     <lastmod>2014-03-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -1317,12 +1323,6 @@
   <url>
     <loc>https://uthark.github.io/categories/%D0%B3%D1%80%D0%B0%D0%B1%D0%BB%D0%B8/</loc>
     <lastmod>2009-06-02T23:31:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://uthark.github.io/categories/%D0%B4%D0%B8%D0%B7%D0%B0%D0%B9%D0%BD/</loc>
-    <lastmod>2009-05-30T23:45:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

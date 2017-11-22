@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
@@ -15,7 +18,7 @@
   
 
   
-  <title>Использование модификатора protected на полях в базовом классе</title>
+  <title>Softwaredesign</title>
 
   
   
@@ -34,7 +37,7 @@
   
   
 
-  
+  <link href="https://uthark.github.io/categories/softwaredesign/index.xml" rel="alternate" type="application/rss+xml" title="Sharing knowledge" />
 
   <meta name="description" content="">
   <meta name="keywords" content="">
@@ -105,71 +108,31 @@
 <div id="main">
   <div id="content">
     <div>
-      <article class="hentry" role="article">
-
-        
-        
-
-<header>
-    <h1 class="entry-title">
-         Использование модификатора protected на полях в базовом классе 
-    </h1>
-
-</header>
-
-
-        <div class="entry-content">
+      <article role="article">
+        <header>
+          <h1 class="entry-title">
+            Category: Softwaredesign
+          </h1>
+        </header>
+        <div id="blog-archives" class="category">
           
-          
-          
-          
-          <p>Недавно задали мне вопрос - что я думаю об использовании модификатора protected для членов базового класса? Под этим вопросом кроются более серьёзные вещи.</p>
+          <article>
+            <h1>
+              <a href="https://uthark.github.io/2009/05/30/protected/" title="Использование модификатора protected на полях в базовом классе">Использование модификатора protected на полях в базовом классе</a>
+            </h1>
+            <footer>
+              
+              <span class="categories">
+             <a class="label" href="https://uthark.github.io/categories/softwaredesign/">softwaredesign</a><a class="label" href="https://uthark.github.io/categories/development/">development</a><a class="label" href="https://uthark.github.io/categories/article/">article</a>
+                </span>
 
-<p>Например, любой член класса, имеющий модификатор protected, расширяет интерфейс базового класса для подклассов - подклассы имеют доступ ко всем protected и public методам этого поля. Иногда это сделано специально, например, для того, чтобы подклассы могли иметь доступ к какой-либо функциональности. Однако, если подкласс будет использовать protected поля неправильно (например, он может установить его в null, нарушив, таким образом, поведение базового класса), то это не принесёт пользы.</p>
-
-<p>Поразмыслив над вопросом я пришел к следующему, достаточно логичному и широкоизвестному выводу - необходимо давать наиболее закрытый доступ, какой можно. То есть, если можно объявить член класса как private, то необходимо сделать его private. Если в подклассах необходим доступ к члену класса, то необходимо проанализировать, какие методы нужны в подклассах и открыть только их через делегирование. Если набор методов заранее неизвестен, то можно сделать protected getter для поля.</p>
-
+            </footer>
+          </article>
+          
         </div>
-        
-
-<footer>
-
-  <p class="meta">
-    
-    
-
-    
-    
-    
-    Filed under: <a class="label" href="https://uthark.github.io/categories/softwaredesign/">softwaredesign</a><a class="label" href="https://uthark.github.io/categories/development/">development</a><a class="label" href="https://uthark.github.io/categories/article/">article</a>
-    
-  </p>
-
-  <p class="meta">
-    
-    Last update: <time>May 30, 2009</time>
-    
-    </span>
-  </p>
-  
-  
-
-  
-
-  <p class="meta">
-    
-        <a class="basic-alignment left" href="https://uthark.github.io/2009/05/27/fixed-price-2/" title="Сферический программист в вакууме и абстрактное понятие качества кода в условиях Fixed-Price проектов (часть 2)">Сферический программист в вакууме и абстрактное понятие качества кода в условиях Fixed-Price проектов (часть 2)</a>
-    
-
-    
-      <a class="basic-alignment right" href="https://uthark.github.io/2009/06/02/apache-ant-metro/" title="Apache Ant и Metro">Apache Ant и Metro</a>
-    
-  </p>
-  
-</footer>
-
       </article>
     </div>
+
     
 
 <aside class="sidebar thirds">
