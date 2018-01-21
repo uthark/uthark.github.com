@@ -85,7 +85,7 @@ video {
     font: inherit;
     font-size: 100%;
     vertical-align: baseline;
-    font-family: "Anonymous Pro","Fira Mono", "DejaVu Sans Mono", Menlo, Consolas, "Liberation Mono", Monaco, "Lucida Console", monospace;
+    font-family: "Go Mono", "Anonymous Pro","Fira Mono", "DejaVu Sans Mono", Menlo, Consolas, "Liberation Mono", Monaco, "Lucida Console", monospace;
 
 }
 html {
@@ -186,7 +186,7 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: "Anonymous Pro","Fira Mono", "DejaVu Sans Mono", Menlo, Consolas, "Liberation Mono", Monaco, "Lucida Console", monospace;
+    font-family: "Go Mono", "Anonymous Pro","Fira Mono", "DejaVu Sans Mono", Menlo, Consolas, "Liberation Mono", Monaco, "Lucida Console", monospace;
 }
 .sans,
 body>header h2,
@@ -198,7 +198,7 @@ html .gist .gist-file .gist-meta,
 #blog-archives time,
 aside.sidebar section,
 body>footer {
-    font-family: "Anonymous Pro","Fira Mono", "DejaVu Sans Mono", Menlo, Consolas, "Liberation Mono", Monaco, "Lucida Console", monospace;
+    font-family: "Go Mono", "Anonymous Pro","Fira Mono", "DejaVu Sans Mono", Menlo, Consolas, "Liberation Mono", Monaco, "Lucida Console", monospace;
 }
 .serif,
 body,
@@ -211,17 +211,17 @@ code,
 tt,
 p code,
 li code {
-    font-family: "Anonymous Pro","Fira Mono", "DejaVu Sans Mono", Menlo, Consolas, "Liberation Mono", Monaco, "Lucida Console", monospace;
+    font-family: "Go Mono", "Anonymous Pro","Fira Mono", "DejaVu Sans Mono", Menlo, Consolas, "Liberation Mono", Monaco, "Lucida Console", monospace;
 }
 body>header h1 {
-    font-size: 1.8em;
-    font-family: "Anonymous Pro","Fira Mono", "DejaVu Sans Mono", Menlo, Consolas, "Liberation Mono", Monaco, "Lucida Console", monospace;
+    font-size: 1.5em;
+    font-family: "Go Mono", "Anonymous Pro","Fira Mono", "DejaVu Sans Mono", Menlo, Consolas, "Liberation Mono", Monaco, "Lucida Console", monospace;
     font-weight: normal;
     line-height: 1.2em;
     margin-bottom: 0.6667em
 }
 body>header h2 {
-    font-family: "Anonymous Pro","Fira Mono", "DejaVu Sans Mono", Menlo, Consolas, "Liberation Mono", Monaco, "Lucida Console", monospace;
+    font-family: "Go Mono", "Anonymous Pro","Fira Mono", "DejaVu Sans Mono", Menlo, Consolas, "Liberation Mono", Monaco, "Lucida Console", monospace;
 }
 body {
     line-height: 1.5em;
@@ -236,7 +236,7 @@ h1 {
         font-size: 1.15em
     }
     h1 {
-        font-size: 2.4em;
+        font-size: 1.4em;
         line-height: 1.2em
     }
 }
@@ -818,7 +818,7 @@ body>nav form {
 body>nav form .search {
     padding: .3em .5em 0;
     font-size: .85em;
-    font-family: "Anonymous Pro","Fira Mono", "DejaVu Sans Mono", Menlo, Consolas, "Liberation Mono", Monaco, "Lucida Console", monospace;
+    font-family: "Go Mono", "Anonymous Pro","Fira Mono", "DejaVu Sans Mono", Menlo, Consolas, "Liberation Mono", Monaco, "Lucida Console", monospace;
     line-height: 1.1em;
     width: 95%;
     /*-webkit-border-radius: 0.5em;*/
@@ -910,7 +910,7 @@ body>nav ul {
     }
     body>nav a {
         color: #6b6b6b;
-        font-family: "Anonymous Pro","Fira Mono", "DejaVu Sans Mono", Menlo, Consolas, "Liberation Mono", Monaco, "Lucida Console", monospace;
+        font-family: "Go Mono", "Anonymous Pro","Fira Mono", "DejaVu Sans Mono", Menlo, Consolas, "Liberation Mono", Monaco, "Lucida Console", monospace;
         /*text-shadow: #ebebeb 0 1px;*/
         float: left;
         text-decoration: none;
@@ -1184,7 +1184,7 @@ article>footer p.meta {
 }
 #content .blog-index article {
     padding-top: 2em;
-    font-family: "Anonymous Pro","Fira Mono", "DejaVu Sans Mono", Menlo, Consolas, "Liberation Mono", Monaco, "Lucida Console", monospace;
+    font-family: "Go Mono", "Anonymous Pro","Fira Mono", "DejaVu Sans Mono", Menlo, Consolas, "Liberation Mono", Monaco, "Lucida Console", monospace;
 }
 #content .blog-index article header {
     background: none;
@@ -1438,7 +1438,7 @@ li pre code {
 .pre-code,
 html .gist .gist-file .gist-syntax .highlighttable pre,
 .highlighttable code {
-    font-family: "Anonymous Pro","Fira Mono", "DejaVu Sans Mono", Menlo, Consolas, "Liberation Mono", Monaco, "Lucida Console", monospace;
+    font-family: "Go Mono", "Anonymous Pro","Fira Mono", "DejaVu Sans Mono", Menlo, Consolas, "Liberation Mono", Monaco, "Lucida Console", monospace;
     overflow: scroll;
     overflow-y: hidden;
     display: block;
@@ -1796,7 +1796,7 @@ figure.code figcaption { /* figcaption changes */
     -webkit-border-top-right-radius: 5px;
     border-top-right-radius: 5px;
     background: #aaa top repeat-x;
-    font-family: "Anonymous Pro","Fira Mono", "DejaVu Sans Mono", Menlo, Consolas, "Liberation Mono", Monaco, "Lucida Console", monospace;
+    font-family: "Go Mono", "Anonymous Pro","Fira Mono", "DejaVu Sans Mono", Menlo, Consolas, "Liberation Mono", Monaco, "Lucida Console", monospace;
     border: 1px solid #565656;
     border-top-color: #cbcbcb;
     border-left-color: #a5a5a5;
@@ -1826,7 +1826,7 @@ figure.code figcaption a:hover {
     padding-top: 0
 }
 #blog-archives {
-    color: #aaa
+    /* color: #aaa */
 }
 #blog-archives article {
     padding: 1em 0 1em;
@@ -1904,18 +1904,19 @@ figure.code figcaption a:hover {
     #blog-archives h2 {
         margin-bottom: 0.3em;
         font-weight: normal;
-        display: inline-block;
-        position: relative;
+        /* display: inline-block; */
+        /* position: relative; */
         top: -1px;
-        float: left;
-        margin-top: 1.7em;     /* align year with the rest */
+        display: block;
+        /* float: left; */
+
     }
     #blog-archives time {
         position: absolute;
         text-align: right;
         left: 0em;
         top: 3em; /* may need to change this to align the month/date on the tag/category (archive) pages with post name */
-        font-family: "Anonymous Pro","Fira Mono", "DejaVu Sans Mono", Menlo, Consolas, "Liberation Mono", Monaco, "Lucida Console", monospace;
+        font-family: "Go Mono", "Anonymous Pro","Fira Mono", "DejaVu Sans Mono", Menlo, Consolas, "Liberation Mono", Monaco, "Lucida Console", monospace;
     }
 
    /* #blog-archives .year {
@@ -2213,7 +2214,7 @@ a.label:visited {
 
 /* because we have changed the font-family of everything, we need to change it for the code inside pre to fit with line numbers */
 pre span {
-    font-family: "Anonymous Pro","Fira Mono", "DejaVu Sans Mono", Menlo, Consolas, "Liberation Mono", Monaco, "Lucida Console", monospace;
+    font-family: "Go Mono", "Anonymous Pro","Fira Mono", "DejaVu Sans Mono", Menlo, Consolas, "Liberation Mono", Monaco, "Lucida Console", monospace;
 }
 
 td.code {

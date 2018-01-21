@@ -42,7 +42,7 @@
   <meta name="author" content="Oleg Atamanenko">
 
   
-  <meta name="generator" content="Hugo 0.31.1" />
+  <meta name="generator" content="Hugo 0.32.2" />
 
   
   
@@ -64,15 +64,11 @@
   
   
     
-      <li><a href="https://uthark.github.io/" title="Home">Home</a></li>
+      <li><a href="https://uthark.github.io/" title="Blog">Blog</a></li>
     
   
     
-      <li><a href="https://uthark.github.io/categories/article/" title="Articles" >Articles</a></li>
-    
-  
-    
-      <li><a href="https://uthark.github.io/categories/reading-list/" title="Reading List" >Reading List</a></li>
+      <li><a href="https://uthark.github.io/readinglist/" title="Reading List" >Reading List</a></li>
     
   
     
@@ -114,73 +110,57 @@
 
 <header>
     <h1 class="entry-title">
-        <a href="https://uthark.github.io/2014/04/07/reading-list-2014-april-07/">Reading List 2014-April-07</a>
+        <a href="https://uthark.github.io/2011/07/21/java/">Немного о виртуальных методах в Java</a>
     </h1>
 
 </header>
 
 
         
-        
+        <p>Сегодня я хочу рассмотреть некоторые особенности переопределения методов в Java.  В java нельзя переопределить:   <br />
+<ul><li>поля класса</li>
+<li>конструкторы, инициализаторы класса</li>
+<li>статические методы</li>
+<li>статические поля</li>
+</ul><br />
+Подробнее об этом можно прочитать в <a href="http://java.sun.com/docs/books/jls/third_edition/html/classes.html#228745">Java Language Specification, §8.4.8</a><br />
+<br />
+Итак, в java все нестатические неприватные (то есть, <tt>protected</tt>, <tt>package</tt> и <tt>public</tt>) методы являются виртуальными. Ключевое слово <tt>final</tt> запрещает возможность дальнейшего переопределения метода в подклассах.  Рассмотрим следующий пример:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">A</span> <span style="color:#f92672">{</span>
+     <span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 3<span style="color:#f92672">;</span>
+     <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">getI</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span><span style="color:#66d9ef">return</span> i<span style="color:#f92672">;}</span>
+<span style="color:#f92672">}</span>
 
-<h3 id="software-development">Software development</h3>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">B</span> <span style="color:#66d9ef">extends</span> A<span style="color:#f92672">{</span>
+     <span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 5<span style="color:#f92672">;</span>
+     <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">getI</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span><span style="color:#66d9ef">return</span> i<span style="color:#f92672">;}</span>
+<span style="color:#f92672">}</span>
 
-<ol>
-<li><a href="http://j.mp/1gDcBnj">Why Hire Older Engineers</a></li>
-<li><a href="http://j.mp/1q1HjWX">Am I really a developer or just a good googler?</a></li>
-<li><a href="http://j.mp/1mQut0h">Facebook open sources code for managing A/B tests — Tech News and Analysis</a></li>
-<li><a href="http://j.mp/1oyReHY">AngularJS Tip - Avoid Multiple Variables in ng-src</a></li>
-<li><a href="http://j.mp/1hoSKTp">Introducing Pyston: an upcoming, JIT-based Python implementation</a></li>
-<li><a href="http://j.mp/1fHeopL">The Power of HTML</a></li>
-<li><a href="http://j.mp/1hcgGyV">Microsoft TypeScript 1.0 Arrives</a></li>
-<li><a href="http://j.mp/1hIPVRD">BlueGreenDeployment</a></li>
-<li><a href="http://j.mp/PpknFx">Five Funny Moments in Developer History</a></li>
-<li><a href="http://j.mp/PpjFbh">Domain-Driven Design Revisited</a></li>
-<li><a href="http://j.mp/1rD86fF">Application Security – Can you Rely on the Honeymoon Effect?</a></li>
-<li><a href="http://j.mp/1gDcCHM">Differences in Map/Reduce between RavenDB &amp; MongoDB</a></li>
-<li><a href="http://j.mp/1hdFCWZ">Microsoft Announces Windows Phone 8.1 With New Action Center, Cortana, Start Screen Improvements</a></li>
-<li><a href="http://j.mp/1jmWwAU">Consume Webservice in Android using intentService</a></li>
-<li><a href="http://j.mp/1q1HaCL">Btrees Are the New Black</a></li>
-<li><a href="http://j.mp/1hdFwPa">Why Ruby Class Methods Resist Refactoring</a></li>
-<li><a href="http://j.mp/1oyRjLN">Subtly Bad Things Linux May Be Doing To PostgreSQL</a></li>
-</ol>
+A a <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> B<span style="color:#f92672">();</span>
+System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>a<span style="color:#f92672">.</span><span style="color:#a6e22e">i</span><span style="color:#f92672">);</span>
+System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>a<span style="color:#f92672">.</span><span style="color:#a6e22e">getI</span><span style="color:#f92672">());</span></code></pre></div>
+<p>Вопрос: что выведет данный код?<br />
+Ответ: <br />
+1. Так как поля класса не наследуются, то у класса A своё поле i и у класса B тоже своё поле i. Так как для полей полиморфизм не действует, то при обращении a.i мы обращаемся к классу A, поэтому на экран будет выведено 3.<br />
+2. При вызове метода a.getI() у нас в дело вступает полиморфизм, поэтому будет вызван метод от класса, инстанс которого был создан. Соответственно, мы получим на выходе 5.<br />
+<br />
+<br />
+Другой пример:<br />
+<br /></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">A</span> <span style="color:#f92672">{</span>
+     <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 3<span style="color:#f92672">;</span>
+     <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">getI</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span><span style="color:#66d9ef">return</span> i<span style="color:#f92672">;}</span> 
+<span style="color:#f92672">}</span>
 
-<h3 id="agile">Agile</h3>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">B</span> <span style="color:#66d9ef">extends</span> A<span style="color:#f92672">{</span>
+     <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 5<span style="color:#f92672">;</span>
+     <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">getI</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span><span style="color:#66d9ef">return</span> i<span style="color:#f92672">;}</span>
+<span style="color:#f92672">}</span>
 
-<ol>
-<li><a href="http://j.mp/1hoSFz0">Lean is Clean without the C for Complexity</a></li>
-<li><a href="http://j.mp/1hl2Me2">Conquering job hell and multiple app branches using Jenkins &amp; Mercurial</a></li>
-</ol>
-
-<h3 id="cloud">Cloud</h3>
-
-<ol>
-<li><a href="http://j.mp/1q2ev2d">The platform-as-a-service winner is &hellip; Puppet?</a></li>
-<li><a href="http://j.mp/1ltqW5i">Integration platform as a service, the cloud, and… baby unicorns</a></li>
-</ol>
-
-<h3 id="java">Java</h3>
-
-<ol>
-<li><a href="http://j.mp/PxbaLu">Common Misconceptions About Java</a></li>
-<li><a href="http://j.mp/P67nEC">javac&rsquo;s -Xprint Option</a></li>
-<li><a href="http://j.mp/1gFHhnV">javac&rsquo;s -Xlint Options</a></li>
-<li><a href="http://j.mp/1jbhjYd">Java 8 default methods: what can and can not do?</a></li>
-<li><a href="http://j.mp/1jbhgLX">Hack Computer Boards with Java! (The Java Source)</a></li>
-<li><a href="http://j.mp/Pz5Kja">Why I Like The Verbosity of Java</a></li>
-<li><a href="http://j.mp/1k8yX2p">How not to use Java 8 default methods</a></li>
-<li><a href="http://j.mp/1k8yZHw">Java 8 Adoption Poll Results</a></li>
-<li><a href="http://j.mp/1iSpUih">10 Example of Lambda Expressions and Streams in Java 8</a></li>
-<li><a href="http://j.mp/1jbhnHj">In Relation To&hellip; Third milestone on the path for Hibernate Search 5</a></li>
-<li><a href="http://j.mp/P3SL8L">Using AmazonS3EncryptionClient to Send Secure Data Between Two Parties</a></li>
-<li><a href="http://j.mp/1mQxUl5">Dealing with org.hibernate.LazyInitializationException: could not initialize proxy - no Session in Hibernate Java</a></li>
-</ol>
-
-<h3 id="in-russian">In Russian</h3>
-
-<ol>
-<li><a href="http://j.mp/1jY5bc0">FAQ: Святилища Кавказа</a></li>
-</ol>
+A a <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> B<span style="color:#f92672">();</span>
+System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>a<span style="color:#f92672">.</span><span style="color:#a6e22e">i</span><span style="color:#f92672">);</span>
+System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>a<span style="color:#f92672">.</span><span style="color:#a6e22e">getI</span><span style="color:#f92672">());</span></code></pre></div>
+<p>Статические поля и методы виртуальными не являются, поэтому оба вызова выведут нам 3.</p>
 
         
 
@@ -193,43 +173,115 @@
 
 <header>
     <h1 class="entry-title">
-        <a href="https://uthark.github.io/2014/04/04/reading-list-2014-april-04/">Reading List 2014-April-04</a>
+        <a href="https://uthark.github.io/2010/12/06/blog-post/">Сокращаем ссылки на андроиде</a>
     </h1>
 
 </header>
 
 
         
-        
+        <p><h5>Вступление</h5>Встала передо мной задача - сокращать ссылки перед тем, как отправлять их в Twitter. Для решения этой задачи я решил использовать <a href="http://bit.ly">bit.ly</a>, благо, их API внятный и простой.  <h5>Программируем!</h5>Решение нарисовалось в виде следующего класса:  <br /></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">import</span> org.apache.http.HttpEntity<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.apache.http.HttpResponse<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.apache.http.NameValuePair<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.apache.http.client.ClientProtocolException<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.apache.http.client.methods.HttpGet<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.apache.http.client.utils.URIUtils<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.apache.http.client.utils.URLEncodedUtils<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.apache.http.impl.client.DefaultHttpClient<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.apache.http.message.BasicNameValuePair<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.apache.http.util.EntityUtils<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.json.JSONException<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.json.JSONObject<span style="color:#f92672">;</span>
 
-<h3 id="software-development">Software development</h3>
+<span style="color:#f92672">import</span> android.util.Log<span style="color:#f92672">;</span>
 
-<ol>
-<li><a href="http://j.mp/1h2Gxt8">How WhatsApp Grew to Nearly 500 Million Users, 11,000 cores, and 70 Million Messages a Second</a></li>
-<li><a href="http://j.mp/1fKB44T">MongoDB on Google Compute Engine – tips and benchmarks</a></li>
-<li><a href="http://j.mp/1msMIGg">Going Reactive - Asynchronous JavaScript at Netflix</a></li>
-<li><a href="http://j.mp/1h8ltSf">Greenpeace Blasts &lsquo;Dirty&rsquo; Amazon Web Services</a></li>
-<li><a href="http://j.mp/1oxzyfP">Eclipse is dead for Android development and I helped kill it — Infinum</a></li>
-</ol>
+<span style="color:#f92672">import</span> java.io.IOException<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> java.net.URI<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> java.net.URISyntaxException<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> java.util.ArrayList<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> java.util.List<span style="color:#f92672">;</span>
 
-<h3 id="java">Java</h3>
 
-<ol>
-<li><a href="http://j.mp/1mI2VYl">How to process stream and read text file in Java 8</a></li>
-<li><a href="http://j.mp/1jr94YG">Integration Testing for Spring Applications with JNDI Connection Pools</a></li>
-<li><a href="http://j.mp/1mI35Pp">Project Sagan: zero-downtime deployments</a></li>
-<li><a href="http://j.mp/PwiSW2">Java: How to Schedule a task to run in an interval</a></li>
-<li><a href="http://j.mp/1fxyTS3">Understanding the JDBC architecture.</a></li>
-<li><a href="http://j.mp/1foo5ch">Java Tip: Hibernate validation in a standalone implementation</a></li>
-</ol>
+<span style="color:#75715e">/**
+</span><span style="color:#75715e"> * Helper class to work with bitly.
+</span><span style="color:#75715e"> *
+</span><span style="color:#75715e"> * @author Oleg Atamanenko
+</span><span style="color:#75715e"> * @since 06-Dec-2010 12:49:36
+</span><span style="color:#75715e"> */</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Bitly</span> <span style="color:#f92672">{</span>
 
-<h3 id="in-russian">In Russian</h3>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> String TAG <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Bitly&#34;</span><span style="color:#f92672">;</span>
 
-<ol>
-<li><a href="http://j.mp/1k5VZqE">Получены первые намеки на эффект Михеева–Смирнова–Вольфенштейна при движении нейтрино сквозь Землю</a></li>
-<li><a href="http://j.mp/1owoAqU">Проект Lazybones — «Лентяй», который работает за вас</a></li>
-<li><a href="http://j.mp/1gQIA3B">Москва: город, агломерация, жители, система управления</a></li>
-</ol>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> String SHORTEN <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;/v3/shorten&#34;</span><span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> String API_URL <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;api.bit.ly&#34;</span><span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> String RESPONSE_FORMAT <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;json&#34;</span><span style="color:#f92672">;</span>
+
+    <span style="color:#66d9ef">private</span> String username<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> String apiKey<span style="color:#f92672">;</span>
+
+
+    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">Bitly</span><span style="color:#f92672">(</span>String username<span style="color:#f92672">,</span> String apiKey<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">username</span> <span style="color:#f92672">=</span> username<span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">apiKey</span> <span style="color:#f92672">=</span> apiKey<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">public</span> String <span style="color:#a6e22e">shorten</span><span style="color:#f92672">(</span>String longUrl<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> BitlyException <span style="color:#f92672">{</span>
+        DefaultHttpClient httpClient <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> DefaultHttpClient<span style="color:#f92672">();</span>
+
+        <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+            List<span style="color:#f92672">&lt;</span>NameValuePair<span style="color:#f92672">&gt;</span> params <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ArrayList<span style="color:#f92672">&lt;</span>NameValuePair<span style="color:#f92672">&gt;();</span>
+            params<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> BasicNameValuePair<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;login&#34;</span><span style="color:#f92672">,</span> username<span style="color:#f92672">));</span>
+            params<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> BasicNameValuePair<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;apiKey&#34;</span><span style="color:#f92672">,</span> apiKey<span style="color:#f92672">));</span>
+            params<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> BasicNameValuePair<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;longUrl&#34;</span><span style="color:#f92672">,</span> longUrl<span style="color:#f92672">));</span>
+            params<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> BasicNameValuePair<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;format&#34;</span><span style="color:#f92672">,</span> RESPONSE_FORMAT<span style="color:#f92672">));</span>
+
+
+            URI uri <span style="color:#f92672">=</span> URIUtils<span style="color:#f92672">.</span><span style="color:#a6e22e">createURI</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;http&#34;</span><span style="color:#f92672">,</span> API_URL<span style="color:#f92672">,</span> <span style="color:#f92672">-</span>1<span style="color:#f92672">,</span> SHORTEN<span style="color:#f92672">,</span> URLEncodedUtils<span style="color:#f92672">.</span><span style="color:#a6e22e">format</span><span style="color:#f92672">(</span>params<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;UTF-8&#34;</span><span style="color:#f92672">),</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">);</span>
+            HttpGet request <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> HttpGet<span style="color:#f92672">(</span>uri<span style="color:#f92672">);</span>
+
+            Log<span style="color:#f92672">.</span><span style="color:#a6e22e">d</span><span style="color:#f92672">(</span>TAG<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;Sending request: &#34;</span> <span style="color:#f92672">+</span> request<span style="color:#f92672">.</span><span style="color:#a6e22e">getURI</span><span style="color:#f92672">());</span>
+
+            HttpResponse httpResponse <span style="color:#f92672">=</span> httpClient<span style="color:#f92672">.</span><span style="color:#a6e22e">execute</span><span style="color:#f92672">(</span>request<span style="color:#f92672">);</span>
+
+            HttpEntity httpEntity <span style="color:#f92672">=</span> httpResponse<span style="color:#f92672">.</span><span style="color:#a6e22e">getEntity</span><span style="color:#f92672">();</span>
+            String response <span style="color:#f92672">=</span> EntityUtils<span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">(</span>httpEntity<span style="color:#f92672">);</span>
+            Log<span style="color:#f92672">.</span><span style="color:#a6e22e">i</span><span style="color:#f92672">(</span>TAG<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;Bitly response is: &#34;</span> <span style="color:#f92672">+</span> response<span style="color:#f92672">);</span>
+            httpResponse<span style="color:#f92672">.</span><span style="color:#a6e22e">getEntity</span><span style="color:#f92672">().</span><span style="color:#a6e22e">consumeContent</span><span style="color:#f92672">();</span>
+
+            JSONObject jsonResponse <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> JSONObject<span style="color:#f92672">(</span>response<span style="color:#f92672">);</span>
+
+            checkForExceptions<span style="color:#f92672">(</span>jsonResponse<span style="color:#f92672">);</span>
+
+            JSONObject data <span style="color:#f92672">=</span> jsonResponse<span style="color:#f92672">.</span><span style="color:#a6e22e">getJSONObject</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;data&#34;</span><span style="color:#f92672">);</span>
+            <span style="color:#66d9ef">return</span> data<span style="color:#f92672">.</span><span style="color:#a6e22e">getString</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;url&#34;</span><span style="color:#f92672">);</span>
+
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>ClientProtocolException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> BitlyException<span style="color:#f92672">(</span>e<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>IOException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> BitlyException<span style="color:#f92672">(</span>e<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>JSONException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> BitlyException<span style="color:#f92672">(</span>e<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>URISyntaxException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> BitlyException<span style="color:#f92672">(</span>e<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">checkForExceptions</span><span style="color:#f92672">(</span>JSONObject jsonResponse<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> JSONException<span style="color:#f92672">,</span> BitlyException <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">int</span> statusCode <span style="color:#f92672">=</span> jsonResponse<span style="color:#f92672">.</span><span style="color:#a6e22e">getInt</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;status_code&#34;</span><span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>statusCode <span style="color:#f92672">!=</span> 200<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            String message <span style="color:#f92672">=</span> jsonResponse<span style="color:#f92672">.</span><span style="color:#a6e22e">getString</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;status_txt&#34;</span><span style="color:#f92672">);</span>
+            <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> BitlyException<span style="color:#f92672">(</span>message<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+
+<span style="color:#f92672">}</span></code></pre></div>
+<p>Конструктор класс принимает на вход следующие параметры: <ul><li><code>userName</code> - имя пользователя bit.ly.</li>
+<li><code>apiKey</code> - Ключ для доступа к API, его можно узнать на <a href="https://bit.ly/a/your_api_key">специальной страничке</a></li>
+</ul><a href="https://code.google.com/p/bitly-api/wiki/ApiDocumentation">Полная документация к Bit.ly API</a> расположена на отдельном проекте в Google Code  <h5>Использование</h5>Единственный метод, реализованный сейчас - это метод <code>shorten()</code>. На вход требуется подать полную ссылку <code>longUrl</code>, на выходе получается укороченная версия ссылки, либо кидается исключение с сообщением от bit.ly API.   <h6>Пример вызова</h6></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">Bitly bitly <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Bitly<span style="color:#f92672">(</span>BITLY_USERNAME<span style="color:#f92672">,</span> BITLY_API_KEY<span style="color:#f92672">);</span>
+String shortLink <span style="color:#f92672">=</span> bitly<span style="color:#f92672">.</span><span style="color:#a6e22e">shorten</span><span style="color:#f92672">(</span>link<span style="color:#f92672">);</span></code></pre></div>
+<p><h6>Дальнейшие улучшения</h6>Если перед вами стоит задача быстренько сократить ссылку - то вышеприведённого кода достаточно. Но если вам нужно полноценное решение, со всеми возможностями bit.ly - то посмотрите в сторону <a href="https://code.google.com/p/bitlyj/">bitlyj</a>. Правда, я не уверен, что оно взведётся под андроидом.</p>
 
         
 
@@ -242,99 +294,27 @@
 
 <header>
     <h1 class="entry-title">
-        <a href="https://uthark.github.io/2014/04/03/reading-list-2014-april-03/">Reading List 2014-April-03</a>
+        <a href="https://uthark.github.io/2010/05/22/blog-post/">Удаление различных диакритических символов из строки</a>
     </h1>
 
 </header>
 
 
         
-        
+        <p>Возникла проблема - каким образом заменить в строке символы из национальных кодировок на соответствующие им из латиницы.</p><p>Например, из строки explicación получить explicacion.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">package</span> com.blogspot.atamanenko<span style="color:#f92672">;</span>
 
-<h3 id="general">General</h3>
+<span style="color:#f92672">import</span> java.text.Normalizer<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> java.text.Normalizer.Form<span style="color:#f92672">;</span>
 
-<ol>
-<li><a href="http://j.mp/1pIDupk">Introducing the Coursera App for Android</a></li>
-<li><a href="http://j.mp/P5wpno">First Asteroid-Like Object Discovered With Rings</a></li>
-<li><a href="http://j.mp/PccUtH">Why is Warren Buffett Offering a Billion Dollar Bracket?</a></li>
-<li><a href="http://j.mp/1gXHing">This video creates natural hallucinations for a&hellip;</a></li>
-</ol>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">StringNormalizer</span> <span style="color:#f92672">{</span>
 
-<h3 id="software-development">Software development</h3>
-
-<ol>
-<li><a href="http://j.mp/1mvgXwa">Getters and setters gone wrong</a></li>
-<li><a href="http://j.mp/PjjnTQ">Don&rsquo;t &ldquo;Control&rdquo; Agile Projects</a></li>
-<li><a href="http://j.mp/1dOIbxO">Use Frequent Branches to Tell a Story and Simplify Code Reviews</a></li>
-<li><a href="http://j.mp/PccW4W">Custom Git Commands in 3 Steps</a></li>
-<li><a href="http://j.mp/1dKMlXH">Collaborating with Lists · GitHub</a></li>
-<li><a href="http://j.mp/1gXDEKd">Adding properties to domain classes on the fly using groovy propertyMissing feature</a></li>
-<li><a href="http://j.mp/1gRyJKL">How to Cache Stored Procedure Results</a></li>
-<li><a href="http://j.mp/1fE6ASc">Basic Concepts of High Availability Linux</a></li>
-<li><a href="http://j.mp/1jp2ou5">Chris&rsquo;s Wiki : blog/linux/KillAllNotRecoverable</a></li>
-<li><a href="http://j.mp/1fE6Al6">Just what we need…another package manager</a></li>
-<li><a href="http://j.mp/1jDBuRM">Good Vs Evil</a></li>
-<li><a href="http://j.mp/1fofZ01">Bringing together the best of PaaS and IaaS</a></li>
-<li><a href="http://j.mp/1hBI3kG">Fail SAFe ~ Geek Out of Water</a></li>
-<li><a href="http://j.mp/1pQxeMf">Adding properties to domain classes on the fly using groovy propertyMissing feature</a></li>
-<li><a href="http://j.mp/1pOWfJI">Continuous integration on Liferay: running your Selenium 2 tests on the Tomcat 6 bundle</a></li>
-<li><a href="http://j.mp/1dOI7hN">Transforming the Web (through transformation)</a></li>
-<li><a href="http://j.mp/1gXDK4D">db.person.find( { &ldquo;role&rdquo; : &ldquo;DBA&rdquo; } ) : Java Code Geeks</a></li>
-<li><a href="http://j.mp/1fIQRRU">MariaDB adds NoSQL features to relational database roots — Tech News and Analysis</a></li>
-<li><a href="http://j.mp/1msMPS8">Notes to students doing research about Agile</a></li>
-<li><a href="http://j.mp/1fFRCei">Automated bug finding with git bisect and mvn test</a></li>
-<li><a href="http://j.mp/1fE6GsQ">Learn To Build</a></li>
-<li><a href="http://j.mp/1fE6HwT">SSDs and MapReduce performance</a></li>
-<li><a href="http://j.mp/1fE6CcI">The Truth About MapReduce Performance on SSDs</a></li>
-<li><a href="http://j.mp/1joZuWb">Big heads &amp; Little heads</a></li>
-<li><a href="http://j.mp/1fvNldq">Are integration tests worth the hassle?</a></li>
-</ol>
-
-<h3 id="cloud">Cloud</h3>
-
-<ol>
-<li><a href="http://j.mp/1msMTkS">New Instance Types for Amazon Elastic MapReduce</a></li>
-<li><a href="http://j.mp/1k1h0CO">PaaS or IaaS? Choosing a Platform in 2014</a></li>
-<li><a href="http://j.mp/1dKMied">Updates to Google BigQuery following Cloud Platform Live</a></li>
-</ol>
-
-<h3 id="java">Java</h3>
-
-<ol>
-<li><a href="http://j.mp/1pMN38I">Hibernate ORM 4.3.5.Final Released</a></li>
-<li><a href="http://j.mp/1mBpGgx">Spring Shell 1.1 RC1 Released</a></li>
-<li><a href="http://j.mp/1mBpH46">Spring for Apache Hadoop 2.0 RC2 released</a></li>
-<li><a href="http://j.mp/1pMN9xd">Spring Tool Suite and Groovy/Grails Tool Suite 3.5.0 released</a></li>
-<li><a href="http://j.mp/1mvgGJL">First Milestone of Spring Data Release Train Dijkstra Available</a></li>
-<li><a href="http://j.mp/1osrvkq">JAX-RS 2.0 : Custom Content Handling</a></li>
-<li><a href="http://j.mp/1or0XjE">Java 8 Date Time API Tutorial : LocalDateTime</a></li>
-<li><a href="http://j.mp/1pMN10w">Play Framework with Java 8</a></li>
-<li><a href="http://j.mp/1iUmprH">What&rsquo;s new in Spring Integration 4.0?</a></li>
-<li><a href="http://j.mp/1rEKp6I">Spring MVC Handler Mapping Example</a></li>
-<li><a href="http://j.mp/P3SMcT">Spring MVC Test with WebDriver</a></li>
-<li><a href="http://j.mp/P5wvvm">Hacking with Raspberry Pi and Java (The Java Source)</a></li>
-<li><a href="http://j.mp/1fFRA67">Java 8&rsquo;s Functional Fomentation</a></li>
-<li><a href="http://j.mp/P5w2JB">JUnit ExpectedException rule: beyond basics</a></li>
-<li><a href="http://j.mp/1igzVnI">Spring MVC Handler Interceptors Example</a></li>
-<li><a href="http://j.mp/1pIDA0g">Hibernate ORM JIRA Policies and Clean-Up Tactics</a></li>
-<li><a href="http://j.mp/1gQIxEH">What is JDBC RowSet ?</a></li>
-<li><a href="http://j.mp/1gRyJue">When comparing Java 8 and Scala, be aware of these issues</a></li>
-<li><a href="http://j.mp/1dKMbzy">Java SE 8 Beyond Lambdas: The Big Picture</a></li>
-<li><a href="http://j.mp/1jY5aF3">Default methods an approach to extend legacy code</a></li>
-</ol>
-
-<h3 id="scala">Scala</h3>
-
-<ol>
-<li><a href="http://j.mp/1fE6H00">Stackifier for Scala</a></li>
-<li><a href="http://j.mp/1pLc6Ji">Spring-boot and Scala</a></li>
-<li><a href="http://j.mp/1pOtIE6">Specializing for primitive types</a></li>
-<li><a href="http://j.mp/1olPth9">Type Programming: Recursive types</a></li>
-<li><a href="http://j.mp/PjjzCb">What is the Scala type-programming analogy for the <code>this</code> keyword?</a></li>
-<li><a href="http://j.mp/1iW71Lq">learning Scalaz</a></li>
-<li><a href="http://j.mp/1iW6ZTT">scala type programming resources</a></li>
-<li><a href="http://j.mp/1fIQAOC">pathikrit/dijon · GitHub</a></li>
-</ol>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> String <span style="color:#a6e22e">normalize</span><span style="color:#f92672">(</span>String string<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> Normalizer<span style="color:#f92672">.</span><span style="color:#a6e22e">normalize</span><span style="color:#f92672">(</span>string<span style="color:#f92672">,</span> Form<span style="color:#f92672">.</span><span style="color:#a6e22e">NFD</span><span style="color:#f92672">)</span>
+            <span style="color:#f92672">.</span><span style="color:#a6e22e">replaceAll</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;\\p{InCombiningDiacriticalMarks}+&#34;</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>Вызов <a href='http://java.sun.com/javase/6/docs/api/java/text/Normalizer.html#normalize%28java.lang.CharSequence,%20java.text.Normalizer.Form%29'>Normalizer.normalize</a> проводит <a href='http://www.unicode.org/reports/tr15/tr15-23.html'>нормализацию</a> входной строки. Последующий вызов регулярного выражения удаляет все диакритические знаки, полученные после нормализации.</p>
 
         
 
@@ -347,58 +327,127 @@
 
 <header>
     <h1 class="entry-title">
-        <a href="https://uthark.github.io/2014/04/02/reading-list-2014-april-02/">Reading List 2014-April-02</a>
+        <a href="https://uthark.github.io/2010/05/22/databene-benerator/">Создание больших объёмов тестовых данных с помощью Databene Benerator</a>
     </h1>
 
 </header>
 
 
         
-        
-
-<h3 id="software-development">Software development</h3>
-
-<ol>
-<li><a href="http://j.mp/1fIQUNq">IAM Best Practices</a></li>
-<li><a href="http://j.mp/PiKChe">Every Great Product Owner Needs a Great ScrumMaster</a></li>
-<li><a href="http://j.mp/1pQCTSu">Manhattan, our real-time, multi-tenant distributed database for Twitter scale</a></li>
-<li><a href="http://j.mp/1juhjTQ">The Cache and Multithreading</a></li>
+        <p>Периодически необходимо решать задачу создания больших ( и не очень) объёмов тестовых данных для проведения различных видов тестирования - функционального, нагрузочного (тестирование стабильности и производительности). При этом часто получается так, что система на тестовых данных ведёт себя совсем иначе, чем на реальных данных. Причина кроется в том, что создать правдоподобные тестовые данные всегда достаточно сложно.</p>
+<p>Изучая данный вопрос я наткнулся на замечательный фреймворк - <a href="http://databene.org/databene-benerator">Databene Benerator</a>, основной целью создания которого как раз и является создание правдоподобных тестовых данных для проведения различных видов тестирования.</p>
+<h4>Установка</h4>
+<p>Установка фреймворка осуществляется двумя способами - как отдельное приложение и как плагин для Maven.</p>
+<h5>Установка под Maven</h5>
+<p>Для использования Databene benerator в проектах, использующих для сборки Apache Maven необходимо добавить в зависимости databene-benerator и сконфигурировать его.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;project</span> <span style="color:#a6e22e">xmlns=</span><span style="color:#e6db74">&#34;http://maven.apache.org/POM/4.0.0&#34;</span> <span style="color:#a6e22e">xmlns:xsi=</span><span style="color:#e6db74">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+         <span style="color:#a6e22e">xsi:schemaLocation=</span><span style="color:#e6db74">&#34;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd&#34;</span><span style="color:#f92672">&gt;</span>
+  <span style="color:#f92672">&lt;modelVersion&gt;</span>4.0.0<span style="color:#f92672">&lt;/modelVersion&gt;</span>
+  <span style="color:#f92672">&lt;groupId&gt;</span>com.myorganization<span style="color:#f92672">&lt;/groupId&gt;</span>
+  <span style="color:#f92672">&lt;artifactId&gt;</span>databene-benerator-test<span style="color:#f92672">&lt;/artifactId&gt;</span>
+  <span style="color:#f92672">&lt;version&gt;</span>1.0<span style="color:#f92672">&lt;/version&gt;</span>
+  <span style="color:#f92672">&lt;packaging&gt;</span>jar<span style="color:#f92672">&lt;/packaging&gt;</span>
+  <span style="color:#f92672">&lt;name&gt;</span>data generation project<span style="color:#f92672">&lt;/name&gt;</span>
+  <span style="color:#f92672">&lt;dependencies&gt;</span>
+    <span style="color:#f92672">&lt;dependency&gt;</span>
+      <span style="color:#f92672">&lt;groupId&gt;</span>org.databene<span style="color:#f92672">&lt;/groupId&gt;</span>
+      <span style="color:#f92672">&lt;artifactId&gt;</span>databene-benerator<span style="color:#f92672">&lt;/artifactId&gt;</span>
+      <span style="color:#f92672">&lt;version&gt;</span>0.5.9<span style="color:#f92672">&lt;/version&gt;</span>
+    <span style="color:#f92672">&lt;/dependency&gt;</span>
+    <span style="color:#f92672">&lt;dependency&gt;</span>
+      <span style="color:#f92672">&lt;groupId&gt;</span>org.databene<span style="color:#f92672">&lt;/groupId&gt;</span>
+      <span style="color:#f92672">&lt;artifactId&gt;</span>databene-webdecs<span style="color:#f92672">&lt;/artifactId&gt;</span>
+      <span style="color:#f92672">&lt;version&gt;</span>0.4.9<span style="color:#f92672">&lt;/version&gt;</span>
+    <span style="color:#f92672">&lt;/dependency&gt;</span>
+    <span style="color:#f92672">&lt;dependency&gt;</span>
+      <span style="color:#f92672">&lt;groupId&gt;</span>org.databene<span style="color:#f92672">&lt;/groupId&gt;</span>
+      <span style="color:#f92672">&lt;artifactId&gt;</span>databene-commons<span style="color:#f92672">&lt;/artifactId&gt;</span>
+      <span style="color:#f92672">&lt;version&gt;</span>0.4.9<span style="color:#f92672">&lt;/version&gt;</span>
+    <span style="color:#f92672">&lt;/dependency&gt;</span>
+    <span style="color:#f92672">&lt;dependency&gt;</span>
+      <span style="color:#f92672">&lt;groupId&gt;</span>mysql<span style="color:#f92672">&lt;/groupId&gt;</span>
+      <span style="color:#f92672">&lt;artifactId&gt;</span>mysql-connector-java<span style="color:#f92672">&lt;/artifactId&gt;</span>
+      <span style="color:#f92672">&lt;version&gt;</span>5.1.6<span style="color:#f92672">&lt;/version&gt;</span>
+    <span style="color:#f92672">&lt;/dependency&gt;</span>
+  <span style="color:#f92672">&lt;/dependencies&gt;</span>
+  <span style="color:#f92672">&lt;build&gt;</span>
+    <span style="color:#f92672">&lt;resources&gt;</span>
+      <span style="color:#f92672">&lt;resource&gt;</span>
+        <span style="color:#f92672">&lt;directory&gt;</span>src/main/resources<span style="color:#f92672">&lt;/directory&gt;</span>
+        <span style="color:#f92672">&lt;filtering&gt;</span>true<span style="color:#f92672">&lt;/filtering&gt;</span>
+      <span style="color:#f92672">&lt;/resource&gt;</span>
+    <span style="color:#f92672">&lt;/resources&gt;</span>
+    <span style="color:#f92672">&lt;plugins&gt;</span>
+      <span style="color:#f92672">&lt;plugin&gt;</span>
+        <span style="color:#f92672">&lt;groupId&gt;</span>org.apache.maven.plugins<span style="color:#f92672">&lt;/groupId&gt;</span>
+        <span style="color:#f92672">&lt;artifactId&gt;</span>maven-compiler-plugin<span style="color:#f92672">&lt;/artifactId&gt;</span>
+        <span style="color:#f92672">&lt;configuration&gt;</span>
+          <span style="color:#f92672">&lt;encoding&gt;</span>UTF-8<span style="color:#f92672">&lt;/encoding&gt;</span>
+          <span style="color:#f92672">&lt;source&gt;</span>1.5<span style="color:#f92672">&lt;/source&gt;</span>
+          <span style="color:#f92672">&lt;target&gt;</span>1.5<span style="color:#f92672">&lt;/target&gt;</span>
+        <span style="color:#f92672">&lt;/configuration&gt;</span>
+      <span style="color:#f92672">&lt;/plugin&gt;</span>
+      <span style="color:#f92672">&lt;plugin&gt;</span>
+        <span style="color:#f92672">&lt;groupId&gt;</span>org.databene<span style="color:#f92672">&lt;/groupId&gt;</span>
+        <span style="color:#f92672">&lt;artifactId&gt;</span>maven-benerator-plugin<span style="color:#f92672">&lt;/artifactId&gt;</span>
+        <span style="color:#f92672">&lt;version&gt;</span>0.5.9<span style="color:#f92672">&lt;/version&gt;</span>
+        <span style="color:#f92672">&lt;executions&gt;</span>
+          <span style="color:#f92672">&lt;execution&gt;</span>
+            <span style="color:#f92672">&lt;phase&gt;</span>compile<span style="color:#f92672">&lt;/phase&gt;</span>
+            <span style="color:#f92672">&lt;goals&gt;</span>
+              <span style="color:#f92672">&lt;goal&gt;</span>generate<span style="color:#f92672">&lt;/goal&gt;</span>
+            <span style="color:#f92672">&lt;/goals&gt;</span>
+          <span style="color:#f92672">&lt;/execution&gt;</span>
+        <span style="color:#f92672">&lt;/executions&gt;</span>
+        <span style="color:#f92672">&lt;configuration&gt;</span>
+          <span style="color:#f92672">&lt;descriptor&gt;</span>src/main/resources/benerator.ben.xml<span style="color:#f92672">&lt;/descriptor&gt;</span>
+          <span style="color:#f92672">&lt;encoding&gt;</span>UTF-8<span style="color:#f92672">&lt;/encoding&gt;</span>
+          <span style="color:#f92672">&lt;validate&gt;</span>true<span style="color:#f92672">&lt;/validate&gt;</span>
+          <span style="color:#f92672">&lt;dbUrl&gt;</span>jdbc:mysql://localhost:3306/hrtool?useUnicode=true<span style="color:#960050;background-color:#1e0010">&amp;</span>characterEncoding=UTF-8<span style="color:#f92672">&lt;/dbUrl&gt;</span>
+          <span style="color:#f92672">&lt;dbDriver&gt;</span>com.mysql.jdbc.Driver<span style="color:#f92672">&lt;/dbDriver&gt;</span>
+          <span style="color:#f92672">&lt;dbSchema&gt;</span>database<span style="color:#f92672">&lt;/dbSchema&gt;</span>
+          <span style="color:#f92672">&lt;dbUser&gt;</span>user<span style="color:#f92672">&lt;/dbUser&gt;</span>
+          <span style="color:#f92672">&lt;dbPassword&gt;</span>password<span style="color:#f92672">&lt;/dbPassword&gt;</span>
+        <span style="color:#f92672">&lt;/configuration&gt;</span>
+        <span style="color:#f92672">&lt;dependencies&gt;</span>
+        <span style="color:#f92672">&lt;dependency&gt;</span>
+            <span style="color:#f92672">&lt;groupId&gt;</span>log4j<span style="color:#f92672">&lt;/groupId&gt;</span>
+            <span style="color:#f92672">&lt;artifactId&gt;</span>log4j<span style="color:#f92672">&lt;/artifactId&gt;</span>
+            <span style="color:#f92672">&lt;version&gt;</span>1.2.13<span style="color:#f92672">&lt;/version&gt;</span>
+            <span style="color:#f92672">&lt;scope&gt;</span>runtime<span style="color:#f92672">&lt;/scope&gt;</span>
+          <span style="color:#f92672">&lt;/dependency&gt;</span>
+          <span style="color:#f92672">&lt;dependency&gt;</span>
+            <span style="color:#f92672">&lt;groupId&gt;</span>org.apache.poi<span style="color:#f92672">&lt;/groupId&gt;</span>
+            <span style="color:#f92672">&lt;artifactId&gt;</span>poi<span style="color:#f92672">&lt;/artifactId&gt;</span>
+            <span style="color:#f92672">&lt;version&gt;</span>3.5-beta5<span style="color:#f92672">&lt;/version&gt;</span>
+            <span style="color:#f92672">&lt;scope&gt;</span>runtime<span style="color:#f92672">&lt;/scope&gt;</span>
+          <span style="color:#f92672">&lt;/dependency&gt;</span>
+        <span style="color:#f92672">&lt;/dependencies&gt;</span>
+      <span style="color:#f92672">&lt;/plugin&gt;</span>
+    <span style="color:#f92672">&lt;/plugins&gt;</span>
+  <span style="color:#f92672">&lt;/build&gt;</span>
+<span style="color:#f92672">&lt;/project&gt;</span></code></pre></div>
+<p>В конфигурации необходимо указать как минимум следующие параметры:</p>
+<ol><li><span style=" font-family:'Courier New,courier';">dbUrl</span> - строка подключения к базе данных в формате JDBC</li>
+<li><span style=" font-family:'Courier New,courier';">dbDriver</span> - используемый драйвер базы данных</li>
+<li><span style=" font-family:'Courier New,courier';">dbSchema</span> - имя схемы базы данных</li>
+<li><span style=" font-family:'Courier New,courier';">dbUser</span> - имя пользователя, под которым подключаемся к базе данных</li>
+<li><span style=" font-family:'Courier New,courier';">dbPassword</span> - пароль пользователя для подключения к базе данных</li>
 </ol>
-
-<h3 id="android">Android</h3>
-
-<ol>
-<li><a href="http://j.mp/1hA8JT2">Useful Tools for Android Apps Test Automation</a></li>
-<li><a href="http://j.mp/1fonTdk">Fixing The Android Camera API</a></li>
+<p>Кроме использования файла pom.xml databene поддерживает возможность указания параметров в файле benerator.properties, что может быть удобно.</p>
+<p>Databene benerator обладает следующими возможностями:</p>
+<ol><li>Решение проблемы создания данных в общем виде. На данный момент поддерживаются XML и реляционные базы данных, но не за горами поддержка веб-сервисов, SAP и любых других систем через механизм расширений.</li>
+<li>Юзабилити. Databene-benerator позволяет упростить создание тестовых данных для сложной модели прикладной области.</li>
+<li>Обработка больших объёмов данных.</li>
+<li>Высокая производительность.</li>
+<li>Поддержка доменных областей.</li>
+<li>Качество данных. Фреймворк поддерживает проверку ограничений модели прикладной области.</li>
+<li>Компонентная, легкорасширяемая архитектура.</li>
+<li>Широкие возможности изменения и настройки генерации тестовых данных</li>
+<li>Создание тестовых данных с нуля.</li>
+<li>Импорт и анонимизация реальных данных.</li>
 </ol>
-
-<h3 id="java">Java</h3>
-
-<ol>
-<li><a href="http://j.mp/1idVzZD">Apache Tomcat 7.0.53 Released</a></li>
-<li><a href="http://j.mp/1fonYgQ">Spring Boot 1.0 GA Released</a></li>
-<li><a href="http://j.mp/1igAhL3">Java 8 Friday: Optional Will Remain an Option in Java</a></li>
-<li><a href="http://j.mp/1pQwYwJ">Eclipse Foundation Announces Java 8 Support</a></li>
-<li><a href="http://j.mp/1igA9Lm">Method 2 of N for crashing your JVM :-)</a></li>
-<li><a href="http://j.mp/1fonWWi">Abstract Class Versus Interface in the JDK 8 Era</a></li>
-<li><a href="http://j.mp/1h2Gtd0">Add Java 8 support to Eclipse Kepler</a></li>
-<li><a href="http://j.mp/1h2GsFZ">Difference between Stub and Mock object in Java Unit testing - JUnit</a></li>
-<li><a href="http://j.mp/1hYVF5Y">Introduction to Nashorn</a></li>
-</ol>
-
-<h3 id="scala">Scala</h3>
-
-<ol>
-<li><a href="http://j.mp/1h2GAVW">IntelliJ, Scala and Gradle: Revisiting Hell</a></li>
-<li><a href="http://j.mp/1opLeBo">Spring-boot and Scala</a></li>
-</ol>
-
-<h3 id="in-russian">In Russian</h3>
-
-<ol>
-<li><a href="http://j.mp/1igrjxo">Новости Большого адронного коллайдера</a></li>
-<li><a href="http://j.mp/1jWZWh9">Одиночное рождение топ-кварка позволило еще тщательнее проверить Стандартную модель</a></li>
-</ol>
+<p>В комплекте идёт толковая, но, к сожалению, неполная <a href="http://databene.org/download/databene-benerator-manual-0.6.0.pdf">документация</a> по возможностям.</p>
 
         
 
@@ -411,51 +460,266 @@
 
 <header>
     <h1 class="entry-title">
-        <a href="https://uthark.github.io/2014/04/01/reading-list-2014-april-1/">Reading List 2014-April-01</a>
+        <a href="https://uthark.github.io/2010/04/11/gorm/">Несколько слов о GORM</a>
     </h1>
 
 </header>
 
 
         
+        <p>В данной заметке хочу поделиться некоторыми моментами использования GORM.</p>
+<p><a href="http://grails.org/doc/latest/guide/5.%20Object%20Relational%20Mapping%20%28GORM%29.html">GORM</a> - это <a href="http://en.wikipedia.org/wiki/Object-relational_mapping">ORM</a>-фреймворк, используемый в <a href="http://grails.org/">Grails</a>. Реализован он поверх <a href="http://hibernate.org/">Hibernate</a>, но, при этом, с некоторыми отличными умолчаниями.</p>
+<p>Для разработчиков, знающих <tt>Hibernate</tt>, рекомендую тщательно изучить <tt>GORM</tt>, так как его поведение в некоторых случаях отлично от <tt>Hibernate</tt>, что может приводить к различным сюрпризам.</p>
+<h4></h4>
+<h4>Маппинг один-ко-многим</h4>
+<p>По умолчанию <tt>GORM</tt> для связей <em>один ко многим</em> (one-to-many) <a href="http://www.grails.org/doc/latest/guide/5.%20Object%20Relational%20Mapping%20%28GORM%29.html#5.2.1.2%20One-to-many" title="Grails will, by default, map this kind of relationship with a join table.">создаёт таблицу-связку</a>, которая обычно нужна только при связях между сущностями вида <em>многие ко многим</em>. Чтобы исправить это поведение необходимо указать <tt>GORM</tt>, чтобы он не создавал таблицу связку.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Person</span> <span style="color:#66d9ef">implements</span> Serializable <span style="color:#f92672">{</span>
+  <span style="color:#66d9ef">static</span> hasMany <span style="color:#f92672">=</span> <span style="color:#f92672">[</span>
+    scores: ScoreSheet
+  <span style="color:#f92672">]</span>
+  
+  <span style="color:#66d9ef">static</span> mapping <span style="color:#f92672">=</span> <span style="color:#f92672">{</span>
+    scores joinTable: <span style="color:#66d9ef">false</span>
+  <span style="color:#f92672">};</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p><h4>Использование однонаправленных связей</h4>
+<p>Если в приложении используются двунаправленные связи и вероятность изменения сущности одновременно несколькими пользователями высокая, то лучше использовать однонаправленные связи для сущностей. Кроме того, лучше проектировать доменные классы таким образом, чтобы связь была не один-ко-многим, а многие к одному.</p></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Note</span> <span style="color:#66d9ef">implements</span> Serializable <span style="color:#f92672">{</span>
+  <span style="color:#66d9ef">static</span> belongsTo <span style="color:#f92672">=</span> <span style="color:#f92672">[</span>
+    person: Person
+  <span style="color:#f92672">]</span>
+<span style="color:#f92672">}</span>
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Person</span> <span style="color:#66d9ef">implements</span> Serializable <span style="color:#f92672">{</span>
+  <span style="color:#75715e">// person fields.
+</span><span style="color:#75715e"></span><span style="color:#f92672">}</span></code></pre></div>
+<p>Для работы с <tt>Notes</tt> необходимо использовать такие запросы: </p>
+<pre class="brush: java">
+  Note.findByPerson(person).each { -&gt; };
+</pre>
+<p> вместо </p>
+<pre class="brush: java">
+  person.notes.each { -&gt; }
+</pre>
+<h4>Маппинг иерархии классов доменных сущностей</h4>
+<p>GORM поддерживает только <a href="http://www.grails.org/doc/latest/guide/5.%20Object%20Relational%20Mapping%20%28GORM%29.html#5.2.3%20Inheritance%20in%20GORM">два варианта </a>маппинга иерархии классов, в отличии от <a href="http://docs.jboss.org/hibernate/stable/core/reference/en/html/inheritance.html">Hibernate</a>: Таблица на всю иерархию (<tt>table-per-hierarchy</tt>), или таблица на каждый подкласс (<tt>table-per-subclass</tt>). У маппинга <tt>table-per-hierarchy</tt> есть серьёзный недостаток - подклассы не могут иметь ненулевые поля. Поэтому, если этот недостаток критичен, то необходимо использовать маппинг <tt>table-per-subclass</tt>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Payment</span> <span style="color:#f92672">{</span>
+  Long id
+  Long version
+  Integer amount
+
+  <span style="color:#66d9ef">static</span> mapping <span style="color:#f92672">=</span> <span style="color:#f92672">{</span>
+    tablePerHierarchy <span style="color:#66d9ef">false</span>
+  <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CreditCardPayment</span> <span style="color:#66d9ef">extends</span> Payment <span style="color:#f92672">{</span>
+  String cardNumber
+<span style="color:#f92672">}</span></code></pre></div>
         
 
-<h3 id="software-development">Software development</h3>
+    </article>
+    
+    <article>
 
-<ol>
-<li><a href="http://j.mp/1fE6FVX">We lost a customer. This is how we found out…</a></li>
-<li><a href="http://j.mp/1jp2qCc">New Linux version will reduce suspend and resume times</a></li>
-<li><a href="http://j.mp/1d3ybR0">The Stress Of Being A Computer Programmer Is Literally Driving Many Of Them Crazy</a></li>
-<li><a href="http://j.mp/1hduWBP">Amazing approximation to e</a></li>
-<li><a href="http://j.mp/1hduYtn">raj bala — Amazon Is Downloading Apps From Google Play and Inspecting Them</a></li>
-<li><a href="http://j.mp/1dMrQd4">coreos/etcd · GitHub</a></li>
-<li><a href="http://j.mp/1dMrQtr">The Python Paradox</a></li>
-<li><a href="http://j.mp/1fIQTZY">The Lucene disk format</a></li>
-<li><a href="http://j.mp/1jSImeh">Git smart! 20 essential tips for Git and GitHub users</a></li>
-<li><a href="http://j.mp/1ffdgG0">Six Degrees of Kevin Bacon in six languages</a></li>
-<li><a href="http://j.mp/1juhnmH">Why I Don’t Inherit from Collection Types</a></li>
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2010/03/22/skype-d-bus-python/">Общение со Skype через D-Bus на Python</a>
+    </h1>
+
+</header>
+
+
+        
+        <p><b>Summary</b>: в данной заметке описывается работа с программой Skype через D-Bus на Python.</p>
+
+<p><h4>Введение</h4>
+<p>Захотелось мне странного - когда я ухожу домой, мне нужно выключить amarok, kopete и Skype. Собственно, решено было через D-Bus отправлять вышеперечисленным приложениям релевантные сообщения.</p></p>
+
+<p><h4>Используем dbus-send</h4>
+<p>Сначала я использовал обычный dbus-send, что оформилось в виде следующего скрипта <tt>go2home</tt>:</p></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">#!/bin/sh
+</span><span style="color:#75715e"></span>
+<span style="color:#75715e"># Stop amarok
+</span><span style="color:#75715e"></span>dbus-send --session --type<span style="color:#f92672">=</span>method_call --dest<span style="color:#f92672">=</span>org.kde.amarok /Player org.freedesktop.MediaPlayer.Stop
+
+<span style="color:#75715e"># Logout from kopete
+</span><span style="color:#75715e"></span>dbus-send --session --type<span style="color:#f92672">=</span>method_call --dest<span style="color:#f92672">=</span>org.kde.kopete /Kopete org.kde.Kopete.disconnectAll 
+
+<span style="color:#75715e"># Logout from Skype
+</span><span style="color:#75715e"></span>skypeapi.py <span style="color:#e6db74">&#39;SET USERSTATUS OFFLINE&#39;</span>
+
+<span style="color:#75715e"># Lock screen
+</span><span style="color:#75715e"></span>dbus-send --session --type<span style="color:#f92672">=</span>method_call --dest<span style="color:#f92672">=</span>org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.Lock</code></pre></div>
+<p>Детали и параметры работы команды <tt>dbus-send</tt> описаны в <a href="http://dbus.freedesktop.org/doc/dbus-send.1.html">man-странице</a></p>
+
+<p><h4>Проблема со скайпом</h4>
+<p> Со скайпом пришлось немного повозиться, так как для работы с ним необходима постоянная сессия, что нельзя сделать с помощью <tt>dbus-send</tt>. </p>
+<p>Прочитав <a href="https://developer.skype.com/Docs/ApiDoc">описание протокола</a> на сайте </p>
+<p> был создан нижеследующий скрипт: skypeapi.py</p></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Python" data-lang="Python"><span style="color:#75715e">#!/usr/bin/env python</span>
+<span style="color:#f92672">import</span> dbus<span style="color:#f92672">,</span> sys
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">main</span>():
+    remote_bus <span style="color:#f92672">=</span> dbus<span style="color:#f92672">.</span>SessionBus()
+    
+    <span style="color:#75715e"># Check if skype is running.</span>
+    system_service_list <span style="color:#f92672">=</span> remote_bus<span style="color:#f92672">.</span>get_object(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;org.freedesktop.DBus&#39;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;/org/freedesktop/DBus&#39;</span>)<span style="color:#f92672">.</span>ListNames()
+    skype_api_found <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+    <span style="color:#66d9ef">for</span> service <span style="color:#f92672">in</span> system_service_list:
+        <span style="color:#66d9ef">if</span> service<span style="color:#f92672">==</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;com.Skype.API&#39;</span>:
+            skype_api_found <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+            <span style="color:#66d9ef">break</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> skype_api_found:
+        sys<span style="color:#f92672">.</span>exit(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;No running API-capable Skype found&#39;</span>)
+
+    <span style="color:#75715e"># Get skype dbus api</span>
+    skype_service <span style="color:#f92672">=</span> remote_bus<span style="color:#f92672">.</span>get_object(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;com.Skype.API&#39;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;/com/Skype&#39;</span>)
+
+    <span style="color:#75715e"># Connect to skype.</span>
+    answer <span style="color:#f92672">=</span> skype_service<span style="color:#f92672">.</span>Invoke(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;NAME SkypeApiClient&#39;</span>)
+    <span style="color:#66d9ef">if</span> answer <span style="color:#f92672">!=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;OK&#39;</span>:
+        sys<span style="color:#f92672">.</span>exit(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;Could not bind to Skype client&#39;</span>)
+
+    <span style="color:#75715e"># Check if protocol is supported.</span>
+    answer <span style="color:#f92672">=</span> skype_service<span style="color:#f92672">.</span>Invoke(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;PROTOCOL 1&#39;</span>)
+    <span style="color:#66d9ef">if</span> answer <span style="color:#f92672">!=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;PROTOCOL 1&#39;</span>:
+        sys<span style="color:#f92672">.</span>exit(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;This test program only supports Skype API protocol version 1&#39;</span>)
+
+    <span style="color:#75715e"># Invoke operations</span>
+    <span style="color:#66d9ef">for</span> arg <span style="color:#f92672">in</span> sys<span style="color:#f92672">.</span>argv:
+        skype_service<span style="color:#f92672">.</span>Invoke(arg)
+    
+    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>    
+
+<span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;__main__&#34;</span>:
+    main()</code></pre></div>
+<p> При первом запуске скрипта появится скайповский диалог с вопросом, можно ли разрешить приложению доступ к скайпу. После нажатия на &quot;Да&quot; Skype добавит наш скрипт в разрешённые и мы сможем управлять скайпом.</p>
+
+<p><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://2.bp.blogspot.com/_y8p0_dtMJ38/S6ev4yVZkJI/AAAAAAAAA9Q/O87mz2Qnku0/s1600-h/skype.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;width: 376px; height: 185px;" src="http://2.bp.blogspot.com/_y8p0_dtMJ38/S6ev4yVZkJI/AAAAAAAAA9Q/O87mz2Qnku0/s400/skype.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5451519264074338450" /></a></p>
+
+<p>После этого для скрипта <tt>go2home</tt> был создана иконка на панели.</p>
+
+<p><h4>Заключение</h4>
+Как видно, работа с DBus из Python проста и элегантна.</p>
+
+<p>В качестве домашнего упражнения предлагаю написать скрипт, который после разблокирования экрана будет запускать все нужные приложения.</p>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2010/03/21/tiddlywiki/">Разработка макроса для TiddlyWiki</a>
+    </h1>
+
+</header>
+
+
+        
+        <p><b>Summary</b>: Пример разработки плагина для TiddlyWiki</p>
+<h4>Вступление</h4>
+<p><a href="http://www.tiddlywiki.com/">TiddlyWiki</a> - это вики-движок, полностью написанный на <a href="http://en.wikipedia.org/wiki/JavaScript">JavaScript</a> и хранящийся в одном файле (как сам движок, так и содержимое). Создатели позиционируют его как &quot;переиспользуемую нелинейную персональную веб записную книжку&quot;.</p>
+<p>Я давно использую TiddlyWiki в различных целях:</p>
+<ol><li>По прямому назначению.</li>
+<li>Как систему <a href="http://mgsd.tiddlyspot.com/#mGSD">GTD</a>.</li>
+<li>Как домашнюю страницу на компьютере.</li>
 </ol>
+<p>Моя домашняя страница на компьютере - это, если говорить терминами TiddlyWiki, <a href="http://en.wikipedia.org/wiki/Tiddler">тиддлер</a>, содержащий ссылки на страницы, которые я часто посещаю.</p>
+<p>Для удобства использования я разработал пару стилей CSS, так что ссылки были крупными.</p>
+<a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://2.bp.blogspot.com/_y8p0_dtMJ38/S6Y0rP2J0eI/AAAAAAAAA9I/xrZhzZf2ad0/s1600-h/tiddly-before.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;width: 172px; height: 132px;" src="http://2.bp.blogspot.com/_y8p0_dtMJ38/S6Y0rP2J0eI/AAAAAAAAA9I/xrZhzZf2ad0/s400/tiddly-before.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5451102316571251170" /></a>
+<h4>Исходный код плагина</h4>
+<p>После длительного использования tiddlywiki в качестве домашней страницы я понял, что мне хочется, чтобы с каждой ссылкой была иконка сайта. Вручную вставлять картинки мне не хотелось, поэтому было решено написать собственный плагин.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#75715e">/*{{{*/</span>
+<span style="color:#a6e22e">version</span>.<span style="color:#a6e22e">extensions</span>.<span style="color:#a6e22e">faviconLinkMacro</span> <span style="color:#f92672">=</span> {<span style="color:#a6e22e">major</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">0</span>, <span style="color:#a6e22e">minor</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>, <span style="color:#a6e22e">revision</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">0</span>, <span style="color:#a6e22e">date</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">new</span> Date(<span style="color:#ae81ff">2010</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">21</span>)};
+<span style="color:#75715e">// Author: Oleg Atamanenko
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">config</span>.<span style="color:#a6e22e">macros</span>.<span style="color:#a6e22e">faviconLink</span> <span style="color:#f92672">=</span> {}
+<span style="color:#a6e22e">config</span>.<span style="color:#a6e22e">macros</span>.<span style="color:#a6e22e">faviconLink</span>.<span style="color:#a6e22e">handler</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">place</span>, <span style="color:#a6e22e">macroName</span>,  <span style="color:#a6e22e">params</span>, <span style="color:#a6e22e">wikifier</span>, <span style="color:#a6e22e">paramString</span>) {
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">linkBox</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">createTiddlyElement</span>(<span style="color:#a6e22e">place</span>, <span style="color:#e6db74">&#34;span&#34;</span>, <span style="color:#66d9ef">null</span>, <span style="color:#e6db74">&#34;favIcon&#34;</span>, <span style="color:#e6db74">&#34;&#34;</span>);
 
-<h3 id="java">Java</h3>
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">args</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">paramString</span>.<span style="color:#a6e22e">parseParams</span>(<span style="color:#e6db74">&#34;list&#34;</span>,<span style="color:#66d9ef">null</span>,<span style="color:#66d9ef">true</span>);
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">link</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">getParam</span>(<span style="color:#a6e22e">args</span>, <span style="color:#e6db74">&#34;link&#34;</span>, <span style="color:#e6db74">&#39;false&#39;</span>);
 
-<ol>
-<li><a href="http://j.mp/PccWSm">Spring Integration 3.0.2 and 4.0 Milestone 4 Released</a></li>
-<li><a href="http://j.mp/1msN13X">Careful With Native SQL in Hibernate</a></li>
-<li><a href="http://j.mp/PccPWV">Java EE 8 Survey Final Results (The Aquarium)</a></li>
-<li><a href="http://j.mp/1hphkUz">Java 8 Will Revolutionize Database Access</a></li>
-<li><a href="http://j.mp/1dg6jax">Introduction to Java multitenancy</a></li>
-<li><a href="http://j.mp/1dMtQC1">Java vs. Go: The case for cloud-specific languages</a></li>
+  <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">link</span> <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;false&#39;</span>){
+    <span style="color:#a6e22e">urlParts</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">link</span>.<span style="color:#a6e22e">split</span>(<span style="color:#e6db74">&#39;/&#39;</span>);
+    <span style="color:#a6e22e">imgLink</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">urlParts</span>[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;//&#34;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">urlParts</span>[<span style="color:#ae81ff">2</span>] <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;/favicon.ico&#34;</span>;
+
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">imgElement</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">createTiddlyElement</span>(<span style="color:#a6e22e">linkBox</span>, <span style="color:#e6db74">&#34;img&#34;</span>, <span style="color:#66d9ef">null</span>, <span style="color:#e6db74">&#34;faviconImage&#34;</span>, <span style="color:#e6db74">&#34;&#34;</span>);
+    <span style="color:#a6e22e">imgElement</span>.<span style="color:#a6e22e">src</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">imgLink</span>;
+    <span style="color:#a6e22e">imgElement</span>.<span style="color:#a6e22e">width</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">16</span>;
+    <span style="color:#a6e22e">imgElement</span>.<span style="color:#a6e22e">height</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">16</span>;
+
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">linkTitle</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">getParam</span>(<span style="color:#a6e22e">args</span>, <span style="color:#e6db74">&#34;title&#34;</span>, <span style="color:#e6db74">&#39;false&#39;</span>);
+
+    <span style="color:#66d9ef">if</span>(<span style="color:#a6e22e">linkTitle</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;false&#39;</span>){
+      <span style="color:#a6e22e">linkTitle</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">link</span>;
+    }
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">linkElement</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">createTiddlyElement</span>(<span style="color:#a6e22e">linkBox</span>, <span style="color:#e6db74">&#34;a&#34;</span>, <span style="color:#66d9ef">null</span>, <span style="color:#e6db74">&#34;faviconLink&#34;</span>, <span style="color:#a6e22e">linkTitle</span>);
+    <span style="color:#a6e22e">linkElement</span>.<span style="color:#a6e22e">href</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">link</span>;
+    <span style="color:#a6e22e">linkElement</span>.<span style="color:#a6e22e">target</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;_blank&#39;</span>;
+  }
+}
+
+<span style="color:#75715e">/*} } }*/</span></code></pre></div>
+<h4> Установка плагина</h4>
+<ol><li>Создаём новый тиддлер, называем его faviconLinkMacro</li>
+<li>Помечаем тиддлер тегом systemConfig, тогда TiddlyWiki при открытии страницы его подгрузит.</li>
 </ol>
-
-<h3 id="scala">Scala</h3>
-
-<ol>
-<li><a href="http://j.mp/1juhcrk">Playframework, how to protect against Mass Assignment</a></li>
-<li><a href="http://j.mp/1fIQCWS">Scala may not be right for you if…</a></li>
-<li><a href="http://j.mp/1fIQGFY">Running an Akka Cluster with Docker Containers</a></li>
-<li><a href="http://j.mp/1gWqddq">Type programming: Shifting from values to types</a></li>
-<li><a href="http://j.mp/1gWqcWP">The learning curve of Scala</a></li>
+<h4>Использование плагина</h4>
+<ol><li>Плагин создаёт новый макрос, faviconLink, с двумя параметрами link и title.</li>
+<li>Вызов <tt>&lt;&lt;faviconLink link:'https://mail.google.com/mail' title:'mail'&gt;&gt;</tt> создаёт ссылку с картинкой с GMail</li>
 </ol>
+<a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://1.bp.blogspot.com/_y8p0_dtMJ38/S6Y0qnki7nI/AAAAAAAAA9A/Ic3skFoirY8/s1600-h/favicon-sample.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;width: 161px; height: 64px;" src="http://1.bp.blogspot.com/_y8p0_dtMJ38/S6Y0qnki7nI/AAAAAAAAA9A/Ic3skFoirY8/s400/favicon-sample.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5451102305759981170" /></a>
+
+<h4>Настройка визульных стилей плагина</h4>
+<p>Макрос создаёт следующие классы:</p>
+<ol><li>span.favIcon</li>
+<li>img.faviconImage</li>
+<li>a.faviconLink</li>
+</ol>
+<h4> Пример стилей</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">.<span style="color:#a6e22e">links</span> <span style="color:#f92672">span</span> {
+  <span style="color:#66d9ef">display</span>: <span style="color:#66d9ef">block</span>;
+  <span style="color:#66d9ef">position</span>: <span style="color:#66d9ef">relative</span>;
+  <span style="color:#66d9ef">padding</span>: <span style="color:#ae81ff">0.7</span><span style="color:#66d9ef">em</span>;
+  <span style="color:#66d9ef">margin</span>: <span style="color:#ae81ff">0.3</span><span style="color:#66d9ef">em</span>;
+  <span style="color:#66d9ef">min-width</span>: <span style="color:#ae81ff">6</span><span style="color:#66d9ef">em</span>;
+  <span style="color:#66d9ef">float</span>:<span style="color:#66d9ef">left</span>;
+  <span style="color:#66d9ef">text-align</span>: <span style="color:#66d9ef">center</span>;
+  <span style="color:#66d9ef">font-weight</span>: <span style="color:#66d9ef">bold</span>;
+  <span style="color:#66d9ef">font-size</span>: <span style="color:#ae81ff">1.5</span><span style="color:#66d9ef">em</span>;
+  <span style="color:#66d9ef">font-family</span>: <span style="color:#e6db74">&#34;Gill Sans MT&#34;</span>, <span style="color:#e6db74">&#34;Candara&#34;</span>, <span style="color:#e6db74">&#34;Arial&#34;</span>;
+  <span style="color:#66d9ef">border</span>: <span style="color:#ae81ff">2</span><span style="color:#66d9ef">px</span> <span style="color:#66d9ef">solid</span> [[ColorPalette<span style="color:#f92672">::</span>SecondaryLight]];
+  <span style="color:#66d9ef">background-color</span>: [[ColorPalette<span style="color:#f92672">::</span>SecondaryPale]];
+}
+
+.<span style="color:#a6e22e">links</span> <span style="color:#f92672">span</span>:<span style="color:#a6e22e">hover</span> {
+  <span style="color:#66d9ef">border</span>: <span style="color:#ae81ff">2</span><span style="color:#66d9ef">px</span> <span style="color:#66d9ef">solid</span> [[ColorPalette<span style="color:#f92672">::</span>SecondaryMid]];
+  <span style="color:#66d9ef">background-color</span>: [[ColorPalette<span style="color:#f92672">::</span>SecondaryLight]];
+  <span style="color:#66d9ef">color</span>: [[ColorPalette<span style="color:#f92672">::</span>PrimaryMid]];
+}
+
+.<span style="color:#a6e22e">links</span> <span style="color:#f92672">img</span>.<span style="color:#a6e22e">faviconImage</span> {
+  <span style="color:#66d9ef">position</span>: <span style="color:#66d9ef">relative</span>;
+  <span style="color:#66d9ef">padding-right</span>: <span style="color:#ae81ff">10</span><span style="color:#66d9ef">px</span>;
+}</code></pre></div>
+<p><p> Данный CSS необходимо добавить в тиддлер с именем StyleSheet</p>
+<h4>Пример тиддлера со ссылками</h4></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">{{links{
+<span style="color:#960050;background-color:#1e0010">&lt;</span>&lt;<span style="color:#f92672">faviconLink</span> <span style="color:#a6e22e">link:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">http:</span><span style="color:#960050;background-color:#1e0010">//</span><span style="color:#a6e22e">delicious</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">com</span><span style="color:#960050;background-color:#1e0010">/</span><span style="color:#a6e22e">dark</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">schakal</span><span style="color:#960050;background-color:#1e0010">/</span><span style="color:#a6e22e">2read</span><span style="color:#960050;background-color:#1e0010">&#39;</span> <span style="color:#a6e22e">title:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">2read</span><span style="color:#960050;background-color:#1e0010">&#39;</span>&gt;&gt; <span style="color:#960050;background-color:#1e0010">&lt;</span>&lt;<span style="color:#f92672">faviconLink</span> <span style="color:#a6e22e">link:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">https:</span><span style="color:#960050;background-color:#1e0010">//</span><span style="color:#a6e22e">mail</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">google</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">com</span><span style="color:#960050;background-color:#1e0010">/</span><span style="color:#a6e22e">mail</span><span style="color:#960050;background-color:#1e0010">&#39;</span> <span style="color:#a6e22e">title:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">mail</span><span style="color:#960050;background-color:#1e0010">&#39;</span>&gt;&gt; <span style="color:#960050;background-color:#1e0010">&lt;</span>&lt;<span style="color:#f92672">faviconLink</span> <span style="color:#a6e22e">link:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">http:</span><span style="color:#960050;background-color:#1e0010">//</span><span style="color:#a6e22e">www</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">google</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">com</span><span style="color:#960050;background-color:#1e0010">/</span><span style="color:#a6e22e">reader</span><span style="color:#960050;background-color:#1e0010">/</span><span style="color:#a6e22e">view</span><span style="color:#960050;background-color:#1e0010">&#39;</span> <span style="color:#a6e22e">title:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">rss</span><span style="color:#960050;background-color:#1e0010">&#39;</span>&gt;&gt; <span style="color:#960050;background-color:#1e0010">&lt;</span>&lt;<span style="color:#f92672">faviconLink</span> <span style="color:#a6e22e">link:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">http:</span><span style="color:#960050;background-color:#1e0010">//</span><span style="color:#a6e22e">atamanenko</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">blogspot</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">com</span><span style="color:#960050;background-color:#1e0010">/&#39;</span> <span style="color:#a6e22e">title:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">blog</span><span style="color:#960050;background-color:#1e0010">&#39;</span>&gt;&gt; <span style="color:#960050;background-color:#1e0010">&lt;</span>&lt;<span style="color:#f92672">faviconLink</span> <span style="color:#a6e22e">link:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">http:</span><span style="color:#960050;background-color:#1e0010">//</span><span style="color:#a6e22e">feedburner</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">google</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">com</span><span style="color:#960050;background-color:#1e0010">/</span><span style="color:#a6e22e">fb</span><span style="color:#960050;background-color:#1e0010">/</span><span style="color:#a6e22e">a</span><span style="color:#960050;background-color:#1e0010">/</span><span style="color:#a6e22e">myfeeds</span><span style="color:#960050;background-color:#1e0010">&#39;</span> <span style="color:#a6e22e">title:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">feedburner</span><span style="color:#960050;background-color:#1e0010">&#39;</span>&gt;&gt; <span style="color:#960050;background-color:#1e0010">&lt;</span>&lt;<span style="color:#f92672">faviconLink</span> <span style="color:#a6e22e">link:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">https:</span><span style="color:#960050;background-color:#1e0010">//</span><span style="color:#a6e22e">www</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">google</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">com</span><span style="color:#960050;background-color:#1e0010">/</span><span style="color:#a6e22e">analytics</span><span style="color:#960050;background-color:#1e0010">/</span><span style="color:#a6e22e">settings</span><span style="color:#960050;background-color:#1e0010">/&#39;</span> <span style="color:#a6e22e">title:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">analytics</span><span style="color:#960050;background-color:#1e0010">&#39;</span>&gt;&gt; <span style="color:#960050;background-color:#1e0010">&lt;</span>&lt;<span style="color:#f92672">faviconLink</span> <span style="color:#a6e22e">link:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">http:</span><span style="color:#960050;background-color:#1e0010">//</span><span style="color:#a6e22e">wave</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">google</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">com</span><span style="color:#960050;background-color:#1e0010">&#39;</span> <span style="color:#a6e22e">title:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">wave</span><span style="color:#960050;background-color:#1e0010">&#39;</span>&gt;&gt; <span style="color:#960050;background-color:#1e0010">&lt;</span>&lt;<span style="color:#f92672">faviconLink</span> <span style="color:#a6e22e">link:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">http:</span><span style="color:#960050;background-color:#1e0010">//</span><span style="color:#a6e22e">www</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">blogger</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">com</span><span style="color:#960050;background-color:#1e0010">/</span><span style="color:#a6e22e">home</span><span style="color:#960050;background-color:#1e0010">&#39;</span> <span style="color:#a6e22e">title:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">blogger</span><span style="color:#960050;background-color:#1e0010">&#39;</span>&gt;&gt; <span style="color:#960050;background-color:#1e0010">&lt;</span>&lt;<span style="color:#f92672">faviconLink</span> <span style="color:#a6e22e">link:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">http:</span><span style="color:#960050;background-color:#1e0010">//</span><span style="color:#a6e22e">twitter</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">com</span><span style="color:#960050;background-color:#1e0010">/&#39;</span> <span style="color:#a6e22e">title:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">twitter</span><span style="color:#960050;background-color:#1e0010">&#39;</span>&gt;&gt; <span style="color:#960050;background-color:#1e0010">&lt;</span>&lt;<span style="color:#f92672">faviconLink</span> <span style="color:#a6e22e">link:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">https:</span><span style="color:#960050;background-color:#1e0010">//</span><span style="color:#a6e22e">www</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">dropbox</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">com</span><span style="color:#960050;background-color:#1e0010">/</span><span style="color:#a6e22e">home</span><span style="color:#960050;background-color:#1e0010">#/&#39;</span> <span style="color:#a6e22e">title:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">dropbox</span><span style="color:#960050;background-color:#1e0010">&#39;</span>&gt;&gt; <span style="color:#960050;background-color:#1e0010">&lt;</span>&lt;<span style="color:#f92672">faviconLink</span> <span style="color:#a6e22e">link:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">http:</span><span style="color:#960050;background-color:#1e0010">//</span><span style="color:#a6e22e">translate</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">google</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">com</span><span style="color:#960050;background-color:#1e0010">/</span><span style="color:#a6e22e">toolkit</span><span style="color:#960050;background-color:#1e0010">/&#39;</span> <span style="color:#a6e22e">title:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">translator</span><span style="color:#960050;background-color:#1e0010">&#39;</span>&gt;&gt; <span style="color:#960050;background-color:#1e0010">&lt;</span>&lt;<span style="color:#f92672">faviconLink</span> <span style="color:#a6e22e">link:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">http:</span><span style="color:#960050;background-color:#1e0010">//</span><span style="color:#a6e22e">sibir</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">megafon</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">ru</span><span style="color:#960050;background-color:#1e0010">/</span><span style="color:#a6e22e">sendsms</span><span style="color:#960050;background-color:#1e0010">/&#39;</span> <span style="color:#a6e22e">title:</span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">SendSMS</span><span style="color:#960050;background-color:#1e0010">&#39;</span>&gt;&gt;
+}}}</code></pre></div>
+<p>Вышеприведённый код тиддлера создаёт следующую страницу:</p>
+
+<p><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://1.bp.blogspot.com/_y8p0_dtMJ38/S6Y0qOLAO4I/AAAAAAAAA84/DFkORdMO8gE/s1600-h/favicon-sample-big.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;width: 400px; height: 157px;" src="http://1.bp.blogspot.com/_y8p0_dtMJ38/S6Y0qOLAO4I/AAAAAAAAA84/DFkORdMO8gE/s400/favicon-sample-big.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5451102298941963138" /></a></p>
 
         
 
@@ -502,34 +766,6 @@
     
         <a href="/page/10/" class="label-pagination">10</a>
     
-        <a href="/page/11/" class="label-pagination">11</a>
-    
-        <a href="/page/12/" class="label-pagination">12</a>
-    
-        <a href="/page/13/" class="label-pagination">13</a>
-    
-        <a href="/page/14/" class="label-pagination">14</a>
-    
-        <a href="/page/15/" class="label-pagination">15</a>
-    
-        <a href="/page/16/" class="label-pagination">16</a>
-    
-        <a href="/page/17/" class="label-pagination">17</a>
-    
-        <a href="/page/18/" class="label-pagination">18</a>
-    
-        <a href="/page/19/" class="label-pagination">19</a>
-    
-        <a href="/page/20/" class="label-pagination">20</a>
-    
-        <a href="/page/21/" class="label-pagination">21</a>
-    
-        <a href="/page/22/" class="label-pagination">22</a>
-    
-        <a href="/page/23/" class="label-pagination">23</a>
-    
-        <a href="/page/24/" class="label-pagination">24</a>
-    
 
     
     
@@ -538,7 +774,7 @@
 
     
     
-        <a href="/page/24/" aria-label="Last"><i class="fa fa-angle-double-right fa-lg"></i></a>
+        <a href="/page/10/" aria-label="Last"><i class="fa fa-angle-double-right fa-lg"></i></a>
     
 
 </div>
@@ -603,7 +839,7 @@
             </li>
         </ul>
     </div>
-    <p>Copyright &copy; 2017 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+    <p>Copyright &copy; 2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
         <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a> and
             <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.
     </p>
