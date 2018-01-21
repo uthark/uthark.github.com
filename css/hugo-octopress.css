@@ -1401,7 +1401,11 @@ pre {
     margin-bottom: 0em;
     padding: 0em 0em;
     color: #93a1a1;
-    font-size: 80%;  /* change the code font size */
+    /* font-size: 80%; */
+    outline: #272822 1em solid;
+    margin: 1em;
+    border-collapse: collapse;
+    overflow-x: auto;
 
 }
 h3.filename+pre {
