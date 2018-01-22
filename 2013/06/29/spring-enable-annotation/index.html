@@ -9,17 +9,14 @@
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
 
-  
-  
-  <link href="//fonts.googleapis.com/css?family=Anonymous+Pro" rel="stylesheet" type="text/css">
-  
+  <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
 
   
   <title>Пишем @Enable*-аннотацию для Spring</title>
 
   
   
-  <link rel="stylesheet" href="https://uthark.github.io/css/hugo-octopress.css">
+  <link rel="stylesheet" href="https://uthark.github.io/css/uthark.css">
 
   
   
@@ -120,20 +117,20 @@
           
           
           <p>Начиная с версии 3.1 Spring поддерживает декларативное включение необходимой функциональности через, так называемые, <code>@Enable*</code> аннотации. Пример таких аннотаций:
-<a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/web/servlet/config/annotation/EnableWebMvc.html"><code>org.springframework.web.servlet.config.annotation.EnableWebMvc</code></a>, <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/cache/annotation/EnableCaching.html"><code>org.springframework.cache.annotation.EnableCaching</code></a>, <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/scheduling/annotation/EnableAsync.html"><code>org.springframework.scheduling.annotation.EnableAsync</code></a> и другие.</p>
+<a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/web/servlet/config/annotation/EnableWebMvc.html" target="_blank"><code>org.springframework.web.servlet.config.annotation.EnableWebMvc</code></a>, <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/cache/annotation/EnableCaching.html" target="_blank"><code>org.springframework.cache.annotation.EnableCaching</code></a>, <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/scheduling/annotation/EnableAsync.html" target="_blank"><code>org.springframework.scheduling.annotation.EnableAsync</code></a> и другие.</p>
 
 <p>В продолжение темы <a href="/blog/2013/06/28/jaxrs-spring-autowiring/">прошлого поста</a>, я хочу показать, как можно добавить собственную <code>@Enable</code> аннотацию.</p>
 
 <p>Для автоматического создания клиента для REST-ресурса нам необходима следующая информация:</p>
 
 <ol>
-<li>Пакет, в котором искать интерфейсы, проаннотированные аннотацией <a href="https://jax-rs-spec.java.net/nonav/2.0/apidocs/javax/ws/rs/Path.html"><code>@Path()</code></a></li>
+<li>Пакет, в котором искать интерфейсы, проаннотированные аннотацией <a href="https://jax-rs-spec.java.net/nonav/2.0/apidocs/javax/ws/rs/Path.html" target="_blank"><code>@Path()</code></a></li>
 <li>Базовый адрес REST-приложения.</li>
 </ol>
 
 <p>Для того, чтобы передать эту информацию, мы создадим два атрибута в аннотации: <code>scanPackage()</code> и <code>endpoint()</code></p>
 
-<p>Кроме того, для обработки аннотации необходимо указать обработчик. Это можно сделать передав подкласс <a href="http://static.springsource.org/spring-framework/docs/3.2.x/javadoc-api/org/springframework/context/annotation/ImportBeanDefinitionRegistrar.html"><code>org.springframework.context.annotation.ImportBeanDefinitionRegistrar</code></a> через аннотацию <a href="http://static.springsource.org/spring-framework/docs/3.2.x/javadoc-api/org/springframework/context/annotation/Import.html"><code>@Import</code></a></p>
+<p>Кроме того, для обработки аннотации необходимо указать обработчик. Это можно сделать передав подкласс <a href="http://static.springsource.org/spring-framework/docs/3.2.x/javadoc-api/org/springframework/context/annotation/ImportBeanDefinitionRegistrar.html" target="_blank"><code>org.springframework.context.annotation.ImportBeanDefinitionRegistrar</code></a> через аннотацию <a href="http://static.springsource.org/spring-framework/docs/3.2.x/javadoc-api/org/springframework/context/annotation/Import.html" target="_blank"><code>@Import</code></a></p>
 
 <p>Пишем аннотацию:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Target</span><span style="color:#f92672">(</span>ElementType<span style="color:#f92672">.</span><span style="color:#a6e22e">TYPE</span><span style="color:#f92672">)</span>
@@ -147,7 +144,7 @@
 
     String <span style="color:#a6e22e">endpoint</span><span style="color:#f92672">();</span>
 <span style="color:#f92672">}</span></code></pre></div>
-<p>Теперь осталось написать реализацию интерфейса <code>org.springframework.context.annotation.ImportBeanDefinitionRegistrar</code>. Так как у нас уже есть написанный ранее <a href="http://static.springsource.org/spring-framework/docs/3.2.x/javadoc-api/org/springframework/beans/factory/config/BeanFactoryPostProcessor.html">BeanFactoryPostProcessor</a> в виде <code>RestClientPostProcessor</code>, реализация интерфейса будет простой - мы создадим описание бина для Spring и зарегистрируем его в реестре бинов.</p>
+<p>Теперь осталось написать реализацию интерфейса <code>org.springframework.context.annotation.ImportBeanDefinitionRegistrar</code>. Так как у нас уже есть написанный ранее <a href="http://static.springsource.org/spring-framework/docs/3.2.x/javadoc-api/org/springframework/beans/factory/config/BeanFactoryPostProcessor.html" target="_blank">BeanFactoryPostProcessor</a> в виде <code>RestClientPostProcessor</code>, реализация интерфейса будет простой - мы создадим описание бина для Spring и зарегистрируем его в реестре бинов.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">JaxRsRestClientRegistrar</span> <span style="color:#66d9ef">implements</span> ImportBeanDefinitionRegistrar <span style="color:#f92672">{</span>
 
     <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> String PROPERTY_ENDPOINT <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;endpoint&#34;</span><span style="color:#f92672">;</span>
@@ -188,7 +185,7 @@
 <span style="color:#f92672">}</span></code></pre></div>
 <p>Обратите внимание, что endpoint можно передавать с использованием подстановочных свойств.</p>
 
-<p>На этом всё, если есть вопросы - <a href="https://plus.google.com/112372998073079463630/posts">спрашивайте в Google+</a></p>
+<p>На этом всё, если есть вопросы - <a href="https://plus.google.com/112372998073079463630/posts" target="_blank">спрашивайте в Google+</a></p>
 
         </div>
         
@@ -198,7 +195,6 @@
   <p class="meta">
     
     
-
     
     
     
@@ -287,8 +283,8 @@
             </li>
         </ul>
     </div>
-    <p>Copyright &copy; 2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
-        <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a> and
+    <p>Copyright &copy; 2009&nbsp;—&nbsp;2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+        <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a>, uses custom theme based on
             <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.
     </p>
 

@@ -9,17 +9,14 @@
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
 
-  
-  
-  <link href="//fonts.googleapis.com/css?family=Anonymous+Pro" rel="stylesheet" type="text/css">
-  
+  <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
 
   
   <title>Автоматизируем работу с виртуальными машинами с помощью Vagrant</title>
 
   
   
-  <link rel="stylesheet" href="https://uthark.github.io/css/hugo-octopress.css">
+  <link rel="stylesheet" href="https://uthark.github.io/css/uthark.css">
 
   
   
@@ -123,7 +120,7 @@
 
 <p>Современные enterprise проекты очень часто имеют очень сложную инфраструктуру для развёртывания. Кроме того, во время разработки часто используются виртуальные машины. Например, может использоваться несколько виртуальных машин, на которых развёрнуты различные конфигурации софта.</p>
 
-<p><a href="http://vagrantup.com/">Vagrant</a> - это средство для управления виртуальными машинами на базе <a href="https://www.virtualbox.org/">Virtualbox</a>.</p>
+<p><a href="http://vagrantup.com/" target="_blank">Vagrant</a> - это средство для управления виртуальными машинами на базе <a href="https://www.virtualbox.org/" target="_blank">Virtualbox</a>.</p>
 
 <h2 id="возможности">Возможности</h2>
 
@@ -248,7 +245,7 @@
   <span style="color:#75715e">#</span>
   <span style="color:#75715e">#   chef.validation_client_name = &#34;ORGNAME-validator&#34;</span>
 <span style="color:#66d9ef">end</span></code></pre></div>
-<p>Подробнее о том, что этот файл может содержать можно почитать в <a href="http://vagrantup.com/v1/docs/vagrantfile.html">документации</a></p>
+<p>Подробнее о том, что этот файл может содержать можно почитать в <a href="http://vagrantup.com/v1/docs/vagrantfile.html" target="_blank">документации</a></p>
 
 <p>Например, можно изменить размер RAM, доступный операционной системе:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">    config<span style="color:#f92672">.</span>vm<span style="color:#f92672">.</span>customize <span style="color:#f92672">[</span><span style="color:#e6db74">&#34;modifyvm&#34;</span>, <span style="color:#e6db74">:id</span>, <span style="color:#e6db74">&#34;--memory&#34;</span>, <span style="color:#ae81ff">1536</span><span style="color:#f92672">]</span></code></pre></div>
@@ -268,12 +265,12 @@
 <p>Vagrant поддерживает следующие приложения, управляющие конфигурацией:</p>
 
 <ul>
-<li><a href="http://wiki.opscode.com/display/chef/Home">Chef</a></li>
-<li><a href="http://puppetlabs.com/puppet/puppet-open-source/">Puppet</a></li>
-<li><a href="http://www.gnu.org/software/bash/manual/bashref.html">Shell</a></li>
+<li><a href="http://wiki.opscode.com/display/chef/Home" target="_blank">Chef</a></li>
+<li><a href="http://puppetlabs.com/puppet/puppet-open-source/" target="_blank">Puppet</a></li>
+<li><a href="http://www.gnu.org/software/bash/manual/bashref.html" target="_blank">Shell</a></li>
 </ul>
 
-<p>А также позволяет использовать написать <a href="http://vagrantup.com/v1/docs/provisioners/others.html">собственное расширение</a>.</p>
+<p>А также позволяет использовать написать <a href="http://vagrantup.com/v1/docs/provisioners/others.html" target="_blank">собственное расширение</a>.</p>
 
 <h2 id="управление-виртуальной-машиной">Управление виртуальной машиной</h2>
 
@@ -292,9 +289,9 @@
 <h2 id="документация-и-ссылки">Документация и ссылки</h2>
 
 <ul>
-<li><a href="http://vagrantup.com/">Официальный сайт</a></li>
-<li><a href="http://vagrantup.com/v1/docs/index.html">Документация</a></li>
-<li><a href="https://github.com/mitchellh/vagrant">Исходный код</a></li>
+<li><a href="http://vagrantup.com/" target="_blank">Официальный сайт</a></li>
+<li><a href="http://vagrantup.com/v1/docs/index.html" target="_blank">Документация</a></li>
+<li><a href="https://github.com/mitchellh/vagrant" target="_blank">Исходный код</a></li>
 </ul>
 
         </div>
@@ -305,7 +302,6 @@
   <p class="meta">
     
     
-
     
     
     
@@ -394,8 +390,8 @@
             </li>
         </ul>
     </div>
-    <p>Copyright &copy; 2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
-        <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a> and
+    <p>Copyright &copy; 2009&nbsp;—&nbsp;2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+        <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a>, uses custom theme based on
             <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.
     </p>
 

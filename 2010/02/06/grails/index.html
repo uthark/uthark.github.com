@@ -9,17 +9,14 @@
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
 
-  
-  
-  <link href="//fonts.googleapis.com/css?family=Anonymous+Pro" rel="stylesheet" type="text/css">
-  
+  <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
 
   
   <title>Список для проверки при оптимизации Grails приложений</title>
 
   
   
-  <link rel="stylesheet" href="https://uthark.github.io/css/hugo-octopress.css">
+  <link rel="stylesheet" href="https://uthark.github.io/css/uthark.css">
 
   
   
@@ -138,7 +135,7 @@
 <li>Обновить jQuery до последней версии.<br />
 </li>
 <li>Оптимизировать настройки виртуальной машины Java (например, -server -Xmx270m -Xms270m -XX:MaxPermSize=80m -Xverify:none -XX:+UseParallelGC -XX:+UseParallelOldGC -XX:+UseAdaptiveSizePolicy -XX:SurvivorRatio=4 -XX:TargetSurvivorRatio=90 -XX:MaxTenuringThreshold=31 -XX:+AggressiveOpts)<br />
-a. <a href="http://java.sun.com/javase/technologies/hotspot/gc/gc_tuning_6.html">http://java.sun.com/javase/technologies/hotspot/gc/gc_tuning_6.html</a><br />
+a. <a href="http://java.sun.com/javase/technologies/hotspot/gc/gc_tuning_6.html" target="_blank">http://java.sun.com/javase/technologies/hotspot/gc/gc_tuning_6.html</a><br />
 Вообще, по оптимизации JVM написаны целые книги, так что не буду здесь останавливаться.<br />
 </li>
 </ol><h4>Оптимизация клиентской части </h4><ol><li>Настроить <a href="http://tomcat.apache.org/tomcat-5.5-doc/config/context.html">кэширование статических ресурсов</a> в Томкате.<br />
@@ -160,8 +157,8 @@ a. <a href="http://java.sun.com/javase/technologies/hotspot/gc/gc_tuning_6.html"
 <li>Провести оптимизацию с использованием плагина UI Performance <br />
 </li>
 </ol><h4>Оптимизация базы данных </h4><ol><li>Оптимизировать производительность сервера базы данных (SQL Server) <br />
-a. <a href="http://www.sql-server-performance.com/tips/all_main.aspx">http://www.sql-server-performance.com/tips/all_main.aspx</a> <br />
-a. <a href="http://msdn.microsoft.com/en-us/library/ms998577.aspx">http://msdn.microsoft.com/en-us/library/ms998577.aspx</a><br />
+a. <a href="http://www.sql-server-performance.com/tips/all_main.aspx" target="_blank">http://www.sql-server-performance.com/tips/all_main.aspx</a> <br />
+a. <a href="http://msdn.microsoft.com/en-us/library/ms998577.aspx" target="_blank">http://msdn.microsoft.com/en-us/library/ms998577.aspx</a><br />
 </li>
 <li>Проверить наличие индексов в базе данных, добавить необходимые<br />
 </li>
@@ -187,7 +184,6 @@ a. <a href="http://msdn.microsoft.com/en-us/library/ms998577.aspx">http://msdn.m
   <p class="meta">
     
     
-
     
     
     
@@ -276,8 +272,8 @@ a. <a href="http://msdn.microsoft.com/en-us/library/ms998577.aspx">http://msdn.m
             </li>
         </ul>
     </div>
-    <p>Copyright &copy; 2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
-        <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a> and
+    <p>Copyright &copy; 2009&nbsp;—&nbsp;2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+        <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a>, uses custom theme based on
             <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.
     </p>
 

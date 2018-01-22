@@ -9,17 +9,14 @@
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
 
-  
-  
-  <link href="//fonts.googleapis.com/css?family=Anonymous+Pro" rel="stylesheet" type="text/css">
-  
+  <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
 
   
   <title>Using custom font in Android TextView</title>
 
   
   
-  <link rel="stylesheet" href="https://uthark.github.io/css/hugo-octopress.css">
+  <link rel="stylesheet" href="https://uthark.github.io/css/uthark.css">
 
   
   
@@ -121,7 +118,7 @@
           
           
 
-<p>Today I want to share with you custom <a href="http://developer.android.com/reference/android/widget/TextView.html">TextView</a> which allows to set font to be used in xml layout.</p>
+<p>Today I want to share with you custom <a href="http://developer.android.com/reference/android/widget/TextView.html" target="_blank">TextView</a> which allows to set font to be used in xml layout.</p>
 
 <p>First, we need to declare our custom styleable</p>
 
@@ -171,7 +168,7 @@
 <span style="color:#f92672">&lt;resources&gt;</span>
     <span style="color:#f92672">&lt;string</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;default_font_name&#34;</span> <span style="color:#a6e22e">translatable=</span><span style="color:#e6db74">&#34;false&#34;</span><span style="color:#f92672">&gt;</span>custom.ttf<span style="color:#f92672">&lt;/string&gt;</span>
 <span style="color:#f92672">&lt;/resources&gt;</span></code></pre></div>
-<p>Due to the <a href="https://code.google.com/p/android/issues/detail?id=9904">bug in Android</a> we have to cache all created typefaces in cache:</p>
+<p>Due to the <a href="https://code.google.com/p/android/issues/detail?id=9904" target="_blank">bug in Android</a> we have to cache all created typefaces in cache:</p>
 
 <p>TypefaceCache:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TypefaceCache</span> <span style="color:#f92672">{</span>
@@ -200,7 +197,7 @@
     <span style="color:#a6e22e">xmlns:custom=</span><span style="color:#e6db74">&#34;http://schemas.android.com/apk/res-auto&#34;</span>
     <span style="color:#a6e22e">a:layout_width=</span><span style="color:#e6db74">&#34;match_parent&#34;</span>
     <span style="color:#a6e22e">custom:typeface=</span><span style="color:#e6db74">&#34;custom-font.ttf&#34;</span><span style="color:#f92672">/&gt;</span></code></pre></div>
-<p>And the last use case it to set custom font for the actionbar title. In this case we can implement custom <a href="http://developer.android.com/reference/android/text/style/CharacterStyle.html"><code>android.text.style.CharacterStyle</code></a></p>
+<p>And the last use case it to set custom font for the actionbar title. In this case we can implement custom <a href="http://developer.android.com/reference/android/text/style/CharacterStyle.html" target="_blank"><code>android.text.style.CharacterStyle</code></a></p>
 
 <p>TypefaceSpan:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TypefaceSpan</span> <span style="color:#66d9ef">extends</span> MetricAffectingSpan <span style="color:#f92672">{</span>
@@ -243,7 +240,7 @@
 <h3 id="additional-information">Additional information</h3>
 
 <ol>
-<li><a href="http://developer.android.com/training/custom-views/#create-view.html">Creating a View Class | Android Developers</a></li>
+<li><a href="http://developer.android.com/training/custom-views/#create-view.html" target="_blank">Creating a View Class | Android Developers</a></li>
 </ol>
 
         </div>
@@ -254,7 +251,6 @@
   <p class="meta">
     
     
-
     
     
     
@@ -343,8 +339,8 @@
             </li>
         </ul>
     </div>
-    <p>Copyright &copy; 2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
-        <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a> and
+    <p>Copyright &copy; 2009&nbsp;—&nbsp;2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+        <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a>, uses custom theme based on
             <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.
     </p>
 

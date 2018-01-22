@@ -9,17 +9,14 @@
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
 
-  
-  
-  <link href="//fonts.googleapis.com/css?family=Anonymous+Pro" rel="stylesheet" type="text/css">
-  
+  <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
 
   
   <title>Валидация входных параметров с использованием Spring</title>
 
   
   
-  <link rel="stylesheet" href="https://uthark.github.io/css/hugo-octopress.css">
+  <link rel="stylesheet" href="https://uthark.github.io/css/uthark.css">
 
   
   
@@ -146,7 +143,7 @@
 <p>Чтобы заставить этот код работать, мы будем использовать возможности Spring Validation.</p>
 
 <ol>
-<li>Spring предоставляет аннотацию <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/validation/annotation/Validated.html">@Validated</a>, которая в отличие от <a href="http://docs.oracle.com/javaee/7/api/javax/validation/Valid.html">@javax.validation.Valid</a> позволяет определять группу валидации.</li>
+<li>Spring предоставляет аннотацию <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/validation/annotation/Validated.html" target="_blank">@Validated</a>, которая в отличие от <a href="http://docs.oracle.com/javaee/7/api/javax/validation/Valid.html" target="_blank">@javax.validation.Valid</a> позволяет определять группу валидации.</li>
 <li>Этой аннотацией необходимо проаннотировать бин, методы которого необходимо валидировать.</li>
 </ol>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Validated</span>
@@ -159,7 +156,7 @@
     <span style="color:#f92672">}</span>
 <span style="color:#f92672">}</span></code></pre></div>
 <ol>
-<li>Для реализации самой валидации нам необходим валидатор. В качестве реализации <a href="http://jcp.org/en/jsr/detail?id=303">JSR-303</a> можно использовать, например, <a href="http://www.hibernate.org/subprojects/validator.html">Hibernate Validator</a>. Для этого в <code>pom.xml</code> необходимо добавить требуемые зависимости:</li>
+<li>Для реализации самой валидации нам необходим валидатор. В качестве реализации <a href="http://jcp.org/en/jsr/detail?id=303" target="_blank">JSR-303</a> можно использовать, например, <a href="http://www.hibernate.org/subprojects/validator.html" target="_blank">Hibernate Validator</a>. Для этого в <code>pom.xml</code> необходимо добавить требуемые зависимости:</li>
 </ol>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;dependency&gt;</span>
     <span style="color:#f92672">&lt;groupId&gt;</span>javax.validation<span style="color:#f92672">&lt;/groupId&gt;</span>
@@ -172,7 +169,7 @@
     <span style="color:#f92672">&lt;artifactId&gt;</span>hibernate-validator<span style="color:#f92672">&lt;/artifactId&gt;</span>
     <span style="color:#f92672">&lt;version&gt;</span>4.3.1.Final<span style="color:#f92672">&lt;/version&gt;</span>
 <span style="color:#f92672">&lt;/dependency&gt;</span></code></pre></div>
-<p>Обращаю внимание, что текущей на данный момент является <a href="http://beanvalidation.org/1.1/spec">спецификация</a> <a href="http://jcp.org/en/jsr/detail?id=349">JSR-349 Bean Validation 1.1</a>, которая поддерживает валидацию методов из коробки, но текущая версия Spring 3.2 - не поддерживает новый API, поэтому необходимо использовать старую версию API, и, соответственно, реализацию. Релевантный баг в Spring <a href="https://jira.springsource.org/browse/SPR-8199">SPR-8199</a>, поддержка нового API ожидается в Spring Framework 4.0.</p>
+<p>Обращаю внимание, что текущей на данный момент является <a href="http://beanvalidation.org/1.1/spec" target="_blank">спецификация</a> <a href="http://jcp.org/en/jsr/detail?id=349" target="_blank">JSR-349 Bean Validation 1.1</a>, которая поддерживает валидацию методов из коробки, но текущая версия Spring 3.2 - не поддерживает новый API, поэтому необходимо использовать старую версию API, и, соответственно, реализацию. Релевантный баг в Spring <a href="https://jira.springsource.org/browse/SPR-8199" target="_blank">SPR-8199</a>, поддержка нового API ожидается в Spring Framework 4.0.</p>
 
 <ol>
 <li>Необходимо объявить необходимые бины в конфигурации Spring:</li>
@@ -205,7 +202,6 @@
   <p class="meta">
     
     
-
     
     
     
@@ -294,8 +290,8 @@
             </li>
         </ul>
     </div>
-    <p>Copyright &copy; 2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
-        <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a> and
+    <p>Copyright &copy; 2009&nbsp;—&nbsp;2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+        <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a>, uses custom theme based on
             <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.
     </p>
 

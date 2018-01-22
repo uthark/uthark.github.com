@@ -9,17 +9,14 @@
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
 
-  
-  
-  <link href="//fonts.googleapis.com/css?family=Anonymous+Pro" rel="stylesheet" type="text/css">
-  
+  <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
 
   
   <title>Sharing knowledge</title>
 
   
   
-  <link rel="stylesheet" href="https://uthark.github.io/css/hugo-octopress.css">
+  <link rel="stylesheet" href="https://uthark.github.io/css/uthark.css">
 
   
   
@@ -117,7 +114,7 @@
 
 
         
-        <p>Продолжая разговор о <a href="http://www.jcp.org/en/jsr/detail?id=339">JAX RS</a> <a href="https://jax-rs-spec.java.net/nonav/2.0/apidocs/javax/ws/rs/client/package-summary.html">Client API</a> - предположим, что мы уже <a href="/blog/2013/06/28/jaxrs/">используем JAX-RS клиент</a></p>
+        <p>Продолжая разговор о <a href="http://www.jcp.org/en/jsr/detail?id=339" target="_blank">JAX RS</a> <a href="https://jax-rs-spec.java.net/nonav/2.0/apidocs/javax/ws/rs/client/package-summary.html" target="_blank">Client API</a> - предположим, что мы уже <a href="/blog/2013/06/28/jaxrs/">используем JAX-RS клиент</a></p>
 
 <p>У нас есть класс, который умеет создавать прокси для любого REST-интерфейса в проекте. Теперь мы хотим сделать так, чтобы эти интерфейсы можно было автоматически создавать в контексте Spring и связывать с другими бинами.</p>
 
@@ -134,7 +131,7 @@
 
 <p>Есть, и я вам сейчас его покажу.</p>
 
-<p>Для того, чтобы добавлять собственные бины в Spring контекст, мы воспользуемся возможностью расширения Spring контекста с использованием <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/beans/factory/config/BeanFactoryPostProcessor.html"><code>BeanFactoryPostProcessor</code></a>.
+<p>Для того, чтобы добавлять собственные бины в Spring контекст, мы воспользуемся возможностью расширения Spring контекста с использованием <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/beans/factory/config/BeanFactoryPostProcessor.html" target="_blank"><code>BeanFactoryPostProcessor</code></a>.
 Метод <code>postProcessBeanFactory</code> данного класса позволяет выполнить дополнительную обработку фабрики бинов Spring, например, удалить, добавить, переопределить бин.
 Это именно то, что нам нужно - автоматически добавить новые бины в фабрику.</p>
 
@@ -146,9 +143,9 @@
 <li>Зарегистрировать каждый прокси в фабрике бинов для дальнейшего использования (например, для @Autowired).</li>
 </ol>
 
-<p>По спецификации JAX-RS, чтобы класс распознавался как REST-ресурс, у него должна быть аннотация <a href="https://jax-rs-spec.java.net/nonav/2.0/apidocs/javax/ws/rs/Path.html"><code>@Path()</code></a>.</p>
+<p>По спецификации JAX-RS, чтобы класс распознавался как REST-ресурс, у него должна быть аннотация <a href="https://jax-rs-spec.java.net/nonav/2.0/apidocs/javax/ws/rs/Path.html" target="_blank"><code>@Path()</code></a>.</p>
 
-<p>Для поиска всех возможных классов/интерфейсов воспользуемся классом <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/context/annotation/ClassPathScanningCandidateComponentProvider.html"><code>ClassPathScanningCandidateComponentProvider</code></a>, который умеет сканировать классы в выбранном пакете и применять фильтры, чтобы собрать только нужные. Также нам нужно учесть, что по умолчанию <code>ClassPathScanningCandidateComponentProvider</code> пытается определить, может ли найденный класс быть и бином (например, проверяет, что это не абстрактный класс и не интерфейс), поэтому нам нужно написать подкласс, который позволит нам работать с интерфейсами.</p>
+<p>Для поиска всех возможных классов/интерфейсов воспользуемся классом <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/context/annotation/ClassPathScanningCandidateComponentProvider.html" target="_blank"><code>ClassPathScanningCandidateComponentProvider</code></a>, который умеет сканировать классы в выбранном пакете и применять фильтры, чтобы собрать только нужные. Также нам нужно учесть, что по умолчанию <code>ClassPathScanningCandidateComponentProvider</code> пытается определить, может ли найденный класс быть и бином (например, проверяет, что это не абстрактный класс и не интерфейс), поэтому нам нужно написать подкласс, который позволит нам работать с интерфейсами.</p>
 
 <p>Пишем класс:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">RestClientPostProcessor</span> <span style="color:#66d9ef">implements</span> BeanFactoryPostProcessor <span style="color:#f92672">{</span>
@@ -221,7 +218,7 @@
 <p>И теперь можно использовать <code>UserRest</code> как обычный бин:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">    <span style="color:#a6e22e">@Autowired</span>
     <span style="color:#66d9ef">private</span> UserShowRest userShowRest<span style="color:#f92672">;</span></code></pre></div>
-<p>Если есть вопросы - <a href="https://plus.google.com/112372998073079463630/posts">спрашивайте в Google+</a></p>
+<p>Если есть вопросы - <a href="https://plus.google.com/112372998073079463630/posts" target="_blank">спрашивайте в Google+</a></p>
 
         
 
@@ -241,17 +238,17 @@
 
 
         
-        <p><a href="http://jcp.org/en/jsr/detail?id=339">JAX-RS</a> - набор Java API для работы с REST сервисами. Существует несколько реализаций, <a href="/blog/2012/02/08/java-rest/">о которых я уже писал раньше</a>.</p>
+        <p><a href="http://jcp.org/en/jsr/detail?id=339" target="_blank">JAX-RS</a> - набор Java API для работы с REST сервисами. Существует несколько реализаций, <a href="/blog/2012/02/08/java-rest/">о которых я уже писал раньше</a>.</p>
 
 <p>Предположим, что проект А выставляет наружу REST API, который мы хотим использовать в проекте Б. Очевидно, что сразу возникает вопрос - можно ли переиспользовать классы модели и интерфейс в другом проекте. Ответ - да, можно. Client API, появившийся в JAX RS 2.0, упрощает реализацию клиента, но это всё равно не самый оптимальный вариант.</p>
 
-<p>Есть более интересный способ - в замечательной библиотеке <a href="http://cxf.apache.org/">Apache CXF</a> есть класс <a href="http://cxf.apache.org/javadoc/latest/org/apache/cxf/jaxrs/client/JAXRSClientFactory.html"><code>org.apache.cxf.jaxrs.client.JAXRSClientFactory</code></a>, который позволяет автоматически получать прокси-клиент для работы с сервером.</p>
+<p>Есть более интересный способ - в замечательной библиотеке <a href="http://cxf.apache.org/" target="_blank">Apache CXF</a> есть класс <a href="http://cxf.apache.org/javadoc/latest/org/apache/cxf/jaxrs/client/JAXRSClientFactory.html" target="_blank"><code>org.apache.cxf.jaxrs.client.JAXRSClientFactory</code></a>, который позволяет автоматически получать прокси-клиент для работы с сервером.</p>
 
-<p>К сожалению, у меня не получилось завести его с JSON без JAXB - Проблема с Generic Collections - <a href="http://cxf.apache.org/javadoc/latest/org/apache/cxf/jaxrs/provider/json/JSONProvider.html"><code>org.apache.cxf.jaxrs.provider.json.JSONProvider</code></a> подразумевает, что в проекте используется JAXB, с помощью которого у нас проаннотирована модель. Поэтому пришлось написать собственную реализацию <a href="http://docs.oracle.com/javaee/6/api/javax/ws/rs/ext/MessageBodyReader.html"><code>javax.ws.rs.ext.MessageBodyReader&lt;T&gt;</code></a> и <a href="http://docs.oracle.com/javaee/6/api/javax/ws/rs/ext/MessageBodyWriter.html">javax.ws.rs.ext.MessageBodyWriter<T></a>.</p>
+<p>К сожалению, у меня не получилось завести его с JSON без JAXB - Проблема с Generic Collections - <a href="http://cxf.apache.org/javadoc/latest/org/apache/cxf/jaxrs/provider/json/JSONProvider.html" target="_blank"><code>org.apache.cxf.jaxrs.provider.json.JSONProvider</code></a> подразумевает, что в проекте используется JAXB, с помощью которого у нас проаннотирована модель. Поэтому пришлось написать собственную реализацию <a href="http://docs.oracle.com/javaee/6/api/javax/ws/rs/ext/MessageBodyReader.html" target="_blank"><code>javax.ws.rs.ext.MessageBodyReader&lt;T&gt;</code></a> и <a href="http://docs.oracle.com/javaee/6/api/javax/ws/rs/ext/MessageBodyWriter.html" target="_blank">javax.ws.rs.ext.MessageBodyWriter<T></a>.</p>
 
-<p>Основная проблема при работе с JSON - это то, что, в общем случае, у нас нет информации об используемых типах данных, а вкупе с тем, что в  Java Generics реализованы с <a href="http://docs.oracle.com/javase/tutorial/java/generics/erasure.html">Type Erasure</a> - ситуация усугубляется, если не предпринять каких-то действий.</p>
+<p>Основная проблема при работе с JSON - это то, что, в общем случае, у нас нет информации об используемых типах данных, а вкупе с тем, что в  Java Generics реализованы с <a href="http://docs.oracle.com/javase/tutorial/java/generics/erasure.html" target="_blank">Type Erasure</a> - ситуация усугубляется, если не предпринять каких-то действий.</p>
 
-<p>Для реализации чтения будем использовать <a href="http://jackson.codehaus.org/Home">Jackson Java JSON-processor</a> и его возможности <a href="http://fasterxml.github.io/jackson-databind/javadoc/2.2.0/com/fasterxml/jackson/databind/type/TypeFactory.html"><code>com.fasterxml.jackson.databind.type.TypeFactory</code></a></p>
+<p>Для реализации чтения будем использовать <a href="http://jackson.codehaus.org/Home" target="_blank">Jackson Java JSON-processor</a> и его возможности <a href="http://fasterxml.github.io/jackson-databind/javadoc/2.2.0/com/fasterxml/jackson/databind/type/TypeFactory.html" target="_blank"><code>com.fasterxml.jackson.databind.type.TypeFactory</code></a></p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">JsonMessageHandler</span> <span style="color:#66d9ef">implements</span> MessageBodyReader<span style="color:#f92672">&lt;</span>Object<span style="color:#f92672">&gt;,</span> MessageBodyWriter<span style="color:#f92672">&lt;</span>Object<span style="color:#f92672">&gt;</span> <span style="color:#f92672">{</span>
 
     <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">final</span> ObjectMapper mapper<span style="color:#f92672">;</span>
@@ -351,7 +348,7 @@ UserRest userRest <span style="color:#f92672">=</span> JAXRSClientFactory<span s
 
 
         
-        <p>Предположим, что у нас есть проект на Spring, в котором необходимо использовать внешние EJB. Для получения бинов необходимо создавать <a href="http://docs.oracle.com/javase/6/docs/api/javax/naming/InitialContext.html">InitialContext</a> и делать <code>lookup()</code> нужных ejb. Но эту задачу можно автоматизировать и пользоваться <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/beans/factory/annotation/Autowired.html">@Autowired</a>, то есть код будет выглядеть вот так:</p>
+        <p>Предположим, что у нас есть проект на Spring, в котором необходимо использовать внешние EJB. Для получения бинов необходимо создавать <a href="http://docs.oracle.com/javase/6/docs/api/javax/naming/InitialContext.html" target="_blank">InitialContext</a> и делать <code>lookup()</code> нужных ejb. Но эту задачу можно автоматизировать и пользоваться <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/beans/factory/annotation/Autowired.html" target="_blank">@Autowired</a>, то есть код будет выглядеть вот так:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Service</span>
 <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">UserService</span> <span style="color:#f92672">{</span>
 
@@ -359,7 +356,7 @@ UserRest userRest <span style="color:#f92672">=</span> JAXRSClientFactory<span s
   <span style="color:#66d9ef">private</span> UserRemoteBean userRemoteBean<span style="color:#f92672">;</span>
 
 <span style="color:#f92672">}</span></code></pre></div>
-<p>Для этого в Spring существует <a href="http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/htmlsingle/#beans-factory-extension-factorybean">FactoryBean</a> - класс, который знает, как создавать бины нужного типа. Собственно, нам необходимо написать такой класс (код на <a href="http://www.scala-lang.org/">Scala</a>):</p>
+<p>Для этого в Spring существует <a href="http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/htmlsingle/#beans-factory-extension-factorybean" target="_blank">FactoryBean</a> - класс, который знает, как создавать бины нужного типа. Собственно, нам необходимо написать такой класс (код на <a href="http://www.scala-lang.org/" target="_blank">Scala</a>):</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-scala" data-lang="scala"><span style="color:#a6e22e">@Component</span>
 <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">UserRemoteBeanFactoryBean</span> <span style="color:#66d9ef">extends</span> <span style="color:#a6e22e">FactoryBean</span><span style="color:#f92672">[</span><span style="color:#66d9ef">UserRemoteBean</span><span style="color:#f92672">]</span> <span style="color:#f92672">{</span>
 
@@ -447,7 +444,7 @@ UserRest userRest <span style="color:#f92672">=</span> JAXRSClientFactory<span s
 <p>Чтобы заставить этот код работать, мы будем использовать возможности Spring Validation.</p>
 
 <ol>
-<li>Spring предоставляет аннотацию <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/validation/annotation/Validated.html">@Validated</a>, которая в отличие от <a href="http://docs.oracle.com/javaee/7/api/javax/validation/Valid.html">@javax.validation.Valid</a> позволяет определять группу валидации.</li>
+<li>Spring предоставляет аннотацию <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/validation/annotation/Validated.html" target="_blank">@Validated</a>, которая в отличие от <a href="http://docs.oracle.com/javaee/7/api/javax/validation/Valid.html" target="_blank">@javax.validation.Valid</a> позволяет определять группу валидации.</li>
 <li>Этой аннотацией необходимо проаннотировать бин, методы которого необходимо валидировать.</li>
 </ol>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Validated</span>
@@ -460,7 +457,7 @@ UserRest userRest <span style="color:#f92672">=</span> JAXRSClientFactory<span s
     <span style="color:#f92672">}</span>
 <span style="color:#f92672">}</span></code></pre></div>
 <ol>
-<li>Для реализации самой валидации нам необходим валидатор. В качестве реализации <a href="http://jcp.org/en/jsr/detail?id=303">JSR-303</a> можно использовать, например, <a href="http://www.hibernate.org/subprojects/validator.html">Hibernate Validator</a>. Для этого в <code>pom.xml</code> необходимо добавить требуемые зависимости:</li>
+<li>Для реализации самой валидации нам необходим валидатор. В качестве реализации <a href="http://jcp.org/en/jsr/detail?id=303" target="_blank">JSR-303</a> можно использовать, например, <a href="http://www.hibernate.org/subprojects/validator.html" target="_blank">Hibernate Validator</a>. Для этого в <code>pom.xml</code> необходимо добавить требуемые зависимости:</li>
 </ol>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;dependency&gt;</span>
     <span style="color:#f92672">&lt;groupId&gt;</span>javax.validation<span style="color:#f92672">&lt;/groupId&gt;</span>
@@ -473,7 +470,7 @@ UserRest userRest <span style="color:#f92672">=</span> JAXRSClientFactory<span s
     <span style="color:#f92672">&lt;artifactId&gt;</span>hibernate-validator<span style="color:#f92672">&lt;/artifactId&gt;</span>
     <span style="color:#f92672">&lt;version&gt;</span>4.3.1.Final<span style="color:#f92672">&lt;/version&gt;</span>
 <span style="color:#f92672">&lt;/dependency&gt;</span></code></pre></div>
-<p>Обращаю внимание, что текущей на данный момент является <a href="http://beanvalidation.org/1.1/spec">спецификация</a> <a href="http://jcp.org/en/jsr/detail?id=349">JSR-349 Bean Validation 1.1</a>, которая поддерживает валидацию методов из коробки, но текущая версия Spring 3.2 - не поддерживает новый API, поэтому необходимо использовать старую версию API, и, соответственно, реализацию. Релевантный баг в Spring <a href="https://jira.springsource.org/browse/SPR-8199">SPR-8199</a>, поддержка нового API ожидается в Spring Framework 4.0.</p>
+<p>Обращаю внимание, что текущей на данный момент является <a href="http://beanvalidation.org/1.1/spec" target="_blank">спецификация</a> <a href="http://jcp.org/en/jsr/detail?id=349" target="_blank">JSR-349 Bean Validation 1.1</a>, которая поддерживает валидацию методов из коробки, но текущая версия Spring 3.2 - не поддерживает новый API, поэтому необходимо использовать старую версию API, и, соответственно, реализацию. Релевантный баг в Spring <a href="https://jira.springsource.org/browse/SPR-8199" target="_blank">SPR-8199</a>, поддержка нового API ожидается в Spring Framework 4.0.</p>
 
 <ol>
 <li>Необходимо объявить необходимые бины в конфигурации Spring:</li>
@@ -518,9 +515,9 @@ UserRest userRest <span style="color:#f92672">=</span> JAXRSClientFactory<span s
         
         
 
-<p>В <a href="http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/html/new-in-3.1.html">Spring 3.1</a> появился замечательный модуль - <a href="http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/html/cache.html">Spring Cache</a>, который является абстракцией над кэшированием, что позволяет декларативно реализовывать кэширование в приложении.</p>
+<p>В <a href="http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/html/new-in-3.1.html" target="_blank">Spring 3.1</a> появился замечательный модуль - <a href="http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/html/cache.html" target="_blank">Spring Cache</a>, который является абстракцией над кэшированием, что позволяет декларативно реализовывать кэширование в приложении.</p>
 
-<p>Я не буду вдаваться в подробности работы, их можно прочитать в документации, но опишу, каким образом можно настроить <a href="http://memcached.org/">memcached</a> в качестве бэкэнда для работы.</p>
+<p>Я не буду вдаваться в подробности работы, их можно прочитать в документации, но опишу, каким образом можно настроить <a href="http://memcached.org/" target="_blank">memcached</a> в качестве бэкэнда для работы.</p>
 
 <h2 id="подключение-зависимостей">Подключение зависимостей</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;dependency&gt;</span>
@@ -615,9 +612,9 @@ UserRest userRest <span style="color:#f92672">=</span> JAXRSClientFactory<span s
         
         
 
-<p><a href="http://jcp.org/en/jsr/detail?id=303">JSR-303</a> предоставляет удобный API для проверки валидности объектов, а также входных параметров. Очевидно, что <a href="http://docs.oracle.com/javaee/6/tutorial/doc/gircz.html">стандартных валидаторов</a> в какой-то момент может быть недостаточно, поэтому необходимо писать собственный.</p>
+<p><a href="http://jcp.org/en/jsr/detail?id=303" target="_blank">JSR-303</a> предоставляет удобный API для проверки валидности объектов, а также входных параметров. Очевидно, что <a href="http://docs.oracle.com/javaee/6/tutorial/doc/gircz.html" target="_blank">стандартных валидаторов</a> в какой-то момент может быть недостаточно, поэтому необходимо писать собственный.</p>
 
-<p>Хочу показать на примере валидации запроса к <a href="http://www.mongodb.org/">MongoDB</a>, как легко это делается.</p>
+<p>Хочу показать на примере валидации запроса к <a href="http://www.mongodb.org/" target="_blank">MongoDB</a>, как легко это делается.</p>
 
 <h2 id="создание-аннотации">Создание аннотации</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Target</span><span style="color:#f92672">({</span>FIELD<span style="color:#f92672">,</span> PARAMETER<span style="color:#f92672">})</span>
@@ -632,7 +629,7 @@ UserRest userRest <span style="color:#f92672">=</span> JAXRSClientFactory<span s
 
     Class<span style="color:#f92672">&lt;?</span> <span style="color:#66d9ef">extends</span> Payload<span style="color:#f92672">&gt;[]</span> <span style="color:#a6e22e">payload</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">default</span> <span style="color:#f92672">{};</span>
 <span style="color:#f92672">}</span></code></pre></div>
-<p>Обратите внимание на аннотацию <a href="http://docs.oracle.com/javaee/7/api/javax/validation/Constraint.html">@Constraint</a> - она описывает, какой класс будет проводить реальную валидацию. Атрибуты <code>groups()</code> и <code>payload()</code> являются обязательными.</p>
+<p>Обратите внимание на аннотацию <a href="http://docs.oracle.com/javaee/7/api/javax/validation/Constraint.html" target="_blank">@Constraint</a> - она описывает, какой класс будет проводить реальную валидацию. Атрибуты <code>groups()</code> и <code>payload()</code> являются обязательными.</p>
 
 <h2 id="написание-валидатора">Написание валидатора</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MongoQueryValidator</span> <span style="color:#66d9ef">implements</span> ConstraintValidator<span style="color:#f92672">&lt;</span>MongoQuery<span style="color:#f92672">,</span> CharSequence<span style="color:#f92672">&gt;</span> <span style="color:#f92672">{</span>
@@ -691,7 +688,7 @@ UserRest userRest <span style="color:#f92672">=</span> JAXRSClientFactory<span s
 
 <p>Современные enterprise проекты очень часто имеют очень сложную инфраструктуру для развёртывания. Кроме того, во время разработки часто используются виртуальные машины. Например, может использоваться несколько виртуальных машин, на которых развёрнуты различные конфигурации софта.</p>
 
-<p><a href="http://vagrantup.com/">Vagrant</a> - это средство для управления виртуальными машинами на базе <a href="https://www.virtualbox.org/">Virtualbox</a>.</p>
+<p><a href="http://vagrantup.com/" target="_blank">Vagrant</a> - это средство для управления виртуальными машинами на базе <a href="https://www.virtualbox.org/" target="_blank">Virtualbox</a>.</p>
 
 <h2 id="возможности">Возможности</h2>
 
@@ -816,7 +813,7 @@ UserRest userRest <span style="color:#f92672">=</span> JAXRSClientFactory<span s
   <span style="color:#75715e">#</span>
   <span style="color:#75715e">#   chef.validation_client_name = &#34;ORGNAME-validator&#34;</span>
 <span style="color:#66d9ef">end</span></code></pre></div>
-<p>Подробнее о том, что этот файл может содержать можно почитать в <a href="http://vagrantup.com/v1/docs/vagrantfile.html">документации</a></p>
+<p>Подробнее о том, что этот файл может содержать можно почитать в <a href="http://vagrantup.com/v1/docs/vagrantfile.html" target="_blank">документации</a></p>
 
 <p>Например, можно изменить размер RAM, доступный операционной системе:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">    config<span style="color:#f92672">.</span>vm<span style="color:#f92672">.</span>customize <span style="color:#f92672">[</span><span style="color:#e6db74">&#34;modifyvm&#34;</span>, <span style="color:#e6db74">:id</span>, <span style="color:#e6db74">&#34;--memory&#34;</span>, <span style="color:#ae81ff">1536</span><span style="color:#f92672">]</span></code></pre></div>
@@ -836,12 +833,12 @@ UserRest userRest <span style="color:#f92672">=</span> JAXRSClientFactory<span s
 <p>Vagrant поддерживает следующие приложения, управляющие конфигурацией:</p>
 
 <ul>
-<li><a href="http://wiki.opscode.com/display/chef/Home">Chef</a></li>
-<li><a href="http://puppetlabs.com/puppet/puppet-open-source/">Puppet</a></li>
-<li><a href="http://www.gnu.org/software/bash/manual/bashref.html">Shell</a></li>
+<li><a href="http://wiki.opscode.com/display/chef/Home" target="_blank">Chef</a></li>
+<li><a href="http://puppetlabs.com/puppet/puppet-open-source/" target="_blank">Puppet</a></li>
+<li><a href="http://www.gnu.org/software/bash/manual/bashref.html" target="_blank">Shell</a></li>
 </ul>
 
-<p>А также позволяет использовать написать <a href="http://vagrantup.com/v1/docs/provisioners/others.html">собственное расширение</a>.</p>
+<p>А также позволяет использовать написать <a href="http://vagrantup.com/v1/docs/provisioners/others.html" target="_blank">собственное расширение</a>.</p>
 
 <h2 id="управление-виртуальной-машиной">Управление виртуальной машиной</h2>
 
@@ -860,9 +857,9 @@ UserRest userRest <span style="color:#f92672">=</span> JAXRSClientFactory<span s
 <h2 id="документация-и-ссылки">Документация и ссылки</h2>
 
 <ul>
-<li><a href="http://vagrantup.com/">Официальный сайт</a></li>
-<li><a href="http://vagrantup.com/v1/docs/index.html">Документация</a></li>
-<li><a href="https://github.com/mitchellh/vagrant">Исходный код</a></li>
+<li><a href="http://vagrantup.com/" target="_blank">Официальный сайт</a></li>
+<li><a href="http://vagrantup.com/v1/docs/index.html" target="_blank">Документация</a></li>
+<li><a href="https://github.com/mitchellh/vagrant" target="_blank">Исходный код</a></li>
 </ul>
 
         
@@ -983,8 +980,8 @@ UserRest userRest <span style="color:#f92672">=</span> JAXRSClientFactory<span s
             </li>
         </ul>
     </div>
-    <p>Copyright &copy; 2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
-        <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a> and
+    <p>Copyright &copy; 2009&nbsp;—&nbsp;2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+        <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a>, uses custom theme based on
             <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.
     </p>
 

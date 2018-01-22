@@ -9,17 +9,14 @@
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
 
-  
-  
-  <link href="//fonts.googleapis.com/css?family=Anonymous+Pro" rel="stylesheet" type="text/css">
-  
+  <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
 
   
   <title>Sharing knowledge</title>
 
   
   
-  <link rel="stylesheet" href="https://uthark.github.io/css/hugo-octopress.css">
+  <link rel="stylesheet" href="https://uthark.github.io/css/uthark.css">
 
   
   
@@ -117,21 +114,21 @@
 
 
         
-        <p>This is a very nice series of posts about Scala by <a href="http://blog.agiledeveloper.com/">Venkat Subramaniam</a></p>
+        <p>This is a very nice series of posts about Scala by <a href="http://blog.agiledeveloper.com/" target="_blank">Venkat Subramaniam</a></p>
 
 <ol>
-<li><a href="http://pragprog.com/magazines/2011-09/scala-for-the-intrigued">The Elegance of Scala</a></li>
-<li><a href="http://pragprog.com/magazines/2011-10/scala-for-the-intrigued">Sensible Typing and Optional Items</a></li>
-<li><a href="http://pragprog.com/magazines/2011-11/scala-for-the-intrigued">Cute Classes and Pure OO</a></li>
-<li><a href="http://pragprog.com/magazines/2011-12/scala-for-the-intrigued">Functional Style of Programming</a></li>
-<li><a href="http://pragprog.com/magazines/2012-01/scala-for-the-intrigued">Working with Collections</a></li>
-<li><a href="http://pragprog.com/magazines/2012-02/scala-for-the-intrigued">Creating Higher Order Functions</a></li>
-<li><a href="http://pragprog.com/magazines/2012-03/scala-for-the-intrigued">Pattern Matching</a></li>
-<li><a href="http://pragprog.com/magazines/2012-04/scala-for-the-intrigued">XML as First Class Citizen</a></li>
-<li><a href="http://pragprog.com/magazines/2012-05/scala-for-the-intrigued">Recursions and Tail Call Optimization</a></li>
-<li><a href="http://pragprog.com/magazines/2012-06/scala-for-the-intrigued">Using Traits</a></li>
-<li><a href="http://pragprog.com/magazines/2012-07/scala-for-the-intrigued">Chaining Traits</a></li>
-<li><a href="http://pragprog.com/magazines/2012-08/scala-for-the-intrigued">Concurrency in Scala</a></li>
+<li><a href="http://pragprog.com/magazines/2011-09/scala-for-the-intrigued" target="_blank">The Elegance of Scala</a></li>
+<li><a href="http://pragprog.com/magazines/2011-10/scala-for-the-intrigued" target="_blank">Sensible Typing and Optional Items</a></li>
+<li><a href="http://pragprog.com/magazines/2011-11/scala-for-the-intrigued" target="_blank">Cute Classes and Pure OO</a></li>
+<li><a href="http://pragprog.com/magazines/2011-12/scala-for-the-intrigued" target="_blank">Functional Style of Programming</a></li>
+<li><a href="http://pragprog.com/magazines/2012-01/scala-for-the-intrigued" target="_blank">Working with Collections</a></li>
+<li><a href="http://pragprog.com/magazines/2012-02/scala-for-the-intrigued" target="_blank">Creating Higher Order Functions</a></li>
+<li><a href="http://pragprog.com/magazines/2012-03/scala-for-the-intrigued" target="_blank">Pattern Matching</a></li>
+<li><a href="http://pragprog.com/magazines/2012-04/scala-for-the-intrigued" target="_blank">XML as First Class Citizen</a></li>
+<li><a href="http://pragprog.com/magazines/2012-05/scala-for-the-intrigued" target="_blank">Recursions and Tail Call Optimization</a></li>
+<li><a href="http://pragprog.com/magazines/2012-06/scala-for-the-intrigued" target="_blank">Using Traits</a></li>
+<li><a href="http://pragprog.com/magazines/2012-07/scala-for-the-intrigued" target="_blank">Chaining Traits</a></li>
+<li><a href="http://pragprog.com/magazines/2012-08/scala-for-the-intrigued" target="_blank">Concurrency in Scala</a></li>
 </ol>
 
         
@@ -178,7 +175,7 @@
 
 
         
-        <p>In one of my projects I used <a href="https://github.com/greenrobot/EventBus">EventBus</a> library. The library is pretty cool and I would recommend everybody to use it.</p>
+        <p>In one of my projects I used <a href="https://github.com/greenrobot/EventBus" target="_blank">EventBus</a> library. The library is pretty cool and I would recommend everybody to use it.</p>
 
 <p>But I found one small issue with this library - in case you send too many events very fast (i.e. more than 1000 per second) you may face issue with application crash due to inability to create new thread.</p>
 
@@ -192,7 +189,7 @@
 </span><span style="color:#75715e"></span><span style="color:#f92672">}</span></code></pre></div>
 <p>As you can see, it calls <code>newCachedThreadPool</code> method to create thread pool.</p>
 
-<p>From <a href="http://developer.android.com/reference/java/util/concurrent/Executors.html#newCachedThreadPool()">javadoc</a> for this method:</p>
+<p>From <a href="http://developer.android.com/reference/java/util/concurrent/Executors.html#newCachedThreadPool()" target="_blank">javadoc</a> for this method:</p>
 
 <blockquote>
 <p>Creates a thread pool that creates new threads as needed, but will reuse
@@ -223,7 +220,7 @@ previously constructed threads when they are available.</p>
         EventBus<span style="color:#f92672">.</span><span style="color:#a6e22e">executorService</span> <span style="color:#f92672">=</span> executorServiceToUse<span style="color:#f92672">;</span>
     <span style="color:#f92672">}</span>
 <span style="color:#f92672">}</span></code></pre></div>
-<p>Android 3.0+ has special <a href="http://developer.android.com/reference/android/os/AsyncTask.html#THREAD_POOL_EXECUTOR">THREAD_POOL_EXECUTOR</a> which is supposed to be used by asynchronous tasks, so we use it on newer devices. On older, pre-Honeycomb devices we create our own thread pool.</p>
+<p>Android 3.0+ has special <a href="http://developer.android.com/reference/android/os/AsyncTask.html#THREAD_POOL_EXECUTOR" target="_blank">THREAD_POOL_EXECUTOR</a> which is supposed to be used by asynchronous tasks, so we use it on newer devices. On older, pre-Honeycomb devices we create our own thread pool.</p>
 
 <p>And then in Android application we configure <code>executorService</code>:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CustomApplication</span> <span style="color:#66d9ef">extends</span> Application <span style="color:#f92672">{</span>
@@ -255,7 +252,7 @@ previously constructed threads when they are available.</p>
         
         
 
-<p>Today I want to share with you custom <a href="http://developer.android.com/reference/android/widget/TextView.html">TextView</a> which allows to set font to be used in xml layout.</p>
+<p>Today I want to share with you custom <a href="http://developer.android.com/reference/android/widget/TextView.html" target="_blank">TextView</a> which allows to set font to be used in xml layout.</p>
 
 <p>First, we need to declare our custom styleable</p>
 
@@ -305,7 +302,7 @@ previously constructed threads when they are available.</p>
 <span style="color:#f92672">&lt;resources&gt;</span>
     <span style="color:#f92672">&lt;string</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;default_font_name&#34;</span> <span style="color:#a6e22e">translatable=</span><span style="color:#e6db74">&#34;false&#34;</span><span style="color:#f92672">&gt;</span>custom.ttf<span style="color:#f92672">&lt;/string&gt;</span>
 <span style="color:#f92672">&lt;/resources&gt;</span></code></pre></div>
-<p>Due to the <a href="https://code.google.com/p/android/issues/detail?id=9904">bug in Android</a> we have to cache all created typefaces in cache:</p>
+<p>Due to the <a href="https://code.google.com/p/android/issues/detail?id=9904" target="_blank">bug in Android</a> we have to cache all created typefaces in cache:</p>
 
 <p>TypefaceCache:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TypefaceCache</span> <span style="color:#f92672">{</span>
@@ -334,7 +331,7 @@ previously constructed threads when they are available.</p>
     <span style="color:#a6e22e">xmlns:custom=</span><span style="color:#e6db74">&#34;http://schemas.android.com/apk/res-auto&#34;</span>
     <span style="color:#a6e22e">a:layout_width=</span><span style="color:#e6db74">&#34;match_parent&#34;</span>
     <span style="color:#a6e22e">custom:typeface=</span><span style="color:#e6db74">&#34;custom-font.ttf&#34;</span><span style="color:#f92672">/&gt;</span></code></pre></div>
-<p>And the last use case it to set custom font for the actionbar title. In this case we can implement custom <a href="http://developer.android.com/reference/android/text/style/CharacterStyle.html"><code>android.text.style.CharacterStyle</code></a></p>
+<p>And the last use case it to set custom font for the actionbar title. In this case we can implement custom <a href="http://developer.android.com/reference/android/text/style/CharacterStyle.html" target="_blank"><code>android.text.style.CharacterStyle</code></a></p>
 
 <p>TypefaceSpan:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TypefaceSpan</span> <span style="color:#66d9ef">extends</span> MetricAffectingSpan <span style="color:#f92672">{</span>
@@ -377,7 +374,7 @@ previously constructed threads when they are available.</p>
 <h3 id="additional-information">Additional information</h3>
 
 <ol>
-<li><a href="http://developer.android.com/training/custom-views/#create-view.html">Creating a View Class | Android Developers</a></li>
+<li><a href="http://developer.android.com/training/custom-views/#create-view.html" target="_blank">Creating a View Class | Android Developers</a></li>
 </ol>
 
         
@@ -413,7 +410,7 @@ cpuid.4.4.eax = &ldquo;0000:0000:0000:0000:0000:0000:0000:0000&rdquo;</p>
 
 <p>```</p>
 
-<p>The answer was found on <a href="https://communities.vmware.com/thread/461857">VMWare Community Forums</a></p>
+<p>The answer was found on <a href="https://communities.vmware.com/thread/461857" target="_blank">VMWare Community Forums</a></p>
 
         
 
@@ -433,7 +430,7 @@ cpuid.4.4.eax = &ldquo;0000:0000:0000:0000:0000:0000:0000:0000&rdquo;</p>
 
 
         
-        <p>Today in the evening I got to <a href="http://www.skiwhitetail.com/winter">Whitetail Ski Resort</a>.</p>
+        <p>Today in the evening I got to <a href="http://www.skiwhitetail.com/winter" target="_blank">Whitetail Ski Resort</a>.</p>
 
 <iframe style="overflow: scroll; width: 100%; height: 600px" src="http://www.endomondo.com/embed/workouts?w=tmMEXnSDfDg&width=950&height=600" frameborder="0" scrolling="yes" ></iframe>
 
@@ -459,7 +456,7 @@ cpuid.4.4.eax = &ldquo;0000:0000:0000:0000:0000:0000:0000:0000&rdquo;</p>
 
 <p>Investigation showed that content in <code>meta tag</code> description contained unquoted quotes, thus resulting in broken HTML.</p>
 
-<p>After searching within <a href="https://github.com/imathis/octopress/">octopress sources</a> I found the issue:</p>
+<p>After searching within <a href="https://github.com/imathis/octopress/" target="_blank">octopress sources</a> I found the issue:</p>
 
 <p>Rendering of description tag, excerpt from _includes/head.html:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">{<span style="color:#e6db74">% capture </span> description <span style="color:#e6db74">%}
@@ -493,7 +490,7 @@ cpuid.4.4.eax = &ldquo;0000:0000:0000:0000:0000:0000:0000:0000&rdquo;</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">meta</span> <span style="color:#a6e22e">name</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;description&#34;</span> <span style="color:#a6e22e">content</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;{{ description | strip_html | condense_spaces | strip_quotes | truncate:150 }}&#34;</span>&gt;</code></pre></div>
 <p>After this fix description is being rendered properly.</p>
 
-<p>P.S. In order to render properly <code>{{</code> and <code>}}</code> in the octopress it is required to put content you want to render within <code>raw</code> and <code>endraw</code> tags. See <a href="http://stackoverflow.com/questions/15786144/how-to-escape-in-markdown-on-octopress">StackOverflow</a> <a href="http://stackoverflow.com/questions/3426182/how-to-escape-liquid-template-tags/13582517#13582517">questions</a> for details.</p>
+<p>P.S. In order to render properly <code>{{</code> and <code>}}</code> in the octopress it is required to put content you want to render within <code>raw</code> and <code>endraw</code> tags. See <a href="http://stackoverflow.com/questions/15786144/how-to-escape-in-markdown-on-octopress" target="_blank">StackOverflow</a> <a href="http://stackoverflow.com/questions/3426182/how-to-escape-liquid-template-tags/13582517#13582517" target="_blank">questions</a> for details.</p>
 
         
 
@@ -613,8 +610,8 @@ cpuid.4.4.eax = &ldquo;0000:0000:0000:0000:0000:0000:0000:0000&rdquo;</p>
             </li>
         </ul>
     </div>
-    <p>Copyright &copy; 2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
-        <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a> and
+    <p>Copyright &copy; 2009&nbsp;—&nbsp;2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+        <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a>, uses custom theme based on
             <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.
     </p>
 

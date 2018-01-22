@@ -9,17 +9,14 @@
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
 
-  
-  
-  <link href="//fonts.googleapis.com/css?family=Anonymous+Pro" rel="stylesheet" type="text/css">
-  
+  <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
 
   
   <title>Преобразуем строку в дату</title>
 
   
   
-  <link rel="stylesheet" href="https://uthark.github.io/css/hugo-octopress.css">
+  <link rel="stylesheet" href="https://uthark.github.io/css/uthark.css">
 
   
   
@@ -121,7 +118,7 @@
           
           <p>Казалось бы, есть простейшая задача - преобразовать строковое представление даты в объект класса <tt>java.util.Date</tt>.</p>
 
-<p>Как оказалось, иногда использование DateFormat не помогает. В случае, если строка - это заголовок <tt>Date</tt> из письма, то нам нужно использовать <tt><a href="http://docs.oracle.com/javaee/5/api/javax/mail/internet/MailDateFormat.html">javax.mail.internet.MailDateFormat</a></tt> для преобразования такой строки.</p>
+<p>Как оказалось, иногда использование DateFormat не помогает. В случае, если строка - это заголовок <tt>Date</tt> из письма, то нам нужно использовать <tt><a href="http://docs.oracle.com/javaee/5/api/javax/mail/internet/MailDateFormat.html" target="_blank">javax.mail.internet.MailDateFormat</a></tt> для преобразования такой строки.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">String dateStr <span style="color:#f92672">=</span> <span style="color:#f92672">...</span>
 Date parsedDate <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> MailDateFormat<span style="color:#f92672">().</span><span style="color:#a6e22e">parse</span><span style="color:#f92672">(</span>dateStr<span style="color:#f92672">);</span></code></pre></div>
         </div>
@@ -132,7 +129,6 @@ Date parsedDate <span style="color:#f92672">=</span> <span style="color:#66d9ef"
   <p class="meta">
     
     
-
     
     
     
@@ -221,8 +217,8 @@ Date parsedDate <span style="color:#f92672">=</span> <span style="color:#66d9ef"
             </li>
         </ul>
     </div>
-    <p>Copyright &copy; 2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
-        <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a> and
+    <p>Copyright &copy; 2009&nbsp;—&nbsp;2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+        <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a>, uses custom theme based on
             <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.
     </p>
 

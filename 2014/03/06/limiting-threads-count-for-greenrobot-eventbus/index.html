@@ -9,17 +9,14 @@
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
 
-  
-  
-  <link href="//fonts.googleapis.com/css?family=Anonymous+Pro" rel="stylesheet" type="text/css">
-  
+  <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
 
   
   <title>Limiting threads count for GreenRobot EventBus</title>
 
   
   
-  <link rel="stylesheet" href="https://uthark.github.io/css/hugo-octopress.css">
+  <link rel="stylesheet" href="https://uthark.github.io/css/uthark.css">
 
   
   
@@ -119,7 +116,7 @@
           
           
           
-          <p>In one of my projects I used <a href="https://github.com/greenrobot/EventBus">EventBus</a> library. The library is pretty cool and I would recommend everybody to use it.</p>
+          <p>In one of my projects I used <a href="https://github.com/greenrobot/EventBus" target="_blank">EventBus</a> library. The library is pretty cool and I would recommend everybody to use it.</p>
 
 <p>But I found one small issue with this library - in case you send too many events very fast (i.e. more than 1000 per second) you may face issue with application crash due to inability to create new thread.</p>
 
@@ -133,7 +130,7 @@
 </span><span style="color:#75715e"></span><span style="color:#f92672">}</span></code></pre></div>
 <p>As you can see, it calls <code>newCachedThreadPool</code> method to create thread pool.</p>
 
-<p>From <a href="http://developer.android.com/reference/java/util/concurrent/Executors.html#newCachedThreadPool()">javadoc</a> for this method:</p>
+<p>From <a href="http://developer.android.com/reference/java/util/concurrent/Executors.html#newCachedThreadPool()" target="_blank">javadoc</a> for this method:</p>
 
 <blockquote>
 <p>Creates a thread pool that creates new threads as needed, but will reuse
@@ -164,7 +161,7 @@ previously constructed threads when they are available.</p>
         EventBus<span style="color:#f92672">.</span><span style="color:#a6e22e">executorService</span> <span style="color:#f92672">=</span> executorServiceToUse<span style="color:#f92672">;</span>
     <span style="color:#f92672">}</span>
 <span style="color:#f92672">}</span></code></pre></div>
-<p>Android 3.0+ has special <a href="http://developer.android.com/reference/android/os/AsyncTask.html#THREAD_POOL_EXECUTOR">THREAD_POOL_EXECUTOR</a> which is supposed to be used by asynchronous tasks, so we use it on newer devices. On older, pre-Honeycomb devices we create our own thread pool.</p>
+<p>Android 3.0+ has special <a href="http://developer.android.com/reference/android/os/AsyncTask.html#THREAD_POOL_EXECUTOR" target="_blank">THREAD_POOL_EXECUTOR</a> which is supposed to be used by asynchronous tasks, so we use it on newer devices. On older, pre-Honeycomb devices we create our own thread pool.</p>
 
 <p>And then in Android application we configure <code>executorService</code>:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CustomApplication</span> <span style="color:#66d9ef">extends</span> Application <span style="color:#f92672">{</span>
@@ -184,7 +181,6 @@ previously constructed threads when they are available.</p>
   <p class="meta">
     
     
-
     
     
     
@@ -273,8 +269,8 @@ previously constructed threads when they are available.</p>
             </li>
         </ul>
     </div>
-    <p>Copyright &copy; 2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
-        <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a> and
+    <p>Copyright &copy; 2009&nbsp;—&nbsp;2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+        <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a>, uses custom theme based on
             <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.
     </p>
 

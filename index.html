@@ -9,17 +9,14 @@
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
 
-  
-  
-  <link href="//fonts.googleapis.com/css?family=Anonymous+Pro" rel="stylesheet" type="text/css">
-  
+  <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
 
   
   <title>Sharing knowledge</title>
 
   
   
-  <link rel="stylesheet" href="https://uthark.github.io/css/hugo-octopress.css">
+  <link rel="stylesheet" href="https://uthark.github.io/css/uthark.css">
 
   
   
@@ -117,7 +114,7 @@
 
 
         
-        <p>Good news, everyone. Migration from octopress to <a href="https://gohugo.io/">hugo</a> was completed. If you find any broken  layout and/or links, please contact me.</p>
+        <p>Good news, everyone. Migration from octopress to <a href="https://gohugo.io/" target="_blank">hugo</a> was completed. If you find any broken  layout and/or links, please contact me.</p>
 
         
 
@@ -157,7 +154,7 @@
 
 
         
-        <p>Hi. <a href="https://twitter.com/Pocket/status/458989752432091136">Pocket is down</a> so it means there is no reading list for today. Everyone have a nice day.</p>
+        <p>Hi. <a href="https://twitter.com/Pocket/status/458989752432091136" target="_blank">Pocket is down</a> so it means there is no reading list for today. Everyone have a nice day.</p>
 
         
 
@@ -179,7 +176,7 @@
         
         <p>Often it is needed to compare two different instances of the class inside test. I.e. we save object into database, then fetch it back from db and we want to be sure if nothing was lost during saving/reading.</p>
 
-<p>In order to make such assertions more easier and maintainable one can use great Unitils library which has useful class <a href="http://www.unitils.org/tutorial-reflectionassert.html">ReflectionAssert</a></p>
+<p>In order to make such assertions more easier and maintainable one can use great Unitils library which has useful class <a href="http://www.unitils.org/tutorial-reflectionassert.html" target="_blank">ReflectionAssert</a></p>
 
 <p>First, update parent&rsquo;s <code>pom.xml</code>:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;properties&gt;</span>
@@ -211,7 +208,7 @@ Double rightDouble <span style="color:#f92672">=</span> getDoubleValue<span styl
 <span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>leftDouble<span style="color:#f92672">.</span><span style="color:#a6e22e">equals</span><span style="color:#f92672">(</span>rightDouble<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
     <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> Difference<span style="color:#f92672">(</span>differenceMessage<span style="color:#f92672">,</span> left<span style="color:#f92672">,</span> right<span style="color:#f92672">);</span>
 <span style="color:#f92672">}</span></code></pre></div>
-<p>If you need to compare double values in JUnit assertions then it is better to use <a href="https://code.google.com/p/hamcrest/">hamcrest library</a>.</p>
+<p>If you need to compare double values in JUnit assertions then it is better to use <a href="https://code.google.com/p/hamcrest/" target="_blank">hamcrest library</a>.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">import static</span> org.hamcrest.number.IsCloseTo.closeTo<span style="color:#f92672">;</span>
 <span style="color:#f92672">import static</span> org.junit.Assert.assertThat<span style="color:#f92672">;</span>
 
@@ -237,7 +234,7 @@ Double rightDouble <span style="color:#f92672">=</span> getDoubleValue<span styl
 
 
         
-        <p><a href="https://github.com/joel-costigliola/assertj-core">AssertJ</a> is a library which provides fluent strongly-typed assertions to use in unit tests.</p>
+        <p><a href="https://github.com/joel-costigliola/assertj-core" target="_blank">AssertJ</a> is a library which provides fluent strongly-typed assertions to use in unit tests.</p>
 
 <p>Example of assertions written with <code>AssertJ</code>:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">import</span> io.github.uthark.blog.assertj.Assertions.assertThat<span style="color:#f92672">;</span>
@@ -317,7 +314,7 @@ The integration of assertj into Maven project is very easy:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">mvn assertj:generate-assertions</code></pre></div>
 <p>By default assertj will generate assertion classes in <code>target/generated-test-sources/assertj-assertions/</code>, it is possible to override this behaviour by passing configuration element <code>targetDir</code> to plugin.</p>
 
-<p>Additonal documentation for Maven plugin can be <a href="http://joel-costigliola.github.io/assertj/assertj-assertions-generator-maven-plugin.html">found here</a></p>
+<p>Additonal documentation for Maven plugin can be <a href="http://joel-costigliola.github.io/assertj/assertj-assertions-generator-maven-plugin.html" target="_blank">found here</a></p>
 
 <p>Happy hacking!</p>
 
@@ -339,14 +336,14 @@ The integration of assertj into Maven project is very easy:</p>
 
 
         
-        <p>In this post I will show how one can implement custom JUnit <a href="http://junit-team.github.io/junit/javadoc/4.11/org/junit/Rule.html">@Rule</a>.</p>
+        <p>In this post I will show how one can implement custom JUnit <a href="http://junit-team.github.io/junit/javadoc/4.11/org/junit/Rule.html" target="_blank">@Rule</a>.</p>
 
-<p>As an example let&rsquo;s take <a href="https://code.google.com/p/mockito/">Mockito</a> and implement custom rule which will initialize Mocks in  test class.</p>
+<p>As an example let&rsquo;s take <a href="https://code.google.com/p/mockito/" target="_blank">Mockito</a> and implement custom rule which will initialize Mocks in  test class.</p>
 
 <p>By default, Mockito provides the following methods of mock initialization:</p>
 
 <ol>
-<li>Using <a href="http://docs.mockito.googlecode.com/hg/org/mockito/Mockito.html#mock(java.lang.Class)">Mockito.mock</a></li>
+<li>Using <a href="http://docs.mockito.googlecode.com/hg/org/mockito/Mockito.html#mock(java.lang.Class)" target="_blank">Mockito.mock</a></li>
 </ol>
 
 <p>Initialize mocks with Mockito.mock:</p>
@@ -363,7 +360,7 @@ The integration of assertj into Maven project is very easy:</p>
 <p>This is the simplest case.</p>
 
 <ol>
-<li>Using <a href="http://docs.mockito.googlecode.com/hg/org/mockito/MockitoAnnotations.html#initMocks(java.lang.Object)">MockitoAnnotations</a>.
+<li>Using <a href="http://docs.mockito.googlecode.com/hg/org/mockito/MockitoAnnotations.html#initMocks(java.lang.Object)" target="_blank">MockitoAnnotations</a>.
 Initialize mocks with MockitoAnnotations:</li>
 </ol>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> FooTest <span style="color:#f92672">{</span>
@@ -382,7 +379,7 @@ Initialize mocks with MockitoAnnotations:</li>
 <p>This method is useful when you have a lot of mocks to inject.</p>
 
 <ol>
-<li>Using <a href="http://docs.mockito.googlecode.com/hg/org/mockito/runners/MockitoJUnitRunner.html">MockitoJUnitRunner</a></li>
+<li>Using <a href="http://docs.mockito.googlecode.com/hg/org/mockito/runners/MockitoJUnitRunner.html" target="_blank">MockitoJUnitRunner</a></li>
 </ol>
 
 <p>Initialize mocks with MockitoJUnitRunner:</p>
@@ -401,7 +398,7 @@ Initialize mocks with MockitoAnnotations:</li>
 <span style="color:#f92672">}</span></code></pre></div>
 <p>I want to show you another method, by using custom JUnit <code>@Rule</code>.</p>
 
-<p>First, we need to implement <a href="http://junit-team.github.io/junit/javadoc/4.11/org/junit/rules/TestRule.html">TestRule</a> interface which allows to implement custom behaviour during test execution:</p>
+<p>First, we need to implement <a href="http://junit-team.github.io/junit/javadoc/4.11/org/junit/rules/TestRule.html" target="_blank">TestRule</a> interface which allows to implement custom behaviour during test execution:</p>
 
 <p>MockitoInitializerRule:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MockitoInitializerRule</span> <span style="color:#66d9ef">implements</span> TestRule <span style="color:#f92672">{</span>
@@ -416,7 +413,7 @@ Initialize mocks with MockitoAnnotations:</li>
         <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> MockitInitilizationStatement<span style="color:#f92672">(</span>base<span style="color:#f92672">,</span> test<span style="color:#f92672">);</span>
     <span style="color:#f92672">}</span>
 <span style="color:#f92672">}</span></code></pre></div>
-<p>We need to pass current test class instance to the rule, so it will be possible inject mocks into class instance. Actual implementation of our rule will go to new class - subclass of <a href="http://junit-team.github.io/junit/javadoc/4.11/org/junit/runners/model/Statement.html">Statement</a>:</p>
+<p>We need to pass current test class instance to the rule, so it will be possible inject mocks into class instance. Actual implementation of our rule will go to new class - subclass of <a href="http://junit-team.github.io/junit/javadoc/4.11/org/junit/runners/model/Statement.html" target="_blank">Statement</a>:</p>
 
 <p>MockitInitilizationStatement:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MockitInitilizationStatement</span> <span style="color:#66d9ef">extends</span> Statement <span style="color:#f92672">{</span>
@@ -454,7 +451,7 @@ Initialize mocks with MockitoAnnotations:</li>
         foo <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Foo<span style="color:#f92672">(</span>dep<span style="color:#f92672">);</span>
     <span style="color:#f92672">}</span>
 <span style="color:#f92672">}</span></code></pre></div>
-<p>Comparing to variant with <code>MockitoJUnitRunner</code> this one provides ability to use custom <a href="http://junit-team.github.io/junit/javadoc/4.11/org/junit/runner/Runner.html">Runner</a>, i.e. we can continue to use <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/test/context/junit4/SpringJUnit4ClassRunner.html">SpringJUnit4ClassRunner</a></p>
+<p>Comparing to variant with <code>MockitoJUnitRunner</code> this one provides ability to use custom <a href="http://junit-team.github.io/junit/javadoc/4.11/org/junit/runner/Runner.html" target="_blank">Runner</a>, i.e. we can continue to use <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/test/context/junit4/SpringJUnit4ClassRunner.html" target="_blank">SpringJUnit4ClassRunner</a></p>
 
         
 
@@ -474,7 +471,7 @@ Initialize mocks with MockitoAnnotations:</li>
 
 
         
-        <p>If anyone needs invites to <a href="http://atom.io">atom.io</a>, text editor from github - ask me in comments. I do have 3 invites to share.</p>
+        <p>If anyone needs invites to <a href="http://atom.io" target="_blank">atom.io</a>, text editor from github - ask me in comments. I do have 3 invites to share.</p>
 
         
 
@@ -591,8 +588,8 @@ Initialize mocks with MockitoAnnotations:</li>
             </li>
         </ul>
     </div>
-    <p>Copyright &copy; 2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
-        <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a> and
+    <p>Copyright &copy; 2009&nbsp;—&nbsp;2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+        <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a>, uses custom theme based on
             <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.
     </p>
 
