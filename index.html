@@ -39,7 +39,7 @@
   <meta name="author" content="Oleg Atamanenko">
 
   
-  <meta name="generator" content="Hugo 0.33" />
+  <meta name="generator" content="Hugo 0.34" />
 
   
   
@@ -343,12 +343,11 @@ The integration of assertj into Maven project is very easy:</p>
 <p>By default, Mockito provides the following methods of mock initialization:</p>
 
 <ol>
-<li>Using <a href="http://docs.mockito.googlecode.com/hg/org/mockito/Mockito.html#mock(java.lang.Class)" target="_blank">Mockito.mock</a></li>
-</ol>
+<li><p>Using <a href="http://docs.mockito.googlecode.com/hg/org/mockito/Mockito.html#mock(java.lang.Class)" target="_blank">Mockito.mock</a></p>
 
 <p>Initialize mocks with Mockito.mock:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> FooTest <span style="color:#f92672">{</span>
-    
+        
     <span style="color:#66d9ef">private</span> Foo foo<span style="color:#f92672">;</span>
 
     <span style="color:#a6e22e">@Before</span>
@@ -357,14 +356,12 @@ The integration of assertj into Maven project is very easy:</p>
         foo <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Foo<span style="color:#f92672">(</span>dep<span style="color:#f92672">);</span>
     <span style="color:#f92672">}</span>
 <span style="color:#f92672">}</span></code></pre></div>
-<p>This is the simplest case.</p>
+<p>This is the simplest case.</p></li>
 
-<ol>
-<li>Using <a href="http://docs.mockito.googlecode.com/hg/org/mockito/MockitoAnnotations.html#initMocks(java.lang.Object)" target="_blank">MockitoAnnotations</a>.
-Initialize mocks with MockitoAnnotations:</li>
-</ol>
+<li><p>Using <a href="http://docs.mockito.googlecode.com/hg/org/mockito/MockitoAnnotations.html#initMocks(java.lang.Object)" target="_blank">MockitoAnnotations</a>.
+Initialize mocks with MockitoAnnotations:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> FooTest <span style="color:#f92672">{</span>
-    
+        
     <span style="color:#66d9ef">private</span> Foo foo<span style="color:#f92672">;</span>
 
     <span style="color:#a6e22e">@Mock</span>
@@ -376,16 +373,14 @@ Initialize mocks with MockitoAnnotations:</li>
         foo <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Foo<span style="color:#f92672">(</span>dep<span style="color:#f92672">);</span>
     <span style="color:#f92672">}</span>
 <span style="color:#f92672">}</span></code></pre></div>
-<p>This method is useful when you have a lot of mocks to inject.</p>
+<p>This method is useful when you have a lot of mocks to inject.</p></li>
 
-<ol>
-<li>Using <a href="http://docs.mockito.googlecode.com/hg/org/mockito/runners/MockitoJUnitRunner.html" target="_blank">MockitoJUnitRunner</a></li>
-</ol>
+<li><p>Using <a href="http://docs.mockito.googlecode.com/hg/org/mockito/runners/MockitoJUnitRunner.html" target="_blank">MockitoJUnitRunner</a></p>
 
 <p>Initialize mocks with MockitoJUnitRunner:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@RunWith</span><span style="color:#f92672">(</span>MockitoJUnitRunner<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">)</span>
 <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> FooTest <span style="color:#f92672">{</span>
-    
+        
     <span style="color:#66d9ef">private</span> Foo foo<span style="color:#f92672">;</span>
 
     <span style="color:#a6e22e">@Mock</span>
@@ -395,8 +390,10 @@ Initialize mocks with MockitoAnnotations:</li>
     <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">setUp</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
         foo <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Foo<span style="color:#f92672">(</span>dep<span style="color:#f92672">);</span>
     <span style="color:#f92672">}</span>
-<span style="color:#f92672">}</span></code></pre></div>
-<p>I want to show you another method, by using custom JUnit <code>@Rule</code>.</p>
+<span style="color:#f92672">}</span></code></pre></div></li>
+</ol>
+
+<p>I want to show you another option, by using custom JUnit <code>@Rule</code>.</p>
 
 <p>First, we need to implement <a href="http://junit-team.github.io/junit/javadoc/4.11/org/junit/rules/TestRule.html" target="_blank">TestRule</a> interface which allows to implement custom behaviour during test execution:</p>
 
