@@ -107,6 +107,95 @@
 
 <header>
     <h1 class="entry-title">
+        <a href="https://uthark.github.io/2013/06/29/spring-enable-annotation/">Пишем @Enable*-аннотацию для Spring</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>Начиная с версии 3.1 Spring поддерживает декларативное включение необходимой функциональности через, так называемые, <code>@Enable*</code> аннотации. Пример таких аннотаций:
+<a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/web/servlet/config/annotation/EnableWebMvc.html" target="_blank"><code>org.springframework.web.servlet.config.annotation.EnableWebMvc</code></a>, <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/cache/annotation/EnableCaching.html" target="_blank"><code>org.springframework.cache.annotation.EnableCaching</code></a>, <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/scheduling/annotation/EnableAsync.html" target="_blank"><code>org.springframework.scheduling.annotation.EnableAsync</code></a> и другие.</p>
+
+<p>В продолжение темы <a href="/blog/2013/06/28/jaxrs-spring-autowiring/">прошлого поста</a>, я хочу показать, как можно добавить собственную <code>@Enable</code> аннотацию.</p>
+
+<p>Для автоматического создания клиента для REST-ресурса нам необходима следующая информация:</p>
+
+<ol>
+<li>Пакет, в котором искать интерфейсы, проаннотированные аннотацией <a href="https://jax-rs-spec.java.net/nonav/2.0/apidocs/javax/ws/rs/Path.html" target="_blank"><code>@Path()</code></a></li>
+<li>Базовый адрес REST-приложения.</li>
+</ol>
+
+<p>Для того, чтобы передать эту информацию, мы создадим два атрибута в аннотации: <code>scanPackage()</code> и <code>endpoint()</code></p>
+
+<p>Кроме того, для обработки аннотации необходимо указать обработчик. Это можно сделать передав подкласс <a href="http://static.springsource.org/spring-framework/docs/3.2.x/javadoc-api/org/springframework/context/annotation/ImportBeanDefinitionRegistrar.html" target="_blank"><code>org.springframework.context.annotation.ImportBeanDefinitionRegistrar</code></a> через аннотацию <a href="http://static.springsource.org/spring-framework/docs/3.2.x/javadoc-api/org/springframework/context/annotation/Import.html" target="_blank"><code>@Import</code></a></p>
+
+<p>Пишем аннотацию:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Target</span><span style="color:#f92672">(</span>ElementType<span style="color:#f92672">.</span><span style="color:#a6e22e">TYPE</span><span style="color:#f92672">)</span>
+<span style="color:#a6e22e">@Retention</span><span style="color:#f92672">(</span>RetentionPolicy<span style="color:#f92672">.</span><span style="color:#a6e22e">RUNTIME</span><span style="color:#f92672">)</span>
+<span style="color:#a6e22e">@Documented</span>
+<span style="color:#a6e22e">@Inherited</span>
+<span style="color:#a6e22e">@Import</span><span style="color:#f92672">(</span>JaxRsRestClientRegistrar<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">)</span>
+<span style="color:#66d9ef">public</span> <span style="color:#a6e22e">@interface</span> EnableJaxRsRestClient <span style="color:#f92672">{</span>
+
+    String <span style="color:#a6e22e">scanPackage</span><span style="color:#f92672">();</span>
+
+    String <span style="color:#a6e22e">endpoint</span><span style="color:#f92672">();</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>Теперь осталось написать реализацию интерфейса <code>org.springframework.context.annotation.ImportBeanDefinitionRegistrar</code>. Так как у нас уже есть написанный ранее <a href="http://static.springsource.org/spring-framework/docs/3.2.x/javadoc-api/org/springframework/beans/factory/config/BeanFactoryPostProcessor.html" target="_blank">BeanFactoryPostProcessor</a> в виде <code>RestClientPostProcessor</code>, реализация интерфейса будет простой - мы создадим описание бина для Spring и зарегистрируем его в реестре бинов.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">JaxRsRestClientRegistrar</span> <span style="color:#66d9ef">implements</span> ImportBeanDefinitionRegistrar <span style="color:#f92672">{</span>
+
+    <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> String PROPERTY_ENDPOINT <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;endpoint&#34;</span><span style="color:#f92672">;</span>
+
+    <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> String PROPERTY_SCAN_PACKAGE <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;basePackage&#34;</span><span style="color:#f92672">;</span>
+
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">registerBeanDefinitions</span><span style="color:#f92672">(</span>AnnotationMetadata importingClassMetadata<span style="color:#f92672">,</span> BeanDefinitionRegistry registry<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        EnableJaxRsRestClient annotation <span style="color:#f92672">=</span>
+                <span style="color:#f92672">(</span>EnableJaxRsRestClient<span style="color:#f92672">)</span> <span style="color:#f92672">((</span>StandardClassMetadata<span style="color:#f92672">)</span> importingClassMetadata<span style="color:#f92672">).</span><span style="color:#a6e22e">getIntrospectedClass</span><span style="color:#f92672">()</span>
+                        <span style="color:#f92672">.</span><span style="color:#a6e22e">getAnnotation</span><span style="color:#f92672">(</span>EnableJaxRsRestClient<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
+        String scanPackage <span style="color:#f92672">=</span> annotation<span style="color:#f92672">.</span><span style="color:#a6e22e">scanPackage</span><span style="color:#f92672">();</span>
+        String endpoint <span style="color:#f92672">=</span> annotation<span style="color:#f92672">.</span><span style="color:#a6e22e">endpoint</span><span style="color:#f92672">();</span>
+
+        GenericBeanDefinition beanDefinition <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> GenericBeanDefinition<span style="color:#f92672">();</span>
+        beanDefinition<span style="color:#f92672">.</span><span style="color:#a6e22e">setAbstract</span><span style="color:#f92672">(</span><span style="color:#66d9ef">false</span><span style="color:#f92672">);</span>
+        beanDefinition<span style="color:#f92672">.</span><span style="color:#a6e22e">setBeanClass</span><span style="color:#f92672">(</span>RestClientPostProcessor<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
+        MutablePropertyValues propertyValues <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> MutablePropertyValues<span style="color:#f92672">();</span>
+        propertyValues<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>PROPERTY_ENDPOINT<span style="color:#f92672">,</span> endpoint<span style="color:#f92672">);</span>
+        propertyValues<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>PROPERTY_SCAN_PACKAGE<span style="color:#f92672">,</span> scanPackage<span style="color:#f92672">);</span>
+        beanDefinition<span style="color:#f92672">.</span><span style="color:#a6e22e">setPropertyValues</span><span style="color:#f92672">(</span>propertyValues<span style="color:#f92672">);</span>
+
+        registry<span style="color:#f92672">.</span><span style="color:#a6e22e">registerBeanDefinition</span><span style="color:#f92672">(</span>ClassUtils<span style="color:#f92672">.</span><span style="color:#a6e22e">getShortName</span><span style="color:#f92672">(</span>getClass<span style="color:#f92672">()),</span> beanDefinition<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>Теперь мы можем использовать аннотацию:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Configuration</span>
+<span style="color:#a6e22e">@EnableJaxRsRestClient</span><span style="color:#f92672">(</span>scanPackage <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&lt;base package&gt;&#34;</span><span style="color:#f92672">,</span> endpoint <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;${remote.rest.endpoint}&#34;</span><span style="color:#f92672">)</span>
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TestAutowiringConfiguration</span> <span style="color:#f92672">{</span>
+
+    <span style="color:#a6e22e">@Bean</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> PropertyPlaceholderConfigurer <span style="color:#a6e22e">configurer</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        PropertyPlaceholderConfigurer pph <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> PropertyPlaceholderConfigurer<span style="color:#f92672">();</span>
+        pph<span style="color:#f92672">.</span><span style="color:#a6e22e">setLocation</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> ClassPathResource<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;application.properties&#34;</span><span style="color:#f92672">));</span>
+        <span style="color:#66d9ef">return</span> pph<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+
+<span style="color:#f92672">}</span></code></pre></div>
+<p>Обратите внимание, что endpoint можно передавать с использованием подстановочных свойств.</p>
+
+<p>На этом всё, если есть вопросы - <a href="https://plus.google.com/112372998073079463630/posts" target="_blank">спрашивайте в Google+</a></p>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
         <a href="https://uthark.github.io/2013/06/28/jaxrs-spring-autowiring/">@Autowired JAX-RS Client API</a>
     </h1>
 
@@ -670,202 +759,6 @@ UserRest userRest <span style="color:#f92672">=</span> JAXRSClientFactory<span s
 
     </article>
     
-    <article>
-
-        
-        
-
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2012/10/24/vagrant/">Автоматизируем работу с виртуальными машинами с помощью Vagrant</a>
-    </h1>
-
-</header>
-
-
-        
-        
-
-<p>Современные enterprise проекты очень часто имеют очень сложную инфраструктуру для развёртывания. Кроме того, во время разработки часто используются виртуальные машины. Например, может использоваться несколько виртуальных машин, на которых развёрнуты различные конфигурации софта.</p>
-
-<p><a href="http://vagrantup.com/" target="_blank">Vagrant</a> - это средство для управления виртуальными машинами на базе <a href="https://www.virtualbox.org/" target="_blank">Virtualbox</a>.</p>
-
-<h2 id="возможности">Возможности</h2>
-
-<ul>
-<li>Создание виртуальных машин с определённой, заранее заданной, конфигурацией.</li>
-<li>Лёгкое создание копии виртуальной машины, используя заранее подготовленный образ.</li>
-<li>Осуществление provisioning для новых виртуальных машин.</li>
-</ul>
-
-<h2 id="работа-с-vagrant">Работа с Vagrant</h2>
-
-<p>Для начала необходимо установить Virtualbox и Vagrant.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">sudo aptitude install virtualbox vagrant</code></pre></div>
-<p>После этого нам нужен образ, из которого мы можем создавать виртуальные машины. Его можно сделать самим или взять уже готовый с сайта Vagrant. Упростим себе жизнь и скачаем образ с сайта:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">    vagrant box add lucid32 http://files.vagrantup.com/lucid32.box</code></pre></div>
-<p>После этого, мы можем начать пользоваться Vagrant.</p>
-
-<p>Для этого нам нужно создать папку, в которой мы будем работать, например:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">    mkdir vagrant-test
-    cd vagrant-test</code></pre></div>
-<p>И инициализировать Vagrant:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">    vagrant init</code></pre></div>
-<p>Результатом работы этой команды будет файлик <code>Vagrantfile</code>, который содержит конфигурацию виртуальной машины для использования.</p>
-
-<p>Пример сгенерированного файла:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># -*- mode: ruby -*-</span>
-<span style="color:#75715e"># vi: set ft=ruby :</span>
-
-<span style="color:#66d9ef">Vagrant</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Config</span><span style="color:#f92672">.</span>run <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
-  <span style="color:#75715e"># All Vagrant configuration is done here. The most common configuration</span>
-  <span style="color:#75715e"># options are documented and commented below. For a complete reference,</span>
-  <span style="color:#75715e"># please see the online documentation at vagrantup.com.</span>
-
-  <span style="color:#75715e"># Every Vagrant virtual environment requires a box to build off of.</span>
-  config<span style="color:#f92672">.</span>vm<span style="color:#f92672">.</span>box <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;base&#34;</span>
-
-  <span style="color:#75715e"># The url from where the &#39;config.vm.box&#39; box will be fetched if it</span>
-  <span style="color:#75715e"># doesn&#39;t already exist on the user&#39;s system.</span>
-  <span style="color:#75715e"># config.vm.box_url = &#34;http://domain.com/path/to/above.box&#34;</span>
-
-  <span style="color:#75715e"># Boot with a GUI so you can see the screen. (Default is headless)</span>
-  <span style="color:#75715e"># config.vm.boot_mode = :gui</span>
-
-  <span style="color:#75715e"># Assign this VM to a host-only network IP, allowing you to access it</span>
-  <span style="color:#75715e"># via the IP. Host-only networks can talk to the host machine as well as</span>
-  <span style="color:#75715e"># any other machines on the same network, but cannot be accessed (through this</span>
-  <span style="color:#75715e"># network interface) by any external networks.</span>
-  <span style="color:#75715e"># config.vm.network :hostonly, &#34;192.168.33.10&#34;</span>
-
-  <span style="color:#75715e"># Assign this VM to a bridged network, allowing you to connect directly to a</span>
-  <span style="color:#75715e"># network using the host&#39;s network device. This makes the VM appear as another</span>
-  <span style="color:#75715e"># physical device on your network.</span>
-  <span style="color:#75715e"># config.vm.network :bridged</span>
-
-  <span style="color:#75715e"># Forward a port from the guest to the host, which allows for outside</span>
-  <span style="color:#75715e"># computers to access the VM, whereas host only networking does not.</span>
-  <span style="color:#75715e"># config.vm.forward_port 80, 8080</span>
-
-  <span style="color:#75715e"># Share an additional folder to the guest VM. The first argument is</span>
-  <span style="color:#75715e"># an identifier, the second is the path on the guest to mount the</span>
-  <span style="color:#75715e"># folder, and the third is the path on the host to the actual folder.</span>
-  <span style="color:#75715e"># config.vm.share_folder &#34;v-data&#34;, &#34;/vagrant_data&#34;, &#34;../data&#34;</span>
-
-  <span style="color:#75715e"># Enable provisioning with Puppet stand alone.  Puppet manifests</span>
-  <span style="color:#75715e"># are contained in a directory path relative to this Vagrantfile.</span>
-  <span style="color:#75715e"># You will need to create the manifests directory and a manifest in</span>
-  <span style="color:#75715e"># the file base.pp in the manifests_path directory.</span>
-  <span style="color:#75715e">#</span>
-  <span style="color:#75715e"># An example Puppet manifest to provision the message of the day:</span>
-  <span style="color:#75715e">#</span>
-  <span style="color:#75715e"># # group { &#34;puppet&#34;:</span>
-  <span style="color:#75715e"># #   ensure =&gt; &#34;present&#34;,</span>
-  <span style="color:#75715e"># # }</span>
-  <span style="color:#75715e"># #</span>
-  <span style="color:#75715e"># # File { owner =&gt; 0, group =&gt; 0, mode =&gt; 0644 }</span>
-  <span style="color:#75715e"># #</span>
-  <span style="color:#75715e"># # file { &#39;/etc/motd&#39;:</span>
-  <span style="color:#75715e"># #   content =&gt; &#34;Welcome to your Vagrant-built virtual machine!</span>
-  <span style="color:#75715e"># #               Managed by Puppet.\n&#34;</span>
-  <span style="color:#75715e"># # }</span>
-  <span style="color:#75715e">#</span>
-  <span style="color:#75715e"># config.vm.provision :puppet do |puppet|</span>
-  <span style="color:#75715e">#   puppet.manifests_path = &#34;manifests&#34;</span>
-  <span style="color:#75715e">#   puppet.manifest_file  = &#34;base.pp&#34;</span>
-  <span style="color:#75715e"># end</span>
-
-  <span style="color:#75715e"># Enable provisioning with chef solo, specifying a cookbooks path, roles</span>
-  <span style="color:#75715e"># path, and data_bags path (all relative to this Vagrantfile), and adding</span>
-  <span style="color:#75715e"># some recipes and/or roles.</span>
-  <span style="color:#75715e">#</span>
-  <span style="color:#75715e"># config.vm.provision :chef_solo do |chef|</span>
-  <span style="color:#75715e">#   chef.cookbooks_path = &#34;../my-recipes/cookbooks&#34;</span>
-  <span style="color:#75715e">#   chef.roles_path = &#34;../my-recipes/roles&#34;</span>
-  <span style="color:#75715e">#   chef.data_bags_path = &#34;../my-recipes/data_bags&#34;</span>
-  <span style="color:#75715e">#   chef.add_recipe &#34;mysql&#34;</span>
-  <span style="color:#75715e">#   chef.add_role &#34;web&#34;</span>
-  <span style="color:#75715e">#</span>
-  <span style="color:#75715e">#   # You may also specify custom JSON attributes:</span>
-  <span style="color:#75715e">#   chef.json = { :mysql_password =&gt; &#34;foo&#34; }</span>
-  <span style="color:#75715e"># end</span>
-
-  <span style="color:#75715e"># Enable provisioning with chef server, specifying the chef server URL,</span>
-  <span style="color:#75715e"># and the path to the validation key (relative to this Vagrantfile).</span>
-  <span style="color:#75715e">#</span>
-  <span style="color:#75715e"># The Opscode Platform uses HTTPS. Substitute your organization for</span>
-  <span style="color:#75715e"># ORGNAME in the URL and validation key.</span>
-  <span style="color:#75715e">#</span>
-  <span style="color:#75715e"># If you have your own Chef Server, use the appropriate URL, which may be</span>
-  <span style="color:#75715e"># HTTP instead of HTTPS depending on your configuration. Also change the</span>
-  <span style="color:#75715e"># validation key to validation.pem.</span>
-  <span style="color:#75715e">#</span>
-  <span style="color:#75715e"># config.vm.provision :chef_client do |chef|</span>
-  <span style="color:#75715e">#   chef.chef_server_url = &#34;https://api.opscode.com/organizations/ORGNAME&#34;</span>
-  <span style="color:#75715e">#   chef.validation_key_path = &#34;ORGNAME-validator.pem&#34;</span>
-  <span style="color:#75715e"># end</span>
-  <span style="color:#75715e">#</span>
-  <span style="color:#75715e"># If you&#39;re using the Opscode platform, your validator client is</span>
-  <span style="color:#75715e"># ORGNAME-validator, replacing ORGNAME with your organization name.</span>
-  <span style="color:#75715e">#</span>
-  <span style="color:#75715e"># IF you have your own Chef Server, the default validation client name is</span>
-  <span style="color:#75715e"># chef-validator, unless you changed the configuration.</span>
-  <span style="color:#75715e">#</span>
-  <span style="color:#75715e">#   chef.validation_client_name = &#34;ORGNAME-validator&#34;</span>
-<span style="color:#66d9ef">end</span></code></pre></div>
-<p>Подробнее о том, что этот файл может содержать можно почитать в <a href="http://vagrantup.com/v1/docs/vagrantfile.html" target="_blank">документации</a></p>
-
-<p>Например, можно изменить размер RAM, доступный операционной системе:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">    config<span style="color:#f92672">.</span>vm<span style="color:#f92672">.</span>customize <span style="color:#f92672">[</span><span style="color:#e6db74">&#34;modifyvm&#34;</span>, <span style="color:#e6db74">:id</span>, <span style="color:#e6db74">&#34;--memory&#34;</span>, <span style="color:#ae81ff">1536</span><span style="color:#f92672">]</span></code></pre></div>
-<p>Так как очень часто мы хотим взаимодействовать с виртуальной машиной снаружи, там нам необходима возможность пробросить порты из виртуальной машины в хост-систему.</p>
-
-<p>Это достигается следующим изменением конфигурации:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">  <span style="color:#75715e"># Включаем bridged network в виртуальной машине.</span>
-  config<span style="color:#f92672">.</span>vm<span style="color:#f92672">.</span>network <span style="color:#e6db74">:bridged</span>
-
-  <span style="color:#75715e"># Пробрасываем порты &lt;порт на виртуальной машине&gt; &lt;порт на хост-системе&gt;</span>
-  config<span style="color:#f92672">.</span>vm<span style="color:#f92672">.</span>forward_port <span style="color:#ae81ff">80</span><span style="color:#f92672"></span>, <span style="color:#ae81ff">8080</span>
-  <span style="color:#f92672"></span>config<span style="color:#f92672">.</span>vm<span style="color:#f92672">.</span>forward_port <span style="color:#ae81ff">443</span><span style="color:#f92672"></span>, <span style="color:#ae81ff">8443</span><span style="color:#f92672"></span></code></pre></div>
-<h2 id="provisioning">Provisioning</h2>
-
-<p>Vagrant не был бы столь успешен, если бы не позволял управляеть конфигурацией создаваемой виртуальной машины.</p>
-
-<p>Vagrant поддерживает следующие приложения, управляющие конфигурацией:</p>
-
-<ul>
-<li><a href="http://wiki.opscode.com/display/chef/Home" target="_blank">Chef</a></li>
-<li><a href="http://puppetlabs.com/puppet/puppet-open-source/" target="_blank">Puppet</a></li>
-<li><a href="http://www.gnu.org/software/bash/manual/bashref.html" target="_blank">Shell</a></li>
-</ul>
-
-<p>А также позволяет использовать написать <a href="http://vagrantup.com/v1/docs/provisioners/others.html" target="_blank">собственное расширение</a>.</p>
-
-<h2 id="управление-виртуальной-машиной">Управление виртуальной машиной</h2>
-
-<p>Управление виртуальной машиной осуществляется командой <code>vagrant</code> с переданным аргументом-действием. Полный список можно получить, выполнив <code>vagrant help</code>.</p>
-
-<p>Список наиболее часто используемых действий:</p>
-
-<ul>
-<li><code>up</code> - поднимает виртуальную машину. Если она не была создана, то создаёт её, используя информацию из файла <code>Vagrantfile</code>.</li>
-<li><code>halt</code> - останавливает виртуальную машину.</li>
-<li><code>provision</code> - обновляет конфигурацию софта на виртуальной машине.</li>
-<li><code>reload</code> - перезагружает виртуальную машину.</li>
-<li><code>ssh</code> - запускает SSH-соединение к машине.</li>
-</ul>
-
-<h2 id="документация-и-ссылки">Документация и ссылки</h2>
-
-<ul>
-<li><a href="http://vagrantup.com/" target="_blank">Официальный сайт</a></li>
-<li><a href="http://vagrantup.com/v1/docs/index.html" target="_blank">Документация</a></li>
-<li><a href="https://github.com/mitchellh/vagrant" target="_blank">Исходный код</a></li>
-</ul>
-
-        
-
-    </article>
-    
     
     
 
@@ -907,6 +800,8 @@ UserRest userRest <span style="color:#f92672">=</span> JAXRSClientFactory<span s
     
         <a href="/page/10/" class="label-pagination">10</a>
     
+        <a href="/page/11/" class="label-pagination">11</a>
+    
 
     
     
@@ -915,7 +810,7 @@ UserRest userRest <span style="color:#f92672">=</span> JAXRSClientFactory<span s
 
     
     
-        <a href="/page/10/" aria-label="Last"><i class="fa fa-angle-double-right fa-lg"></i></a>
+        <a href="/page/11/" aria-label="Last"><i class="fa fa-angle-double-right fa-lg"></i></a>
     
 
 </div>

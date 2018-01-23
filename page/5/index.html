@@ -107,6 +107,202 @@
 
 <header>
     <h1 class="entry-title">
+        <a href="https://uthark.github.io/2012/10/24/vagrant/">Автоматизируем работу с виртуальными машинами с помощью Vagrant</a>
+    </h1>
+
+</header>
+
+
+        
+        
+
+<p>Современные enterprise проекты очень часто имеют очень сложную инфраструктуру для развёртывания. Кроме того, во время разработки часто используются виртуальные машины. Например, может использоваться несколько виртуальных машин, на которых развёрнуты различные конфигурации софта.</p>
+
+<p><a href="http://vagrantup.com/" target="_blank">Vagrant</a> - это средство для управления виртуальными машинами на базе <a href="https://www.virtualbox.org/" target="_blank">Virtualbox</a>.</p>
+
+<h2 id="возможности">Возможности</h2>
+
+<ul>
+<li>Создание виртуальных машин с определённой, заранее заданной, конфигурацией.</li>
+<li>Лёгкое создание копии виртуальной машины, используя заранее подготовленный образ.</li>
+<li>Осуществление provisioning для новых виртуальных машин.</li>
+</ul>
+
+<h2 id="работа-с-vagrant">Работа с Vagrant</h2>
+
+<p>Для начала необходимо установить Virtualbox и Vagrant.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">sudo aptitude install virtualbox vagrant</code></pre></div>
+<p>После этого нам нужен образ, из которого мы можем создавать виртуальные машины. Его можно сделать самим или взять уже готовый с сайта Vagrant. Упростим себе жизнь и скачаем образ с сайта:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">    vagrant box add lucid32 http://files.vagrantup.com/lucid32.box</code></pre></div>
+<p>После этого, мы можем начать пользоваться Vagrant.</p>
+
+<p>Для этого нам нужно создать папку, в которой мы будем работать, например:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">    mkdir vagrant-test
+    cd vagrant-test</code></pre></div>
+<p>И инициализировать Vagrant:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">    vagrant init</code></pre></div>
+<p>Результатом работы этой команды будет файлик <code>Vagrantfile</code>, который содержит конфигурацию виртуальной машины для использования.</p>
+
+<p>Пример сгенерированного файла:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># -*- mode: ruby -*-</span>
+<span style="color:#75715e"># vi: set ft=ruby :</span>
+
+<span style="color:#66d9ef">Vagrant</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Config</span><span style="color:#f92672">.</span>run <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
+  <span style="color:#75715e"># All Vagrant configuration is done here. The most common configuration</span>
+  <span style="color:#75715e"># options are documented and commented below. For a complete reference,</span>
+  <span style="color:#75715e"># please see the online documentation at vagrantup.com.</span>
+
+  <span style="color:#75715e"># Every Vagrant virtual environment requires a box to build off of.</span>
+  config<span style="color:#f92672">.</span>vm<span style="color:#f92672">.</span>box <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;base&#34;</span>
+
+  <span style="color:#75715e"># The url from where the &#39;config.vm.box&#39; box will be fetched if it</span>
+  <span style="color:#75715e"># doesn&#39;t already exist on the user&#39;s system.</span>
+  <span style="color:#75715e"># config.vm.box_url = &#34;http://domain.com/path/to/above.box&#34;</span>
+
+  <span style="color:#75715e"># Boot with a GUI so you can see the screen. (Default is headless)</span>
+  <span style="color:#75715e"># config.vm.boot_mode = :gui</span>
+
+  <span style="color:#75715e"># Assign this VM to a host-only network IP, allowing you to access it</span>
+  <span style="color:#75715e"># via the IP. Host-only networks can talk to the host machine as well as</span>
+  <span style="color:#75715e"># any other machines on the same network, but cannot be accessed (through this</span>
+  <span style="color:#75715e"># network interface) by any external networks.</span>
+  <span style="color:#75715e"># config.vm.network :hostonly, &#34;192.168.33.10&#34;</span>
+
+  <span style="color:#75715e"># Assign this VM to a bridged network, allowing you to connect directly to a</span>
+  <span style="color:#75715e"># network using the host&#39;s network device. This makes the VM appear as another</span>
+  <span style="color:#75715e"># physical device on your network.</span>
+  <span style="color:#75715e"># config.vm.network :bridged</span>
+
+  <span style="color:#75715e"># Forward a port from the guest to the host, which allows for outside</span>
+  <span style="color:#75715e"># computers to access the VM, whereas host only networking does not.</span>
+  <span style="color:#75715e"># config.vm.forward_port 80, 8080</span>
+
+  <span style="color:#75715e"># Share an additional folder to the guest VM. The first argument is</span>
+  <span style="color:#75715e"># an identifier, the second is the path on the guest to mount the</span>
+  <span style="color:#75715e"># folder, and the third is the path on the host to the actual folder.</span>
+  <span style="color:#75715e"># config.vm.share_folder &#34;v-data&#34;, &#34;/vagrant_data&#34;, &#34;../data&#34;</span>
+
+  <span style="color:#75715e"># Enable provisioning with Puppet stand alone.  Puppet manifests</span>
+  <span style="color:#75715e"># are contained in a directory path relative to this Vagrantfile.</span>
+  <span style="color:#75715e"># You will need to create the manifests directory and a manifest in</span>
+  <span style="color:#75715e"># the file base.pp in the manifests_path directory.</span>
+  <span style="color:#75715e">#</span>
+  <span style="color:#75715e"># An example Puppet manifest to provision the message of the day:</span>
+  <span style="color:#75715e">#</span>
+  <span style="color:#75715e"># # group { &#34;puppet&#34;:</span>
+  <span style="color:#75715e"># #   ensure =&gt; &#34;present&#34;,</span>
+  <span style="color:#75715e"># # }</span>
+  <span style="color:#75715e"># #</span>
+  <span style="color:#75715e"># # File { owner =&gt; 0, group =&gt; 0, mode =&gt; 0644 }</span>
+  <span style="color:#75715e"># #</span>
+  <span style="color:#75715e"># # file { &#39;/etc/motd&#39;:</span>
+  <span style="color:#75715e"># #   content =&gt; &#34;Welcome to your Vagrant-built virtual machine!</span>
+  <span style="color:#75715e"># #               Managed by Puppet.\n&#34;</span>
+  <span style="color:#75715e"># # }</span>
+  <span style="color:#75715e">#</span>
+  <span style="color:#75715e"># config.vm.provision :puppet do |puppet|</span>
+  <span style="color:#75715e">#   puppet.manifests_path = &#34;manifests&#34;</span>
+  <span style="color:#75715e">#   puppet.manifest_file  = &#34;base.pp&#34;</span>
+  <span style="color:#75715e"># end</span>
+
+  <span style="color:#75715e"># Enable provisioning with chef solo, specifying a cookbooks path, roles</span>
+  <span style="color:#75715e"># path, and data_bags path (all relative to this Vagrantfile), and adding</span>
+  <span style="color:#75715e"># some recipes and/or roles.</span>
+  <span style="color:#75715e">#</span>
+  <span style="color:#75715e"># config.vm.provision :chef_solo do |chef|</span>
+  <span style="color:#75715e">#   chef.cookbooks_path = &#34;../my-recipes/cookbooks&#34;</span>
+  <span style="color:#75715e">#   chef.roles_path = &#34;../my-recipes/roles&#34;</span>
+  <span style="color:#75715e">#   chef.data_bags_path = &#34;../my-recipes/data_bags&#34;</span>
+  <span style="color:#75715e">#   chef.add_recipe &#34;mysql&#34;</span>
+  <span style="color:#75715e">#   chef.add_role &#34;web&#34;</span>
+  <span style="color:#75715e">#</span>
+  <span style="color:#75715e">#   # You may also specify custom JSON attributes:</span>
+  <span style="color:#75715e">#   chef.json = { :mysql_password =&gt; &#34;foo&#34; }</span>
+  <span style="color:#75715e"># end</span>
+
+  <span style="color:#75715e"># Enable provisioning with chef server, specifying the chef server URL,</span>
+  <span style="color:#75715e"># and the path to the validation key (relative to this Vagrantfile).</span>
+  <span style="color:#75715e">#</span>
+  <span style="color:#75715e"># The Opscode Platform uses HTTPS. Substitute your organization for</span>
+  <span style="color:#75715e"># ORGNAME in the URL and validation key.</span>
+  <span style="color:#75715e">#</span>
+  <span style="color:#75715e"># If you have your own Chef Server, use the appropriate URL, which may be</span>
+  <span style="color:#75715e"># HTTP instead of HTTPS depending on your configuration. Also change the</span>
+  <span style="color:#75715e"># validation key to validation.pem.</span>
+  <span style="color:#75715e">#</span>
+  <span style="color:#75715e"># config.vm.provision :chef_client do |chef|</span>
+  <span style="color:#75715e">#   chef.chef_server_url = &#34;https://api.opscode.com/organizations/ORGNAME&#34;</span>
+  <span style="color:#75715e">#   chef.validation_key_path = &#34;ORGNAME-validator.pem&#34;</span>
+  <span style="color:#75715e"># end</span>
+  <span style="color:#75715e">#</span>
+  <span style="color:#75715e"># If you&#39;re using the Opscode platform, your validator client is</span>
+  <span style="color:#75715e"># ORGNAME-validator, replacing ORGNAME with your organization name.</span>
+  <span style="color:#75715e">#</span>
+  <span style="color:#75715e"># IF you have your own Chef Server, the default validation client name is</span>
+  <span style="color:#75715e"># chef-validator, unless you changed the configuration.</span>
+  <span style="color:#75715e">#</span>
+  <span style="color:#75715e">#   chef.validation_client_name = &#34;ORGNAME-validator&#34;</span>
+<span style="color:#66d9ef">end</span></code></pre></div>
+<p>Подробнее о том, что этот файл может содержать можно почитать в <a href="http://vagrantup.com/v1/docs/vagrantfile.html" target="_blank">документации</a></p>
+
+<p>Например, можно изменить размер RAM, доступный операционной системе:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">    config<span style="color:#f92672">.</span>vm<span style="color:#f92672">.</span>customize <span style="color:#f92672">[</span><span style="color:#e6db74">&#34;modifyvm&#34;</span>, <span style="color:#e6db74">:id</span>, <span style="color:#e6db74">&#34;--memory&#34;</span>, <span style="color:#ae81ff">1536</span><span style="color:#f92672">]</span></code></pre></div>
+<p>Так как очень часто мы хотим взаимодействовать с виртуальной машиной снаружи, там нам необходима возможность пробросить порты из виртуальной машины в хост-систему.</p>
+
+<p>Это достигается следующим изменением конфигурации:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">  <span style="color:#75715e"># Включаем bridged network в виртуальной машине.</span>
+  config<span style="color:#f92672">.</span>vm<span style="color:#f92672">.</span>network <span style="color:#e6db74">:bridged</span>
+
+  <span style="color:#75715e"># Пробрасываем порты &lt;порт на виртуальной машине&gt; &lt;порт на хост-системе&gt;</span>
+  config<span style="color:#f92672">.</span>vm<span style="color:#f92672">.</span>forward_port <span style="color:#ae81ff">80</span><span style="color:#f92672"></span>, <span style="color:#ae81ff">8080</span>
+  <span style="color:#f92672"></span>config<span style="color:#f92672">.</span>vm<span style="color:#f92672">.</span>forward_port <span style="color:#ae81ff">443</span><span style="color:#f92672"></span>, <span style="color:#ae81ff">8443</span><span style="color:#f92672"></span></code></pre></div>
+<h2 id="provisioning">Provisioning</h2>
+
+<p>Vagrant не был бы столь успешен, если бы не позволял управляеть конфигурацией создаваемой виртуальной машины.</p>
+
+<p>Vagrant поддерживает следующие приложения, управляющие конфигурацией:</p>
+
+<ul>
+<li><a href="http://wiki.opscode.com/display/chef/Home" target="_blank">Chef</a></li>
+<li><a href="http://puppetlabs.com/puppet/puppet-open-source/" target="_blank">Puppet</a></li>
+<li><a href="http://www.gnu.org/software/bash/manual/bashref.html" target="_blank">Shell</a></li>
+</ul>
+
+<p>А также позволяет использовать написать <a href="http://vagrantup.com/v1/docs/provisioners/others.html" target="_blank">собственное расширение</a>.</p>
+
+<h2 id="управление-виртуальной-машиной">Управление виртуальной машиной</h2>
+
+<p>Управление виртуальной машиной осуществляется командой <code>vagrant</code> с переданным аргументом-действием. Полный список можно получить, выполнив <code>vagrant help</code>.</p>
+
+<p>Список наиболее часто используемых действий:</p>
+
+<ul>
+<li><code>up</code> - поднимает виртуальную машину. Если она не была создана, то создаёт её, используя информацию из файла <code>Vagrantfile</code>.</li>
+<li><code>halt</code> - останавливает виртуальную машину.</li>
+<li><code>provision</code> - обновляет конфигурацию софта на виртуальной машине.</li>
+<li><code>reload</code> - перезагружает виртуальную машину.</li>
+<li><code>ssh</code> - запускает SSH-соединение к машине.</li>
+</ul>
+
+<h2 id="документация-и-ссылки">Документация и ссылки</h2>
+
+<ul>
+<li><a href="http://vagrantup.com/" target="_blank">Официальный сайт</a></li>
+<li><a href="http://vagrantup.com/v1/docs/index.html" target="_blank">Документация</a></li>
+<li><a href="https://github.com/mitchellh/vagrant" target="_blank">Исходный код</a></li>
+</ul>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
         <a href="https://uthark.github.io/2012/04/28/spring-data-jpa_28/">Собственная реализация методов в Spring Data JPA</a>
     </h1>
 
@@ -850,135 +1046,6 @@ Spring Data значительно упрощает жизнь при испол
 
     </article>
     
-    <article>
-
-        
-        
-
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2012/01/28/aspectj/">Немножко магии от AspectJ</a>
-    </h1>
-
-</header>
-
-
-        
-        <p>Наверно, вы уже сталкивались с таким понятием, как AOП - <a href="http://en.wikipedia.org/wiki/Aspect-oriented_programming">аспектно-ориентированное программирование</a>.<br />
-<br />
-Обычно, про него вспоминают, когда говорят про <a href="http://static.springsource.org/spring/docs/current/reference/html/transaction.html#transaction-declarative-applying-more-than-just-tx-advice">декларативное использование транзакций</a>,  про <a href="https://docs.jboss.com/aop/1.0/aspect-library/reference/annotation15_security.html">проверку прав доступа</a>, либо про <a href="http://static.springsource.org/spring/docs/3.0.x/javadoc-api/org/springframework/aop/interceptor/CustomizableTraceInterceptor.html">реализацию журналирования</a>.<br />
-<br />
-Но это не единственные области применения АОП.<br />
-<br />
-Я хочу показать ещё пару областей применения из реальных проектов:<br />
-<br />
-1. Модификация исходного кода для реализации дополнительных возможностей.<br />
-2. Принудительная проверка контракта между модулями.<br />
-<br />
-<h4>Модификация исходного кода для реализации дополнительных возможностей</h4>Предположим, что у нас есть модуль в приложении, который предоставляет нужную нам функциональность. С модулем всё в порядке, кроме одного - все его методы могут выбрасывать проверяемые исключения, что ведёт к ухудшению читаемости кода, так как вместо простого вызова метода:<br />
-<br /></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">service<span style="color:#f92672">.</span><span style="color:#a6e22e">doUsefulThing</span><span style="color:#f92672">();</span></code></pre></div>
-<p>наш вызов превращается в <br /></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
-        service<span style="color:#f92672">.</span><span style="color:#a6e22e">doUsefulThing</span><span style="color:#f92672">();</span>
-    <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span> FirstServiceException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        processException<span style="color:#f92672">(</span>e<span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span> SecondServiceException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        processException<span style="color:#f92672">(</span>e<span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span></code></pre></div>
-<p>Дополнительная проблема в том, что у модуля количество модулей 10+, количество методов также велико, что приводит к тому, что блоки <tt>try/catch</tt> замусоривают код. Решение с использованием паттерна <tt><a href="https://en.wikipedia.org/wiki/Callback_(computer_programming)">Callback</a></tt> также приведёт к замусориванию кода.<br />
-<br />
-<h5>Вариант решения проблемы с использованием AOP</h5>Решение данной проблемы было таким - а что, если используя возможности AOP трансформировать проверяемое исключение в непроверяемое? Таким образом, мы сможем избавиться от скучной проверки на исключения в нашем коде, а для обработки исключения (ведь мы всегда его будем обрабатывать одинаково) достаточно будет использовать обработку исключения на верхнем уровне абстракции.<br />
-<br />
-Для более элегантного решения проблемы было решено добавить собственную аннотацию, которой нужно помечать метод, который использует сервис из &ldquo;плохого&rdquo; модуля.<br />
-<br /></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">package</span> com.blogger.atamanenko<span style="color:#f92672">;</span>
-
-<span style="color:#f92672">import</span> java.lang.annotation.Documented<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> java.lang.annotation.Inherited<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> java.lang.annotation.Retention<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> java.lang.annotation.Target<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> java.lang.annotation.RetentionPolicy<span style="color:#f92672">;</span>
-
-<span style="color:#a6e22e">@Retention</span><span style="color:#f92672">(</span>RetentionPolicy<span style="color:#f92672">.</span><span style="color:#a6e22e">RUNTIME</span><span style="color:#f92672">)</span>
-<span style="color:#a6e22e">@Target</span><span style="color:#f92672">({</span>ElementType<span style="color:#f92672">.</span><span style="color:#a6e22e">METHOD</span><span style="color:#f92672">})</span>
-<span style="color:#a6e22e">@Documented</span>
-<span style="color:#a6e22e">@Inherited</span>
-<span style="color:#66d9ef">public</span> <span style="color:#a6e22e">@interface</span> SuppressExceptions <span style="color:#f92672">{</span>
-<span style="color:#f92672">}</span></code></pre></div>
-<p>А также аспект, который бы делал всю нужную нам функциональность:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> aspect ExceptionSupressingAspect <span style="color:#f92672">{</span>
-
-        declare soft <span style="color:#f92672">:</span>ServiceException:  execution<span style="color:#f92672">(</span><span style="color:#a6e22e">@com.blogger.atamanenko.annotation.SuppressExceptions</span> <span style="color:#f92672">*</span> <span style="color:#f92672">*.*(..));</span>
-<span style="color:#f92672">}</span></code></pre></div>
-<p>Данный аспект делает в точности следующее: &ldquo;Смягчает&rdquo; исключение <tt>ServiceException</tt> для метода, который помечен аннотацией <tt>@SuppressExceptions</tt>.<br />
-<br />
-Пример использования:<br /></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@SuppressExceptions</span>
-    <span style="color:#66d9ef">protected</span> Entity <span style="color:#a6e22e">findEntity</span><span style="color:#f92672">(</span><span style="color:#66d9ef">final</span> Identifiable id<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        <span style="color:#66d9ef">return</span> entityService<span style="color:#f92672">.</span><span style="color:#a6e22e">findById</span><span style="color:#f92672">(</span>id<span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span></code></pre></div>
-<p><h4>Принудительная проверка контракта между модулями</h4>Часто нам необходимо принудительно требовать выполнения каких-то архитектурных ограничений, например, контроллеры должны работать только с сервисами и им запрещено напрямую обращаться к базе данных.<br />
-<br />
-Для реализации таких проверок можно также использовать возможности AOP.<br />
-<br />
-Предположим, что в нашем приложении модуль сервиса выставляет наружу <a href="http://java.sun.com/blueprints/corej2eepatterns/Patterns/TransferObject.html">DTO</a> для работы, скрывая при этом классы модели. Для того, чтобы явно запретить доступ к классам и методам модели нам необходимо создать аспект, который бы вызывал ошибку компиляции при нарушении ограничения.<br />
-<br /></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">aspect ForbidAccessToModelAspect <span style="color:#f92672">{</span>
-
-<span style="color:#75715e">//      Full prohibition of access to model:
-</span><span style="color:#75715e"></span>        pointcut <span style="color:#a6e22e">accessModel</span><span style="color:#f92672">():</span> call<span style="color:#f92672">(*</span> com<span style="color:#f92672">.</span><span style="color:#a6e22e">blogger</span><span style="color:#f92672">.</span><span style="color:#a6e22e">atamanenko</span><span style="color:#f92672">.</span><span style="color:#a6e22e">app</span><span style="color:#f92672">.</span><span style="color:#a6e22e">model</span><span style="color:#f92672">..*.*(..));</span>
-        declare error: accessModel<span style="color:#f92672">()</span> <span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;Illegal call to model&#34;</span><span style="color:#f92672">;</span>
-<span style="color:#f92672">}</span></code></pre></div>
-<p>После объявления такого аспекта, мы получим ошибку компиляции, что, очевидным образом, приведёт к выполнению архитектурного ограничения.<br />
-<br />
-Если же нам необходимо разрешить доступ к одному пакету только из какого-то определённого другого, то мы можем модифицировать наш аспект следующим образом:<br /></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">aspect ForbidAccessToModelAspect2 <span style="color:#f92672">{</span>
-
-        pointcut <span style="color:#a6e22e">accessModel</span><span style="color:#f92672">():</span> call<span style="color:#f92672">(*</span> com<span style="color:#f92672">.</span><span style="color:#a6e22e">blogger</span><span style="color:#f92672">.</span><span style="color:#a6e22e">atamanenko</span><span style="color:#f92672">.</span><span style="color:#a6e22e">app</span><span style="color:#f92672">.</span><span style="color:#a6e22e">model</span><span style="color:#f92672">.**.*(..));</span>
-
-        <span style="color:#75715e">// Allow access to model from specific package for methods and constructors
-</span><span style="color:#75715e"></span>        pointcut <span style="color:#a6e22e">allowAccessModelFromSpecificPackage</span><span style="color:#f92672">():</span> withincode<span style="color:#f92672">(*</span> com<span style="color:#f92672">.</span><span style="color:#a6e22e">blogger</span><span style="color:#f92672">.</span><span style="color:#a6e22e">atamanenko</span><span style="color:#f92672">.</span><span style="color:#a6e22e">app</span><span style="color:#f92672">.</span><span style="color:#a6e22e">allowedpackage</span><span style="color:#f92672">..*.*(..));</span>
-        pointcut <span style="color:#a6e22e">allowAccessModelFromSpecificPackage2</span><span style="color:#f92672">():</span> withincode<span style="color:#f92672">(</span>com<span style="color:#f92672">.</span><span style="color:#a6e22e">blogger</span><span style="color:#f92672">.</span><span style="color:#a6e22e">atamanenko</span><span style="color:#f92672">.</span><span style="color:#a6e22e">app</span><span style="color:#f92672">.</span><span style="color:#a6e22e">allowedpackage</span><span style="color:#f92672">..*.</span><span style="color:#a6e22e">new</span><span style="color:#f92672">(..));</span>
-
-        <span style="color:#75715e">// forbid usage from any other methods.
-</span><span style="color:#75715e"></span>        declare error: accessModel<span style="color:#f92672">()</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!(</span>allowAccessModelFromSpecificPackage<span style="color:#f92672">()</span> <span style="color:#f92672">||</span> allowAccessModelFromSpecificPackage<span style="color:#f92672">()):</span><span style="color:#e6db74">&#34;Illegal call to Model from forbidden package&#34;</span><span style="color:#f92672">;</span>
-<span style="color:#f92672">}</span></code></pre></div>
-<p>Такой аспект, созданный в нашем модуле запретит нам использовать классы модели из всех пакетов, кроме <tt>com.blogger.atamanenko.app.allowedpackage</tt><br />
-<h4>Сборка приложения</h4>Файл аспекта нужно положить в каталог <tt>src/main/aspect</tt>, а для сборки приложения необходимо использовать не стандартный Oracle <a href="http://docs.oracle.com/javase/6/docs/technotes/tools/solaris/javac.html">Java Compiler</a>, а <a href="http://eclipse.org/aspectj/downloads.php">AspectJ compiler</a>.<br />
-<br />
-Пример конфигурации для <a href="https://maven.apache.org/">Apache Maven</a>:<br />
-<br /></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;plugin&gt;</span>
-    <span style="color:#f92672">&lt;groupId&gt;</span>org.codehaus.mojo<span style="color:#f92672">&lt;/groupId&gt;</span>
-    <span style="color:#f92672">&lt;artifactId&gt;</span>aspectj-maven-plugin<span style="color:#f92672">&lt;/artifactId&gt;</span>
-    <span style="color:#f92672">&lt;version&gt;</span>${aspectj-maven-plugin.version}<span style="color:#f92672">&lt;/version&gt;</span>
-    <span style="color:#f92672">&lt;configuration&gt;</span>
-        <span style="color:#f92672">&lt;complianceLevel&gt;</span>1.6<span style="color:#f92672">&lt;/complianceLevel&gt;</span>
-        <span style="color:#f92672">&lt;aspectLibraries&gt;</span>
-            <span style="color:#f92672">&lt;aspectLibrary&gt;</span>
-                <span style="color:#f92672">&lt;groupId&gt;</span>org.springframework<span style="color:#f92672">&lt;/groupId&gt;</span>
-                <span style="color:#f92672">&lt;artifactId&gt;</span>spring-aspects<span style="color:#f92672">&lt;/artifactId&gt;</span>
-            <span style="color:#f92672">&lt;/aspectLibrary&gt;</span>
-        <span style="color:#f92672">&lt;/aspectLibraries&gt;</span>
-        <span style="color:#f92672">&lt;verbose&gt;</span>true<span style="color:#f92672">&lt;/verbose&gt;</span>
-    <span style="color:#f92672">&lt;/configuration&gt;</span>
-    <span style="color:#f92672">&lt;executions&gt;</span>
-        <span style="color:#f92672">&lt;execution&gt;</span>
-            <span style="color:#f92672">&lt;phase&gt;</span>process-sources<span style="color:#f92672">&lt;/phase&gt;</span>
-            <span style="color:#f92672">&lt;goals&gt;</span>
-                <span style="color:#f92672">&lt;goal&gt;</span>compile<span style="color:#f92672">&lt;/goal&gt;</span>
-                <span style="color:#f92672">&lt;goal&gt;</span>test-compile<span style="color:#f92672">&lt;/goal&gt;</span>
-            <span style="color:#f92672">&lt;/goals&gt;</span>
-        <span style="color:#f92672">&lt;/execution&gt;</span>
-    <span style="color:#f92672">&lt;/executions&gt;</span>
-<span style="color:#f92672">&lt;/plugin&gt;</span></code></pre></div>
-<p><h4>Заключение</h4>Вот в общем-то и всё. Я сознательно не стал описывать языковые конструкции аспектов, так как они подробно описаны в <a href="https://www.eclipse.org/aspectj/doc/next/progguide/index.html">руководстве AspectJ</a></p>
-
-        
-
-    </article>
-    
     
     
 
@@ -1020,6 +1087,8 @@ Spring Data значительно упрощает жизнь при испол
     
         <a href="/page/10/" class="label-pagination">10</a>
     
+        <a href="/page/11/" class="label-pagination">11</a>
+    
 
     
     
@@ -1028,7 +1097,7 @@ Spring Data значительно упрощает жизнь при испол
 
     
     
-        <a href="/page/10/" aria-label="Last"><i class="fa fa-angle-double-right fa-lg"></i></a>
+        <a href="/page/11/" aria-label="Last"><i class="fa fa-angle-double-right fa-lg"></i></a>
     
 
 </div>

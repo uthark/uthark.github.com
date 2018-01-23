@@ -107,6 +107,145 @@
 
 <header>
     <h1 class="entry-title">
+        <a href="https://uthark.github.io/post/2018-01-22-go-restful-yaml/">How to add YAML support to go-restful</a>
+    </h1>
+
+</header>
+
+
+        
+        <p><a href="https://github.com/emicklei/go-restful" target="_blank">go-restful</a> is a <a href="https://golang.org" target="_blank">go</a> package used for building REST-style web services.
+It is very powerful, but it supports JSON and XML out of the box only. Fortunately, go-restful allows to register custom serialization schemes.</p>
+
+<p>To do so, it provides a handy interface <a href="https://godoc.org/github.com/emicklei/go-restful#EntityReaderWriter" target="_blank">EntityReaderWriter</a>, which contains only two methods:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// EntityReaderWriter can read and write values using an encoding such as JSON,XML.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">EntityReaderWriter</span> <span style="color:#66d9ef">interface</span> {
+    <span style="color:#75715e">// Read a serialized version of the value from the request.
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// The Request may have a decompressing reader. Depends on Content-Encoding.
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">Read</span>(<span style="color:#a6e22e">req</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Request</span>, <span style="color:#a6e22e">v</span> <span style="color:#66d9ef">interface</span>{}) <span style="color:#66d9ef">error</span>
+
+    <span style="color:#75715e">// Write a serialized version of the value on the response.
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// The Response may have a compressing writer. Depends on Accept-Encoding.
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// status should be a valid Http Status code
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">Write</span>(<span style="color:#a6e22e">resp</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Response</span>, <span style="color:#a6e22e">status</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">v</span> <span style="color:#66d9ef">interface</span>{}) <span style="color:#66d9ef">error</span>
+}</code></pre></div>
+<p>What we need to do is to implement this interface and register it in go-restful.</p>
+
+<p>Let’s implement the interface:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">restyaml</span>
+
+<span style="color:#f92672">import</span> (
+	<span style="color:#e6db74">&#34;io&#34;</span>
+	<span style="color:#e6db74">&#34;io/ioutil&#34;</span>
+
+	<span style="color:#e6db74">&#34;github.com/emicklei/go-restful&#34;</span>
+	<span style="color:#e6db74">&#34;gopkg.in/yaml.v2&#34;</span>
+)
+
+<span style="color:#75715e">// MediaTypeApplicationYaml is a Mime Type for YAML.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">MediaTypeApplicationYaml</span> = <span style="color:#e6db74">&#34;application/x-yaml&#34;</span>
+
+<span style="color:#75715e">// YamlReaderWriter implements EntityReaderWriter for YAML objects to be used by restful.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">YamlReaderWriter</span> <span style="color:#66d9ef">struct</span> {
+	<span style="color:#a6e22e">contentType</span> <span style="color:#66d9ef">string</span>
+}
+
+<span style="color:#75715e">// NewYamlReaderWriter creates new instance.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">NewYamlReaderWriter</span>(<span style="color:#a6e22e">contentType</span> <span style="color:#66d9ef">string</span>) <span style="color:#a6e22e">restful</span>.<span style="color:#a6e22e">EntityReaderWriter</span> {
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">YamlReaderWriter</span>{<span style="color:#a6e22e">contentType</span>: <span style="color:#a6e22e">contentType</span>}
+}
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">closeWithErrHandle</span>(<span style="color:#a6e22e">c</span> <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">Closer</span>) {
+	<span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Close</span>()
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		<span style="color:#a6e22e">logger</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Unable to close resource: &#34;</span>, <span style="color:#a6e22e">err</span>)
+	}
+}
+
+<span style="color:#75715e">// Read a serialized version of the value from the request.
+</span><span style="color:#75715e">// The Request may have a decompressing reader. Depends on Content-Encoding.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">e</span> <span style="color:#a6e22e">YamlReaderWriter</span>) <span style="color:#a6e22e">Read</span>(<span style="color:#a6e22e">req</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">restful</span>.<span style="color:#a6e22e">Request</span>, <span style="color:#a6e22e">v</span> <span style="color:#66d9ef">interface</span>{}) <span style="color:#66d9ef">error</span> {
+	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">closeWithErrHandle</span>(<span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">Request</span>.<span style="color:#a6e22e">Body</span>)
+	<span style="color:#a6e22e">bytes</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ioutil</span>.<span style="color:#a6e22e">ReadAll</span>(<span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">Request</span>.<span style="color:#a6e22e">Body</span>)
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
+	}
+	<span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">yaml</span>.<span style="color:#a6e22e">Unmarshal</span>(<span style="color:#a6e22e">bytes</span>, <span style="color:#a6e22e">v</span>)
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
+}
+
+<span style="color:#75715e">// Write a serialized version of the value on the response.
+</span><span style="color:#75715e">// The Response may have a compressing writer. Depends on Accept-Encoding.
+</span><span style="color:#75715e">// status should be a valid Http Status code
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">e</span> <span style="color:#a6e22e">YamlReaderWriter</span>) <span style="color:#a6e22e">Write</span>(<span style="color:#a6e22e">resp</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">restful</span>.<span style="color:#a6e22e">Response</span>, <span style="color:#a6e22e">status</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">v</span> <span style="color:#66d9ef">interface</span>{}) <span style="color:#66d9ef">error</span> {
+	<span style="color:#a6e22e">bytes</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">yaml</span>.<span style="color:#a6e22e">Marshal</span>(<span style="color:#a6e22e">v</span>)
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
+	}
+
+	<span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">WriteHeader</span>(<span style="color:#a6e22e">status</span>)
+	<span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">Write</span>(<span style="color:#a6e22e">bytes</span>)
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
+}</code></pre></div>
+<p>For implementing actual reading/writing of YAML I use library called <a href="https://github.com/go-yaml/yaml" target="_blank">go-yaml</a>. The implementation is straightforward, just call <a href="https://godoc.org/gopkg.in/yaml.v2#Marshal" target="_blank"><code>Marshal</code></a> and <a href="https://godoc.org/gopkg.in/yaml.v2#Unmarshal" target="_blank"><code>Unmarshal</code></a> methods and do an error processing.</p>
+
+<p>The final step is to register newly written <code>YamlReaderWriter</code> in go-restful container during application startup.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">rest</span>
+
+<span style="color:#f92672">import</span> (
+	<span style="color:#e6db74">&#34;context&#34;</span>
+	<span style="color:#e6db74">&#34;fmt&#34;</span>
+	<span style="color:#e6db74">&#34;net/http&#34;</span>
+	<span style="color:#e6db74">&#34;os&#34;</span>
+	<span style="color:#e6db74">&#34;os/signal&#34;</span>
+	<span style="color:#e6db74">&#34;strconv&#34;</span>
+	<span style="color:#e6db74">&#34;syscall&#34;</span>
+	<span style="color:#e6db74">&#34;time&#34;</span>
+
+	<span style="color:#e6db74">&#34;bitbucket.org/uthark/yttrium/internal/config&#34;</span>
+	<span style="color:#e6db74">&#34;bitbucket.org/uthark/yttrium/internal/mime&#34;</span>
+	<span style="color:#e6db74">&#34;github.com/emicklei/go-restful&#34;</span>
+)
+
+<span style="color:#75715e">// Init initializes server.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">init</span>() {
+
+	<span style="color:#a6e22e">restful</span>.<span style="color:#a6e22e">SetLogger</span>(<span style="color:#a6e22e">logger</span>)
+	<span style="color:#a6e22e">restful</span>.<span style="color:#a6e22e">DefaultResponseContentType</span>(<span style="color:#a6e22e">restful</span>.<span style="color:#a6e22e">MIME_JSON</span>)
+	<span style="color:#a6e22e">restful</span>.<span style="color:#a6e22e">RegisterEntityAccessor</span>(<span style="color:#a6e22e">restyaml</span>.<span style="color:#a6e22e">MediaTypeApplicationYaml</span>, <span style="color:#a6e22e">restyaml</span>.<span style="color:#a6e22e">NewYamlReaderWriter</span>(<span style="color:#a6e22e">restyaml</span>.<span style="color:#a6e22e">MediaTypeApplicationYaml</span>))
+
+	<span style="color:#75715e">// register web-services in restful and start http…
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">// omitted for brevity
+</span><span style="color:#75715e"></span>}</code></pre></div>
+<p>Now, we can submit requests in YAML format to our API:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ curl -H <span style="color:#e6db74">&#34;Accept: application/x-yaml&#34;</span> http://localhost:8080/task
+- id: dd453ac9-6e8d-4f37-88a9-4e6d5b653e8d
+  name: Another Task
+  dateAdded: <span style="color:#ae81ff">2018</span>-01-20T20:05:09.378Z
+  dateCompleted: <span style="color:#ae81ff">0001</span>-01-01T00:00:00Z</code></pre></div>
+<p>If we don’t specify header, the output will be in JSON:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ curl http://localhost:8080/task
+<span style="color:#f92672">[</span>
+  <span style="color:#f92672">{</span>
+   <span style="color:#e6db74">&#34;id&#34;</span>: <span style="color:#e6db74">&#34;dd453ac9-6e8d-4f37-88a9-4e6d5b653e8d&#34;</span>,
+   <span style="color:#e6db74">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Another Task&#34;</span>,
+   <span style="color:#e6db74">&#34;dateAdded&#34;</span>: <span style="color:#e6db74">&#34;2018-01-20T20:05:09.378Z&#34;</span>,
+   <span style="color:#e6db74">&#34;dateCompleted&#34;</span>: <span style="color:#e6db74">&#34;0001-01-01T00:00:00Z&#34;</span>
+  <span style="color:#f92672">}</span>
+ <span style="color:#f92672">]</span>                        </code></pre></div>
+<p>If you have any questions, feel free to ping me on Twitter.</p>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
         <a href="https://uthark.github.io/2017/11/21/migrate-to-hugo/">Migration to hugo completed</a>
     </h1>
 
@@ -454,26 +593,6 @@ Initialize mocks with MockitoAnnotations:</p>
 
     </article>
     
-    <article>
-
-        
-        
-
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2014/03/28/atom-dot-io-invites/">Atom.io invites</a>
-    </h1>
-
-</header>
-
-
-        
-        <p>If anyone needs invites to <a href="http://atom.io" target="_blank">atom.io</a>, text editor from github - ask me in comments. I do have 3 invites to share.</p>
-
-        
-
-    </article>
-    
     
     
 
@@ -512,6 +631,8 @@ Initialize mocks with MockitoAnnotations:</p>
     
         <a href="/page/10/" class="label-pagination">10</a>
     
+        <a href="/page/11/" class="label-pagination">11</a>
+    
 
     
     
@@ -520,7 +641,7 @@ Initialize mocks with MockitoAnnotations:</p>
 
     
     
-        <a href="/page/10/" aria-label="Last"><i class="fa fa-angle-double-right fa-lg"></i></a>
+        <a href="/page/11/" aria-label="Last"><i class="fa fa-angle-double-right fa-lg"></i></a>
     
 
 </div>

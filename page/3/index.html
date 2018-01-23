@@ -107,6 +107,64 @@
 
 <header>
     <h1 class="entry-title">
+        <a href="https://uthark.github.io/2014/03/02/octopress-quote-fix/">Fixing unescaped quotes in page rendering in Octopress</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>When I created <a href="/about">About Me</a> page I found issue with rendering: for some reason styles and some javascripts were missing on the page.</p>
+
+<p>Investigation showed that content in <code>meta tag</code> description contained unquoted quotes, thus resulting in broken HTML.</p>
+
+<p>After searching within <a href="https://github.com/imathis/octopress/" target="_blank">octopress sources</a> I found the issue:</p>
+
+<p>Rendering of description tag, excerpt from _includes/head.html:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">{<span style="color:#e6db74">% capture </span> description <span style="color:#e6db74">%}
+</span><span style="color:#e6db74">    {% if page.description %}</span>
+        {{ page<span style="color:#f92672">.</span>description }}
+    {<span style="color:#e6db74">% else </span> <span style="color:#e6db74">%}
+</span><span style="color:#e6db74">        {{ content | raw_content }</span>}
+    {<span style="color:#e6db74">% endif </span> <span style="color:#e6db74">%}
+</span><span style="color:#e6db74">{% endcapture %}</span>
+<span style="color:#f92672">&lt;</span>meta name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;description&#34;</span> content<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;{{ description | strip_html | condense_spaces | truncate:150 }}&#34;</span><span style="color:#f92672">&gt;</span></code></pre></div>
+<p>After capturing, <code>description</code> is being processed with filters, defined in <code>plugins/octopress_filters.rb</code>. In this case, the following filter are applied:</p>
+
+<ul>
+<li>strip_html</li>
+<li>condense_spaces</li>
+<li>truncate</li>
+</ul>
+
+<p>So, as you can see, if description contains quotes, then it will be rendered as is, without any escaping and quotes will break resulting page.</p>
+
+<p>In order to fix this I decided to add new filter, which will just remove quotes.</p>
+
+<p>So, let&rsquo;s add new function, <code>strip_quotes</code> in <code>plugins/octopress_filters.rb</code>:</p>
+
+<p>strip_quotes function:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># Strips quotes</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">strip_quotes</span>(input)
+    input<span style="color:#f92672">.</span>gsub(<span style="color:#e6db74">/[\&#39;\&#34;&#34;]/</span>, <span style="color:#e6db74">&#39;&#39;</span>)
+<span style="color:#66d9ef">end</span></code></pre></div>
+<p>And then we need to update rendering of description tag - add newly created filter:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">meta</span> <span style="color:#a6e22e">name</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;description&#34;</span> <span style="color:#a6e22e">content</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;{{ description | strip_html | condense_spaces | strip_quotes | truncate:150 }}&#34;</span>&gt;</code></pre></div>
+<p>After this fix description is being rendered properly.</p>
+
+<p>P.S. In order to render properly <code>{{</code> and <code>}}</code> in the octopress it is required to put content you want to render within <code>raw</code> and <code>endraw</code> tags. See <a href="http://stackoverflow.com/questions/15786144/how-to-escape-in-markdown-on-octopress" target="_blank">StackOverflow</a> <a href="http://stackoverflow.com/questions/3426182/how-to-escape-liquid-template-tags/13582517#13582517" target="_blank">questions</a> for details.</p>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
         <a href="https://uthark.github.io/2014/03/02/lyne-game/">Lyne Game</a>
     </h1>
 
@@ -403,95 +461,6 @@ Click on <code>Edit</code> button in <code>Triggers</code> section.</p>
 
     </article>
     
-    <article>
-
-        
-        
-
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2013/06/29/spring-enable-annotation/">Пишем @Enable*-аннотацию для Spring</a>
-    </h1>
-
-</header>
-
-
-        
-        <p>Начиная с версии 3.1 Spring поддерживает декларативное включение необходимой функциональности через, так называемые, <code>@Enable*</code> аннотации. Пример таких аннотаций:
-<a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/web/servlet/config/annotation/EnableWebMvc.html" target="_blank"><code>org.springframework.web.servlet.config.annotation.EnableWebMvc</code></a>, <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/cache/annotation/EnableCaching.html" target="_blank"><code>org.springframework.cache.annotation.EnableCaching</code></a>, <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/scheduling/annotation/EnableAsync.html" target="_blank"><code>org.springframework.scheduling.annotation.EnableAsync</code></a> и другие.</p>
-
-<p>В продолжение темы <a href="/blog/2013/06/28/jaxrs-spring-autowiring/">прошлого поста</a>, я хочу показать, как можно добавить собственную <code>@Enable</code> аннотацию.</p>
-
-<p>Для автоматического создания клиента для REST-ресурса нам необходима следующая информация:</p>
-
-<ol>
-<li>Пакет, в котором искать интерфейсы, проаннотированные аннотацией <a href="https://jax-rs-spec.java.net/nonav/2.0/apidocs/javax/ws/rs/Path.html" target="_blank"><code>@Path()</code></a></li>
-<li>Базовый адрес REST-приложения.</li>
-</ol>
-
-<p>Для того, чтобы передать эту информацию, мы создадим два атрибута в аннотации: <code>scanPackage()</code> и <code>endpoint()</code></p>
-
-<p>Кроме того, для обработки аннотации необходимо указать обработчик. Это можно сделать передав подкласс <a href="http://static.springsource.org/spring-framework/docs/3.2.x/javadoc-api/org/springframework/context/annotation/ImportBeanDefinitionRegistrar.html" target="_blank"><code>org.springframework.context.annotation.ImportBeanDefinitionRegistrar</code></a> через аннотацию <a href="http://static.springsource.org/spring-framework/docs/3.2.x/javadoc-api/org/springframework/context/annotation/Import.html" target="_blank"><code>@Import</code></a></p>
-
-<p>Пишем аннотацию:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Target</span><span style="color:#f92672">(</span>ElementType<span style="color:#f92672">.</span><span style="color:#a6e22e">TYPE</span><span style="color:#f92672">)</span>
-<span style="color:#a6e22e">@Retention</span><span style="color:#f92672">(</span>RetentionPolicy<span style="color:#f92672">.</span><span style="color:#a6e22e">RUNTIME</span><span style="color:#f92672">)</span>
-<span style="color:#a6e22e">@Documented</span>
-<span style="color:#a6e22e">@Inherited</span>
-<span style="color:#a6e22e">@Import</span><span style="color:#f92672">(</span>JaxRsRestClientRegistrar<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">)</span>
-<span style="color:#66d9ef">public</span> <span style="color:#a6e22e">@interface</span> EnableJaxRsRestClient <span style="color:#f92672">{</span>
-
-    String <span style="color:#a6e22e">scanPackage</span><span style="color:#f92672">();</span>
-
-    String <span style="color:#a6e22e">endpoint</span><span style="color:#f92672">();</span>
-<span style="color:#f92672">}</span></code></pre></div>
-<p>Теперь осталось написать реализацию интерфейса <code>org.springframework.context.annotation.ImportBeanDefinitionRegistrar</code>. Так как у нас уже есть написанный ранее <a href="http://static.springsource.org/spring-framework/docs/3.2.x/javadoc-api/org/springframework/beans/factory/config/BeanFactoryPostProcessor.html" target="_blank">BeanFactoryPostProcessor</a> в виде <code>RestClientPostProcessor</code>, реализация интерфейса будет простой - мы создадим описание бина для Spring и зарегистрируем его в реестре бинов.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">JaxRsRestClientRegistrar</span> <span style="color:#66d9ef">implements</span> ImportBeanDefinitionRegistrar <span style="color:#f92672">{</span>
-
-    <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> String PROPERTY_ENDPOINT <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;endpoint&#34;</span><span style="color:#f92672">;</span>
-
-    <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> String PROPERTY_SCAN_PACKAGE <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;basePackage&#34;</span><span style="color:#f92672">;</span>
-
-    <span style="color:#a6e22e">@Override</span>
-    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">registerBeanDefinitions</span><span style="color:#f92672">(</span>AnnotationMetadata importingClassMetadata<span style="color:#f92672">,</span> BeanDefinitionRegistry registry<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        EnableJaxRsRestClient annotation <span style="color:#f92672">=</span>
-                <span style="color:#f92672">(</span>EnableJaxRsRestClient<span style="color:#f92672">)</span> <span style="color:#f92672">((</span>StandardClassMetadata<span style="color:#f92672">)</span> importingClassMetadata<span style="color:#f92672">).</span><span style="color:#a6e22e">getIntrospectedClass</span><span style="color:#f92672">()</span>
-                        <span style="color:#f92672">.</span><span style="color:#a6e22e">getAnnotation</span><span style="color:#f92672">(</span>EnableJaxRsRestClient<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
-        String scanPackage <span style="color:#f92672">=</span> annotation<span style="color:#f92672">.</span><span style="color:#a6e22e">scanPackage</span><span style="color:#f92672">();</span>
-        String endpoint <span style="color:#f92672">=</span> annotation<span style="color:#f92672">.</span><span style="color:#a6e22e">endpoint</span><span style="color:#f92672">();</span>
-
-        GenericBeanDefinition beanDefinition <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> GenericBeanDefinition<span style="color:#f92672">();</span>
-        beanDefinition<span style="color:#f92672">.</span><span style="color:#a6e22e">setAbstract</span><span style="color:#f92672">(</span><span style="color:#66d9ef">false</span><span style="color:#f92672">);</span>
-        beanDefinition<span style="color:#f92672">.</span><span style="color:#a6e22e">setBeanClass</span><span style="color:#f92672">(</span>RestClientPostProcessor<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
-        MutablePropertyValues propertyValues <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> MutablePropertyValues<span style="color:#f92672">();</span>
-        propertyValues<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>PROPERTY_ENDPOINT<span style="color:#f92672">,</span> endpoint<span style="color:#f92672">);</span>
-        propertyValues<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>PROPERTY_SCAN_PACKAGE<span style="color:#f92672">,</span> scanPackage<span style="color:#f92672">);</span>
-        beanDefinition<span style="color:#f92672">.</span><span style="color:#a6e22e">setPropertyValues</span><span style="color:#f92672">(</span>propertyValues<span style="color:#f92672">);</span>
-
-        registry<span style="color:#f92672">.</span><span style="color:#a6e22e">registerBeanDefinition</span><span style="color:#f92672">(</span>ClassUtils<span style="color:#f92672">.</span><span style="color:#a6e22e">getShortName</span><span style="color:#f92672">(</span>getClass<span style="color:#f92672">()),</span> beanDefinition<span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span>
-<span style="color:#f92672">}</span></code></pre></div>
-<p>Теперь мы можем использовать аннотацию:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Configuration</span>
-<span style="color:#a6e22e">@EnableJaxRsRestClient</span><span style="color:#f92672">(</span>scanPackage <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&lt;base package&gt;&#34;</span><span style="color:#f92672">,</span> endpoint <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;${remote.rest.endpoint}&#34;</span><span style="color:#f92672">)</span>
-<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TestAutowiringConfiguration</span> <span style="color:#f92672">{</span>
-
-    <span style="color:#a6e22e">@Bean</span>
-    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> PropertyPlaceholderConfigurer <span style="color:#a6e22e">configurer</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-        PropertyPlaceholderConfigurer pph <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> PropertyPlaceholderConfigurer<span style="color:#f92672">();</span>
-        pph<span style="color:#f92672">.</span><span style="color:#a6e22e">setLocation</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> ClassPathResource<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;application.properties&#34;</span><span style="color:#f92672">));</span>
-        <span style="color:#66d9ef">return</span> pph<span style="color:#f92672">;</span>
-    <span style="color:#f92672">}</span>
-
-<span style="color:#f92672">}</span></code></pre></div>
-<p>Обратите внимание, что endpoint можно передавать с использованием подстановочных свойств.</p>
-
-<p>На этом всё, если есть вопросы - <a href="https://plus.google.com/112372998073079463630/posts" target="_blank">спрашивайте в Google+</a></p>
-
-        
-
-    </article>
-    
     
     
 
@@ -533,6 +502,8 @@ Click on <code>Edit</code> button in <code>Triggers</code> section.</p>
     
         <a href="/page/10/" class="label-pagination">10</a>
     
+        <a href="/page/11/" class="label-pagination">11</a>
+    
 
     
     
@@ -541,7 +512,7 @@ Click on <code>Edit</code> button in <code>Triggers</code> section.</p>
 
     
     
-        <a href="/page/10/" aria-label="Last"><i class="fa fa-angle-double-right fa-lg"></i></a>
+        <a href="/page/11/" aria-label="Last"><i class="fa fa-angle-double-right fa-lg"></i></a>
     
 
 </div>

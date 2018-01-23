@@ -107,6 +107,26 @@
 
 <header>
     <h1 class="entry-title">
+        <a href="https://uthark.github.io/2014/03/28/atom-dot-io-invites/">Atom.io invites</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>If anyone needs invites to <a href="http://atom.io" target="_blank">atom.io</a>, text editor from github - ask me in comments. I do have 3 invites to share.</p>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+
+<header>
+    <h1 class="entry-title">
         <a href="https://uthark.github.io/2014/03/25/scala-for-the-intrigued/">Scala for the Intrigued</a>
     </h1>
 
@@ -438,64 +458,6 @@ cpuid.4.4.eax = &ldquo;0000:0000:0000:0000:0000:0000:0000:0000&rdquo;</p>
 
     </article>
     
-    <article>
-
-        
-        
-
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2014/03/02/octopress-quote-fix/">Fixing unescaped quotes in page rendering in Octopress</a>
-    </h1>
-
-</header>
-
-
-        
-        <p>When I created <a href="/about">About Me</a> page I found issue with rendering: for some reason styles and some javascripts were missing on the page.</p>
-
-<p>Investigation showed that content in <code>meta tag</code> description contained unquoted quotes, thus resulting in broken HTML.</p>
-
-<p>After searching within <a href="https://github.com/imathis/octopress/" target="_blank">octopress sources</a> I found the issue:</p>
-
-<p>Rendering of description tag, excerpt from _includes/head.html:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">{<span style="color:#e6db74">% capture </span> description <span style="color:#e6db74">%}
-</span><span style="color:#e6db74">    {% if page.description %}</span>
-        {{ page<span style="color:#f92672">.</span>description }}
-    {<span style="color:#e6db74">% else </span> <span style="color:#e6db74">%}
-</span><span style="color:#e6db74">        {{ content | raw_content }</span>}
-    {<span style="color:#e6db74">% endif </span> <span style="color:#e6db74">%}
-</span><span style="color:#e6db74">{% endcapture %}</span>
-<span style="color:#f92672">&lt;</span>meta name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;description&#34;</span> content<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;{{ description | strip_html | condense_spaces | truncate:150 }}&#34;</span><span style="color:#f92672">&gt;</span></code></pre></div>
-<p>After capturing, <code>description</code> is being processed with filters, defined in <code>plugins/octopress_filters.rb</code>. In this case, the following filter are applied:</p>
-
-<ul>
-<li>strip_html</li>
-<li>condense_spaces</li>
-<li>truncate</li>
-</ul>
-
-<p>So, as you can see, if description contains quotes, then it will be rendered as is, without any escaping and quotes will break resulting page.</p>
-
-<p>In order to fix this I decided to add new filter, which will just remove quotes.</p>
-
-<p>So, let&rsquo;s add new function, <code>strip_quotes</code> in <code>plugins/octopress_filters.rb</code>:</p>
-
-<p>strip_quotes function:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># Strips quotes</span>
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">strip_quotes</span>(input)
-    input<span style="color:#f92672">.</span>gsub(<span style="color:#e6db74">/[\&#39;\&#34;&#34;]/</span>, <span style="color:#e6db74">&#39;&#39;</span>)
-<span style="color:#66d9ef">end</span></code></pre></div>
-<p>And then we need to update rendering of description tag - add newly created filter:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">meta</span> <span style="color:#a6e22e">name</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;description&#34;</span> <span style="color:#a6e22e">content</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;{{ description | strip_html | condense_spaces | strip_quotes | truncate:150 }}&#34;</span>&gt;</code></pre></div>
-<p>After this fix description is being rendered properly.</p>
-
-<p>P.S. In order to render properly <code>{{</code> and <code>}}</code> in the octopress it is required to put content you want to render within <code>raw</code> and <code>endraw</code> tags. See <a href="http://stackoverflow.com/questions/15786144/how-to-escape-in-markdown-on-octopress" target="_blank">StackOverflow</a> <a href="http://stackoverflow.com/questions/3426182/how-to-escape-liquid-template-tags/13582517#13582517" target="_blank">questions</a> for details.</p>
-
-        
-
-    </article>
-    
     
     
 
@@ -537,6 +499,8 @@ cpuid.4.4.eax = &ldquo;0000:0000:0000:0000:0000:0000:0000:0000&rdquo;</p>
     
         <a href="/page/10/" class="label-pagination">10</a>
     
+        <a href="/page/11/" class="label-pagination">11</a>
+    
 
     
     
@@ -545,7 +509,7 @@ cpuid.4.4.eax = &ldquo;0000:0000:0000:0000:0000:0000:0000:0000&rdquo;</p>
 
     
     
-        <a href="/page/10/" aria-label="Last"><i class="fa fa-angle-double-right fa-lg"></i></a>
+        <a href="/page/11/" aria-label="Last"><i class="fa fa-angle-double-right fa-lg"></i></a>
     
 
 </div>
