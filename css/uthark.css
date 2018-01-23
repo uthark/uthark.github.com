@@ -2174,15 +2174,19 @@ div.codewrapper {
    by just modifying div.highlight I will screw the codecaption overflow as they have div.highlight too.
    This ">" syntax is something new that I learned.
    basically it will select only div.highlights that are direct childs of entry-content */
-div.entry-content > div.highlight {
+div.entry-content > div.highlight,
+div.blog-index article > div.highlight {
     border-color: #002B36;
     overflow-x: auto;
     overflow-y: hidden;
     margin-bottom: 0.4em;
 }
-div.entry-content > div.highlight pre {
+div.entry-content > div.highlight pre,
+div.blog-index article > div.highlight pre {
     margin: 0.5em;
     border: 0.7em solid #272822;
+    margin-bottom: 2em;
+    margin-top: 2em;
 }
 /* decrease h1 size in article body so we can use it in the article as heading */
 div.entry-content > h1 {
