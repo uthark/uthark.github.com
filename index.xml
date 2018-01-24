@@ -6,10 +6,19 @@
     <description>Recent content on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 22 Jan 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 24 Jan 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://uthark.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Section closed</title>
+      <link>https://uthark.github.io/2018/01/24/section-archived/</link>
+      <pubDate>Wed, 24 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/2018/01/24/section-archived/</guid>
+      <description>This section is no longer updated.</description>
+    </item>
     
     <item>
       <title>How to add YAML support to go-restful</title>
