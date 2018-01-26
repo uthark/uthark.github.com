@@ -198,7 +198,7 @@ h1 {
         font-size: 1.15em
     }
     h1 {
-        font-size: 1.4em;
+        font-size: 1.8em;
         line-height: 1.2em
     }
 }
@@ -1136,20 +1136,8 @@ article>footer p.meta {
 }
 .blog-index article+article {
 }
-#content .blog-index {
-    padding-top: 0;
-    padding-bottom: 0
-}
-#content .blog-index article {
-    padding-top: 2.5em;
-}
-#content .blog-index article header {
-    background: none;
-    padding-bottom: 0
-}
-#content .blog-index article h1 {
-    font-size: 1.8em
-}
+
+
 #content .blog-index article h1 a {
     color: inherit
 }
