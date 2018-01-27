@@ -2241,3 +2241,24 @@ h6 {
     left:   1rem;
   }
 }
+
+div.sharing {
+    position: relative;
+    text-align: right;
+    top: 0;
+    z-index: 1;
+    float:right;
+}
+
+div.sharing a {
+    color: black;
+}
+
+div.sharing a:hover {
+    color: red;
+}
+
+div.sharing a i.fa{
+    padding: 0.5em;
+    font-size: 1.5em;
+}
