@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
-<head>
-  <link href="http://gmpg.org/xfn/11" rel="profile">
+<html prefix="og: http://ogp.me/ns#">
+<head >
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
@@ -9,12 +8,19 @@
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
 
+  
+  <title>Двунаправленная ссылочная целостность</title>
+
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <meta name="author" content="Oleg Atamanenko">
+
 
   <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
 
 
-  
-  <title>Двунаправленная ссылочная целостность</title>
 
   
   
@@ -35,6 +41,7 @@
   
   
 
+
   
 
 
@@ -42,13 +49,28 @@
   <link href="https://feeds.feedburner.com/atamanenko" rel="alternate" type="application/rss+xml" title="Sharing knowledge" />
   <link href="https://feeds.feedburner.com/atamanenko" rel="feed" type="application/rss+xml" title="Sharing knowledge" />
   
+
   
   
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@LinkageError">
+  <meta name="twitter:creator" content="@LinkageError">
 
-  <meta name="description" content="">
-  <meta name="keywords" content="">
+  <meta name="twitter:title" content="Двунаправленная ссылочная целостность">
 
-  <meta name="author" content="Oleg Atamanenko">
+  
+
+  <meta property="og:title" content="Двунаправленная ссылочная целостность" />
+  <meta property="og:url" content="https://uthark.github.io/2009/07/07/blog-post/" />
+  <meta property="og:description" content="Здравствуйте.
+Я считаю, что разработчику всегда стоит иметь представление о том, как работают низлежащие абстракции. Хотя бы потому, что часто абстракции бывают протекающими.
+А веду я это к тому, что когда фреймворк вываливает стектрейс с несколькими вложенными (и, часто, для непосвященных непонятными) исключениями, то бывает непонятно, что с этим делать, особенно, если не знаешь, как реализована абстракция.
+Иногда бывает нужно хранить двунаправленные связи между таблицами. Например, есть игрок и есть его статистика и нужно, чтобы каждая из сущностей знала про другую." />
+
+  
+
+
+
 
 </head>
 <body>
@@ -116,7 +138,7 @@
 
         
         
-<div class="sharing"> 
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2009%2f07%2f07%2fblog-post%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=%d0%94%d0%b2%d1%83%d0%bd%d0%b0%d0%bf%d1%80%d0%b0%d0%b2%d0%bb%d0%b5%d0%bd%d0%bd%d0%b0%d1%8f%20%d1%81%d1%81%d1%8b%d0%bb%d0%be%d1%87%d0%bd%d0%b0%d1%8f%20%d1%86%d0%b5%d0%bb%d0%be%d1%81%d1%82%d0%bd%d0%be%d1%81%d1%82%d1%8c&url=https%3a%2f%2futhark.github.io%2f2009%2f07%2f07%2fblog-post%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></i></a>
 </div>
@@ -333,7 +355,7 @@ INITIALLY DEFERRED or INITIALLY IMMEDIATE</p>
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="https://twitter.com/LinkageError/" title="https://twitter.com/LinkageError/"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[creator:@LinkageError card:summary site:@LinkageError]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 

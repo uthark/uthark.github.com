@@ -1,8 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
-<head>
-	<meta name="generator" content="Hugo 0.34" />
-  <link href="http://gmpg.org/xfn/11" rel="profile">
+<html prefix="og: http://ogp.me/ns#">
+<head >
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
@@ -10,12 +8,19 @@
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
 
+  
+  <title>Sharing knowledge</title>
+
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <meta name="author" content="Oleg Atamanenko">
+
 
   <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
 
 
-  
-  <title>Sharing knowledge</title>
 
   
   
@@ -36,6 +41,7 @@
   
   
 
+
   
 
 
@@ -43,13 +49,9 @@
   <link href="https://feeds.feedburner.com/atamanenko" rel="alternate" type="application/rss+xml" title="Sharing knowledge" />
   <link href="https://feeds.feedburner.com/atamanenko" rel="feed" type="application/rss+xml" title="Sharing knowledge" />
   
-  
+
   
 
-  <meta name="description" content="">
-  <meta name="keywords" content="">
-
-  <meta name="author" content="Oleg Atamanenko">
 
 </head>
 <body>
@@ -119,7 +121,7 @@
 
         
         
-<div class="sharing"> 
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2009%2f07%2f07%2fblog-post%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=%d0%94%d0%b2%d1%83%d0%bd%d0%b0%d0%bf%d1%80%d0%b0%d0%b2%d0%bb%d0%b5%d0%bd%d0%bd%d0%b0%d1%8f%20%d1%81%d1%81%d1%8b%d0%bb%d0%be%d1%87%d0%bd%d0%b0%d1%8f%20%d1%86%d0%b5%d0%bb%d0%be%d1%81%d1%82%d0%bd%d0%be%d1%81%d1%82%d1%8c&url=https%3a%2f%2futhark.github.io%2f2009%2f07%2f07%2fblog-post%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></i></a>
 </div>
@@ -239,7 +241,7 @@ INITIALLY DEFERRED or INITIALLY IMMEDIATE</p>
 
         
         
-<div class="sharing"> 
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2009%2f07%2f04%2fopera-delicious%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=Opera%20%d0%b8%20del.icio.us&url=https%3a%2f%2futhark.github.io%2f2009%2f07%2f04%2fopera-delicious%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></i></a>
 </div>
@@ -259,7 +261,7 @@ INITIALLY DEFERRED or INITIALLY IMMEDIATE</p>
 <p>Посмотрев исходник букмарклета, а это обычный javascript, я добавил небольшой кусочек кода, который восстанавливает справедливость и тоже добавляет в поле Notes текст, выделенный на странице.</p>
 
 <p>Ниже привожу изменённый код букмарклета:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#a6e22e">javascript</span><span style="color:#f92672">:</span>(<span style="color:#66d9ef">function</span>(){<span style="color:#a6e22e">f</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#39;http://delicious.com/save?url=&#39;</span><span style="color:#f92672">+</span>encodeURIComponent(window.<span style="color:#a6e22e">location</span>.<span style="color:#a6e22e">href</span>)<span style="color:#f92672">+</span><span style="color:#e6db74">&#39;&amp;title=&#39;</span><span style="color:#f92672">+</span>encodeURIComponent(document.<span style="color:#a6e22e">title</span>)<span style="color:#f92672">+</span><span style="color:#e6db74">&#39;¬es=&#39;</span><span style="color:#f92672">+</span>encodeURIComponent(document.<span style="color:#a6e22e">getSelection</span>())<span style="color:#f92672">+</span><span style="color:#e6db74">&#39;&amp;v=5&amp;&#39;</span>;<span style="color:#a6e22e">a</span><span style="color:#f92672">=</span><span style="color:#66d9ef">function</span>(){<span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span>window.<span style="color:#a6e22e">open</span>(<span style="color:#a6e22e">f</span><span style="color:#f92672">+</span><span style="color:#e6db74">&#39;noui=1&amp;jump=doclose&#39;</span>,<span style="color:#e6db74">&#39;deliciousuiv5&#39;</span>,<span style="color:#e6db74">&#39;location=yes,links=no,scrollbars=no,toolbar=no,width=550,height=550&#39;</span>))<span style="color:#a6e22e">location</span>.<span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#a6e22e">f</span><span style="color:#f92672">+</span><span style="color:#e6db74">&#39;jump=yes&#39;</span>};<span style="color:#66d9ef">if</span>(<span style="color:#e6db74">/Firefox/</span>.<span style="color:#a6e22e">test</span>(<span style="color:#a6e22e">navigator</span>.<span style="color:#a6e22e">userAgent</span>)){<span style="color:#a6e22e">setTimeout</span>(<span style="color:#a6e22e">a</span>,<span style="color:#ae81ff">0</span>)}<span style="color:#66d9ef">else</span>{<span style="color:#a6e22e">a</span>()}})()</code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#a6e22e">javascript</span><span style="color:#f92672">:</span>(<span style="color:#66d9ef">function</span>(){<span style="color:#a6e22e">f</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#39;http://delicious.com/save?url=&#39;</span><span style="color:#f92672">+</span>encodeURIComponent(window.<span style="color:#a6e22e">location</span>.<span style="color:#a6e22e">href</span>)<span style="color:#f92672">+</span><span style="color:#e6db74">&#39;&amp;title=&#39;</span><span style="color:#f92672">+</span>encodeURIComponent(document.<span style="color:#a6e22e">title</span>)<span style="color:#f92672">+</span><span style="color:#e6db74">&#39;&amp;notes=&#39;</span><span style="color:#f92672">+</span>encodeURIComponent(document.<span style="color:#a6e22e">getSelection</span>())<span style="color:#f92672">+</span><span style="color:#e6db74">&#39;&amp;v=5&amp;&#39;</span>;<span style="color:#a6e22e">a</span><span style="color:#f92672">=</span><span style="color:#66d9ef">function</span>(){<span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span>window.<span style="color:#a6e22e">open</span>(<span style="color:#a6e22e">f</span><span style="color:#f92672">+</span><span style="color:#e6db74">&#39;noui=1&amp;jump=doclose&#39;</span>,<span style="color:#e6db74">&#39;deliciousuiv5&#39;</span>,<span style="color:#e6db74">&#39;location=yes,links=no,scrollbars=no,toolbar=no,width=550,height=550&#39;</span>))<span style="color:#a6e22e">location</span>.<span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#a6e22e">f</span><span style="color:#f92672">+</span><span style="color:#e6db74">&#39;jump=yes&#39;</span>};<span style="color:#66d9ef">if</span>(<span style="color:#e6db74">/Firefox/</span>.<span style="color:#a6e22e">test</span>(<span style="color:#a6e22e">navigator</span>.<span style="color:#a6e22e">userAgent</span>)){<span style="color:#a6e22e">setTimeout</span>(<span style="color:#a6e22e">a</span>,<span style="color:#ae81ff">0</span>)}<span style="color:#66d9ef">else</span>{<span style="color:#a6e22e">a</span>()}})()</code></pre></div>
         
 
     </article>
@@ -268,7 +270,7 @@ INITIALLY DEFERRED or INITIALLY IMMEDIATE</p>
 
         
         
-<div class="sharing"> 
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2009%2f06%2f06%2fspring-roo-2%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=Spring%20Roo%20%28%d1%87%d0%b0%d1%81%d1%82%d1%8c%202%29&url=https%3a%2f%2futhark.github.io%2f2009%2f06%2f06%2fspring-roo-2%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></i></a>
 </div>
@@ -565,7 +567,7 @@ org<span style="color:#f92672">.</span><span style="color:#a6e22e">springframewo
 
         
         
-<div class="sharing"> 
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2009%2f06%2f03%2fspring-roo%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=%d0%92%d0%b2%d0%b5%d0%b4%d0%b5%d0%bd%d0%b8%d0%b5%20%d0%b2%20Spring%20Roo&url=https%3a%2f%2futhark.github.io%2f2009%2f06%2f03%2fspring-roo%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></i></a>
 </div>
@@ -593,7 +595,7 @@ org<span style="color:#f92672">.</span><span style="color:#a6e22e">springframewo
 
         
         
-<div class="sharing"> 
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2009%2f06%2f02%2fapache-ant-metro%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=Apache%20Ant%20%d0%b8%20Metro&url=https%3a%2f%2futhark.github.io%2f2009%2f06%2f02%2fapache-ant-metro%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></i></a>
 </div>
@@ -628,7 +630,7 @@ Metro создавал файл package-info.java, в котором было п
 
         
         
-<div class="sharing"> 
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2009%2f05%2f30%2fprotected%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=%d0%98%d1%81%d0%bf%d0%be%d0%bb%d1%8c%d0%b7%d0%be%d0%b2%d0%b0%d0%bd%d0%b8%d0%b5%20%d0%bc%d0%be%d0%b4%d0%b8%d1%84%d0%b8%d0%ba%d0%b0%d1%82%d0%be%d1%80%d0%b0%20protected%20%d0%bd%d0%b0%20%d0%bf%d0%be%d0%bb%d1%8f%d1%85%20%d0%b2%20%d0%b1%d0%b0%d0%b7%d0%be%d0%b2%d0%be%d0%bc%20%d0%ba%d0%bb%d0%b0%d1%81%d1%81%d0%b5&url=https%3a%2f%2futhark.github.io%2f2009%2f05%2f30%2fprotected%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></i></a>
 </div>
@@ -655,7 +657,7 @@ Metro создавал файл package-info.java, в котором было п
 
         
         
-<div class="sharing"> 
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2009%2f05%2f27%2ffixed-price-2%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=%d0%a1%d1%84%d0%b5%d1%80%d0%b8%d1%87%d0%b5%d1%81%d0%ba%d0%b8%d0%b9%20%d0%bf%d1%80%d0%be%d0%b3%d1%80%d0%b0%d0%bc%d0%bc%d0%b8%d1%81%d1%82%20%d0%b2%20%d0%b2%d0%b0%d0%ba%d1%83%d1%83%d0%bc%d0%b5%20%d0%b8%20%d0%b0%d0%b1%d1%81%d1%82%d1%80%d0%b0%d0%ba%d1%82%d0%bd%d0%be%d0%b5%20%d0%bf%d0%be%d0%bd%d1%8f%d1%82%d0%b8%d0%b5%20%d0%ba%d0%b0%d1%87%d0%b5%d1%81%d1%82%d0%b2%d0%b0%20%d0%ba%d0%be%d0%b4%d0%b0%20%d0%b2%20%d1%83%d1%81%d0%bb%d0%be%d0%b2%d0%b8%d1%8f%d1%85%20Fixed-Price%20%d0%bf%d1%80%d0%be%d0%b5%d0%ba%d1%82%d0%be%d0%b2%20%28%d1%87%d0%b0%d1%81%d1%82%d1%8c%202%29&url=https%3a%2f%2futhark.github.io%2f2009%2f05%2f27%2ffixed-price-2%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></i></a>
 </div>
@@ -794,7 +796,7 @@ Metro создавал файл package-info.java, в котором было п
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="https://twitter.com/LinkageError/" title="https://twitter.com/LinkageError/"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[site:@LinkageError creator:@LinkageError card:summary]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 

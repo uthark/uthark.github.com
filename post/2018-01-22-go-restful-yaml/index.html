@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
-<head>
-  <link href="http://gmpg.org/xfn/11" rel="profile">
+<html prefix="og: http://ogp.me/ns#">
+<head >
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
@@ -9,12 +8,19 @@
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
 
+  
+  <title>How to add YAML support to go-restful</title>
+
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <meta name="author" content="Oleg Atamanenko">
+
 
   <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
 
 
-  
-  <title>How to add YAML support to go-restful</title>
 
   
   
@@ -35,6 +41,7 @@
   
   
 
+
   
 
 
@@ -42,13 +49,27 @@
   <link href="https://feeds.feedburner.com/atamanenko" rel="alternate" type="application/rss+xml" title="Sharing knowledge" />
   <link href="https://feeds.feedburner.com/atamanenko" rel="feed" type="application/rss+xml" title="Sharing knowledge" />
   
+
   
   
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@LinkageError">
+  <meta name="twitter:creator" content="@LinkageError">
 
-  <meta name="description" content="">
-  <meta name="keywords" content="">
+  <meta name="twitter:title" content="How to add YAML support to go-restful">
 
-  <meta name="author" content="Oleg Atamanenko">
+  
+
+  <meta property="og:title" content="How to add YAML support to go-restful" />
+  <meta property="og:url" content="https://uthark.github.io/post/2018-01-22-go-restful-yaml/" />
+  <meta property="og:description" content="go-restful is a go package used for building REST-style web services. It is very powerful, but it supports JSON and XML out of the box only. Fortunately, go-restful allows to register custom serialization schemes.
+To do so, it provides a handy interface EntityReaderWriter, which contains only two methods:
+// EntityReaderWriter can read and write values using an encoding such as JSON,XML. type EntityReaderWriter interface { // Read a serialized version of the value from the request." />
+
+  
+
+
+
 
 </head>
 <body>
@@ -116,7 +137,7 @@
 
         
         
-<div class="sharing"> 
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2fpost%2f2018-01-22-go-restful-yaml%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=How%20to%20add%20YAML%20support%20to%20go-restful&url=https%3a%2f%2futhark.github.io%2fpost%2f2018-01-22-go-restful-yaml%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></i></a>
 </div>
@@ -251,7 +272,7 @@ It is very powerful, but it supports JSON and XML out of the box only. Fortunate
    <span style="color:#e6db74">&#34;dateAdded&#34;</span>: <span style="color:#e6db74">&#34;2018-01-20T20:05:09.378Z&#34;</span>,
    <span style="color:#e6db74">&#34;dateCompleted&#34;</span>: <span style="color:#e6db74">&#34;0001-01-01T00:00:00Z&#34;</span>
   <span style="color:#f92672">}</span>
- <span style="color:#f92672">]</span>                        </code></pre></div>
+ <span style="color:#f92672">]</span></code></pre></div>
 <p>If you have any questions, feel free to ping me on Twitter.</p>
 
         </div>
@@ -353,7 +374,7 @@ It is very powerful, but it supports JSON and XML out of the box only. Fortunate
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="https://twitter.com/LinkageError/" title="https://twitter.com/LinkageError/"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[site:@LinkageError creator:@LinkageError card:summary]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 

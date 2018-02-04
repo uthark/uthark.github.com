@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
-<head>
-  <link href="http://gmpg.org/xfn/11" rel="profile">
+<html prefix="og: http://ogp.me/ns#">
+<head >
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
@@ -9,12 +8,19 @@
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
 
+  
+  <title>Общение со Skype через D-Bus на Python</title>
+
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <meta name="author" content="Oleg Atamanenko">
+
 
   <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
 
 
-  
-  <title>Общение со Skype через D-Bus на Python</title>
 
   
   
@@ -35,6 +41,7 @@
   
   
 
+
   
 
 
@@ -42,13 +49,28 @@
   <link href="https://feeds.feedburner.com/atamanenko" rel="alternate" type="application/rss+xml" title="Sharing knowledge" />
   <link href="https://feeds.feedburner.com/atamanenko" rel="feed" type="application/rss+xml" title="Sharing knowledge" />
   
+
   
   
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@LinkageError">
+  <meta name="twitter:creator" content="@LinkageError">
 
-  <meta name="description" content="">
-  <meta name="keywords" content="">
+  <meta name="twitter:title" content="Общение со Skype через D-Bus на Python">
 
-  <meta name="author" content="Oleg Atamanenko">
+  
+
+  <meta property="og:title" content="Общение со Skype через D-Bus на Python" />
+  <meta property="og:url" content="https://uthark.github.io/2010/03/22/skype-d-bus-python/" />
+  <meta property="og:description" content="Summary: в данной заметке описывается работа с программой Skype через D-Bus на Python.
+Введение Захотелось мне странного - когда я ухожу домой, мне нужно выключить amarok, kopete и Skype. Собственно, решено было через D-Bus отправлять вышеперечисленным приложениям релевантные сообщения.
+Используем dbus-send Сначала я использовал обычный dbus-send, что оформилось в виде следующего скрипта go2home:
+#!/bin/sh  # Stop amarok dbus-send --session --type=method_call --dest=org.kde.amarok /Player org.freedesktop.MediaPlayer.Stop # Logout from kopete dbus-send --session --type=method_call --dest=org." />
+
+  
+
+
+
 
 </head>
 <body>
@@ -116,7 +138,7 @@
 
         
         
-<div class="sharing"> 
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2010%2f03%2f22%2fskype-d-bus-python%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=%d0%9e%d0%b1%d1%89%d0%b5%d0%bd%d0%b8%d0%b5%20%d1%81%d0%be%20Skype%20%d1%87%d0%b5%d1%80%d0%b5%d0%b7%20D-Bus%20%d0%bd%d0%b0%20Python&url=https%3a%2f%2futhark.github.io%2f2010%2f03%2f22%2fskype-d-bus-python%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></i></a>
 </div>
@@ -194,7 +216,7 @@
     
     <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>    
 
-<span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;__main__&#34;</span>:
+<span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#f92672">&amp;</span>quot;__main__<span style="color:#f92672">&amp;</span>quot;:
     main()</code></pre></div>
 <p> При первом запуске скрипта появится скайповский диалог с вопросом, можно ли разрешить приложению доступ к скайпу. После нажатия на &quot;Да&quot; Skype добавит наш скрипт в разрешённые и мы сможем управлять скайпом.</p>
 
@@ -308,7 +330,7 @@
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="https://twitter.com/LinkageError/" title="https://twitter.com/LinkageError/"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[site:@LinkageError creator:@LinkageError card:summary]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 

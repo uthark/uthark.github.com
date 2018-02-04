@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
-<head>
-  <link href="http://gmpg.org/xfn/11" rel="profile">
+<html prefix="og: http://ogp.me/ns#">
+<head >
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
@@ -9,12 +8,19 @@
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
 
+  
+  <title>Fixing unescaped quotes in page rendering in Octopress</title>
+
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <meta name="author" content="Oleg Atamanenko">
+
 
   <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
 
 
-  
-  <title>Fixing unescaped quotes in page rendering in Octopress</title>
 
   
   
@@ -35,6 +41,7 @@
   
   
 
+
   
 
 
@@ -42,13 +49,29 @@
   <link href="https://feeds.feedburner.com/atamanenko" rel="alternate" type="application/rss+xml" title="Sharing knowledge" />
   <link href="https://feeds.feedburner.com/atamanenko" rel="feed" type="application/rss+xml" title="Sharing knowledge" />
   
+
   
   
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@LinkageError">
+  <meta name="twitter:creator" content="@LinkageError">
 
-  <meta name="description" content="">
-  <meta name="keywords" content="">
+  <meta name="twitter:title" content="Fixing unescaped quotes in page rendering in Octopress">
 
-  <meta name="author" content="Oleg Atamanenko">
+  
+
+  <meta property="og:title" content="Fixing unescaped quotes in page rendering in Octopress" />
+  <meta property="og:url" content="https://uthark.github.io/2014/03/02/octopress-quote-fix/" />
+  <meta property="og:description" content="When I created About Me page I found issue with rendering: for some reason styles and some javascripts were missing on the page.
+Investigation showed that content in meta tag description contained unquoted quotes, thus resulting in broken HTML.
+After searching within octopress sources I found the issue:
+Rendering of description tag, excerpt from _includes/head.html:
+{% capture  description %} {% if page.description %} {{ page.description }} {% else  %} {{ content | raw_content }} {% endif  %} {% endcapture %} &lt;meta name=&#34;description&#34; content=&#34;{{ description | strip_html | condense_spaces | truncate:150 }}&#34;&gt; After capturing, description is being processed with filters, defined in plugins/octopress_filters." />
+
+  
+
+
+
 
 </head>
 <body>
@@ -116,7 +139,7 @@
 
         
         
-<div class="sharing"> 
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2014%2f03%2f02%2foctopress-quote-fix%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=Fixing%20unescaped%20quotes%20in%20page%20rendering%20in%20Octopress&url=https%3a%2f%2futhark.github.io%2f2014%2f03%2f02%2foctopress-quote-fix%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></i></a>
 </div>
@@ -274,7 +297,7 @@
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="https://twitter.com/LinkageError/" title="https://twitter.com/LinkageError/"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary site:@LinkageError creator:@LinkageError]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 

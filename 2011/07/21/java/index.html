@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
-<head>
-  <link href="http://gmpg.org/xfn/11" rel="profile">
+<html prefix="og: http://ogp.me/ns#">
+<head >
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
@@ -9,12 +8,19 @@
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
 
+  
+  <title>Немного о виртуальных методах в Java</title>
+
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <meta name="author" content="Oleg Atamanenko">
+
 
   <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
 
 
-  
-  <title>Немного о виртуальных методах в Java</title>
 
   
   
@@ -35,6 +41,7 @@
   
   
 
+
   
 
 
@@ -42,13 +49,28 @@
   <link href="https://feeds.feedburner.com/atamanenko" rel="alternate" type="application/rss+xml" title="Sharing knowledge" />
   <link href="https://feeds.feedburner.com/atamanenko" rel="feed" type="application/rss+xml" title="Sharing knowledge" />
   
+
   
   
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@LinkageError">
+  <meta name="twitter:creator" content="@LinkageError">
 
-  <meta name="description" content="">
-  <meta name="keywords" content="">
+  <meta name="twitter:title" content="Немного о виртуальных методах в Java">
 
-  <meta name="author" content="Oleg Atamanenko">
+  
+
+  <meta property="og:title" content="Немного о виртуальных методах в Java" />
+  <meta property="og:url" content="https://uthark.github.io/2011/07/21/java/" />
+  <meta property="og:description" content="Сегодня я хочу рассмотреть некоторые особенности переопределения методов в Java. В java нельзя переопределить: поля класса конструкторы, инициализаторы класса статические методы статические поля 
+Подробнее об этом можно прочитать в Java Language Specification, §8.4.8
+Итак, в java все нестатические неприватные (то есть, protected, package и public) методы являются виртуальными. Ключевое слово final запрещает возможность дальнейшего переопределения метода в подклассах. Рассмотрим следующий пример:
+public class A { int i = 3; int getI() {return i;} } public class B extends A{ int i = 5; int getI() {return i;} } A a = new B(); System." />
+
+  
+
+
+
 
 </head>
 <body>
@@ -116,7 +138,7 @@
 
         
         
-<div class="sharing"> 
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2011%2f07%2f21%2fjava%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=%d0%9d%d0%b5%d0%bc%d0%bd%d0%be%d0%b3%d0%be%20%d0%be%20%d0%b2%d0%b8%d1%80%d1%82%d1%83%d0%b0%d0%bb%d1%8c%d0%bd%d1%8b%d1%85%20%d0%bc%d0%b5%d1%82%d0%be%d0%b4%d0%b0%d1%85%20%d0%b2%20Java&url=https%3a%2f%2futhark.github.io%2f2011%2f07%2f21%2fjava%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></i></a>
 </div>
@@ -279,7 +301,7 @@ System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span>
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="https://twitter.com/LinkageError/" title="https://twitter.com/LinkageError/"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[site:@LinkageError creator:@LinkageError card:summary]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 

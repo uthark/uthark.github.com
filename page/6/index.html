@@ -1,8 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
-<head>
-	<meta name="generator" content="Hugo 0.34" />
-  <link href="http://gmpg.org/xfn/11" rel="profile">
+<html prefix="og: http://ogp.me/ns#">
+<head >
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
@@ -10,12 +8,19 @@
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
 
+  
+  <title>Sharing knowledge</title>
+
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <meta name="author" content="Oleg Atamanenko">
+
 
   <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
 
 
-  
-  <title>Sharing knowledge</title>
 
   
   
@@ -36,6 +41,7 @@
   
   
 
+
   
 
 
@@ -43,13 +49,9 @@
   <link href="https://feeds.feedburner.com/atamanenko" rel="alternate" type="application/rss+xml" title="Sharing knowledge" />
   <link href="https://feeds.feedburner.com/atamanenko" rel="feed" type="application/rss+xml" title="Sharing knowledge" />
   
-  
+
   
 
-  <meta name="description" content="">
-  <meta name="keywords" content="">
-
-  <meta name="author" content="Oleg Atamanenko">
 
 </head>
 <body>
@@ -119,7 +121,7 @@
 
         
         
-<div class="sharing"> 
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2012%2f01%2f28%2faspectj%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=%d0%9d%d0%b5%d0%bc%d0%bd%d0%be%d0%b6%d0%ba%d0%be%20%d0%bc%d0%b0%d0%b3%d0%b8%d0%b8%20%d0%be%d1%82%20AspectJ&url=https%3a%2f%2futhark.github.io%2f2012%2f01%2f28%2faspectj%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></i></a>
 </div>
@@ -226,30 +228,30 @@
 <p>Файл аспекта нужно положить в каталог <code>src/main/aspect</code>, а для сборки приложения необходимо использовать не стандартный Oracle <a href="http://docs.oracle.com/javase/6/docs/technotes/tools/solaris/javac.html">Java Compiler</a>, а <a href="http://eclipse.org/aspectj/downloads.php">AspectJ compiler</a>.</p>
 
 <p>Пример конфигурации для <a href="https://maven.apache.org/">Apache Maven</a>:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;plugin&gt;</span>
-    <span style="color:#f92672">&lt;groupId&gt;</span>org.codehaus.mojo<span style="color:#f92672">&lt;/groupId&gt;</span>
-    <span style="color:#f92672">&lt;artifactId&gt;</span>aspectj-maven-plugin<span style="color:#f92672">&lt;/artifactId&gt;</span>
-    <span style="color:#f92672">&lt;version&gt;</span>${aspectj-maven-plugin.version}<span style="color:#f92672">&lt;/version&gt;</span>
-    <span style="color:#f92672">&lt;configuration&gt;</span>
-        <span style="color:#f92672">&lt;complianceLevel&gt;</span>1.6<span style="color:#f92672">&lt;/complianceLevel&gt;</span>
-        <span style="color:#f92672">&lt;aspectLibraries&gt;</span>
-            <span style="color:#f92672">&lt;aspectLibrary&gt;</span>
-                <span style="color:#f92672">&lt;groupId&gt;</span>org.springframework<span style="color:#f92672">&lt;/groupId&gt;</span>
-                <span style="color:#f92672">&lt;artifactId&gt;</span>spring-aspects<span style="color:#f92672">&lt;/artifactId&gt;</span>
-            <span style="color:#f92672">&lt;/aspectLibrary&gt;</span>
-        <span style="color:#f92672">&lt;/aspectLibraries&gt;</span>
-        <span style="color:#f92672">&lt;verbose&gt;</span>true<span style="color:#f92672">&lt;/verbose&gt;</span>
-    <span style="color:#f92672">&lt;/configuration&gt;</span>
-    <span style="color:#f92672">&lt;executions&gt;</span>
-        <span style="color:#f92672">&lt;execution&gt;</span>
-            <span style="color:#f92672">&lt;phase&gt;</span>process-sources<span style="color:#f92672">&lt;/phase&gt;</span>
-            <span style="color:#f92672">&lt;goals&gt;</span>
-                <span style="color:#f92672">&lt;goal&gt;</span>compile<span style="color:#f92672">&lt;/goal&gt;</span>
-                <span style="color:#f92672">&lt;goal&gt;</span>test-compile<span style="color:#f92672">&lt;/goal&gt;</span>
-            <span style="color:#f92672">&lt;/goals&gt;</span>
-        <span style="color:#f92672">&lt;/execution&gt;</span>
-    <span style="color:#f92672">&lt;/executions&gt;</span>
-<span style="color:#f92672">&lt;/plugin&gt;</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml">&amp;lt;plugin&amp;gt;
+    &amp;lt;groupId&amp;gt;org.codehaus.mojo&amp;lt;/groupId&amp;gt;
+    &amp;lt;artifactId&amp;gt;aspectj-maven-plugin&amp;lt;/artifactId&amp;gt;
+    &amp;lt;version&amp;gt;${aspectj-maven-plugin.version}&amp;lt;/version&amp;gt;
+    &amp;lt;configuration&amp;gt;
+        &amp;lt;complianceLevel&amp;gt;1.6&amp;lt;/complianceLevel&amp;gt;
+        &amp;lt;aspectLibraries&amp;gt;
+            &amp;lt;aspectLibrary&amp;gt;
+                &amp;lt;groupId&amp;gt;org.springframework&amp;lt;/groupId&amp;gt;
+                &amp;lt;artifactId&amp;gt;spring-aspects&amp;lt;/artifactId&amp;gt;
+            &amp;lt;/aspectLibrary&amp;gt;
+        &amp;lt;/aspectLibraries&amp;gt;
+        &amp;lt;verbose&amp;gt;true&amp;lt;/verbose&amp;gt;
+    &amp;lt;/configuration&amp;gt;
+    &amp;lt;executions&amp;gt;
+        &amp;lt;execution&amp;gt;
+            &amp;lt;phase&amp;gt;process-sources&amp;lt;/phase&amp;gt;
+            &amp;lt;goals&amp;gt;
+                &amp;lt;goal&amp;gt;compile&amp;lt;/goal&amp;gt;
+                &amp;lt;goal&amp;gt;test-compile&amp;lt;/goal&amp;gt;
+            &amp;lt;/goals&amp;gt;
+        &amp;lt;/execution&amp;gt;
+    &amp;lt;/executions&amp;gt;
+&amp;lt;/plugin&amp;gt;</code></pre></div>
 <h4 id="заключение">Заключение</h4>
 
 <p>Вот в общем-то и всё. Я сознательно не стал описывать языковые конструкции аспектов, так как они подробно описаны в <a href="https://www.eclipse.org/aspectj/doc/next/progguide/index.html">руководстве AspectJ</a></p>
@@ -262,7 +264,7 @@
 
         
         
-<div class="sharing"> 
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2011%2f07%2f21%2fjava%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=%d0%9d%d0%b5%d0%bc%d0%bd%d0%be%d0%b3%d0%be%20%d0%be%20%d0%b2%d0%b8%d1%80%d1%82%d1%83%d0%b0%d0%bb%d1%8c%d0%bd%d1%8b%d1%85%20%d0%bc%d0%b5%d1%82%d0%be%d0%b4%d0%b0%d1%85%20%d0%b2%20Java&url=https%3a%2f%2futhark.github.io%2f2011%2f07%2f21%2fjava%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></i></a>
 </div>
@@ -328,7 +330,7 @@ System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span>
 
         
         
-<div class="sharing"> 
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2010%2f12%2f06%2fblog-post%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=%d0%a1%d0%be%d0%ba%d1%80%d0%b0%d1%89%d0%b0%d0%b5%d0%bc%20%d1%81%d1%81%d1%8b%d0%bb%d0%ba%d0%b8%20%d0%bd%d0%b0%20%d0%b0%d0%bd%d0%b4%d1%80%d0%be%d0%b8%d0%b4%d0%b5&url=https%3a%2f%2futhark.github.io%2f2010%2f12%2f06%2fblog-post%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></i></a>
 </div>
@@ -452,7 +454,7 @@ String shortLink <span style="color:#f92672">=</span> bitly<span style="color:#f
 
         
         
-<div class="sharing"> 
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2010%2f05%2f22%2fblog-post%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=%d0%a3%d0%b4%d0%b0%d0%bb%d0%b5%d0%bd%d0%b8%d0%b5%20%d1%80%d0%b0%d0%b7%d0%bb%d0%b8%d1%87%d0%bd%d1%8b%d1%85%20%d0%b4%d0%b8%d0%b0%d0%ba%d1%80%d0%b8%d1%82%d0%b8%d1%87%d0%b5%d1%81%d0%ba%d0%b8%d1%85%20%d1%81%d0%b8%d0%bc%d0%b2%d0%be%d0%bb%d0%be%d0%b2%20%d0%b8%d0%b7%20%d1%81%d1%82%d1%80%d0%be%d0%ba%d0%b8&url=https%3a%2f%2futhark.github.io%2f2010%2f05%2f22%2fblog-post%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></i></a>
 </div>
@@ -488,7 +490,7 @@ String shortLink <span style="color:#f92672">=</span> bitly<span style="color:#f
 
         
         
-<div class="sharing"> 
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2010%2f05%2f22%2fdatabene-benerator%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=%d0%a1%d0%be%d0%b7%d0%b4%d0%b0%d0%bd%d0%b8%d0%b5%20%d0%b1%d0%be%d0%bb%d1%8c%d1%88%d0%b8%d1%85%20%d0%be%d0%b1%d1%8a%d1%91%d0%bc%d0%be%d0%b2%20%d1%82%d0%b5%d1%81%d1%82%d0%be%d0%b2%d1%8b%d1%85%20%d0%b4%d0%b0%d0%bd%d0%bd%d1%8b%d1%85%20%d1%81%20%d0%bf%d0%be%d0%bc%d0%be%d1%89%d1%8c%d1%8e%20Databene%20Benerator&url=https%3a%2f%2futhark.github.io%2f2010%2f05%2f22%2fdatabene-benerator%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></i></a>
 </div>
@@ -507,93 +509,93 @@ String shortLink <span style="color:#f92672">=</span> bitly<span style="color:#f
 <p>Установка фреймворка осуществляется двумя способами - как отдельное приложение и как плагин для Maven.</p>
 <h5>Установка под Maven</h5>
 <p>Для использования Databene benerator в проектах, использующих для сборки Apache Maven необходимо добавить в зависимости databene-benerator и сконфигурировать его.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;project</span> <span style="color:#a6e22e">xmlns=</span><span style="color:#e6db74">&#34;http://maven.apache.org/POM/4.0.0&#34;</span> <span style="color:#a6e22e">xmlns:xsi=</span><span style="color:#e6db74">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
-         <span style="color:#a6e22e">xsi:schemaLocation=</span><span style="color:#e6db74">&#34;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd&#34;</span><span style="color:#f92672">&gt;</span>
-  <span style="color:#f92672">&lt;modelVersion&gt;</span>4.0.0<span style="color:#f92672">&lt;/modelVersion&gt;</span>
-  <span style="color:#f92672">&lt;groupId&gt;</span>com.myorganization<span style="color:#f92672">&lt;/groupId&gt;</span>
-  <span style="color:#f92672">&lt;artifactId&gt;</span>databene-benerator-test<span style="color:#f92672">&lt;/artifactId&gt;</span>
-  <span style="color:#f92672">&lt;version&gt;</span>1.0<span style="color:#f92672">&lt;/version&gt;</span>
-  <span style="color:#f92672">&lt;packaging&gt;</span>jar<span style="color:#f92672">&lt;/packaging&gt;</span>
-  <span style="color:#f92672">&lt;name&gt;</span>data generation project<span style="color:#f92672">&lt;/name&gt;</span>
-  <span style="color:#f92672">&lt;dependencies&gt;</span>
-    <span style="color:#f92672">&lt;dependency&gt;</span>
-      <span style="color:#f92672">&lt;groupId&gt;</span>org.databene<span style="color:#f92672">&lt;/groupId&gt;</span>
-      <span style="color:#f92672">&lt;artifactId&gt;</span>databene-benerator<span style="color:#f92672">&lt;/artifactId&gt;</span>
-      <span style="color:#f92672">&lt;version&gt;</span>0.5.9<span style="color:#f92672">&lt;/version&gt;</span>
-    <span style="color:#f92672">&lt;/dependency&gt;</span>
-    <span style="color:#f92672">&lt;dependency&gt;</span>
-      <span style="color:#f92672">&lt;groupId&gt;</span>org.databene<span style="color:#f92672">&lt;/groupId&gt;</span>
-      <span style="color:#f92672">&lt;artifactId&gt;</span>databene-webdecs<span style="color:#f92672">&lt;/artifactId&gt;</span>
-      <span style="color:#f92672">&lt;version&gt;</span>0.4.9<span style="color:#f92672">&lt;/version&gt;</span>
-    <span style="color:#f92672">&lt;/dependency&gt;</span>
-    <span style="color:#f92672">&lt;dependency&gt;</span>
-      <span style="color:#f92672">&lt;groupId&gt;</span>org.databene<span style="color:#f92672">&lt;/groupId&gt;</span>
-      <span style="color:#f92672">&lt;artifactId&gt;</span>databene-commons<span style="color:#f92672">&lt;/artifactId&gt;</span>
-      <span style="color:#f92672">&lt;version&gt;</span>0.4.9<span style="color:#f92672">&lt;/version&gt;</span>
-    <span style="color:#f92672">&lt;/dependency&gt;</span>
-    <span style="color:#f92672">&lt;dependency&gt;</span>
-      <span style="color:#f92672">&lt;groupId&gt;</span>mysql<span style="color:#f92672">&lt;/groupId&gt;</span>
-      <span style="color:#f92672">&lt;artifactId&gt;</span>mysql-connector-java<span style="color:#f92672">&lt;/artifactId&gt;</span>
-      <span style="color:#f92672">&lt;version&gt;</span>5.1.6<span style="color:#f92672">&lt;/version&gt;</span>
-    <span style="color:#f92672">&lt;/dependency&gt;</span>
-  <span style="color:#f92672">&lt;/dependencies&gt;</span>
-  <span style="color:#f92672">&lt;build&gt;</span>
-    <span style="color:#f92672">&lt;resources&gt;</span>
-      <span style="color:#f92672">&lt;resource&gt;</span>
-        <span style="color:#f92672">&lt;directory&gt;</span>src/main/resources<span style="color:#f92672">&lt;/directory&gt;</span>
-        <span style="color:#f92672">&lt;filtering&gt;</span>true<span style="color:#f92672">&lt;/filtering&gt;</span>
-      <span style="color:#f92672">&lt;/resource&gt;</span>
-    <span style="color:#f92672">&lt;/resources&gt;</span>
-    <span style="color:#f92672">&lt;plugins&gt;</span>
-      <span style="color:#f92672">&lt;plugin&gt;</span>
-        <span style="color:#f92672">&lt;groupId&gt;</span>org.apache.maven.plugins<span style="color:#f92672">&lt;/groupId&gt;</span>
-        <span style="color:#f92672">&lt;artifactId&gt;</span>maven-compiler-plugin<span style="color:#f92672">&lt;/artifactId&gt;</span>
-        <span style="color:#f92672">&lt;configuration&gt;</span>
-          <span style="color:#f92672">&lt;encoding&gt;</span>UTF-8<span style="color:#f92672">&lt;/encoding&gt;</span>
-          <span style="color:#f92672">&lt;source&gt;</span>1.5<span style="color:#f92672">&lt;/source&gt;</span>
-          <span style="color:#f92672">&lt;target&gt;</span>1.5<span style="color:#f92672">&lt;/target&gt;</span>
-        <span style="color:#f92672">&lt;/configuration&gt;</span>
-      <span style="color:#f92672">&lt;/plugin&gt;</span>
-      <span style="color:#f92672">&lt;plugin&gt;</span>
-        <span style="color:#f92672">&lt;groupId&gt;</span>org.databene<span style="color:#f92672">&lt;/groupId&gt;</span>
-        <span style="color:#f92672">&lt;artifactId&gt;</span>maven-benerator-plugin<span style="color:#f92672">&lt;/artifactId&gt;</span>
-        <span style="color:#f92672">&lt;version&gt;</span>0.5.9<span style="color:#f92672">&lt;/version&gt;</span>
-        <span style="color:#f92672">&lt;executions&gt;</span>
-          <span style="color:#f92672">&lt;execution&gt;</span>
-            <span style="color:#f92672">&lt;phase&gt;</span>compile<span style="color:#f92672">&lt;/phase&gt;</span>
-            <span style="color:#f92672">&lt;goals&gt;</span>
-              <span style="color:#f92672">&lt;goal&gt;</span>generate<span style="color:#f92672">&lt;/goal&gt;</span>
-            <span style="color:#f92672">&lt;/goals&gt;</span>
-          <span style="color:#f92672">&lt;/execution&gt;</span>
-        <span style="color:#f92672">&lt;/executions&gt;</span>
-        <span style="color:#f92672">&lt;configuration&gt;</span>
-          <span style="color:#f92672">&lt;descriptor&gt;</span>src/main/resources/benerator.ben.xml<span style="color:#f92672">&lt;/descriptor&gt;</span>
-          <span style="color:#f92672">&lt;encoding&gt;</span>UTF-8<span style="color:#f92672">&lt;/encoding&gt;</span>
-          <span style="color:#f92672">&lt;validate&gt;</span>true<span style="color:#f92672">&lt;/validate&gt;</span>
-          <span style="color:#f92672">&lt;dbUrl&gt;</span>jdbc:mysql://localhost:3306/hrtool?useUnicode=true<span style="color:#960050;background-color:#1e0010">&amp;</span>characterEncoding=UTF-8<span style="color:#f92672">&lt;/dbUrl&gt;</span>
-          <span style="color:#f92672">&lt;dbDriver&gt;</span>com.mysql.jdbc.Driver<span style="color:#f92672">&lt;/dbDriver&gt;</span>
-          <span style="color:#f92672">&lt;dbSchema&gt;</span>database<span style="color:#f92672">&lt;/dbSchema&gt;</span>
-          <span style="color:#f92672">&lt;dbUser&gt;</span>user<span style="color:#f92672">&lt;/dbUser&gt;</span>
-          <span style="color:#f92672">&lt;dbPassword&gt;</span>password<span style="color:#f92672">&lt;/dbPassword&gt;</span>
-        <span style="color:#f92672">&lt;/configuration&gt;</span>
-        <span style="color:#f92672">&lt;dependencies&gt;</span>
-        <span style="color:#f92672">&lt;dependency&gt;</span>
-            <span style="color:#f92672">&lt;groupId&gt;</span>log4j<span style="color:#f92672">&lt;/groupId&gt;</span>
-            <span style="color:#f92672">&lt;artifactId&gt;</span>log4j<span style="color:#f92672">&lt;/artifactId&gt;</span>
-            <span style="color:#f92672">&lt;version&gt;</span>1.2.13<span style="color:#f92672">&lt;/version&gt;</span>
-            <span style="color:#f92672">&lt;scope&gt;</span>runtime<span style="color:#f92672">&lt;/scope&gt;</span>
-          <span style="color:#f92672">&lt;/dependency&gt;</span>
-          <span style="color:#f92672">&lt;dependency&gt;</span>
-            <span style="color:#f92672">&lt;groupId&gt;</span>org.apache.poi<span style="color:#f92672">&lt;/groupId&gt;</span>
-            <span style="color:#f92672">&lt;artifactId&gt;</span>poi<span style="color:#f92672">&lt;/artifactId&gt;</span>
-            <span style="color:#f92672">&lt;version&gt;</span>3.5-beta5<span style="color:#f92672">&lt;/version&gt;</span>
-            <span style="color:#f92672">&lt;scope&gt;</span>runtime<span style="color:#f92672">&lt;/scope&gt;</span>
-          <span style="color:#f92672">&lt;/dependency&gt;</span>
-        <span style="color:#f92672">&lt;/dependencies&gt;</span>
-      <span style="color:#f92672">&lt;/plugin&gt;</span>
-    <span style="color:#f92672">&lt;/plugins&gt;</span>
-  <span style="color:#f92672">&lt;/build&gt;</span>
-<span style="color:#f92672">&lt;/project&gt;</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml">&amp;lt;project xmlns=&amp;quot;http://maven.apache.org/POM/4.0.0&amp;quot; xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
+         xsi:schemaLocation=&amp;quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd&amp;quot;&amp;gt;
+  &amp;lt;modelVersion&amp;gt;4.0.0&amp;lt;/modelVersion&amp;gt;
+  &amp;lt;groupId&amp;gt;com.myorganization&amp;lt;/groupId&amp;gt;
+  &amp;lt;artifactId&amp;gt;databene-benerator-test&amp;lt;/artifactId&amp;gt;
+  &amp;lt;version&amp;gt;1.0&amp;lt;/version&amp;gt;
+  &amp;lt;packaging&amp;gt;jar&amp;lt;/packaging&amp;gt;
+  &amp;lt;name&amp;gt;data generation project&amp;lt;/name&amp;gt;
+  &amp;lt;dependencies&amp;gt;
+    &amp;lt;dependency&amp;gt;
+      &amp;lt;groupId&amp;gt;org.databene&amp;lt;/groupId&amp;gt;
+      &amp;lt;artifactId&amp;gt;databene-benerator&amp;lt;/artifactId&amp;gt;
+      &amp;lt;version&amp;gt;0.5.9&amp;lt;/version&amp;gt;
+    &amp;lt;/dependency&amp;gt;
+    &amp;lt;dependency&amp;gt;
+      &amp;lt;groupId&amp;gt;org.databene&amp;lt;/groupId&amp;gt;
+      &amp;lt;artifactId&amp;gt;databene-webdecs&amp;lt;/artifactId&amp;gt;
+      &amp;lt;version&amp;gt;0.4.9&amp;lt;/version&amp;gt;
+    &amp;lt;/dependency&amp;gt;
+    &amp;lt;dependency&amp;gt;
+      &amp;lt;groupId&amp;gt;org.databene&amp;lt;/groupId&amp;gt;
+      &amp;lt;artifactId&amp;gt;databene-commons&amp;lt;/artifactId&amp;gt;
+      &amp;lt;version&amp;gt;0.4.9&amp;lt;/version&amp;gt;
+    &amp;lt;/dependency&amp;gt;
+    &amp;lt;dependency&amp;gt;
+      &amp;lt;groupId&amp;gt;mysql&amp;lt;/groupId&amp;gt;
+      &amp;lt;artifactId&amp;gt;mysql-connector-java&amp;lt;/artifactId&amp;gt;
+      &amp;lt;version&amp;gt;5.1.6&amp;lt;/version&amp;gt;
+    &amp;lt;/dependency&amp;gt;
+  &amp;lt;/dependencies&amp;gt;
+  &amp;lt;build&amp;gt;
+    &amp;lt;resources&amp;gt;
+      &amp;lt;resource&amp;gt;
+        &amp;lt;directory&amp;gt;src/main/resources&amp;lt;/directory&amp;gt;
+        &amp;lt;filtering&amp;gt;true&amp;lt;/filtering&amp;gt;
+      &amp;lt;/resource&amp;gt;
+    &amp;lt;/resources&amp;gt;
+    &amp;lt;plugins&amp;gt;
+      &amp;lt;plugin&amp;gt;
+        &amp;lt;groupId&amp;gt;org.apache.maven.plugins&amp;lt;/groupId&amp;gt;
+        &amp;lt;artifactId&amp;gt;maven-compiler-plugin&amp;lt;/artifactId&amp;gt;
+        &amp;lt;configuration&amp;gt;
+          &amp;lt;encoding&amp;gt;UTF-8&amp;lt;/encoding&amp;gt;
+          &amp;lt;source&amp;gt;1.5&amp;lt;/source&amp;gt;
+          &amp;lt;target&amp;gt;1.5&amp;lt;/target&amp;gt;
+        &amp;lt;/configuration&amp;gt;
+      &amp;lt;/plugin&amp;gt;
+      &amp;lt;plugin&amp;gt;
+        &amp;lt;groupId&amp;gt;org.databene&amp;lt;/groupId&amp;gt;
+        &amp;lt;artifactId&amp;gt;maven-benerator-plugin&amp;lt;/artifactId&amp;gt;
+        &amp;lt;version&amp;gt;0.5.9&amp;lt;/version&amp;gt;
+        &amp;lt;executions&amp;gt;
+          &amp;lt;execution&amp;gt;
+            &amp;lt;phase&amp;gt;compile&amp;lt;/phase&amp;gt;
+            &amp;lt;goals&amp;gt;
+              &amp;lt;goal&amp;gt;generate&amp;lt;/goal&amp;gt;
+            &amp;lt;/goals&amp;gt;
+          &amp;lt;/execution&amp;gt;
+        &amp;lt;/executions&amp;gt;
+        &amp;lt;configuration&amp;gt;
+          &amp;lt;descriptor&amp;gt;src/main/resources/benerator.ben.xml&amp;lt;/descriptor&amp;gt;
+          &amp;lt;encoding&amp;gt;UTF-8&amp;lt;/encoding&amp;gt;
+          &amp;lt;validate&amp;gt;true&amp;lt;/validate&amp;gt;
+          &amp;lt;dbUrl&amp;gt;jdbc:mysql://localhost:3306/hrtool?useUnicode=true&amp;amp;characterEncoding=UTF-8&amp;lt;/dbUrl&amp;gt;
+          &amp;lt;dbDriver&amp;gt;com.mysql.jdbc.Driver&amp;lt;/dbDriver&amp;gt;
+          &amp;lt;dbSchema&amp;gt;database&amp;lt;/dbSchema&amp;gt;
+          &amp;lt;dbUser&amp;gt;user&amp;lt;/dbUser&amp;gt;
+          &amp;lt;dbPassword&amp;gt;password&amp;lt;/dbPassword&amp;gt;
+        &amp;lt;/configuration&amp;gt;
+        &amp;lt;dependencies&amp;gt;
+        &amp;lt;dependency&amp;gt;
+            &amp;lt;groupId&amp;gt;log4j&amp;lt;/groupId&amp;gt;
+            &amp;lt;artifactId&amp;gt;log4j&amp;lt;/artifactId&amp;gt;
+            &amp;lt;version&amp;gt;1.2.13&amp;lt;/version&amp;gt;
+            &amp;lt;scope&amp;gt;runtime&amp;lt;/scope&amp;gt;
+          &amp;lt;/dependency&amp;gt;
+          &amp;lt;dependency&amp;gt;
+            &amp;lt;groupId&amp;gt;org.apache.poi&amp;lt;/groupId&amp;gt;
+            &amp;lt;artifactId&amp;gt;poi&amp;lt;/artifactId&amp;gt;
+            &amp;lt;version&amp;gt;3.5-beta5&amp;lt;/version&amp;gt;
+            &amp;lt;scope&amp;gt;runtime&amp;lt;/scope&amp;gt;
+          &amp;lt;/dependency&amp;gt;
+        &amp;lt;/dependencies&amp;gt;
+      &amp;lt;/plugin&amp;gt;
+    &amp;lt;/plugins&amp;gt;
+  &amp;lt;/build&amp;gt;
+&amp;lt;/project&amp;gt;</code></pre></div>
 <p>В конфигурации необходимо указать как минимум следующие параметры:</p>
 <ol><li><span style=" font-family:'Courier New,courier';">dbUrl</span> - строка подключения к базе данных в формате JDBC</li>
 <li><span style=" font-family:'Courier New,courier';">dbDriver</span> - используемый драйвер базы данных</li>
@@ -624,7 +626,7 @@ String shortLink <span style="color:#f92672">=</span> bitly<span style="color:#f
 
         
         
-<div class="sharing"> 
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2010%2f04%2f11%2fgorm%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=%d0%9d%d0%b5%d1%81%d0%ba%d0%be%d0%bb%d1%8c%d0%ba%d0%be%20%d1%81%d0%bb%d0%be%d0%b2%20%d0%be%20GORM&url=https%3a%2f%2futhark.github.io%2f2010%2f04%2f11%2fgorm%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></i></a>
 </div>
@@ -694,7 +696,7 @@ String shortLink <span style="color:#f92672">=</span> bitly<span style="color:#f
 
         
         
-<div class="sharing"> 
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2010%2f03%2f22%2fskype-d-bus-python%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=%d0%9e%d0%b1%d1%89%d0%b5%d0%bd%d0%b8%d0%b5%20%d1%81%d0%be%20Skype%20%d1%87%d0%b5%d1%80%d0%b5%d0%b7%20D-Bus%20%d0%bd%d0%b0%20Python&url=https%3a%2f%2futhark.github.io%2f2010%2f03%2f22%2fskype-d-bus-python%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></i></a>
 </div>
@@ -768,7 +770,7 @@ String shortLink <span style="color:#f92672">=</span> bitly<span style="color:#f
     
     <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>    
 
-<span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;__main__&#34;</span>:
+<span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#f92672">&amp;</span>quot;__main__<span style="color:#f92672">&amp;</span>quot;:
     main()</code></pre></div>
 <p> При первом запуске скрипта появится скайповский диалог с вопросом, можно ли разрешить приложению доступ к скайпу. После нажатия на &quot;Да&quot; Skype добавит наш скрипт в разрешённые и мы сможем управлять скайпом.</p>
 
@@ -884,7 +886,7 @@ String shortLink <span style="color:#f92672">=</span> bitly<span style="color:#f
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="https://twitter.com/LinkageError/" title="https://twitter.com/LinkageError/"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary site:@LinkageError creator:@LinkageError]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 

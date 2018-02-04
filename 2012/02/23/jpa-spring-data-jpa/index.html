@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
-<head>
-  <link href="http://gmpg.org/xfn/11" rel="profile">
+<html prefix="og: http://ogp.me/ns#">
+<head >
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
@@ -9,12 +8,19 @@
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
 
+  
+  <title>Упрощаем работу с JPA при помощи Spring Data JPA</title>
+
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <meta name="author" content="Oleg Atamanenko">
+
 
   <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
 
 
-  
-  <title>Упрощаем работу с JPA при помощи Spring Data JPA</title>
 
   
   
@@ -35,6 +41,7 @@
   
   
 
+
   
 
 
@@ -42,13 +49,25 @@
   <link href="https://feeds.feedburner.com/atamanenko" rel="alternate" type="application/rss+xml" title="Sharing knowledge" />
   <link href="https://feeds.feedburner.com/atamanenko" rel="feed" type="application/rss+xml" title="Sharing knowledge" />
   
+
   
   
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@LinkageError">
+  <meta name="twitter:creator" content="@LinkageError">
 
-  <meta name="description" content="">
-  <meta name="keywords" content="">
+  <meta name="twitter:title" content="Упрощаем работу с JPA при помощи Spring Data JPA">
 
-  <meta name="author" content="Oleg Atamanenko">
+  
+
+  <meta property="og:title" content="Упрощаем работу с JPA при помощи Spring Data JPA" />
+  <meta property="og:url" content="https://uthark.github.io/2012/02/23/jpa-spring-data-jpa/" />
+  <meta property="og:description" content="Введение Уже прошло несколько лет с тех пор, как появился JPA. Работа с EntityManager увлекательна, но разработчики пишут красивый API, а подробности работы с базой данных скрывают. При этом частая проблема - дублирование имплементации, когда из одного DAO в другой у нас плавно перекочёвывает один и тот же код, в лучшем случае этот код переносится в абстрактный базовый DAO. Spring Data коренным образом решает проблему - при его использовании остаётся только API на уровне интерфейсов, вся имплементация создаётся автоматически с использованием AOP." />
+
+  
+
+
+
 
 </head>
 <body>
@@ -116,7 +135,7 @@
 
         
         
-<div class="sharing"> 
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2012%2f02%2f23%2fjpa-spring-data-jpa%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=%d0%a3%d0%bf%d1%80%d0%be%d1%89%d0%b0%d0%b5%d0%bc%20%d1%80%d0%b0%d0%b1%d0%be%d1%82%d1%83%20%d1%81%20JPA%20%d0%bf%d1%80%d0%b8%20%d0%bf%d0%be%d0%bc%d0%be%d1%89%d0%b8%20Spring%20Data%20JPA&url=https%3a%2f%2futhark.github.io%2f2012%2f02%2f23%2fjpa-spring-data-jpa%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></i></a>
 </div>
@@ -142,7 +161,7 @@
 <h3>Объявление DAO-интерфейса</h3>
 
 <p>Итак, для начала нам необходимо объявить DAO-интерфейс, в котором мы будем объявлять методы для работы с сущностью.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">UserRepository</span> <span style="color:#66d9ef">extends</span> CrudRepository<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">,</span> Long<span style="color:#f92672">&gt;</span> <span style="color:#f92672">{</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">UserRepository</span> <span style="color:#66d9ef">extends</span> CrudRepository<span style="color:#f92672">&amp;</span>lt<span style="color:#f92672">;</span>User<span style="color:#f92672">,</span> Long<span style="color:#f92672">&amp;</span>gt<span style="color:#f92672">;</span> <span style="color:#f92672">{</span>
 <span style="color:#f92672">}</span></code></pre></div>
 <p>Данного кода достаточно для обычного DAO с <a href="http://en.wikipedia.org/wiki/Create,_read,_update_and_delete">CRUD</a>-методами.</p>
 
@@ -162,7 +181,7 @@
 
 <p><h3>Поддержка сортировки и постраничного просмотра</h3>
 Очень часто требующаяся функциональность - это возможность возвращать только часть сущностей из БД, например, для реализации постраничного просмотра в пользовательском интерфейсе. Spring Data и тут хорош и предоставляет нам возможность добавить такую функциональность в наш DAO. Для этого достаточно добавить объявление следующего метода в наш DAO-интерфейс:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"> Page<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">findAll</span><span style="color:#f92672">(</span>Pageable pageable<span style="color:#f92672">);</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"> Page<span style="color:#f92672">&amp;</span>lt<span style="color:#f92672">;</span>User<span style="color:#f92672">&amp;</span>gt<span style="color:#f92672">;</span> findAll<span style="color:#f92672">(</span>Pageable pageable<span style="color:#f92672">);</span></code></pre></div>
 <p>Интерфейс <a href="http://static.springsource.org/spring-data/data-commons/docs/current/api/org/springframework/data/domain/Pageable.html">Pageable</a> инкапсулирует в себе сведения о номере запрашиваемой страницы, размере страницы, а также требуемой сортировке.</p>
 
 <p><h3>Ищем данные</h3>
@@ -232,26 +251,26 @@
 <p>Во-первых, вы объявляете зависимость на DAO, а во-вторых всегда вызываете метод <tt>findOne()</tt> для загрузки сущности. К счастью, Spring позволяет нам преобразовывать строковые значения из HTTP-запросов в любой нужный тип используя либо <tt><a href="http://docs.oracle.com/javase/6/docs/api/java/beans/PropertyEditor.html">PropertyEditor</a></tt>, либо <tt><a href="http://static.springsource.org/spring/docs/current/javadoc-api/org/springframework/core/convert/ConversionService.html">ConversionService</a></tt>.</p>
 
 <p>Если вы используете Spring версии 3.0 и выше, то вам необходимо добавить следующую конфигурацию:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;mvc:annotation-driven</span> <span style="color:#a6e22e">conversion-service=</span><span style="color:#e6db74">&#34;conversionService&#34;</span> <span style="color:#f92672">/&gt;</span>
-<span style="color:#f92672">&lt;bean</span> <span style="color:#a6e22e">id=</span><span style="color:#e6db74">&#34;conversionService&#34;</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;….context.support.ConversionServiceFactoryBean&#34;</span><span style="color:#f92672">&gt;</span>
-  <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;converters&#34;</span><span style="color:#f92672">&gt;</span>
-    <span style="color:#f92672">&lt;list&gt;</span>
-      <span style="color:#f92672">&lt;bean</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;org.springframework.data.repository.support.DomainClassConverter&#34;</span><span style="color:#f92672">&gt;</span>
-        <span style="color:#f92672">&lt;constructor-arg</span> <span style="color:#a6e22e">ref=</span><span style="color:#e6db74">&#34;conversionService&#34;</span> <span style="color:#f92672">/&gt;</span>
-      <span style="color:#f92672">&lt;/bean&gt;</span>
-    <span style="color:#f92672">&lt;/list&gt;</span>
-  <span style="color:#f92672">&lt;/property&gt;</span>
-<span style="color:#f92672">&lt;/bean&gt;</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml">&amp;lt;mvc:annotation-driven conversion-service=&#34;conversionService&#34; /&amp;gt;
+&amp;lt;bean id=&#34;conversionService&#34; class=&#34;&amp;#8230;.context.support.ConversionServiceFactoryBean&#34;&amp;gt;
+  &amp;lt;property name=&#34;converters&#34;&amp;gt;
+    &amp;lt;list&amp;gt;
+      &amp;lt;bean class=&#34;org.springframework.data.repository.support.DomainClassConverter&#34;&amp;gt;
+        &amp;lt;constructor-arg ref=&#34;conversionService&#34; /&amp;gt;
+      &amp;lt;/bean&amp;gt;
+    &amp;lt;/list&amp;gt;
+  &amp;lt;/property&amp;gt;
+&amp;lt;/bean&amp;gt;</code></pre></div>
 <p>Если же вы используете Spring более старой версии, то вам необходима вот такая конфигурация:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;bean</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;….web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter&#34;</span><span style="color:#f92672">&gt;</span>
-  <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;webBindingInitializer&#34;</span><span style="color:#f92672">&gt;</span>
-    <span style="color:#f92672">&lt;bean</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;….web.bind.support.ConfigurableWebBindingInitializer&#34;</span><span style="color:#f92672">&gt;</span>
-      <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;propertyEditorRegistrars&#34;</span><span style="color:#f92672">&gt;</span>
-        <span style="color:#f92672">&lt;bean</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;org.springframework.data.repository.support.DomainClassPropertyEditorRegistrar&#34;</span> <span style="color:#f92672">/&gt;</span>
-      <span style="color:#f92672">&lt;/property&gt;</span>
-    <span style="color:#f92672">&lt;/bean&gt;</span>
-  <span style="color:#f92672">&lt;/property&gt;</span>
-<span style="color:#f92672">&lt;/bean&gt;</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml">&amp;lt;bean class=&#34;&amp;#8230;.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter&#34;&amp;gt;
+  &amp;lt;property name=&#34;webBindingInitializer&#34;&amp;gt;
+    &amp;lt;bean class=&#34;&amp;#8230;.web.bind.support.ConfigurableWebBindingInitializer&#34;&amp;gt;
+      &amp;lt;property name=&#34;propertyEditorRegistrars&#34;&amp;gt;
+        &amp;lt;bean class=&#34;org.springframework.data.repository.support.DomainClassPropertyEditorRegistrar&#34; /&amp;gt;
+      &amp;lt;/property&amp;gt;
+    &amp;lt;/bean&amp;gt;
+  &amp;lt;/property&amp;gt;
+&amp;lt;/bean&amp;gt;</code></pre></div>
 <p>После данных изменений в конфигурации можно переписать контроллер следующим образом:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Controller</span>
 <span style="color:#a6e22e">@RequestMapping</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/users&#34;</span><span style="color:#f92672">)</span>
@@ -380,7 +399,7 @@ Spring Data значительно упрощает жизнь при испол
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="https://twitter.com/LinkageError/" title="https://twitter.com/LinkageError/"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[site:@LinkageError creator:@LinkageError card:summary]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 

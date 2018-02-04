@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
-<head>
-  <link href="http://gmpg.org/xfn/11" rel="profile">
+<html prefix="og: http://ogp.me/ns#">
+<head >
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
@@ -9,12 +8,19 @@
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
 
+  
+  <title>Немножко магии от AspectJ</title>
+
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <meta name="author" content="Oleg Atamanenko">
+
 
   <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
 
 
-  
-  <title>Немножко магии от AspectJ</title>
 
   
   
@@ -35,6 +41,7 @@
   
   
 
+
   
 
 
@@ -42,13 +49,29 @@
   <link href="https://feeds.feedburner.com/atamanenko" rel="alternate" type="application/rss+xml" title="Sharing knowledge" />
   <link href="https://feeds.feedburner.com/atamanenko" rel="feed" type="application/rss+xml" title="Sharing knowledge" />
   
+
   
   
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@LinkageError">
+  <meta name="twitter:creator" content="@LinkageError">
 
-  <meta name="description" content="">
-  <meta name="keywords" content="">
+  <meta name="twitter:title" content="Немножко магии от AspectJ">
 
-  <meta name="author" content="Oleg Atamanenko">
+  
+
+  <meta property="og:title" content="Немножко магии от AspectJ" />
+  <meta property="og:url" content="https://uthark.github.io/2012/01/28/aspectj/" />
+  <meta property="og:description" content="Наверно, вы уже сталкивались с таким понятием, как AOП - аспектно-ориентированное программирование.
+Обычно, про него вспоминают, когда говорят про декларативное использование транзакций, про проверку прав доступа, либо про реализацию журналирования.
+Но это не единственные области применения АОП.
+Я хочу показать ещё пару областей применения из реальных проектов:
+ Модификация исходного кода для реализации дополнительных возможностей. Принудительная проверка контракта между модулями.  Модификация исходного кода для реализации дополнительных возможностей Предположим, что у нас есть модуль в приложении, который предоставляет нужную нам функциональность." />
+
+  
+
+
+
 
 </head>
 <body>
@@ -116,7 +139,7 @@
 
         
         
-<div class="sharing"> 
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2012%2f01%2f28%2faspectj%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=%d0%9d%d0%b5%d0%bc%d0%bd%d0%be%d0%b6%d0%ba%d0%be%20%d0%bc%d0%b0%d0%b3%d0%b8%d0%b8%20%d0%be%d1%82%20AspectJ&url=https%3a%2f%2futhark.github.io%2f2012%2f01%2f28%2faspectj%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></i></a>
 </div>
@@ -227,30 +250,30 @@
 <p>Файл аспекта нужно положить в каталог <code>src/main/aspect</code>, а для сборки приложения необходимо использовать не стандартный Oracle <a href="http://docs.oracle.com/javase/6/docs/technotes/tools/solaris/javac.html">Java Compiler</a>, а <a href="http://eclipse.org/aspectj/downloads.php">AspectJ compiler</a>.</p>
 
 <p>Пример конфигурации для <a href="https://maven.apache.org/">Apache Maven</a>:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;plugin&gt;</span>
-    <span style="color:#f92672">&lt;groupId&gt;</span>org.codehaus.mojo<span style="color:#f92672">&lt;/groupId&gt;</span>
-    <span style="color:#f92672">&lt;artifactId&gt;</span>aspectj-maven-plugin<span style="color:#f92672">&lt;/artifactId&gt;</span>
-    <span style="color:#f92672">&lt;version&gt;</span>${aspectj-maven-plugin.version}<span style="color:#f92672">&lt;/version&gt;</span>
-    <span style="color:#f92672">&lt;configuration&gt;</span>
-        <span style="color:#f92672">&lt;complianceLevel&gt;</span>1.6<span style="color:#f92672">&lt;/complianceLevel&gt;</span>
-        <span style="color:#f92672">&lt;aspectLibraries&gt;</span>
-            <span style="color:#f92672">&lt;aspectLibrary&gt;</span>
-                <span style="color:#f92672">&lt;groupId&gt;</span>org.springframework<span style="color:#f92672">&lt;/groupId&gt;</span>
-                <span style="color:#f92672">&lt;artifactId&gt;</span>spring-aspects<span style="color:#f92672">&lt;/artifactId&gt;</span>
-            <span style="color:#f92672">&lt;/aspectLibrary&gt;</span>
-        <span style="color:#f92672">&lt;/aspectLibraries&gt;</span>
-        <span style="color:#f92672">&lt;verbose&gt;</span>true<span style="color:#f92672">&lt;/verbose&gt;</span>
-    <span style="color:#f92672">&lt;/configuration&gt;</span>
-    <span style="color:#f92672">&lt;executions&gt;</span>
-        <span style="color:#f92672">&lt;execution&gt;</span>
-            <span style="color:#f92672">&lt;phase&gt;</span>process-sources<span style="color:#f92672">&lt;/phase&gt;</span>
-            <span style="color:#f92672">&lt;goals&gt;</span>
-                <span style="color:#f92672">&lt;goal&gt;</span>compile<span style="color:#f92672">&lt;/goal&gt;</span>
-                <span style="color:#f92672">&lt;goal&gt;</span>test-compile<span style="color:#f92672">&lt;/goal&gt;</span>
-            <span style="color:#f92672">&lt;/goals&gt;</span>
-        <span style="color:#f92672">&lt;/execution&gt;</span>
-    <span style="color:#f92672">&lt;/executions&gt;</span>
-<span style="color:#f92672">&lt;/plugin&gt;</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml">&amp;lt;plugin&amp;gt;
+    &amp;lt;groupId&amp;gt;org.codehaus.mojo&amp;lt;/groupId&amp;gt;
+    &amp;lt;artifactId&amp;gt;aspectj-maven-plugin&amp;lt;/artifactId&amp;gt;
+    &amp;lt;version&amp;gt;${aspectj-maven-plugin.version}&amp;lt;/version&amp;gt;
+    &amp;lt;configuration&amp;gt;
+        &amp;lt;complianceLevel&amp;gt;1.6&amp;lt;/complianceLevel&amp;gt;
+        &amp;lt;aspectLibraries&amp;gt;
+            &amp;lt;aspectLibrary&amp;gt;
+                &amp;lt;groupId&amp;gt;org.springframework&amp;lt;/groupId&amp;gt;
+                &amp;lt;artifactId&amp;gt;spring-aspects&amp;lt;/artifactId&amp;gt;
+            &amp;lt;/aspectLibrary&amp;gt;
+        &amp;lt;/aspectLibraries&amp;gt;
+        &amp;lt;verbose&amp;gt;true&amp;lt;/verbose&amp;gt;
+    &amp;lt;/configuration&amp;gt;
+    &amp;lt;executions&amp;gt;
+        &amp;lt;execution&amp;gt;
+            &amp;lt;phase&amp;gt;process-sources&amp;lt;/phase&amp;gt;
+            &amp;lt;goals&amp;gt;
+                &amp;lt;goal&amp;gt;compile&amp;lt;/goal&amp;gt;
+                &amp;lt;goal&amp;gt;test-compile&amp;lt;/goal&amp;gt;
+            &amp;lt;/goals&amp;gt;
+        &amp;lt;/execution&amp;gt;
+    &amp;lt;/executions&amp;gt;
+&amp;lt;/plugin&amp;gt;</code></pre></div>
 <h4 id="заключение">Заключение</h4>
 
 <p>Вот в общем-то и всё. Я сознательно не стал описывать языковые конструкции аспектов, так как они подробно описаны в <a href="https://www.eclipse.org/aspectj/doc/next/progguide/index.html">руководстве AspectJ</a></p>
@@ -356,7 +379,7 @@
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="https://twitter.com/LinkageError/" title="https://twitter.com/LinkageError/"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[site:@LinkageError creator:@LinkageError card:summary]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 

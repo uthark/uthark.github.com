@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
-<head>
-  <link href="http://gmpg.org/xfn/11" rel="profile">
+<html prefix="og: http://ogp.me/ns#">
+<head >
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
@@ -9,12 +8,19 @@
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
 
+  
+  <title>Opera и del.icio.us</title>
+
+
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <meta name="author" content="Oleg Atamanenko">
+
 
   <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
 
 
-  
-  <title>Opera и del.icio.us</title>
 
   
   
@@ -35,6 +41,7 @@
   
   
 
+
   
 
 
@@ -42,13 +49,27 @@
   <link href="https://feeds.feedburner.com/atamanenko" rel="alternate" type="application/rss+xml" title="Sharing knowledge" />
   <link href="https://feeds.feedburner.com/atamanenko" rel="feed" type="application/rss+xml" title="Sharing knowledge" />
   
+
   
   
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@LinkageError">
+  <meta name="twitter:creator" content="@LinkageError">
 
-  <meta name="description" content="">
-  <meta name="keywords" content="">
+  <meta name="twitter:title" content="Opera и del.icio.us">
 
-  <meta name="author" content="Oleg Atamanenko">
+  
+
+  <meta property="og:title" content="Opera и del.icio.us" />
+  <meta property="og:url" content="https://uthark.github.io/2009/07/04/opera-delicious/" />
+  <meta property="og:description" content="Так получилось, что в последнее время я стал пользоваться небезызвестной оперой.
+В связи с этим я стал искать замену часто используемым расширениям, одно из них - delicious bookmarks. Сервис del.icio.us предоставляет букмарклеты для различных браузеров, которые позволяют сохранять закладки быстро и удобно. Вот только есть один недостаток - официальный плагин для Firefox в свойство Notes новой закладки добавляет выделенный текст со страницы, чего букмарклет не делает.
+Посмотрев исходник букмарклета, а это обычный javascript, я добавил небольшой кусочек кода, который восстанавливает справедливость и тоже добавляет в поле Notes текст, выделенный на странице." />
+
+  
+
+
+
 
 </head>
 <body>
@@ -116,7 +137,7 @@
 
         
         
-<div class="sharing"> 
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2009%2f07%2f04%2fopera-delicious%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=Opera%20%d0%b8%20del.icio.us&url=https%3a%2f%2futhark.github.io%2f2009%2f07%2f04%2fopera-delicious%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></i></a>
 </div>
@@ -140,7 +161,7 @@
 <p>Посмотрев исходник букмарклета, а это обычный javascript, я добавил небольшой кусочек кода, который восстанавливает справедливость и тоже добавляет в поле Notes текст, выделенный на странице.</p>
 
 <p>Ниже привожу изменённый код букмарклета:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#a6e22e">javascript</span><span style="color:#f92672">:</span>(<span style="color:#66d9ef">function</span>(){<span style="color:#a6e22e">f</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#39;http://delicious.com/save?url=&#39;</span><span style="color:#f92672">+</span>encodeURIComponent(window.<span style="color:#a6e22e">location</span>.<span style="color:#a6e22e">href</span>)<span style="color:#f92672">+</span><span style="color:#e6db74">&#39;&amp;title=&#39;</span><span style="color:#f92672">+</span>encodeURIComponent(document.<span style="color:#a6e22e">title</span>)<span style="color:#f92672">+</span><span style="color:#e6db74">&#39;¬es=&#39;</span><span style="color:#f92672">+</span>encodeURIComponent(document.<span style="color:#a6e22e">getSelection</span>())<span style="color:#f92672">+</span><span style="color:#e6db74">&#39;&amp;v=5&amp;&#39;</span>;<span style="color:#a6e22e">a</span><span style="color:#f92672">=</span><span style="color:#66d9ef">function</span>(){<span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span>window.<span style="color:#a6e22e">open</span>(<span style="color:#a6e22e">f</span><span style="color:#f92672">+</span><span style="color:#e6db74">&#39;noui=1&amp;jump=doclose&#39;</span>,<span style="color:#e6db74">&#39;deliciousuiv5&#39;</span>,<span style="color:#e6db74">&#39;location=yes,links=no,scrollbars=no,toolbar=no,width=550,height=550&#39;</span>))<span style="color:#a6e22e">location</span>.<span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#a6e22e">f</span><span style="color:#f92672">+</span><span style="color:#e6db74">&#39;jump=yes&#39;</span>};<span style="color:#66d9ef">if</span>(<span style="color:#e6db74">/Firefox/</span>.<span style="color:#a6e22e">test</span>(<span style="color:#a6e22e">navigator</span>.<span style="color:#a6e22e">userAgent</span>)){<span style="color:#a6e22e">setTimeout</span>(<span style="color:#a6e22e">a</span>,<span style="color:#ae81ff">0</span>)}<span style="color:#66d9ef">else</span>{<span style="color:#a6e22e">a</span>()}})()</code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#a6e22e">javascript</span><span style="color:#f92672">:</span>(<span style="color:#66d9ef">function</span>(){<span style="color:#a6e22e">f</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#39;http://delicious.com/save?url=&#39;</span><span style="color:#f92672">+</span>encodeURIComponent(window.<span style="color:#a6e22e">location</span>.<span style="color:#a6e22e">href</span>)<span style="color:#f92672">+</span><span style="color:#e6db74">&#39;&amp;title=&#39;</span><span style="color:#f92672">+</span>encodeURIComponent(document.<span style="color:#a6e22e">title</span>)<span style="color:#f92672">+</span><span style="color:#e6db74">&#39;&amp;notes=&#39;</span><span style="color:#f92672">+</span>encodeURIComponent(document.<span style="color:#a6e22e">getSelection</span>())<span style="color:#f92672">+</span><span style="color:#e6db74">&#39;&amp;v=5&amp;&#39;</span>;<span style="color:#a6e22e">a</span><span style="color:#f92672">=</span><span style="color:#66d9ef">function</span>(){<span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span>window.<span style="color:#a6e22e">open</span>(<span style="color:#a6e22e">f</span><span style="color:#f92672">+</span><span style="color:#e6db74">&#39;noui=1&amp;jump=doclose&#39;</span>,<span style="color:#e6db74">&#39;deliciousuiv5&#39;</span>,<span style="color:#e6db74">&#39;location=yes,links=no,scrollbars=no,toolbar=no,width=550,height=550&#39;</span>))<span style="color:#a6e22e">location</span>.<span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#a6e22e">f</span><span style="color:#f92672">+</span><span style="color:#e6db74">&#39;jump=yes&#39;</span>};<span style="color:#66d9ef">if</span>(<span style="color:#e6db74">/Firefox/</span>.<span style="color:#a6e22e">test</span>(<span style="color:#a6e22e">navigator</span>.<span style="color:#a6e22e">userAgent</span>)){<span style="color:#a6e22e">setTimeout</span>(<span style="color:#a6e22e">a</span>,<span style="color:#ae81ff">0</span>)}<span style="color:#66d9ef">else</span>{<span style="color:#a6e22e">a</span>()}})()</code></pre></div>
         </div>
         
 
@@ -242,7 +263,7 @@
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="https://twitter.com/LinkageError/" title="https://twitter.com/LinkageError/"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[site:@LinkageError creator:@LinkageError card:summary]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 
