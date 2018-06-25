@@ -80,6 +80,10 @@
     
   
     
+      <li><a href="https://uthark.github.io/usefularticles/" title="Useful Articles" >Useful Articles</a></li>
+    
+  
+    
       <li><a href="https://uthark.github.io/about/" title="About" >About</a></li>
     
   
@@ -455,14 +459,8 @@ previously constructed threads when they are available.</p>
 <p>After some googling I found out that it is due to the fact that current version of DB2 can&rsquo;t handle more than 4 responses to CPUID query.</p>
 
 <p>The workaround is to update VMWare configuration file for the virtual machine.</p>
-
-<p>``` ini Changes to *.vmx file</p>
-
-<p>monitor_control.enable_fullcpuid = TRUE
-cpuid.4.4.eax = &ldquo;0000:0000:0000:0000:0000:0000:0000:0000&rdquo;</p>
-
-<p>```</p>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ini Changes to *.vmx file" data-lang="ini Changes to *.vmx file">monitor_control.enable_fullcpuid = TRUE
+cpuid.4.4.eax = &#34;0000:0000:0000:0000:0000:0000:0000:0000&#34;</code></pre></div>
 <p>The answer was found on <a href="https://communities.vmware.com/thread/461857" target="_blank">VMWare Community Forums</a></p>
 
         
@@ -594,7 +592,7 @@ cpuid.4.4.eax = &ldquo;0000:0000:0000:0000:0000:0000:0000:0000&rdquo;</p>
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[creator:@LinkageError card:summary site:@LinkageError]"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary site:@LinkageError creator:@LinkageError]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 

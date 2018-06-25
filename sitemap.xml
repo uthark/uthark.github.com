@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://uthark.github.io/usefularticles/</loc>
+    <lastmod>2018-06-24T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://uthark.github.io/2018/01/24/section-archived/</loc>
     <lastmod>2018-01-24T00:00:00+00:00</lastmod>
   </url>
@@ -1212,7 +1217,7 @@
   
   <url>
     <loc>https://uthark.github.io/categories/useful/</loc>
-    <lastmod>2009-12-08T23:17:00+00:00</lastmod>
+    <lastmod>2018-06-24T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

@@ -99,6 +99,10 @@
     
   
     
+      <li><a href="https://uthark.github.io/usefularticles/" title="Useful Articles" >Useful Articles</a></li>
+    
+  
+    
       <li><a href="https://uthark.github.io/about/" title="About" >About</a></li>
     
   
@@ -186,27 +190,27 @@
     remote_bus <span style="color:#f92672">=</span> dbus<span style="color:#f92672">.</span>SessionBus()
     
     <span style="color:#75715e"># Check if skype is running.</span>
-    system_service_list <span style="color:#f92672">=</span> remote_bus<span style="color:#f92672">.</span>get_object(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;org.freedesktop.DBus&#39;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;/org/freedesktop/DBus&#39;</span>)<span style="color:#f92672">.</span>ListNames()
+    system_service_list <span style="color:#f92672">=</span> remote_bus<span style="color:#f92672">.</span>get_object(<span style="color:#e6db74">&#39;org.freedesktop.DBus&#39;</span>, <span style="color:#e6db74">&#39;/org/freedesktop/DBus&#39;</span>)<span style="color:#f92672">.</span>ListNames()
     skype_api_found <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
     <span style="color:#66d9ef">for</span> service <span style="color:#f92672">in</span> system_service_list:
-        <span style="color:#66d9ef">if</span> service<span style="color:#f92672">==</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;com.Skype.API&#39;</span>:
+        <span style="color:#66d9ef">if</span> service<span style="color:#f92672">==</span><span style="color:#e6db74">&#39;com.Skype.API&#39;</span>:
             skype_api_found <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
             <span style="color:#66d9ef">break</span>
     <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> skype_api_found:
-        sys<span style="color:#f92672">.</span>exit(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;No running API-capable Skype found&#39;</span>)
+        sys<span style="color:#f92672">.</span>exit(<span style="color:#e6db74">&#39;No running API-capable Skype found&#39;</span>)
 
     <span style="color:#75715e"># Get skype dbus api</span>
-    skype_service <span style="color:#f92672">=</span> remote_bus<span style="color:#f92672">.</span>get_object(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;com.Skype.API&#39;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;/com/Skype&#39;</span>)
+    skype_service <span style="color:#f92672">=</span> remote_bus<span style="color:#f92672">.</span>get_object(<span style="color:#e6db74">&#39;com.Skype.API&#39;</span>, <span style="color:#e6db74">&#39;/com/Skype&#39;</span>)
 
     <span style="color:#75715e"># Connect to skype.</span>
-    answer <span style="color:#f92672">=</span> skype_service<span style="color:#f92672">.</span>Invoke(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;NAME SkypeApiClient&#39;</span>)
-    <span style="color:#66d9ef">if</span> answer <span style="color:#f92672">!=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;OK&#39;</span>:
-        sys<span style="color:#f92672">.</span>exit(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;Could not bind to Skype client&#39;</span>)
+    answer <span style="color:#f92672">=</span> skype_service<span style="color:#f92672">.</span>Invoke(<span style="color:#e6db74">&#39;NAME SkypeApiClient&#39;</span>)
+    <span style="color:#66d9ef">if</span> answer <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;OK&#39;</span>:
+        sys<span style="color:#f92672">.</span>exit(<span style="color:#e6db74">&#39;Could not bind to Skype client&#39;</span>)
 
     <span style="color:#75715e"># Check if protocol is supported.</span>
-    answer <span style="color:#f92672">=</span> skype_service<span style="color:#f92672">.</span>Invoke(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;PROTOCOL 1&#39;</span>)
-    <span style="color:#66d9ef">if</span> answer <span style="color:#f92672">!=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;PROTOCOL 1&#39;</span>:
-        sys<span style="color:#f92672">.</span>exit(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;This test program only supports Skype API protocol version 1&#39;</span>)
+    answer <span style="color:#f92672">=</span> skype_service<span style="color:#f92672">.</span>Invoke(<span style="color:#e6db74">&#39;PROTOCOL 1&#39;</span>)
+    <span style="color:#66d9ef">if</span> answer <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;PROTOCOL 1&#39;</span>:
+        sys<span style="color:#f92672">.</span>exit(<span style="color:#e6db74">&#39;This test program only supports Skype API protocol version 1&#39;</span>)
 
     <span style="color:#75715e"># Invoke operations</span>
     <span style="color:#66d9ef">for</span> arg <span style="color:#f92672">in</span> sys<span style="color:#f92672">.</span>argv:
@@ -329,7 +333,7 @@
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[creator:@LinkageError card:summary site:@LinkageError]"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary site:@LinkageError creator:@LinkageError]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 

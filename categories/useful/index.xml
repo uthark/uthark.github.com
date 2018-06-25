@@ -6,10 +6,19 @@
     <description>Recent content in Useful on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 08 Dec 2009 23:17:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 24 Jun 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://uthark.github.io/categories/useful/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Links to interesting articles and whitepapers</title>
+      <link>https://uthark.github.io/usefularticles/</link>
+      <pubDate>Sun, 24 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/usefularticles/</guid>
+      <description> The Fallacy of Premature Optimization  </description>
+    </item>
     
     <item>
       <title>Использование Dropbox для хранения конфигурационных файлов</title>

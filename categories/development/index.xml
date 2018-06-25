@@ -117,7 +117,7 @@ Rendering of description tag, excerpt from _includes/head.html:
       <guid>https://uthark.github.io/2014/03/02/iterm-triggers/</guid>
       <description>I want to share one of the cool features which iTerm.app has - triggers. The idea behind triggers is simple - it allows to perform arbitrary action based on the output in console window. For example, it can colorize specified content (based on regular expressions).
 Start iTerm, open settings (⌘+,), go to Profiles, then tab Advanced. Click on Edit button in Triggers section.
- iTerm Settings   Then you can define your own triggers:</description>
+  iTerm Settings   Then you can define your own triggers:</description>
     </item>
     
     <item>
