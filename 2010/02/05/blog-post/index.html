@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html prefix="og: http://ogp.me/ns#">
-<head >
+<html prefix="og: http://ogp.me/ns#" lang="en">
+<head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=5">
 
   
   <title>Вложенные транзакции в базах данных</title>
@@ -19,7 +19,7 @@
 
 
   <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
-
+  <link rel="stylesheet" media="screen" href="https://fonts.googleapis.com/css?family=Arvo" type="text/css"/>
 
 
   
@@ -29,10 +29,8 @@
   
   
 
-
   
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-
 
   
   <link href="https://uthark.github.io/favicon.png" rel="icon">
@@ -76,10 +74,10 @@
 </head>
 <body>
 
-
-<header>  
+<header>
+  
   <h1><a href="https://uthark.github.io/">Sharing knowledge</a></h1>
-    
+    <h2>by Oleg Atamanenko</h2>
 </header>
 
 
@@ -180,20 +178,20 @@
 Псевдовложенные транзакции являются самым простым способом реализации вложенных транзакций.<br />
 <br />
 Пример псевдотранзакции для базы данных Sybase:<br /></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">begin</span> tran
-    <span style="color:#66d9ef">select</span> <span style="color:#f92672">@@</span>trancount
-    <span style="color:#75715e">/* @@trancount = 1 */</span>
-    <span style="color:#66d9ef">begin</span> tran
-        <span style="color:#66d9ef">select</span> <span style="color:#f92672">@@</span>trancount
-        <span style="color:#75715e">/* @@trancount = 2 */</span>
-        <span style="color:#66d9ef">begin</span> tran
-            <span style="color:#66d9ef">select</span> <span style="color:#f92672">@@</span>trancount
-            <span style="color:#75715e">/* @@trancount = 3 */</span>
-        <span style="color:#66d9ef">commit</span> tran
-    <span style="color:#66d9ef">commit</span> tran
-<span style="color:#66d9ef">commit</span> tran
-<span style="color:#66d9ef">select</span> <span style="color:#f92672">@@</span>trancount
-<span style="color:#75715e">/* @@ trancount = 0 */</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">begin</span> <span class="n">tran</span>
+    <span class="k">select</span> <span class="o">@@</span><span class="n">trancount</span>
+    <span class="cm">/* @@trancount = 1 */</span>
+    <span class="k">begin</span> <span class="n">tran</span>
+        <span class="k">select</span> <span class="o">@@</span><span class="n">trancount</span>
+        <span class="cm">/* @@trancount = 2 */</span>
+        <span class="k">begin</span> <span class="n">tran</span>
+            <span class="k">select</span> <span class="o">@@</span><span class="n">trancount</span>
+            <span class="cm">/* @@trancount = 3 */</span>
+        <span class="k">commit</span> <span class="n">tran</span>
+    <span class="k">commit</span> <span class="n">tran</span>
+<span class="k">commit</span> <span class="n">tran</span>
+<span class="k">select</span> <span class="o">@@</span><span class="n">trancount</span>
+<span class="cm">/* @@ trancount = 0 */</span></code></pre></div>
 <p><h3>Вложенная субтранзакция</h3><br />
 Данный вид вложенных транзакций решает проблему с обработкой ошибок при <tt>ROLLBACK</tt>. <br />
 При коммите вложенной транзакции происходит коммит, но он не обладает свойством <tt>Durability</tt> - окончательный результат зависит от результата внешней транзакции - если внешняя транзакция заканчивается успешно, то и результат внутренней транзакции также фиксируется. Если же при фиксации изменений внешней транзакции происходит ошибка, то внутренняя транзакция также откатывается. Кроме того, необходимо обратить внимание на то, что если внутренняя транзакция заканчивается неуспешно, то внешняя транзакция может закончиться успешно, если не выкинуть исключение наружу. Таким образом, для данного вида вложенных транзакций необходимо выкидывать исключение наружу, для того, чтобы прервать и откатить внешнюю транзакцию в случае ошибки.<br />
@@ -212,7 +210,9 @@
         
 
 <footer>
-
+  <div>
+    <p>If you have any questions, feel free to ping me on Twitter.</p>
+  </div>
   <p class="meta">
     
     
@@ -310,7 +310,7 @@
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary site:@LinkageError creator:@LinkageError]"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[creator:@LinkageError card:summary site:@LinkageError]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 

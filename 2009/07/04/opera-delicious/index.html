@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html prefix="og: http://ogp.me/ns#">
-<head >
+<html prefix="og: http://ogp.me/ns#" lang="en">
+<head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=5">
 
   
   <title>Opera и del.icio.us</title>
@@ -19,7 +19,7 @@
 
 
   <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
-
+  <link rel="stylesheet" media="screen" href="https://fonts.googleapis.com/css?family=Arvo" type="text/css"/>
 
 
   
@@ -29,10 +29,8 @@
   
   
 
-
   
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-
 
   
   <link href="https://uthark.github.io/favicon.png" rel="icon">
@@ -73,10 +71,10 @@
 </head>
 <body>
 
-
-<header>  
+<header>
+  
   <h1><a href="https://uthark.github.io/">Sharing knowledge</a></h1>
-    
+    <h2>by Oleg Atamanenko</h2>
 </header>
 
 
@@ -163,13 +161,15 @@
 <p>Посмотрев исходник букмарклета, а это обычный javascript, я добавил небольшой кусочек кода, который восстанавливает справедливость и тоже добавляет в поле Notes текст, выделенный на странице.</p>
 
 <p>Ниже привожу изменённый код букмарклета:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#a6e22e">javascript</span><span style="color:#f92672">:</span>(<span style="color:#66d9ef">function</span>(){<span style="color:#a6e22e">f</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#39;http://delicious.com/save?url=&#39;</span><span style="color:#f92672">+</span>encodeURIComponent(window.<span style="color:#a6e22e">location</span>.<span style="color:#a6e22e">href</span>)<span style="color:#f92672">+</span><span style="color:#e6db74">&#39;&amp;title=&#39;</span><span style="color:#f92672">+</span>encodeURIComponent(document.<span style="color:#a6e22e">title</span>)<span style="color:#f92672">+</span><span style="color:#e6db74">&#39;&amp;notes=&#39;</span><span style="color:#f92672">+</span>encodeURIComponent(document.<span style="color:#a6e22e">getSelection</span>())<span style="color:#f92672">+</span><span style="color:#e6db74">&#39;&amp;v=5&amp;&#39;</span>;<span style="color:#a6e22e">a</span><span style="color:#f92672">=</span><span style="color:#66d9ef">function</span>(){<span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span>window.<span style="color:#a6e22e">open</span>(<span style="color:#a6e22e">f</span><span style="color:#f92672">+</span><span style="color:#e6db74">&#39;noui=1&amp;jump=doclose&#39;</span>,<span style="color:#e6db74">&#39;deliciousuiv5&#39;</span>,<span style="color:#e6db74">&#39;location=yes,links=no,scrollbars=no,toolbar=no,width=550,height=550&#39;</span>))<span style="color:#a6e22e">location</span>.<span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#a6e22e">f</span><span style="color:#f92672">+</span><span style="color:#e6db74">&#39;jump=yes&#39;</span>};<span style="color:#66d9ef">if</span>(<span style="color:#e6db74">/Firefox/</span>.<span style="color:#a6e22e">test</span>(<span style="color:#a6e22e">navigator</span>.<span style="color:#a6e22e">userAgent</span>)){<span style="color:#a6e22e">setTimeout</span>(<span style="color:#a6e22e">a</span>,<span style="color:#ae81ff">0</span>)}<span style="color:#66d9ef">else</span>{<span style="color:#a6e22e">a</span>()}})()
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">javascript</span><span class="o">:</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span><span class="nx">f</span><span class="o">=</span><span class="s1">&#39;http://delicious.com/save?url=&#39;</span><span class="o">+</span><span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">href</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;&amp;title=&#39;</span><span class="o">+</span><span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">title</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;&amp;notes=&#39;</span><span class="o">+</span><span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getSelection</span><span class="p">())</span><span class="o">+</span><span class="s1">&#39;&amp;v=5&amp;&#39;</span><span class="p">;</span><span class="nx">a</span><span class="o">=</span><span class="kd">function</span><span class="p">(){</span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nb">window</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="nx">f</span><span class="o">+</span><span class="s1">&#39;noui=1&amp;jump=doclose&#39;</span><span class="p">,</span><span class="s1">&#39;deliciousuiv5&#39;</span><span class="p">,</span><span class="s1">&#39;location=yes,links=no,scrollbars=no,toolbar=no,width=550,height=550&#39;</span><span class="p">))</span><span class="nx">location</span><span class="p">.</span><span class="nx">href</span><span class="o">=</span><span class="nx">f</span><span class="o">+</span><span class="s1">&#39;jump=yes&#39;</span><span class="p">};</span><span class="k">if</span><span class="p">(</span><span class="sr">/Firefox/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">navigator</span><span class="p">.</span><span class="nx">userAgent</span><span class="p">)){</span><span class="nx">setTimeout</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="mi">0</span><span class="p">)}</span><span class="k">else</span><span class="p">{</span><span class="nx">a</span><span class="p">()}})()</span>
 </code></pre></div>
         </div>
         
 
 <footer>
-
+  <div>
+    <p>If you have any questions, feel free to ping me on Twitter.</p>
+  </div>
   <p class="meta">
     
     
@@ -267,7 +267,7 @@
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary site:@LinkageError creator:@LinkageError]"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[creator:@LinkageError card:summary site:@LinkageError]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 

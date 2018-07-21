@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html prefix="og: http://ogp.me/ns#">
-<head >
+<html prefix="og: http://ogp.me/ns#" lang="en">
+<head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=5">
 
   
   <title>Fixing unescaped quotes in page rendering in Octopress</title>
@@ -19,7 +19,7 @@
 
 
   <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
-
+  <link rel="stylesheet" media="screen" href="https://fonts.googleapis.com/css?family=Arvo" type="text/css"/>
 
 
   
@@ -29,10 +29,8 @@
   
   
 
-
   
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-
 
   
   <link href="https://uthark.github.io/favicon.png" rel="icon">
@@ -75,10 +73,10 @@ Rendering of description tag, excerpt from _includes/head.html:
 </head>
 <body>
 
-
-<header>  
+<header>
+  
   <h1><a href="https://uthark.github.io/">Sharing knowledge</a></h1>
-    
+    <h2>by Oleg Atamanenko</h2>
 </header>
 
 
@@ -165,14 +163,14 @@ Rendering of description tag, excerpt from _includes/head.html:
 <p>After searching within <a href="https://github.com/imathis/octopress/" target="_blank">octopress sources</a> I found the issue:</p>
 
 <p>Rendering of description tag, excerpt from _includes/head.html:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">{<span style="color:#e6db74">% capture </span> description <span style="color:#e6db74">%}
-</span><span style="color:#e6db74">    {% if page.description %}</span>
-        {{ page<span style="color:#f92672">.</span>description }}
-    {<span style="color:#e6db74">% else </span> <span style="color:#e6db74">%}
-</span><span style="color:#e6db74">        {{ content | raw_content }</span>}
-    {<span style="color:#e6db74">% endif </span> <span style="color:#e6db74">%}
-</span><span style="color:#e6db74">{% endcapture %}</span>
-<span style="color:#f92672">&lt;</span>meta name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;description&#34;</span> content<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;{{ description | strip_html | condense_spaces | truncate:150 }}&#34;</span><span style="color:#f92672">&gt;</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="p">{</span><span class="sx">% capture </span> <span class="n">description</span> <span class="s">%}
+</span><span class="s">    {% if page.description %}</span>
+        <span class="p">{{</span> <span class="n">page</span><span class="o">.</span><span class="n">description</span> <span class="p">}}</span>
+    <span class="p">{</span><span class="sx">% else </span> <span class="s">%}
+</span><span class="s">        {{ content | raw_content }</span><span class="p">}</span>
+    <span class="p">{</span><span class="sx">% endif </span> <span class="s">%}
+</span><span class="s">{% endcapture %}</span>
+<span class="o">&lt;</span><span class="n">meta</span> <span class="nb">name</span><span class="o">=</span><span class="s2">&#34;description&#34;</span> <span class="n">content</span><span class="o">=</span><span class="s2">&#34;{{ description | strip_html | condense_spaces | truncate:150 }}&#34;</span><span class="o">&gt;</span></code></pre></div>
 <p>After capturing, <code>description</code> is being processed with filters, defined in <code>plugins/octopress_filters.rb</code>. In this case, the following filter are applied:</p>
 
 <ul>
@@ -188,12 +186,12 @@ Rendering of description tag, excerpt from _includes/head.html:
 <p>So, let&rsquo;s add new function, <code>strip_quotes</code> in <code>plugins/octopress_filters.rb</code>:</p>
 
 <p>strip_quotes function:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># Strips quotes</span>
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">strip_quotes</span>(input)
-    input<span style="color:#f92672">.</span>gsub(<span style="color:#e6db74">/[\&#39;\&#34;&#34;]/</span>, <span style="color:#e6db74">&#39;&#39;</span>)
-<span style="color:#66d9ef">end</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="c1"># Strips quotes</span>
+<span class="k">def</span> <span class="nf">strip_quotes</span><span class="p">(</span><span class="n">input</span><span class="p">)</span>
+    <span class="n">input</span><span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="sr">/[\&#39;\&#34;&#34;]/</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="k">end</span></code></pre></div>
 <p>And then we need to update rendering of description tag - add newly created filter:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">meta</span> <span style="color:#a6e22e">name</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;description&#34;</span> <span style="color:#a6e22e">content</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;{{ description | strip_html | condense_spaces | strip_quotes | truncate:150 }}&#34;</span>&gt;</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">&#34;description&#34;</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;{{ description | strip_html | condense_spaces | strip_quotes | truncate:150 }}&#34;</span><span class="p">&gt;</span></code></pre></div>
 <p>After this fix description is being rendered properly.</p>
 
 <p>P.S. In order to render properly <code>{{</code> and <code>}}</code> in the octopress it is required to put content you want to render within <code>raw</code> and <code>endraw</code> tags. See <a href="http://stackoverflow.com/questions/15786144/how-to-escape-in-markdown-on-octopress" target="_blank">StackOverflow</a> <a href="http://stackoverflow.com/questions/3426182/how-to-escape-liquid-template-tags/13582517#13582517" target="_blank">questions</a> for details.</p>
@@ -202,7 +200,9 @@ Rendering of description tag, excerpt from _includes/head.html:
         
 
 <footer>
-
+  <div>
+    <p>If you have any questions, feel free to ping me on Twitter.</p>
+  </div>
   <p class="meta">
     
     
@@ -300,7 +300,7 @@ Rendering of description tag, excerpt from _includes/head.html:
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[site:@LinkageError creator:@LinkageError card:summary]"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary site:@LinkageError creator:@LinkageError]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 

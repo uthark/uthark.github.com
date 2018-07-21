@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html prefix="og: http://ogp.me/ns#">
-<head >
+<html prefix="og: http://ogp.me/ns#" lang="en">
+<head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=5">
 
   
   <title>Using AssertJ</title>
@@ -19,7 +19,7 @@
 
 
   <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
-
+  <link rel="stylesheet" media="screen" href="https://fonts.googleapis.com/css?family=Arvo" type="text/css"/>
 
 
   
@@ -29,10 +29,8 @@
   
   
 
-
   
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-
 
   
   <link href="https://uthark.github.io/favicon.png" rel="icon">
@@ -74,10 +72,10 @@ import io.github.uthark.blog.assertj.Assertions.assertThat; // ... within @Test 
 </head>
 <body>
 
-
-<header>  
+<header>
+  
   <h1><a href="https://uthark.github.io/">Sharing knowledge</a></h1>
-    
+    <h2>by Oleg Atamanenko</h2>
 </header>
 
 
@@ -160,81 +158,81 @@ import io.github.uthark.blog.assertj.Assertions.assertThat; // ... within @Test 
           <p><a href="https://github.com/joel-costigliola/assertj-core" target="_blank">AssertJ</a> is a library which provides fluent strongly-typed assertions to use in unit tests.</p>
 
 <p>Example of assertions written with <code>AssertJ</code>:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">import</span> io.github.uthark.blog.assertj.Assertions.assertThat<span style="color:#f92672">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">io.github.uthark.blog.assertj.Assertions.assertThat</span><span class="o">;</span>
 
-<span style="color:#75715e">// ... within @Test
-</span><span style="color:#75715e"></span>User result <span style="color:#f92672">=</span> userDao<span style="color:#f92672">.</span><span style="color:#a6e22e">findByLogin</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;username&#34;</span><span style="color:#f92672">);</span>
-assertThat<span style="color:#f92672">(</span>result<span style="color:#f92672">).</span>
-    isNotNull<span style="color:#f92672">().</span>
-    isActive<span style="color:#f92672">().</span>
-    hasLogin<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;username&#34;</span><span style="color:#f92672">);</span></code></pre></div>
+<span class="c1">// ... within @Test
+</span><span class="c1"></span><span class="n">User</span> <span class="n">result</span> <span class="o">=</span> <span class="n">userDao</span><span class="o">.</span><span class="na">findByLogin</span><span class="o">(</span><span class="s">&#34;username&#34;</span><span class="o">);</span>
+<span class="n">assertThat</span><span class="o">(</span><span class="n">result</span><span class="o">).</span>
+    <span class="n">isNotNull</span><span class="o">().</span>
+    <span class="n">isActive</span><span class="o">().</span>
+    <span class="n">hasLogin</span><span class="o">(</span><span class="s">&#34;username&#34;</span><span class="o">);</span></code></pre></div>
 <p>As you can see assertions look much more readable.
 The integration of assertj into Maven project is very easy:</p>
 
 <ol>
 <li>Update pom.xml in parent module</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;properties&gt;</span>
-    <span style="color:#f92672">&lt;assertj-core.version&gt;</span>1.6.0<span style="color:#f92672">&lt;/assertj-core.version&gt;</span>
-    <span style="color:#f92672">&lt;assertj-assertions-generator-maven-plugin.version&gt;</span>1.2.0<span style="color:#f92672">&lt;/assertj-assertions-generator-maven-plugin.version&gt;</span>
-<span style="color:#f92672">&lt;/properties&gt;</span>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;properties&gt;</span>
+    <span class="nt">&lt;assertj-core.version&gt;</span>1.6.0<span class="nt">&lt;/assertj-core.version&gt;</span>
+    <span class="nt">&lt;assertj-assertions-generator-maven-plugin.version&gt;</span>1.2.0<span class="nt">&lt;/assertj-assertions-generator-maven-plugin.version&gt;</span>
+<span class="nt">&lt;/properties&gt;</span>
 
-<span style="color:#f92672">&lt;dependencyManagement&gt;</span>
-    <span style="color:#f92672">&lt;dependency&gt;</span>
-        <span style="color:#f92672">&lt;groupId&gt;</span>org.assertj<span style="color:#f92672">&lt;/groupId&gt;</span>
-        <span style="color:#f92672">&lt;artifactId&gt;</span>assertj-core<span style="color:#f92672">&lt;/artifactId&gt;</span>
-        <span style="color:#f92672">&lt;version&gt;</span>${assertj-core.version}<span style="color:#f92672">&lt;/version&gt;</span>
-        <span style="color:#f92672">&lt;scope&gt;</span>test<span style="color:#f92672">&lt;/scope&gt;</span>
-    <span style="color:#f92672">&lt;/dependency&gt;</span>
-<span style="color:#f92672">&lt;/dependencyManagement&gt;</span>
+<span class="nt">&lt;dependencyManagement&gt;</span>
+    <span class="nt">&lt;dependency&gt;</span>
+        <span class="nt">&lt;groupId&gt;</span>org.assertj<span class="nt">&lt;/groupId&gt;</span>
+        <span class="nt">&lt;artifactId&gt;</span>assertj-core<span class="nt">&lt;/artifactId&gt;</span>
+        <span class="nt">&lt;version&gt;</span>${assertj-core.version}<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
+    <span class="nt">&lt;/dependency&gt;</span>
+<span class="nt">&lt;/dependencyManagement&gt;</span>
 
-<span style="color:#f92672">&lt;pluginManagement&gt;</span>
-    <span style="color:#f92672">&lt;plugin&gt;</span>
-        <span style="color:#f92672">&lt;groupId&gt;</span>org.assertj<span style="color:#f92672">&lt;/groupId&gt;</span>
-        <span style="color:#f92672">&lt;artifactId&gt;</span>assertj-assertions-generator-maven-plugin<span style="color:#f92672">&lt;/artifactId&gt;</span>
-        <span style="color:#f92672">&lt;version&gt;</span>${assertj-assertions-generator-maven-plugin.version}<span style="color:#f92672">&lt;/version&gt;</span>
-        <span style="color:#f92672">&lt;executions&gt;</span>
-            <span style="color:#f92672">&lt;execution&gt;</span>
-                <span style="color:#f92672">&lt;id&gt;</span>generate-assertions<span style="color:#f92672">&lt;/id&gt;</span>
-                <span style="color:#f92672">&lt;phase&gt;</span>generate-test-sources<span style="color:#f92672">&lt;/phase&gt;</span>
-                <span style="color:#f92672">&lt;goals&gt;</span>
-                    <span style="color:#f92672">&lt;goal&gt;</span>generate-assertions<span style="color:#f92672">&lt;/goal&gt;</span>
-                <span style="color:#f92672">&lt;/goals&gt;</span>
-            <span style="color:#f92672">&lt;/execution&gt;</span>
-        <span style="color:#f92672">&lt;/executions&gt;</span>
-    <span style="color:#f92672">&lt;/plugin&gt;</span>
+<span class="nt">&lt;pluginManagement&gt;</span>
+    <span class="nt">&lt;plugin&gt;</span>
+        <span class="nt">&lt;groupId&gt;</span>org.assertj<span class="nt">&lt;/groupId&gt;</span>
+        <span class="nt">&lt;artifactId&gt;</span>assertj-assertions-generator-maven-plugin<span class="nt">&lt;/artifactId&gt;</span>
+        <span class="nt">&lt;version&gt;</span>${assertj-assertions-generator-maven-plugin.version}<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;executions&gt;</span>
+            <span class="nt">&lt;execution&gt;</span>
+                <span class="nt">&lt;id&gt;</span>generate-assertions<span class="nt">&lt;/id&gt;</span>
+                <span class="nt">&lt;phase&gt;</span>generate-test-sources<span class="nt">&lt;/phase&gt;</span>
+                <span class="nt">&lt;goals&gt;</span>
+                    <span class="nt">&lt;goal&gt;</span>generate-assertions<span class="nt">&lt;/goal&gt;</span>
+                <span class="nt">&lt;/goals&gt;</span>
+            <span class="nt">&lt;/execution&gt;</span>
+        <span class="nt">&lt;/executions&gt;</span>
+    <span class="nt">&lt;/plugin&gt;</span>
 
-<span style="color:#f92672">&lt;/pluginManagement&gt;</span></code></pre></div>
+<span class="nt">&lt;/pluginManagement&gt;</span></code></pre></div>
 <ol>
 <li>Update pom.xml in child module</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;dependencies&gt;</span>
-    <span style="color:#f92672">&lt;dependency&gt;</span>
-        <span style="color:#f92672">&lt;groupId&gt;</span>org.assertj<span style="color:#f92672">&lt;/groupId&gt;</span>
-        <span style="color:#f92672">&lt;artifactId&gt;</span>assertj-core<span style="color:#f92672">&lt;/artifactId&gt;</span>
-    <span style="color:#f92672">&lt;/dependency&gt;</span>
-<span style="color:#f92672">&lt;/dependencies&gt;</span>
-<span style="color:#f92672">&lt;build&gt;</span>
-    <span style="color:#f92672">&lt;plugins&gt;</span>
-        <span style="color:#f92672">&lt;plugin&gt;</span>
-            <span style="color:#f92672">&lt;groupId&gt;</span>org.assertj<span style="color:#f92672">&lt;/groupId&gt;</span>
-            <span style="color:#f92672">&lt;artifactId&gt;</span>assertj-assertions-generator-maven-plugin<span style="color:#f92672">&lt;/artifactId&gt;</span>
-            <span style="color:#f92672">&lt;configuration&gt;</span>
-                <span style="color:#75715e">&lt;!-- you can define collection packages: --&gt;</span>
-                <span style="color:#f92672">&lt;packages&gt;</span>
-                    <span style="color:#f92672">&lt;param&gt;</span>io.github.uthark.blog.assertj<span style="color:#f92672">&lt;/param&gt;</span>
-                <span style="color:#f92672">&lt;/packages&gt;</span>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependencies&gt;</span>
+    <span class="nt">&lt;dependency&gt;</span>
+        <span class="nt">&lt;groupId&gt;</span>org.assertj<span class="nt">&lt;/groupId&gt;</span>
+        <span class="nt">&lt;artifactId&gt;</span>assertj-core<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;/dependency&gt;</span>
+<span class="nt">&lt;/dependencies&gt;</span>
+<span class="nt">&lt;build&gt;</span>
+    <span class="nt">&lt;plugins&gt;</span>
+        <span class="nt">&lt;plugin&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.assertj<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>assertj-assertions-generator-maven-plugin<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;configuration&gt;</span>
+                <span class="c">&lt;!-- you can define collection packages: --&gt;</span>
+                <span class="nt">&lt;packages&gt;</span>
+                    <span class="nt">&lt;param&gt;</span>io.github.uthark.blog.assertj<span class="nt">&lt;/param&gt;</span>
+                <span class="nt">&lt;/packages&gt;</span>
 
-                <span style="color:#75715e">&lt;!-- Or specify classes one by one. --&gt;</span>
-                <span style="color:#f92672">&lt;classes&gt;</span>
-                    <span style="color:#f92672">&lt;param&gt;</span>io.github.uthark.blog.assertj.User<span style="color:#f92672">&lt;/param&gt;</span>
-                <span style="color:#f92672">&lt;/classes&gt;</span>
-            <span style="color:#f92672">&lt;/configuration&gt;</span>
-        <span style="color:#f92672">&lt;/plugin&gt;</span>
-    <span style="color:#f92672">&lt;/plugins&gt;</span>
-<span style="color:#f92672">&lt;/build&gt;</span></code></pre></div>
+                <span class="c">&lt;!-- Or specify classes one by one. --&gt;</span>
+                <span class="nt">&lt;classes&gt;</span>
+                    <span class="nt">&lt;param&gt;</span>io.github.uthark.blog.assertj.User<span class="nt">&lt;/param&gt;</span>
+                <span class="nt">&lt;/classes&gt;</span>
+            <span class="nt">&lt;/configuration&gt;</span>
+        <span class="nt">&lt;/plugin&gt;</span>
+    <span class="nt">&lt;/plugins&gt;</span>
+<span class="nt">&lt;/build&gt;</span></code></pre></div>
 <p>After this changes it is possible to generate assertions for the classes you want test:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">mvn assertj:generate-assertions</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mvn assertj:generate-assertions</code></pre></div>
 <p>By default assertj will generate assertion classes in <code>target/generated-test-sources/assertj-assertions/</code>, it is possible to override this behaviour by passing configuration element <code>targetDir</code> to plugin.</p>
 
 <p>Additonal documentation for Maven plugin can be <a href="http://joel-costigliola.github.io/assertj/assertj-assertions-generator-maven-plugin.html" target="_blank">found here</a></p>
@@ -245,7 +243,9 @@ The integration of assertj into Maven project is very easy:</p>
         
 
 <footer>
-
+  <div>
+    <p>If you have any questions, feel free to ping me on Twitter.</p>
+  </div>
   <p class="meta">
     
     

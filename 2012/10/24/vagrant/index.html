@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html prefix="og: http://ogp.me/ns#">
-<head >
+<html prefix="og: http://ogp.me/ns#" lang="en">
+<head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=5">
 
   
   <title>Автоматизируем работу с виртуальными машинами с помощью Vagrant</title>
@@ -19,7 +19,7 @@
 
 
   <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
-
+  <link rel="stylesheet" media="screen" href="https://fonts.googleapis.com/css?family=Arvo" type="text/css"/>
 
 
   
@@ -29,10 +29,8 @@
   
   
 
-
   
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-
 
   
   <link href="https://uthark.github.io/favicon.png" rel="icon">
@@ -73,10 +71,10 @@ Vagrant - это средство для управления виртуальн
 </head>
 <body>
 
-
-<header>  
+<header>
+  
   <h1><a href="https://uthark.github.io/">Sharing knowledge</a></h1>
-    
+    <h2>by Oleg Atamanenko</h2>
 </header>
 
 
@@ -173,131 +171,131 @@ Vagrant - это средство для управления виртуальн
 <h2 id="работа-с-vagrant">Работа с Vagrant</h2>
 
 <p>Для начала необходимо установить Virtualbox и Vagrant.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">sudo aptitude install virtualbox vagrant</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo aptitude install virtualbox vagrant</code></pre></div>
 <p>После этого нам нужен образ, из которого мы можем создавать виртуальные машины. Его можно сделать самим или взять уже готовый с сайта Vagrant. Упростим себе жизнь и скачаем образ с сайта:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">    vagrant box add lucid32 http://files.vagrantup.com/lucid32.box</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">    vagrant box add lucid32 http://files.vagrantup.com/lucid32.box</code></pre></div>
 <p>После этого, мы можем начать пользоваться Vagrant.</p>
 
 <p>Для этого нам нужно создать папку, в которой мы будем работать, например:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">    mkdir vagrant-test
-    cd vagrant-test</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">    mkdir vagrant-test
+    <span class="nb">cd</span> vagrant-test</code></pre></div>
 <p>И инициализировать Vagrant:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">    vagrant init</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">    vagrant init</code></pre></div>
 <p>Результатом работы этой команды будет файлик <code>Vagrantfile</code>, который содержит конфигурацию виртуальной машины для использования.</p>
 
 <p>Пример сгенерированного файла:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># -*- mode: ruby -*-</span>
-<span style="color:#75715e"># vi: set ft=ruby :</span>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="c1"># -*- mode: ruby -*-</span>
+<span class="c1"># vi: set ft=ruby :</span>
 
-<span style="color:#66d9ef">Vagrant</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Config</span><span style="color:#f92672">.</span>run <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
-  <span style="color:#75715e"># All Vagrant configuration is done here. The most common configuration</span>
-  <span style="color:#75715e"># options are documented and commented below. For a complete reference,</span>
-  <span style="color:#75715e"># please see the online documentation at vagrantup.com.</span>
+<span class="no">Vagrant</span><span class="o">::</span><span class="no">Config</span><span class="o">.</span><span class="n">run</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+  <span class="c1"># All Vagrant configuration is done here. The most common configuration</span>
+  <span class="c1"># options are documented and commented below. For a complete reference,</span>
+  <span class="c1"># please see the online documentation at vagrantup.com.</span>
 
-  <span style="color:#75715e"># Every Vagrant virtual environment requires a box to build off of.</span>
-  config<span style="color:#f92672">.</span>vm<span style="color:#f92672">.</span>box <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;base&#34;</span>
+  <span class="c1"># Every Vagrant virtual environment requires a box to build off of.</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span> <span class="o">=</span> <span class="s2">&#34;base&#34;</span>
 
-  <span style="color:#75715e"># The url from where the &#39;config.vm.box&#39; box will be fetched if it</span>
-  <span style="color:#75715e"># doesn&#39;t already exist on the user&#39;s system.</span>
-  <span style="color:#75715e"># config.vm.box_url = &#34;http://domain.com/path/to/above.box&#34;</span>
+  <span class="c1"># The url from where the &#39;config.vm.box&#39; box will be fetched if it</span>
+  <span class="c1"># doesn&#39;t already exist on the user&#39;s system.</span>
+  <span class="c1"># config.vm.box_url = &#34;http://domain.com/path/to/above.box&#34;</span>
 
-  <span style="color:#75715e"># Boot with a GUI so you can see the screen. (Default is headless)</span>
-  <span style="color:#75715e"># config.vm.boot_mode = :gui</span>
+  <span class="c1"># Boot with a GUI so you can see the screen. (Default is headless)</span>
+  <span class="c1"># config.vm.boot_mode = :gui</span>
 
-  <span style="color:#75715e"># Assign this VM to a host-only network IP, allowing you to access it</span>
-  <span style="color:#75715e"># via the IP. Host-only networks can talk to the host machine as well as</span>
-  <span style="color:#75715e"># any other machines on the same network, but cannot be accessed (through this</span>
-  <span style="color:#75715e"># network interface) by any external networks.</span>
-  <span style="color:#75715e"># config.vm.network :hostonly, &#34;192.168.33.10&#34;</span>
+  <span class="c1"># Assign this VM to a host-only network IP, allowing you to access it</span>
+  <span class="c1"># via the IP. Host-only networks can talk to the host machine as well as</span>
+  <span class="c1"># any other machines on the same network, but cannot be accessed (through this</span>
+  <span class="c1"># network interface) by any external networks.</span>
+  <span class="c1"># config.vm.network :hostonly, &#34;192.168.33.10&#34;</span>
 
-  <span style="color:#75715e"># Assign this VM to a bridged network, allowing you to connect directly to a</span>
-  <span style="color:#75715e"># network using the host&#39;s network device. This makes the VM appear as another</span>
-  <span style="color:#75715e"># physical device on your network.</span>
-  <span style="color:#75715e"># config.vm.network :bridged</span>
+  <span class="c1"># Assign this VM to a bridged network, allowing you to connect directly to a</span>
+  <span class="c1"># network using the host&#39;s network device. This makes the VM appear as another</span>
+  <span class="c1"># physical device on your network.</span>
+  <span class="c1"># config.vm.network :bridged</span>
 
-  <span style="color:#75715e"># Forward a port from the guest to the host, which allows for outside</span>
-  <span style="color:#75715e"># computers to access the VM, whereas host only networking does not.</span>
-  <span style="color:#75715e"># config.vm.forward_port 80, 8080</span>
+  <span class="c1"># Forward a port from the guest to the host, which allows for outside</span>
+  <span class="c1"># computers to access the VM, whereas host only networking does not.</span>
+  <span class="c1"># config.vm.forward_port 80, 8080</span>
 
-  <span style="color:#75715e"># Share an additional folder to the guest VM. The first argument is</span>
-  <span style="color:#75715e"># an identifier, the second is the path on the guest to mount the</span>
-  <span style="color:#75715e"># folder, and the third is the path on the host to the actual folder.</span>
-  <span style="color:#75715e"># config.vm.share_folder &#34;v-data&#34;, &#34;/vagrant_data&#34;, &#34;../data&#34;</span>
+  <span class="c1"># Share an additional folder to the guest VM. The first argument is</span>
+  <span class="c1"># an identifier, the second is the path on the guest to mount the</span>
+  <span class="c1"># folder, and the third is the path on the host to the actual folder.</span>
+  <span class="c1"># config.vm.share_folder &#34;v-data&#34;, &#34;/vagrant_data&#34;, &#34;../data&#34;</span>
 
-  <span style="color:#75715e"># Enable provisioning with Puppet stand alone.  Puppet manifests</span>
-  <span style="color:#75715e"># are contained in a directory path relative to this Vagrantfile.</span>
-  <span style="color:#75715e"># You will need to create the manifests directory and a manifest in</span>
-  <span style="color:#75715e"># the file base.pp in the manifests_path directory.</span>
-  <span style="color:#75715e">#</span>
-  <span style="color:#75715e"># An example Puppet manifest to provision the message of the day:</span>
-  <span style="color:#75715e">#</span>
-  <span style="color:#75715e"># # group { &#34;puppet&#34;:</span>
-  <span style="color:#75715e"># #   ensure =&gt; &#34;present&#34;,</span>
-  <span style="color:#75715e"># # }</span>
-  <span style="color:#75715e"># #</span>
-  <span style="color:#75715e"># # File { owner =&gt; 0, group =&gt; 0, mode =&gt; 0644 }</span>
-  <span style="color:#75715e"># #</span>
-  <span style="color:#75715e"># # file { &#39;/etc/motd&#39;:</span>
-  <span style="color:#75715e"># #   content =&gt; &#34;Welcome to your Vagrant-built virtual machine!</span>
-  <span style="color:#75715e"># #               Managed by Puppet.\n&#34;</span>
-  <span style="color:#75715e"># # }</span>
-  <span style="color:#75715e">#</span>
-  <span style="color:#75715e"># config.vm.provision :puppet do |puppet|</span>
-  <span style="color:#75715e">#   puppet.manifests_path = &#34;manifests&#34;</span>
-  <span style="color:#75715e">#   puppet.manifest_file  = &#34;base.pp&#34;</span>
-  <span style="color:#75715e"># end</span>
+  <span class="c1"># Enable provisioning with Puppet stand alone.  Puppet manifests</span>
+  <span class="c1"># are contained in a directory path relative to this Vagrantfile.</span>
+  <span class="c1"># You will need to create the manifests directory and a manifest in</span>
+  <span class="c1"># the file base.pp in the manifests_path directory.</span>
+  <span class="c1">#</span>
+  <span class="c1"># An example Puppet manifest to provision the message of the day:</span>
+  <span class="c1">#</span>
+  <span class="c1"># # group { &#34;puppet&#34;:</span>
+  <span class="c1"># #   ensure =&gt; &#34;present&#34;,</span>
+  <span class="c1"># # }</span>
+  <span class="c1"># #</span>
+  <span class="c1"># # File { owner =&gt; 0, group =&gt; 0, mode =&gt; 0644 }</span>
+  <span class="c1"># #</span>
+  <span class="c1"># # file { &#39;/etc/motd&#39;:</span>
+  <span class="c1"># #   content =&gt; &#34;Welcome to your Vagrant-built virtual machine!</span>
+  <span class="c1"># #               Managed by Puppet.\n&#34;</span>
+  <span class="c1"># # }</span>
+  <span class="c1">#</span>
+  <span class="c1"># config.vm.provision :puppet do |puppet|</span>
+  <span class="c1">#   puppet.manifests_path = &#34;manifests&#34;</span>
+  <span class="c1">#   puppet.manifest_file  = &#34;base.pp&#34;</span>
+  <span class="c1"># end</span>
 
-  <span style="color:#75715e"># Enable provisioning with chef solo, specifying a cookbooks path, roles</span>
-  <span style="color:#75715e"># path, and data_bags path (all relative to this Vagrantfile), and adding</span>
-  <span style="color:#75715e"># some recipes and/or roles.</span>
-  <span style="color:#75715e">#</span>
-  <span style="color:#75715e"># config.vm.provision :chef_solo do |chef|</span>
-  <span style="color:#75715e">#   chef.cookbooks_path = &#34;../my-recipes/cookbooks&#34;</span>
-  <span style="color:#75715e">#   chef.roles_path = &#34;../my-recipes/roles&#34;</span>
-  <span style="color:#75715e">#   chef.data_bags_path = &#34;../my-recipes/data_bags&#34;</span>
-  <span style="color:#75715e">#   chef.add_recipe &#34;mysql&#34;</span>
-  <span style="color:#75715e">#   chef.add_role &#34;web&#34;</span>
-  <span style="color:#75715e">#</span>
-  <span style="color:#75715e">#   # You may also specify custom JSON attributes:</span>
-  <span style="color:#75715e">#   chef.json = { :mysql_password =&gt; &#34;foo&#34; }</span>
-  <span style="color:#75715e"># end</span>
+  <span class="c1"># Enable provisioning with chef solo, specifying a cookbooks path, roles</span>
+  <span class="c1"># path, and data_bags path (all relative to this Vagrantfile), and adding</span>
+  <span class="c1"># some recipes and/or roles.</span>
+  <span class="c1">#</span>
+  <span class="c1"># config.vm.provision :chef_solo do |chef|</span>
+  <span class="c1">#   chef.cookbooks_path = &#34;../my-recipes/cookbooks&#34;</span>
+  <span class="c1">#   chef.roles_path = &#34;../my-recipes/roles&#34;</span>
+  <span class="c1">#   chef.data_bags_path = &#34;../my-recipes/data_bags&#34;</span>
+  <span class="c1">#   chef.add_recipe &#34;mysql&#34;</span>
+  <span class="c1">#   chef.add_role &#34;web&#34;</span>
+  <span class="c1">#</span>
+  <span class="c1">#   # You may also specify custom JSON attributes:</span>
+  <span class="c1">#   chef.json = { :mysql_password =&gt; &#34;foo&#34; }</span>
+  <span class="c1"># end</span>
 
-  <span style="color:#75715e"># Enable provisioning with chef server, specifying the chef server URL,</span>
-  <span style="color:#75715e"># and the path to the validation key (relative to this Vagrantfile).</span>
-  <span style="color:#75715e">#</span>
-  <span style="color:#75715e"># The Opscode Platform uses HTTPS. Substitute your organization for</span>
-  <span style="color:#75715e"># ORGNAME in the URL and validation key.</span>
-  <span style="color:#75715e">#</span>
-  <span style="color:#75715e"># If you have your own Chef Server, use the appropriate URL, which may be</span>
-  <span style="color:#75715e"># HTTP instead of HTTPS depending on your configuration. Also change the</span>
-  <span style="color:#75715e"># validation key to validation.pem.</span>
-  <span style="color:#75715e">#</span>
-  <span style="color:#75715e"># config.vm.provision :chef_client do |chef|</span>
-  <span style="color:#75715e">#   chef.chef_server_url = &#34;https://api.opscode.com/organizations/ORGNAME&#34;</span>
-  <span style="color:#75715e">#   chef.validation_key_path = &#34;ORGNAME-validator.pem&#34;</span>
-  <span style="color:#75715e"># end</span>
-  <span style="color:#75715e">#</span>
-  <span style="color:#75715e"># If you&#39;re using the Opscode platform, your validator client is</span>
-  <span style="color:#75715e"># ORGNAME-validator, replacing ORGNAME with your organization name.</span>
-  <span style="color:#75715e">#</span>
-  <span style="color:#75715e"># IF you have your own Chef Server, the default validation client name is</span>
-  <span style="color:#75715e"># chef-validator, unless you changed the configuration.</span>
-  <span style="color:#75715e">#</span>
-  <span style="color:#75715e">#   chef.validation_client_name = &#34;ORGNAME-validator&#34;</span>
-<span style="color:#66d9ef">end</span></code></pre></div>
+  <span class="c1"># Enable provisioning with chef server, specifying the chef server URL,</span>
+  <span class="c1"># and the path to the validation key (relative to this Vagrantfile).</span>
+  <span class="c1">#</span>
+  <span class="c1"># The Opscode Platform uses HTTPS. Substitute your organization for</span>
+  <span class="c1"># ORGNAME in the URL and validation key.</span>
+  <span class="c1">#</span>
+  <span class="c1"># If you have your own Chef Server, use the appropriate URL, which may be</span>
+  <span class="c1"># HTTP instead of HTTPS depending on your configuration. Also change the</span>
+  <span class="c1"># validation key to validation.pem.</span>
+  <span class="c1">#</span>
+  <span class="c1"># config.vm.provision :chef_client do |chef|</span>
+  <span class="c1">#   chef.chef_server_url = &#34;https://api.opscode.com/organizations/ORGNAME&#34;</span>
+  <span class="c1">#   chef.validation_key_path = &#34;ORGNAME-validator.pem&#34;</span>
+  <span class="c1"># end</span>
+  <span class="c1">#</span>
+  <span class="c1"># If you&#39;re using the Opscode platform, your validator client is</span>
+  <span class="c1"># ORGNAME-validator, replacing ORGNAME with your organization name.</span>
+  <span class="c1">#</span>
+  <span class="c1"># IF you have your own Chef Server, the default validation client name is</span>
+  <span class="c1"># chef-validator, unless you changed the configuration.</span>
+  <span class="c1">#</span>
+  <span class="c1">#   chef.validation_client_name = &#34;ORGNAME-validator&#34;</span>
+<span class="k">end</span></code></pre></div>
 <p>Подробнее о том, что этот файл может содержать можно почитать в <a href="http://vagrantup.com/v1/docs/vagrantfile.html" target="_blank">документации</a></p>
 
 <p>Например, можно изменить размер RAM, доступный операционной системе:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">    config<span style="color:#f92672">.</span>vm<span style="color:#f92672">.</span>customize <span style="color:#f92672">[</span><span style="color:#e6db74">&#34;modifyvm&#34;</span>, <span style="color:#e6db74">:id</span>, <span style="color:#e6db74">&#34;--memory&#34;</span>, <span style="color:#ae81ff">1536</span><span style="color:#f92672">]</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby">    <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">customize</span> <span class="o">[</span><span class="s2">&#34;modifyvm&#34;</span><span class="p">,</span> <span class="ss">:id</span><span class="p">,</span> <span class="s2">&#34;--memory&#34;</span><span class="p">,</span> <span class="mi">1536</span><span class="o">]</span></code></pre></div>
 <p>Так как очень часто мы хотим взаимодействовать с виртуальной машиной снаружи, там нам необходима возможность пробросить порты из виртуальной машины в хост-систему.</p>
 
 <p>Это достигается следующим изменением конфигурации:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">  <span style="color:#75715e"># Включаем bridged network в виртуальной машине.</span>
-  config<span style="color:#f92672">.</span>vm<span style="color:#f92672">.</span>network <span style="color:#e6db74">:bridged</span>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby">  <span class="c1"># Включаем bridged network в виртуальной машине.</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span> <span class="ss">:bridged</span>
 
-  <span style="color:#75715e"># Пробрасываем порты &lt;порт на виртуальной машине&gt; &lt;порт на хост-системе&gt;</span>
-  config<span style="color:#f92672">.</span>vm<span style="color:#f92672">.</span>forward_port <span style="color:#ae81ff">80</span>, <span style="color:#ae81ff">8080</span>
-  config<span style="color:#f92672">.</span>vm<span style="color:#f92672">.</span>forward_port <span style="color:#ae81ff">443</span>, <span style="color:#ae81ff">8443</span></code></pre></div>
+  <span class="c1"># Пробрасываем порты &lt;порт на виртуальной машине&gt; &lt;порт на хост-системе&gt;</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">forward_port</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">8080</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">forward_port</span> <span class="mi">443</span><span class="p">,</span> <span class="mi">8443</span></code></pre></div>
 <h2 id="provisioning">Provisioning</h2>
 
 <p>Vagrant не был бы столь успешен, если бы не позволял управляеть конфигурацией создаваемой виртуальной машины.</p>
@@ -338,7 +336,9 @@ Vagrant - это средство для управления виртуальн
         
 
 <footer>
-
+  <div>
+    <p>If you have any questions, feel free to ping me on Twitter.</p>
+  </div>
   <p class="meta">
     
     
@@ -410,7 +410,7 @@ Vagrant - это средство для управления виртуальн
 
 
 <section class="even">
-  <span>Table of Contents</span>
+  <div class="toc-header">Table of Contents</div>
    <nav id="TableOfContents">
 <ul>
 <li>
@@ -452,7 +452,7 @@ Vagrant - это средство для управления виртуальн
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary site:@LinkageError creator:@LinkageError]"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[site:@LinkageError creator:@LinkageError card:summary]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 

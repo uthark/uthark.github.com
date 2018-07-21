@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html prefix="og: http://ogp.me/ns#">
-<head >
+<html prefix="og: http://ogp.me/ns#" lang="en">
+<head>
+	<meta name="generator" content="Hugo 0.44" />
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=5">
 
   
   <title>Sharing knowledge</title>
@@ -19,7 +20,7 @@
 
 
   <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
-
+  <link rel="stylesheet" media="screen" href="https://fonts.googleapis.com/css?family=Arvo" type="text/css"/>
 
 
   
@@ -29,10 +30,8 @@
   
   
 
-
   
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-
 
   
   <link href="https://uthark.github.io/favicon.png" rel="icon">
@@ -55,10 +54,10 @@
 </head>
 <body>
 
-
-<header>  
+<header>
+  
   <h1><a href="https://uthark.github.io/">Sharing knowledge</a></h1>
-    
+    <h2>by Oleg Atamanenko</h2>
 </header>
 
 
@@ -143,14 +142,14 @@
 <p>After searching within <a href="https://github.com/imathis/octopress/" target="_blank">octopress sources</a> I found the issue:</p>
 
 <p>Rendering of description tag, excerpt from _includes/head.html:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">{<span style="color:#e6db74">% capture </span> description <span style="color:#e6db74">%}
-</span><span style="color:#e6db74">    {% if page.description %}</span>
-        {{ page<span style="color:#f92672">.</span>description }}
-    {<span style="color:#e6db74">% else </span> <span style="color:#e6db74">%}
-</span><span style="color:#e6db74">        {{ content | raw_content }</span>}
-    {<span style="color:#e6db74">% endif </span> <span style="color:#e6db74">%}
-</span><span style="color:#e6db74">{% endcapture %}</span>
-<span style="color:#f92672">&lt;</span>meta name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;description&#34;</span> content<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;{{ description | strip_html | condense_spaces | truncate:150 }}&#34;</span><span style="color:#f92672">&gt;</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="p">{</span><span class="sx">% capture </span> <span class="n">description</span> <span class="s">%}
+</span><span class="s">    {% if page.description %}</span>
+        <span class="p">{{</span> <span class="n">page</span><span class="o">.</span><span class="n">description</span> <span class="p">}}</span>
+    <span class="p">{</span><span class="sx">% else </span> <span class="s">%}
+</span><span class="s">        {{ content | raw_content }</span><span class="p">}</span>
+    <span class="p">{</span><span class="sx">% endif </span> <span class="s">%}
+</span><span class="s">{% endcapture %}</span>
+<span class="o">&lt;</span><span class="n">meta</span> <span class="nb">name</span><span class="o">=</span><span class="s2">&#34;description&#34;</span> <span class="n">content</span><span class="o">=</span><span class="s2">&#34;{{ description | strip_html | condense_spaces | truncate:150 }}&#34;</span><span class="o">&gt;</span></code></pre></div>
 <p>After capturing, <code>description</code> is being processed with filters, defined in <code>plugins/octopress_filters.rb</code>. In this case, the following filter are applied:</p>
 
 <ul>
@@ -166,12 +165,12 @@
 <p>So, let&rsquo;s add new function, <code>strip_quotes</code> in <code>plugins/octopress_filters.rb</code>:</p>
 
 <p>strip_quotes function:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># Strips quotes</span>
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">strip_quotes</span>(input)
-    input<span style="color:#f92672">.</span>gsub(<span style="color:#e6db74">/[\&#39;\&#34;&#34;]/</span>, <span style="color:#e6db74">&#39;&#39;</span>)
-<span style="color:#66d9ef">end</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="c1"># Strips quotes</span>
+<span class="k">def</span> <span class="nf">strip_quotes</span><span class="p">(</span><span class="n">input</span><span class="p">)</span>
+    <span class="n">input</span><span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="sr">/[\&#39;\&#34;&#34;]/</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="k">end</span></code></pre></div>
 <p>And then we need to update rendering of description tag - add newly created filter:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">meta</span> <span style="color:#a6e22e">name</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;description&#34;</span> <span style="color:#a6e22e">content</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;{{ description | strip_html | condense_spaces | strip_quotes | truncate:150 }}&#34;</span>&gt;</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">&#34;description&#34;</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;{{ description | strip_html | condense_spaces | strip_quotes | truncate:150 }}&#34;</span><span class="p">&gt;</span></code></pre></div>
 <p>After this fix description is being rendered properly.</p>
 
 <p>P.S. In order to render properly <code>{{</code> and <code>}}</code> in the octopress it is required to put content you want to render within <code>raw</code> and <code>endraw</code> tags. See <a href="http://stackoverflow.com/questions/15786144/how-to-escape-in-markdown-on-octopress" target="_blank">StackOverflow</a> <a href="http://stackoverflow.com/questions/3426182/how-to-escape-liquid-template-tags/13582517#13582517" target="_blank">questions</a> for details.</p>
@@ -368,108 +367,108 @@ Click on <code>Edit</code> button in <code>Triggers</code> section.</p>
 <h3 id="implementation">Implementation</h3>
 
 <p>First, let&rsquo;s introduce interface <code>QueryModifier</code>.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">import</span> org.springframework.data.mongodb.core.query.Query<span style="color:#f92672">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">org.springframework.data.mongodb.core.query.Query</span><span class="o">;</span>
 
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">QueryModifier</span> <span style="color:#f92672">{</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">QueryModifier</span> <span class="o">{</span>
 
-    <span style="color:#75715e">/**
-</span><span style="color:#75715e">     * Modifies source query according to the rules.
-</span><span style="color:#75715e">     * @param query Source query to modify.
-</span><span style="color:#75715e">     * @param collectionName name of the collection against which query will be executed.
-</span><span style="color:#75715e">     * @return Modified query.
-</span><span style="color:#75715e">     */</span>
-    Query <span style="color:#a6e22e">modify</span><span style="color:#f92672">(</span>Query query<span style="color:#f92672">,</span> String collectionName<span style="color:#f92672">);</span>
-<span style="color:#f92672">}</span></code></pre></div>
+    <span class="cm">/**
+</span><span class="cm">     * Modifies source query according to the rules.
+</span><span class="cm">     * @param query Source query to modify.
+</span><span class="cm">     * @param collectionName name of the collection against which query will be executed.
+</span><span class="cm">     * @return Modified query.
+</span><span class="cm">     */</span>
+    <span class="n">Query</span> <span class="nf">modify</span><span class="o">(</span><span class="n">Query</span> <span class="n">query</span><span class="o">,</span> <span class="n">String</span> <span class="n">collectionName</span><span class="o">);</span>
+<span class="o">}</span></code></pre></div>
 <p>Implementations of this interface will pickup original query and modify it somehow. In order to make it work we need inject this modification after query was generated by <code>Spring Data but before query is sent to the MongoDB instance. The perfect place for this is</code>MongoTemplate`.</p>
 
 <p>So, let&rsquo;s create subclass of <code>MongoTemplate</code> and override <code>find()</code> and <code>executeQuery()</code> methods.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">import</span> com.mongodb.*<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> org.slf4j.*<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> org.springframework.data.authentication.UserCredentials<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> org.springframework.data.mongodb.MongoDbFactory<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> org.springframework.data.mongodb.core.*<span style="color:#f92672">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">com.mongodb.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.slf4j.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.data.authentication.UserCredentials</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.data.mongodb.MongoDbFactory</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.data.mongodb.core.*</span><span class="o">;</span>
 
-<span style="color:#f92672">import</span> java.util.*<span style="color:#f92672">;</span>
+<span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span>
 
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">RestrictingMongoTemplate</span> <span style="color:#66d9ef">extends</span> MongoTemplate <span style="color:#f92672">{</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">RestrictingMongoTemplate</span> <span class="kd">extends</span> <span class="n">MongoTemplate</span> <span class="o">{</span>
 
-    <span style="color:#66d9ef">private</span> List<span style="color:#f92672">&lt;?</span> <span style="color:#66d9ef">extends</span> QueryModifier<span style="color:#f92672">&gt;</span> queryModifiers <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ArrayList<span style="color:#f92672">&lt;&gt;();</span>
+    <span class="kd">private</span> <span class="n">List</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">QueryModifier</span><span class="o">&gt;</span> <span class="n">queryModifiers</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;();</span>
 
-    <span style="color:#75715e">/** omitting constructors */</span>
+    <span class="cm">/** omitting constructors */</span>
     
-    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">setQueryModifiers</span><span style="color:#f92672">(</span>List<span style="color:#f92672">&lt;?</span> <span style="color:#66d9ef">extends</span> QueryModifier<span style="color:#f92672">&gt;</span> queryModifiers<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">queryModifiers</span> <span style="color:#f92672">=</span> queryModifiers<span style="color:#f92672">;</span>
-    <span style="color:#f92672">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setQueryModifiers</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">QueryModifier</span><span class="o">&gt;</span> <span class="n">queryModifiers</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">queryModifiers</span> <span class="o">=</span> <span class="n">queryModifiers</span><span class="o">;</span>
+    <span class="o">}</span>
 
-    <span style="color:#a6e22e">@Override</span>
-    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">executeQuery</span><span style="color:#f92672">(</span>Query query<span style="color:#f92672">,</span> String collectionName<span style="color:#f92672">,</span> DocumentCallbackHandler dch<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>QueryModifier queryModifier <span style="color:#f92672">:</span> queryModifiers<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-            query <span style="color:#f92672">=</span> queryModifier<span style="color:#f92672">.</span><span style="color:#a6e22e">modify</span><span style="color:#f92672">(</span>query<span style="color:#f92672">,</span> collectionName<span style="color:#f92672">);</span>
-        <span style="color:#f92672">}</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">executeQuery</span><span class="o">(</span><span class="n">Query</span> <span class="n">query</span><span class="o">,</span> <span class="n">String</span> <span class="n">collectionName</span><span class="o">,</span> <span class="n">DocumentCallbackHandler</span> <span class="n">dch</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">QueryModifier</span> <span class="n">queryModifier</span> <span class="o">:</span> <span class="n">queryModifiers</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">queryModifier</span><span class="o">.</span><span class="na">modify</span><span class="o">(</span><span class="n">query</span><span class="o">,</span> <span class="n">collectionName</span><span class="o">);</span>
+        <span class="o">}</span>
 
-        <span style="color:#66d9ef">super</span><span style="color:#f92672">.</span><span style="color:#a6e22e">executeQuery</span><span style="color:#f92672">(</span>query<span style="color:#f92672">,</span> collectionName<span style="color:#f92672">,</span> dch<span style="color:#f92672">);</span>
-   <span style="color:#f92672">}</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">executeQuery</span><span class="o">(</span><span class="n">query</span><span class="o">,</span> <span class="n">collectionName</span><span class="o">,</span> <span class="n">dch</span><span class="o">);</span>
+   <span class="o">}</span>
 
-    <span style="color:#66d9ef">public</span> <span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> List<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">find</span><span style="color:#f92672">(</span>Query query<span style="color:#f92672">,</span> Class<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> entityClass<span style="color:#f92672">,</span> String collectionName<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        <span style="color:#66d9ef">int</span> limit <span style="color:#f92672">=</span> query<span style="color:#f92672">.</span><span style="color:#a6e22e">getLimit</span><span style="color:#f92672">();</span>
+    <span class="kd">public</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="nf">find</span><span class="o">(</span><span class="n">Query</span> <span class="n">query</span><span class="o">,</span> <span class="n">Class</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">entityClass</span><span class="o">,</span> <span class="n">String</span> <span class="n">collectionName</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">limit</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="na">getLimit</span><span class="o">();</span>
 
-        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>QueryModifier queryModifier <span style="color:#f92672">:</span> queryModifiers<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-            query <span style="color:#f92672">=</span> queryModifier<span style="color:#f92672">.</span><span style="color:#a6e22e">modify</span><span style="color:#f92672">(</span>query<span style="color:#f92672">,</span> collectionName<span style="color:#f92672">);</span>
-        <span style="color:#f92672">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">QueryModifier</span> <span class="n">queryModifier</span> <span class="o">:</span> <span class="n">queryModifiers</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">queryModifier</span><span class="o">.</span><span class="na">modify</span><span class="o">(</span><span class="n">query</span><span class="o">,</span> <span class="n">collectionName</span><span class="o">);</span>
+        <span class="o">}</span>
 
-        query<span style="color:#f92672">.</span><span style="color:#a6e22e">limit</span><span style="color:#f92672">(</span>limit<span style="color:#f92672">);</span>
+        <span class="n">query</span><span class="o">.</span><span class="na">limit</span><span class="o">(</span><span class="n">limit</span><span class="o">);</span>
 
-        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">super</span><span style="color:#f92672">.</span><span style="color:#a6e22e">find</span><span style="color:#f92672">(</span>query<span style="color:#f92672">,</span> entityClass<span style="color:#f92672">,</span> collectionName<span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span>
+        <span class="k">return</span> <span class="kd">super</span><span class="o">.</span><span class="na">find</span><span class="o">(</span><span class="n">query</span><span class="o">,</span> <span class="n">entityClass</span><span class="o">,</span> <span class="n">collectionName</span><span class="o">);</span>
+    <span class="o">}</span>
 
-<span style="color:#f92672">}</span></code></pre></div>
+<span class="o">}</span></code></pre></div>
 <p>Let&rsquo;s implement simple QueryModifier which will add restriction to return only active documents from Mongo:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">import</span> model.Document<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> org.springframework.data.mongodb.core.query.Criteria<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> org.springframework.data.mongodb.core.query.Query<span style="color:#f92672">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">model.Document</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.data.mongodb.core.query.Criteria</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.data.mongodb.core.query.Query</span><span class="o">;</span>
 
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ActiveQueryModifier</span> <span style="color:#66d9ef">implements</span> QueryModifier <span style="color:#f92672">{</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ActiveQueryModifier</span> <span class="kd">implements</span> <span class="n">QueryModifier</span> <span class="o">{</span>
 
-    <span style="color:#a6e22e">@Override</span>
-    <span style="color:#66d9ef">public</span> Query <span style="color:#a6e22e">modify</span><span style="color:#f92672">(</span>Query query<span style="color:#f92672">,</span> String collectionName<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>Document<span style="color:#f92672">.</span><span style="color:#a6e22e">COLLECTION_NAME</span><span style="color:#f92672">.</span><span style="color:#a6e22e">equals</span><span style="color:#f92672">(</span>collectionName<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
-            <span style="color:#66d9ef">return</span> query<span style="color:#f92672">.</span><span style="color:#a6e22e">addCriteria</span><span style="color:#f92672">(</span>Criteria<span style="color:#f92672">.</span><span style="color:#a6e22e">where</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;active&#34;</span><span style="color:#f92672">).</span><span style="color:#a6e22e">is</span><span style="color:#f92672">(</span>Boolean<span style="color:#f92672">.</span><span style="color:#a6e22e">TRUE</span><span style="color:#f92672">));</span>
-        <span style="color:#f92672">}</span>
-        <span style="color:#66d9ef">return</span> query<span style="color:#f92672">;</span>
-    <span style="color:#f92672">}</span>
-<span style="color:#f92672">}</span></code></pre></div>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">Query</span> <span class="nf">modify</span><span class="o">(</span><span class="n">Query</span> <span class="n">query</span><span class="o">,</span> <span class="n">String</span> <span class="n">collectionName</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">Document</span><span class="o">.</span><span class="na">COLLECTION_NAME</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">collectionName</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">query</span><span class="o">.</span><span class="na">addCriteria</span><span class="o">(</span><span class="n">Criteria</span><span class="o">.</span><span class="na">where</span><span class="o">(</span><span class="s">&#34;active&#34;</span><span class="o">).</span><span class="na">is</span><span class="o">(</span><span class="n">Boolean</span><span class="o">.</span><span class="na">TRUE</span><span class="o">));</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">query</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
 <p>Next step is to provide our custom implementation of <code>MongoTemplate</code> to Spring Data:</p>
 
 <p>Example of Spring Configuration:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@PropertySource</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;classpath:application.properties&#34;</span><span style="color:#f92672">)</span>
-<span style="color:#a6e22e">@EnableMongoRepositories</span><span style="color:#f92672">(</span>
-        basePackages <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;model&#34;</span><span style="color:#f92672">,</span>
-        mongoTemplateRef <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;mongoTemplate&#34;</span><span style="color:#f92672">)</span>
-<span style="color:#a6e22e">@Configuration</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;configuration&#34;</span><span style="color:#f92672">)</span>
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ServiceConfiguration</span> <span style="color:#66d9ef">extends</span> AbstractMongoConfiguration <span style="color:#f92672">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@PropertySource</span><span class="o">(</span><span class="s">&#34;classpath:application.properties&#34;</span><span class="o">)</span>
+<span class="nd">@EnableMongoRepositories</span><span class="o">(</span>
+        <span class="n">basePackages</span> <span class="o">=</span> <span class="s">&#34;model&#34;</span><span class="o">,</span>
+        <span class="n">mongoTemplateRef</span> <span class="o">=</span> <span class="s">&#34;mongoTemplate&#34;</span><span class="o">)</span>
+<span class="nd">@Configuration</span><span class="o">(</span><span class="s">&#34;configuration&#34;</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ServiceConfiguration</span> <span class="kd">extends</span> <span class="n">AbstractMongoConfiguration</span> <span class="o">{</span>
 
-    <span style="color:#a6e22e">@Value</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;${mongo.db.name}&#34;</span><span style="color:#f92672">)</span>
-    <span style="color:#66d9ef">protected</span> String mongoDatabaseName<span style="color:#f92672">;</span>
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">&#34;${mongo.db.name}&#34;</span><span class="o">)</span>
+    <span class="kd">protected</span> <span class="n">String</span> <span class="n">mongoDatabaseName</span><span class="o">;</span>
 
-    <span style="color:#a6e22e">@Override</span>
-    <span style="color:#66d9ef">protected</span> String <span style="color:#a6e22e">getDatabaseName</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-        <span style="color:#66d9ef">return</span> mongoDatabaseName<span style="color:#f92672">;</span>
-    <span style="color:#f92672">}</span>
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="n">String</span> <span class="nf">getDatabaseName</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">mongoDatabaseName</span><span class="o">;</span>
+    <span class="o">}</span>
 
-    <span style="color:#a6e22e">@Override</span>
-    <span style="color:#66d9ef">public</span> RestrictingMongoTemplate <span style="color:#a6e22e">mongoTemplate</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">throws</span> UnknownHostException <span style="color:#f92672">{</span>
-        RestrictingMongoTemplate mongoTemplate <span style="color:#f92672">=</span>
-                <span style="color:#66d9ef">new</span> RestrictingMongoTemplate<span style="color:#f92672">(</span>mongo<span style="color:#f92672">(),</span> mongoDatabaseName<span style="color:#f92672">);</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">RestrictingMongoTemplate</span> <span class="nf">mongoTemplate</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">UnknownHostException</span> <span class="o">{</span>
+        <span class="n">RestrictingMongoTemplate</span> <span class="n">mongoTemplate</span> <span class="o">=</span>
+                <span class="k">new</span> <span class="n">RestrictingMongoTemplate</span><span class="o">(</span><span class="n">mongo</span><span class="o">(),</span> <span class="n">mongoDatabaseName</span><span class="o">);</span>
 
-        mongoTemplate<span style="color:#f92672">.</span><span style="color:#a6e22e">setQueryModifiers</span><span style="color:#f92672">(</span>Arrays<span style="color:#f92672">.</span><span style="color:#a6e22e">asList</span><span style="color:#f92672">(</span>
-                <span style="color:#66d9ef">new</span> ActiveQueryModifier<span style="color:#f92672">()</span>
-        <span style="color:#f92672">));</span>
+        <span class="n">mongoTemplate</span><span class="o">.</span><span class="na">setQueryModifiers</span><span class="o">(</span><span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span>
+                <span class="k">new</span> <span class="n">ActiveQueryModifier</span><span class="o">()</span>
+        <span class="o">));</span>
 
-        <span style="color:#66d9ef">return</span> mongoTemplate<span style="color:#f92672">;</span>    
-    <span style="color:#f92672">}</span>
+        <span class="k">return</span> <span class="n">mongoTemplate</span><span class="o">;</span>    
+    <span class="o">}</span>
 
-    <span style="color:#75715e">// creation of Mongo bean omitted.
-</span><span style="color:#75715e"></span><span style="color:#f92672">}</span></code></pre></div>
+    <span class="c1">// creation of Mongo bean omitted.
+</span><span class="c1"></span><span class="o">}</span></code></pre></div>
 <p>That&rsquo;s all for today. If you have any questions - <a href="https://plus.google.com/112372998073079463630/posts" target="_blank">Ask me on Google+</a></p>
 
         

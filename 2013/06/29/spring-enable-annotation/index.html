@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html prefix="og: http://ogp.me/ns#">
-<head >
+<html prefix="og: http://ogp.me/ns#" lang="en">
+<head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=5">
 
   
   <title>Пишем @Enable*-аннотацию для Spring</title>
@@ -19,7 +19,7 @@
 
 
   <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
-
+  <link rel="stylesheet" media="screen" href="https://fonts.googleapis.com/css?family=Arvo" type="text/css"/>
 
 
   
@@ -29,10 +29,8 @@
   
   
 
-
   
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-
 
   
   <link href="https://uthark.github.io/favicon.png" rel="icon">
@@ -74,10 +72,10 @@
 </head>
 <body>
 
-
-<header>  
+<header>
+  
   <h1><a href="https://uthark.github.io/">Sharing knowledge</a></h1>
-    
+    <h2>by Oleg Atamanenko</h2>
 </header>
 
 
@@ -174,56 +172,56 @@
 <p>Кроме того, для обработки аннотации необходимо указать обработчик. Это можно сделать передав подкласс <a href="http://static.springsource.org/spring-framework/docs/3.2.x/javadoc-api/org/springframework/context/annotation/ImportBeanDefinitionRegistrar.html" target="_blank"><code>org.springframework.context.annotation.ImportBeanDefinitionRegistrar</code></a> через аннотацию <a href="http://static.springsource.org/spring-framework/docs/3.2.x/javadoc-api/org/springframework/context/annotation/Import.html" target="_blank"><code>@Import</code></a></p>
 
 <p>Пишем аннотацию:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Target</span><span style="color:#f92672">(</span>ElementType<span style="color:#f92672">.</span><span style="color:#a6e22e">TYPE</span><span style="color:#f92672">)</span>
-<span style="color:#a6e22e">@Retention</span><span style="color:#f92672">(</span>RetentionPolicy<span style="color:#f92672">.</span><span style="color:#a6e22e">RUNTIME</span><span style="color:#f92672">)</span>
-<span style="color:#a6e22e">@Documented</span>
-<span style="color:#a6e22e">@Inherited</span>
-<span style="color:#a6e22e">@Import</span><span style="color:#f92672">(</span>JaxRsRestClientRegistrar<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">)</span>
-<span style="color:#66d9ef">public</span> <span style="color:#a6e22e">@interface</span> EnableJaxRsRestClient <span style="color:#f92672">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Target</span><span class="o">(</span><span class="n">ElementType</span><span class="o">.</span><span class="na">TYPE</span><span class="o">)</span>
+<span class="nd">@Retention</span><span class="o">(</span><span class="n">RetentionPolicy</span><span class="o">.</span><span class="na">RUNTIME</span><span class="o">)</span>
+<span class="nd">@Documented</span>
+<span class="nd">@Inherited</span>
+<span class="nd">@Import</span><span class="o">(</span><span class="n">JaxRsRestClientRegistrar</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<span class="kd">public</span> <span class="nd">@interface</span> <span class="n">EnableJaxRsRestClient</span> <span class="o">{</span>
 
-    String <span style="color:#a6e22e">scanPackage</span><span style="color:#f92672">();</span>
+    <span class="n">String</span> <span class="nf">scanPackage</span><span class="o">();</span>
 
-    String <span style="color:#a6e22e">endpoint</span><span style="color:#f92672">();</span>
-<span style="color:#f92672">}</span></code></pre></div>
+    <span class="n">String</span> <span class="nf">endpoint</span><span class="o">();</span>
+<span class="o">}</span></code></pre></div>
 <p>Теперь осталось написать реализацию интерфейса <code>org.springframework.context.annotation.ImportBeanDefinitionRegistrar</code>. Так как у нас уже есть написанный ранее <a href="http://static.springsource.org/spring-framework/docs/3.2.x/javadoc-api/org/springframework/beans/factory/config/BeanFactoryPostProcessor.html" target="_blank">BeanFactoryPostProcessor</a> в виде <code>RestClientPostProcessor</code>, реализация интерфейса будет простой - мы создадим описание бина для Spring и зарегистрируем его в реестре бинов.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">JaxRsRestClientRegistrar</span> <span style="color:#66d9ef">implements</span> ImportBeanDefinitionRegistrar <span style="color:#f92672">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">JaxRsRestClientRegistrar</span> <span class="kd">implements</span> <span class="n">ImportBeanDefinitionRegistrar</span> <span class="o">{</span>
 
-    <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> String PROPERTY_ENDPOINT <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;endpoint&#34;</span><span style="color:#f92672">;</span>
+    <span class="kd">protected</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">PROPERTY_ENDPOINT</span> <span class="o">=</span> <span class="s">&#34;endpoint&#34;</span><span class="o">;</span>
 
-    <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> String PROPERTY_SCAN_PACKAGE <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;basePackage&#34;</span><span style="color:#f92672">;</span>
+    <span class="kd">protected</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">PROPERTY_SCAN_PACKAGE</span> <span class="o">=</span> <span class="s">&#34;basePackage&#34;</span><span class="o">;</span>
 
-    <span style="color:#a6e22e">@Override</span>
-    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">registerBeanDefinitions</span><span style="color:#f92672">(</span>AnnotationMetadata importingClassMetadata<span style="color:#f92672">,</span> BeanDefinitionRegistry registry<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        EnableJaxRsRestClient annotation <span style="color:#f92672">=</span>
-                <span style="color:#f92672">(</span>EnableJaxRsRestClient<span style="color:#f92672">)</span> <span style="color:#f92672">((</span>StandardClassMetadata<span style="color:#f92672">)</span> importingClassMetadata<span style="color:#f92672">).</span><span style="color:#a6e22e">getIntrospectedClass</span><span style="color:#f92672">()</span>
-                        <span style="color:#f92672">.</span><span style="color:#a6e22e">getAnnotation</span><span style="color:#f92672">(</span>EnableJaxRsRestClient<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
-        String scanPackage <span style="color:#f92672">=</span> annotation<span style="color:#f92672">.</span><span style="color:#a6e22e">scanPackage</span><span style="color:#f92672">();</span>
-        String endpoint <span style="color:#f92672">=</span> annotation<span style="color:#f92672">.</span><span style="color:#a6e22e">endpoint</span><span style="color:#f92672">();</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">registerBeanDefinitions</span><span class="o">(</span><span class="n">AnnotationMetadata</span> <span class="n">importingClassMetadata</span><span class="o">,</span> <span class="n">BeanDefinitionRegistry</span> <span class="n">registry</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">EnableJaxRsRestClient</span> <span class="n">annotation</span> <span class="o">=</span>
+                <span class="o">(</span><span class="n">EnableJaxRsRestClient</span><span class="o">)</span> <span class="o">((</span><span class="n">StandardClassMetadata</span><span class="o">)</span> <span class="n">importingClassMetadata</span><span class="o">).</span><span class="na">getIntrospectedClass</span><span class="o">()</span>
+                        <span class="o">.</span><span class="na">getAnnotation</span><span class="o">(</span><span class="n">EnableJaxRsRestClient</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="n">String</span> <span class="n">scanPackage</span> <span class="o">=</span> <span class="n">annotation</span><span class="o">.</span><span class="na">scanPackage</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">endpoint</span> <span class="o">=</span> <span class="n">annotation</span><span class="o">.</span><span class="na">endpoint</span><span class="o">();</span>
 
-        GenericBeanDefinition beanDefinition <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> GenericBeanDefinition<span style="color:#f92672">();</span>
-        beanDefinition<span style="color:#f92672">.</span><span style="color:#a6e22e">setAbstract</span><span style="color:#f92672">(</span><span style="color:#66d9ef">false</span><span style="color:#f92672">);</span>
-        beanDefinition<span style="color:#f92672">.</span><span style="color:#a6e22e">setBeanClass</span><span style="color:#f92672">(</span>RestClientPostProcessor<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
-        MutablePropertyValues propertyValues <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> MutablePropertyValues<span style="color:#f92672">();</span>
-        propertyValues<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>PROPERTY_ENDPOINT<span style="color:#f92672">,</span> endpoint<span style="color:#f92672">);</span>
-        propertyValues<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>PROPERTY_SCAN_PACKAGE<span style="color:#f92672">,</span> scanPackage<span style="color:#f92672">);</span>
-        beanDefinition<span style="color:#f92672">.</span><span style="color:#a6e22e">setPropertyValues</span><span style="color:#f92672">(</span>propertyValues<span style="color:#f92672">);</span>
+        <span class="n">GenericBeanDefinition</span> <span class="n">beanDefinition</span> <span class="o">=</span> <span class="k">new</span> <span class="n">GenericBeanDefinition</span><span class="o">();</span>
+        <span class="n">beanDefinition</span><span class="o">.</span><span class="na">setAbstract</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
+        <span class="n">beanDefinition</span><span class="o">.</span><span class="na">setBeanClass</span><span class="o">(</span><span class="n">RestClientPostProcessor</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="n">MutablePropertyValues</span> <span class="n">propertyValues</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MutablePropertyValues</span><span class="o">();</span>
+        <span class="n">propertyValues</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">PROPERTY_ENDPOINT</span><span class="o">,</span> <span class="n">endpoint</span><span class="o">);</span>
+        <span class="n">propertyValues</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">PROPERTY_SCAN_PACKAGE</span><span class="o">,</span> <span class="n">scanPackage</span><span class="o">);</span>
+        <span class="n">beanDefinition</span><span class="o">.</span><span class="na">setPropertyValues</span><span class="o">(</span><span class="n">propertyValues</span><span class="o">);</span>
 
-        registry<span style="color:#f92672">.</span><span style="color:#a6e22e">registerBeanDefinition</span><span style="color:#f92672">(</span>ClassUtils<span style="color:#f92672">.</span><span style="color:#a6e22e">getShortName</span><span style="color:#f92672">(</span>getClass<span style="color:#f92672">()),</span> beanDefinition<span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span>
-<span style="color:#f92672">}</span></code></pre></div>
+        <span class="n">registry</span><span class="o">.</span><span class="na">registerBeanDefinition</span><span class="o">(</span><span class="n">ClassUtils</span><span class="o">.</span><span class="na">getShortName</span><span class="o">(</span><span class="n">getClass</span><span class="o">()),</span> <span class="n">beanDefinition</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
 <p>Теперь мы можем использовать аннотацию:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Configuration</span>
-<span style="color:#a6e22e">@EnableJaxRsRestClient</span><span style="color:#f92672">(</span>scanPackage <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&lt;base package&gt;&#34;</span><span style="color:#f92672">,</span> endpoint <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;${remote.rest.endpoint}&#34;</span><span style="color:#f92672">)</span>
-<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TestAutowiringConfiguration</span> <span style="color:#f92672">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Configuration</span>
+<span class="nd">@EnableJaxRsRestClient</span><span class="o">(</span><span class="n">scanPackage</span> <span class="o">=</span> <span class="s">&#34;&lt;base package&gt;&#34;</span><span class="o">,</span> <span class="n">endpoint</span> <span class="o">=</span> <span class="s">&#34;${remote.rest.endpoint}&#34;</span><span class="o">)</span>
+<span class="kd">class</span> <span class="nc">TestAutowiringConfiguration</span> <span class="o">{</span>
 
-    <span style="color:#a6e22e">@Bean</span>
-    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> PropertyPlaceholderConfigurer <span style="color:#a6e22e">configurer</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-        PropertyPlaceholderConfigurer pph <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> PropertyPlaceholderConfigurer<span style="color:#f92672">();</span>
-        pph<span style="color:#f92672">.</span><span style="color:#a6e22e">setLocation</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> ClassPathResource<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;application.properties&#34;</span><span style="color:#f92672">));</span>
-        <span style="color:#66d9ef">return</span> pph<span style="color:#f92672">;</span>
-    <span style="color:#f92672">}</span>
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">PropertyPlaceholderConfigurer</span> <span class="nf">configurer</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">PropertyPlaceholderConfigurer</span> <span class="n">pph</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PropertyPlaceholderConfigurer</span><span class="o">();</span>
+        <span class="n">pph</span><span class="o">.</span><span class="na">setLocation</span><span class="o">(</span><span class="k">new</span> <span class="n">ClassPathResource</span><span class="o">(</span><span class="s">&#34;application.properties&#34;</span><span class="o">));</span>
+        <span class="k">return</span> <span class="n">pph</span><span class="o">;</span>
+    <span class="o">}</span>
 
-<span style="color:#f92672">}</span></code></pre></div>
+<span class="o">}</span></code></pre></div>
 <p>Обратите внимание, что endpoint можно передавать с использованием подстановочных свойств.</p>
 
 <p>На этом всё, если есть вопросы - <a href="https://plus.google.com/112372998073079463630/posts" target="_blank">спрашивайте в Google+</a></p>
@@ -232,7 +230,9 @@
         
 
 <footer>
-
+  <div>
+    <p>If you have any questions, feel free to ping me on Twitter.</p>
+  </div>
   <p class="meta">
     
     

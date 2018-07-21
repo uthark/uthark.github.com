@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html prefix="og: http://ogp.me/ns#">
-<head >
+<html prefix="og: http://ogp.me/ns#" lang="en">
+<head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=5">
 
   
   <title>Немножко магии от AspectJ</title>
@@ -19,7 +19,7 @@
 
 
   <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
-
+  <link rel="stylesheet" media="screen" href="https://fonts.googleapis.com/css?family=Arvo" type="text/css"/>
 
 
   
@@ -29,10 +29,8 @@
   
   
 
-
   
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-
 
   
   <link href="https://uthark.github.io/favicon.png" rel="icon">
@@ -75,10 +73,10 @@
 </head>
 <body>
 
-
-<header>  
+<header>
+  
   <h1><a href="https://uthark.github.io/">Sharing knowledge</a></h1>
-    
+    <h2>by Oleg Atamanenko</h2>
 </header>
 
 
@@ -176,15 +174,15 @@
 <h4 id="модификация-исходного-кода-для-реализации-дополнительных-возможностей">Модификация исходного кода для реализации дополнительных возможностей</h4>
 
 <p>Предположим, что у нас есть модуль в приложении, который предоставляет нужную нам функциональность. С модулем всё в порядке, кроме одного - все его методы могут выбрасывать проверяемые исключения, что ведёт к ухудшению читаемости кода, так как вместо простого вызова метода:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">service<span style="color:#f92672">.</span><span style="color:#a6e22e">doUsefulThing</span><span style="color:#f92672">();</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">service</span><span class="o">.</span><span class="na">doUsefulThing</span><span class="o">();</span></code></pre></div>
 <p>наш вызов превращается в следующую конструкцию</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
-    service<span style="color:#f92672">.</span><span style="color:#a6e22e">doUsefulThing</span><span style="color:#f92672">();</span>
-<span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span> FirstServiceException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-    processException<span style="color:#f92672">(</span>e<span style="color:#f92672">);</span>
-<span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span> SecondServiceException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-    processException<span style="color:#f92672">(</span>e<span style="color:#f92672">);</span>
-<span style="color:#f92672">}</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="k">try</span> <span class="o">{</span>
+    <span class="n">service</span><span class="o">.</span><span class="na">doUsefulThing</span><span class="o">();</span>
+<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span> <span class="n">FirstServiceException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">processException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span> <span class="n">SecondServiceException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">processException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+<span class="o">}</span></code></pre></div>
 <p>Дополнительная проблема в том, что у модуля количество модулей 10+, количество методов также велико, что приводит к тому, что блоки <code>try/catch</code> замусоривают код. Решение с использованием паттерна <a href="https://en.wikipedia.org/wiki/Callback_(computer_programming)"><code>Callback</code></a> также приведёт к замусориванию кода.</p>
 
 <h4 id="вариант-решения-проблемы-с-использованием-aop">Вариант решения проблемы с использованием AOP</h4>
@@ -192,32 +190,32 @@
 <p>Решение данной проблемы было таким - а что, если используя возможности AOP трансформировать проверяемое исключение в непроверяемое? Таким образом, мы сможем избавиться от скучной проверки на исключения в нашем коде, а для обработки исключения (ведь мы всегда его будем обрабатывать одинаково) достаточно будет использовать обработку исключения на верхнем уровне абстракции.</p>
 
 <p>Для более элегантного решения проблемы было решено добавить собственную аннотацию, которой нужно помечать метод, который использует сервис из «плохого» модуля.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">package</span> com.blogger.atamanenko<span style="color:#f92672">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.blogger.atamanenko</span><span class="o">;</span>
 
-<span style="color:#f92672">import</span> java.lang.annotation.Documented<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> java.lang.annotation.Inherited<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> java.lang.annotation.Retention<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> java.lang.annotation.Target<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> java.lang.annotation.RetentionPolicy<span style="color:#f92672">;</span>
+<span class="kn">import</span> <span class="nn">java.lang.annotation.Documented</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.lang.annotation.Inherited</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.lang.annotation.Retention</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.lang.annotation.Target</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.lang.annotation.RetentionPolicy</span><span class="o">;</span>
 
-<span style="color:#a6e22e">@Retention</span><span style="color:#f92672">(</span>RetentionPolicy<span style="color:#f92672">.</span><span style="color:#a6e22e">RUNTIME</span><span style="color:#f92672">)</span>
-<span style="color:#a6e22e">@Target</span><span style="color:#f92672">({</span>ElementType<span style="color:#f92672">.</span><span style="color:#a6e22e">METHOD</span><span style="color:#f92672">})</span>
-<span style="color:#a6e22e">@Documented</span>
-<span style="color:#a6e22e">@Inherited</span>
-<span style="color:#66d9ef">public</span> <span style="color:#a6e22e">@interface</span> SuppressExceptions <span style="color:#f92672">{</span>
-<span style="color:#f92672">}</span></code></pre></div>
+<span class="nd">@Retention</span><span class="o">(</span><span class="n">RetentionPolicy</span><span class="o">.</span><span class="na">RUNTIME</span><span class="o">)</span>
+<span class="nd">@Target</span><span class="o">({</span><span class="n">ElementType</span><span class="o">.</span><span class="na">METHOD</span><span class="o">})</span>
+<span class="nd">@Documented</span>
+<span class="nd">@Inherited</span>
+<span class="kd">public</span> <span class="nd">@interface</span> <span class="n">SuppressExceptions</span> <span class="o">{</span>
+<span class="o">}</span></code></pre></div>
 <p>А также аспект, который бы делал всю нужную нам функциональность:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> aspect ExceptionSupressingAspect <span style="color:#f92672">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="n">aspect</span> <span class="n">ExceptionSupressingAspect</span> <span class="o">{</span>
 
-        declare soft <span style="color:#f92672">:</span>ServiceException:  execution<span style="color:#f92672">(</span><span style="color:#a6e22e">@com.blogger.atamanenko.annotation.SuppressExceptions</span> <span style="color:#f92672">*</span> <span style="color:#f92672">*.*(..));</span>
-<span style="color:#f92672">}</span></code></pre></div>
+        <span class="n">declare</span> <span class="n">soft</span> <span class="o">:</span><span class="nl">ServiceException:</span>  <span class="n">execution</span><span class="o">(</span><span class="nd">@com.blogger.atamanenko.annotation.SuppressExceptions</span> <span class="o">*</span> <span class="o">*.*(..));</span>
+<span class="o">}</span></code></pre></div>
 <p>Данный аспект делает в точности следующее: &ldquo;Смягчает&rdquo; исключение <code>ServiceException</code> для метода, который помечен аннотацией <code>@SuppressExceptions</code>.</p>
 
 <p>Пример использования:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">    <span style="color:#a6e22e">@SuppressExceptions</span>
-    <span style="color:#66d9ef">protected</span> Entity <span style="color:#a6e22e">findEntity</span><span style="color:#f92672">(</span><span style="color:#66d9ef">final</span> Identifiable id<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        <span style="color:#66d9ef">return</span> entityService<span style="color:#f92672">.</span><span style="color:#a6e22e">findById</span><span style="color:#f92672">(</span>id<span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">    <span class="nd">@SuppressExceptions</span>
+    <span class="kd">protected</span> <span class="n">Entity</span> <span class="nf">findEntity</span><span class="o">(</span><span class="kd">final</span> <span class="n">Identifiable</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">entityService</span><span class="o">.</span><span class="na">findById</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
+    <span class="o">}</span></code></pre></div>
 <h4 id="принудительная-проверка-контракта-между-модулями">Принудительная проверка контракта между модулями</h4>
 
 <p>Часто нам необходимо принудительно требовать выполнения каких-то архитектурных ограничений, например, контроллеры должны работать только с сервисами и им запрещено напрямую обращаться к базе данных.</p>
@@ -225,26 +223,26 @@
 <p>Для реализации таких проверок можно также использовать возможности AOP.</p>
 
 <p>Предположим, что в нашем приложении модуль сервиса выставляет наружу <a href="http://java.sun.com/blueprints/corej2eepatterns/Patterns/TransferObject.html">DTO</a> для работы, скрывая при этом классы модели. Для того, чтобы явно запретить доступ к классам и методам модели нам необходимо создать аспект, который бы вызывал ошибку компиляции при нарушении ограничения.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">aspect ForbidAccessToModelAspect <span style="color:#f92672">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">aspect</span> <span class="n">ForbidAccessToModelAspect</span> <span class="o">{</span>
 
-<span style="color:#75715e">//      Full prohibition of access to model:
-</span><span style="color:#75715e"></span>        pointcut <span style="color:#a6e22e">accessModel</span><span style="color:#f92672">():</span> call<span style="color:#f92672">(*</span> com<span style="color:#f92672">.</span><span style="color:#a6e22e">blogger</span><span style="color:#f92672">.</span><span style="color:#a6e22e">atamanenko</span><span style="color:#f92672">.</span><span style="color:#a6e22e">app</span><span style="color:#f92672">.</span><span style="color:#a6e22e">model</span><span style="color:#f92672">..*.*(..));</span>
-        declare error: accessModel<span style="color:#f92672">()</span> <span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;Illegal call to model&#34;</span><span style="color:#f92672">;</span>
-<span style="color:#f92672">}</span></code></pre></div>
+<span class="c1">//      Full prohibition of access to model:
+</span><span class="c1"></span>        <span class="n">pointcut</span> <span class="nf">accessModel</span><span class="o">():</span> <span class="n">call</span><span class="o">(*</span> <span class="n">com</span><span class="o">.</span><span class="na">blogger</span><span class="o">.</span><span class="na">atamanenko</span><span class="o">.</span><span class="na">app</span><span class="o">.</span><span class="na">model</span><span class="o">..*.*(..));</span>
+        <span class="n">declare</span> <span class="nl">error:</span> <span class="n">accessModel</span><span class="o">()</span> <span class="o">:</span> <span class="s">&#34;Illegal call to model&#34;</span><span class="o">;</span>
+<span class="o">}</span></code></pre></div>
 <p>После объявления такого аспекта, мы получим ошибку компиляции, что, очевидным образом, приведёт к выполнению архитектурного ограничения.</p>
 
 <p>Если же нам необходимо разрешить доступ к одному пакету только из какого-то определённого другого, то мы можем модифицировать наш аспект следующим образом:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">aspect ForbidAccessToModelAspect2 <span style="color:#f92672">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">aspect</span> <span class="n">ForbidAccessToModelAspect2</span> <span class="o">{</span>
 
-        pointcut <span style="color:#a6e22e">accessModel</span><span style="color:#f92672">():</span> call<span style="color:#f92672">(*</span> com<span style="color:#f92672">.</span><span style="color:#a6e22e">blogger</span><span style="color:#f92672">.</span><span style="color:#a6e22e">atamanenko</span><span style="color:#f92672">.</span><span style="color:#a6e22e">app</span><span style="color:#f92672">.</span><span style="color:#a6e22e">model</span><span style="color:#f92672">.**.*(..));</span>
+        <span class="n">pointcut</span> <span class="nf">accessModel</span><span class="o">():</span> <span class="n">call</span><span class="o">(*</span> <span class="n">com</span><span class="o">.</span><span class="na">blogger</span><span class="o">.</span><span class="na">atamanenko</span><span class="o">.</span><span class="na">app</span><span class="o">.</span><span class="na">model</span><span class="o">.**.*(..));</span>
 
-        <span style="color:#75715e">// Allow access to model from specific package for methods and constructors
-</span><span style="color:#75715e"></span>        pointcut <span style="color:#a6e22e">allowAccessModelFromSpecificPackage</span><span style="color:#f92672">():</span> withincode<span style="color:#f92672">(*</span> com<span style="color:#f92672">.</span><span style="color:#a6e22e">blogger</span><span style="color:#f92672">.</span><span style="color:#a6e22e">atamanenko</span><span style="color:#f92672">.</span><span style="color:#a6e22e">app</span><span style="color:#f92672">.</span><span style="color:#a6e22e">allowedpackage</span><span style="color:#f92672">..*.*(..));</span>
-        pointcut <span style="color:#a6e22e">allowAccessModelFromSpecificPackage2</span><span style="color:#f92672">():</span> withincode<span style="color:#f92672">(</span>com<span style="color:#f92672">.</span><span style="color:#a6e22e">blogger</span><span style="color:#f92672">.</span><span style="color:#a6e22e">atamanenko</span><span style="color:#f92672">.</span><span style="color:#a6e22e">app</span><span style="color:#f92672">.</span><span style="color:#a6e22e">allowedpackage</span><span style="color:#f92672">..*.</span><span style="color:#a6e22e">new</span><span style="color:#f92672">(..));</span>
+        <span class="c1">// Allow access to model from specific package for methods and constructors
+</span><span class="c1"></span>        <span class="n">pointcut</span> <span class="nf">allowAccessModelFromSpecificPackage</span><span class="o">():</span> <span class="n">withincode</span><span class="o">(*</span> <span class="n">com</span><span class="o">.</span><span class="na">blogger</span><span class="o">.</span><span class="na">atamanenko</span><span class="o">.</span><span class="na">app</span><span class="o">.</span><span class="na">allowedpackage</span><span class="o">..*.*(..));</span>
+        <span class="n">pointcut</span> <span class="nf">allowAccessModelFromSpecificPackage2</span><span class="o">():</span> <span class="n">withincode</span><span class="o">(</span><span class="n">com</span><span class="o">.</span><span class="na">blogger</span><span class="o">.</span><span class="na">atamanenko</span><span class="o">.</span><span class="na">app</span><span class="o">.</span><span class="na">allowedpackage</span><span class="o">..*.</span><span class="na">new</span><span class="o">(..));</span>
 
-        <span style="color:#75715e">// forbid usage from any other methods.
-</span><span style="color:#75715e"></span>        declare error: accessModel<span style="color:#f92672">()</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!(</span>allowAccessModelFromSpecificPackage<span style="color:#f92672">()</span> <span style="color:#f92672">||</span> allowAccessModelFromSpecificPackage<span style="color:#f92672">()):</span><span style="color:#e6db74">&#34;Illegal call to Model from forbidden package&#34;</span><span style="color:#f92672">;</span>
-<span style="color:#f92672">}</span></code></pre></div>
+        <span class="c1">// forbid usage from any other methods.
+</span><span class="c1"></span>        <span class="n">declare</span> <span class="nl">error:</span> <span class="n">accessModel</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="o">!(</span><span class="n">allowAccessModelFromSpecificPackage</span><span class="o">()</span> <span class="o">||</span> <span class="n">allowAccessModelFromSpecificPackage</span><span class="o">()):</span><span class="s">&#34;Illegal call to Model from forbidden package&#34;</span><span class="o">;</span>
+<span class="o">}</span></code></pre></div>
 <p>Такой аспект, созданный в нашем модуле запретит нам использовать классы модели из всех пакетов, кроме <code>com.blogger.atamanenko.app.allowedpackage</code></p>
 
 <h4 id="сборка-приложения">Сборка приложения</h4>
@@ -252,30 +250,30 @@
 <p>Файл аспекта нужно положить в каталог <code>src/main/aspect</code>, а для сборки приложения необходимо использовать не стандартный Oracle <a href="http://docs.oracle.com/javase/6/docs/technotes/tools/solaris/javac.html">Java Compiler</a>, а <a href="http://eclipse.org/aspectj/downloads.php">AspectJ compiler</a>.</p>
 
 <p>Пример конфигурации для <a href="https://maven.apache.org/">Apache Maven</a>:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml">&amp;lt;plugin&amp;gt;
-    &amp;lt;groupId&amp;gt;org.codehaus.mojo&amp;lt;/groupId&amp;gt;
-    &amp;lt;artifactId&amp;gt;aspectj-maven-plugin&amp;lt;/artifactId&amp;gt;
-    &amp;lt;version&amp;gt;${aspectj-maven-plugin.version}&amp;lt;/version&amp;gt;
-    &amp;lt;configuration&amp;gt;
-        &amp;lt;complianceLevel&amp;gt;1.6&amp;lt;/complianceLevel&amp;gt;
-        &amp;lt;aspectLibraries&amp;gt;
-            &amp;lt;aspectLibrary&amp;gt;
-                &amp;lt;groupId&amp;gt;org.springframework&amp;lt;/groupId&amp;gt;
-                &amp;lt;artifactId&amp;gt;spring-aspects&amp;lt;/artifactId&amp;gt;
-            &amp;lt;/aspectLibrary&amp;gt;
-        &amp;lt;/aspectLibraries&amp;gt;
-        &amp;lt;verbose&amp;gt;true&amp;lt;/verbose&amp;gt;
-    &amp;lt;/configuration&amp;gt;
-    &amp;lt;executions&amp;gt;
-        &amp;lt;execution&amp;gt;
-            &amp;lt;phase&amp;gt;process-sources&amp;lt;/phase&amp;gt;
-            &amp;lt;goals&amp;gt;
-                &amp;lt;goal&amp;gt;compile&amp;lt;/goal&amp;gt;
-                &amp;lt;goal&amp;gt;test-compile&amp;lt;/goal&amp;gt;
-            &amp;lt;/goals&amp;gt;
-        &amp;lt;/execution&amp;gt;
-    &amp;lt;/executions&amp;gt;
-&amp;lt;/plugin&amp;gt;</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="ni">&amp;lt;</span>plugin<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.codehaus.mojo<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>aspectj-maven-plugin<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>${aspectj-maven-plugin.version}<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>configuration<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>complianceLevel<span class="ni">&amp;gt;</span>1.6<span class="ni">&amp;lt;</span>/complianceLevel<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>aspectLibraries<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>aspectLibrary<span class="ni">&amp;gt;</span>
+                <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.springframework<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+                <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>spring-aspects<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>/aspectLibrary<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>/aspectLibraries<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>verbose<span class="ni">&amp;gt;</span>true<span class="ni">&amp;lt;</span>/verbose<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>/configuration<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>executions<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>execution<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>phase<span class="ni">&amp;gt;</span>process-sources<span class="ni">&amp;lt;</span>/phase<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>goals<span class="ni">&amp;gt;</span>
+                <span class="ni">&amp;lt;</span>goal<span class="ni">&amp;gt;</span>compile<span class="ni">&amp;lt;</span>/goal<span class="ni">&amp;gt;</span>
+                <span class="ni">&amp;lt;</span>goal<span class="ni">&amp;gt;</span>test-compile<span class="ni">&amp;lt;</span>/goal<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>/goals<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>/execution<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>/executions<span class="ni">&amp;gt;</span>
+<span class="ni">&amp;lt;</span>/plugin<span class="ni">&amp;gt;</span></code></pre></div>
 <h4 id="заключение">Заключение</h4>
 
 <p>Вот в общем-то и всё. Я сознательно не стал описывать языковые конструкции аспектов, так как они подробно описаны в <a href="https://www.eclipse.org/aspectj/doc/next/progguide/index.html">руководстве AspectJ</a></p>
@@ -284,7 +282,9 @@
         
 
 <footer>
-
+  <div>
+    <p>If you have any questions, feel free to ping me on Twitter.</p>
+  </div>
   <p class="meta">
     
     
@@ -356,7 +356,7 @@
 
 
 <section class="even">
-  <span>Table of Contents</span>
+  <div class="toc-header">Table of Contents</div>
    <nav id="TableOfContents">
 <ul>
 <li>

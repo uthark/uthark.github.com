@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html prefix="og: http://ogp.me/ns#">
-<head >
+<html prefix="og: http://ogp.me/ns#" lang="en">
+<head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=5">
 
   
   <title>Двунаправленная ссылочная целостность</title>
@@ -19,7 +19,7 @@
 
 
   <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
-
+  <link rel="stylesheet" media="screen" href="https://fonts.googleapis.com/css?family=Arvo" type="text/css"/>
 
 
   
@@ -29,10 +29,8 @@
   
   
 
-
   
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-
 
   
   <link href="https://uthark.github.io/favicon.png" rel="icon">
@@ -74,10 +72,10 @@
 </head>
 <body>
 
-
-<header>  
+<header>
+  
   <h1><a href="https://uthark.github.io/">Sharing knowledge</a></h1>
-    
+    <h2>by Oleg Atamanenko</h2>
 </header>
 
 
@@ -176,16 +174,16 @@
 <p>Во-первых, вставки в обе таблицы должны происходить в рамках одной транзакции (как я <a href="http://www.blogger.com/2009/04/blog-post_24.html">уже писал</a>, транзакция обеспечивает перевод базы данных из одного непротиворечащего состояния в другое непротиворечащее состояние).</p>
 
 <p>К сожалению, этого недостаточно:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">BEGIN</span> TRANSACTION;
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">BEGIN</span> <span class="n">TRANSACTION</span><span class="p">;</span>
 
-<span style="color:#66d9ef">INSERT</span> <span style="color:#66d9ef">INTO</span> <span style="color:#e6db74">&#34;Player&#34;</span>  <span style="color:#66d9ef">VALUES</span> (<span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">20</span>);
-<span style="color:#66d9ef">INSERT</span> <span style="color:#66d9ef">INTO</span> <span style="color:#e6db74">&#34;Statistics&#34;</span>  <span style="color:#66d9ef">VALUES</span> (<span style="color:#ae81ff">20</span>, <span style="color:#ae81ff">10</span>);
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="s2">&#34;Player&#34;</span>  <span class="k">VALUES</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="s2">&#34;Statistics&#34;</span>  <span class="k">VALUES</span> <span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
 
-<span style="color:#66d9ef">COMMIT</span>;</code></pre></div>
+<span class="k">COMMIT</span><span class="p">;</span></code></pre></div>
 <p>выдаёт следующую ошибку:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">ERROR: insert or update on table <span style="color:#e6db74">&#34;Player&#34;</span> violates foreign key constraint <span style="color:#e6db74">&#34;statisticsId&#34;</span>
-SQL state: <span style="color:#ae81ff">23503</span>
-Detail: Key <span style="color:#f92672">(</span>statisticsId<span style="color:#f92672">)=(</span><span style="color:#ae81ff">20</span><span style="color:#f92672">)</span> is not present in table <span style="color:#e6db74">&#34;Statistics&#34;</span>.</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">ERROR: insert or update on table <span class="s2">&#34;Player&#34;</span> violates foreign key constraint <span class="s2">&#34;statisticsId&#34;</span>
+SQL state: <span class="m">23503</span>
+Detail: Key <span class="o">(</span>statisticsId<span class="o">)=(</span><span class="m">20</span><span class="o">)</span> is not present in table <span class="s2">&#34;Statistics&#34;</span>.</code></pre></div>
 <p>И снова кажется, что замкнутый круг не разорвать</p>
 
 <p>Но решение всё же есть.</p>
@@ -193,22 +191,22 @@ Detail: Key <span style="color:#f92672">(</span>statisticsId<span style="color:#
 <p>Многие базы данных позволяют нарушать консистентность базы данных внутри транзакции. В данном случае можно &ldquo;попросить&rdquo; базу данных отложить проверку ссылочной целостности. На примере <code>PostgreSQL</code> рассмотрим, как это работает.</p>
 
 <h3 id="postgresql">PostgreSQL</h3>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-postgresql" data-lang="postgresql"><span style="color:#66d9ef">begin</span> <span style="color:#66d9ef">transaction</span>;
+<div class="highlight"><pre class="chroma"><code class="language-postgresql" data-lang="postgresql"><span class="k">begin</span> <span class="k">transaction</span><span class="p">;</span>
 
-<span style="color:#66d9ef">set</span> <span style="color:#66d9ef">constraints</span> <span style="color:#66d9ef">all</span> <span style="color:#66d9ef">deferred</span>; <span style="color:#75715e">-- 1
-</span><span style="color:#75715e"></span>
-<span style="color:#66d9ef">INSERT</span> <span style="color:#66d9ef">INTO</span> <span style="color:#e6db74">&#34;Player&#34;</span>  <span style="color:#66d9ef">VALUES</span> (<span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">20</span>);
-<span style="color:#66d9ef">INSERT</span> <span style="color:#66d9ef">INTO</span> <span style="color:#e6db74">&#34;Statistics&#34;</span>  <span style="color:#66d9ef">VALUES</span> (<span style="color:#ae81ff">20</span>, <span style="color:#ae81ff">10</span>);
+<span class="k">set</span> <span class="k">constraints</span> <span class="k">all</span> <span class="k">deferred</span><span class="p">;</span> <span class="c1">-- 1
+</span><span class="c1"></span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="s">&#34;Player&#34;</span>  <span class="k">VALUES</span> <span class="p">(</span><span class="mf">10</span><span class="p">,</span> <span class="mf">20</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="s">&#34;Statistics&#34;</span>  <span class="k">VALUES</span> <span class="p">(</span><span class="mf">20</span><span class="p">,</span> <span class="mf">10</span><span class="p">);</span>
 
-<span style="color:#66d9ef">set</span> <span style="color:#66d9ef">constraints</span> <span style="color:#66d9ef">all</span> <span style="color:#66d9ef">immediate</span>; <span style="color:#75715e">-- 2
-</span><span style="color:#75715e"></span>
-<span style="color:#66d9ef">commit</span>; <span style="color:#75715e">-- 3</span></code></pre></div>
+<span class="k">set</span> <span class="k">constraints</span> <span class="k">all</span> <span class="k">immediate</span><span class="p">;</span> <span class="c1">-- 2
+</span><span class="c1"></span>
+<span class="k">commit</span><span class="p">;</span> <span class="c1">-- 3</span></code></pre></div>
 <p>1 - Сделать все ограничения отложенными. Ограничения будут проверены в момент проведения фиксации транзакции (в строке 3)</p>
 
 <p>2 - Явно делаем все ограничения немедленными. В данном примере это необязательно, так как в 3) они всё равно будут проверены.</p>
 
 <p>После выполнения данного кода получаем:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">Query returned successfully with no result in <span style="color:#ae81ff">24</span> ms.</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">Query returned successfully with no result in <span class="m">24</span> ms.</code></pre></div>
 <p>Это уже полностью рабочий пример, чтобы это заработало нужно явно сделать ограничения отложенными - они должны быть объявлены как <code>DEFERRED</code>. Официальная документация к PostgreSQL гласит:</p>
 
 <blockquote>
@@ -216,10 +214,10 @@ Detail: Key <span style="color:#f92672">(</span>statisticsId<span style="color:#
 </blockquote>
 
 <p>Так что необходимо также модифицировать объявления ограничений:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">ALTER</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#e6db74">&#34;Player&#34;</span>
-<span style="color:#66d9ef">ADD</span> <span style="color:#66d9ef">CONSTRAINT</span> <span style="color:#e6db74">&#34;statisticsId&#34;</span> <span style="color:#66d9ef">FOREIGN</span> <span style="color:#66d9ef">KEY</span> (<span style="color:#e6db74">&#34;statisticsId&#34;</span>)
-<span style="color:#66d9ef">REFERENCES</span> <span style="color:#e6db74">&#34;Statistics&#34;</span> (<span style="color:#e6db74">&#34;statisticsId&#34;</span>) <span style="color:#66d9ef">MATCH</span> <span style="color:#66d9ef">SIMPLE</span>
-<span style="color:#66d9ef">ON</span> <span style="color:#66d9ef">UPDATE</span> <span style="color:#66d9ef">NO</span> ACTION <span style="color:#66d9ef">ON</span> <span style="color:#66d9ef">DELETE</span> <span style="color:#66d9ef">NO</span> ACTION <span style="color:#66d9ef">DEFERRABLE</span> <span style="color:#66d9ef">INITIALLY</span> <span style="color:#66d9ef">IMMEDIATE</span>;</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="s2">&#34;Player&#34;</span>
+<span class="k">ADD</span> <span class="k">CONSTRAINT</span> <span class="s2">&#34;statisticsId&#34;</span> <span class="k">FOREIGN</span> <span class="k">KEY</span> <span class="p">(</span><span class="s2">&#34;statisticsId&#34;</span><span class="p">)</span>
+<span class="k">REFERENCES</span> <span class="s2">&#34;Statistics&#34;</span> <span class="p">(</span><span class="s2">&#34;statisticsId&#34;</span><span class="p">)</span> <span class="k">MATCH</span> <span class="k">SIMPLE</span>
+<span class="k">ON</span> <span class="k">UPDATE</span> <span class="k">NO</span> <span class="n">ACTION</span> <span class="k">ON</span> <span class="k">DELETE</span> <span class="k">NO</span> <span class="n">ACTION</span> <span class="k">DEFERRABLE</span> <span class="k">INITIALLY</span> <span class="k">IMMEDIATE</span><span class="p">;</span></code></pre></div>
 <p>Данный пример был приведён для PostgreSQL.</p>
 
 <p>Для других баз данных решения следующие:</p>
@@ -251,16 +249,18 @@ INITIALLY DEFERRED or INITIALLY IMMEDIATE</p>
 </blockquote>
 
 <p>Но это не конец света, так как можно отключить проверку внешних ключей:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">SET</span> foreign_key_checks <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
-<span style="color:#75715e">-- code goes here
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">SET</span> foreign_key_checks <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SET</span> <span class="n">foreign_key_checks</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="c1">-- code goes here
+</span><span class="c1"></span><span class="k">SET</span> <span class="n">foreign_key_checks</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span></code></pre></div>
 <p>Чем эта информация может быть полезна для разработчика? Например, в случае, если ошибки и недоработки Hibernate покажут себя в виде стектрейса в логе(например, <a href="http://opensource.atlassian.com/projects/hibernate/browse/HHH-2248">HHH-2248</a>), то разработчик будет понимать причину ошибки и то, как реализовать work-around.</p>
 
         </div>
         
 
 <footer>
-
+  <div>
+    <p>If you have any questions, feel free to ping me on Twitter.</p>
+  </div>
   <p class="meta">
     
     
@@ -332,7 +332,7 @@ INITIALLY DEFERRED or INITIALLY IMMEDIATE</p>
 
 
 <section class="even">
-  <span>Table of Contents</span>
+  <div class="toc-header">Table of Contents</div>
    <nav id="TableOfContents">
 <ul>
 <li>
@@ -376,7 +376,7 @@ INITIALLY DEFERRED or INITIALLY IMMEDIATE</p>
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[site:@LinkageError creator:@LinkageError card:summary]"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary site:@LinkageError creator:@LinkageError]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 

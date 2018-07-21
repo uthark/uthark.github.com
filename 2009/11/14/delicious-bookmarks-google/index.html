@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html prefix="og: http://ogp.me/ns#">
-<head >
+<html prefix="og: http://ogp.me/ns#" lang="en">
+<head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=5">
 
   
   <title>Расширение Delicious Bookmarks для Google Chrome/Chromium</title>
@@ -19,7 +19,7 @@
 
 
   <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
-
+  <link rel="stylesheet" media="screen" href="https://fonts.googleapis.com/css?family=Arvo" type="text/css"/>
 
 
   
@@ -29,10 +29,8 @@
   
   
 
-
   
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-
 
   
   <link href="https://uthark.github.io/favicon.png" rel="icon">
@@ -77,10 +75,10 @@
 </head>
 <body>
 
-
-<header>  
+<header>
+  
   <h1><a href="https://uthark.github.io/">Sharing knowledge</a></h1>
-    
+    <h2>by Oleg Atamanenko</h2>
 </header>
 
 
@@ -320,8 +318,7 @@ selection : description
     function saveOptions() {
         var share = document.getElementById(&quot;share&quot;);
         localStorage[&quot;markPrivate&quot;] = share.checked;</p>
-
-<pre><code>    // Update status to let user know options were saved.
+<div class="highlight"><pre class="chroma">    // Update status to let user know options were saved.
     var status = document.getElementById(&amp;quot;status&amp;quot;);
     status.innerHTML = &amp;quot;Options Saved.&amp;quot;;
     setTimeout(function() {
@@ -340,9 +337,7 @@ function restoreOptions() {
 
     shareCheckbox.checked = share;
 
-}
-</code></pre>
-
+}</pre></div>
 <p>&lt;/script&gt;</p>
 
 <p>&lt;body onload=&quot;restoreOptions()&quot;&gt;</p>
@@ -383,7 +378,9 @@ function restoreOptions() {
         
 
 <footer>
-
+  <div>
+    <p>If you have any questions, feel free to ping me on Twitter.</p>
+  </div>
   <p class="meta">
     
     

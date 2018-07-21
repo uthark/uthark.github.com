@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html prefix="og: http://ogp.me/ns#">
-<head >
+<html prefix="og: http://ogp.me/ns#" lang="en">
+<head>
+	<meta name="generator" content="Hugo 0.44" />
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=5">
 
   
   <title>Sharing knowledge</title>
@@ -19,7 +20,7 @@
 
 
   <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
-
+  <link rel="stylesheet" media="screen" href="https://fonts.googleapis.com/css?family=Arvo" type="text/css"/>
 
 
   
@@ -29,10 +30,8 @@
   
   
 
-
   
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-
 
   
   <link href="https://uthark.github.io/favicon.png" rel="icon">
@@ -55,10 +54,10 @@
 </head>
 <body>
 
-
-<header>  
+<header>
+  
   <h1><a href="https://uthark.github.io/">Sharing knowledge</a></h1>
-    
+    <h2>by Oleg Atamanenko</h2>
 </header>
 
 
@@ -153,56 +152,56 @@
 <p>Кроме того, для обработки аннотации необходимо указать обработчик. Это можно сделать передав подкласс <a href="http://static.springsource.org/spring-framework/docs/3.2.x/javadoc-api/org/springframework/context/annotation/ImportBeanDefinitionRegistrar.html" target="_blank"><code>org.springframework.context.annotation.ImportBeanDefinitionRegistrar</code></a> через аннотацию <a href="http://static.springsource.org/spring-framework/docs/3.2.x/javadoc-api/org/springframework/context/annotation/Import.html" target="_blank"><code>@Import</code></a></p>
 
 <p>Пишем аннотацию:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Target</span><span style="color:#f92672">(</span>ElementType<span style="color:#f92672">.</span><span style="color:#a6e22e">TYPE</span><span style="color:#f92672">)</span>
-<span style="color:#a6e22e">@Retention</span><span style="color:#f92672">(</span>RetentionPolicy<span style="color:#f92672">.</span><span style="color:#a6e22e">RUNTIME</span><span style="color:#f92672">)</span>
-<span style="color:#a6e22e">@Documented</span>
-<span style="color:#a6e22e">@Inherited</span>
-<span style="color:#a6e22e">@Import</span><span style="color:#f92672">(</span>JaxRsRestClientRegistrar<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">)</span>
-<span style="color:#66d9ef">public</span> <span style="color:#a6e22e">@interface</span> EnableJaxRsRestClient <span style="color:#f92672">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Target</span><span class="o">(</span><span class="n">ElementType</span><span class="o">.</span><span class="na">TYPE</span><span class="o">)</span>
+<span class="nd">@Retention</span><span class="o">(</span><span class="n">RetentionPolicy</span><span class="o">.</span><span class="na">RUNTIME</span><span class="o">)</span>
+<span class="nd">@Documented</span>
+<span class="nd">@Inherited</span>
+<span class="nd">@Import</span><span class="o">(</span><span class="n">JaxRsRestClientRegistrar</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<span class="kd">public</span> <span class="nd">@interface</span> <span class="n">EnableJaxRsRestClient</span> <span class="o">{</span>
 
-    String <span style="color:#a6e22e">scanPackage</span><span style="color:#f92672">();</span>
+    <span class="n">String</span> <span class="nf">scanPackage</span><span class="o">();</span>
 
-    String <span style="color:#a6e22e">endpoint</span><span style="color:#f92672">();</span>
-<span style="color:#f92672">}</span></code></pre></div>
+    <span class="n">String</span> <span class="nf">endpoint</span><span class="o">();</span>
+<span class="o">}</span></code></pre></div>
 <p>Теперь осталось написать реализацию интерфейса <code>org.springframework.context.annotation.ImportBeanDefinitionRegistrar</code>. Так как у нас уже есть написанный ранее <a href="http://static.springsource.org/spring-framework/docs/3.2.x/javadoc-api/org/springframework/beans/factory/config/BeanFactoryPostProcessor.html" target="_blank">BeanFactoryPostProcessor</a> в виде <code>RestClientPostProcessor</code>, реализация интерфейса будет простой - мы создадим описание бина для Spring и зарегистрируем его в реестре бинов.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">JaxRsRestClientRegistrar</span> <span style="color:#66d9ef">implements</span> ImportBeanDefinitionRegistrar <span style="color:#f92672">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">JaxRsRestClientRegistrar</span> <span class="kd">implements</span> <span class="n">ImportBeanDefinitionRegistrar</span> <span class="o">{</span>
 
-    <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> String PROPERTY_ENDPOINT <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;endpoint&#34;</span><span style="color:#f92672">;</span>
+    <span class="kd">protected</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">PROPERTY_ENDPOINT</span> <span class="o">=</span> <span class="s">&#34;endpoint&#34;</span><span class="o">;</span>
 
-    <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> String PROPERTY_SCAN_PACKAGE <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;basePackage&#34;</span><span style="color:#f92672">;</span>
+    <span class="kd">protected</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">PROPERTY_SCAN_PACKAGE</span> <span class="o">=</span> <span class="s">&#34;basePackage&#34;</span><span class="o">;</span>
 
-    <span style="color:#a6e22e">@Override</span>
-    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">registerBeanDefinitions</span><span style="color:#f92672">(</span>AnnotationMetadata importingClassMetadata<span style="color:#f92672">,</span> BeanDefinitionRegistry registry<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        EnableJaxRsRestClient annotation <span style="color:#f92672">=</span>
-                <span style="color:#f92672">(</span>EnableJaxRsRestClient<span style="color:#f92672">)</span> <span style="color:#f92672">((</span>StandardClassMetadata<span style="color:#f92672">)</span> importingClassMetadata<span style="color:#f92672">).</span><span style="color:#a6e22e">getIntrospectedClass</span><span style="color:#f92672">()</span>
-                        <span style="color:#f92672">.</span><span style="color:#a6e22e">getAnnotation</span><span style="color:#f92672">(</span>EnableJaxRsRestClient<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
-        String scanPackage <span style="color:#f92672">=</span> annotation<span style="color:#f92672">.</span><span style="color:#a6e22e">scanPackage</span><span style="color:#f92672">();</span>
-        String endpoint <span style="color:#f92672">=</span> annotation<span style="color:#f92672">.</span><span style="color:#a6e22e">endpoint</span><span style="color:#f92672">();</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">registerBeanDefinitions</span><span class="o">(</span><span class="n">AnnotationMetadata</span> <span class="n">importingClassMetadata</span><span class="o">,</span> <span class="n">BeanDefinitionRegistry</span> <span class="n">registry</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">EnableJaxRsRestClient</span> <span class="n">annotation</span> <span class="o">=</span>
+                <span class="o">(</span><span class="n">EnableJaxRsRestClient</span><span class="o">)</span> <span class="o">((</span><span class="n">StandardClassMetadata</span><span class="o">)</span> <span class="n">importingClassMetadata</span><span class="o">).</span><span class="na">getIntrospectedClass</span><span class="o">()</span>
+                        <span class="o">.</span><span class="na">getAnnotation</span><span class="o">(</span><span class="n">EnableJaxRsRestClient</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="n">String</span> <span class="n">scanPackage</span> <span class="o">=</span> <span class="n">annotation</span><span class="o">.</span><span class="na">scanPackage</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">endpoint</span> <span class="o">=</span> <span class="n">annotation</span><span class="o">.</span><span class="na">endpoint</span><span class="o">();</span>
 
-        GenericBeanDefinition beanDefinition <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> GenericBeanDefinition<span style="color:#f92672">();</span>
-        beanDefinition<span style="color:#f92672">.</span><span style="color:#a6e22e">setAbstract</span><span style="color:#f92672">(</span><span style="color:#66d9ef">false</span><span style="color:#f92672">);</span>
-        beanDefinition<span style="color:#f92672">.</span><span style="color:#a6e22e">setBeanClass</span><span style="color:#f92672">(</span>RestClientPostProcessor<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
-        MutablePropertyValues propertyValues <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> MutablePropertyValues<span style="color:#f92672">();</span>
-        propertyValues<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>PROPERTY_ENDPOINT<span style="color:#f92672">,</span> endpoint<span style="color:#f92672">);</span>
-        propertyValues<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>PROPERTY_SCAN_PACKAGE<span style="color:#f92672">,</span> scanPackage<span style="color:#f92672">);</span>
-        beanDefinition<span style="color:#f92672">.</span><span style="color:#a6e22e">setPropertyValues</span><span style="color:#f92672">(</span>propertyValues<span style="color:#f92672">);</span>
+        <span class="n">GenericBeanDefinition</span> <span class="n">beanDefinition</span> <span class="o">=</span> <span class="k">new</span> <span class="n">GenericBeanDefinition</span><span class="o">();</span>
+        <span class="n">beanDefinition</span><span class="o">.</span><span class="na">setAbstract</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
+        <span class="n">beanDefinition</span><span class="o">.</span><span class="na">setBeanClass</span><span class="o">(</span><span class="n">RestClientPostProcessor</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="n">MutablePropertyValues</span> <span class="n">propertyValues</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MutablePropertyValues</span><span class="o">();</span>
+        <span class="n">propertyValues</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">PROPERTY_ENDPOINT</span><span class="o">,</span> <span class="n">endpoint</span><span class="o">);</span>
+        <span class="n">propertyValues</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">PROPERTY_SCAN_PACKAGE</span><span class="o">,</span> <span class="n">scanPackage</span><span class="o">);</span>
+        <span class="n">beanDefinition</span><span class="o">.</span><span class="na">setPropertyValues</span><span class="o">(</span><span class="n">propertyValues</span><span class="o">);</span>
 
-        registry<span style="color:#f92672">.</span><span style="color:#a6e22e">registerBeanDefinition</span><span style="color:#f92672">(</span>ClassUtils<span style="color:#f92672">.</span><span style="color:#a6e22e">getShortName</span><span style="color:#f92672">(</span>getClass<span style="color:#f92672">()),</span> beanDefinition<span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span>
-<span style="color:#f92672">}</span></code></pre></div>
+        <span class="n">registry</span><span class="o">.</span><span class="na">registerBeanDefinition</span><span class="o">(</span><span class="n">ClassUtils</span><span class="o">.</span><span class="na">getShortName</span><span class="o">(</span><span class="n">getClass</span><span class="o">()),</span> <span class="n">beanDefinition</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
 <p>Теперь мы можем использовать аннотацию:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Configuration</span>
-<span style="color:#a6e22e">@EnableJaxRsRestClient</span><span style="color:#f92672">(</span>scanPackage <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&lt;base package&gt;&#34;</span><span style="color:#f92672">,</span> endpoint <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;${remote.rest.endpoint}&#34;</span><span style="color:#f92672">)</span>
-<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TestAutowiringConfiguration</span> <span style="color:#f92672">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Configuration</span>
+<span class="nd">@EnableJaxRsRestClient</span><span class="o">(</span><span class="n">scanPackage</span> <span class="o">=</span> <span class="s">&#34;&lt;base package&gt;&#34;</span><span class="o">,</span> <span class="n">endpoint</span> <span class="o">=</span> <span class="s">&#34;${remote.rest.endpoint}&#34;</span><span class="o">)</span>
+<span class="kd">class</span> <span class="nc">TestAutowiringConfiguration</span> <span class="o">{</span>
 
-    <span style="color:#a6e22e">@Bean</span>
-    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> PropertyPlaceholderConfigurer <span style="color:#a6e22e">configurer</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-        PropertyPlaceholderConfigurer pph <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> PropertyPlaceholderConfigurer<span style="color:#f92672">();</span>
-        pph<span style="color:#f92672">.</span><span style="color:#a6e22e">setLocation</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> ClassPathResource<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;application.properties&#34;</span><span style="color:#f92672">));</span>
-        <span style="color:#66d9ef">return</span> pph<span style="color:#f92672">;</span>
-    <span style="color:#f92672">}</span>
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">PropertyPlaceholderConfigurer</span> <span class="nf">configurer</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">PropertyPlaceholderConfigurer</span> <span class="n">pph</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PropertyPlaceholderConfigurer</span><span class="o">();</span>
+        <span class="n">pph</span><span class="o">.</span><span class="na">setLocation</span><span class="o">(</span><span class="k">new</span> <span class="n">ClassPathResource</span><span class="o">(</span><span class="s">&#34;application.properties&#34;</span><span class="o">));</span>
+        <span class="k">return</span> <span class="n">pph</span><span class="o">;</span>
+    <span class="o">}</span>
 
-<span style="color:#f92672">}</span></code></pre></div>
+<span class="o">}</span></code></pre></div>
 <p>Обратите внимание, что endpoint можно передавать с использованием подстановочных свойств.</p>
 
 <p>На этом всё, если есть вопросы - <a href="https://plus.google.com/112372998073079463630/posts" target="_blank">спрашивайте в Google+</a></p>
@@ -233,14 +232,14 @@
 <p>У нас есть класс, который умеет создавать прокси для любого REST-интерфейса в проекте. Теперь мы хотим сделать так, чтобы эти интерфейсы можно было автоматически создавать в контексте Spring и связывать с другими бинами.</p>
 
 <p>Первое решение, которое приходит в лоб - объявить бин в конфигурации для каждого интерфейса:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Configuration</span>
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SpringConfiguration</span> <span style="color:#f92672">{</span>
-    <span style="color:#a6e22e">@Bean</span>
-    <span style="color:#66d9ef">public</span> UserRest <span style="color:#a6e22e">userRest</span><span style="color:#f92672">(){</span>
-        List<span style="color:#f92672">&lt;?&gt;</span> providers <span style="color:#f92672">=</span> Arrays<span style="color:#f92672">.</span><span style="color:#a6e22e">asList</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> JsonMessageHandler<span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> ObjectMapper<span style="color:#f92672">()));</span>
-        <span style="color:#66d9ef">return</span> JAXRSClientFactory<span style="color:#f92672">.</span><span style="color:#a6e22e">create</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;http://localhost:8080&#34;</span><span style="color:#f92672">,</span> UserRest<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">,</span> providers<span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span>
-<span style="color:#f92672">}</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Configuration</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SpringConfiguration</span> <span class="o">{</span>
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="n">UserRest</span> <span class="nf">userRest</span><span class="o">(){</span>
+        <span class="n">List</span><span class="o">&lt;?&gt;</span> <span class="n">providers</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="k">new</span> <span class="n">JsonMessageHandler</span><span class="o">(</span><span class="k">new</span> <span class="n">ObjectMapper</span><span class="o">()));</span>
+        <span class="k">return</span> <span class="n">JAXRSClientFactory</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="s">&#34;http://localhost:8080&#34;</span><span class="o">,</span> <span class="n">UserRest</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">providers</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
 <p>Написав объявление нескольких таких бинов можно задуматься - &ldquo;Есть ли способ проще?&rdquo;.</p>
 
 <p>Есть, и я вам сейчас его покажу.</p>
@@ -262,76 +261,76 @@
 <p>Для поиска всех возможных классов/интерфейсов воспользуемся классом <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/context/annotation/ClassPathScanningCandidateComponentProvider.html" target="_blank"><code>ClassPathScanningCandidateComponentProvider</code></a>, который умеет сканировать классы в выбранном пакете и применять фильтры, чтобы собрать только нужные. Также нам нужно учесть, что по умолчанию <code>ClassPathScanningCandidateComponentProvider</code> пытается определить, может ли найденный класс быть и бином (например, проверяет, что это не абстрактный класс и не интерфейс), поэтому нам нужно написать подкласс, который позволит нам работать с интерфейсами.</p>
 
 <p>Пишем класс:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">RestClientPostProcessor</span> <span style="color:#66d9ef">implements</span> BeanFactoryPostProcessor <span style="color:#f92672">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">RestClientPostProcessor</span> <span class="kd">implements</span> <span class="n">BeanFactoryPostProcessor</span> <span class="o">{</span>
 
-    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> Logger LOGGER <span style="color:#f92672">=</span> LoggerFactory<span style="color:#f92672">.</span><span style="color:#a6e22e">getLogger</span><span style="color:#f92672">(</span>RestClientPostProcessor<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Logger</span> <span class="n">LOGGER</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">RestClientPostProcessor</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
 
-    <span style="color:#66d9ef">protected</span> String endpoint <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;http://localhost:8080&#34;</span><span style="color:#f92672">;</span>
+    <span class="kd">protected</span> <span class="n">String</span> <span class="n">endpoint</span> <span class="o">=</span> <span class="s">&#34;http://localhost:8080&#34;</span><span class="o">;</span>
 
-    <span style="color:#66d9ef">private</span> Class<span style="color:#f92672">&lt;?</span> <span style="color:#66d9ef">extends</span> Annotation<span style="color:#f92672">&gt;</span> requiredAnnotation <span style="color:#f92672">=</span> Path<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">;</span>
+    <span class="kd">private</span> <span class="n">Class</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">Annotation</span><span class="o">&gt;</span> <span class="n">requiredAnnotation</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="na">class</span><span class="o">;</span>
 
-    <span style="color:#66d9ef">private</span> String basePackage <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&lt;base package&gt;&#34;</span><span style="color:#f92672">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">basePackage</span> <span class="o">=</span> <span class="s">&#34;&lt;base package&gt;&#34;</span><span class="o">;</span>
 
-    <span style="color:#66d9ef">private</span> ObjectMapper objectMapper<span style="color:#f92672">;</span>
+    <span class="kd">private</span> <span class="n">ObjectMapper</span> <span class="n">objectMapper</span><span class="o">;</span>
 
-    <span style="color:#75715e">// getters/setters omitted.
-</span><span style="color:#75715e"></span>
-    <span style="color:#66d9ef">protected</span> Object <span style="color:#a6e22e">createBean</span><span style="color:#f92672">(</span>Class<span style="color:#f92672">&lt;?&gt;</span> clazz<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        List<span style="color:#f92672">&lt;?&gt;</span> providers <span style="color:#f92672">=</span> Arrays<span style="color:#f92672">.</span><span style="color:#a6e22e">asList</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> JsonMessageHandler<span style="color:#f92672">(</span>objectMapper<span style="color:#f92672">));</span>
-        <span style="color:#66d9ef">return</span> JAXRSClientFactory<span style="color:#f92672">.</span><span style="color:#a6e22e">create</span><span style="color:#f92672">(</span>endpoint<span style="color:#f92672">,</span> clazz<span style="color:#f92672">,</span> providers<span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span>
+    <span class="c1">// getters/setters omitted.
+</span><span class="c1"></span>
+    <span class="kd">protected</span> <span class="n">Object</span> <span class="nf">createBean</span><span class="o">(</span><span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">clazz</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">List</span><span class="o">&lt;?&gt;</span> <span class="n">providers</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="k">new</span> <span class="n">JsonMessageHandler</span><span class="o">(</span><span class="n">objectMapper</span><span class="o">));</span>
+        <span class="k">return</span> <span class="n">JAXRSClientFactory</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">endpoint</span><span class="o">,</span> <span class="n">clazz</span><span class="o">,</span> <span class="n">providers</span><span class="o">);</span>
+    <span class="o">}</span>
 
-    <span style="color:#a6e22e">@Override</span> 
-    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">postProcessBeanFactory</span><span style="color:#f92672">(</span>ConfigurableListableBeanFactory beanFactory<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> BeansException <span style="color:#f92672">{</span>
+    <span class="nd">@Override</span> 
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">postProcessBeanFactory</span><span class="o">(</span><span class="n">ConfigurableListableBeanFactory</span> <span class="n">beanFactory</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">BeansException</span> <span class="o">{</span>
 
-        ClassPathScanningCandidateComponentProvider provider <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ClasspathScanner<span style="color:#f92672">();</span>
-        provider<span style="color:#f92672">.</span><span style="color:#a6e22e">addIncludeFilter</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> AnnotationTypeFilter<span style="color:#f92672">(</span>requiredAnnotation<span style="color:#f92672">));</span>
-        Set<span style="color:#f92672">&lt;</span>BeanDefinition<span style="color:#f92672">&gt;</span> components <span style="color:#f92672">=</span> provider<span style="color:#f92672">.</span><span style="color:#a6e22e">findCandidateComponents</span><span style="color:#f92672">(</span>basePackage<span style="color:#f92672">);</span>
+        <span class="n">ClassPathScanningCandidateComponentProvider</span> <span class="n">provider</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ClasspathScanner</span><span class="o">();</span>
+        <span class="n">provider</span><span class="o">.</span><span class="na">addIncludeFilter</span><span class="o">(</span><span class="k">new</span> <span class="n">AnnotationTypeFilter</span><span class="o">(</span><span class="n">requiredAnnotation</span><span class="o">));</span>
+        <span class="n">Set</span><span class="o">&lt;</span><span class="n">BeanDefinition</span><span class="o">&gt;</span> <span class="n">components</span> <span class="o">=</span> <span class="n">provider</span><span class="o">.</span><span class="na">findCandidateComponents</span><span class="o">(</span><span class="n">basePackage</span><span class="o">);</span>
 
-        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>BeanDefinition component <span style="color:#f92672">:</span> components<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-            createAndRegisterBean<span style="color:#f92672">(</span>beanFactory<span style="color:#f92672">,</span> component<span style="color:#f92672">);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">BeanDefinition</span> <span class="n">component</span> <span class="o">:</span> <span class="n">components</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">createAndRegisterBean</span><span class="o">(</span><span class="n">beanFactory</span><span class="o">,</span> <span class="n">component</span><span class="o">);</span>
 
-        <span style="color:#f92672">}</span>
-    <span style="color:#f92672">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
 
-    <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">createAndRegisterBean</span><span style="color:#f92672">(</span>ConfigurableListableBeanFactory beanFactory<span style="color:#f92672">,</span> BeanDefinition component<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
-            String beanClassName <span style="color:#f92672">=</span> component<span style="color:#f92672">.</span><span style="color:#a6e22e">getBeanClassName</span><span style="color:#f92672">();</span>
-            Class<span style="color:#f92672">&lt;?&gt;</span> clazz <span style="color:#f92672">=</span> Class<span style="color:#f92672">.</span><span style="color:#a6e22e">forName</span><span style="color:#f92672">(</span>beanClassName<span style="color:#f92672">);</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">createAndRegisterBean</span><span class="o">(</span><span class="n">ConfigurableListableBeanFactory</span> <span class="n">beanFactory</span><span class="o">,</span> <span class="n">BeanDefinition</span> <span class="n">component</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">String</span> <span class="n">beanClassName</span> <span class="o">=</span> <span class="n">component</span><span class="o">.</span><span class="na">getBeanClassName</span><span class="o">();</span>
+            <span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">clazz</span> <span class="o">=</span> <span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="n">beanClassName</span><span class="o">);</span>
 
-            Object o <span style="color:#f92672">=</span> createBean<span style="color:#f92672">(</span>clazz<span style="color:#f92672">);</span>
+            <span class="n">Object</span> <span class="n">o</span> <span class="o">=</span> <span class="n">createBean</span><span class="o">(</span><span class="n">clazz</span><span class="o">);</span>
 
-            beanFactory<span style="color:#f92672">.</span><span style="color:#a6e22e">registerResolvableDependency</span><span style="color:#f92672">(</span>clazz<span style="color:#f92672">,</span> o<span style="color:#f92672">);</span>
-        <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>ClassNotFoundException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-            LOGGER<span style="color:#f92672">.</span><span style="color:#a6e22e">warn</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Unable to find class: {}&#34;</span><span style="color:#f92672">,</span> component<span style="color:#f92672">.</span><span style="color:#a6e22e">getBeanClassName</span><span style="color:#f92672">(),</span> e<span style="color:#f92672">);</span>
-        <span style="color:#f92672">}</span>
-    <span style="color:#f92672">}</span>
+            <span class="n">beanFactory</span><span class="o">.</span><span class="na">registerResolvableDependency</span><span class="o">(</span><span class="n">clazz</span><span class="o">,</span> <span class="n">o</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ClassNotFoundException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">LOGGER</span><span class="o">.</span><span class="na">warn</span><span class="o">(</span><span class="s">&#34;Unable to find class: {}&#34;</span><span class="o">,</span> <span class="n">component</span><span class="o">.</span><span class="na">getBeanClassName</span><span class="o">(),</span> <span class="n">e</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
 
-    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ClasspathScanner</span> <span style="color:#66d9ef">extends</span> ClassPathScanningCandidateComponentProvider <span style="color:#f92672">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">ClasspathScanner</span> <span class="kd">extends</span> <span class="n">ClassPathScanningCandidateComponentProvider</span> <span class="o">{</span>
 
-        <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">ClasspathScanner</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-            <span style="color:#66d9ef">super</span><span style="color:#f92672">(</span><span style="color:#66d9ef">false</span><span style="color:#f92672">);</span>
-        <span style="color:#f92672">}</span>
+        <span class="kd">public</span> <span class="nf">ClasspathScanner</span><span class="o">()</span> <span class="o">{</span>
+            <span class="kd">super</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
+        <span class="o">}</span>
 
-        <span style="color:#a6e22e">@Override</span> <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">isCandidateComponent</span><span style="color:#f92672">(</span>AnnotatedBeanDefinition beanDefinition<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-            <span style="color:#75715e">// override this method, because our classes are interfaces, by default interfaces are
-</span><span style="color:#75715e"></span>            <span style="color:#75715e">// not allowed.
-</span><span style="color:#75715e"></span>            <span style="color:#66d9ef">return</span> beanDefinition<span style="color:#f92672">.</span><span style="color:#a6e22e">getMetadata</span><span style="color:#f92672">().</span><span style="color:#a6e22e">isIndependent</span><span style="color:#f92672">();</span>
-        <span style="color:#f92672">}</span>
-    <span style="color:#f92672">}</span>
-<span style="color:#f92672">}</span></code></pre></div>
+        <span class="nd">@Override</span> <span class="kd">protected</span> <span class="kt">boolean</span> <span class="nf">isCandidateComponent</span><span class="o">(</span><span class="n">AnnotatedBeanDefinition</span> <span class="n">beanDefinition</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// override this method, because our classes are interfaces, by default interfaces are
+</span><span class="c1"></span>            <span class="c1">// not allowed.
+</span><span class="c1"></span>            <span class="k">return</span> <span class="n">beanDefinition</span><span class="o">.</span><span class="na">getMetadata</span><span class="o">().</span><span class="na">isIndependent</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
 <p>Теперь этот процессор необходимо зарегистрировать в контексте Spring:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Configuration</span>
-<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TestAutowiringConfiguration</span> <span style="color:#f92672">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Configuration</span>
+<span class="kd">class</span> <span class="nc">TestAutowiringConfiguration</span> <span class="o">{</span>
 
-    <span style="color:#a6e22e">@Bean</span>
-    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> RestClientPostProcessor <span style="color:#a6e22e">autowiringRestApiProcessor</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> RestClientPostProcessor<span style="color:#f92672">();</span>
-    <span style="color:#f92672">}</span>
-<span style="color:#f92672">}</span></code></pre></div>
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">RestClientPostProcessor</span> <span class="nf">autowiringRestApiProcessor</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="n">RestClientPostProcessor</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
 <p>И теперь можно использовать <code>UserRest</code> как обычный бин:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">    <span style="color:#a6e22e">@Autowired</span>
-    <span style="color:#66d9ef">private</span> UserShowRest userShowRest<span style="color:#f92672">;</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">    <span class="nd">@Autowired</span>
+    <span class="kd">private</span> <span class="n">UserShowRest</span> <span class="n">userShowRest</span><span class="o">;</span></code></pre></div>
 <p>Если есть вопросы - <a href="https://plus.google.com/112372998073079463630/posts" target="_blank">спрашивайте в Google+</a></p>
 
         
@@ -366,83 +365,83 @@
 <p>Основная проблема при работе с JSON - это то, что, в общем случае, у нас нет информации об используемых типах данных, а вкупе с тем, что в  Java Generics реализованы с <a href="http://docs.oracle.com/javase/tutorial/java/generics/erasure.html" target="_blank">Type Erasure</a> - ситуация усугубляется, если не предпринять каких-то действий.</p>
 
 <p>Для реализации чтения будем использовать <a href="http://jackson.codehaus.org/Home" target="_blank">Jackson Java JSON-processor</a> и его возможности <a href="http://fasterxml.github.io/jackson-databind/javadoc/2.2.0/com/fasterxml/jackson/databind/type/TypeFactory.html" target="_blank"><code>com.fasterxml.jackson.databind.type.TypeFactory</code></a></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">JsonMessageHandler</span> <span style="color:#66d9ef">implements</span> MessageBodyReader<span style="color:#f92672">&lt;</span>Object<span style="color:#f92672">&gt;,</span> MessageBodyWriter<span style="color:#f92672">&lt;</span>Object<span style="color:#f92672">&gt;</span> <span style="color:#f92672">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">JsonMessageHandler</span> <span class="kd">implements</span> <span class="n">MessageBodyReader</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;,</span> <span class="n">MessageBodyWriter</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span> <span class="o">{</span>
 
-    <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">final</span> ObjectMapper mapper<span style="color:#f92672">;</span>
+    <span class="kd">protected</span> <span class="kd">final</span> <span class="n">ObjectMapper</span> <span class="n">mapper</span><span class="o">;</span>
 
-    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">JsonMessageHandler</span><span style="color:#f92672">(</span>ObjectMapper mapper<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">mapper</span> <span style="color:#f92672">=</span> mapper<span style="color:#f92672">;</span>
-    <span style="color:#f92672">}</span>
+    <span class="kd">public</span> <span class="nf">JsonMessageHandler</span><span class="o">(</span><span class="n">ObjectMapper</span> <span class="n">mapper</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">mapper</span> <span class="o">=</span> <span class="n">mapper</span><span class="o">;</span>
+    <span class="o">}</span>
 
-    <span style="color:#a6e22e">@Override</span>
-    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">isReadable</span><span style="color:#f92672">(</span>Class<span style="color:#f92672">&lt;?&gt;</span> type<span style="color:#f92672">,</span> Type genericType<span style="color:#f92672">,</span> Annotation<span style="color:#f92672">[]</span> annotations<span style="color:#f92672">,</span> MediaType mediaType<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span>
-    <span style="color:#f92672">}</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isReadable</span><span class="o">(</span><span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">type</span><span class="o">,</span> <span class="n">Type</span> <span class="n">genericType</span><span class="o">,</span> <span class="n">Annotation</span><span class="o">[]</span> <span class="n">annotations</span><span class="o">,</span> <span class="n">MediaType</span> <span class="n">mediaType</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
 
-    <span style="color:#a6e22e">@Override</span>
-    <span style="color:#66d9ef">public</span> Object <span style="color:#a6e22e">readFrom</span><span style="color:#f92672">(</span>Class<span style="color:#f92672">&lt;</span>Object<span style="color:#f92672">&gt;</span> type<span style="color:#f92672">,</span> Type genericType<span style="color:#f92672">,</span> Annotation<span style="color:#f92672">[]</span> annotations<span style="color:#f92672">,</span> MediaType mediaType<span style="color:#f92672">,</span> MultivaluedMap<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">,</span> String<span style="color:#f92672">&gt;</span> httpHeaders<span style="color:#f92672">,</span> InputStream entityStream<span style="color:#f92672">)</span>
-            <span style="color:#66d9ef">throws</span> IOException<span style="color:#f92672">,</span> WebApplicationException <span style="color:#f92672">{</span>
-        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>genericType <span style="color:#66d9ef">instanceof</span> ParameterizedType<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>Collection<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">.</span><span style="color:#a6e22e">isAssignableFrom</span><span style="color:#f92672">(</span>type<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
-                CollectionType collectionType <span style="color:#f92672">=</span> resolveCollectionType<span style="color:#f92672">(</span>type<span style="color:#f92672">,</span> <span style="color:#f92672">(</span>ParameterizedType<span style="color:#f92672">)</span> genericType<span style="color:#f92672">);</span>
-                <span style="color:#66d9ef">return</span> mapper<span style="color:#f92672">.</span><span style="color:#a6e22e">readValue</span><span style="color:#f92672">(</span>entityStream<span style="color:#f92672">,</span> collectionType<span style="color:#f92672">);</span>
-            <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>Map<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">.</span><span style="color:#a6e22e">isAssignableFrom</span><span style="color:#f92672">(</span>type<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
-                MapType mapType <span style="color:#f92672">=</span> resolveMapType<span style="color:#f92672">(</span>type<span style="color:#f92672">,</span> <span style="color:#f92672">(</span>ParameterizedType<span style="color:#f92672">)</span> genericType<span style="color:#f92672">);</span>
-                <span style="color:#66d9ef">return</span> mapper<span style="color:#f92672">.</span><span style="color:#a6e22e">readValue</span><span style="color:#f92672">(</span>entityStream<span style="color:#f92672">,</span> mapType<span style="color:#f92672">);</span>
-            <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
-                Type<span style="color:#f92672">[]</span> actualTypeArguments <span style="color:#f92672">=</span> <span style="color:#f92672">((</span>ParameterizedType<span style="color:#f92672">)</span> genericType<span style="color:#f92672">).</span><span style="color:#a6e22e">getActualTypeArguments</span><span style="color:#f92672">();</span>
-                Class<span style="color:#f92672">[]</span> typeArgs <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Class<span style="color:#f92672">[</span>actualTypeArguments<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">];</span>
-                <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;</span> actualTypeArguments<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">;</span> i<span style="color:#f92672">++)</span> <span style="color:#f92672">{</span>
-                    Type actualTypeArgument <span style="color:#f92672">=</span> actualTypeArguments<span style="color:#f92672">[</span>i<span style="color:#f92672">];</span>
-                    typeArgs<span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>Class<span style="color:#f92672">)</span> actualTypeArgument<span style="color:#f92672">;</span>
-                <span style="color:#f92672">}</span>
-                JavaType javaType <span style="color:#f92672">=</span>
-                        TypeFactory<span style="color:#f92672">.</span><span style="color:#a6e22e">defaultInstance</span><span style="color:#f92672">().</span><span style="color:#a6e22e">constructParametricType</span><span style="color:#f92672">(</span>type<span style="color:#f92672">,</span> typeArgs<span style="color:#f92672">);</span>
-                <span style="color:#66d9ef">return</span> mapper<span style="color:#f92672">.</span><span style="color:#a6e22e">readValue</span><span style="color:#f92672">(</span>entityStream<span style="color:#f92672">,</span> javaType<span style="color:#f92672">);</span>
-            <span style="color:#f92672">}</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">Object</span> <span class="nf">readFrom</span><span class="o">(</span><span class="n">Class</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span> <span class="n">type</span><span class="o">,</span> <span class="n">Type</span> <span class="n">genericType</span><span class="o">,</span> <span class="n">Annotation</span><span class="o">[]</span> <span class="n">annotations</span><span class="o">,</span> <span class="n">MediaType</span> <span class="n">mediaType</span><span class="o">,</span> <span class="n">MultivaluedMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">httpHeaders</span><span class="o">,</span> <span class="n">InputStream</span> <span class="n">entityStream</span><span class="o">)</span>
+            <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">WebApplicationException</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">genericType</span> <span class="k">instanceof</span> <span class="n">ParameterizedType</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">Collection</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">isAssignableFrom</span><span class="o">(</span><span class="n">type</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">CollectionType</span> <span class="n">collectionType</span> <span class="o">=</span> <span class="n">resolveCollectionType</span><span class="o">(</span><span class="n">type</span><span class="o">,</span> <span class="o">(</span><span class="n">ParameterizedType</span><span class="o">)</span> <span class="n">genericType</span><span class="o">);</span>
+                <span class="k">return</span> <span class="n">mapper</span><span class="o">.</span><span class="na">readValue</span><span class="o">(</span><span class="n">entityStream</span><span class="o">,</span> <span class="n">collectionType</span><span class="o">);</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">Map</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">isAssignableFrom</span><span class="o">(</span><span class="n">type</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">MapType</span> <span class="n">mapType</span> <span class="o">=</span> <span class="n">resolveMapType</span><span class="o">(</span><span class="n">type</span><span class="o">,</span> <span class="o">(</span><span class="n">ParameterizedType</span><span class="o">)</span> <span class="n">genericType</span><span class="o">);</span>
+                <span class="k">return</span> <span class="n">mapper</span><span class="o">.</span><span class="na">readValue</span><span class="o">(</span><span class="n">entityStream</span><span class="o">,</span> <span class="n">mapType</span><span class="o">);</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">Type</span><span class="o">[]</span> <span class="n">actualTypeArguments</span> <span class="o">=</span> <span class="o">((</span><span class="n">ParameterizedType</span><span class="o">)</span> <span class="n">genericType</span><span class="o">).</span><span class="na">getActualTypeArguments</span><span class="o">();</span>
+                <span class="n">Class</span><span class="o">[]</span> <span class="n">typeArgs</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Class</span><span class="o">[</span><span class="n">actualTypeArguments</span><span class="o">.</span><span class="na">length</span><span class="o">];</span>
+                <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">actualTypeArguments</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+                    <span class="n">Type</span> <span class="n">actualTypeArgument</span> <span class="o">=</span> <span class="n">actualTypeArguments</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+                    <span class="n">typeArgs</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="o">(</span><span class="n">Class</span><span class="o">)</span> <span class="n">actualTypeArgument</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="n">JavaType</span> <span class="n">javaType</span> <span class="o">=</span>
+                        <span class="n">TypeFactory</span><span class="o">.</span><span class="na">defaultInstance</span><span class="o">().</span><span class="na">constructParametricType</span><span class="o">(</span><span class="n">type</span><span class="o">,</span> <span class="n">typeArgs</span><span class="o">);</span>
+                <span class="k">return</span> <span class="n">mapper</span><span class="o">.</span><span class="na">readValue</span><span class="o">(</span><span class="n">entityStream</span><span class="o">,</span> <span class="n">javaType</span><span class="o">);</span>
+            <span class="o">}</span>
 
-        <span style="color:#f92672">}</span>
+        <span class="o">}</span>
 
-        <span style="color:#66d9ef">return</span> mapper<span style="color:#f92672">.</span><span style="color:#a6e22e">readValue</span><span style="color:#f92672">(</span>entityStream<span style="color:#f92672">,</span> type<span style="color:#f92672">);</span>
+        <span class="k">return</span> <span class="n">mapper</span><span class="o">.</span><span class="na">readValue</span><span class="o">(</span><span class="n">entityStream</span><span class="o">,</span> <span class="n">type</span><span class="o">);</span>
 
-    <span style="color:#f92672">}</span>
+    <span class="o">}</span>
 
-    <span style="color:#66d9ef">private</span> MapType <span style="color:#a6e22e">resolveMapType</span><span style="color:#f92672">(</span>Class<span style="color:#f92672">&lt;</span>Object<span style="color:#f92672">&gt;</span> type<span style="color:#f92672">,</span> ParameterizedType genericType<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        Type<span style="color:#f92672">[]</span> args <span style="color:#f92672">=</span> genericType<span style="color:#f92672">.</span><span style="color:#a6e22e">getActualTypeArguments</span><span style="color:#f92672">();</span>
-        Class<span style="color:#f92672">&lt;?</span> <span style="color:#66d9ef">extends</span> Map<span style="color:#f92672">&gt;</span> mapClass <span style="color:#f92672">=</span> type<span style="color:#f92672">.</span><span style="color:#a6e22e">asSubclass</span><span style="color:#f92672">(</span>Map<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
-        <span style="color:#66d9ef">return</span> TypeFactory<span style="color:#f92672">.</span><span style="color:#a6e22e">defaultInstance</span><span style="color:#f92672">().</span><span style="color:#a6e22e">constructMapType</span><span style="color:#f92672">(</span>mapClass<span style="color:#f92672">,</span> <span style="color:#f92672">(</span>Class<span style="color:#f92672">)</span> args<span style="color:#f92672">[</span>0<span style="color:#f92672">],</span> <span style="color:#f92672">(</span>Class<span style="color:#f92672">)</span> args<span style="color:#f92672">[</span>1<span style="color:#f92672">]);</span>
-    <span style="color:#f92672">}</span>
+    <span class="kd">private</span> <span class="n">MapType</span> <span class="nf">resolveMapType</span><span class="o">(</span><span class="n">Class</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span> <span class="n">type</span><span class="o">,</span> <span class="n">ParameterizedType</span> <span class="n">genericType</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Type</span><span class="o">[]</span> <span class="n">args</span> <span class="o">=</span> <span class="n">genericType</span><span class="o">.</span><span class="na">getActualTypeArguments</span><span class="o">();</span>
+        <span class="n">Class</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">Map</span><span class="o">&gt;</span> <span class="n">mapClass</span> <span class="o">=</span> <span class="n">type</span><span class="o">.</span><span class="na">asSubclass</span><span class="o">(</span><span class="n">Map</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">TypeFactory</span><span class="o">.</span><span class="na">defaultInstance</span><span class="o">().</span><span class="na">constructMapType</span><span class="o">(</span><span class="n">mapClass</span><span class="o">,</span> <span class="o">(</span><span class="n">Class</span><span class="o">)</span> <span class="n">args</span><span class="o">[</span><span class="n">0</span><span class="o">],</span> <span class="o">(</span><span class="n">Class</span><span class="o">)</span> <span class="n">args</span><span class="o">[</span><span class="n">1</span><span class="o">]);</span>
+    <span class="o">}</span>
 
-    <span style="color:#66d9ef">private</span> CollectionType <span style="color:#a6e22e">resolveCollectionType</span><span style="color:#f92672">(</span>Class<span style="color:#f92672">&lt;</span>Object<span style="color:#f92672">&gt;</span> type<span style="color:#f92672">,</span> ParameterizedType genericType<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        Type type1 <span style="color:#f92672">=</span> genericType<span style="color:#f92672">.</span><span style="color:#a6e22e">getActualTypeArguments</span><span style="color:#f92672">()[</span>0<span style="color:#f92672">];</span>
-        Class<span style="color:#f92672">&lt;?</span> <span style="color:#66d9ef">extends</span> Collection<span style="color:#f92672">&gt;</span> collectionClass <span style="color:#f92672">=</span> type<span style="color:#f92672">.</span><span style="color:#a6e22e">asSubclass</span><span style="color:#f92672">(</span>Collection<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
-        <span style="color:#66d9ef">return</span> TypeFactory<span style="color:#f92672">.</span><span style="color:#a6e22e">defaultInstance</span><span style="color:#f92672">().</span><span style="color:#a6e22e">constructCollectionType</span><span style="color:#f92672">(</span>collectionClass<span style="color:#f92672">,</span> <span style="color:#f92672">(</span>Class<span style="color:#f92672">)</span> type1<span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span>
+    <span class="kd">private</span> <span class="n">CollectionType</span> <span class="nf">resolveCollectionType</span><span class="o">(</span><span class="n">Class</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span> <span class="n">type</span><span class="o">,</span> <span class="n">ParameterizedType</span> <span class="n">genericType</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Type</span> <span class="n">type1</span> <span class="o">=</span> <span class="n">genericType</span><span class="o">.</span><span class="na">getActualTypeArguments</span><span class="o">()[</span><span class="n">0</span><span class="o">];</span>
+        <span class="n">Class</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">Collection</span><span class="o">&gt;</span> <span class="n">collectionClass</span> <span class="o">=</span> <span class="n">type</span><span class="o">.</span><span class="na">asSubclass</span><span class="o">(</span><span class="n">Collection</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">TypeFactory</span><span class="o">.</span><span class="na">defaultInstance</span><span class="o">().</span><span class="na">constructCollectionType</span><span class="o">(</span><span class="n">collectionClass</span><span class="o">,</span> <span class="o">(</span><span class="n">Class</span><span class="o">)</span> <span class="n">type1</span><span class="o">);</span>
+    <span class="o">}</span>
 
-    <span style="color:#a6e22e">@Override</span>
-    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">isWriteable</span><span style="color:#f92672">(</span>Class<span style="color:#f92672">&lt;?&gt;</span> type<span style="color:#f92672">,</span> Type genericType<span style="color:#f92672">,</span> Annotation<span style="color:#f92672">[]</span> annotations<span style="color:#f92672">,</span> MediaType mediaType<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span>
-    <span style="color:#f92672">}</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isWriteable</span><span class="o">(</span><span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">type</span><span class="o">,</span> <span class="n">Type</span> <span class="n">genericType</span><span class="o">,</span> <span class="n">Annotation</span><span class="o">[]</span> <span class="n">annotations</span><span class="o">,</span> <span class="n">MediaType</span> <span class="n">mediaType</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
 
-    <span style="color:#a6e22e">@Override</span>
-    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">long</span> <span style="color:#a6e22e">getSize</span><span style="color:#f92672">(</span>Object o<span style="color:#f92672">,</span> Class<span style="color:#f92672">&lt;?&gt;</span> type<span style="color:#f92672">,</span> Type genericType<span style="color:#f92672">,</span> Annotation<span style="color:#f92672">[]</span> annotations<span style="color:#f92672">,</span> MediaType mediaType<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        <span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span>1L<span style="color:#f92672">;</span>
-    <span style="color:#f92672">}</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">long</span> <span class="nf">getSize</span><span class="o">(</span><span class="n">Object</span> <span class="n">o</span><span class="o">,</span> <span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">type</span><span class="o">,</span> <span class="n">Type</span> <span class="n">genericType</span><span class="o">,</span> <span class="n">Annotation</span><span class="o">[]</span> <span class="n">annotations</span><span class="o">,</span> <span class="n">MediaType</span> <span class="n">mediaType</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">1L</span><span class="o">;</span>
+    <span class="o">}</span>
 
-    <span style="color:#a6e22e">@Override</span>
-    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">writeTo</span><span style="color:#f92672">(</span>Object o<span style="color:#f92672">,</span> Class<span style="color:#f92672">&lt;?&gt;</span> type<span style="color:#f92672">,</span> Type genericType<span style="color:#f92672">,</span> Annotation<span style="color:#f92672">[]</span> annotations<span style="color:#f92672">,</span> MediaType mediaType<span style="color:#f92672">,</span> MultivaluedMap<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">,</span> Object<span style="color:#f92672">&gt;</span> httpHeaders<span style="color:#f92672">,</span> OutputStream entityStream<span style="color:#f92672">)</span>
-            <span style="color:#66d9ef">throws</span> IOException<span style="color:#f92672">,</span> WebApplicationException <span style="color:#f92672">{</span>
-        mapper<span style="color:#f92672">.</span><span style="color:#a6e22e">writeValue</span><span style="color:#f92672">(</span>entityStream<span style="color:#f92672">,</span> o<span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span>
-<span style="color:#f92672">}</span></code></pre></div>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">writeTo</span><span class="o">(</span><span class="n">Object</span> <span class="n">o</span><span class="o">,</span> <span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">type</span><span class="o">,</span> <span class="n">Type</span> <span class="n">genericType</span><span class="o">,</span> <span class="n">Annotation</span><span class="o">[]</span> <span class="n">annotations</span><span class="o">,</span> <span class="n">MediaType</span> <span class="n">mediaType</span><span class="o">,</span> <span class="n">MultivaluedMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">httpHeaders</span><span class="o">,</span> <span class="n">OutputStream</span> <span class="n">entityStream</span><span class="o">)</span>
+            <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">WebApplicationException</span> <span class="o">{</span>
+        <span class="n">mapper</span><span class="o">.</span><span class="na">writeValue</span><span class="o">(</span><span class="n">entityStream</span><span class="o">,</span> <span class="n">o</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
 <p>Основной код класса сосредоточен в методе <code>readFrom</code>, который определяет типизацию класса и создаёт необходимый подкласс <code>com.fasterxml.jackson.databind.JavaType</code>, который будет использован во время десериализации.</p>
 
 <p>Теперь мы можем создать клиента следующим образом:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">List<span style="color:#f92672">&lt;?&gt;</span> providers <span style="color:#f92672">=</span> Arrays<span style="color:#f92672">.</span><span style="color:#a6e22e">asList</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> JsonMessageHandler<span style="color:#f92672">(</span>objectMapper<span style="color:#f92672">));</span>
-UserRest userRest <span style="color:#f92672">=</span> JAXRSClientFactory<span style="color:#f92672">.</span><span style="color:#a6e22e">create</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;http://localhost:8080&#34;</span><span style="color:#f92672">,</span> UserRest<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">,</span> providers<span style="color:#f92672">);</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">List</span><span class="o">&lt;?&gt;</span> <span class="n">providers</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="k">new</span> <span class="n">JsonMessageHandler</span><span class="o">(</span><span class="n">objectMapper</span><span class="o">));</span>
+<span class="n">UserRest</span> <span class="n">userRest</span> <span class="o">=</span> <span class="n">JAXRSClientFactory</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="s">&#34;http://localhost:8080&#34;</span><span class="o">,</span> <span class="n">UserRest</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">providers</span><span class="o">);</span>
 
-<span style="color:#75715e">// usage:
-</span><span style="color:#75715e"></span>User user <span style="color:#f92672">=</span> userRest<span style="color:#f92672">.</span><span style="color:#a6e22e">findByLogin</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;uthark&#34;</span><span style="color:#f92672">);</span></code></pre></div>
+<span class="c1">// usage:
+</span><span class="c1"></span><span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="n">userRest</span><span class="o">.</span><span class="na">findByLogin</span><span class="o">(</span><span class="s">&#34;uthark&#34;</span><span class="o">);</span></code></pre></div>
 <p>Когда вызывается метод <code>findByLogin</code> под капотом создаётся HTTP Request, дёргается сервер и полученный ответ десериализуется. От конечного пользотеля детали реализации API скрыты.</p>
 
 <p>В <a href="/blog/2013/06/28/jaxrs-spring-autowiring/">следующем посте</a> описано, как автоматически добавить полученные прокси в фабрику бинов Spring для дальнейшего использования.</p>
@@ -469,56 +468,56 @@ UserRest userRest <span style="color:#f92672">=</span> JAXRSClientFactory<span s
 
         
         <p>Предположим, что у нас есть проект на Spring, в котором необходимо использовать внешние EJB. Для получения бинов необходимо создавать <a href="http://docs.oracle.com/javase/6/docs/api/javax/naming/InitialContext.html" target="_blank">InitialContext</a> и делать <code>lookup()</code> нужных ejb. Но эту задачу можно автоматизировать и пользоваться <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/beans/factory/annotation/Autowired.html" target="_blank">@Autowired</a>, то есть код будет выглядеть вот так:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Service</span>
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">UserService</span> <span style="color:#f92672">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Service</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserService</span> <span class="o">{</span>
 
-  <span style="color:#a6e22e">@Autowired</span>
-  <span style="color:#66d9ef">private</span> UserRemoteBean userRemoteBean<span style="color:#f92672">;</span>
+  <span class="nd">@Autowired</span>
+  <span class="kd">private</span> <span class="n">UserRemoteBean</span> <span class="n">userRemoteBean</span><span class="o">;</span>
 
-<span style="color:#f92672">}</span></code></pre></div>
+<span class="o">}</span></code></pre></div>
 <p>Для этого в Spring существует <a href="http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/htmlsingle/#beans-factory-extension-factorybean" target="_blank">FactoryBean</a> - класс, который знает, как создавать бины нужного типа. Собственно, нам необходимо написать такой класс (код на <a href="http://www.scala-lang.org/" target="_blank">Scala</a>):</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-scala" data-lang="scala"><span style="color:#a6e22e">@Component</span>
-<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">UserRemoteBeanFactoryBean</span> <span style="color:#66d9ef">extends</span> <span style="color:#a6e22e">FactoryBean</span><span style="color:#f92672">[</span><span style="color:#66d9ef">UserRemoteBean</span><span style="color:#f92672">]</span> <span style="color:#f92672">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="nd">@Component</span>
+<span class="k">class</span> <span class="nc">UserRemoteBeanFactoryBean</span> <span class="k">extends</span> <span class="nc">FactoryBean</span><span class="o">[</span><span class="kt">UserRemoteBean</span><span class="o">]</span> <span class="o">{</span>
 
-  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">ACCESS_BEAN_REMOTE_NAME</span><span style="color:#66d9ef">:</span> <span style="color:#66d9ef">String</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;our ejb name.&#34;</span>
+  <span class="k">def</span> <span class="nc">ACCESS_BEAN_REMOTE_NAME</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">&#34;our ejb name.&#34;</span>
 
-  <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">val</span> log<span style="color:#66d9ef">:</span> <span style="color:#66d9ef">Logger</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">LoggerFactory</span><span style="color:#f92672">.</span>getLogger<span style="color:#f92672">(</span>getObjectType<span style="color:#f92672">)</span>
+  <span class="k">private</span> <span class="k">val</span> <span class="n">log</span><span class="k">:</span> <span class="kt">Logger</span> <span class="o">=</span> <span class="nc">LoggerFactory</span><span class="o">.</span><span class="n">getLogger</span><span class="o">(</span><span class="n">getObjectType</span><span class="o">)</span>
 
-  <span style="color:#66d9ef">var</span> ctx<span style="color:#66d9ef">:</span> <span style="color:#66d9ef">Context</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>
+  <span class="k">var</span> <span class="n">ctx</span><span class="k">:</span> <span class="kt">Context</span> <span class="o">=</span> <span class="kc">null</span>
 
-  <span style="color:#66d9ef">def</span> getObject<span style="color:#66d9ef">:</span> <span style="color:#66d9ef">UserRemoteBean</span> <span style="color:#f92672">=</span> <span style="color:#f92672">{</span>
-    log<span style="color:#f92672">.</span>debug<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Requesting new instance of {}&#34;</span><span style="color:#f92672">,</span> getObjectType<span style="color:#f92672">)</span>
+  <span class="k">def</span> <span class="n">getObject</span><span class="k">:</span> <span class="kt">UserRemoteBean</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="o">(</span><span class="s">&#34;Requesting new instance of {}&#34;</span><span class="o">,</span> <span class="n">getObjectType</span><span class="o">)</span>
 
-    <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
-      ctx<span style="color:#f92672">.</span>lookup<span style="color:#f92672">(</span><span style="color:#a6e22e">ACCESS_BEAN_REMOTE_NAME</span><span style="color:#f92672">).</span>asInstanceOf<span style="color:#f92672">[</span><span style="color:#66d9ef">UserRemoteBean</span><span style="color:#f92672">]</span>
-    <span style="color:#f92672">}</span>
-    <span style="color:#66d9ef">catch</span> <span style="color:#f92672">{</span>
-      <span style="color:#66d9ef">case</span> e<span style="color:#66d9ef">:</span> <span style="color:#66d9ef">NamingException</span> <span style="color:#f92672">=&gt;</span> <span style="color:#f92672">{</span>
-        log<span style="color:#f92672">.</span>error<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Unable to get ejb: {}&#34;</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">Array</span><span style="color:#f92672">[</span><span style="color:#66d9ef">AnyRef</span><span style="color:#f92672">](</span>e<span style="color:#f92672">.</span>getMessage<span style="color:#f92672">,</span> e<span style="color:#f92672">)</span><span style="color:#66d9ef">:</span> <span style="color:#66d9ef">_</span><span style="color:#66d9ef">*</span><span style="color:#f92672">)</span>
-        <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">RuntimeException</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Unable to get UserRemoteBean bean &#34;</span> <span style="color:#f92672">+</span> e<span style="color:#f92672">.</span>getMessage<span style="color:#f92672">,</span> e<span style="color:#f92672">)</span>
-      <span style="color:#f92672">}</span>
+    <span class="k">try</span> <span class="o">{</span>
+      <span class="n">ctx</span><span class="o">.</span><span class="n">lookup</span><span class="o">(</span><span class="nc">ACCESS_BEAN_REMOTE_NAME</span><span class="o">).</span><span class="n">asInstanceOf</span><span class="o">[</span><span class="kt">UserRemoteBean</span><span class="o">]</span>
+    <span class="o">}</span>
+    <span class="k">catch</span> <span class="o">{</span>
+      <span class="k">case</span> <span class="n">e</span><span class="k">:</span> <span class="kt">NamingException</span> <span class="o">=&gt;</span> <span class="o">{</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="o">(</span><span class="s">&#34;Unable to get ejb: {}&#34;</span><span class="o">,</span> <span class="nc">Array</span><span class="o">[</span><span class="kt">AnyRef</span><span class="o">](</span><span class="n">e</span><span class="o">.</span><span class="n">getMessage</span><span class="o">,</span> <span class="n">e</span><span class="o">)</span><span class="k">:</span> <span class="k">_</span><span class="kt">*</span><span class="o">)</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nc">RuntimeException</span><span class="o">(</span><span class="s">&#34;Unable to get UserRemoteBean bean &#34;</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="n">getMessage</span><span class="o">,</span> <span class="n">e</span><span class="o">)</span>
+      <span class="o">}</span>
 
-    <span style="color:#f92672">}</span>
-  <span style="color:#f92672">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
 
-  <span style="color:#a6e22e">@PostConstruct</span>
-  <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">def</span> init<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-    <span style="color:#66d9ef">val</span> jndiProperties<span style="color:#66d9ef">:</span> <span style="color:#66d9ef">Hashtable</span><span style="color:#f92672">[</span><span style="color:#66d9ef">String</span>, <span style="color:#66d9ef">Object</span><span style="color:#f92672">]</span> <span style="color:#66d9ef">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Hashtable</span><span style="color:#f92672">[</span><span style="color:#66d9ef">String</span>, <span style="color:#66d9ef">Object</span><span style="color:#f92672">]</span>
-    jndiProperties<span style="color:#f92672">.</span>put<span style="color:#f92672">(</span><span style="color:#a6e22e">Context</span><span style="color:#f92672">.</span><span style="color:#a6e22e">URL_PKG_PREFIXES</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;org.jboss.ejb.client.naming&#34;</span><span style="color:#f92672">)</span>
-    jndiProperties<span style="color:#f92672">.</span>put<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;jboss.naming.client.ejb.context&#34;</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">new</span> java<span style="color:#f92672">.</span>lang<span style="color:#f92672">.</span><span style="color:#a6e22e">Boolean</span><span style="color:#f92672">(</span><span style="color:#66d9ef">true</span><span style="color:#f92672">))</span>
-    <span style="color:#66d9ef">try</span>
-      ctx <span style="color:#66d9ef">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">InitialContext</span><span style="color:#f92672">(</span>jndiProperties<span style="color:#f92672">)</span>
-    <span style="color:#66d9ef">catch</span> <span style="color:#f92672">{</span>
-      <span style="color:#66d9ef">case</span> e<span style="color:#66d9ef">:</span> <span style="color:#66d9ef">NamingException</span> <span style="color:#f92672">=&gt;</span> log<span style="color:#f92672">.</span>error<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Unable to create JNDI Context: {}&#34;</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">Array</span><span style="color:#f92672">[</span><span style="color:#66d9ef">AnyRef</span><span style="color:#f92672">](</span>e<span style="color:#f92672">.</span>getMessage<span style="color:#f92672">,</span> e<span style="color:#f92672">)</span><span style="color:#66d9ef">:</span> <span style="color:#66d9ef">_</span><span style="color:#66d9ef">*</span><span style="color:#f92672">)</span>
-    <span style="color:#f92672">}</span>
-  <span style="color:#f92672">}</span>
+  <span class="nd">@PostConstruct</span>
+  <span class="k">protected</span> <span class="k">def</span> <span class="n">init</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="n">jndiProperties</span><span class="k">:</span> <span class="kt">Hashtable</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Object</span><span class="o">]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Hashtable</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Object</span><span class="o">]</span>
+    <span class="n">jndiProperties</span><span class="o">.</span><span class="n">put</span><span class="o">(</span><span class="nc">Context</span><span class="o">.</span><span class="nc">URL_PKG_PREFIXES</span><span class="o">,</span> <span class="s">&#34;org.jboss.ejb.client.naming&#34;</span><span class="o">)</span>
+    <span class="n">jndiProperties</span><span class="o">.</span><span class="n">put</span><span class="o">(</span><span class="s">&#34;jboss.naming.client.ejb.context&#34;</span><span class="o">,</span> <span class="k">new</span> <span class="n">java</span><span class="o">.</span><span class="n">lang</span><span class="o">.</span><span class="nc">Boolean</span><span class="o">(</span><span class="kc">true</span><span class="o">))</span>
+    <span class="k">try</span>
+      <span class="n">ctx</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">InitialContext</span><span class="o">(</span><span class="n">jndiProperties</span><span class="o">)</span>
+    <span class="k">catch</span> <span class="o">{</span>
+      <span class="k">case</span> <span class="n">e</span><span class="k">:</span> <span class="kt">NamingException</span> <span class="o">=&gt;</span> <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="o">(</span><span class="s">&#34;Unable to create JNDI Context: {}&#34;</span><span class="o">,</span> <span class="nc">Array</span><span class="o">[</span><span class="kt">AnyRef</span><span class="o">](</span><span class="n">e</span><span class="o">.</span><span class="n">getMessage</span><span class="o">,</span> <span class="n">e</span><span class="o">)</span><span class="k">:</span> <span class="k">_</span><span class="kt">*</span><span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
 
-  <span style="color:#66d9ef">def</span> isSingleton<span style="color:#66d9ef">:</span> <span style="color:#66d9ef">Boolean</span> <span style="color:#f92672">=</span> <span style="color:#f92672">{</span>
-    <span style="color:#66d9ef">false</span>
-  <span style="color:#f92672">}</span>
+  <span class="k">def</span> <span class="n">isSingleton</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="kc">false</span>
+  <span class="o">}</span>
 
-  <span style="color:#66d9ef">def</span> getObjectType<span style="color:#66d9ef">:</span> <span style="color:#66d9ef">Class</span><span style="color:#f92672">[</span><span style="color:#66d9ef">_</span><span style="color:#f92672">]</span> <span style="color:#66d9ef">=</span> classOf<span style="color:#f92672">[</span><span style="color:#66d9ef">UserRemoteBean</span><span style="color:#f92672">]</span>
-<span style="color:#f92672">}</span></code></pre></div>
+  <span class="k">def</span> <span class="n">getObjectType</span><span class="k">:</span> <span class="kt">Class</span><span class="o">[</span><span class="k">_</span><span class="o">]</span> <span class="k">=</span> <span class="n">classOf</span><span class="o">[</span><span class="kt">UserRemoteBean</span><span class="o">]</span>
+<span class="o">}</span></code></pre></div>
         
 
     </article>
@@ -543,77 +542,77 @@ UserRest userRest <span style="color:#f92672">=</span> JAXRSClientFactory<span s
         <p>Очень часто возникает задача проверки входных параметров в сервис на корректность с точки зрения бизнес логики.</p>
 
 <p>Эту задачу можно решить в лоб, написав вручную код валидации в каждом из методов сервиса, например, вот так:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">  <span style="color:#66d9ef">public</span> User <span style="color:#a6e22e">save</span><span style="color:#f92672">(</span>User user<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-    <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>user <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IllegalArgumentException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;User is null&#34;</span><span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span>
-    <span style="color:#75715e">// other checks
-</span><span style="color:#75715e"></span>    <span style="color:#75715e">//...
-</span><span style="color:#75715e"></span>
-    <span style="color:#75715e">// business logic starts here...
-</span><span style="color:#75715e"></span>    <span style="color:#75715e">//...
-</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">return</span> savedUser<span style="color:#f92672">;</span>
-  <span style="color:#f92672">}</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">  <span class="kd">public</span> <span class="n">User</span> <span class="nf">save</span><span class="o">(</span><span class="n">User</span> <span class="n">user</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span><span class="o">(</span><span class="n">user</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&#34;User is null&#34;</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="c1">// other checks
+</span><span class="c1"></span>    <span class="c1">//...
+</span><span class="c1"></span>
+    <span class="c1">// business logic starts here...
+</span><span class="c1"></span>    <span class="c1">//...
+</span><span class="c1"></span>    <span class="k">return</span> <span class="n">savedUser</span><span class="o">;</span>
+  <span class="o">}</span></code></pre></div>
 <p>Очевидно, что если в каждом методе делать такие проверки, то код бизнес-логики загрязняется проверками, что ухудшает читаемость кода. Решить эту проблему можно следующим образом:</p>
 
 <ol>
 <li>Добавляем аннотации для валидации входных параметров.</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">  <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">@NotNull</span> User <span style="color:#a6e22e">save</span><span style="color:#f92672">(</span><span style="color:#a6e22e">@NotNull</span> User user<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-    <span style="color:#75715e">// business logic starts here...
-</span><span style="color:#75715e"></span>    <span style="color:#75715e">//...
-</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">return</span> savedUser<span style="color:#f92672">;</span>
-  <span style="color:#f92672">}</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">  <span class="kd">public</span> <span class="nd">@NotNull</span> <span class="n">User</span> <span class="nf">save</span><span class="o">(</span><span class="nd">@NotNull</span> <span class="n">User</span> <span class="n">user</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// business logic starts here...
+</span><span class="c1"></span>    <span class="c1">//...
+</span><span class="c1"></span>    <span class="k">return</span> <span class="n">savedUser</span><span class="o">;</span>
+  <span class="o">}</span></code></pre></div>
 <p>Чтобы заставить этот код работать, мы будем использовать возможности Spring Validation.</p>
 
 <ol>
 <li>Spring предоставляет аннотацию <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/validation/annotation/Validated.html" target="_blank">@Validated</a>, которая в отличие от <a href="http://docs.oracle.com/javaee/7/api/javax/validation/Valid.html" target="_blank">@javax.validation.Valid</a> позволяет определять группу валидации.</li>
 <li>Этой аннотацией необходимо проаннотировать бин, методы которого необходимо валидировать.</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Validated</span>
-<span style="color:#a6e22e">@Service</span>
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">UserService</span> <span style="color:#f92672">{</span>
-    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">@NotNull</span> User <span style="color:#a6e22e">save</span><span style="color:#f92672">(</span><span style="color:#a6e22e">@NotNull</span> User user<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        <span style="color:#75715e">// business logic starts here...
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">//...
-</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">return</span> savedUser<span style="color:#f92672">;</span>
-    <span style="color:#f92672">}</span>
-<span style="color:#f92672">}</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Validated</span>
+<span class="nd">@Service</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserService</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nd">@NotNull</span> <span class="n">User</span> <span class="nf">save</span><span class="o">(</span><span class="nd">@NotNull</span> <span class="n">User</span> <span class="n">user</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// business logic starts here...
+</span><span class="c1"></span>        <span class="c1">//...
+</span><span class="c1"></span>        <span class="k">return</span> <span class="n">savedUser</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
 <ol>
 <li>Для реализации самой валидации нам необходим валидатор. В качестве реализации <a href="http://jcp.org/en/jsr/detail?id=303" target="_blank">JSR-303</a> можно использовать, например, <a href="http://www.hibernate.org/subprojects/validator.html" target="_blank">Hibernate Validator</a>. Для этого в <code>pom.xml</code> необходимо добавить требуемые зависимости:</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;dependency&gt;</span>
-    <span style="color:#f92672">&lt;groupId&gt;</span>javax.validation<span style="color:#f92672">&lt;/groupId&gt;</span>
-    <span style="color:#f92672">&lt;artifactId&gt;</span>validation-api<span style="color:#f92672">&lt;/artifactId&gt;</span>
-    <span style="color:#f92672">&lt;version&gt;</span>1.0.0.GA<span style="color:#f92672">&lt;/version&gt;</span>
-<span style="color:#f92672">&lt;/dependency&gt;</span>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>javax.validation<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>validation-api<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.0.0.GA<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
 
-<span style="color:#f92672">&lt;dependency&gt;</span>
-    <span style="color:#f92672">&lt;groupId&gt;</span>org.hibernate<span style="color:#f92672">&lt;/groupId&gt;</span>
-    <span style="color:#f92672">&lt;artifactId&gt;</span>hibernate-validator<span style="color:#f92672">&lt;/artifactId&gt;</span>
-    <span style="color:#f92672">&lt;version&gt;</span>4.3.1.Final<span style="color:#f92672">&lt;/version&gt;</span>
-<span style="color:#f92672">&lt;/dependency&gt;</span></code></pre></div>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.hibernate<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>hibernate-validator<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>4.3.1.Final<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre></div>
 <p>Обращаю внимание, что текущей на данный момент является <a href="http://beanvalidation.org/1.1/spec" target="_blank">спецификация</a> <a href="http://jcp.org/en/jsr/detail?id=349" target="_blank">JSR-349 Bean Validation 1.1</a>, которая поддерживает валидацию методов из коробки, но текущая версия Spring 3.2 - не поддерживает новый API, поэтому необходимо использовать старую версию API, и, соответственно, реализацию. Релевантный баг в Spring <a href="https://jira.springsource.org/browse/SPR-8199" target="_blank">SPR-8199</a>, поддержка нового API ожидается в Spring Framework 4.0.</p>
 
 <ol>
 <li>Необходимо объявить необходимые бины в конфигурации Spring:</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">    <span style="color:#a6e22e">@Bean</span>
-    <span style="color:#66d9ef">public</span> LocalValidatorFactoryBean <span style="color:#a6e22e">validatorFactory</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-        LocalValidatorFactoryBean factoryBean <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LocalValidatorFactoryBean<span style="color:#f92672">();</span>
-        factoryBean<span style="color:#f92672">.</span><span style="color:#a6e22e">afterPropertiesSet</span><span style="color:#f92672">();</span>
-        <span style="color:#66d9ef">return</span> factoryBean<span style="color:#f92672">;</span>
-    <span style="color:#f92672">}</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="n">LocalValidatorFactoryBean</span> <span class="nf">validatorFactory</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">LocalValidatorFactoryBean</span> <span class="n">factoryBean</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LocalValidatorFactoryBean</span><span class="o">();</span>
+        <span class="n">factoryBean</span><span class="o">.</span><span class="na">afterPropertiesSet</span><span class="o">();</span>
+        <span class="k">return</span> <span class="n">factoryBean</span><span class="o">;</span>
+    <span class="o">}</span>
 
-    <span style="color:#a6e22e">@Bean</span>
-    <span style="color:#66d9ef">public</span> Validator <span style="color:#a6e22e">validator</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-        <span style="color:#66d9ef">return</span> validatorFactory<span style="color:#f92672">().</span><span style="color:#a6e22e">getValidator</span><span style="color:#f92672">();</span>
-    <span style="color:#f92672">}</span>
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="n">Validator</span> <span class="nf">validator</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">validatorFactory</span><span class="o">().</span><span class="na">getValidator</span><span class="o">();</span>
+    <span class="o">}</span>
 
-    <span style="color:#a6e22e">@Bean</span>
-    <span style="color:#66d9ef">public</span> MethodValidationPostProcessor <span style="color:#a6e22e">methodValidationPostProcessor</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> MethodValidationPostProcessor<span style="color:#f92672">();</span>
-    <span style="color:#f92672">}</span></code></pre></div>
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="n">MethodValidationPostProcessor</span> <span class="nf">methodValidationPostProcessor</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="n">MethodValidationPostProcessor</span><span class="o">();</span>
+    <span class="o">}</span></code></pre></div>
 <ol>
 <li>На этом всё. Как видно, декларативная валидация входных параметров реализуется очень просто.</li>
 </ol>
@@ -646,78 +645,78 @@ UserRest userRest <span style="color:#f92672">=</span> JAXRSClientFactory<span s
 <p>Я не буду вдаваться в подробности работы, их можно прочитать в документации, но опишу, каким образом можно настроить <a href="http://memcached.org/" target="_blank">memcached</a> в качестве бэкэнда для работы.</p>
 
 <h2 id="подключение-зависимостей">Подключение зависимостей</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;dependency&gt;</span>
-    <span style="color:#f92672">&lt;groupId&gt;</span>com.google.code.simple-spring-memcached<span style="color:#f92672">&lt;/groupId&gt;</span>
-    <span style="color:#f92672">&lt;artifactId&gt;</span>spymemcached-provider<span style="color:#f92672">&lt;/artifactId&gt;</span>
-    <span style="color:#f92672">&lt;version&gt;</span>3.1.0<span style="color:#f92672">&lt;/version&gt;</span>
-<span style="color:#f92672">&lt;/dependency&gt;</span>
-<span style="color:#f92672">&lt;dependency&gt;</span>
-    <span style="color:#f92672">&lt;groupId&gt;</span>com.google.code.simple-spring-memcached<span style="color:#f92672">&lt;/groupId&gt;</span>
-    <span style="color:#f92672">&lt;artifactId&gt;</span>spring-cache<span style="color:#f92672">&lt;/artifactId&gt;</span>
-    <span style="color:#f92672">&lt;version&gt;</span>3.1.0<span style="color:#f92672">&lt;/version&gt;</span>
-<span style="color:#f92672">&lt;/dependency&gt;</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.google.code.simple-spring-memcached<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spymemcached-provider<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>3.1.0<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.google.code.simple-spring-memcached<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-cache<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>3.1.0<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre></div>
 <p><code>spymemcached-provider</code> - это библиотечка для работы с <code>memcached</code> из Java, а <code>spring-cache</code> - модуль интеграции со Spring.</p>
 
 <h2 id="включение-кэширования">Включение кэширования</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Configuration</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;serviceConfiguration&#34;</span><span style="color:#f92672">)</span>
-<span style="color:#a6e22e">@EnableCaching</span><span style="color:#f92672">(</span>proxyTargetClass <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">,</span> mode <span style="color:#f92672">=</span> AdviceMode<span style="color:#f92672">.</span><span style="color:#a6e22e">PROXY</span><span style="color:#f92672">)</span>
-<span style="color:#a6e22e">@Import</span><span style="color:#f92672">(</span>CacheConfiguration<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">)</span>
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ServiceConfiguration</span> <span style="color:#f92672">{</span>
-  <span style="color:#75715e">// bean declarations goes here.
-</span><span style="color:#75715e"></span><span style="color:#f92672">}</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Configuration</span><span class="o">(</span><span class="s">&#34;serviceConfiguration&#34;</span><span class="o">)</span>
+<span class="nd">@EnableCaching</span><span class="o">(</span><span class="n">proxyTargetClass</span> <span class="o">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="n">AdviceMode</span><span class="o">.</span><span class="na">PROXY</span><span class="o">)</span>
+<span class="nd">@Import</span><span class="o">(</span><span class="n">CacheConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ServiceConfiguration</span> <span class="o">{</span>
+  <span class="c1">// bean declarations goes here.
+</span><span class="c1"></span><span class="o">}</span></code></pre></div>
 <p>Аннотация <code>@EnableCaching</code> включает кэширование. Конфигурацию бинов для кэширования мы выносим в отдельный класс, <code>CacheConfiguration</code>, чтобы не смешивать бины, отвечающие за кэширование с бинами, отвечающими за бизнес-логику.</p>
 
 <p>Объявляем необходимые для работы бины:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Configuration</span>
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CacheConfiguration</span> <span style="color:#f92672">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Configuration</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CacheConfiguration</span> <span class="o">{</span>
 
-    <span style="color:#a6e22e">@Value</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;${memcached.url}&#34;</span><span style="color:#f92672">)</span>
-    <span style="color:#66d9ef">private</span> String memcachedUrl<span style="color:#f92672">;</span>
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">&#34;${memcached.url}&#34;</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">memcachedUrl</span><span class="o">;</span>
 
-    <span style="color:#a6e22e">@Bean</span>
-    <span style="color:#66d9ef">public</span> CacheManager <span style="color:#a6e22e">cacheManager</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">throws</span> Exception <span style="color:#f92672">{</span>
-        SSMCacheManager result <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> SSMCacheManager<span style="color:#f92672">();</span>
-        result<span style="color:#f92672">.</span><span style="color:#a6e22e">setCaches</span><span style="color:#f92672">(</span>Arrays<span style="color:#f92672">.</span><span style="color:#a6e22e">asList</span><span style="color:#f92672">(</span>
-                <span style="color:#66d9ef">new</span> SSMCache<span style="color:#f92672">(</span>defaultCacheFactory<span style="color:#f92672">().</span><span style="color:#a6e22e">getObject</span><span style="color:#f92672">(),</span> 45<span style="color:#f92672">)</span>
-        <span style="color:#f92672">));</span>
-        <span style="color:#66d9ef">return</span> result<span style="color:#f92672">;</span>
-    <span style="color:#f92672">}</span>
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="n">CacheManager</span> <span class="nf">cacheManager</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">SSMCacheManager</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SSMCacheManager</span><span class="o">();</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">setCaches</span><span class="o">(</span><span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span>
+                <span class="k">new</span> <span class="n">SSMCache</span><span class="o">(</span><span class="n">defaultCacheFactory</span><span class="o">().</span><span class="na">getObject</span><span class="o">(),</span> <span class="n">45</span><span class="o">)</span>
+        <span class="o">));</span>
+        <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
+    <span class="o">}</span>
 
-    <span style="color:#a6e22e">@Bean</span>
-    <span style="color:#66d9ef">public</span> CacheFactory <span style="color:#a6e22e">defaultCacheFactory</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-        CacheFactory factory <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> CacheFactory<span style="color:#f92672">();</span>
-        factory<span style="color:#f92672">.</span><span style="color:#a6e22e">setCacheName</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;defaultCache&#34;</span><span style="color:#f92672">);</span>
-        factory<span style="color:#f92672">.</span><span style="color:#a6e22e">setAddressProvider</span><span style="color:#f92672">(</span>addressProvider<span style="color:#f92672">());</span>
-        factory<span style="color:#f92672">.</span><span style="color:#a6e22e">setCacheClientFactory</span><span style="color:#f92672">(</span>cacheClientFactory<span style="color:#f92672">());</span>
-        factory<span style="color:#f92672">.</span><span style="color:#a6e22e">setConfiguration</span><span style="color:#f92672">(</span>cacheConfiguration<span style="color:#f92672">());</span>
-        <span style="color:#66d9ef">return</span> factory<span style="color:#f92672">;</span>
-    <span style="color:#f92672">}</span>
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="n">CacheFactory</span> <span class="nf">defaultCacheFactory</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">CacheFactory</span> <span class="n">factory</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CacheFactory</span><span class="o">();</span>
+        <span class="n">factory</span><span class="o">.</span><span class="na">setCacheName</span><span class="o">(</span><span class="s">&#34;defaultCache&#34;</span><span class="o">);</span>
+        <span class="n">factory</span><span class="o">.</span><span class="na">setAddressProvider</span><span class="o">(</span><span class="n">addressProvider</span><span class="o">());</span>
+        <span class="n">factory</span><span class="o">.</span><span class="na">setCacheClientFactory</span><span class="o">(</span><span class="n">cacheClientFactory</span><span class="o">());</span>
+        <span class="n">factory</span><span class="o">.</span><span class="na">setConfiguration</span><span class="o">(</span><span class="n">cacheConfiguration</span><span class="o">());</span>
+        <span class="k">return</span> <span class="n">factory</span><span class="o">;</span>
+    <span class="o">}</span>
 
-    <span style="color:#a6e22e">@Bean</span>
-    <span style="color:#a6e22e">@Scope</span><span style="color:#f92672">(</span>ConfigurableBeanFactory<span style="color:#f92672">.</span><span style="color:#a6e22e">SCOPE_PROTOTYPE</span><span style="color:#f92672">)</span>
-    <span style="color:#66d9ef">public</span> CacheClientFactory <span style="color:#a6e22e">cacheClientFactory</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> MemcacheClientFactoryImpl<span style="color:#f92672">();</span>
-    <span style="color:#f92672">}</span>
+    <span class="nd">@Bean</span>
+    <span class="nd">@Scope</span><span class="o">(</span><span class="n">ConfigurableBeanFactory</span><span class="o">.</span><span class="na">SCOPE_PROTOTYPE</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">CacheClientFactory</span> <span class="nf">cacheClientFactory</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="n">MemcacheClientFactoryImpl</span><span class="o">();</span>
+    <span class="o">}</span>
 
-    <span style="color:#a6e22e">@Bean</span>
-    <span style="color:#66d9ef">public</span> AddressProvider <span style="color:#a6e22e">addressProvider</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> DefaultAddressProvider<span style="color:#f92672">(</span>memcachedUrl<span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span>
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="n">AddressProvider</span> <span class="nf">addressProvider</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="n">DefaultAddressProvider</span><span class="o">(</span><span class="n">memcachedUrl</span><span class="o">);</span>
+    <span class="o">}</span>
 
-    <span style="color:#a6e22e">@Bean</span>
-    <span style="color:#a6e22e">@Scope</span><span style="color:#f92672">(</span>ConfigurableBeanFactory<span style="color:#f92672">.</span><span style="color:#a6e22e">SCOPE_PROTOTYPE</span><span style="color:#f92672">)</span>
-    <span style="color:#66d9ef">public</span> com<span style="color:#f92672">.</span><span style="color:#a6e22e">google</span><span style="color:#f92672">.</span><span style="color:#a6e22e">code</span><span style="color:#f92672">.</span><span style="color:#a6e22e">ssm</span><span style="color:#f92672">.</span><span style="color:#a6e22e">providers</span><span style="color:#f92672">.</span><span style="color:#a6e22e">CacheConfiguration</span> <span style="color:#a6e22e">cacheConfiguration</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-        com<span style="color:#f92672">.</span><span style="color:#a6e22e">google</span><span style="color:#f92672">.</span><span style="color:#a6e22e">code</span><span style="color:#f92672">.</span><span style="color:#a6e22e">ssm</span><span style="color:#f92672">.</span><span style="color:#a6e22e">providers</span><span style="color:#f92672">.</span><span style="color:#a6e22e">CacheConfiguration</span> configuration <span style="color:#f92672">=</span>
-                <span style="color:#66d9ef">new</span> com<span style="color:#f92672">.</span><span style="color:#a6e22e">google</span><span style="color:#f92672">.</span><span style="color:#a6e22e">code</span><span style="color:#f92672">.</span><span style="color:#a6e22e">ssm</span><span style="color:#f92672">.</span><span style="color:#a6e22e">providers</span><span style="color:#f92672">.</span><span style="color:#a6e22e">CacheConfiguration</span><span style="color:#f92672">();</span>
-        configuration<span style="color:#f92672">.</span><span style="color:#a6e22e">setConsistentHashing</span><span style="color:#f92672">(</span><span style="color:#66d9ef">true</span><span style="color:#f92672">);</span>
-        <span style="color:#66d9ef">return</span> configuration<span style="color:#f92672">;</span>
-    <span style="color:#f92672">}</span>
-<span style="color:#f92672">}</span></code></pre></div>
+    <span class="nd">@Bean</span>
+    <span class="nd">@Scope</span><span class="o">(</span><span class="n">ConfigurableBeanFactory</span><span class="o">.</span><span class="na">SCOPE_PROTOTYPE</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">com</span><span class="o">.</span><span class="na">google</span><span class="o">.</span><span class="na">code</span><span class="o">.</span><span class="na">ssm</span><span class="o">.</span><span class="na">providers</span><span class="o">.</span><span class="na">CacheConfiguration</span> <span class="nf">cacheConfiguration</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">com</span><span class="o">.</span><span class="na">google</span><span class="o">.</span><span class="na">code</span><span class="o">.</span><span class="na">ssm</span><span class="o">.</span><span class="na">providers</span><span class="o">.</span><span class="na">CacheConfiguration</span> <span class="n">configuration</span> <span class="o">=</span>
+                <span class="k">new</span> <span class="n">com</span><span class="o">.</span><span class="na">google</span><span class="o">.</span><span class="na">code</span><span class="o">.</span><span class="na">ssm</span><span class="o">.</span><span class="na">providers</span><span class="o">.</span><span class="na">CacheConfiguration</span><span class="o">();</span>
+        <span class="n">configuration</span><span class="o">.</span><span class="na">setConsistentHashing</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">configuration</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
 <h2 id="использование">Использование</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Cacheable</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;defaultCache&#34;</span><span style="color:#f92672">)</span>
-<span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">getUser</span><span style="color:#f92672">(</span><span style="color:#a6e22e">@NotNull</span> String username<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> IOException <span style="color:#f92672">{</span>
-    <span style="color:#75715e">// ...
-</span><span style="color:#75715e"></span><span style="color:#f92672">}</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Cacheable</span><span class="o">(</span><span class="s">&#34;defaultCache&#34;</span><span class="o">)</span>
+<span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">getUser</span><span class="o">(</span><span class="nd">@NotNull</span> <span class="n">String</span> <span class="n">username</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+    <span class="c1">// ...
+</span><span class="c1"></span><span class="o">}</span></code></pre></div>
         
 
     </article>
@@ -746,55 +745,55 @@ UserRest userRest <span style="color:#f92672">=</span> JAXRSClientFactory<span s
 <p>Хочу показать на примере валидации запроса к <a href="http://www.mongodb.org/" target="_blank">MongoDB</a>, как легко это делается.</p>
 
 <h2 id="создание-аннотации">Создание аннотации</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Target</span><span style="color:#f92672">({</span>FIELD<span style="color:#f92672">,</span> PARAMETER<span style="color:#f92672">})</span>
-<span style="color:#a6e22e">@Retention</span><span style="color:#f92672">(</span>RUNTIME<span style="color:#f92672">)</span>
-<span style="color:#a6e22e">@Documented</span>
-<span style="color:#a6e22e">@Constraint</span><span style="color:#f92672">(</span>validatedBy <span style="color:#f92672">=</span> <span style="color:#f92672">{</span>MongoQueryValidator<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">})</span>
-<span style="color:#66d9ef">public</span> <span style="color:#a6e22e">@interface</span> MongoQuery <span style="color:#f92672">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Target</span><span class="o">({</span><span class="n">FIELD</span><span class="o">,</span> <span class="n">PARAMETER</span><span class="o">})</span>
+<span class="nd">@Retention</span><span class="o">(</span><span class="n">RUNTIME</span><span class="o">)</span>
+<span class="nd">@Documented</span>
+<span class="nd">@Constraint</span><span class="o">(</span><span class="n">validatedBy</span> <span class="o">=</span> <span class="o">{</span><span class="n">MongoQueryValidator</span><span class="o">.</span><span class="na">class</span><span class="o">})</span>
+<span class="kd">public</span> <span class="nd">@interface</span> <span class="n">MongoQuery</span> <span class="o">{</span>
 
-    String <span style="color:#a6e22e">message</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">default</span> <span style="color:#e6db74">&#34;Invalid mongo query&#34;</span><span style="color:#f92672">;</span>
+    <span class="n">String</span> <span class="nf">message</span><span class="o">()</span> <span class="k">default</span> <span class="s">&#34;Invalid mongo query&#34;</span><span class="o">;</span>
 
-    Class<span style="color:#f92672">&lt;?&gt;[]</span> groups<span style="color:#f92672">()</span> <span style="color:#66d9ef">default</span> <span style="color:#f92672">{};</span>
+    <span class="n">Class</span><span class="o">&lt;?&gt;[]</span> <span class="n">groups</span><span class="o">()</span> <span class="k">default</span> <span class="o">{};</span>
 
-    Class<span style="color:#f92672">&lt;?</span> <span style="color:#66d9ef">extends</span> Payload<span style="color:#f92672">&gt;[]</span> <span style="color:#a6e22e">payload</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">default</span> <span style="color:#f92672">{};</span>
-<span style="color:#f92672">}</span></code></pre></div>
+    <span class="n">Class</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">Payload</span><span class="o">&gt;[]</span> <span class="nf">payload</span><span class="o">()</span> <span class="k">default</span> <span class="o">{};</span>
+<span class="o">}</span></code></pre></div>
 <p>Обратите внимание на аннотацию <a href="http://docs.oracle.com/javaee/7/api/javax/validation/Constraint.html" target="_blank">@Constraint</a> - она описывает, какой класс будет проводить реальную валидацию. Атрибуты <code>groups()</code> и <code>payload()</code> являются обязательными.</p>
 
 <h2 id="написание-валидатора">Написание валидатора</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MongoQueryValidator</span> <span style="color:#66d9ef">implements</span> ConstraintValidator<span style="color:#f92672">&lt;</span>MongoQuery<span style="color:#f92672">,</span> CharSequence<span style="color:#f92672">&gt;</span> <span style="color:#f92672">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MongoQueryValidator</span> <span class="kd">implements</span> <span class="n">ConstraintValidator</span><span class="o">&lt;</span><span class="n">MongoQuery</span><span class="o">,</span> <span class="n">CharSequence</span><span class="o">&gt;</span> <span class="o">{</span>
 
-    <span style="color:#a6e22e">@Override</span>
-    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">initialize</span><span style="color:#f92672">(</span>MongoQuery constraintAnnotation<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-    <span style="color:#f92672">}</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">initialize</span><span class="o">(</span><span class="n">MongoQuery</span> <span class="n">constraintAnnotation</span><span class="o">)</span> <span class="o">{</span>
+    <span class="o">}</span>
 
-    <span style="color:#a6e22e">@Override</span>
-    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">isValid</span><span style="color:#f92672">(</span>CharSequence value<span style="color:#f92672">,</span> ConstraintValidatorContext context<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        <span style="color:#75715e">// ignore null and empty strings.
-</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">null</span> <span style="color:#f92672">==</span> value <span style="color:#f92672">||</span> value<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">()</span> <span style="color:#f92672">==</span> 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span>
-        <span style="color:#f92672">}</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isValid</span><span class="o">(</span><span class="n">CharSequence</span> <span class="n">value</span><span class="o">,</span> <span class="n">ConstraintValidatorContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// ignore null and empty strings.
+</span><span class="c1"></span>        <span class="k">if</span> <span class="o">(</span><span class="kc">null</span> <span class="o">==</span> <span class="n">value</span> <span class="o">||</span> <span class="n">value</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">==</span> <span class="n">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
 
-        <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
-            Query query <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> BasicQuery<span style="color:#f92672">(</span>value<span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">());</span>
-            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span>
-        <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>Exception e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
-        <span style="color:#f92672">}</span>
-    <span style="color:#f92672">}</span>
-<span style="color:#f92672">}</span></code></pre></div>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">Query</span> <span class="n">query</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BasicQuery</span><span class="o">(</span><span class="n">value</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
 <p>В данном случае, валидатор у нас простой - мы пытаемся создать Mongo Query из переданной строки, если это не удаётся, то считаем, что строка не является корректным запросом к Mongo и возвращаем <code>false</code>.</p>
 
 <p>Если есть желание возвращать динамическое сообщение об ошибке, то это можно сделать следующим образом:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">    context<span style="color:#f92672">.</span><span style="color:#a6e22e">disableDefaultConstraintViolation</span><span style="color:#f92672">();</span>
-    context<span style="color:#f92672">.</span><span style="color:#a6e22e">buildConstraintViolationWithTemplate</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;&lt;Custom error message&gt;&#34;</span><span style="color:#f92672">).</span><span style="color:#a6e22e">addConstraintViolation</span><span style="color:#f92672">();</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">    <span class="n">context</span><span class="o">.</span><span class="na">disableDefaultConstraintViolation</span><span class="o">();</span>
+    <span class="n">context</span><span class="o">.</span><span class="na">buildConstraintViolationWithTemplate</span><span class="o">(</span><span class="s">&#34;&lt;Custom error message&gt;&#34;</span><span class="o">).</span><span class="na">addConstraintViolation</span><span class="o">();</span></code></pre></div>
 <h2 id="использование">Использование</h2>
 
 <p>На этом всё, теперь нам остаётся только добавить валидацию на нашу модель или входной параметр.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Model</span> <span style="color:#f92672">{</span>
-    <span style="color:#a6e22e">@MongoQuery</span>
-    <span style="color:#66d9ef">private</span> String queryCriteria<span style="color:#f92672">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Model</span> <span class="o">{</span>
+    <span class="nd">@MongoQuery</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">queryCriteria</span><span class="o">;</span>
 
-<span style="color:#f92672">}</span></code></pre></div>
+<span class="o">}</span></code></pre></div>
         
 
     </article>

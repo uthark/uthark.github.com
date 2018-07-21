@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html prefix="og: http://ogp.me/ns#">
-<head >
+<html prefix="og: http://ogp.me/ns#" lang="en">
+<head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=5">
 
   
   <title>Общение со Skype через D-Bus на Python</title>
@@ -19,7 +19,7 @@
 
 
   <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
-
+  <link rel="stylesheet" media="screen" href="https://fonts.googleapis.com/css?family=Arvo" type="text/css"/>
 
 
   
@@ -29,10 +29,8 @@
   
   
 
-
   
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-
 
   
   <link href="https://uthark.github.io/favicon.png" rel="icon">
@@ -74,10 +72,10 @@
 </head>
 <body>
 
-
-<header>  
+<header>
+  
   <h1><a href="https://uthark.github.io/">Sharing knowledge</a></h1>
-    
+    <h2>by Oleg Atamanenko</h2>
 </header>
 
 
@@ -164,62 +162,62 @@
 
 <p><h4>Используем dbus-send</h4>
 <p>Сначала я использовал обычный dbus-send, что оформилось в виде следующего скрипта <tt>go2home</tt>:</p></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">#!/bin/sh
-</span><span style="color:#75715e"></span>
-<span style="color:#75715e"># Stop amarok
-</span><span style="color:#75715e"></span>dbus-send --session --type<span style="color:#f92672">=</span>method_call --dest<span style="color:#f92672">=</span>org.kde.amarok /Player org.freedesktop.MediaPlayer.Stop
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="cp">#!/bin/sh
+</span><span class="cp"></span>
+<span class="c1"># Stop amarok
+</span><span class="c1"></span>dbus-send --session --type<span class="o">=</span>method_call --dest<span class="o">=</span>org.kde.amarok /Player org.freedesktop.MediaPlayer.Stop
 
-<span style="color:#75715e"># Logout from kopete
-</span><span style="color:#75715e"></span>dbus-send --session --type<span style="color:#f92672">=</span>method_call --dest<span style="color:#f92672">=</span>org.kde.kopete /Kopete org.kde.Kopete.disconnectAll 
+<span class="c1"># Logout from kopete
+</span><span class="c1"></span>dbus-send --session --type<span class="o">=</span>method_call --dest<span class="o">=</span>org.kde.kopete /Kopete org.kde.Kopete.disconnectAll 
 
-<span style="color:#75715e"># Logout from Skype
-</span><span style="color:#75715e"></span>skypeapi.py <span style="color:#e6db74">&#39;SET USERSTATUS OFFLINE&#39;</span>
+<span class="c1"># Logout from Skype
+</span><span class="c1"></span>skypeapi.py <span class="s1">&#39;SET USERSTATUS OFFLINE&#39;</span>
 
-<span style="color:#75715e"># Lock screen
-</span><span style="color:#75715e"></span>dbus-send --session --type<span style="color:#f92672">=</span>method_call --dest<span style="color:#f92672">=</span>org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.Lock</code></pre></div>
+<span class="c1"># Lock screen
+</span><span class="c1"></span>dbus-send --session --type<span class="o">=</span>method_call --dest<span class="o">=</span>org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.Lock</code></pre></div>
 <p>Детали и параметры работы команды <tt>dbus-send</tt> описаны в <a href="http://dbus.freedesktop.org/doc/dbus-send.1.html">man-странице</a></p>
 
 <p><h4>Проблема со скайпом</h4>
 <p> Со скайпом пришлось немного повозиться, так как для работы с ним необходима постоянная сессия, что нельзя сделать с помощью <tt>dbus-send</tt>. </p>
 <p>Прочитав <a href="https://developer.skype.com/Docs/ApiDoc">описание протокола</a> на сайте </p>
 <p> был создан нижеследующий скрипт: skypeapi.py</p></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Python" data-lang="Python"><span style="color:#75715e">#!/usr/bin/env python</span>
-<span style="color:#f92672">import</span> dbus<span style="color:#f92672">,</span> sys
+<div class="highlight"><pre class="chroma"><code class="language-Python" data-lang="Python"><span class="ch">#!/usr/bin/env python</span>
+<span class="kn">import</span> <span class="nn">dbus</span><span class="o">,</span> <span class="nn">sys</span>
 
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">main</span>():
-    remote_bus <span style="color:#f92672">=</span> dbus<span style="color:#f92672">.</span>SessionBus()
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">remote_bus</span> <span class="o">=</span> <span class="n">dbus</span><span class="o">.</span><span class="n">SessionBus</span><span class="p">()</span>
     
-    <span style="color:#75715e"># Check if skype is running.</span>
-    system_service_list <span style="color:#f92672">=</span> remote_bus<span style="color:#f92672">.</span>get_object(<span style="color:#e6db74">&#39;org.freedesktop.DBus&#39;</span>, <span style="color:#e6db74">&#39;/org/freedesktop/DBus&#39;</span>)<span style="color:#f92672">.</span>ListNames()
-    skype_api_found <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
-    <span style="color:#66d9ef">for</span> service <span style="color:#f92672">in</span> system_service_list:
-        <span style="color:#66d9ef">if</span> service<span style="color:#f92672">==</span><span style="color:#e6db74">&#39;com.Skype.API&#39;</span>:
-            skype_api_found <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
-            <span style="color:#66d9ef">break</span>
-    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> skype_api_found:
-        sys<span style="color:#f92672">.</span>exit(<span style="color:#e6db74">&#39;No running API-capable Skype found&#39;</span>)
+    <span class="c1"># Check if skype is running.</span>
+    <span class="n">system_service_list</span> <span class="o">=</span> <span class="n">remote_bus</span><span class="o">.</span><span class="n">get_object</span><span class="p">(</span><span class="s1">&#39;org.freedesktop.DBus&#39;</span><span class="p">,</span> <span class="s1">&#39;/org/freedesktop/DBus&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">ListNames</span><span class="p">()</span>
+    <span class="n">skype_api_found</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">system_service_list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">service</span><span class="o">==</span><span class="s1">&#39;com.Skype.API&#39;</span><span class="p">:</span>
+            <span class="n">skype_api_found</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">break</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">skype_api_found</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="nb">exit</span><span class="p">(</span><span class="s1">&#39;No running API-capable Skype found&#39;</span><span class="p">)</span>
 
-    <span style="color:#75715e"># Get skype dbus api</span>
-    skype_service <span style="color:#f92672">=</span> remote_bus<span style="color:#f92672">.</span>get_object(<span style="color:#e6db74">&#39;com.Skype.API&#39;</span>, <span style="color:#e6db74">&#39;/com/Skype&#39;</span>)
+    <span class="c1"># Get skype dbus api</span>
+    <span class="n">skype_service</span> <span class="o">=</span> <span class="n">remote_bus</span><span class="o">.</span><span class="n">get_object</span><span class="p">(</span><span class="s1">&#39;com.Skype.API&#39;</span><span class="p">,</span> <span class="s1">&#39;/com/Skype&#39;</span><span class="p">)</span>
 
-    <span style="color:#75715e"># Connect to skype.</span>
-    answer <span style="color:#f92672">=</span> skype_service<span style="color:#f92672">.</span>Invoke(<span style="color:#e6db74">&#39;NAME SkypeApiClient&#39;</span>)
-    <span style="color:#66d9ef">if</span> answer <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;OK&#39;</span>:
-        sys<span style="color:#f92672">.</span>exit(<span style="color:#e6db74">&#39;Could not bind to Skype client&#39;</span>)
+    <span class="c1"># Connect to skype.</span>
+    <span class="n">answer</span> <span class="o">=</span> <span class="n">skype_service</span><span class="o">.</span><span class="n">Invoke</span><span class="p">(</span><span class="s1">&#39;NAME SkypeApiClient&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">answer</span> <span class="o">!=</span> <span class="s1">&#39;OK&#39;</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="nb">exit</span><span class="p">(</span><span class="s1">&#39;Could not bind to Skype client&#39;</span><span class="p">)</span>
 
-    <span style="color:#75715e"># Check if protocol is supported.</span>
-    answer <span style="color:#f92672">=</span> skype_service<span style="color:#f92672">.</span>Invoke(<span style="color:#e6db74">&#39;PROTOCOL 1&#39;</span>)
-    <span style="color:#66d9ef">if</span> answer <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;PROTOCOL 1&#39;</span>:
-        sys<span style="color:#f92672">.</span>exit(<span style="color:#e6db74">&#39;This test program only supports Skype API protocol version 1&#39;</span>)
+    <span class="c1"># Check if protocol is supported.</span>
+    <span class="n">answer</span> <span class="o">=</span> <span class="n">skype_service</span><span class="o">.</span><span class="n">Invoke</span><span class="p">(</span><span class="s1">&#39;PROTOCOL 1&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">answer</span> <span class="o">!=</span> <span class="s1">&#39;PROTOCOL 1&#39;</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="nb">exit</span><span class="p">(</span><span class="s1">&#39;This test program only supports Skype API protocol version 1&#39;</span><span class="p">)</span>
 
-    <span style="color:#75715e"># Invoke operations</span>
-    <span style="color:#66d9ef">for</span> arg <span style="color:#f92672">in</span> sys<span style="color:#f92672">.</span>argv:
-        skype_service<span style="color:#f92672">.</span>Invoke(arg)
+    <span class="c1"># Invoke operations</span>
+    <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">:</span>
+        <span class="n">skype_service</span><span class="o">.</span><span class="n">Invoke</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
     
-    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>    
+    <span class="k">return</span> <span class="mi">0</span>    
 
-<span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#f92672">&amp;</span>quot;__main__<span style="color:#f92672">&amp;</span>quot;:
-    main()</code></pre></div>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="o">&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">__main__</span><span class="o">&amp;</span><span class="n">quot</span><span class="p">;:</span>
+    <span class="n">main</span><span class="p">()</span></code></pre></div>
 <p> При первом запуске скрипта появится скайповский диалог с вопросом, можно ли разрешить приложению доступ к скайпу. После нажатия на &quot;Да&quot; Skype добавит наш скрипт в разрешённые и мы сможем управлять скайпом.</p>
 
 <p><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://2.bp.blogspot.com/_y8p0_dtMJ38/S6ev4yVZkJI/AAAAAAAAA9Q/O87mz2Qnku0/s1600-h/skype.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;width: 376px; height: 185px;" src="http://2.bp.blogspot.com/_y8p0_dtMJ38/S6ev4yVZkJI/AAAAAAAAA9Q/O87mz2Qnku0/s400/skype.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5451519264074338450" /></a></p>
@@ -235,7 +233,9 @@
         
 
 <footer>
-
+  <div>
+    <p>If you have any questions, feel free to ping me on Twitter.</p>
+  </div>
   <p class="meta">
     
     

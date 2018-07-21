@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html prefix="og: http://ogp.me/ns#">
-<head >
+<html prefix="og: http://ogp.me/ns#" lang="en">
+<head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=5">
 
   
   <title>Собственная реализация методов в Spring Data JPA</title>
@@ -19,7 +19,7 @@
 
 
   <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
-
+  <link rel="stylesheet" media="screen" href="https://fonts.googleapis.com/css?family=Arvo" type="text/css"/>
 
 
   
@@ -29,10 +29,8 @@
   
   
 
-
   
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-
 
   
   <link href="https://uthark.github.io/favicon.png" rel="icon">
@@ -73,10 +71,10 @@
 </head>
 <body>
 
-
-<header>  
+<header>
+  
   <h1><a href="https://uthark.github.io/">Sharing knowledge</a></h1>
-    
+    <h2>by Oleg Atamanenko</h2>
 </header>
 
 
@@ -161,55 +159,57 @@
 <p>Рассмотрим следующий пример - например, нам нужна функциональность уникального счётчика, который мы решили реализовать с помощью последовательности (sequence).</p>
 
 <p>Сначала определим интерфейс, в котором опишем все методы, которые мы будем реализовывать самостоятельно. В нашем случае, это будет только один метод:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">UserRepositoryCustom</span> <span style="color:#f92672">{</span>
-    <span style="color:#75715e">/**
-</span><span style="color:#75715e">     * Returns next unique id.
-</span><span style="color:#75715e">     *
-</span><span style="color:#75715e">     * @return next unique id.
-</span><span style="color:#75715e">     */</span>
-    Integer <span style="color:#a6e22e">getNextUniqueId</span><span style="color:#f92672">();</span>
-<span style="color:#f92672">}</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UserRepositoryCustom</span> <span class="o">{</span>
+    <span class="cm">/**
+</span><span class="cm">     * Returns next unique id.
+</span><span class="cm">     *
+</span><span class="cm">     * @return next unique id.
+</span><span class="cm">     */</span>
+    <span class="n">Integer</span> <span class="nf">getNextUniqueId</span><span class="o">();</span>
+<span class="o">}</span></code></pre></div>
 <p>Затем обновим объявление репозитория, чтобы он унаследовал новый интерфейс <tt>UserRepositoryCustom</tt></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">UserRepository</span> <span style="color:#66d9ef">extends</span> JpaRepository<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">,</span> Integer<span style="color:#f92672">&gt;,</span> UserRepositoryCustom <span style="color:#f92672">{</span>
-   <span style="color:#f92672">...</span>
-<span style="color:#f92672">}</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UserRepository</span> <span class="kd">extends</span> <span class="n">JpaRepository</span><span class="o">&lt;</span><span class="n">User</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;,</span> <span class="n">UserRepositoryCustom</span> <span class="o">{</span>
+   <span class="o">...</span>
+<span class="o">}</span></code></pre></div>
 <p>Теперь напишем реализацию метода:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">UserRepositoryImpl</span> <span style="color:#66d9ef">implements</span> UserRepositoryCustom <span style="color:#f92672">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserRepositoryImpl</span> <span class="kd">implements</span> <span class="n">UserRepositoryCustom</span> <span class="o">{</span>
 
-    <span style="color:#a6e22e">@PersistenceContext</span>
-    <span style="color:#66d9ef">private</span> EntityManager entityManager<span style="color:#f92672">;</span>
+    <span class="nd">@PersistenceContext</span>
+    <span class="kd">private</span> <span class="n">EntityManager</span> <span class="n">entityManager</span><span class="o">;</span>
 
-    <span style="color:#a6e22e">@Override</span>
-    <span style="color:#66d9ef">public</span> Integer <span style="color:#a6e22e">getNextUniqueId</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">Integer</span> <span class="nf">getNextUniqueId</span><span class="o">()</span> <span class="o">{</span>
 
-        <span style="color:#75715e">// When using Hibernate via JPA native queries fails with mapping exception, so just use Hibernate directly:
-</span><span style="color:#75715e"></span>        Session session <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>Session<span style="color:#f92672">)</span> entityManager<span style="color:#f92672">.</span><span style="color:#a6e22e">getDelegate</span><span style="color:#f92672">();</span>
-        SQLQuery nativeQuery <span style="color:#f92672">=</span> session<span style="color:#f92672">.</span><span style="color:#a6e22e">createSQLQuery</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;SELECT \&#34;nextval\&#34;(&#39;unique_id_seq&#39;) &#34;</span><span style="color:#f92672">);</span>
-        List<span style="color:#f92672">&lt;</span>BigInteger<span style="color:#f92672">&gt;</span> list <span style="color:#f92672">=</span> nativeQuery<span style="color:#f92672">.</span><span style="color:#a6e22e">list</span><span style="color:#f92672">();</span>
-        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>list<span style="color:#f92672">.</span><span style="color:#a6e22e">isEmpty</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
-            <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IncorrectResultSizeDataAccessException<span style="color:#f92672">(</span>1<span style="color:#f92672">);</span>
-        <span style="color:#f92672">}</span>
+        <span class="c1">// When using Hibernate via JPA native queries fails with mapping exception, so just use Hibernate directly:
+</span><span class="c1"></span>        <span class="n">Session</span> <span class="n">session</span> <span class="o">=</span> <span class="o">(</span><span class="n">Session</span><span class="o">)</span> <span class="n">entityManager</span><span class="o">.</span><span class="na">getDelegate</span><span class="o">();</span>
+        <span class="n">SQLQuery</span> <span class="n">nativeQuery</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="na">createSQLQuery</span><span class="o">(</span><span class="s">&#34;SELECT \&#34;nextval\&#34;(&#39;unique_id_seq&#39;) &#34;</span><span class="o">);</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">BigInteger</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="n">nativeQuery</span><span class="o">.</span><span class="na">list</span><span class="o">();</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">list</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="n">IncorrectResultSizeDataAccessException</span><span class="o">(</span><span class="n">1</span><span class="o">);</span>
+        <span class="o">}</span>
 
-        BigInteger result <span style="color:#f92672">=</span> list<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>0<span style="color:#f92672">);</span>
+        <span class="n">BigInteger</span> <span class="n">result</span> <span class="o">=</span> <span class="n">list</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">0</span><span class="o">);</span>
 
-        <span style="color:#66d9ef">return</span> result<span style="color:#f92672">.</span><span style="color:#a6e22e">intValue</span><span style="color:#f92672">();</span>
-    <span style="color:#f92672">}</span>
-<span style="color:#f92672">}</span></code></pre></div>
+        <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="na">intValue</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
 <p>И, наконец, укажем Spring Data JPA, чтобы в качестве класса для прокси использовался наш класс с реализацией собственных методов. Для этого нам нужна ещё одна секция <tt>repositories</tt> в конфигурационном файле:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml">    <span style="color:#f92672">&lt;repositories</span> <span style="color:#a6e22e">base-package=</span><span style="color:#e6db74">&#34;[base.repository.package]&#34;</span><span style="color:#f92672">/&gt;</span>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml">    <span class="nt">&lt;repositories</span> <span class="na">base-package=</span><span class="s">&#34;[base.repository.package]&#34;</span><span class="nt">/&gt;</span>
 
-    <span style="color:#f92672">&lt;repositories</span> <span style="color:#a6e22e">base-package=</span><span style="color:#e6db74">&#34;[base.repository.package]&#34;</span><span style="color:#f92672">&gt;</span>
-        <span style="color:#f92672">&lt;repository</span> <span style="color:#a6e22e">id=</span><span style="color:#e6db74">&#34;userRepository&#34;</span> <span style="color:#a6e22e">custom-impl-ref=</span><span style="color:#e6db74">&#34;userRepositoryImpl&#34;</span><span style="color:#f92672">/&gt;</span>
-    <span style="color:#f92672">&lt;/repositories&gt;</span>
+    <span class="nt">&lt;repositories</span> <span class="na">base-package=</span><span class="s">&#34;[base.repository.package]&#34;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;repository</span> <span class="na">id=</span><span class="s">&#34;userRepository&#34;</span> <span class="na">custom-impl-ref=</span><span class="s">&#34;userRepositoryImpl&#34;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/repositories&gt;</span>
 
-    <span style="color:#f92672">&lt;beans:bean</span> <span style="color:#a6e22e">id=</span><span style="color:#e6db74">&#34;userRepositoryImpl&#34;</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;...UserRepositoryImpl&#34;</span><span style="color:#f92672">/&gt;</span></code></pre></div>
+    <span class="nt">&lt;beans:bean</span> <span class="na">id=</span><span class="s">&#34;userRepositoryImpl&#34;</span> <span class="na">class=</span><span class="s">&#34;...UserRepositoryImpl&#34;</span><span class="nt">/&gt;</span></code></pre></div>
 <p>Вот и всё.</p>
 
         </div>
         
 
 <footer>
-
+  <div>
+    <p>If you have any questions, feel free to ping me on Twitter.</p>
+  </div>
   <p class="meta">
     
     

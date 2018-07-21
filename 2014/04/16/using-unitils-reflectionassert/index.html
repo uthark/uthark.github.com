@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html prefix="og: http://ogp.me/ns#">
-<head >
+<html prefix="og: http://ogp.me/ns#" lang="en">
+<head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=5">
 
   
   <title>Using Unitils ReflectionAssert</title>
@@ -19,7 +19,7 @@
 
 
   <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
-
+  <link rel="stylesheet" media="screen" href="https://fonts.googleapis.com/css?family=Arvo" type="text/css"/>
 
 
   
@@ -29,10 +29,8 @@
   
   
 
-
   
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-
 
   
   <link href="https://uthark.github.io/favicon.png" rel="icon">
@@ -74,10 +72,10 @@ First, update parent&rsquo;s pom.xml:
 </head>
 <body>
 
-
-<header>  
+<header>
+  
   <h1><a href="https://uthark.github.io/">Sharing knowledge</a></h1>
-    
+    <h2>by Oleg Atamanenko</h2>
 </header>
 
 
@@ -162,48 +160,50 @@ First, update parent&rsquo;s pom.xml:
 <p>In order to make such assertions more easier and maintainable one can use great Unitils library which has useful class <a href="http://www.unitils.org/tutorial-reflectionassert.html" target="_blank">ReflectionAssert</a></p>
 
 <p>First, update parent&rsquo;s <code>pom.xml</code>:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;properties&gt;</span>
-    <span style="color:#f92672">&lt;unitils.version&gt;</span>3.4<span style="color:#f92672">&lt;/unitils.version&gt;</span>
-<span style="color:#f92672">&lt;/properties&gt;</span>
-<span style="color:#f92672">&lt;dependency&gt;</span>
-    <span style="color:#f92672">&lt;groupId&gt;</span>org.unitils<span style="color:#f92672">&lt;/groupId&gt;</span>
-    <span style="color:#f92672">&lt;artifactId&gt;</span>unitils-core<span style="color:#f92672">&lt;/artifactId&gt;</span>
-    <span style="color:#f92672">&lt;version&gt;</span>${unitils.version}<span style="color:#f92672">&lt;/version&gt;</span>
-    <span style="color:#f92672">&lt;scope&gt;</span>test<span style="color:#f92672">&lt;/scope&gt;</span>
-<span style="color:#f92672">&lt;/dependency&gt;</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;properties&gt;</span>
+    <span class="nt">&lt;unitils.version&gt;</span>3.4<span class="nt">&lt;/unitils.version&gt;</span>
+<span class="nt">&lt;/properties&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.unitils<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>unitils-core<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>${unitils.version}<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre></div>
 <p>Then add dependency to the child module:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;dependency&gt;</span>
-    <span style="color:#f92672">&lt;groupId&gt;</span>org.unitils<span style="color:#f92672">&lt;/groupId&gt;</span>
-    <span style="color:#f92672">&lt;artifactId&gt;</span>unitils-core<span style="color:#f92672">&lt;/artifactId&gt;</span>
-<span style="color:#f92672">&lt;/dependency&gt;</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.unitils<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>unitils-core<span class="nt">&lt;/artifactId&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre></div>
 <p>Usage is very simple:
 Add static import to the class.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">import static</span> org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals<span style="color:#f92672">;</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import static</span> <span class="nn">org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals</span><span class="o">;</span></code></pre></div>
 <p>and use it instead of regular JUnit assert:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">assertReflectionEquals<span style="color:#f92672">(</span>expected<span style="color:#f92672">,</span> actual<span style="color:#f92672">);</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">assertReflectionEquals</span><span class="o">(</span><span class="n">expected</span><span class="o">,</span> <span class="n">actual</span><span class="o">);</span></code></pre></div>
 <p>It is possible to pass reflection comparator modes as optional parameters to the above method.</p>
 
 <p>Be ware that this method is not very useful if you want to compare objects which has floating point or double parameters - ReflectionAssert compares <code>double</code> and <code>float</code> values using <code>==</code>, so it is not very useful. It is not possible to pass epsilon for comparison.</p>
 
 <p>excerpt from <code>org.unitils.reflectionassert.comparator.impl.LenientNumberComparator#compare</code>:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">Double leftDouble <span style="color:#f92672">=</span> getDoubleValue<span style="color:#f92672">(</span>left<span style="color:#f92672">);</span>
-Double rightDouble <span style="color:#f92672">=</span> getDoubleValue<span style="color:#f92672">(</span>right<span style="color:#f92672">);</span>
-<span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>leftDouble<span style="color:#f92672">.</span><span style="color:#a6e22e">equals</span><span style="color:#f92672">(</span>rightDouble<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
-    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> Difference<span style="color:#f92672">(</span>differenceMessage<span style="color:#f92672">,</span> left<span style="color:#f92672">,</span> right<span style="color:#f92672">);</span>
-<span style="color:#f92672">}</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">Double</span> <span class="n">leftDouble</span> <span class="o">=</span> <span class="n">getDoubleValue</span><span class="o">(</span><span class="n">left</span><span class="o">);</span>
+<span class="n">Double</span> <span class="n">rightDouble</span> <span class="o">=</span> <span class="n">getDoubleValue</span><span class="o">(</span><span class="n">right</span><span class="o">);</span>
+<span class="k">if</span> <span class="o">(!</span><span class="n">leftDouble</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">rightDouble</span><span class="o">))</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="n">Difference</span><span class="o">(</span><span class="n">differenceMessage</span><span class="o">,</span> <span class="n">left</span><span class="o">,</span> <span class="n">right</span><span class="o">);</span>
+<span class="o">}</span></code></pre></div>
 <p>If you need to compare double values in JUnit assertions then it is better to use <a href="https://code.google.com/p/hamcrest/" target="_blank">hamcrest library</a>.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">import static</span> org.hamcrest.number.IsCloseTo.closeTo<span style="color:#f92672">;</span>
-<span style="color:#f92672">import static</span> org.junit.Assert.assertThat<span style="color:#f92672">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import static</span> <span class="nn">org.hamcrest.number.IsCloseTo.closeTo</span><span class="o">;</span>
+<span class="kn">import static</span> <span class="nn">org.junit.Assert.assertThat</span><span class="o">;</span>
 
-<span style="color:#75715e">// in @Test method:
-</span><span style="color:#75715e"></span>assertThat<span style="color:#f92672">(</span>actual<span style="color:#f92672">.</span><span style="color:#a6e22e">getFederalIncomeTax</span><span style="color:#f92672">(),</span> closeTo<span style="color:#f92672">(</span>expected<span style="color:#f92672">.</span><span style="color:#a6e22e">getFederalIncomeTax</span><span style="color:#f92672">(),</span> EPSILON<span style="color:#f92672">))</span></code></pre></div>
+<span class="c1">// in @Test method:
+</span><span class="c1"></span><span class="n">assertThat</span><span class="o">(</span><span class="n">actual</span><span class="o">.</span><span class="na">getFederalIncomeTax</span><span class="o">(),</span> <span class="n">closeTo</span><span class="o">(</span><span class="n">expected</span><span class="o">.</span><span class="na">getFederalIncomeTax</span><span class="o">(),</span> <span class="n">EPSILON</span><span class="o">))</span></code></pre></div>
 <p>Happy hacking!</p>
 
         </div>
         
 
 <footer>
-
+  <div>
+    <p>If you have any questions, feel free to ping me on Twitter.</p>
+  </div>
   <p class="meta">
     
     
@@ -301,7 +301,7 @@ Double rightDouble <span style="color:#f92672">=</span> getDoubleValue<span styl
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[site:@LinkageError creator:@LinkageError card:summary]"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary site:@LinkageError creator:@LinkageError]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 

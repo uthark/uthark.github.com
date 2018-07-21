@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html prefix="og: http://ogp.me/ns#">
-<head >
+<html prefix="og: http://ogp.me/ns#" lang="en">
+<head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=5">
 
   
   <title>Создание больших объёмов тестовых данных с помощью Databene Benerator</title>
@@ -19,7 +19,7 @@
 
 
   <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
-
+  <link rel="stylesheet" media="screen" href="https://fonts.googleapis.com/css?family=Arvo" type="text/css"/>
 
 
   
@@ -29,10 +29,8 @@
   
   
 
-
   
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-
 
   
   <link href="https://uthark.github.io/favicon.png" rel="icon">
@@ -72,10 +70,10 @@
 </head>
 <body>
 
-
-<header>  
+<header>
+  
   <h1><a href="https://uthark.github.io/">Sharing knowledge</a></h1>
-    
+    <h2>by Oleg Atamanenko</h2>
 </header>
 
 
@@ -161,93 +159,93 @@
 <p>Установка фреймворка осуществляется двумя способами - как отдельное приложение и как плагин для Maven.</p>
 <h5>Установка под Maven</h5>
 <p>Для использования Databene benerator в проектах, использующих для сборки Apache Maven необходимо добавить в зависимости databene-benerator и сконфигурировать его.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml">&amp;lt;project xmlns=&amp;quot;http://maven.apache.org/POM/4.0.0&amp;quot; xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
-         xsi:schemaLocation=&amp;quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd&amp;quot;&amp;gt;
-  &amp;lt;modelVersion&amp;gt;4.0.0&amp;lt;/modelVersion&amp;gt;
-  &amp;lt;groupId&amp;gt;com.myorganization&amp;lt;/groupId&amp;gt;
-  &amp;lt;artifactId&amp;gt;databene-benerator-test&amp;lt;/artifactId&amp;gt;
-  &amp;lt;version&amp;gt;1.0&amp;lt;/version&amp;gt;
-  &amp;lt;packaging&amp;gt;jar&amp;lt;/packaging&amp;gt;
-  &amp;lt;name&amp;gt;data generation project&amp;lt;/name&amp;gt;
-  &amp;lt;dependencies&amp;gt;
-    &amp;lt;dependency&amp;gt;
-      &amp;lt;groupId&amp;gt;org.databene&amp;lt;/groupId&amp;gt;
-      &amp;lt;artifactId&amp;gt;databene-benerator&amp;lt;/artifactId&amp;gt;
-      &amp;lt;version&amp;gt;0.5.9&amp;lt;/version&amp;gt;
-    &amp;lt;/dependency&amp;gt;
-    &amp;lt;dependency&amp;gt;
-      &amp;lt;groupId&amp;gt;org.databene&amp;lt;/groupId&amp;gt;
-      &amp;lt;artifactId&amp;gt;databene-webdecs&amp;lt;/artifactId&amp;gt;
-      &amp;lt;version&amp;gt;0.4.9&amp;lt;/version&amp;gt;
-    &amp;lt;/dependency&amp;gt;
-    &amp;lt;dependency&amp;gt;
-      &amp;lt;groupId&amp;gt;org.databene&amp;lt;/groupId&amp;gt;
-      &amp;lt;artifactId&amp;gt;databene-commons&amp;lt;/artifactId&amp;gt;
-      &amp;lt;version&amp;gt;0.4.9&amp;lt;/version&amp;gt;
-    &amp;lt;/dependency&amp;gt;
-    &amp;lt;dependency&amp;gt;
-      &amp;lt;groupId&amp;gt;mysql&amp;lt;/groupId&amp;gt;
-      &amp;lt;artifactId&amp;gt;mysql-connector-java&amp;lt;/artifactId&amp;gt;
-      &amp;lt;version&amp;gt;5.1.6&amp;lt;/version&amp;gt;
-    &amp;lt;/dependency&amp;gt;
-  &amp;lt;/dependencies&amp;gt;
-  &amp;lt;build&amp;gt;
-    &amp;lt;resources&amp;gt;
-      &amp;lt;resource&amp;gt;
-        &amp;lt;directory&amp;gt;src/main/resources&amp;lt;/directory&amp;gt;
-        &amp;lt;filtering&amp;gt;true&amp;lt;/filtering&amp;gt;
-      &amp;lt;/resource&amp;gt;
-    &amp;lt;/resources&amp;gt;
-    &amp;lt;plugins&amp;gt;
-      &amp;lt;plugin&amp;gt;
-        &amp;lt;groupId&amp;gt;org.apache.maven.plugins&amp;lt;/groupId&amp;gt;
-        &amp;lt;artifactId&amp;gt;maven-compiler-plugin&amp;lt;/artifactId&amp;gt;
-        &amp;lt;configuration&amp;gt;
-          &amp;lt;encoding&amp;gt;UTF-8&amp;lt;/encoding&amp;gt;
-          &amp;lt;source&amp;gt;1.5&amp;lt;/source&amp;gt;
-          &amp;lt;target&amp;gt;1.5&amp;lt;/target&amp;gt;
-        &amp;lt;/configuration&amp;gt;
-      &amp;lt;/plugin&amp;gt;
-      &amp;lt;plugin&amp;gt;
-        &amp;lt;groupId&amp;gt;org.databene&amp;lt;/groupId&amp;gt;
-        &amp;lt;artifactId&amp;gt;maven-benerator-plugin&amp;lt;/artifactId&amp;gt;
-        &amp;lt;version&amp;gt;0.5.9&amp;lt;/version&amp;gt;
-        &amp;lt;executions&amp;gt;
-          &amp;lt;execution&amp;gt;
-            &amp;lt;phase&amp;gt;compile&amp;lt;/phase&amp;gt;
-            &amp;lt;goals&amp;gt;
-              &amp;lt;goal&amp;gt;generate&amp;lt;/goal&amp;gt;
-            &amp;lt;/goals&amp;gt;
-          &amp;lt;/execution&amp;gt;
-        &amp;lt;/executions&amp;gt;
-        &amp;lt;configuration&amp;gt;
-          &amp;lt;descriptor&amp;gt;src/main/resources/benerator.ben.xml&amp;lt;/descriptor&amp;gt;
-          &amp;lt;encoding&amp;gt;UTF-8&amp;lt;/encoding&amp;gt;
-          &amp;lt;validate&amp;gt;true&amp;lt;/validate&amp;gt;
-          &amp;lt;dbUrl&amp;gt;jdbc:mysql://localhost:3306/hrtool?useUnicode=true&amp;amp;characterEncoding=UTF-8&amp;lt;/dbUrl&amp;gt;
-          &amp;lt;dbDriver&amp;gt;com.mysql.jdbc.Driver&amp;lt;/dbDriver&amp;gt;
-          &amp;lt;dbSchema&amp;gt;database&amp;lt;/dbSchema&amp;gt;
-          &amp;lt;dbUser&amp;gt;user&amp;lt;/dbUser&amp;gt;
-          &amp;lt;dbPassword&amp;gt;password&amp;lt;/dbPassword&amp;gt;
-        &amp;lt;/configuration&amp;gt;
-        &amp;lt;dependencies&amp;gt;
-        &amp;lt;dependency&amp;gt;
-            &amp;lt;groupId&amp;gt;log4j&amp;lt;/groupId&amp;gt;
-            &amp;lt;artifactId&amp;gt;log4j&amp;lt;/artifactId&amp;gt;
-            &amp;lt;version&amp;gt;1.2.13&amp;lt;/version&amp;gt;
-            &amp;lt;scope&amp;gt;runtime&amp;lt;/scope&amp;gt;
-          &amp;lt;/dependency&amp;gt;
-          &amp;lt;dependency&amp;gt;
-            &amp;lt;groupId&amp;gt;org.apache.poi&amp;lt;/groupId&amp;gt;
-            &amp;lt;artifactId&amp;gt;poi&amp;lt;/artifactId&amp;gt;
-            &amp;lt;version&amp;gt;3.5-beta5&amp;lt;/version&amp;gt;
-            &amp;lt;scope&amp;gt;runtime&amp;lt;/scope&amp;gt;
-          &amp;lt;/dependency&amp;gt;
-        &amp;lt;/dependencies&amp;gt;
-      &amp;lt;/plugin&amp;gt;
-    &amp;lt;/plugins&amp;gt;
-  &amp;lt;/build&amp;gt;
-&amp;lt;/project&amp;gt;</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="ni">&amp;lt;</span>project xmlns=<span class="ni">&amp;quot;</span>http://maven.apache.org/POM/4.0.0<span class="ni">&amp;quot;</span> xmlns:xsi=<span class="ni">&amp;quot;</span>http://www.w3.org/2001/XMLSchema-instance<span class="ni">&amp;quot;</span>
+         xsi:schemaLocation=<span class="ni">&amp;quot;</span>http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd<span class="ni">&amp;quot;&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>modelVersion<span class="ni">&amp;gt;</span>4.0.0<span class="ni">&amp;lt;</span>/modelVersion<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>com.myorganization<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>databene-benerator-test<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>1.0<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>packaging<span class="ni">&amp;gt;</span>jar<span class="ni">&amp;lt;</span>/packaging<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>name<span class="ni">&amp;gt;</span>data generation project<span class="ni">&amp;lt;</span>/name<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>dependencies<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.databene<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>databene-benerator<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>0.5.9<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.databene<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>databene-webdecs<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>0.4.9<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.databene<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>databene-commons<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>0.4.9<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>mysql<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>mysql-connector-java<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>5.1.6<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>/dependencies<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>build<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>resources<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>resource<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>directory<span class="ni">&amp;gt;</span>src/main/resources<span class="ni">&amp;lt;</span>/directory<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>filtering<span class="ni">&amp;gt;</span>true<span class="ni">&amp;lt;</span>/filtering<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>/resource<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>/resources<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>plugins<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>plugin<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.apache.maven.plugins<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>maven-compiler-plugin<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>configuration<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>encoding<span class="ni">&amp;gt;</span>UTF-8<span class="ni">&amp;lt;</span>/encoding<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>source<span class="ni">&amp;gt;</span>1.5<span class="ni">&amp;lt;</span>/source<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>target<span class="ni">&amp;gt;</span>1.5<span class="ni">&amp;lt;</span>/target<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>/configuration<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>/plugin<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>plugin<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.databene<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>maven-benerator-plugin<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>0.5.9<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>executions<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>execution<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>phase<span class="ni">&amp;gt;</span>compile<span class="ni">&amp;lt;</span>/phase<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>goals<span class="ni">&amp;gt;</span>
+              <span class="ni">&amp;lt;</span>goal<span class="ni">&amp;gt;</span>generate<span class="ni">&amp;lt;</span>/goal<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>/goals<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>/execution<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>/executions<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>configuration<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>descriptor<span class="ni">&amp;gt;</span>src/main/resources/benerator.ben.xml<span class="ni">&amp;lt;</span>/descriptor<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>encoding<span class="ni">&amp;gt;</span>UTF-8<span class="ni">&amp;lt;</span>/encoding<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>validate<span class="ni">&amp;gt;</span>true<span class="ni">&amp;lt;</span>/validate<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>dbUrl<span class="ni">&amp;gt;</span>jdbc:mysql://localhost:3306/hrtool?useUnicode=true<span class="ni">&amp;amp;</span>characterEncoding=UTF-8<span class="ni">&amp;lt;</span>/dbUrl<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>dbDriver<span class="ni">&amp;gt;</span>com.mysql.jdbc.Driver<span class="ni">&amp;lt;</span>/dbDriver<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>dbSchema<span class="ni">&amp;gt;</span>database<span class="ni">&amp;lt;</span>/dbSchema<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>dbUser<span class="ni">&amp;gt;</span>user<span class="ni">&amp;lt;</span>/dbUser<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>dbPassword<span class="ni">&amp;gt;</span>password<span class="ni">&amp;lt;</span>/dbPassword<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>/configuration<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>dependencies<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>log4j<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>log4j<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>1.2.13<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>scope<span class="ni">&amp;gt;</span>runtime<span class="ni">&amp;lt;</span>/scope<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.apache.poi<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>poi<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>3.5-beta5<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>scope<span class="ni">&amp;gt;</span>runtime<span class="ni">&amp;lt;</span>/scope<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>/dependencies<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>/plugin<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>/plugins<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>/build<span class="ni">&amp;gt;</span>
+<span class="ni">&amp;lt;</span>/project<span class="ni">&amp;gt;</span></code></pre></div>
 <p>В конфигурации необходимо указать как минимум следующие параметры:</p>
 <ol><li><span style=" font-family:'Courier New,courier';">dbUrl</span> - строка подключения к базе данных в формате JDBC</li>
 <li><span style=" font-family:'Courier New,courier';">dbDriver</span> - используемый драйвер базы данных</li>
@@ -274,7 +272,9 @@
         
 
 <footer>
-
+  <div>
+    <p>If you have any questions, feel free to ping me on Twitter.</p>
+  </div>
   <p class="meta">
     
     

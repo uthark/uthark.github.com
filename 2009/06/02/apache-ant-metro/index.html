@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html prefix="og: http://ogp.me/ns#">
-<head >
+<html prefix="og: http://ogp.me/ns#" lang="en">
+<head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=5">
 
   
   <title>Apache Ant и Metro</title>
@@ -19,7 +19,7 @@
 
 
   <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
-
+  <link rel="stylesheet" media="screen" href="https://fonts.googleapis.com/css?family=Arvo" type="text/css"/>
 
 
   
@@ -29,10 +29,8 @@
   
   
 
-
   
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-
 
   
   <link href="https://uthark.github.io/favicon.png" rel="icon">
@@ -72,10 +70,10 @@
 </head>
 <body>
 
-
-<header>  
+<header>
+  
   <h1><a href="https://uthark.github.io/">Sharing knowledge</a></h1>
-    
+    <h2>by Oleg Atamanenko</h2>
 </header>
 
 
@@ -161,10 +159,10 @@
 
 <p>Как выяснилось позже, виноват был во всё Ant.
 Metro создавал файл package-info.java, в котором было примерно следующее содержание:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@javax.xml.bind.annotation.XmlSchema</span><span style="color:#f92672">(</span>
-    namespace <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;http://z.y.x.com&#34;</span><span style="color:#f92672">,</span> 
-    elementFormDefault<span style="color:#f92672">=</span>javax<span style="color:#f92672">.</span><span style="color:#a6e22e">xml</span><span style="color:#f92672">.</span><span style="color:#a6e22e">bind</span><span style="color:#f92672">.</span><span style="color:#a6e22e">annotation</span><span style="color:#f92672">.</span><span style="color:#a6e22e">XmlNsForm</span><span style="color:#f92672">.</span><span style="color:#a6e22e">UNQUALIFIED</span><span style="color:#f92672">)</span>
-<span style="color:#f92672">package</span> com.x.y.z<span style="color:#f92672">;</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@javax.xml.bind.annotation.XmlSchema</span><span class="o">(</span>
+    <span class="n">namespace</span> <span class="o">=</span> <span class="s">&#34;http://z.y.x.com&#34;</span><span class="o">,</span> 
+    <span class="n">elementFormDefault</span><span class="o">=</span><span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">bind</span><span class="o">.</span><span class="na">annotation</span><span class="o">.</span><span class="na">XmlNsForm</span><span class="o">.</span><span class="na">UNQUALIFIED</span><span class="o">)</span>
+<span class="kn">package</span> <span class="nn">com.x.y.z</span><span class="o">;</span></code></pre></div>
 <p>Ант, в свою очередь, должен был этот файл компилировать. А <a href="http://ant.apache.org/manual/CoreTasks/javac.html">в реальности этого не происходило</a>, поэтому Metro не мог корректно отобразить XML-запрос на объекты доменной области.</p>
 
 <p>Решение было немного кривым, но при этом поразительно простым - принудительный вызов javac на файлах <code>package-info.java</code>.</p>
@@ -173,7 +171,9 @@ Metro создавал файл package-info.java, в котором было п
         
 
 <footer>
-
+  <div>
+    <p>If you have any questions, feel free to ping me on Twitter.</p>
+  </div>
   <p class="meta">
     
     
@@ -271,7 +271,7 @@ Metro создавал файл package-info.java, в котором было п
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[site:@LinkageError creator:@LinkageError card:summary]"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary site:@LinkageError creator:@LinkageError]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 

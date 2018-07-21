@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html prefix="og: http://ogp.me/ns#">
-<head >
+<html prefix="og: http://ogp.me/ns#" lang="en">
+<head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=5">
 
   
   <title>Solving issue with DB2 on VMWare Fusion on MacBook Pro 2013 Late</title>
@@ -19,7 +19,7 @@
 
 
   <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
-
+  <link rel="stylesheet" media="screen" href="https://fonts.googleapis.com/css?family=Arvo" type="text/css"/>
 
 
   
@@ -29,10 +29,8 @@
   
   
 
-
   
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-
 
   
   <link href="https://uthark.github.io/favicon.png" rel="icon">
@@ -73,10 +71,10 @@ After some googling I found out that it is due to the fact that current version 
 </head>
 <body>
 
-
-<header>  
+<header>
+  
   <h1><a href="https://uthark.github.io/">Sharing knowledge</a></h1>
-    
+    <h2>by Oleg Atamanenko</h2>
 </header>
 
 
@@ -163,7 +161,7 @@ After some googling I found out that it is due to the fact that current version 
 <p>After some googling I found out that it is due to the fact that current version of DB2 can&rsquo;t handle more than 4 responses to CPUID query.</p>
 
 <p>The workaround is to update VMWare configuration file for the virtual machine.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ini Changes to *.vmx file" data-lang="ini Changes to *.vmx file">monitor_control.enable_fullcpuid = TRUE
+<div class="highlight"><pre class="chroma"><code class="language-ini Changes to *.vmx file" data-lang="ini Changes to *.vmx file">monitor_control.enable_fullcpuid = TRUE
 cpuid.4.4.eax = &#34;0000:0000:0000:0000:0000:0000:0000:0000&#34;</code></pre></div>
 <p>The answer was found on <a href="https://communities.vmware.com/thread/461857" target="_blank">VMWare Community Forums</a></p>
 
@@ -171,7 +169,9 @@ cpuid.4.4.eax = &#34;0000:0000:0000:0000:0000:0000:0000:0000&#34;</code></pre></
         
 
 <footer>
-
+  <div>
+    <p>If you have any questions, feel free to ping me on Twitter.</p>
+  </div>
   <p class="meta">
     
     

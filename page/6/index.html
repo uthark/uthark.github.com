@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html prefix="og: http://ogp.me/ns#">
-<head >
+<html prefix="og: http://ogp.me/ns#" lang="en">
+<head>
+	<meta name="generator" content="Hugo 0.44" />
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=5">
 
   
   <title>Sharing knowledge</title>
@@ -19,7 +20,7 @@
 
 
   <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
-
+  <link rel="stylesheet" media="screen" href="https://fonts.googleapis.com/css?family=Arvo" type="text/css"/>
 
 
   
@@ -29,10 +30,8 @@
   
   
 
-
   
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-
 
   
   <link href="https://uthark.github.io/favicon.png" rel="icon">
@@ -55,10 +54,10 @@
 </head>
 <body>
 
-
-<header>  
+<header>
+  
   <h1><a href="https://uthark.github.io/">Sharing knowledge</a></h1>
-    
+    <h2>by Oleg Atamanenko</h2>
 </header>
 
 
@@ -154,15 +153,15 @@
 <h4 id="модификация-исходного-кода-для-реализации-дополнительных-возможностей">Модификация исходного кода для реализации дополнительных возможностей</h4>
 
 <p>Предположим, что у нас есть модуль в приложении, который предоставляет нужную нам функциональность. С модулем всё в порядке, кроме одного - все его методы могут выбрасывать проверяемые исключения, что ведёт к ухудшению читаемости кода, так как вместо простого вызова метода:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">service<span style="color:#f92672">.</span><span style="color:#a6e22e">doUsefulThing</span><span style="color:#f92672">();</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">service</span><span class="o">.</span><span class="na">doUsefulThing</span><span class="o">();</span></code></pre></div>
 <p>наш вызов превращается в следующую конструкцию</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
-    service<span style="color:#f92672">.</span><span style="color:#a6e22e">doUsefulThing</span><span style="color:#f92672">();</span>
-<span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span> FirstServiceException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-    processException<span style="color:#f92672">(</span>e<span style="color:#f92672">);</span>
-<span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span> SecondServiceException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-    processException<span style="color:#f92672">(</span>e<span style="color:#f92672">);</span>
-<span style="color:#f92672">}</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="k">try</span> <span class="o">{</span>
+    <span class="n">service</span><span class="o">.</span><span class="na">doUsefulThing</span><span class="o">();</span>
+<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span> <span class="n">FirstServiceException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">processException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span> <span class="n">SecondServiceException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">processException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+<span class="o">}</span></code></pre></div>
 <p>Дополнительная проблема в том, что у модуля количество модулей 10+, количество методов также велико, что приводит к тому, что блоки <code>try/catch</code> замусоривают код. Решение с использованием паттерна <a href="https://en.wikipedia.org/wiki/Callback_(computer_programming)"><code>Callback</code></a> также приведёт к замусориванию кода.</p>
 
 <h4 id="вариант-решения-проблемы-с-использованием-aop">Вариант решения проблемы с использованием AOP</h4>
@@ -170,32 +169,32 @@
 <p>Решение данной проблемы было таким - а что, если используя возможности AOP трансформировать проверяемое исключение в непроверяемое? Таким образом, мы сможем избавиться от скучной проверки на исключения в нашем коде, а для обработки исключения (ведь мы всегда его будем обрабатывать одинаково) достаточно будет использовать обработку исключения на верхнем уровне абстракции.</p>
 
 <p>Для более элегантного решения проблемы было решено добавить собственную аннотацию, которой нужно помечать метод, который использует сервис из «плохого» модуля.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">package</span> com.blogger.atamanenko<span style="color:#f92672">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.blogger.atamanenko</span><span class="o">;</span>
 
-<span style="color:#f92672">import</span> java.lang.annotation.Documented<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> java.lang.annotation.Inherited<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> java.lang.annotation.Retention<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> java.lang.annotation.Target<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> java.lang.annotation.RetentionPolicy<span style="color:#f92672">;</span>
+<span class="kn">import</span> <span class="nn">java.lang.annotation.Documented</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.lang.annotation.Inherited</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.lang.annotation.Retention</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.lang.annotation.Target</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.lang.annotation.RetentionPolicy</span><span class="o">;</span>
 
-<span style="color:#a6e22e">@Retention</span><span style="color:#f92672">(</span>RetentionPolicy<span style="color:#f92672">.</span><span style="color:#a6e22e">RUNTIME</span><span style="color:#f92672">)</span>
-<span style="color:#a6e22e">@Target</span><span style="color:#f92672">({</span>ElementType<span style="color:#f92672">.</span><span style="color:#a6e22e">METHOD</span><span style="color:#f92672">})</span>
-<span style="color:#a6e22e">@Documented</span>
-<span style="color:#a6e22e">@Inherited</span>
-<span style="color:#66d9ef">public</span> <span style="color:#a6e22e">@interface</span> SuppressExceptions <span style="color:#f92672">{</span>
-<span style="color:#f92672">}</span></code></pre></div>
+<span class="nd">@Retention</span><span class="o">(</span><span class="n">RetentionPolicy</span><span class="o">.</span><span class="na">RUNTIME</span><span class="o">)</span>
+<span class="nd">@Target</span><span class="o">({</span><span class="n">ElementType</span><span class="o">.</span><span class="na">METHOD</span><span class="o">})</span>
+<span class="nd">@Documented</span>
+<span class="nd">@Inherited</span>
+<span class="kd">public</span> <span class="nd">@interface</span> <span class="n">SuppressExceptions</span> <span class="o">{</span>
+<span class="o">}</span></code></pre></div>
 <p>А также аспект, который бы делал всю нужную нам функциональность:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> aspect ExceptionSupressingAspect <span style="color:#f92672">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="n">aspect</span> <span class="n">ExceptionSupressingAspect</span> <span class="o">{</span>
 
-        declare soft <span style="color:#f92672">:</span>ServiceException:  execution<span style="color:#f92672">(</span><span style="color:#a6e22e">@com.blogger.atamanenko.annotation.SuppressExceptions</span> <span style="color:#f92672">*</span> <span style="color:#f92672">*.*(..));</span>
-<span style="color:#f92672">}</span></code></pre></div>
+        <span class="n">declare</span> <span class="n">soft</span> <span class="o">:</span><span class="nl">ServiceException:</span>  <span class="n">execution</span><span class="o">(</span><span class="nd">@com.blogger.atamanenko.annotation.SuppressExceptions</span> <span class="o">*</span> <span class="o">*.*(..));</span>
+<span class="o">}</span></code></pre></div>
 <p>Данный аспект делает в точности следующее: &ldquo;Смягчает&rdquo; исключение <code>ServiceException</code> для метода, который помечен аннотацией <code>@SuppressExceptions</code>.</p>
 
 <p>Пример использования:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">    <span style="color:#a6e22e">@SuppressExceptions</span>
-    <span style="color:#66d9ef">protected</span> Entity <span style="color:#a6e22e">findEntity</span><span style="color:#f92672">(</span><span style="color:#66d9ef">final</span> Identifiable id<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        <span style="color:#66d9ef">return</span> entityService<span style="color:#f92672">.</span><span style="color:#a6e22e">findById</span><span style="color:#f92672">(</span>id<span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">    <span class="nd">@SuppressExceptions</span>
+    <span class="kd">protected</span> <span class="n">Entity</span> <span class="nf">findEntity</span><span class="o">(</span><span class="kd">final</span> <span class="n">Identifiable</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">entityService</span><span class="o">.</span><span class="na">findById</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
+    <span class="o">}</span></code></pre></div>
 <h4 id="принудительная-проверка-контракта-между-модулями">Принудительная проверка контракта между модулями</h4>
 
 <p>Часто нам необходимо принудительно требовать выполнения каких-то архитектурных ограничений, например, контроллеры должны работать только с сервисами и им запрещено напрямую обращаться к базе данных.</p>
@@ -203,26 +202,26 @@
 <p>Для реализации таких проверок можно также использовать возможности AOP.</p>
 
 <p>Предположим, что в нашем приложении модуль сервиса выставляет наружу <a href="http://java.sun.com/blueprints/corej2eepatterns/Patterns/TransferObject.html">DTO</a> для работы, скрывая при этом классы модели. Для того, чтобы явно запретить доступ к классам и методам модели нам необходимо создать аспект, который бы вызывал ошибку компиляции при нарушении ограничения.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">aspect ForbidAccessToModelAspect <span style="color:#f92672">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">aspect</span> <span class="n">ForbidAccessToModelAspect</span> <span class="o">{</span>
 
-<span style="color:#75715e">//      Full prohibition of access to model:
-</span><span style="color:#75715e"></span>        pointcut <span style="color:#a6e22e">accessModel</span><span style="color:#f92672">():</span> call<span style="color:#f92672">(*</span> com<span style="color:#f92672">.</span><span style="color:#a6e22e">blogger</span><span style="color:#f92672">.</span><span style="color:#a6e22e">atamanenko</span><span style="color:#f92672">.</span><span style="color:#a6e22e">app</span><span style="color:#f92672">.</span><span style="color:#a6e22e">model</span><span style="color:#f92672">..*.*(..));</span>
-        declare error: accessModel<span style="color:#f92672">()</span> <span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;Illegal call to model&#34;</span><span style="color:#f92672">;</span>
-<span style="color:#f92672">}</span></code></pre></div>
+<span class="c1">//      Full prohibition of access to model:
+</span><span class="c1"></span>        <span class="n">pointcut</span> <span class="nf">accessModel</span><span class="o">():</span> <span class="n">call</span><span class="o">(*</span> <span class="n">com</span><span class="o">.</span><span class="na">blogger</span><span class="o">.</span><span class="na">atamanenko</span><span class="o">.</span><span class="na">app</span><span class="o">.</span><span class="na">model</span><span class="o">..*.*(..));</span>
+        <span class="n">declare</span> <span class="nl">error:</span> <span class="n">accessModel</span><span class="o">()</span> <span class="o">:</span> <span class="s">&#34;Illegal call to model&#34;</span><span class="o">;</span>
+<span class="o">}</span></code></pre></div>
 <p>После объявления такого аспекта, мы получим ошибку компиляции, что, очевидным образом, приведёт к выполнению архитектурного ограничения.</p>
 
 <p>Если же нам необходимо разрешить доступ к одному пакету только из какого-то определённого другого, то мы можем модифицировать наш аспект следующим образом:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">aspect ForbidAccessToModelAspect2 <span style="color:#f92672">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">aspect</span> <span class="n">ForbidAccessToModelAspect2</span> <span class="o">{</span>
 
-        pointcut <span style="color:#a6e22e">accessModel</span><span style="color:#f92672">():</span> call<span style="color:#f92672">(*</span> com<span style="color:#f92672">.</span><span style="color:#a6e22e">blogger</span><span style="color:#f92672">.</span><span style="color:#a6e22e">atamanenko</span><span style="color:#f92672">.</span><span style="color:#a6e22e">app</span><span style="color:#f92672">.</span><span style="color:#a6e22e">model</span><span style="color:#f92672">.**.*(..));</span>
+        <span class="n">pointcut</span> <span class="nf">accessModel</span><span class="o">():</span> <span class="n">call</span><span class="o">(*</span> <span class="n">com</span><span class="o">.</span><span class="na">blogger</span><span class="o">.</span><span class="na">atamanenko</span><span class="o">.</span><span class="na">app</span><span class="o">.</span><span class="na">model</span><span class="o">.**.*(..));</span>
 
-        <span style="color:#75715e">// Allow access to model from specific package for methods and constructors
-</span><span style="color:#75715e"></span>        pointcut <span style="color:#a6e22e">allowAccessModelFromSpecificPackage</span><span style="color:#f92672">():</span> withincode<span style="color:#f92672">(*</span> com<span style="color:#f92672">.</span><span style="color:#a6e22e">blogger</span><span style="color:#f92672">.</span><span style="color:#a6e22e">atamanenko</span><span style="color:#f92672">.</span><span style="color:#a6e22e">app</span><span style="color:#f92672">.</span><span style="color:#a6e22e">allowedpackage</span><span style="color:#f92672">..*.*(..));</span>
-        pointcut <span style="color:#a6e22e">allowAccessModelFromSpecificPackage2</span><span style="color:#f92672">():</span> withincode<span style="color:#f92672">(</span>com<span style="color:#f92672">.</span><span style="color:#a6e22e">blogger</span><span style="color:#f92672">.</span><span style="color:#a6e22e">atamanenko</span><span style="color:#f92672">.</span><span style="color:#a6e22e">app</span><span style="color:#f92672">.</span><span style="color:#a6e22e">allowedpackage</span><span style="color:#f92672">..*.</span><span style="color:#a6e22e">new</span><span style="color:#f92672">(..));</span>
+        <span class="c1">// Allow access to model from specific package for methods and constructors
+</span><span class="c1"></span>        <span class="n">pointcut</span> <span class="nf">allowAccessModelFromSpecificPackage</span><span class="o">():</span> <span class="n">withincode</span><span class="o">(*</span> <span class="n">com</span><span class="o">.</span><span class="na">blogger</span><span class="o">.</span><span class="na">atamanenko</span><span class="o">.</span><span class="na">app</span><span class="o">.</span><span class="na">allowedpackage</span><span class="o">..*.*(..));</span>
+        <span class="n">pointcut</span> <span class="nf">allowAccessModelFromSpecificPackage2</span><span class="o">():</span> <span class="n">withincode</span><span class="o">(</span><span class="n">com</span><span class="o">.</span><span class="na">blogger</span><span class="o">.</span><span class="na">atamanenko</span><span class="o">.</span><span class="na">app</span><span class="o">.</span><span class="na">allowedpackage</span><span class="o">..*.</span><span class="na">new</span><span class="o">(..));</span>
 
-        <span style="color:#75715e">// forbid usage from any other methods.
-</span><span style="color:#75715e"></span>        declare error: accessModel<span style="color:#f92672">()</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!(</span>allowAccessModelFromSpecificPackage<span style="color:#f92672">()</span> <span style="color:#f92672">||</span> allowAccessModelFromSpecificPackage<span style="color:#f92672">()):</span><span style="color:#e6db74">&#34;Illegal call to Model from forbidden package&#34;</span><span style="color:#f92672">;</span>
-<span style="color:#f92672">}</span></code></pre></div>
+        <span class="c1">// forbid usage from any other methods.
+</span><span class="c1"></span>        <span class="n">declare</span> <span class="nl">error:</span> <span class="n">accessModel</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="o">!(</span><span class="n">allowAccessModelFromSpecificPackage</span><span class="o">()</span> <span class="o">||</span> <span class="n">allowAccessModelFromSpecificPackage</span><span class="o">()):</span><span class="s">&#34;Illegal call to Model from forbidden package&#34;</span><span class="o">;</span>
+<span class="o">}</span></code></pre></div>
 <p>Такой аспект, созданный в нашем модуле запретит нам использовать классы модели из всех пакетов, кроме <code>com.blogger.atamanenko.app.allowedpackage</code></p>
 
 <h4 id="сборка-приложения">Сборка приложения</h4>
@@ -230,30 +229,30 @@
 <p>Файл аспекта нужно положить в каталог <code>src/main/aspect</code>, а для сборки приложения необходимо использовать не стандартный Oracle <a href="http://docs.oracle.com/javase/6/docs/technotes/tools/solaris/javac.html">Java Compiler</a>, а <a href="http://eclipse.org/aspectj/downloads.php">AspectJ compiler</a>.</p>
 
 <p>Пример конфигурации для <a href="https://maven.apache.org/">Apache Maven</a>:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml">&amp;lt;plugin&amp;gt;
-    &amp;lt;groupId&amp;gt;org.codehaus.mojo&amp;lt;/groupId&amp;gt;
-    &amp;lt;artifactId&amp;gt;aspectj-maven-plugin&amp;lt;/artifactId&amp;gt;
-    &amp;lt;version&amp;gt;${aspectj-maven-plugin.version}&amp;lt;/version&amp;gt;
-    &amp;lt;configuration&amp;gt;
-        &amp;lt;complianceLevel&amp;gt;1.6&amp;lt;/complianceLevel&amp;gt;
-        &amp;lt;aspectLibraries&amp;gt;
-            &amp;lt;aspectLibrary&amp;gt;
-                &amp;lt;groupId&amp;gt;org.springframework&amp;lt;/groupId&amp;gt;
-                &amp;lt;artifactId&amp;gt;spring-aspects&amp;lt;/artifactId&amp;gt;
-            &amp;lt;/aspectLibrary&amp;gt;
-        &amp;lt;/aspectLibraries&amp;gt;
-        &amp;lt;verbose&amp;gt;true&amp;lt;/verbose&amp;gt;
-    &amp;lt;/configuration&amp;gt;
-    &amp;lt;executions&amp;gt;
-        &amp;lt;execution&amp;gt;
-            &amp;lt;phase&amp;gt;process-sources&amp;lt;/phase&amp;gt;
-            &amp;lt;goals&amp;gt;
-                &amp;lt;goal&amp;gt;compile&amp;lt;/goal&amp;gt;
-                &amp;lt;goal&amp;gt;test-compile&amp;lt;/goal&amp;gt;
-            &amp;lt;/goals&amp;gt;
-        &amp;lt;/execution&amp;gt;
-    &amp;lt;/executions&amp;gt;
-&amp;lt;/plugin&amp;gt;</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="ni">&amp;lt;</span>plugin<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.codehaus.mojo<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>aspectj-maven-plugin<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>${aspectj-maven-plugin.version}<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>configuration<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>complianceLevel<span class="ni">&amp;gt;</span>1.6<span class="ni">&amp;lt;</span>/complianceLevel<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>aspectLibraries<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>aspectLibrary<span class="ni">&amp;gt;</span>
+                <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.springframework<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+                <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>spring-aspects<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>/aspectLibrary<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>/aspectLibraries<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>verbose<span class="ni">&amp;gt;</span>true<span class="ni">&amp;lt;</span>/verbose<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>/configuration<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>executions<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>execution<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>phase<span class="ni">&amp;gt;</span>process-sources<span class="ni">&amp;lt;</span>/phase<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>goals<span class="ni">&amp;gt;</span>
+                <span class="ni">&amp;lt;</span>goal<span class="ni">&amp;gt;</span>compile<span class="ni">&amp;lt;</span>/goal<span class="ni">&amp;gt;</span>
+                <span class="ni">&amp;lt;</span>goal<span class="ni">&amp;gt;</span>test-compile<span class="ni">&amp;lt;</span>/goal<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>/goals<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>/execution<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>/executions<span class="ni">&amp;gt;</span>
+<span class="ni">&amp;lt;</span>/plugin<span class="ni">&amp;gt;</span></code></pre></div>
 <h4 id="заключение">Заключение</h4>
 
 <p>Вот в общем-то и всё. Я сознательно не стал описывать языковые конструкции аспектов, так как они подробно описаны в <a href="https://www.eclipse.org/aspectj/doc/next/progguide/index.html">руководстве AspectJ</a></p>
@@ -288,19 +287,19 @@
 Подробнее об этом можно прочитать в <a href="http://java.sun.com/docs/books/jls/third_edition/html/classes.html#228745">Java Language Specification, §8.4.8</a><br />
 <br />
 Итак, в java все нестатические неприватные (то есть, <tt>protected</tt>, <tt>package</tt> и <tt>public</tt>) методы являются виртуальными. Ключевое слово <tt>final</tt> запрещает возможность дальнейшего переопределения метода в подклассах.  Рассмотрим следующий пример:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">A</span> <span style="color:#f92672">{</span>
-     <span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 3<span style="color:#f92672">;</span>
-     <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">getI</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span><span style="color:#66d9ef">return</span> i<span style="color:#f92672">;}</span>
-<span style="color:#f92672">}</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">A</span> <span class="o">{</span>
+     <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">3</span><span class="o">;</span>
+     <span class="kt">int</span> <span class="nf">getI</span><span class="o">()</span> <span class="o">{</span><span class="k">return</span> <span class="n">i</span><span class="o">;}</span>
+<span class="o">}</span>
 
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">B</span> <span style="color:#66d9ef">extends</span> A<span style="color:#f92672">{</span>
-     <span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 5<span style="color:#f92672">;</span>
-     <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">getI</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span><span style="color:#66d9ef">return</span> i<span style="color:#f92672">;}</span>
-<span style="color:#f92672">}</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">B</span> <span class="kd">extends</span> <span class="n">A</span><span class="o">{</span>
+     <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">5</span><span class="o">;</span>
+     <span class="kt">int</span> <span class="nf">getI</span><span class="o">()</span> <span class="o">{</span><span class="k">return</span> <span class="n">i</span><span class="o">;}</span>
+<span class="o">}</span>
 
-A a <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> B<span style="color:#f92672">();</span>
-System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>a<span style="color:#f92672">.</span><span style="color:#a6e22e">i</span><span style="color:#f92672">);</span>
-System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>a<span style="color:#f92672">.</span><span style="color:#a6e22e">getI</span><span style="color:#f92672">());</span></code></pre></div>
+<span class="n">A</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="n">B</span><span class="o">();</span>
+<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">a</span><span class="o">.</span><span class="na">i</span><span class="o">);</span>
+<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">a</span><span class="o">.</span><span class="na">getI</span><span class="o">());</span></code></pre></div>
 <p>Вопрос: что выведет данный код?<br />
 Ответ: <br />
 1. Так как поля класса не наследуются, то у класса A своё поле i и у класса B тоже своё поле i. Так как для полей полиморфизм не действует, то при обращении a.i мы обращаемся к классу A, поэтому на экран будет выведено 3.<br />
@@ -309,19 +308,19 @@ System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span>
 <br />
 Другой пример:<br />
 <br /></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">A</span> <span style="color:#f92672">{</span>
-     <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 3<span style="color:#f92672">;</span>
-     <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">getI</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span><span style="color:#66d9ef">return</span> i<span style="color:#f92672">;}</span> 
-<span style="color:#f92672">}</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">A</span> <span class="o">{</span>
+     <span class="kd">static</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">3</span><span class="o">;</span>
+     <span class="kd">static</span> <span class="kt">int</span> <span class="nf">getI</span><span class="o">()</span> <span class="o">{</span><span class="k">return</span> <span class="n">i</span><span class="o">;}</span> 
+<span class="o">}</span>
 
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">B</span> <span style="color:#66d9ef">extends</span> A<span style="color:#f92672">{</span>
-     <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 5<span style="color:#f92672">;</span>
-     <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">getI</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span><span style="color:#66d9ef">return</span> i<span style="color:#f92672">;}</span>
-<span style="color:#f92672">}</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">B</span> <span class="kd">extends</span> <span class="n">A</span><span class="o">{</span>
+     <span class="kd">static</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">5</span><span class="o">;</span>
+     <span class="kd">static</span> <span class="kt">int</span> <span class="nf">getI</span><span class="o">()</span> <span class="o">{</span><span class="k">return</span> <span class="n">i</span><span class="o">;}</span>
+<span class="o">}</span>
 
-A a <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> B<span style="color:#f92672">();</span>
-System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>a<span style="color:#f92672">.</span><span style="color:#a6e22e">i</span><span style="color:#f92672">);</span>
-System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>a<span style="color:#f92672">.</span><span style="color:#a6e22e">getI</span><span style="color:#f92672">());</span></code></pre></div>
+<span class="n">A</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="n">B</span><span class="o">();</span>
+<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">a</span><span class="o">.</span><span class="na">i</span><span class="o">);</span>
+<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">a</span><span class="o">.</span><span class="na">getI</span><span class="o">());</span></code></pre></div>
 <p>Статические поля и методы виртуальными не являются, поэтому оба вызова выведут нам 3.</p>
 
         
@@ -346,106 +345,106 @@ System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span>
 
         
         <p><h5>Вступление</h5>Встала передо мной задача - сокращать ссылки перед тем, как отправлять их в Twitter. Для решения этой задачи я решил использовать <a href="http://bit.ly">bit.ly</a>, благо, их API внятный и простой.  <h5>Программируем!</h5>Решение нарисовалось в виде следующего класса:  <br /></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">import</span> org.apache.http.HttpEntity<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> org.apache.http.HttpResponse<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> org.apache.http.NameValuePair<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> org.apache.http.client.ClientProtocolException<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> org.apache.http.client.methods.HttpGet<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> org.apache.http.client.utils.URIUtils<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> org.apache.http.client.utils.URLEncodedUtils<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> org.apache.http.impl.client.DefaultHttpClient<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> org.apache.http.message.BasicNameValuePair<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> org.apache.http.util.EntityUtils<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> org.json.JSONException<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> org.json.JSONObject<span style="color:#f92672">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">org.apache.http.HttpEntity</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.HttpResponse</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.NameValuePair</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.ClientProtocolException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.methods.HttpGet</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.utils.URIUtils</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.utils.URLEncodedUtils</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.impl.client.DefaultHttpClient</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.message.BasicNameValuePair</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.util.EntityUtils</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.json.JSONException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.json.JSONObject</span><span class="o">;</span>
 
-<span style="color:#f92672">import</span> android.util.Log<span style="color:#f92672">;</span>
+<span class="kn">import</span> <span class="nn">android.util.Log</span><span class="o">;</span>
 
-<span style="color:#f92672">import</span> java.io.IOException<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> java.net.URI<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> java.net.URISyntaxException<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> java.util.ArrayList<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> java.util.List<span style="color:#f92672">;</span>
-
-
-<span style="color:#75715e">/**
-</span><span style="color:#75715e"> * Helper class to work with bitly.
-</span><span style="color:#75715e"> *
-</span><span style="color:#75715e"> * @author Oleg Atamanenko
-</span><span style="color:#75715e"> * @since 06-Dec-2010 12:49:36
-</span><span style="color:#75715e"> */</span>
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Bitly</span> <span style="color:#f92672">{</span>
-
-    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> String TAG <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Bitly&#34;</span><span style="color:#f92672">;</span>
-
-    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> String SHORTEN <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;/v3/shorten&#34;</span><span style="color:#f92672">;</span>
-    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> String API_URL <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;api.bit.ly&#34;</span><span style="color:#f92672">;</span>
-    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> String RESPONSE_FORMAT <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;json&#34;</span><span style="color:#f92672">;</span>
-
-    <span style="color:#66d9ef">private</span> String username<span style="color:#f92672">;</span>
-    <span style="color:#66d9ef">private</span> String apiKey<span style="color:#f92672">;</span>
+<span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.net.URI</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.net.URISyntaxException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
 
 
-    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">Bitly</span><span style="color:#f92672">(</span>String username<span style="color:#f92672">,</span> String apiKey<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">username</span> <span style="color:#f92672">=</span> username<span style="color:#f92672">;</span>
-        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">apiKey</span> <span style="color:#f92672">=</span> apiKey<span style="color:#f92672">;</span>
-    <span style="color:#f92672">}</span>
+<span class="cm">/**
+</span><span class="cm"> * Helper class to work with bitly.
+</span><span class="cm"> *
+</span><span class="cm"> * @author Oleg Atamanenko
+</span><span class="cm"> * @since 06-Dec-2010 12:49:36
+</span><span class="cm"> */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Bitly</span> <span class="o">{</span>
 
-    <span style="color:#66d9ef">public</span> String <span style="color:#a6e22e">shorten</span><span style="color:#f92672">(</span>String longUrl<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> BitlyException <span style="color:#f92672">{</span>
-        DefaultHttpClient httpClient <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> DefaultHttpClient<span style="color:#f92672">();</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">TAG</span> <span class="o">=</span> <span class="s">&#34;Bitly&#34;</span><span class="o">;</span>
 
-        <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
-            List<span style="color:#f92672">&lt;</span>NameValuePair<span style="color:#f92672">&gt;</span> params <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ArrayList<span style="color:#f92672">&lt;</span>NameValuePair<span style="color:#f92672">&gt;();</span>
-            params<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> BasicNameValuePair<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;login&#34;</span><span style="color:#f92672">,</span> username<span style="color:#f92672">));</span>
-            params<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> BasicNameValuePair<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;apiKey&#34;</span><span style="color:#f92672">,</span> apiKey<span style="color:#f92672">));</span>
-            params<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> BasicNameValuePair<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;longUrl&#34;</span><span style="color:#f92672">,</span> longUrl<span style="color:#f92672">));</span>
-            params<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> BasicNameValuePair<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;format&#34;</span><span style="color:#f92672">,</span> RESPONSE_FORMAT<span style="color:#f92672">));</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">SHORTEN</span> <span class="o">=</span> <span class="s">&#34;/v3/shorten&#34;</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">API_URL</span> <span class="o">=</span> <span class="s">&#34;api.bit.ly&#34;</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">RESPONSE_FORMAT</span> <span class="o">=</span> <span class="s">&#34;json&#34;</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">username</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">apiKey</span><span class="o">;</span>
 
 
-            URI uri <span style="color:#f92672">=</span> URIUtils<span style="color:#f92672">.</span><span style="color:#a6e22e">createURI</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;http&#34;</span><span style="color:#f92672">,</span> API_URL<span style="color:#f92672">,</span> <span style="color:#f92672">-</span>1<span style="color:#f92672">,</span> SHORTEN<span style="color:#f92672">,</span> URLEncodedUtils<span style="color:#f92672">.</span><span style="color:#a6e22e">format</span><span style="color:#f92672">(</span>params<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;UTF-8&#34;</span><span style="color:#f92672">),</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">);</span>
-            HttpGet request <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> HttpGet<span style="color:#f92672">(</span>uri<span style="color:#f92672">);</span>
+    <span class="kd">public</span> <span class="nf">Bitly</span><span class="o">(</span><span class="n">String</span> <span class="n">username</span><span class="o">,</span> <span class="n">String</span> <span class="n">apiKey</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">username</span> <span class="o">=</span> <span class="n">username</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">apiKey</span> <span class="o">=</span> <span class="n">apiKey</span><span class="o">;</span>
+    <span class="o">}</span>
 
-            Log<span style="color:#f92672">.</span><span style="color:#a6e22e">d</span><span style="color:#f92672">(</span>TAG<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;Sending request: &#34;</span> <span style="color:#f92672">+</span> request<span style="color:#f92672">.</span><span style="color:#a6e22e">getURI</span><span style="color:#f92672">());</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">shorten</span><span class="o">(</span><span class="n">String</span> <span class="n">longUrl</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">BitlyException</span> <span class="o">{</span>
+        <span class="n">DefaultHttpClient</span> <span class="n">httpClient</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DefaultHttpClient</span><span class="o">();</span>
 
-            HttpResponse httpResponse <span style="color:#f92672">=</span> httpClient<span style="color:#f92672">.</span><span style="color:#a6e22e">execute</span><span style="color:#f92672">(</span>request<span style="color:#f92672">);</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">List</span><span class="o">&lt;</span><span class="n">NameValuePair</span><span class="o">&gt;</span> <span class="n">params</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">NameValuePair</span><span class="o">&gt;();</span>
+            <span class="n">params</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">BasicNameValuePair</span><span class="o">(</span><span class="s">&#34;login&#34;</span><span class="o">,</span> <span class="n">username</span><span class="o">));</span>
+            <span class="n">params</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">BasicNameValuePair</span><span class="o">(</span><span class="s">&#34;apiKey&#34;</span><span class="o">,</span> <span class="n">apiKey</span><span class="o">));</span>
+            <span class="n">params</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">BasicNameValuePair</span><span class="o">(</span><span class="s">&#34;longUrl&#34;</span><span class="o">,</span> <span class="n">longUrl</span><span class="o">));</span>
+            <span class="n">params</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">BasicNameValuePair</span><span class="o">(</span><span class="s">&#34;format&#34;</span><span class="o">,</span> <span class="n">RESPONSE_FORMAT</span><span class="o">));</span>
 
-            HttpEntity httpEntity <span style="color:#f92672">=</span> httpResponse<span style="color:#f92672">.</span><span style="color:#a6e22e">getEntity</span><span style="color:#f92672">();</span>
-            String response <span style="color:#f92672">=</span> EntityUtils<span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">(</span>httpEntity<span style="color:#f92672">);</span>
-            Log<span style="color:#f92672">.</span><span style="color:#a6e22e">i</span><span style="color:#f92672">(</span>TAG<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;Bitly response is: &#34;</span> <span style="color:#f92672">+</span> response<span style="color:#f92672">);</span>
-            httpResponse<span style="color:#f92672">.</span><span style="color:#a6e22e">getEntity</span><span style="color:#f92672">().</span><span style="color:#a6e22e">consumeContent</span><span style="color:#f92672">();</span>
 
-            JSONObject jsonResponse <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> JSONObject<span style="color:#f92672">(</span>response<span style="color:#f92672">);</span>
+            <span class="n">URI</span> <span class="n">uri</span> <span class="o">=</span> <span class="n">URIUtils</span><span class="o">.</span><span class="na">createURI</span><span class="o">(</span><span class="s">&#34;http&#34;</span><span class="o">,</span> <span class="n">API_URL</span><span class="o">,</span> <span class="o">-</span><span class="n">1</span><span class="o">,</span> <span class="n">SHORTEN</span><span class="o">,</span> <span class="n">URLEncodedUtils</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="n">params</span><span class="o">,</span> <span class="s">&#34;UTF-8&#34;</span><span class="o">),</span> <span class="kc">null</span><span class="o">);</span>
+            <span class="n">HttpGet</span> <span class="n">request</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HttpGet</span><span class="o">(</span><span class="n">uri</span><span class="o">);</span>
 
-            checkForExceptions<span style="color:#f92672">(</span>jsonResponse<span style="color:#f92672">);</span>
+            <span class="n">Log</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span> <span class="s">&#34;Sending request: &#34;</span> <span class="o">+</span> <span class="n">request</span><span class="o">.</span><span class="na">getURI</span><span class="o">());</span>
 
-            JSONObject data <span style="color:#f92672">=</span> jsonResponse<span style="color:#f92672">.</span><span style="color:#a6e22e">getJSONObject</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;data&#34;</span><span style="color:#f92672">);</span>
-            <span style="color:#66d9ef">return</span> data<span style="color:#f92672">.</span><span style="color:#a6e22e">getString</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;url&#34;</span><span style="color:#f92672">);</span>
+            <span class="n">HttpResponse</span> <span class="n">httpResponse</span> <span class="o">=</span> <span class="n">httpClient</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="n">request</span><span class="o">);</span>
 
-        <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>ClientProtocolException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-            <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> BitlyException<span style="color:#f92672">(</span>e<span style="color:#f92672">);</span>
-        <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>IOException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-            <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> BitlyException<span style="color:#f92672">(</span>e<span style="color:#f92672">);</span>
-        <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>JSONException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-            <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> BitlyException<span style="color:#f92672">(</span>e<span style="color:#f92672">);</span>
-        <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>URISyntaxException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-            <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> BitlyException<span style="color:#f92672">(</span>e<span style="color:#f92672">);</span>
-        <span style="color:#f92672">}</span>
-    <span style="color:#f92672">}</span>
+            <span class="n">HttpEntity</span> <span class="n">httpEntity</span> <span class="o">=</span> <span class="n">httpResponse</span><span class="o">.</span><span class="na">getEntity</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">response</span> <span class="o">=</span> <span class="n">EntityUtils</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">httpEntity</span><span class="o">);</span>
+            <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span> <span class="s">&#34;Bitly response is: &#34;</span> <span class="o">+</span> <span class="n">response</span><span class="o">);</span>
+            <span class="n">httpResponse</span><span class="o">.</span><span class="na">getEntity</span><span class="o">().</span><span class="na">consumeContent</span><span class="o">();</span>
 
-    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">checkForExceptions</span><span style="color:#f92672">(</span>JSONObject jsonResponse<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> JSONException<span style="color:#f92672">,</span> BitlyException <span style="color:#f92672">{</span>
-        <span style="color:#66d9ef">int</span> statusCode <span style="color:#f92672">=</span> jsonResponse<span style="color:#f92672">.</span><span style="color:#a6e22e">getInt</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;status_code&#34;</span><span style="color:#f92672">);</span>
-        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>statusCode <span style="color:#f92672">!=</span> 200<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-            String message <span style="color:#f92672">=</span> jsonResponse<span style="color:#f92672">.</span><span style="color:#a6e22e">getString</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;status_txt&#34;</span><span style="color:#f92672">);</span>
-            <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> BitlyException<span style="color:#f92672">(</span>message<span style="color:#f92672">);</span>
-        <span style="color:#f92672">}</span>
-    <span style="color:#f92672">}</span>
+            <span class="n">JSONObject</span> <span class="n">jsonResponse</span> <span class="o">=</span> <span class="k">new</span> <span class="n">JSONObject</span><span class="o">(</span><span class="n">response</span><span class="o">);</span>
 
-<span style="color:#f92672">}</span></code></pre></div>
+            <span class="n">checkForExceptions</span><span class="o">(</span><span class="n">jsonResponse</span><span class="o">);</span>
+
+            <span class="n">JSONObject</span> <span class="n">data</span> <span class="o">=</span> <span class="n">jsonResponse</span><span class="o">.</span><span class="na">getJSONObject</span><span class="o">(</span><span class="s">&#34;data&#34;</span><span class="o">);</span>
+            <span class="k">return</span> <span class="n">data</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">&#34;url&#34;</span><span class="o">);</span>
+
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ClientProtocolException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="n">BitlyException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="n">BitlyException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">JSONException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="n">BitlyException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">URISyntaxException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="n">BitlyException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">checkForExceptions</span><span class="o">(</span><span class="n">JSONObject</span> <span class="n">jsonResponse</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">JSONException</span><span class="o">,</span> <span class="n">BitlyException</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">statusCode</span> <span class="o">=</span> <span class="n">jsonResponse</span><span class="o">.</span><span class="na">getInt</span><span class="o">(</span><span class="s">&#34;status_code&#34;</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">statusCode</span> <span class="o">!=</span> <span class="n">200</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">String</span> <span class="n">message</span> <span class="o">=</span> <span class="n">jsonResponse</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">&#34;status_txt&#34;</span><span class="o">);</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="n">BitlyException</span><span class="o">(</span><span class="n">message</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+<span class="o">}</span></code></pre></div>
 <p>Конструктор класс принимает на вход следующие параметры: <ul><li><code>userName</code> - имя пользователя bit.ly.</li>
 <li><code>apiKey</code> - Ключ для доступа к API, его можно узнать на <a href="https://bit.ly/a/your_api_key">специальной страничке</a></li>
 </ul><a href="https://code.google.com/p/bitly-api/wiki/ApiDocumentation">Полная документация к Bit.ly API</a> расположена на отдельном проекте в Google Code  <h5>Использование</h5>Единственный метод, реализованный сейчас - это метод <code>shorten()</code>. На вход требуется подать полную ссылку <code>longUrl</code>, на выходе получается укороченная версия ссылки, либо кидается исключение с сообщением от bit.ly API.   <h6>Пример вызова</h6></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">Bitly bitly <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Bitly<span style="color:#f92672">(</span>BITLY_USERNAME<span style="color:#f92672">,</span> BITLY_API_KEY<span style="color:#f92672">);</span>
-String shortLink <span style="color:#f92672">=</span> bitly<span style="color:#f92672">.</span><span style="color:#a6e22e">shorten</span><span style="color:#f92672">(</span>link<span style="color:#f92672">);</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">Bitly</span> <span class="n">bitly</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Bitly</span><span class="o">(</span><span class="n">BITLY_USERNAME</span><span class="o">,</span> <span class="n">BITLY_API_KEY</span><span class="o">);</span>
+<span class="n">String</span> <span class="n">shortLink</span> <span class="o">=</span> <span class="n">bitly</span><span class="o">.</span><span class="na">shorten</span><span class="o">(</span><span class="n">link</span><span class="o">);</span></code></pre></div>
 <p><h6>Дальнейшие улучшения</h6>Если перед вами стоит задача быстренько сократить ссылку - то вышеприведённого кода достаточно. Но если вам нужно полноценное решение, со всеми возможностями bit.ly - то посмотрите в сторону <a href="https://code.google.com/p/bitlyj/">bitlyj</a>. Правда, я не уверен, что оно взведётся под андроидом.</p>
 
         
@@ -470,18 +469,18 @@ String shortLink <span style="color:#f92672">=</span> bitly<span style="color:#f
 
         
         <p>Возникла проблема - каким образом заменить в строке символы из национальных кодировок на соответствующие им из латиницы.</p><p>Например, из строки explicación получить explicacion.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">package</span> com.blogspot.atamanenko<span style="color:#f92672">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.blogspot.atamanenko</span><span class="o">;</span>
 
-<span style="color:#f92672">import</span> java.text.Normalizer<span style="color:#f92672">;</span>
-<span style="color:#f92672">import</span> java.text.Normalizer.Form<span style="color:#f92672">;</span>
+<span class="kn">import</span> <span class="nn">java.text.Normalizer</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.text.Normalizer.Form</span><span class="o">;</span>
 
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">StringNormalizer</span> <span style="color:#f92672">{</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">StringNormalizer</span> <span class="o">{</span>
 
-    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> String <span style="color:#a6e22e">normalize</span><span style="color:#f92672">(</span>String string<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        <span style="color:#66d9ef">return</span> Normalizer<span style="color:#f92672">.</span><span style="color:#a6e22e">normalize</span><span style="color:#f92672">(</span>string<span style="color:#f92672">,</span> Form<span style="color:#f92672">.</span><span style="color:#a6e22e">NFD</span><span style="color:#f92672">)</span>
-            <span style="color:#f92672">.</span><span style="color:#a6e22e">replaceAll</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;\\p{InCombiningDiacriticalMarks}+&#34;</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span>
-<span style="color:#f92672">}</span></code></pre></div>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">normalize</span><span class="o">(</span><span class="n">String</span> <span class="n">string</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">Normalizer</span><span class="o">.</span><span class="na">normalize</span><span class="o">(</span><span class="n">string</span><span class="o">,</span> <span class="n">Form</span><span class="o">.</span><span class="na">NFD</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">replaceAll</span><span class="o">(</span><span class="s">&#34;\\p{InCombiningDiacriticalMarks}+&#34;</span><span class="o">,</span> <span class="s">&#34;&#34;</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
 <p>Вызов <a href='http://java.sun.com/javase/6/docs/api/java/text/Normalizer.html#normalize%28java.lang.CharSequence,%20java.text.Normalizer.Form%29'>Normalizer.normalize</a> проводит <a href='http://www.unicode.org/reports/tr15/tr15-23.html'>нормализацию</a> входной строки. Последующий вызов регулярного выражения удаляет все диакритические знаки, полученные после нормализации.</p>
 
         
@@ -511,93 +510,93 @@ String shortLink <span style="color:#f92672">=</span> bitly<span style="color:#f
 <p>Установка фреймворка осуществляется двумя способами - как отдельное приложение и как плагин для Maven.</p>
 <h5>Установка под Maven</h5>
 <p>Для использования Databene benerator в проектах, использующих для сборки Apache Maven необходимо добавить в зависимости databene-benerator и сконфигурировать его.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml">&amp;lt;project xmlns=&amp;quot;http://maven.apache.org/POM/4.0.0&amp;quot; xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
-         xsi:schemaLocation=&amp;quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd&amp;quot;&amp;gt;
-  &amp;lt;modelVersion&amp;gt;4.0.0&amp;lt;/modelVersion&amp;gt;
-  &amp;lt;groupId&amp;gt;com.myorganization&amp;lt;/groupId&amp;gt;
-  &amp;lt;artifactId&amp;gt;databene-benerator-test&amp;lt;/artifactId&amp;gt;
-  &amp;lt;version&amp;gt;1.0&amp;lt;/version&amp;gt;
-  &amp;lt;packaging&amp;gt;jar&amp;lt;/packaging&amp;gt;
-  &amp;lt;name&amp;gt;data generation project&amp;lt;/name&amp;gt;
-  &amp;lt;dependencies&amp;gt;
-    &amp;lt;dependency&amp;gt;
-      &amp;lt;groupId&amp;gt;org.databene&amp;lt;/groupId&amp;gt;
-      &amp;lt;artifactId&amp;gt;databene-benerator&amp;lt;/artifactId&amp;gt;
-      &amp;lt;version&amp;gt;0.5.9&amp;lt;/version&amp;gt;
-    &amp;lt;/dependency&amp;gt;
-    &amp;lt;dependency&amp;gt;
-      &amp;lt;groupId&amp;gt;org.databene&amp;lt;/groupId&amp;gt;
-      &amp;lt;artifactId&amp;gt;databene-webdecs&amp;lt;/artifactId&amp;gt;
-      &amp;lt;version&amp;gt;0.4.9&amp;lt;/version&amp;gt;
-    &amp;lt;/dependency&amp;gt;
-    &amp;lt;dependency&amp;gt;
-      &amp;lt;groupId&amp;gt;org.databene&amp;lt;/groupId&amp;gt;
-      &amp;lt;artifactId&amp;gt;databene-commons&amp;lt;/artifactId&amp;gt;
-      &amp;lt;version&amp;gt;0.4.9&amp;lt;/version&amp;gt;
-    &amp;lt;/dependency&amp;gt;
-    &amp;lt;dependency&amp;gt;
-      &amp;lt;groupId&amp;gt;mysql&amp;lt;/groupId&amp;gt;
-      &amp;lt;artifactId&amp;gt;mysql-connector-java&amp;lt;/artifactId&amp;gt;
-      &amp;lt;version&amp;gt;5.1.6&amp;lt;/version&amp;gt;
-    &amp;lt;/dependency&amp;gt;
-  &amp;lt;/dependencies&amp;gt;
-  &amp;lt;build&amp;gt;
-    &amp;lt;resources&amp;gt;
-      &amp;lt;resource&amp;gt;
-        &amp;lt;directory&amp;gt;src/main/resources&amp;lt;/directory&amp;gt;
-        &amp;lt;filtering&amp;gt;true&amp;lt;/filtering&amp;gt;
-      &amp;lt;/resource&amp;gt;
-    &amp;lt;/resources&amp;gt;
-    &amp;lt;plugins&amp;gt;
-      &amp;lt;plugin&amp;gt;
-        &amp;lt;groupId&amp;gt;org.apache.maven.plugins&amp;lt;/groupId&amp;gt;
-        &amp;lt;artifactId&amp;gt;maven-compiler-plugin&amp;lt;/artifactId&amp;gt;
-        &amp;lt;configuration&amp;gt;
-          &amp;lt;encoding&amp;gt;UTF-8&amp;lt;/encoding&amp;gt;
-          &amp;lt;source&amp;gt;1.5&amp;lt;/source&amp;gt;
-          &amp;lt;target&amp;gt;1.5&amp;lt;/target&amp;gt;
-        &amp;lt;/configuration&amp;gt;
-      &amp;lt;/plugin&amp;gt;
-      &amp;lt;plugin&amp;gt;
-        &amp;lt;groupId&amp;gt;org.databene&amp;lt;/groupId&amp;gt;
-        &amp;lt;artifactId&amp;gt;maven-benerator-plugin&amp;lt;/artifactId&amp;gt;
-        &amp;lt;version&amp;gt;0.5.9&amp;lt;/version&amp;gt;
-        &amp;lt;executions&amp;gt;
-          &amp;lt;execution&amp;gt;
-            &amp;lt;phase&amp;gt;compile&amp;lt;/phase&amp;gt;
-            &amp;lt;goals&amp;gt;
-              &amp;lt;goal&amp;gt;generate&amp;lt;/goal&amp;gt;
-            &amp;lt;/goals&amp;gt;
-          &amp;lt;/execution&amp;gt;
-        &amp;lt;/executions&amp;gt;
-        &amp;lt;configuration&amp;gt;
-          &amp;lt;descriptor&amp;gt;src/main/resources/benerator.ben.xml&amp;lt;/descriptor&amp;gt;
-          &amp;lt;encoding&amp;gt;UTF-8&amp;lt;/encoding&amp;gt;
-          &amp;lt;validate&amp;gt;true&amp;lt;/validate&amp;gt;
-          &amp;lt;dbUrl&amp;gt;jdbc:mysql://localhost:3306/hrtool?useUnicode=true&amp;amp;characterEncoding=UTF-8&amp;lt;/dbUrl&amp;gt;
-          &amp;lt;dbDriver&amp;gt;com.mysql.jdbc.Driver&amp;lt;/dbDriver&amp;gt;
-          &amp;lt;dbSchema&amp;gt;database&amp;lt;/dbSchema&amp;gt;
-          &amp;lt;dbUser&amp;gt;user&amp;lt;/dbUser&amp;gt;
-          &amp;lt;dbPassword&amp;gt;password&amp;lt;/dbPassword&amp;gt;
-        &amp;lt;/configuration&amp;gt;
-        &amp;lt;dependencies&amp;gt;
-        &amp;lt;dependency&amp;gt;
-            &amp;lt;groupId&amp;gt;log4j&amp;lt;/groupId&amp;gt;
-            &amp;lt;artifactId&amp;gt;log4j&amp;lt;/artifactId&amp;gt;
-            &amp;lt;version&amp;gt;1.2.13&amp;lt;/version&amp;gt;
-            &amp;lt;scope&amp;gt;runtime&amp;lt;/scope&amp;gt;
-          &amp;lt;/dependency&amp;gt;
-          &amp;lt;dependency&amp;gt;
-            &amp;lt;groupId&amp;gt;org.apache.poi&amp;lt;/groupId&amp;gt;
-            &amp;lt;artifactId&amp;gt;poi&amp;lt;/artifactId&amp;gt;
-            &amp;lt;version&amp;gt;3.5-beta5&amp;lt;/version&amp;gt;
-            &amp;lt;scope&amp;gt;runtime&amp;lt;/scope&amp;gt;
-          &amp;lt;/dependency&amp;gt;
-        &amp;lt;/dependencies&amp;gt;
-      &amp;lt;/plugin&amp;gt;
-    &amp;lt;/plugins&amp;gt;
-  &amp;lt;/build&amp;gt;
-&amp;lt;/project&amp;gt;</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="ni">&amp;lt;</span>project xmlns=<span class="ni">&amp;quot;</span>http://maven.apache.org/POM/4.0.0<span class="ni">&amp;quot;</span> xmlns:xsi=<span class="ni">&amp;quot;</span>http://www.w3.org/2001/XMLSchema-instance<span class="ni">&amp;quot;</span>
+         xsi:schemaLocation=<span class="ni">&amp;quot;</span>http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd<span class="ni">&amp;quot;&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>modelVersion<span class="ni">&amp;gt;</span>4.0.0<span class="ni">&amp;lt;</span>/modelVersion<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>com.myorganization<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>databene-benerator-test<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>1.0<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>packaging<span class="ni">&amp;gt;</span>jar<span class="ni">&amp;lt;</span>/packaging<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>name<span class="ni">&amp;gt;</span>data generation project<span class="ni">&amp;lt;</span>/name<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>dependencies<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.databene<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>databene-benerator<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>0.5.9<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.databene<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>databene-webdecs<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>0.4.9<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.databene<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>databene-commons<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>0.4.9<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>mysql<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>mysql-connector-java<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>5.1.6<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>/dependencies<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>build<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>resources<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>resource<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>directory<span class="ni">&amp;gt;</span>src/main/resources<span class="ni">&amp;lt;</span>/directory<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>filtering<span class="ni">&amp;gt;</span>true<span class="ni">&amp;lt;</span>/filtering<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>/resource<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>/resources<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>plugins<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>plugin<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.apache.maven.plugins<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>maven-compiler-plugin<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>configuration<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>encoding<span class="ni">&amp;gt;</span>UTF-8<span class="ni">&amp;lt;</span>/encoding<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>source<span class="ni">&amp;gt;</span>1.5<span class="ni">&amp;lt;</span>/source<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>target<span class="ni">&amp;gt;</span>1.5<span class="ni">&amp;lt;</span>/target<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>/configuration<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>/plugin<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>plugin<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.databene<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>maven-benerator-plugin<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>0.5.9<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>executions<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>execution<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>phase<span class="ni">&amp;gt;</span>compile<span class="ni">&amp;lt;</span>/phase<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>goals<span class="ni">&amp;gt;</span>
+              <span class="ni">&amp;lt;</span>goal<span class="ni">&amp;gt;</span>generate<span class="ni">&amp;lt;</span>/goal<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>/goals<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>/execution<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>/executions<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>configuration<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>descriptor<span class="ni">&amp;gt;</span>src/main/resources/benerator.ben.xml<span class="ni">&amp;lt;</span>/descriptor<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>encoding<span class="ni">&amp;gt;</span>UTF-8<span class="ni">&amp;lt;</span>/encoding<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>validate<span class="ni">&amp;gt;</span>true<span class="ni">&amp;lt;</span>/validate<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>dbUrl<span class="ni">&amp;gt;</span>jdbc:mysql://localhost:3306/hrtool?useUnicode=true<span class="ni">&amp;amp;</span>characterEncoding=UTF-8<span class="ni">&amp;lt;</span>/dbUrl<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>dbDriver<span class="ni">&amp;gt;</span>com.mysql.jdbc.Driver<span class="ni">&amp;lt;</span>/dbDriver<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>dbSchema<span class="ni">&amp;gt;</span>database<span class="ni">&amp;lt;</span>/dbSchema<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>dbUser<span class="ni">&amp;gt;</span>user<span class="ni">&amp;lt;</span>/dbUser<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>dbPassword<span class="ni">&amp;gt;</span>password<span class="ni">&amp;lt;</span>/dbPassword<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>/configuration<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>dependencies<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>log4j<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>log4j<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>1.2.13<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>scope<span class="ni">&amp;gt;</span>runtime<span class="ni">&amp;lt;</span>/scope<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.apache.poi<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>poi<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>3.5-beta5<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>scope<span class="ni">&amp;gt;</span>runtime<span class="ni">&amp;lt;</span>/scope<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>/dependencies<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>/plugin<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>/plugins<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>/build<span class="ni">&amp;gt;</span>
+<span class="ni">&amp;lt;</span>/project<span class="ni">&amp;gt;</span></code></pre></div>
 <p>В конфигурации необходимо указать как минимум следующие параметры:</p>
 <ol><li><span style=" font-family:'Courier New,courier';">dbUrl</span> - строка подключения к базе данных в формате JDBC</li>
 <li><span style=" font-family:'Courier New,courier';">dbDriver</span> - используемый драйвер базы данных</li>
@@ -647,26 +646,26 @@ String shortLink <span style="color:#f92672">=</span> bitly<span style="color:#f
 <h4></h4>
 <h4>Маппинг один-ко-многим</h4>
 <p>По умолчанию <tt>GORM</tt> для связей <em>один ко многим</em> (one-to-many) <a href="http://www.grails.org/doc/latest/guide/5.%20Object%20Relational%20Mapping%20%28GORM%29.html#5.2.1.2%20One-to-many" title="Grails will, by default, map this kind of relationship with a join table.">создаёт таблицу-связку</a>, которая обычно нужна только при связях между сущностями вида <em>многие ко многим</em>. Чтобы исправить это поведение необходимо указать <tt>GORM</tt>, чтобы он не создавал таблицу связку.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Person</span> <span style="color:#66d9ef">implements</span> Serializable <span style="color:#f92672">{</span>
-  <span style="color:#66d9ef">static</span> hasMany <span style="color:#f92672">=</span> <span style="color:#f92672">[</span>
-    scores: ScoreSheet
-  <span style="color:#f92672">]</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">Person</span> <span class="kd">implements</span> <span class="n">Serializable</span> <span class="o">{</span>
+  <span class="kd">static</span> <span class="n">hasMany</span> <span class="o">=</span> <span class="o">[</span><span class="nl">
+</span><span class="nl">    scores:</span> <span class="n">ScoreSheet</span>
+  <span class="o">]</span>
   
-  <span style="color:#66d9ef">static</span> mapping <span style="color:#f92672">=</span> <span style="color:#f92672">{</span>
-    scores joinTable: <span style="color:#66d9ef">false</span>
-  <span style="color:#f92672">};</span>
-<span style="color:#f92672">}</span></code></pre></div>
+  <span class="kd">static</span> <span class="n">mapping</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">scores</span> <span class="nl">joinTable:</span> <span class="kc">false</span>
+  <span class="o">};</span>
+<span class="o">}</span></code></pre></div>
 <p><h4>Использование однонаправленных связей</h4>
 <p>Если в приложении используются двунаправленные связи и вероятность изменения сущности одновременно несколькими пользователями высокая, то лучше использовать однонаправленные связи для сущностей. Кроме того, лучше проектировать доменные классы таким образом, чтобы связь была не один-ко-многим, а многие к одному.</p></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Note</span> <span style="color:#66d9ef">implements</span> Serializable <span style="color:#f92672">{</span>
-  <span style="color:#66d9ef">static</span> belongsTo <span style="color:#f92672">=</span> <span style="color:#f92672">[</span>
-    person: Person
-  <span style="color:#f92672">]</span>
-<span style="color:#f92672">}</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">Note</span> <span class="kd">implements</span> <span class="n">Serializable</span> <span class="o">{</span>
+  <span class="kd">static</span> <span class="n">belongsTo</span> <span class="o">=</span> <span class="o">[</span><span class="nl">
+</span><span class="nl">    person:</span> <span class="n">Person</span>
+  <span class="o">]</span>
+<span class="o">}</span>
 
-<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Person</span> <span style="color:#66d9ef">implements</span> Serializable <span style="color:#f92672">{</span>
-  <span style="color:#75715e">// person fields.
-</span><span style="color:#75715e"></span><span style="color:#f92672">}</span></code></pre></div>
+<span class="kd">class</span> <span class="nc">Person</span> <span class="kd">implements</span> <span class="n">Serializable</span> <span class="o">{</span>
+  <span class="c1">// person fields.
+</span><span class="c1"></span><span class="o">}</span></code></pre></div>
 <p>Для работы с <tt>Notes</tt> необходимо использовать такие запросы: </p>
 <pre class="brush: java">
   Note.findByPerson(person).each { -&gt; };
@@ -677,19 +676,19 @@ String shortLink <span style="color:#f92672">=</span> bitly<span style="color:#f
 </pre>
 <h4>Маппинг иерархии классов доменных сущностей</h4>
 <p>GORM поддерживает только <a href="http://www.grails.org/doc/latest/guide/5.%20Object%20Relational%20Mapping%20%28GORM%29.html#5.2.3%20Inheritance%20in%20GORM">два варианта </a>маппинга иерархии классов, в отличии от <a href="http://docs.jboss.org/hibernate/stable/core/reference/en/html/inheritance.html">Hibernate</a>: Таблица на всю иерархию (<tt>table-per-hierarchy</tt>), или таблица на каждый подкласс (<tt>table-per-subclass</tt>). У маппинга <tt>table-per-hierarchy</tt> есть серьёзный недостаток - подклассы не могут иметь ненулевые поля. Поэтому, если этот недостаток критичен, то необходимо использовать маппинг <tt>table-per-subclass</tt>.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Payment</span> <span style="color:#f92672">{</span>
-  Long id
-  Long version
-  Integer amount
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">Payment</span> <span class="o">{</span>
+  <span class="n">Long</span> <span class="n">id</span>
+  <span class="n">Long</span> <span class="n">version</span>
+  <span class="n">Integer</span> <span class="n">amount</span>
 
-  <span style="color:#66d9ef">static</span> mapping <span style="color:#f92672">=</span> <span style="color:#f92672">{</span>
-    tablePerHierarchy <span style="color:#66d9ef">false</span>
-  <span style="color:#f92672">}</span>
-<span style="color:#f92672">}</span>
+  <span class="kd">static</span> <span class="n">mapping</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">tablePerHierarchy</span> <span class="kc">false</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 
-<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CreditCardPayment</span> <span style="color:#66d9ef">extends</span> Payment <span style="color:#f92672">{</span>
-  String cardNumber
-<span style="color:#f92672">}</span></code></pre></div>
+<span class="kd">class</span> <span class="nc">CreditCardPayment</span> <span class="kd">extends</span> <span class="n">Payment</span> <span class="o">{</span>
+  <span class="n">String</span> <span class="n">cardNumber</span>
+<span class="o">}</span></code></pre></div>
         
 
     </article>
@@ -718,62 +717,62 @@ String shortLink <span style="color:#f92672">=</span> bitly<span style="color:#f
 
 <p><h4>Используем dbus-send</h4>
 <p>Сначала я использовал обычный dbus-send, что оформилось в виде следующего скрипта <tt>go2home</tt>:</p></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">#!/bin/sh
-</span><span style="color:#75715e"></span>
-<span style="color:#75715e"># Stop amarok
-</span><span style="color:#75715e"></span>dbus-send --session --type<span style="color:#f92672">=</span>method_call --dest<span style="color:#f92672">=</span>org.kde.amarok /Player org.freedesktop.MediaPlayer.Stop
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="cp">#!/bin/sh
+</span><span class="cp"></span>
+<span class="c1"># Stop amarok
+</span><span class="c1"></span>dbus-send --session --type<span class="o">=</span>method_call --dest<span class="o">=</span>org.kde.amarok /Player org.freedesktop.MediaPlayer.Stop
 
-<span style="color:#75715e"># Logout from kopete
-</span><span style="color:#75715e"></span>dbus-send --session --type<span style="color:#f92672">=</span>method_call --dest<span style="color:#f92672">=</span>org.kde.kopete /Kopete org.kde.Kopete.disconnectAll 
+<span class="c1"># Logout from kopete
+</span><span class="c1"></span>dbus-send --session --type<span class="o">=</span>method_call --dest<span class="o">=</span>org.kde.kopete /Kopete org.kde.Kopete.disconnectAll 
 
-<span style="color:#75715e"># Logout from Skype
-</span><span style="color:#75715e"></span>skypeapi.py <span style="color:#e6db74">&#39;SET USERSTATUS OFFLINE&#39;</span>
+<span class="c1"># Logout from Skype
+</span><span class="c1"></span>skypeapi.py <span class="s1">&#39;SET USERSTATUS OFFLINE&#39;</span>
 
-<span style="color:#75715e"># Lock screen
-</span><span style="color:#75715e"></span>dbus-send --session --type<span style="color:#f92672">=</span>method_call --dest<span style="color:#f92672">=</span>org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.Lock</code></pre></div>
+<span class="c1"># Lock screen
+</span><span class="c1"></span>dbus-send --session --type<span class="o">=</span>method_call --dest<span class="o">=</span>org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.Lock</code></pre></div>
 <p>Детали и параметры работы команды <tt>dbus-send</tt> описаны в <a href="http://dbus.freedesktop.org/doc/dbus-send.1.html">man-странице</a></p>
 
 <p><h4>Проблема со скайпом</h4>
 <p> Со скайпом пришлось немного повозиться, так как для работы с ним необходима постоянная сессия, что нельзя сделать с помощью <tt>dbus-send</tt>. </p>
 <p>Прочитав <a href="https://developer.skype.com/Docs/ApiDoc">описание протокола</a> на сайте </p>
 <p> был создан нижеследующий скрипт: skypeapi.py</p></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Python" data-lang="Python"><span style="color:#75715e">#!/usr/bin/env python</span>
-<span style="color:#f92672">import</span> dbus<span style="color:#f92672">,</span> sys
+<div class="highlight"><pre class="chroma"><code class="language-Python" data-lang="Python"><span class="ch">#!/usr/bin/env python</span>
+<span class="kn">import</span> <span class="nn">dbus</span><span class="o">,</span> <span class="nn">sys</span>
 
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">main</span>():
-    remote_bus <span style="color:#f92672">=</span> dbus<span style="color:#f92672">.</span>SessionBus()
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">remote_bus</span> <span class="o">=</span> <span class="n">dbus</span><span class="o">.</span><span class="n">SessionBus</span><span class="p">()</span>
     
-    <span style="color:#75715e"># Check if skype is running.</span>
-    system_service_list <span style="color:#f92672">=</span> remote_bus<span style="color:#f92672">.</span>get_object(<span style="color:#e6db74">&#39;org.freedesktop.DBus&#39;</span>, <span style="color:#e6db74">&#39;/org/freedesktop/DBus&#39;</span>)<span style="color:#f92672">.</span>ListNames()
-    skype_api_found <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
-    <span style="color:#66d9ef">for</span> service <span style="color:#f92672">in</span> system_service_list:
-        <span style="color:#66d9ef">if</span> service<span style="color:#f92672">==</span><span style="color:#e6db74">&#39;com.Skype.API&#39;</span>:
-            skype_api_found <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
-            <span style="color:#66d9ef">break</span>
-    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> skype_api_found:
-        sys<span style="color:#f92672">.</span>exit(<span style="color:#e6db74">&#39;No running API-capable Skype found&#39;</span>)
+    <span class="c1"># Check if skype is running.</span>
+    <span class="n">system_service_list</span> <span class="o">=</span> <span class="n">remote_bus</span><span class="o">.</span><span class="n">get_object</span><span class="p">(</span><span class="s1">&#39;org.freedesktop.DBus&#39;</span><span class="p">,</span> <span class="s1">&#39;/org/freedesktop/DBus&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">ListNames</span><span class="p">()</span>
+    <span class="n">skype_api_found</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">system_service_list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">service</span><span class="o">==</span><span class="s1">&#39;com.Skype.API&#39;</span><span class="p">:</span>
+            <span class="n">skype_api_found</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">break</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">skype_api_found</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="nb">exit</span><span class="p">(</span><span class="s1">&#39;No running API-capable Skype found&#39;</span><span class="p">)</span>
 
-    <span style="color:#75715e"># Get skype dbus api</span>
-    skype_service <span style="color:#f92672">=</span> remote_bus<span style="color:#f92672">.</span>get_object(<span style="color:#e6db74">&#39;com.Skype.API&#39;</span>, <span style="color:#e6db74">&#39;/com/Skype&#39;</span>)
+    <span class="c1"># Get skype dbus api</span>
+    <span class="n">skype_service</span> <span class="o">=</span> <span class="n">remote_bus</span><span class="o">.</span><span class="n">get_object</span><span class="p">(</span><span class="s1">&#39;com.Skype.API&#39;</span><span class="p">,</span> <span class="s1">&#39;/com/Skype&#39;</span><span class="p">)</span>
 
-    <span style="color:#75715e"># Connect to skype.</span>
-    answer <span style="color:#f92672">=</span> skype_service<span style="color:#f92672">.</span>Invoke(<span style="color:#e6db74">&#39;NAME SkypeApiClient&#39;</span>)
-    <span style="color:#66d9ef">if</span> answer <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;OK&#39;</span>:
-        sys<span style="color:#f92672">.</span>exit(<span style="color:#e6db74">&#39;Could not bind to Skype client&#39;</span>)
+    <span class="c1"># Connect to skype.</span>
+    <span class="n">answer</span> <span class="o">=</span> <span class="n">skype_service</span><span class="o">.</span><span class="n">Invoke</span><span class="p">(</span><span class="s1">&#39;NAME SkypeApiClient&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">answer</span> <span class="o">!=</span> <span class="s1">&#39;OK&#39;</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="nb">exit</span><span class="p">(</span><span class="s1">&#39;Could not bind to Skype client&#39;</span><span class="p">)</span>
 
-    <span style="color:#75715e"># Check if protocol is supported.</span>
-    answer <span style="color:#f92672">=</span> skype_service<span style="color:#f92672">.</span>Invoke(<span style="color:#e6db74">&#39;PROTOCOL 1&#39;</span>)
-    <span style="color:#66d9ef">if</span> answer <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;PROTOCOL 1&#39;</span>:
-        sys<span style="color:#f92672">.</span>exit(<span style="color:#e6db74">&#39;This test program only supports Skype API protocol version 1&#39;</span>)
+    <span class="c1"># Check if protocol is supported.</span>
+    <span class="n">answer</span> <span class="o">=</span> <span class="n">skype_service</span><span class="o">.</span><span class="n">Invoke</span><span class="p">(</span><span class="s1">&#39;PROTOCOL 1&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">answer</span> <span class="o">!=</span> <span class="s1">&#39;PROTOCOL 1&#39;</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="nb">exit</span><span class="p">(</span><span class="s1">&#39;This test program only supports Skype API protocol version 1&#39;</span><span class="p">)</span>
 
-    <span style="color:#75715e"># Invoke operations</span>
-    <span style="color:#66d9ef">for</span> arg <span style="color:#f92672">in</span> sys<span style="color:#f92672">.</span>argv:
-        skype_service<span style="color:#f92672">.</span>Invoke(arg)
+    <span class="c1"># Invoke operations</span>
+    <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">:</span>
+        <span class="n">skype_service</span><span class="o">.</span><span class="n">Invoke</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
     
-    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>    
+    <span class="k">return</span> <span class="mi">0</span>    
 
-<span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#f92672">&amp;</span>quot;__main__<span style="color:#f92672">&amp;</span>quot;:
-    main()</code></pre></div>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="o">&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">__main__</span><span class="o">&amp;</span><span class="n">quot</span><span class="p">;:</span>
+    <span class="n">main</span><span class="p">()</span></code></pre></div>
 <p> При первом запуске скрипта появится скайповский диалог с вопросом, можно ли разрешить приложению доступ к скайпу. После нажатия на &quot;Да&quot; Skype добавит наш скрипт в разрешённые и мы сможем управлять скайпом.</p>
 
 <p><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://2.bp.blogspot.com/_y8p0_dtMJ38/S6ev4yVZkJI/AAAAAAAAA9Q/O87mz2Qnku0/s1600-h/skype.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;width: 376px; height: 185px;" src="http://2.bp.blogspot.com/_y8p0_dtMJ38/S6ev4yVZkJI/AAAAAAAAA9Q/O87mz2Qnku0/s400/skype.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5451519264074338450" /></a></p>

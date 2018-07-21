@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html prefix="og: http://ogp.me/ns#">
-<head >
+<html prefix="og: http://ogp.me/ns#" lang="en">
+<head>
+	<meta name="generator" content="Hugo 0.44" />
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=5">
 
   
   <title>Sharing knowledge</title>
@@ -19,7 +20,7 @@
 
 
   <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
-
+  <link rel="stylesheet" media="screen" href="https://fonts.googleapis.com/css?family=Arvo" type="text/css"/>
 
 
   
@@ -29,10 +30,8 @@
   
   
 
-
   
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-
 
   
   <link href="https://uthark.github.io/favicon.png" rel="icon">
@@ -55,10 +54,10 @@
 </head>
 <body>
 
-
-<header>  
+<header>
+  
   <h1><a href="https://uthark.github.io/">Sharing knowledge</a></h1>
-    
+    <h2>by Oleg Atamanenko</h2>
 </header>
 
 
@@ -140,123 +139,121 @@
 It is very powerful, but it supports JSON and XML out of the box only. Fortunately, go-restful allows to register custom serialization schemes.</p>
 
 <p>To do so, it provides a handy interface <a href="https://godoc.org/github.com/emicklei/go-restful#EntityReaderWriter" target="_blank">EntityReaderWriter</a>, which contains only two methods:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// EntityReaderWriter can read and write values using an encoding such as JSON,XML.
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">EntityReaderWriter</span> <span style="color:#66d9ef">interface</span> {
-    <span style="color:#75715e">// Read a serialized version of the value from the request.
-</span><span style="color:#75715e"></span>    <span style="color:#75715e">// The Request may have a decompressing reader. Depends on Content-Encoding.
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">Read</span>(<span style="color:#a6e22e">req</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Request</span>, <span style="color:#a6e22e">v</span> <span style="color:#66d9ef">interface</span>{}) <span style="color:#66d9ef">error</span>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// EntityReaderWriter can read and write values using an encoding such as JSON,XML.
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">EntityReaderWriter</span> <span class="kd">interface</span> <span class="p">{</span>
+    <span class="c1">// Read a serialized version of the value from the request.
+</span><span class="c1"></span>    <span class="c1">// The Request may have a decompressing reader. Depends on Content-Encoding.
+</span><span class="c1"></span>    <span class="nx">Read</span><span class="p">(</span><span class="nx">req</span> <span class="o">*</span><span class="nx">Request</span><span class="p">,</span> <span class="nx">v</span> <span class="kd">interface</span><span class="p">{})</span> <span class="kt">error</span>
 
-    <span style="color:#75715e">// Write a serialized version of the value on the response.
-</span><span style="color:#75715e"></span>    <span style="color:#75715e">// The Response may have a compressing writer. Depends on Accept-Encoding.
-</span><span style="color:#75715e"></span>    <span style="color:#75715e">// status should be a valid Http Status code
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">Write</span>(<span style="color:#a6e22e">resp</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Response</span>, <span style="color:#a6e22e">status</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">v</span> <span style="color:#66d9ef">interface</span>{}) <span style="color:#66d9ef">error</span>
-}</code></pre></div>
+    <span class="c1">// Write a serialized version of the value on the response.
+</span><span class="c1"></span>    <span class="c1">// The Response may have a compressing writer. Depends on Accept-Encoding.
+</span><span class="c1"></span>    <span class="c1">// status should be a valid Http Status code
+</span><span class="c1"></span>    <span class="nx">Write</span><span class="p">(</span><span class="nx">resp</span> <span class="o">*</span><span class="nx">Response</span><span class="p">,</span> <span class="nx">status</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">v</span> <span class="kd">interface</span><span class="p">{})</span> <span class="kt">error</span>
+<span class="p">}</span></code></pre></div>
 <p>What we need to do is to implement this interface and register it in go-restful.</p>
 
 <p>Let’s implement the interface:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">restyaml</span>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">restyaml</span>
 
-<span style="color:#f92672">import</span> (
-	<span style="color:#e6db74">&#34;io&#34;</span>
-	<span style="color:#e6db74">&#34;io/ioutil&#34;</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;io&#34;</span>
+	<span class="s">&#34;io/ioutil&#34;</span>
 
-	<span style="color:#e6db74">&#34;github.com/emicklei/go-restful&#34;</span>
-	<span style="color:#e6db74">&#34;gopkg.in/yaml.v2&#34;</span>
-)
+	<span class="s">&#34;github.com/emicklei/go-restful&#34;</span>
+	<span class="s">&#34;gopkg.in/yaml.v2&#34;</span>
+<span class="p">)</span>
 
-<span style="color:#75715e">// MediaTypeApplicationYaml is a Mime Type for YAML.
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">MediaTypeApplicationYaml</span> = <span style="color:#e6db74">&#34;application/x-yaml&#34;</span>
+<span class="c1">// MediaTypeApplicationYaml is a Mime Type for YAML.
+</span><span class="c1"></span><span class="kd">const</span> <span class="nx">MediaTypeApplicationYaml</span> <span class="p">=</span> <span class="s">&#34;application/x-yaml&#34;</span>
 
-<span style="color:#75715e">// YamlReaderWriter implements EntityReaderWriter for YAML objects to be used by restful.
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">YamlReaderWriter</span> <span style="color:#66d9ef">struct</span> {
-	<span style="color:#a6e22e">contentType</span> <span style="color:#66d9ef">string</span>
-}
+<span class="c1">// YamlReaderWriter implements EntityReaderWriter for YAML objects to be used by restful.
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">YamlReaderWriter</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">contentType</span> <span class="kt">string</span>
+<span class="p">}</span>
 
-<span style="color:#75715e">// NewYamlReaderWriter creates new instance.
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">NewYamlReaderWriter</span>(<span style="color:#a6e22e">contentType</span> <span style="color:#66d9ef">string</span>) <span style="color:#a6e22e">restful</span>.<span style="color:#a6e22e">EntityReaderWriter</span> {
-	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">YamlReaderWriter</span>{<span style="color:#a6e22e">contentType</span>: <span style="color:#a6e22e">contentType</span>}
-}
+<span class="c1">// NewYamlReaderWriter creates new instance.
+</span><span class="c1"></span><span class="kd">func</span> <span class="nx">NewYamlReaderWriter</span><span class="p">(</span><span class="nx">contentType</span> <span class="kt">string</span><span class="p">)</span> <span class="nx">restful</span><span class="p">.</span><span class="nx">EntityReaderWriter</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="nx">YamlReaderWriter</span><span class="p">{</span><span class="nx">contentType</span><span class="p">:</span> <span class="nx">contentType</span><span class="p">}</span>
+<span class="p">}</span>
 
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">closeWithErrHandle</span>(<span style="color:#a6e22e">c</span> <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">Closer</span>) {
-	<span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Close</span>()
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-		<span style="color:#a6e22e">logger</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Unable to close resource: &#34;</span>, <span style="color:#a6e22e">err</span>)
-	}
-}
+<span class="kd">func</span> <span class="nx">closeWithErrHandle</span><span class="p">(</span><span class="nx">c</span> <span class="nx">io</span><span class="p">.</span><span class="nx">Closer</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">c</span><span class="p">.</span><span class="nx">Close</span><span class="p">()</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">logger</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&#34;Unable to close resource: &#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
 
-<span style="color:#75715e">// Read a serialized version of the value from the request.
-</span><span style="color:#75715e">// The Request may have a decompressing reader. Depends on Content-Encoding.
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">e</span> <span style="color:#a6e22e">YamlReaderWriter</span>) <span style="color:#a6e22e">Read</span>(<span style="color:#a6e22e">req</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">restful</span>.<span style="color:#a6e22e">Request</span>, <span style="color:#a6e22e">v</span> <span style="color:#66d9ef">interface</span>{}) <span style="color:#66d9ef">error</span> {
-	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">closeWithErrHandle</span>(<span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">Request</span>.<span style="color:#a6e22e">Body</span>)
-	<span style="color:#a6e22e">bytes</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ioutil</span>.<span style="color:#a6e22e">ReadAll</span>(<span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">Request</span>.<span style="color:#a6e22e">Body</span>)
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
-	}
-	<span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">yaml</span>.<span style="color:#a6e22e">Unmarshal</span>(<span style="color:#a6e22e">bytes</span>, <span style="color:#a6e22e">v</span>)
-	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
-}
+<span class="c1">// Read a serialized version of the value from the request.
+</span><span class="c1">// The Request may have a decompressing reader. Depends on Content-Encoding.
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">e</span> <span class="nx">YamlReaderWriter</span><span class="p">)</span> <span class="nx">Read</span><span class="p">(</span><span class="nx">req</span> <span class="o">*</span><span class="nx">restful</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span> <span class="nx">v</span> <span class="kd">interface</span><span class="p">{})</span> <span class="kt">error</span> <span class="p">{</span>
+	<span class="k">defer</span> <span class="nx">closeWithErrHandle</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">Body</span><span class="p">)</span>
+	<span class="nx">bytes</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ioutil</span><span class="p">.</span><span class="nx">ReadAll</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">Body</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">err</span>
+	<span class="p">}</span>
+	<span class="nx">err</span> <span class="p">=</span> <span class="nx">yaml</span><span class="p">.</span><span class="nx">Unmarshal</span><span class="p">(</span><span class="nx">bytes</span><span class="p">,</span> <span class="nx">v</span><span class="p">)</span>
+	<span class="k">return</span> <span class="nx">err</span>
+<span class="p">}</span>
 
-<span style="color:#75715e">// Write a serialized version of the value on the response.
-</span><span style="color:#75715e">// The Response may have a compressing writer. Depends on Accept-Encoding.
-</span><span style="color:#75715e">// status should be a valid Http Status code
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">e</span> <span style="color:#a6e22e">YamlReaderWriter</span>) <span style="color:#a6e22e">Write</span>(<span style="color:#a6e22e">resp</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">restful</span>.<span style="color:#a6e22e">Response</span>, <span style="color:#a6e22e">status</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">v</span> <span style="color:#66d9ef">interface</span>{}) <span style="color:#66d9ef">error</span> {
-	<span style="color:#a6e22e">bytes</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">yaml</span>.<span style="color:#a6e22e">Marshal</span>(<span style="color:#a6e22e">v</span>)
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
-	}
+<span class="c1">// Write a serialized version of the value on the response.
+</span><span class="c1">// The Response may have a compressing writer. Depends on Accept-Encoding.
+</span><span class="c1">// status should be a valid Http Status code
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">e</span> <span class="nx">YamlReaderWriter</span><span class="p">)</span> <span class="nx">Write</span><span class="p">(</span><span class="nx">resp</span> <span class="o">*</span><span class="nx">restful</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span> <span class="nx">status</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">v</span> <span class="kd">interface</span><span class="p">{})</span> <span class="kt">error</span> <span class="p">{</span>
+	<span class="nx">bytes</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">yaml</span><span class="p">.</span><span class="nx">Marshal</span><span class="p">(</span><span class="nx">v</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">err</span>
+	<span class="p">}</span>
 
-	<span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">WriteHeader</span>(<span style="color:#a6e22e">status</span>)
-	<span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">Write</span>(<span style="color:#a6e22e">bytes</span>)
-	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
-}</code></pre></div>
+	<span class="nx">resp</span><span class="p">.</span><span class="nx">WriteHeader</span><span class="p">(</span><span class="nx">status</span><span class="p">)</span>
+	<span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">resp</span><span class="p">.</span><span class="nx">Write</span><span class="p">(</span><span class="nx">bytes</span><span class="p">)</span>
+	<span class="k">return</span> <span class="nx">err</span>
+<span class="p">}</span></code></pre></div>
 <p>For implementing actual reading/writing of YAML I use library called <a href="https://github.com/go-yaml/yaml" target="_blank">go-yaml</a>. The implementation is straightforward, just call <a href="https://godoc.org/gopkg.in/yaml.v2#Marshal" target="_blank"><code>Marshal</code></a> and <a href="https://godoc.org/gopkg.in/yaml.v2#Unmarshal" target="_blank"><code>Unmarshal</code></a> methods and do an error processing.</p>
 
 <p>The final step is to register newly written <code>YamlReaderWriter</code> in go-restful container during application startup.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">rest</span>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">rest</span>
 
-<span style="color:#f92672">import</span> (
-	<span style="color:#e6db74">&#34;context&#34;</span>
-	<span style="color:#e6db74">&#34;fmt&#34;</span>
-	<span style="color:#e6db74">&#34;net/http&#34;</span>
-	<span style="color:#e6db74">&#34;os&#34;</span>
-	<span style="color:#e6db74">&#34;os/signal&#34;</span>
-	<span style="color:#e6db74">&#34;strconv&#34;</span>
-	<span style="color:#e6db74">&#34;syscall&#34;</span>
-	<span style="color:#e6db74">&#34;time&#34;</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;context&#34;</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;net/http&#34;</span>
+	<span class="s">&#34;os&#34;</span>
+	<span class="s">&#34;os/signal&#34;</span>
+	<span class="s">&#34;strconv&#34;</span>
+	<span class="s">&#34;syscall&#34;</span>
+	<span class="s">&#34;time&#34;</span>
 
-	<span style="color:#e6db74">&#34;bitbucket.org/uthark/yttrium/internal/config&#34;</span>
-	<span style="color:#e6db74">&#34;bitbucket.org/uthark/yttrium/internal/mime&#34;</span>
-	<span style="color:#e6db74">&#34;github.com/emicklei/go-restful&#34;</span>
-)
+	<span class="s">&#34;bitbucket.org/uthark/yttrium/internal/config&#34;</span>
+	<span class="s">&#34;bitbucket.org/uthark/yttrium/internal/mime&#34;</span>
+	<span class="s">&#34;github.com/emicklei/go-restful&#34;</span>
+<span class="p">)</span>
 
-<span style="color:#75715e">// Init initializes server.
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">init</span>() {
+<span class="c1">// Init initializes server.
+</span><span class="c1"></span><span class="kd">func</span> <span class="nx">init</span><span class="p">()</span> <span class="p">{</span>
 
-	<span style="color:#a6e22e">restful</span>.<span style="color:#a6e22e">SetLogger</span>(<span style="color:#a6e22e">logger</span>)
-	<span style="color:#a6e22e">restful</span>.<span style="color:#a6e22e">DefaultResponseContentType</span>(<span style="color:#a6e22e">restful</span>.<span style="color:#a6e22e">MIME_JSON</span>)
-	<span style="color:#a6e22e">restful</span>.<span style="color:#a6e22e">RegisterEntityAccessor</span>(<span style="color:#a6e22e">restyaml</span>.<span style="color:#a6e22e">MediaTypeApplicationYaml</span>, <span style="color:#a6e22e">restyaml</span>.<span style="color:#a6e22e">NewYamlReaderWriter</span>(<span style="color:#a6e22e">restyaml</span>.<span style="color:#a6e22e">MediaTypeApplicationYaml</span>))
+	<span class="nx">restful</span><span class="p">.</span><span class="nx">SetLogger</span><span class="p">(</span><span class="nx">logger</span><span class="p">)</span>
+	<span class="nx">restful</span><span class="p">.</span><span class="nx">DefaultResponseContentType</span><span class="p">(</span><span class="nx">restful</span><span class="p">.</span><span class="nx">MIME_JSON</span><span class="p">)</span>
+	<span class="nx">restful</span><span class="p">.</span><span class="nx">RegisterEntityAccessor</span><span class="p">(</span><span class="nx">restyaml</span><span class="p">.</span><span class="nx">MediaTypeApplicationYaml</span><span class="p">,</span> <span class="nx">restyaml</span><span class="p">.</span><span class="nx">NewYamlReaderWriter</span><span class="p">(</span><span class="nx">restyaml</span><span class="p">.</span><span class="nx">MediaTypeApplicationYaml</span><span class="p">))</span>
 
-	<span style="color:#75715e">// register web-services in restful and start http…
-</span><span style="color:#75715e"></span>	<span style="color:#75715e">// omitted for brevity
-</span><span style="color:#75715e"></span>}</code></pre></div>
+	<span class="c1">// register web-services in restful and start http…
+</span><span class="c1"></span>	<span class="c1">// omitted for brevity
+</span><span class="c1"></span><span class="p">}</span></code></pre></div>
 <p>Now, we can submit requests in YAML format to our API:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ curl -H <span style="color:#e6db74">&#34;Accept: application/x-yaml&#34;</span> http://localhost:8080/task
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">$ curl -H <span class="s2">&#34;Accept: application/x-yaml&#34;</span> http://localhost:8080/task
 - id: dd453ac9-6e8d-4f37-88a9-4e6d5b653e8d
   name: Another Task
-  dateAdded: <span style="color:#ae81ff">2018</span>-01-20T20:05:09.378Z
-  dateCompleted: <span style="color:#ae81ff">0001</span>-01-01T00:00:00Z</code></pre></div>
+  dateAdded: <span class="m">2018</span>-01-20T20:05:09.378Z
+  dateCompleted: <span class="m">0001</span>-01-01T00:00:00Z</code></pre></div>
 <p>If we don’t specify header, the output will be in JSON:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ curl http://localhost:8080/task
-<span style="color:#f92672">[</span>
-  <span style="color:#f92672">{</span>
-   <span style="color:#e6db74">&#34;id&#34;</span>: <span style="color:#e6db74">&#34;dd453ac9-6e8d-4f37-88a9-4e6d5b653e8d&#34;</span>,
-   <span style="color:#e6db74">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Another Task&#34;</span>,
-   <span style="color:#e6db74">&#34;dateAdded&#34;</span>: <span style="color:#e6db74">&#34;2018-01-20T20:05:09.378Z&#34;</span>,
-   <span style="color:#e6db74">&#34;dateCompleted&#34;</span>: <span style="color:#e6db74">&#34;0001-01-01T00:00:00Z&#34;</span>
-  <span style="color:#f92672">}</span>
- <span style="color:#f92672">]</span></code></pre></div>
-<p>If you have any questions, feel free to ping me on Twitter.</p>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">$ curl http://localhost:8080/task
+<span class="o">[</span>
+  <span class="o">{</span>
+   <span class="s2">&#34;id&#34;</span>: <span class="s2">&#34;dd453ac9-6e8d-4f37-88a9-4e6d5b653e8d&#34;</span>,
+   <span class="s2">&#34;name&#34;</span>: <span class="s2">&#34;Another Task&#34;</span>,
+   <span class="s2">&#34;dateAdded&#34;</span>: <span class="s2">&#34;2018-01-20T20:05:09.378Z&#34;</span>,
+   <span class="s2">&#34;dateCompleted&#34;</span>: <span class="s2">&#34;0001-01-01T00:00:00Z&#34;</span>
+  <span class="o">}</span>
+ <span class="o">]</span></code></pre></div>
         
 
     </article>
@@ -352,41 +349,41 @@ It is very powerful, but it supports JSON and XML out of the box only. Fortunate
 <p>In order to make such assertions more easier and maintainable one can use great Unitils library which has useful class <a href="http://www.unitils.org/tutorial-reflectionassert.html" target="_blank">ReflectionAssert</a></p>
 
 <p>First, update parent&rsquo;s <code>pom.xml</code>:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;properties&gt;</span>
-    <span style="color:#f92672">&lt;unitils.version&gt;</span>3.4<span style="color:#f92672">&lt;/unitils.version&gt;</span>
-<span style="color:#f92672">&lt;/properties&gt;</span>
-<span style="color:#f92672">&lt;dependency&gt;</span>
-    <span style="color:#f92672">&lt;groupId&gt;</span>org.unitils<span style="color:#f92672">&lt;/groupId&gt;</span>
-    <span style="color:#f92672">&lt;artifactId&gt;</span>unitils-core<span style="color:#f92672">&lt;/artifactId&gt;</span>
-    <span style="color:#f92672">&lt;version&gt;</span>${unitils.version}<span style="color:#f92672">&lt;/version&gt;</span>
-    <span style="color:#f92672">&lt;scope&gt;</span>test<span style="color:#f92672">&lt;/scope&gt;</span>
-<span style="color:#f92672">&lt;/dependency&gt;</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;properties&gt;</span>
+    <span class="nt">&lt;unitils.version&gt;</span>3.4<span class="nt">&lt;/unitils.version&gt;</span>
+<span class="nt">&lt;/properties&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.unitils<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>unitils-core<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>${unitils.version}<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre></div>
 <p>Then add dependency to the child module:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;dependency&gt;</span>
-    <span style="color:#f92672">&lt;groupId&gt;</span>org.unitils<span style="color:#f92672">&lt;/groupId&gt;</span>
-    <span style="color:#f92672">&lt;artifactId&gt;</span>unitils-core<span style="color:#f92672">&lt;/artifactId&gt;</span>
-<span style="color:#f92672">&lt;/dependency&gt;</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.unitils<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>unitils-core<span class="nt">&lt;/artifactId&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre></div>
 <p>Usage is very simple:
 Add static import to the class.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">import static</span> org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals<span style="color:#f92672">;</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import static</span> <span class="nn">org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals</span><span class="o">;</span></code></pre></div>
 <p>and use it instead of regular JUnit assert:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">assertReflectionEquals<span style="color:#f92672">(</span>expected<span style="color:#f92672">,</span> actual<span style="color:#f92672">);</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">assertReflectionEquals</span><span class="o">(</span><span class="n">expected</span><span class="o">,</span> <span class="n">actual</span><span class="o">);</span></code></pre></div>
 <p>It is possible to pass reflection comparator modes as optional parameters to the above method.</p>
 
 <p>Be ware that this method is not very useful if you want to compare objects which has floating point or double parameters - ReflectionAssert compares <code>double</code> and <code>float</code> values using <code>==</code>, so it is not very useful. It is not possible to pass epsilon for comparison.</p>
 
 <p>excerpt from <code>org.unitils.reflectionassert.comparator.impl.LenientNumberComparator#compare</code>:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">Double leftDouble <span style="color:#f92672">=</span> getDoubleValue<span style="color:#f92672">(</span>left<span style="color:#f92672">);</span>
-Double rightDouble <span style="color:#f92672">=</span> getDoubleValue<span style="color:#f92672">(</span>right<span style="color:#f92672">);</span>
-<span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>leftDouble<span style="color:#f92672">.</span><span style="color:#a6e22e">equals</span><span style="color:#f92672">(</span>rightDouble<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
-    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> Difference<span style="color:#f92672">(</span>differenceMessage<span style="color:#f92672">,</span> left<span style="color:#f92672">,</span> right<span style="color:#f92672">);</span>
-<span style="color:#f92672">}</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">Double</span> <span class="n">leftDouble</span> <span class="o">=</span> <span class="n">getDoubleValue</span><span class="o">(</span><span class="n">left</span><span class="o">);</span>
+<span class="n">Double</span> <span class="n">rightDouble</span> <span class="o">=</span> <span class="n">getDoubleValue</span><span class="o">(</span><span class="n">right</span><span class="o">);</span>
+<span class="k">if</span> <span class="o">(!</span><span class="n">leftDouble</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">rightDouble</span><span class="o">))</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="n">Difference</span><span class="o">(</span><span class="n">differenceMessage</span><span class="o">,</span> <span class="n">left</span><span class="o">,</span> <span class="n">right</span><span class="o">);</span>
+<span class="o">}</span></code></pre></div>
 <p>If you need to compare double values in JUnit assertions then it is better to use <a href="https://code.google.com/p/hamcrest/" target="_blank">hamcrest library</a>.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">import static</span> org.hamcrest.number.IsCloseTo.closeTo<span style="color:#f92672">;</span>
-<span style="color:#f92672">import static</span> org.junit.Assert.assertThat<span style="color:#f92672">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import static</span> <span class="nn">org.hamcrest.number.IsCloseTo.closeTo</span><span class="o">;</span>
+<span class="kn">import static</span> <span class="nn">org.junit.Assert.assertThat</span><span class="o">;</span>
 
-<span style="color:#75715e">// in @Test method:
-</span><span style="color:#75715e"></span>assertThat<span style="color:#f92672">(</span>actual<span style="color:#f92672">.</span><span style="color:#a6e22e">getFederalIncomeTax</span><span style="color:#f92672">(),</span> closeTo<span style="color:#f92672">(</span>expected<span style="color:#f92672">.</span><span style="color:#a6e22e">getFederalIncomeTax</span><span style="color:#f92672">(),</span> EPSILON<span style="color:#f92672">))</span></code></pre></div>
+<span class="c1">// in @Test method:
+</span><span class="c1"></span><span class="n">assertThat</span><span class="o">(</span><span class="n">actual</span><span class="o">.</span><span class="na">getFederalIncomeTax</span><span class="o">(),</span> <span class="n">closeTo</span><span class="o">(</span><span class="n">expected</span><span class="o">.</span><span class="na">getFederalIncomeTax</span><span class="o">(),</span> <span class="n">EPSILON</span><span class="o">))</span></code></pre></div>
 <p>Happy hacking!</p>
 
         
@@ -413,81 +410,81 @@ Double rightDouble <span style="color:#f92672">=</span> getDoubleValue<span styl
         <p><a href="https://github.com/joel-costigliola/assertj-core" target="_blank">AssertJ</a> is a library which provides fluent strongly-typed assertions to use in unit tests.</p>
 
 <p>Example of assertions written with <code>AssertJ</code>:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">import</span> io.github.uthark.blog.assertj.Assertions.assertThat<span style="color:#f92672">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">io.github.uthark.blog.assertj.Assertions.assertThat</span><span class="o">;</span>
 
-<span style="color:#75715e">// ... within @Test
-</span><span style="color:#75715e"></span>User result <span style="color:#f92672">=</span> userDao<span style="color:#f92672">.</span><span style="color:#a6e22e">findByLogin</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;username&#34;</span><span style="color:#f92672">);</span>
-assertThat<span style="color:#f92672">(</span>result<span style="color:#f92672">).</span>
-    isNotNull<span style="color:#f92672">().</span>
-    isActive<span style="color:#f92672">().</span>
-    hasLogin<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;username&#34;</span><span style="color:#f92672">);</span></code></pre></div>
+<span class="c1">// ... within @Test
+</span><span class="c1"></span><span class="n">User</span> <span class="n">result</span> <span class="o">=</span> <span class="n">userDao</span><span class="o">.</span><span class="na">findByLogin</span><span class="o">(</span><span class="s">&#34;username&#34;</span><span class="o">);</span>
+<span class="n">assertThat</span><span class="o">(</span><span class="n">result</span><span class="o">).</span>
+    <span class="n">isNotNull</span><span class="o">().</span>
+    <span class="n">isActive</span><span class="o">().</span>
+    <span class="n">hasLogin</span><span class="o">(</span><span class="s">&#34;username&#34;</span><span class="o">);</span></code></pre></div>
 <p>As you can see assertions look much more readable.
 The integration of assertj into Maven project is very easy:</p>
 
 <ol>
 <li>Update pom.xml in parent module</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;properties&gt;</span>
-    <span style="color:#f92672">&lt;assertj-core.version&gt;</span>1.6.0<span style="color:#f92672">&lt;/assertj-core.version&gt;</span>
-    <span style="color:#f92672">&lt;assertj-assertions-generator-maven-plugin.version&gt;</span>1.2.0<span style="color:#f92672">&lt;/assertj-assertions-generator-maven-plugin.version&gt;</span>
-<span style="color:#f92672">&lt;/properties&gt;</span>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;properties&gt;</span>
+    <span class="nt">&lt;assertj-core.version&gt;</span>1.6.0<span class="nt">&lt;/assertj-core.version&gt;</span>
+    <span class="nt">&lt;assertj-assertions-generator-maven-plugin.version&gt;</span>1.2.0<span class="nt">&lt;/assertj-assertions-generator-maven-plugin.version&gt;</span>
+<span class="nt">&lt;/properties&gt;</span>
 
-<span style="color:#f92672">&lt;dependencyManagement&gt;</span>
-    <span style="color:#f92672">&lt;dependency&gt;</span>
-        <span style="color:#f92672">&lt;groupId&gt;</span>org.assertj<span style="color:#f92672">&lt;/groupId&gt;</span>
-        <span style="color:#f92672">&lt;artifactId&gt;</span>assertj-core<span style="color:#f92672">&lt;/artifactId&gt;</span>
-        <span style="color:#f92672">&lt;version&gt;</span>${assertj-core.version}<span style="color:#f92672">&lt;/version&gt;</span>
-        <span style="color:#f92672">&lt;scope&gt;</span>test<span style="color:#f92672">&lt;/scope&gt;</span>
-    <span style="color:#f92672">&lt;/dependency&gt;</span>
-<span style="color:#f92672">&lt;/dependencyManagement&gt;</span>
+<span class="nt">&lt;dependencyManagement&gt;</span>
+    <span class="nt">&lt;dependency&gt;</span>
+        <span class="nt">&lt;groupId&gt;</span>org.assertj<span class="nt">&lt;/groupId&gt;</span>
+        <span class="nt">&lt;artifactId&gt;</span>assertj-core<span class="nt">&lt;/artifactId&gt;</span>
+        <span class="nt">&lt;version&gt;</span>${assertj-core.version}<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
+    <span class="nt">&lt;/dependency&gt;</span>
+<span class="nt">&lt;/dependencyManagement&gt;</span>
 
-<span style="color:#f92672">&lt;pluginManagement&gt;</span>
-    <span style="color:#f92672">&lt;plugin&gt;</span>
-        <span style="color:#f92672">&lt;groupId&gt;</span>org.assertj<span style="color:#f92672">&lt;/groupId&gt;</span>
-        <span style="color:#f92672">&lt;artifactId&gt;</span>assertj-assertions-generator-maven-plugin<span style="color:#f92672">&lt;/artifactId&gt;</span>
-        <span style="color:#f92672">&lt;version&gt;</span>${assertj-assertions-generator-maven-plugin.version}<span style="color:#f92672">&lt;/version&gt;</span>
-        <span style="color:#f92672">&lt;executions&gt;</span>
-            <span style="color:#f92672">&lt;execution&gt;</span>
-                <span style="color:#f92672">&lt;id&gt;</span>generate-assertions<span style="color:#f92672">&lt;/id&gt;</span>
-                <span style="color:#f92672">&lt;phase&gt;</span>generate-test-sources<span style="color:#f92672">&lt;/phase&gt;</span>
-                <span style="color:#f92672">&lt;goals&gt;</span>
-                    <span style="color:#f92672">&lt;goal&gt;</span>generate-assertions<span style="color:#f92672">&lt;/goal&gt;</span>
-                <span style="color:#f92672">&lt;/goals&gt;</span>
-            <span style="color:#f92672">&lt;/execution&gt;</span>
-        <span style="color:#f92672">&lt;/executions&gt;</span>
-    <span style="color:#f92672">&lt;/plugin&gt;</span>
+<span class="nt">&lt;pluginManagement&gt;</span>
+    <span class="nt">&lt;plugin&gt;</span>
+        <span class="nt">&lt;groupId&gt;</span>org.assertj<span class="nt">&lt;/groupId&gt;</span>
+        <span class="nt">&lt;artifactId&gt;</span>assertj-assertions-generator-maven-plugin<span class="nt">&lt;/artifactId&gt;</span>
+        <span class="nt">&lt;version&gt;</span>${assertj-assertions-generator-maven-plugin.version}<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;executions&gt;</span>
+            <span class="nt">&lt;execution&gt;</span>
+                <span class="nt">&lt;id&gt;</span>generate-assertions<span class="nt">&lt;/id&gt;</span>
+                <span class="nt">&lt;phase&gt;</span>generate-test-sources<span class="nt">&lt;/phase&gt;</span>
+                <span class="nt">&lt;goals&gt;</span>
+                    <span class="nt">&lt;goal&gt;</span>generate-assertions<span class="nt">&lt;/goal&gt;</span>
+                <span class="nt">&lt;/goals&gt;</span>
+            <span class="nt">&lt;/execution&gt;</span>
+        <span class="nt">&lt;/executions&gt;</span>
+    <span class="nt">&lt;/plugin&gt;</span>
 
-<span style="color:#f92672">&lt;/pluginManagement&gt;</span></code></pre></div>
+<span class="nt">&lt;/pluginManagement&gt;</span></code></pre></div>
 <ol>
 <li>Update pom.xml in child module</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;dependencies&gt;</span>
-    <span style="color:#f92672">&lt;dependency&gt;</span>
-        <span style="color:#f92672">&lt;groupId&gt;</span>org.assertj<span style="color:#f92672">&lt;/groupId&gt;</span>
-        <span style="color:#f92672">&lt;artifactId&gt;</span>assertj-core<span style="color:#f92672">&lt;/artifactId&gt;</span>
-    <span style="color:#f92672">&lt;/dependency&gt;</span>
-<span style="color:#f92672">&lt;/dependencies&gt;</span>
-<span style="color:#f92672">&lt;build&gt;</span>
-    <span style="color:#f92672">&lt;plugins&gt;</span>
-        <span style="color:#f92672">&lt;plugin&gt;</span>
-            <span style="color:#f92672">&lt;groupId&gt;</span>org.assertj<span style="color:#f92672">&lt;/groupId&gt;</span>
-            <span style="color:#f92672">&lt;artifactId&gt;</span>assertj-assertions-generator-maven-plugin<span style="color:#f92672">&lt;/artifactId&gt;</span>
-            <span style="color:#f92672">&lt;configuration&gt;</span>
-                <span style="color:#75715e">&lt;!-- you can define collection packages: --&gt;</span>
-                <span style="color:#f92672">&lt;packages&gt;</span>
-                    <span style="color:#f92672">&lt;param&gt;</span>io.github.uthark.blog.assertj<span style="color:#f92672">&lt;/param&gt;</span>
-                <span style="color:#f92672">&lt;/packages&gt;</span>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependencies&gt;</span>
+    <span class="nt">&lt;dependency&gt;</span>
+        <span class="nt">&lt;groupId&gt;</span>org.assertj<span class="nt">&lt;/groupId&gt;</span>
+        <span class="nt">&lt;artifactId&gt;</span>assertj-core<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;/dependency&gt;</span>
+<span class="nt">&lt;/dependencies&gt;</span>
+<span class="nt">&lt;build&gt;</span>
+    <span class="nt">&lt;plugins&gt;</span>
+        <span class="nt">&lt;plugin&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.assertj<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>assertj-assertions-generator-maven-plugin<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;configuration&gt;</span>
+                <span class="c">&lt;!-- you can define collection packages: --&gt;</span>
+                <span class="nt">&lt;packages&gt;</span>
+                    <span class="nt">&lt;param&gt;</span>io.github.uthark.blog.assertj<span class="nt">&lt;/param&gt;</span>
+                <span class="nt">&lt;/packages&gt;</span>
 
-                <span style="color:#75715e">&lt;!-- Or specify classes one by one. --&gt;</span>
-                <span style="color:#f92672">&lt;classes&gt;</span>
-                    <span style="color:#f92672">&lt;param&gt;</span>io.github.uthark.blog.assertj.User<span style="color:#f92672">&lt;/param&gt;</span>
-                <span style="color:#f92672">&lt;/classes&gt;</span>
-            <span style="color:#f92672">&lt;/configuration&gt;</span>
-        <span style="color:#f92672">&lt;/plugin&gt;</span>
-    <span style="color:#f92672">&lt;/plugins&gt;</span>
-<span style="color:#f92672">&lt;/build&gt;</span></code></pre></div>
+                <span class="c">&lt;!-- Or specify classes one by one. --&gt;</span>
+                <span class="nt">&lt;classes&gt;</span>
+                    <span class="nt">&lt;param&gt;</span>io.github.uthark.blog.assertj.User<span class="nt">&lt;/param&gt;</span>
+                <span class="nt">&lt;/classes&gt;</span>
+            <span class="nt">&lt;/configuration&gt;</span>
+        <span class="nt">&lt;/plugin&gt;</span>
+    <span class="nt">&lt;/plugins&gt;</span>
+<span class="nt">&lt;/build&gt;</span></code></pre></div>
 <p>After this changes it is possible to generate assertions for the classes you want test:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">mvn assertj:generate-assertions</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mvn assertj:generate-assertions</code></pre></div>
 <p>By default assertj will generate assertion classes in <code>target/generated-test-sources/assertj-assertions/</code>, it is possible to override this behaviour by passing configuration element <code>targetDir</code> to plugin.</p>
 
 <p>Additonal documentation for Maven plugin can be <a href="http://joel-costigliola.github.io/assertj/assertj-assertions-generator-maven-plugin.html" target="_blank">found here</a></p>
@@ -525,51 +522,51 @@ The integration of assertj into Maven project is very easy:</p>
 <li><p>Using <a href="http://docs.mockito.googlecode.com/hg/org/mockito/Mockito.html#mock(java.lang.Class)" target="_blank">Mockito.mock</a></p>
 
 <p>Initialize mocks with Mockito.mock:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> FooTest <span style="color:#f92672">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kt">void</span> <span class="n">FooTest</span> <span class="o">{</span>
         
-    <span style="color:#66d9ef">private</span> Foo foo<span style="color:#f92672">;</span>
+    <span class="kd">private</span> <span class="n">Foo</span> <span class="n">foo</span><span class="o">;</span>
 
-    <span style="color:#a6e22e">@Before</span>
-    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">setUp</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-        FooDependency dep <span style="color:#f92672">=</span> Mockito<span style="color:#f92672">.</span><span style="color:#a6e22e">mock</span><span style="color:#f92672">(</span>FooDependency<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
-        foo <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Foo<span style="color:#f92672">(</span>dep<span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span>
-<span style="color:#f92672">}</span></code></pre></div>
+    <span class="nd">@Before</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setUp</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">FooDependency</span> <span class="n">dep</span> <span class="o">=</span> <span class="n">Mockito</span><span class="o">.</span><span class="na">mock</span><span class="o">(</span><span class="n">FooDependency</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="n">foo</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Foo</span><span class="o">(</span><span class="n">dep</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
 <p>This is the simplest case.</p></li>
 
 <li><p>Using <a href="http://docs.mockito.googlecode.com/hg/org/mockito/MockitoAnnotations.html#initMocks(java.lang.Object)" target="_blank">MockitoAnnotations</a>.
 Initialize mocks with MockitoAnnotations:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> FooTest <span style="color:#f92672">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kt">void</span> <span class="n">FooTest</span> <span class="o">{</span>
         
-    <span style="color:#66d9ef">private</span> Foo foo<span style="color:#f92672">;</span>
+    <span class="kd">private</span> <span class="n">Foo</span> <span class="n">foo</span><span class="o">;</span>
 
-    <span style="color:#a6e22e">@Mock</span>
-    <span style="color:#66d9ef">private</span> FooDependency dep<span style="color:#f92672">;</span>
+    <span class="nd">@Mock</span>
+    <span class="kd">private</span> <span class="n">FooDependency</span> <span class="n">dep</span><span class="o">;</span>
 
-    <span style="color:#a6e22e">@Before</span>
-    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">setUp</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-        MockitoAnnotations<span style="color:#f92672">.</span><span style="color:#a6e22e">initMocks</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">);</span>
-        foo <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Foo<span style="color:#f92672">(</span>dep<span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span>
-<span style="color:#f92672">}</span></code></pre></div>
+    <span class="nd">@Before</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setUp</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">MockitoAnnotations</span><span class="o">.</span><span class="na">initMocks</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+        <span class="n">foo</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Foo</span><span class="o">(</span><span class="n">dep</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
 <p>This method is useful when you have a lot of mocks to inject.</p></li>
 
 <li><p>Using <a href="http://docs.mockito.googlecode.com/hg/org/mockito/runners/MockitoJUnitRunner.html" target="_blank">MockitoJUnitRunner</a></p>
 
 <p>Initialize mocks with MockitoJUnitRunner:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@RunWith</span><span style="color:#f92672">(</span>MockitoJUnitRunner<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">)</span>
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> FooTest <span style="color:#f92672">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@RunWith</span><span class="o">(</span><span class="n">MockitoJUnitRunner</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="n">FooTest</span> <span class="o">{</span>
         
-    <span style="color:#66d9ef">private</span> Foo foo<span style="color:#f92672">;</span>
+    <span class="kd">private</span> <span class="n">Foo</span> <span class="n">foo</span><span class="o">;</span>
 
-    <span style="color:#a6e22e">@Mock</span>
-    <span style="color:#66d9ef">private</span> FooDependency dep<span style="color:#f92672">;</span>
+    <span class="nd">@Mock</span>
+    <span class="kd">private</span> <span class="n">FooDependency</span> <span class="n">dep</span><span class="o">;</span>
 
-    <span style="color:#a6e22e">@Before</span>
-    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">setUp</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-        foo <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Foo<span style="color:#f92672">(</span>dep<span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span>
-<span style="color:#f92672">}</span></code></pre></div></li>
+    <span class="nd">@Before</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setUp</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">foo</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Foo</span><span class="o">(</span><span class="n">dep</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></div></li>
 </ol>
 
 <p>I want to show you another option, by using custom JUnit <code>@Rule</code>.</p>
@@ -577,56 +574,56 @@ Initialize mocks with MockitoAnnotations:</p>
 <p>First, we need to implement <a href="http://junit-team.github.io/junit/javadoc/4.11/org/junit/rules/TestRule.html" target="_blank">TestRule</a> interface which allows to implement custom behaviour during test execution:</p>
 
 <p>MockitoInitializerRule:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MockitoInitializerRule</span> <span style="color:#66d9ef">implements</span> TestRule <span style="color:#f92672">{</span>
-    <span style="color:#66d9ef">private</span> Object test<span style="color:#f92672">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MockitoInitializerRule</span> <span class="kd">implements</span> <span class="n">TestRule</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="n">Object</span> <span class="n">test</span><span class="o">;</span>
 
-    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">MockitoInitializerRule</span><span style="color:#f92672">(</span>Object test<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">test</span> <span style="color:#f92672">=</span> test<span style="color:#f92672">;</span>
-    <span style="color:#f92672">}</span>
+    <span class="kd">public</span> <span class="nf">MockitoInitializerRule</span><span class="o">(</span><span class="n">Object</span> <span class="n">test</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">test</span> <span class="o">=</span> <span class="n">test</span><span class="o">;</span>
+    <span class="o">}</span>
 
-    <span style="color:#a6e22e">@Override</span>
-    <span style="color:#66d9ef">public</span> Statement <span style="color:#a6e22e">apply</span><span style="color:#f92672">(</span>Statement base<span style="color:#f92672">,</span> Description description<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> MockitInitilizationStatement<span style="color:#f92672">(</span>base<span style="color:#f92672">,</span> test<span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span>
-<span style="color:#f92672">}</span></code></pre></div>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">Statement</span> <span class="nf">apply</span><span class="o">(</span><span class="n">Statement</span> <span class="n">base</span><span class="o">,</span> <span class="n">Description</span> <span class="n">description</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="n">MockitInitilizationStatement</span><span class="o">(</span><span class="n">base</span><span class="o">,</span> <span class="n">test</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
 <p>We need to pass current test class instance to the rule, so it will be possible inject mocks into class instance. Actual implementation of our rule will go to new class - subclass of <a href="http://junit-team.github.io/junit/javadoc/4.11/org/junit/runners/model/Statement.html" target="_blank">Statement</a>:</p>
 
 <p>MockitInitilizationStatement:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MockitInitilizationStatement</span> <span style="color:#66d9ef">extends</span> Statement <span style="color:#f92672">{</span>
-    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> Statement base<span style="color:#f92672">;</span>
-    <span style="color:#66d9ef">private</span> Object test<span style="color:#f92672">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MockitInitilizationStatement</span> <span class="kd">extends</span> <span class="n">Statement</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Statement</span> <span class="n">base</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">Object</span> <span class="n">test</span><span class="o">;</span>
 
-    MockitInitilizationStatement<span style="color:#f92672">(</span>Statement base<span style="color:#f92672">,</span> Object test<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">base</span> <span style="color:#f92672">=</span> base<span style="color:#f92672">;</span>
-        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">test</span> <span style="color:#f92672">=</span> test<span style="color:#f92672">;</span>
-    <span style="color:#f92672">}</span>
+    <span class="n">MockitInitilizationStatement</span><span class="o">(</span><span class="n">Statement</span> <span class="n">base</span><span class="o">,</span> <span class="n">Object</span> <span class="n">test</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">base</span> <span class="o">=</span> <span class="n">base</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">test</span> <span class="o">=</span> <span class="n">test</span><span class="o">;</span>
+    <span class="o">}</span>
 
-    <span style="color:#a6e22e">@Override</span>
-    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">evaluate</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">throws</span> Throwable <span style="color:#f92672">{</span>
-        MockitoAnnotations<span style="color:#f92672">.</span><span style="color:#a6e22e">initMocks</span><span style="color:#f92672">(</span>test<span style="color:#f92672">);</span>
-        base<span style="color:#f92672">.</span><span style="color:#a6e22e">evaluate</span><span style="color:#f92672">();</span>
-    <span style="color:#f92672">}</span>
-<span style="color:#f92672">}</span></code></pre></div>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">evaluate</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Throwable</span> <span class="o">{</span>
+        <span class="n">MockitoAnnotations</span><span class="o">.</span><span class="na">initMocks</span><span class="o">(</span><span class="n">test</span><span class="o">);</span>
+        <span class="n">base</span><span class="o">.</span><span class="na">evaluate</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
 <p>What we do is basically initialize mocks in the test class and then proceed with the test method execution.</p>
 
 <p>Now, let&rsquo;s take a look at the usage of newly created Rule:</p>
 
 <p>Example usage of MockitoInitializerRule:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> FooTest <span style="color:#f92672">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kt">void</span> <span class="n">FooTest</span> <span class="o">{</span>
     
-    <span style="color:#66d9ef">private</span> Foo foo<span style="color:#f92672">;</span>
+    <span class="kd">private</span> <span class="n">Foo</span> <span class="n">foo</span><span class="o">;</span>
 
-    <span style="color:#a6e22e">@Mock</span>
-    <span style="color:#66d9ef">private</span> FooDependency dep<span style="color:#f92672">;</span>
+    <span class="nd">@Mock</span>
+    <span class="kd">private</span> <span class="n">FooDependency</span> <span class="n">dep</span><span class="o">;</span>
 
-    <span style="color:#a6e22e">@Rule</span>
-    <span style="color:#66d9ef">public</span> TestRule mockitoInitializerRule <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> MockitoInitializerRule<span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">);</span>
+    <span class="nd">@Rule</span>
+    <span class="kd">public</span> <span class="n">TestRule</span> <span class="n">mockitoInitializerRule</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MockitoInitializerRule</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
 
-    <span style="color:#a6e22e">@Before</span>
-    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">setUp</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-        foo <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Foo<span style="color:#f92672">(</span>dep<span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span>
-<span style="color:#f92672">}</span></code></pre></div>
+    <span class="nd">@Before</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setUp</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">foo</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Foo</span><span class="o">(</span><span class="n">dep</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
 <p>Comparing to variant with <code>MockitoJUnitRunner</code> this one provides ability to use custom <a href="http://junit-team.github.io/junit/javadoc/4.11/org/junit/runner/Runner.html" target="_blank">Runner</a>, i.e. we can continue to use <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/test/context/junit4/SpringJUnit4ClassRunner.html" target="_blank">SpringJUnit4ClassRunner</a></p>
 
         

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html prefix="og: http://ogp.me/ns#">
-<head >
+<html prefix="og: http://ogp.me/ns#" lang="en">
+<head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=5">
 
   
   <title>Spring Roo (часть 2)</title>
@@ -19,7 +19,7 @@
 
 
   <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
-
+  <link rel="stylesheet" media="screen" href="https://fonts.googleapis.com/css?family=Arvo" type="text/css"/>
 
 
   
@@ -29,10 +29,8 @@
   
   
 
-
   
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-
 
   
   <link href="https://uthark.github.io/favicon.png" rel="icon">
@@ -73,10 +71,10 @@ new persistent class jpa -name ~.domain.Action -testAutomatically add field stri
 </head>
 <body>
 
-
-<header>  
+<header>
+  
   <h1><a href="https://uthark.github.io/">Sharing knowledge</a></h1>
-    
+    <h2>by Oleg Atamanenko</h2>
 </header>
 
 
@@ -162,29 +160,29 @@ new persistent class jpa -name ~.domain.Action -testAutomatically add field stri
 Spring Roo активно использует аспекты. В качестве реализации аспектов была взята библиотека <a href="http://www.eclipse.org/aspectj/">aspectj</a>.
 Большая часть сгенерированного кода попадает в отдельные файлы-аспекты.
 Создадим простой класс:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">new persistent class jpa -name ~.domain.Action -testAutomatically
-add field string name -notNull -sizeMin <span style="color:#ae81ff">1</span> -sizeMax <span style="color:#ae81ff">80</span>
-add field string description -sizeMax <span style="color:#ae81ff">1024</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">new persistent class jpa -name ~.domain.Action -testAutomatically
+add field string name -notNull -sizeMin <span class="m">1</span> -sizeMax <span class="m">80</span>
+add field string description -sizeMax <span class="m">1024</span></code></pre></div>
 <p>Spring Roo создаст нам следующие файлы:</p>
 
 <ul>
 <li><strong>Action.java</strong>
 Класс содержит только полезную с точки зрения назначения класса информацию. По сути, то, что вводит разработчик в консоль Roo аккумулируется здесь. Весь дополнительный код разносится по другим классам.</li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Entity</span> <span style="color:#75715e">//1
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">@RooJavaBean</span> <span style="color:#75715e">//2
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">@RooToString</span> <span style="color:#75715e">//3
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">@RooEntity</span><span style="color:#f92672">(</span>finders <span style="color:#f92672">=</span> <span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;findActionsByName&#34;</span> <span style="color:#f92672">})</span> <span style="color:#75715e">//4
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Action</span> <span style="color:#f92672">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Entity</span> <span class="c1">//1
+</span><span class="c1"></span><span class="nd">@RooJavaBean</span> <span class="c1">//2
+</span><span class="c1"></span><span class="nd">@RooToString</span> <span class="c1">//3
+</span><span class="c1"></span><span class="nd">@RooEntity</span><span class="o">(</span><span class="n">finders</span> <span class="o">=</span> <span class="o">{</span> <span class="s">&#34;findActionsByName&#34;</span> <span class="o">})</span> <span class="c1">//4
+</span><span class="c1"></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Action</span> <span class="o">{</span>
 
-<span style="color:#a6e22e">@NotNull</span>
-<span style="color:#a6e22e">@Size</span><span style="color:#f92672">(</span>min <span style="color:#f92672">=</span> 1<span style="color:#f92672">,</span> max <span style="color:#f92672">=</span> 80<span style="color:#f92672">)</span>
-<span style="color:#66d9ef">private</span> String name<span style="color:#f92672">;</span>
+<span class="nd">@NotNull</span>
+<span class="nd">@Size</span><span class="o">(</span><span class="n">min</span> <span class="o">=</span> <span class="n">1</span><span class="o">,</span> <span class="n">max</span> <span class="o">=</span> <span class="n">80</span><span class="o">)</span>
+<span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
 
 
-<span style="color:#a6e22e">@Size</span><span style="color:#f92672">(</span>max <span style="color:#f92672">=</span> 1024<span style="color:#f92672">)</span>
-<span style="color:#66d9ef">private</span> String description<span style="color:#f92672">;</span>
-<span style="color:#f92672">}</span></code></pre></div>
+<span class="nd">@Size</span><span class="o">(</span><span class="n">max</span> <span class="o">=</span> <span class="n">1024</span><span class="o">)</span>
+<span class="kd">private</span> <span class="n">String</span> <span class="n">description</span><span class="o">;</span>
+<span class="o">}</span></code></pre></div>
 <p>Мы видим, что:</p>
 
 <ol>
@@ -198,212 +196,212 @@ add field string description -sizeMax <span style="color:#ae81ff">1024</span></c
 <li><strong>Action_Roo_Configurable.aj</strong>
 Данный аспект говорит, что класс Action является конфигурируемым через Spring.</li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">privileged aspect Action_Roo_Configurable <span style="color:#f92672">{</span>
-declare <span style="color:#a6e22e">@type</span><span style="color:#f92672">:</span> Action: <span style="color:#a6e22e">@org.springframework.beans.factory.annotation.Configurable</span><span style="color:#f92672">;</span>
-<span style="color:#f92672">}</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">privileged</span> <span class="n">aspect</span> <span class="n">Action_Roo_Configurable</span> <span class="o">{</span>
+<span class="n">declare</span> <span class="nd">@type</span><span class="o">:</span> <span class="nl">Action:</span> <span class="nd">@org.springframework.beans.factory.annotation.Configurable</span><span class="o">;</span>
+<span class="o">}</span></code></pre></div>
 <ul>
 <li><strong>Action_Roo_Entity.aj</strong>
 В данном классе собраны все методы DAO для работы с классом Action.</li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">package</span> org.academ.uthark.research.roo.domain<span style="color:#f92672">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">org.academ.uthark.research.roo.domain</span><span class="o">;</span>
 
-privileged aspect Action_Roo_Entity <span style="color:#f92672">{</span>
+<span class="n">privileged</span> <span class="n">aspect</span> <span class="n">Action_Roo_Entity</span> <span class="o">{</span>
 
-<span style="color:#a6e22e">@javax.persistence.PersistenceContext</span>
-<span style="color:#66d9ef">transient</span> javax<span style="color:#f92672">.</span><span style="color:#a6e22e">persistence</span><span style="color:#f92672">.</span><span style="color:#a6e22e">EntityManager</span> Action<span style="color:#f92672">.</span><span style="color:#a6e22e">entityManager</span><span style="color:#f92672">;</span>
+<span class="nd">@javax.persistence.PersistenceContext</span>
+<span class="kd">transient</span> <span class="n">javax</span><span class="o">.</span><span class="na">persistence</span><span class="o">.</span><span class="na">EntityManager</span> <span class="n">Action</span><span class="o">.</span><span class="na">entityManager</span><span class="o">;</span>
 
-<span style="color:#a6e22e">@javax.persistence.Id</span>
-<span style="color:#a6e22e">@javax.persistence.GeneratedValue</span><span style="color:#f92672">(</span>strategy <span style="color:#f92672">=</span> javax<span style="color:#f92672">.</span><span style="color:#a6e22e">persistence</span><span style="color:#f92672">.</span><span style="color:#a6e22e">GenerationType</span><span style="color:#f92672">.</span><span style="color:#a6e22e">AUTO</span><span style="color:#f92672">)</span>
-<span style="color:#a6e22e">@javax.persistence.Column</span><span style="color:#f92672">(</span>name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;id&#34;</span><span style="color:#f92672">)</span>
-<span style="color:#66d9ef">private</span> java<span style="color:#f92672">.</span><span style="color:#a6e22e">lang</span><span style="color:#f92672">.</span><span style="color:#a6e22e">Long</span> Action<span style="color:#f92672">.</span><span style="color:#a6e22e">id</span><span style="color:#f92672">;</span>
+<span class="nd">@javax.persistence.Id</span>
+<span class="nd">@javax.persistence.GeneratedValue</span><span class="o">(</span><span class="n">strategy</span> <span class="o">=</span> <span class="n">javax</span><span class="o">.</span><span class="na">persistence</span><span class="o">.</span><span class="na">GenerationType</span><span class="o">.</span><span class="na">AUTO</span><span class="o">)</span>
+<span class="nd">@javax.persistence.Column</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#34;id&#34;</span><span class="o">)</span>
+<span class="kd">private</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">Long</span> <span class="n">Action</span><span class="o">.</span><span class="na">id</span><span class="o">;</span>
 
-<span style="color:#a6e22e">@javax.persistence.Version</span>
-<span style="color:#a6e22e">@javax.persistence.Column</span><span style="color:#f92672">(</span>name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;version&#34;</span><span style="color:#f92672">)</span>
-<span style="color:#66d9ef">private</span> java<span style="color:#f92672">.</span><span style="color:#a6e22e">lang</span><span style="color:#f92672">.</span><span style="color:#a6e22e">Integer</span> Action<span style="color:#f92672">.</span><span style="color:#a6e22e">version</span><span style="color:#f92672">;</span>
+<span class="nd">@javax.persistence.Version</span>
+<span class="nd">@javax.persistence.Column</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#34;version&#34;</span><span class="o">)</span>
+<span class="kd">private</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">Integer</span> <span class="n">Action</span><span class="o">.</span><span class="na">version</span><span class="o">;</span>
 
-<span style="color:#66d9ef">public</span> java<span style="color:#f92672">.</span><span style="color:#a6e22e">lang</span><span style="color:#f92672">.</span><span style="color:#a6e22e">Long</span> Action<span style="color:#f92672">.</span><span style="color:#a6e22e">getId</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">id</span><span style="color:#f92672">;</span>
-<span style="color:#f92672">}</span>
+<span class="kd">public</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">Long</span> <span class="n">Action</span><span class="o">.</span><span class="na">getId</span><span class="o">()</span> <span class="o">{</span>
+<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">id</span><span class="o">;</span>
+<span class="o">}</span>
 
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> Action<span style="color:#f92672">.</span><span style="color:#a6e22e">setId</span><span style="color:#f92672">(</span>java<span style="color:#f92672">.</span><span style="color:#a6e22e">lang</span><span style="color:#f92672">.</span><span style="color:#a6e22e">Long</span> id<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-<span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">id</span> <span style="color:#f92672">=</span> id<span style="color:#f92672">;</span>
-<span style="color:#f92672">}</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="n">Action</span><span class="o">.</span><span class="na">setId</span><span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">Long</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+<span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">id</span><span class="o">;</span>
+<span class="o">}</span>
 
-<span style="color:#66d9ef">public</span> java<span style="color:#f92672">.</span><span style="color:#a6e22e">lang</span><span style="color:#f92672">.</span><span style="color:#a6e22e">Integer</span> Action<span style="color:#f92672">.</span><span style="color:#a6e22e">getVersion</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">version</span><span style="color:#f92672">;</span>
-<span style="color:#f92672">}</span>
+<span class="kd">public</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">Integer</span> <span class="n">Action</span><span class="o">.</span><span class="na">getVersion</span><span class="o">()</span> <span class="o">{</span>
+<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">version</span><span class="o">;</span>
+<span class="o">}</span>
 
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> Action<span style="color:#f92672">.</span><span style="color:#a6e22e">setVersion</span><span style="color:#f92672">(</span>java<span style="color:#f92672">.</span><span style="color:#a6e22e">lang</span><span style="color:#f92672">.</span><span style="color:#a6e22e">Integer</span> version<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-<span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">version</span> <span style="color:#f92672">=</span> version<span style="color:#f92672">;</span>
-<span style="color:#f92672">}</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="n">Action</span><span class="o">.</span><span class="na">setVersion</span><span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">Integer</span> <span class="n">version</span><span class="o">)</span> <span class="o">{</span>
+<span class="k">this</span><span class="o">.</span><span class="na">version</span> <span class="o">=</span> <span class="n">version</span><span class="o">;</span>
+<span class="o">}</span>
 
-<span style="color:#a6e22e">@org.springframework.transaction.annotation.Transactional</span>
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> Action<span style="color:#f92672">.</span><span style="color:#a6e22e">persist</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-<span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">entityManager</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IllegalStateException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)&#34;</span><span style="color:#f92672">);</span>
-<span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">entityManager</span><span style="color:#f92672">.</span><span style="color:#a6e22e">persist</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">);</span>
-<span style="color:#f92672">}</span>
+<span class="nd">@org.springframework.transaction.annotation.Transactional</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="n">Action</span><span class="o">.</span><span class="na">persist</span><span class="o">()</span> <span class="o">{</span>
+<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">entityManager</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalStateException</span><span class="o">(</span><span class="s">&#34;Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)&#34;</span><span class="o">);</span>
+<span class="k">this</span><span class="o">.</span><span class="na">entityManager</span><span class="o">.</span><span class="na">persist</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+<span class="o">}</span>
 
-<span style="color:#a6e22e">@org.springframework.transaction.annotation.Transactional</span>
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> Action<span style="color:#f92672">.</span><span style="color:#a6e22e">remove</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-<span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">entityManager</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IllegalStateException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)&#34;</span><span style="color:#f92672">);</span>
-<span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">entityManager</span><span style="color:#f92672">.</span><span style="color:#a6e22e">remove</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">);</span>
-<span style="color:#f92672">}</span>
+<span class="nd">@org.springframework.transaction.annotation.Transactional</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="n">Action</span><span class="o">.</span><span class="na">remove</span><span class="o">()</span> <span class="o">{</span>
+<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">entityManager</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalStateException</span><span class="o">(</span><span class="s">&#34;Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)&#34;</span><span class="o">);</span>
+<span class="k">this</span><span class="o">.</span><span class="na">entityManager</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+<span class="o">}</span>
 
-<span style="color:#a6e22e">@org.springframework.transaction.annotation.Transactional</span>
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> Action<span style="color:#f92672">.</span><span style="color:#a6e22e">flush</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-<span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">entityManager</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IllegalStateException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)&#34;</span><span style="color:#f92672">);</span>
-<span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">entityManager</span><span style="color:#f92672">.</span><span style="color:#a6e22e">flush</span><span style="color:#f92672">();</span>
-<span style="color:#f92672">}</span>
+<span class="nd">@org.springframework.transaction.annotation.Transactional</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="n">Action</span><span class="o">.</span><span class="na">flush</span><span class="o">()</span> <span class="o">{</span>
+<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">entityManager</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalStateException</span><span class="o">(</span><span class="s">&#34;Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)&#34;</span><span class="o">);</span>
+<span class="k">this</span><span class="o">.</span><span class="na">entityManager</span><span class="o">.</span><span class="na">flush</span><span class="o">();</span>
+<span class="o">}</span>
 
-<span style="color:#a6e22e">@org.springframework.transaction.annotation.Transactional</span>
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> Action<span style="color:#f92672">.</span><span style="color:#a6e22e">merge</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-<span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">entityManager</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IllegalStateException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)&#34;</span><span style="color:#f92672">);</span>
-Action merged <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">entityManager</span><span style="color:#f92672">.</span><span style="color:#a6e22e">merge</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">);</span>
-<span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">entityManager</span><span style="color:#f92672">.</span><span style="color:#a6e22e">flush</span><span style="color:#f92672">();</span>
-<span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">id</span> <span style="color:#f92672">=</span> merged<span style="color:#f92672">.</span><span style="color:#a6e22e">getId</span><span style="color:#f92672">();</span>
-<span style="color:#f92672">}</span>
+<span class="nd">@org.springframework.transaction.annotation.Transactional</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="n">Action</span><span class="o">.</span><span class="na">merge</span><span class="o">()</span> <span class="o">{</span>
+<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">entityManager</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalStateException</span><span class="o">(</span><span class="s">&#34;Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)&#34;</span><span class="o">);</span>
+<span class="n">Action</span> <span class="n">merged</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">entityManager</span><span class="o">.</span><span class="na">merge</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+<span class="k">this</span><span class="o">.</span><span class="na">entityManager</span><span class="o">.</span><span class="na">flush</span><span class="o">();</span>
+<span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
+<span class="o">}</span>
 
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">long</span> Action<span style="color:#f92672">.</span><span style="color:#a6e22e">countActions</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-<span style="color:#66d9ef">return</span> <span style="color:#f92672">(</span>Long<span style="color:#f92672">)</span> <span style="color:#66d9ef">new</span> Action<span style="color:#f92672">().</span><span style="color:#a6e22e">entityManager</span><span style="color:#f92672">.</span><span style="color:#a6e22e">createQuery</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;select count(o) from Action o&#34;</span><span style="color:#f92672">).</span><span style="color:#a6e22e">getSingleResult</span><span style="color:#f92672">();</span>
-<span style="color:#f92672">}</span>
+<span class="kd">public</span> <span class="kd">static</span> <span class="kt">long</span> <span class="n">Action</span><span class="o">.</span><span class="na">countActions</span><span class="o">()</span> <span class="o">{</span>
+<span class="k">return</span> <span class="o">(</span><span class="n">Long</span><span class="o">)</span> <span class="k">new</span> <span class="n">Action</span><span class="o">().</span><span class="na">entityManager</span><span class="o">.</span><span class="na">createQuery</span><span class="o">(</span><span class="s">&#34;select count(o) from Action o&#34;</span><span class="o">).</span><span class="na">getSingleResult</span><span class="o">();</span>
+<span class="o">}</span>
 
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> java<span style="color:#f92672">.</span><span style="color:#a6e22e">util</span><span style="color:#f92672">.</span><span style="color:#a6e22e">List</span><span style="color:#f92672">&lt;</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">academ</span><span style="color:#f92672">.</span><span style="color:#a6e22e">uthark</span><span style="color:#f92672">.</span><span style="color:#a6e22e">research</span><span style="color:#f92672">.</span><span style="color:#a6e22e">roo</span><span style="color:#f92672">.</span><span style="color:#a6e22e">domain</span><span style="color:#f92672">.</span><span style="color:#a6e22e">action</span><span style="color:#f92672">&gt;</span> Action<span style="color:#f92672">.</span><span style="color:#a6e22e">findAllActions</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> Action<span style="color:#f92672">().</span><span style="color:#a6e22e">entityManager</span><span style="color:#f92672">.</span><span style="color:#a6e22e">createQuery</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;select o from Action o&#34;</span><span style="color:#f92672">).</span><span style="color:#a6e22e">getResultList</span><span style="color:#f92672">();</span>
-<span style="color:#f92672">}</span>
+<span class="kd">public</span> <span class="kd">static</span> <span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">List</span><span class="o">&lt;</span><span class="n">org</span><span class="o">.</span><span class="na">academ</span><span class="o">.</span><span class="na">uthark</span><span class="o">.</span><span class="na">research</span><span class="o">.</span><span class="na">roo</span><span class="o">.</span><span class="na">domain</span><span class="o">.</span><span class="na">action</span><span class="o">&gt;</span> <span class="n">Action</span><span class="o">.</span><span class="na">findAllActions</span><span class="o">()</span> <span class="o">{</span>
+<span class="k">return</span> <span class="k">new</span> <span class="n">Action</span><span class="o">().</span><span class="na">entityManager</span><span class="o">.</span><span class="na">createQuery</span><span class="o">(</span><span class="s">&#34;select o from Action o&#34;</span><span class="o">).</span><span class="na">getResultList</span><span class="o">();</span>
+<span class="o">}</span>
 
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> org<span style="color:#f92672">.</span><span style="color:#a6e22e">academ</span><span style="color:#f92672">.</span><span style="color:#a6e22e">uthark</span><span style="color:#f92672">.</span><span style="color:#a6e22e">research</span><span style="color:#f92672">.</span><span style="color:#a6e22e">roo</span><span style="color:#f92672">.</span><span style="color:#a6e22e">domain</span><span style="color:#f92672">.</span><span style="color:#a6e22e">Action</span> Action<span style="color:#f92672">.</span><span style="color:#a6e22e">findAction</span><span style="color:#f92672">(</span>java<span style="color:#f92672">.</span><span style="color:#a6e22e">lang</span><span style="color:#f92672">.</span><span style="color:#a6e22e">Long</span> id<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-<span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>id <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IllegalArgumentException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;An identifier is required to retrieve an instance of Action&#34;</span><span style="color:#f92672">);</span>
-<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> Action<span style="color:#f92672">().</span><span style="color:#a6e22e">entityManager</span><span style="color:#f92672">.</span><span style="color:#a6e22e">find</span><span style="color:#f92672">(</span>Action<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">,</span> id<span style="color:#f92672">);</span>
-<span style="color:#f92672">}</span>
+<span class="kd">public</span> <span class="kd">static</span> <span class="n">org</span><span class="o">.</span><span class="na">academ</span><span class="o">.</span><span class="na">uthark</span><span class="o">.</span><span class="na">research</span><span class="o">.</span><span class="na">roo</span><span class="o">.</span><span class="na">domain</span><span class="o">.</span><span class="na">Action</span> <span class="n">Action</span><span class="o">.</span><span class="na">findAction</span><span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">Long</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+<span class="k">if</span> <span class="o">(</span><span class="n">id</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&#34;An identifier is required to retrieve an instance of Action&#34;</span><span class="o">);</span>
+<span class="k">return</span> <span class="k">new</span> <span class="n">Action</span><span class="o">().</span><span class="na">entityManager</span><span class="o">.</span><span class="na">find</span><span class="o">(</span><span class="n">Action</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">id</span><span class="o">);</span>
+<span class="o">}</span>
 
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> java<span style="color:#f92672">.</span><span style="color:#a6e22e">util</span><span style="color:#f92672">.</span><span style="color:#a6e22e">List</span><span style="color:#f92672">&lt;</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">academ</span><span style="color:#f92672">.</span><span style="color:#a6e22e">uthark</span><span style="color:#f92672">.</span><span style="color:#a6e22e">research</span><span style="color:#f92672">.</span><span style="color:#a6e22e">roo</span><span style="color:#f92672">.</span><span style="color:#a6e22e">domain</span><span style="color:#f92672">.</span><span style="color:#a6e22e">action</span><span style="color:#f92672">&gt;</span> Action<span style="color:#f92672">.</span><span style="color:#a6e22e">findActionEntries</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> firstResult<span style="color:#f92672">,</span> <span style="color:#66d9ef">int</span> maxResults<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> Action<span style="color:#f92672">().</span><span style="color:#a6e22e">entityManager</span><span style="color:#f92672">.</span><span style="color:#a6e22e">createQuery</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;select o from Action o&#34;</span><span style="color:#f92672">).</span><span style="color:#a6e22e">setFirstResult</span><span style="color:#f92672">(</span>firstResult<span style="color:#f92672">).</span><span style="color:#a6e22e">setMaxResults</span><span style="color:#f92672">(</span>maxResults<span style="color:#f92672">).</span><span style="color:#a6e22e">getResultList</span><span style="color:#f92672">();</span>
-<span style="color:#f92672">}</span>
+<span class="kd">public</span> <span class="kd">static</span> <span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">List</span><span class="o">&lt;</span><span class="n">org</span><span class="o">.</span><span class="na">academ</span><span class="o">.</span><span class="na">uthark</span><span class="o">.</span><span class="na">research</span><span class="o">.</span><span class="na">roo</span><span class="o">.</span><span class="na">domain</span><span class="o">.</span><span class="na">action</span><span class="o">&gt;</span> <span class="n">Action</span><span class="o">.</span><span class="na">findActionEntries</span><span class="o">(</span><span class="kt">int</span> <span class="n">firstResult</span><span class="o">,</span> <span class="kt">int</span> <span class="n">maxResults</span><span class="o">)</span> <span class="o">{</span>
+<span class="k">return</span> <span class="k">new</span> <span class="n">Action</span><span class="o">().</span><span class="na">entityManager</span><span class="o">.</span><span class="na">createQuery</span><span class="o">(</span><span class="s">&#34;select o from Action o&#34;</span><span class="o">).</span><span class="na">setFirstResult</span><span class="o">(</span><span class="n">firstResult</span><span class="o">).</span><span class="na">setMaxResults</span><span class="o">(</span><span class="n">maxResults</span><span class="o">).</span><span class="na">getResultList</span><span class="o">();</span>
+<span class="o">}</span>
 
-<span style="color:#f92672">}</span></code></pre></div>
+<span class="o">}</span></code></pre></div>
 <p>Как легко видеть, этот аспект добавляет классу Action CRUD-методы, поля id и version.</p>
 
 <ul>
 <li><strong>Action_Roo_Finder.aj</strong>
 Этот аспект аккумулирует все finder-методы, созданные через консоль Spring Roo.</li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">privileged aspect Action_Roo_Finder <span style="color:#f92672">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">privileged</span> <span class="n">aspect</span> <span class="n">Action_Roo_Finder</span> <span class="o">{</span>
 
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> javax<span style="color:#f92672">.</span><span style="color:#a6e22e">persistence</span><span style="color:#f92672">.</span><span style="color:#a6e22e">Query</span> Action<span style="color:#f92672">.</span><span style="color:#a6e22e">findActionsByName</span><span style="color:#f92672">(</span>java<span style="color:#f92672">.</span><span style="color:#a6e22e">lang</span><span style="color:#f92672">.</span><span style="color:#a6e22e">String</span> name<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-<span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>name <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IllegalArgumentException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;The name argument is required&#34;</span><span style="color:#f92672">);</span>
-javax<span style="color:#f92672">.</span><span style="color:#a6e22e">persistence</span><span style="color:#f92672">.</span><span style="color:#a6e22e">Query</span> q <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Action<span style="color:#f92672">().</span><span style="color:#a6e22e">entityManager</span><span style="color:#f92672">.</span><span style="color:#a6e22e">createQuery</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;FROM Action AS action WHERE action.name = :name&#34;</span><span style="color:#f92672">);</span>
-q<span style="color:#f92672">.</span><span style="color:#a6e22e">setParameter</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;name&#34;</span><span style="color:#f92672">,</span> name<span style="color:#f92672">);</span>
-<span style="color:#66d9ef">return</span> q<span style="color:#f92672">;</span>
-<span style="color:#f92672">}</span>
+<span class="kd">public</span> <span class="kd">static</span> <span class="n">javax</span><span class="o">.</span><span class="na">persistence</span><span class="o">.</span><span class="na">Query</span> <span class="n">Action</span><span class="o">.</span><span class="na">findActionsByName</span><span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+<span class="k">if</span> <span class="o">(</span><span class="n">name</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&#34;The name argument is required&#34;</span><span class="o">);</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">persistence</span><span class="o">.</span><span class="na">Query</span> <span class="n">q</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Action</span><span class="o">().</span><span class="na">entityManager</span><span class="o">.</span><span class="na">createQuery</span><span class="o">(</span><span class="s">&#34;FROM Action AS action WHERE action.name = :name&#34;</span><span class="o">);</span>
+<span class="n">q</span><span class="o">.</span><span class="na">setParameter</span><span class="o">(</span><span class="s">&#34;name&#34;</span><span class="o">,</span> <span class="n">name</span><span class="o">);</span>
+<span class="k">return</span> <span class="n">q</span><span class="o">;</span>
+<span class="o">}</span>
 
-<span style="color:#f92672">}</span></code></pre></div>
+<span class="o">}</span></code></pre></div>
 <ul>
 <li><strong>Action_Roo_JavaBean.aj</strong>
 Для уменьшения загромождения кода ненужными методами для доступа к полям Spring Roo выносит их в отдельный аспект.</li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">privileged aspect Action_Roo_JavaBean <span style="color:#f92672">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">privileged</span> <span class="n">aspect</span> <span class="n">Action_Roo_JavaBean</span> <span class="o">{</span>
 
-<span style="color:#66d9ef">public</span> java<span style="color:#f92672">.</span><span style="color:#a6e22e">lang</span><span style="color:#f92672">.</span><span style="color:#a6e22e">String</span> Action<span style="color:#f92672">.</span><span style="color:#a6e22e">getName</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">name</span><span style="color:#f92672">;</span>
-<span style="color:#f92672">}</span>
+<span class="kd">public</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">String</span> <span class="n">Action</span><span class="o">.</span><span class="na">getName</span><span class="o">()</span> <span class="o">{</span>
+<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">name</span><span class="o">;</span>
+<span class="o">}</span>
 
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> Action<span style="color:#f92672">.</span><span style="color:#a6e22e">setName</span><span style="color:#f92672">(</span>java<span style="color:#f92672">.</span><span style="color:#a6e22e">lang</span><span style="color:#f92672">.</span><span style="color:#a6e22e">String</span> name<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-<span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">name</span> <span style="color:#f92672">=</span> name<span style="color:#f92672">;</span>
-<span style="color:#f92672">}</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="n">Action</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+<span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+<span class="o">}</span>
 
-<span style="color:#66d9ef">public</span> java<span style="color:#f92672">.</span><span style="color:#a6e22e">lang</span><span style="color:#f92672">.</span><span style="color:#a6e22e">String</span> Action<span style="color:#f92672">.</span><span style="color:#a6e22e">getDescription</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">description</span><span style="color:#f92672">;</span>
-<span style="color:#f92672">}</span>
+<span class="kd">public</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">String</span> <span class="n">Action</span><span class="o">.</span><span class="na">getDescription</span><span class="o">()</span> <span class="o">{</span>
+<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">description</span><span class="o">;</span>
+<span class="o">}</span>
 
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> Action<span style="color:#f92672">.</span><span style="color:#a6e22e">setDescription</span><span style="color:#f92672">(</span>java<span style="color:#f92672">.</span><span style="color:#a6e22e">lang</span><span style="color:#f92672">.</span><span style="color:#a6e22e">String</span> description<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-<span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">description</span> <span style="color:#f92672">=</span> description<span style="color:#f92672">;</span>
-<span style="color:#f92672">}</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="n">Action</span><span class="o">.</span><span class="na">setDescription</span><span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">String</span> <span class="n">description</span><span class="o">)</span> <span class="o">{</span>
+<span class="k">this</span><span class="o">.</span><span class="na">description</span> <span class="o">=</span> <span class="n">description</span><span class="o">;</span>
+<span class="o">}</span>
 
-<span style="color:#f92672">}</span></code></pre></div>
+<span class="o">}</span></code></pre></div>
 <ul>
 <li><strong>Action_Roo_Plural.aj</strong>
 В данном аспекте можно определить, как созданная сущность выглядит во множественном числе.</li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">package</span> org.academ.uthark.research.roo.domain<span style="color:#f92672">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">org.academ.uthark.research.roo.domain</span><span class="o">;</span>
 
-privileged aspect Action_Roo_JavaBean <span style="color:#f92672">{</span>
+<span class="n">privileged</span> <span class="n">aspect</span> <span class="n">Action_Roo_JavaBean</span> <span class="o">{</span>
 
-<span style="color:#66d9ef">public</span> java<span style="color:#f92672">.</span><span style="color:#a6e22e">lang</span><span style="color:#f92672">.</span><span style="color:#a6e22e">String</span> Action<span style="color:#f92672">.</span><span style="color:#a6e22e">getName</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">name</span><span style="color:#f92672">;</span>
-<span style="color:#f92672">}</span>
+<span class="kd">public</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">String</span> <span class="n">Action</span><span class="o">.</span><span class="na">getName</span><span class="o">()</span> <span class="o">{</span>
+<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">name</span><span class="o">;</span>
+<span class="o">}</span>
 
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> Action<span style="color:#f92672">.</span><span style="color:#a6e22e">setName</span><span style="color:#f92672">(</span>java<span style="color:#f92672">.</span><span style="color:#a6e22e">lang</span><span style="color:#f92672">.</span><span style="color:#a6e22e">String</span> name<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-<span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">name</span> <span style="color:#f92672">=</span> name<span style="color:#f92672">;</span>
-<span style="color:#f92672">}</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="n">Action</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+<span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+<span class="o">}</span>
 
-<span style="color:#66d9ef">public</span> java<span style="color:#f92672">.</span><span style="color:#a6e22e">lang</span><span style="color:#f92672">.</span><span style="color:#a6e22e">String</span> Action<span style="color:#f92672">.</span><span style="color:#a6e22e">getDescription</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">description</span><span style="color:#f92672">;</span>
-<span style="color:#f92672">}</span>
+<span class="kd">public</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">String</span> <span class="n">Action</span><span class="o">.</span><span class="na">getDescription</span><span class="o">()</span> <span class="o">{</span>
+<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">description</span><span class="o">;</span>
+<span class="o">}</span>
 
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> Action<span style="color:#f92672">.</span><span style="color:#a6e22e">setDescription</span><span style="color:#f92672">(</span>java<span style="color:#f92672">.</span><span style="color:#a6e22e">lang</span><span style="color:#f92672">.</span><span style="color:#a6e22e">String</span> description<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-<span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">description</span> <span style="color:#f92672">=</span> description<span style="color:#f92672">;</span>
-<span style="color:#f92672">}</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="n">Action</span><span class="o">.</span><span class="na">setDescription</span><span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">String</span> <span class="n">description</span><span class="o">)</span> <span class="o">{</span>
+<span class="k">this</span><span class="o">.</span><span class="na">description</span> <span class="o">=</span> <span class="n">description</span><span class="o">;</span>
+<span class="o">}</span>
 
-<span style="color:#f92672">}</span></code></pre></div>
+<span class="o">}</span></code></pre></div>
 <ul>
 <li><strong>Action_Roo_ToString.aj</strong>
 Аспект, переопределяющий <code>toString()</code></li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">privileged aspect Action_Roo_ToString <span style="color:#f92672">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">privileged</span> <span class="n">aspect</span> <span class="n">Action_Roo_ToString</span> <span class="o">{</span>
 
-<span style="color:#66d9ef">public</span> java<span style="color:#f92672">.</span><span style="color:#a6e22e">lang</span><span style="color:#f92672">.</span><span style="color:#a6e22e">String</span> Action<span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-StringBuilder sb <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> StringBuilder<span style="color:#f92672">();</span>
-sb<span style="color:#f92672">.</span><span style="color:#a6e22e">append</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;id: &#34;</span><span style="color:#f92672">).</span><span style="color:#a6e22e">append</span><span style="color:#f92672">(</span>getId<span style="color:#f92672">()).</span><span style="color:#a6e22e">append</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;, &#34;</span><span style="color:#f92672">);</span>
-sb<span style="color:#f92672">.</span><span style="color:#a6e22e">append</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;version: &#34;</span><span style="color:#f92672">).</span><span style="color:#a6e22e">append</span><span style="color:#f92672">(</span>getVersion<span style="color:#f92672">()).</span><span style="color:#a6e22e">append</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;, &#34;</span><span style="color:#f92672">);</span>
-sb<span style="color:#f92672">.</span><span style="color:#a6e22e">append</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;name: &#34;</span><span style="color:#f92672">).</span><span style="color:#a6e22e">append</span><span style="color:#f92672">(</span>getName<span style="color:#f92672">()).</span><span style="color:#a6e22e">append</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;, &#34;</span><span style="color:#f92672">);</span>
-sb<span style="color:#f92672">.</span><span style="color:#a6e22e">append</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;description: &#34;</span><span style="color:#f92672">).</span><span style="color:#a6e22e">append</span><span style="color:#f92672">(</span>getDescription<span style="color:#f92672">()).</span><span style="color:#a6e22e">append</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;, &#34;</span><span style="color:#f92672">);</span>
-<span style="color:#66d9ef">return</span> sb<span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">();</span>
-<span style="color:#f92672">}</span>
+<span class="kd">public</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">String</span> <span class="n">Action</span><span class="o">.</span><span class="na">toString</span><span class="o">()</span> <span class="o">{</span>
+<span class="n">StringBuilder</span> <span class="n">sb</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">();</span>
+<span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">&#34;id: &#34;</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">getId</span><span class="o">()).</span><span class="na">append</span><span class="o">(</span><span class="s">&#34;, &#34;</span><span class="o">);</span>
+<span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">&#34;version: &#34;</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">getVersion</span><span class="o">()).</span><span class="na">append</span><span class="o">(</span><span class="s">&#34;, &#34;</span><span class="o">);</span>
+<span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">&#34;name: &#34;</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">getName</span><span class="o">()).</span><span class="na">append</span><span class="o">(</span><span class="s">&#34;, &#34;</span><span class="o">);</span>
+<span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">&#34;description: &#34;</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">getDescription</span><span class="o">()).</span><span class="na">append</span><span class="o">(</span><span class="s">&#34;, &#34;</span><span class="o">);</span>
+<span class="k">return</span> <span class="n">sb</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+<span class="o">}</span>
 
-<span style="color:#f92672">}</span></code></pre></div>
+<span class="o">}</span></code></pre></div>
 <ul>
 <li><strong>ActionEditor.java</strong>
 Кроме того, при создании контроллеров для работы дополнительно создается <code>ActionEditor</code></li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">import</span> org.springframework.roo.addon.property.editor.RooEditor<span style="color:#f92672">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">org.springframework.roo.addon.property.editor.RooEditor</span><span class="o">;</span>
 
-<span style="color:#a6e22e">@RooEditor</span><span style="color:#f92672">(</span>providePropertyEditorFor <span style="color:#f92672">=</span> Action<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">)</span>
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ActionEditor</span> <span style="color:#f92672">{</span>
-<span style="color:#f92672">}</span></code></pre></div>
+<span class="nd">@RooEditor</span><span class="o">(</span><span class="n">providePropertyEditorFor</span> <span class="o">=</span> <span class="n">Action</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ActionEditor</span> <span class="o">{</span>
+<span class="o">}</span></code></pre></div>
 <ul>
 <li><strong>ActionEditor_Roo_Editor.aj</strong>
 Аспект с реализацией.</li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">privileged aspect ActionEditor_Roo_Editor <span style="color:#f92672">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">privileged</span> <span class="n">aspect</span> <span class="n">ActionEditor_Roo_Editor</span> <span class="o">{</span>
 
-declare parents: ActionEditor <span style="color:#66d9ef">implements</span> java<span style="color:#f92672">.</span><span style="color:#a6e22e">beans</span><span style="color:#f92672">.</span><span style="color:#a6e22e">PropertyEditorSupport</span><span style="color:#f92672">;</span>
+<span class="n">declare</span> <span class="nl">parents:</span> <span class="n">ActionEditor</span> <span class="kd">implements</span> <span class="n">java</span><span class="o">.</span><span class="na">beans</span><span class="o">.</span><span class="na">PropertyEditorSupport</span><span class="o">;</span>
 
-org<span style="color:#f92672">.</span><span style="color:#a6e22e">springframework</span><span style="color:#f92672">.</span><span style="color:#a6e22e">beans</span><span style="color:#f92672">.</span><span style="color:#a6e22e">SimpleTypeConverter</span> ActionEditor<span style="color:#f92672">.</span><span style="color:#a6e22e">typeConverter</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> org<span style="color:#f92672">.</span><span style="color:#a6e22e">springframework</span><span style="color:#f92672">.</span><span style="color:#a6e22e">beans</span><span style="color:#f92672">.</span><span style="color:#a6e22e">SimpleTypeConverter</span><span style="color:#f92672">();</span>
+<span class="n">org</span><span class="o">.</span><span class="na">springframework</span><span class="o">.</span><span class="na">beans</span><span class="o">.</span><span class="na">SimpleTypeConverter</span> <span class="n">ActionEditor</span><span class="o">.</span><span class="na">typeConverter</span> <span class="o">=</span> <span class="k">new</span> <span class="n">org</span><span class="o">.</span><span class="na">springframework</span><span class="o">.</span><span class="na">beans</span><span class="o">.</span><span class="na">SimpleTypeConverter</span><span class="o">();</span>
 
-<span style="color:#66d9ef">public</span> java<span style="color:#f92672">.</span><span style="color:#a6e22e">lang</span><span style="color:#f92672">.</span><span style="color:#a6e22e">String</span> ActionEditor<span style="color:#f92672">.</span><span style="color:#a6e22e">getAsText</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
- Object obj <span style="color:#f92672">=</span> getValue<span style="color:#f92672">();</span> 
- <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>obj <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span> 
-     <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>     
- <span style="color:#f92672">}</span> 
- <span style="color:#66d9ef">return</span> <span style="color:#f92672">(</span>String<span style="color:#f92672">)</span> typeConverter<span style="color:#f92672">.</span><span style="color:#a6e22e">convertIfNecessary</span><span style="color:#f92672">(((</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">academ</span><span style="color:#f92672">.</span><span style="color:#a6e22e">uthark</span><span style="color:#f92672">.</span><span style="color:#a6e22e">research</span><span style="color:#f92672">.</span><span style="color:#a6e22e">roo</span><span style="color:#f92672">.</span><span style="color:#a6e22e">domain</span><span style="color:#f92672">.</span><span style="color:#a6e22e">Action</span><span style="color:#f92672">)</span> obj<span style="color:#f92672">).</span><span style="color:#a6e22e">getId</span><span style="color:#f92672">()</span> <span style="color:#f92672">,</span> String<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span> 
-<span style="color:#f92672">}</span>
+<span class="kd">public</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">String</span> <span class="n">ActionEditor</span><span class="o">.</span><span class="na">getAsText</span><span class="o">()</span> <span class="o">{</span>
+ <span class="n">Object</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">getValue</span><span class="o">();</span> 
+ <span class="k">if</span> <span class="o">(</span><span class="n">obj</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span> 
+     <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>     
+ <span class="o">}</span> 
+ <span class="k">return</span> <span class="o">(</span><span class="n">String</span><span class="o">)</span> <span class="n">typeConverter</span><span class="o">.</span><span class="na">convertIfNecessary</span><span class="o">(((</span><span class="n">org</span><span class="o">.</span><span class="na">academ</span><span class="o">.</span><span class="na">uthark</span><span class="o">.</span><span class="na">research</span><span class="o">.</span><span class="na">roo</span><span class="o">.</span><span class="na">domain</span><span class="o">.</span><span class="na">Action</span><span class="o">)</span> <span class="n">obj</span><span class="o">).</span><span class="na">getId</span><span class="o">()</span> <span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">class</span><span class="o">);</span> 
+<span class="o">}</span>
 
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> ActionEditor<span style="color:#f92672">.</span><span style="color:#a6e22e">setAsText</span><span style="color:#f92672">(</span>java<span style="color:#f92672">.</span><span style="color:#a6e22e">lang</span><span style="color:#f92672">.</span><span style="color:#a6e22e">String</span> text<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
- <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>text <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">||</span> <span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">.</span><span style="color:#a6e22e">equals</span><span style="color:#f92672">(</span>text<span style="color:#f92672">))</span> <span style="color:#f92672">{</span> 
-     setValue<span style="color:#f92672">(</span><span style="color:#66d9ef">null</span><span style="color:#f92672">);</span>     
-     <span style="color:#66d9ef">return</span><span style="color:#f92672">;</span>     
- <span style="color:#f92672">}</span> 
+<span class="kd">public</span> <span class="kt">void</span> <span class="n">ActionEditor</span><span class="o">.</span><span class="na">setAsText</span><span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">String</span> <span class="n">text</span><span class="o">)</span> <span class="o">{</span>
+ <span class="k">if</span> <span class="o">(</span><span class="n">text</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="s">&#34;&#34;</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">text</span><span class="o">))</span> <span class="o">{</span> 
+     <span class="n">setValue</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>     
+     <span class="k">return</span><span class="o">;</span>     
+ <span class="o">}</span> 
 
- java<span style="color:#f92672">.</span><span style="color:#a6e22e">lang</span><span style="color:#f92672">.</span><span style="color:#a6e22e">Long</span> identifier <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>java<span style="color:#f92672">.</span><span style="color:#a6e22e">lang</span><span style="color:#f92672">.</span><span style="color:#a6e22e">Long</span><span style="color:#f92672">)</span> typeConverter<span style="color:#f92672">.</span><span style="color:#a6e22e">convertIfNecessary</span><span style="color:#f92672">(</span>text<span style="color:#f92672">,</span> java<span style="color:#f92672">.</span><span style="color:#a6e22e">lang</span><span style="color:#f92672">.</span><span style="color:#a6e22e">Long</span><span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span> 
- <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>identifier <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span> 
-     setValue<span style="color:#f92672">(</span><span style="color:#66d9ef">null</span><span style="color:#f92672">);</span>     
-     <span style="color:#66d9ef">return</span><span style="color:#f92672">;</span>     
- <span style="color:#f92672">}</span> 
+ <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">Long</span> <span class="n">identifier</span> <span class="o">=</span> <span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">Long</span><span class="o">)</span> <span class="n">typeConverter</span><span class="o">.</span><span class="na">convertIfNecessary</span><span class="o">(</span><span class="n">text</span><span class="o">,</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">Long</span><span class="o">.</span><span class="na">class</span><span class="o">);</span> 
+ <span class="k">if</span> <span class="o">(</span><span class="n">identifier</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span> 
+     <span class="n">setValue</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>     
+     <span class="k">return</span><span class="o">;</span>     
+ <span class="o">}</span> 
 
- setValue<span style="color:#f92672">(</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">academ</span><span style="color:#f92672">.</span><span style="color:#a6e22e">uthark</span><span style="color:#f92672">.</span><span style="color:#a6e22e">research</span><span style="color:#f92672">.</span><span style="color:#a6e22e">roo</span><span style="color:#f92672">.</span><span style="color:#a6e22e">domain</span><span style="color:#f92672">.</span><span style="color:#a6e22e">Action</span><span style="color:#f92672">.</span><span style="color:#a6e22e">findAction</span><span style="color:#f92672">(</span>identifier<span style="color:#f92672">));</span> 
-<span style="color:#f92672">}</span>
+ <span class="n">setValue</span><span class="o">(</span><span class="n">org</span><span class="o">.</span><span class="na">academ</span><span class="o">.</span><span class="na">uthark</span><span class="o">.</span><span class="na">research</span><span class="o">.</span><span class="na">roo</span><span class="o">.</span><span class="na">domain</span><span class="o">.</span><span class="na">Action</span><span class="o">.</span><span class="na">findAction</span><span class="o">(</span><span class="n">identifier</span><span class="o">));</span> 
+<span class="o">}</span>
 
-<span style="color:#f92672">}</span></code></pre></div>
+<span class="o">}</span></code></pre></div>
 <h3 id="а-где-же-equals-hashcode">А где же equals()/hashCode()?</h3>
 
 <p>Легко заметить, что Spring Roo забыл ещё про один важный аспект - про реализацию методов <code>equals()</code> и <code>hashCode()</code>. К релизу, я думаю, эта недоработка будет исправлена.</p>
@@ -436,7 +434,9 @@ org<span style="color:#f92672">.</span><span style="color:#a6e22e">springframewo
         
 
 <footer>
-
+  <div>
+    <p>If you have any questions, feel free to ping me on Twitter.</p>
+  </div>
   <p class="meta">
     
     
@@ -508,7 +508,7 @@ org<span style="color:#f92672">.</span><span style="color:#a6e22e">springframewo
 
 
 <section class="even">
-  <span>Table of Contents</span>
+  <div class="toc-header">Table of Contents</div>
    <nav id="TableOfContents">
 <ul>
 <li>
