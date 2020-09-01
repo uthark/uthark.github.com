@@ -123,6 +123,88 @@
         
         
 <div class="sharing">
+    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2010%2f03%2f22%2fskype-d-bus-python%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
+    <a href="https://twitter.com/intent/tweet?text=%d0%9e%d0%b1%d1%89%d0%b5%d0%bd%d0%b8%d0%b5%20%d1%81%d0%be%20Skype%20%d1%87%d0%b5%d1%80%d0%b5%d0%b7%20D-Bus%20%d0%bd%d0%b0%20Python&url=https%3a%2f%2futhark.github.io%2f2010%2f03%2f22%2fskype-d-bus-python%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
+</div>
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2010/03/22/skype-d-bus-python/">Общение со Skype через D-Bus на Python</a>
+    </h1>
+
+</header>
+
+
+        
+        <!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="cp">#!/bin/sh
+</span><span class="cp"></span>
+<span class="c1"># Stop amarok</span>
+dbus-send --session --type<span class="o">=</span>method_call --dest<span class="o">=</span>org.kde.amarok /Player org.freedesktop.MediaPlayer.Stop
+
+<span class="c1"># Logout from kopete</span>
+dbus-send --session --type<span class="o">=</span>method_call --dest<span class="o">=</span>org.kde.kopete /Kopete org.kde.Kopete.disconnectAll 
+
+<span class="c1"># Logout from Skype</span>
+skypeapi.py <span class="s1">&#39;SET USERSTATUS OFFLINE&#39;</span>
+
+<span class="c1"># Lock screen</span>
+dbus-send --session --type<span class="o">=</span>method_call --dest<span class="o">=</span>org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.Lock
+</code></pre></div><p>Детали и параметры работы команды <!-- raw HTML omitted -->dbus-send<!-- raw HTML omitted --> описаны в <!-- raw HTML omitted -->man-странице<!-- raw HTML omitted --></p>
+<!-- raw HTML omitted -->
+<div class="highlight"><pre class="chroma"><code class="language-Python" data-lang="Python"><span class="ch">#!/usr/bin/env python</span>
+<span class="kn">import</span> <span class="nn">dbus</span><span class="o">,</span> <span class="nn">sys</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">remote_bus</span> <span class="o">=</span> <span class="n">dbus</span><span class="o">.</span><span class="n">SessionBus</span><span class="p">()</span>
+    
+    <span class="c1"># Check if skype is running.</span>
+    <span class="n">system_service_list</span> <span class="o">=</span> <span class="n">remote_bus</span><span class="o">.</span><span class="n">get_object</span><span class="p">(</span><span class="s1">&#39;org.freedesktop.DBus&#39;</span><span class="p">,</span> <span class="s1">&#39;/org/freedesktop/DBus&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">ListNames</span><span class="p">()</span>
+    <span class="n">skype_api_found</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">system_service_list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">service</span><span class="o">==</span><span class="s1">&#39;com.Skype.API&#39;</span><span class="p">:</span>
+            <span class="n">skype_api_found</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">break</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">skype_api_found</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s1">&#39;No running API-capable Skype found&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Get skype dbus api</span>
+    <span class="n">skype_service</span> <span class="o">=</span> <span class="n">remote_bus</span><span class="o">.</span><span class="n">get_object</span><span class="p">(</span><span class="s1">&#39;com.Skype.API&#39;</span><span class="p">,</span> <span class="s1">&#39;/com/Skype&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Connect to skype.</span>
+    <span class="n">answer</span> <span class="o">=</span> <span class="n">skype_service</span><span class="o">.</span><span class="n">Invoke</span><span class="p">(</span><span class="s1">&#39;NAME SkypeApiClient&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">answer</span> <span class="o">!=</span> <span class="s1">&#39;OK&#39;</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s1">&#39;Could not bind to Skype client&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Check if protocol is supported.</span>
+    <span class="n">answer</span> <span class="o">=</span> <span class="n">skype_service</span><span class="o">.</span><span class="n">Invoke</span><span class="p">(</span><span class="s1">&#39;PROTOCOL 1&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">answer</span> <span class="o">!=</span> <span class="s1">&#39;PROTOCOL 1&#39;</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s1">&#39;This test program only supports Skype API protocol version 1&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Invoke operations</span>
+    <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">:</span>
+        <span class="n">skype_service</span><span class="o">.</span><span class="n">Invoke</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="mi">0</span>    
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="o">&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">__main__</span><span class="o">&amp;</span><span class="n">quot</span><span class="p">;:</span>
+    <span class="n">main</span><span class="p">()</span>
+</code></pre></div><!-- raw HTML omitted -->
+<p><!-- raw HTML omitted -->&lt;img style=&quot;display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;width: 376px; height: 185px;&rdquo; src=&quot;http://2.bp.blogspot.com/_y8p0_dtMJ38/S6ev4yVZkJI/AAAAAAAAA9Q/O87mz2Qnku0/s400/skype.png&rdquo; border=&quot;0&rdquo; alt=&quot;&ldquo;id=&quot;BLOGGER_PHOTO_ID_5451519264074338450&rdquo; /&gt;<!-- raw HTML omitted --></p>
+<p>После этого для скрипта <!-- raw HTML omitted -->go2home<!-- raw HTML omitted --> был создана иконка на панели.</p>
+<!-- raw HTML omitted -->
+<p>В качестве домашнего упражнения предлагаю написать скрипт, который после разблокирования экрана будет запускать все нужные приложения.</p>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2010%2f03%2f21%2ftiddlywiki%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=%d0%a0%d0%b0%d0%b7%d1%80%d0%b0%d0%b1%d0%be%d1%82%d0%ba%d0%b0%20%d0%bc%d0%b0%d0%ba%d1%80%d0%be%d1%81%d0%b0%20%d0%b4%d0%bb%d1%8f%20TiddlyWiki&url=https%3a%2f%2futhark.github.io%2f2010%2f03%2f21%2ftiddlywiki%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
 </div>
@@ -434,60 +516,6 @@ a. <a href="http://msdn.microsoft.com/en-us/library/ms998577.aspx">http://msdn.m
 
         
         <!-- raw HTML omitted -->
-
-        
-
-    </article>
-    
-    <article>
-
-        
-        
-<div class="sharing">
-    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2009%2f12%2f08%2fdropbox%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
-    <a href="https://twitter.com/intent/tweet?text=%d0%98%d1%81%d0%bf%d0%be%d0%bb%d1%8c%d0%b7%d0%be%d0%b2%d0%b0%d0%bd%d0%b8%d0%b5%20Dropbox%20%d0%b4%d0%bb%d1%8f%20%d1%85%d1%80%d0%b0%d0%bd%d0%b5%d0%bd%d0%b8%d1%8f%20%d0%ba%d0%be%d0%bd%d1%84%d0%b8%d0%b3%d1%83%d1%80%d0%b0%d1%86%d0%b8%d0%be%d0%bd%d0%bd%d1%8b%d1%85%20%d1%84%d0%b0%d0%b9%d0%bb%d0%be%d0%b2&url=https%3a%2f%2futhark.github.io%2f2009%2f12%2f08%2fdropbox%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
-</div>
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2009/12/08/dropbox/">Использование Dropbox для хранения конфигурационных файлов</a>
-    </h1>
-
-</header>
-
-
-        
-        <p>Есть такой замечательный сервис - <!-- raw HTML omitted -->Dropbox<!-- raw HTML omitted -->. <!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-Этот сервис является онлайн-хранилищем ваших данных. Работает очень просто:<!-- raw HTML omitted -->
-<!-- raw HTML omitted --></p>
-<ol>
-<li>Вы регистрируетесь в сервисе.<!-- raw HTML omitted --></li>
-<li>Устанавливаете клиент<!-- raw HTML omitted --></li>
-<li>Пользуетесь.<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-Недавно я понял, что этот сервис можно легко и непринуждённо использовать не только для хранения различных документов и фотографий, а также и конфигурационных файлов приложений, что существенно упрощает жизнь, когда у вас несколько рабочих машин (например, у меня домашний компьютер, ноутбук, а также ещё и рабочий) - необходимо каким-то образом синхронизовать конфиги при изменении их на одной из машине с другими.<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-Итак, что я сделал.<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-Нижеприведённые действия я делал на одной машине:<!-- raw HTML omitted --></li>
-<li>Создал каталог <!-- raw HTML omitted -->ConfigFiles<!-- raw HTML omitted --><!-- raw HTML omitted --></li>
-<li>Переместил в него свои конфигурационные файлы (<!-- raw HTML omitted -->~/.zshrc<!-- raw HTML omitted -->, <!-- raw HTML omitted -->~/.zsh<!-- raw HTML omitted -->, <!-- raw HTML omitted -->~/.vimrc<!-- raw HTML omitted -->, <!-- raw HTML omitted -->~/.vim<!-- raw HTML omitted -->)<!-- raw HTML omitted --></li>
-<li>Из каталога Dropbox сделал соответствующие симлинки в домашнем каталоге.<!-- raw HTML omitted -->
-<!-- raw HTML omitted --></li>
-</ol>
-<!-- raw HTML omitted -->
-<p><!-- raw HTML omitted --><!-- raw HTML omitted -->
-Теперь нужно создать в домашнем каталоге файл с локальной конфигурацией:<!-- raw HTML omitted --></p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>И внести в него конфигурацию, локальную для машины.<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-Да, этот файл тоже может быть симлинком на файл из dropbox.<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-P.S. Если вас заинтересовал сервис, то прошу вас регистироваться по <!-- raw HTML omitted -->реферальной ссылке<!-- raw HTML omitted -->, тогда и вам и мне добавят +250 мегабайт бесплатно.<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-P.P.S. Да, ещё забыл сказать, что сервис достаточно умный и отправляет дельты файлов во время синхронизации. Подробнее - <!-- raw HTML omitted -->в официальной документации<!-- raw HTML omitted -->.<!-- raw HTML omitted --></p>
-<!-- raw HTML omitted -->
 
         
 

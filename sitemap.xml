@@ -3,17 +3,57 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://uthark.github.io/categories/</loc>
-    <lastmod>2018-06-24T00:00:00+00:00</lastmod>
+    <loc>https://uthark.github.io/categories/adblocking/</loc>
+    <lastmod>2020-08-31T22:55:25-07:00</lastmod>
   </url>
   
   <url>
-    <loc>https://uthark.github.io/usefularticles/</loc>
-    <lastmod>2018-06-24T00:00:00+00:00</lastmod>
+    <loc>https://uthark.github.io/categories/</loc>
+    <lastmod>2020-08-31T22:55:25-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://uthark.github.io/categories/pihole/</loc>
+    <lastmod>2020-08-31T22:55:25-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://uthark.github.io/post/</loc>
+    <lastmod>2020-08-31T22:55:25-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://uthark.github.io/categories/raspberry/</loc>
+    <lastmod>2020-08-31T22:55:25-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://uthark.github.io/post/2020-08-31-pihole/</loc>
+    <lastmod>2020-08-31T22:55:25-07:00</lastmod>
   </url>
   
   <url>
     <loc>https://uthark.github.io/</loc>
+    <lastmod>2020-08-31T22:55:25-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://uthark.github.io/tags/tag1/</loc>
+    <lastmod>2020-08-31T22:55:25-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://uthark.github.io/tags/tag2/</loc>
+    <lastmod>2020-08-31T22:55:25-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://uthark.github.io/tags/</loc>
+    <lastmod>2020-08-31T22:55:25-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://uthark.github.io/usefularticles/</loc>
     <lastmod>2018-06-24T00:00:00+00:00</lastmod>
   </url>
   
@@ -29,11 +69,6 @@
   
   <url>
     <loc>https://uthark.github.io/post/2018-02-24-used-stuff/</loc>
-    <lastmod>2018-02-24T11:46:41-05:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://uthark.github.io/post/</loc>
     <lastmod>2018-02-24T11:46:41-05:00</lastmod>
   </url>
   
@@ -1214,10 +1249,6 @@
   
   <url>
     <loc>https://uthark.github.io/google8ccc21a81c1d9755.html</loc>
-  </url>
-  
-  <url>
-    <loc>https://uthark.github.io/tags/</loc>
   </url>
   
 </urlset>

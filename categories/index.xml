@@ -6,10 +6,37 @@
     <description>Recent content in Categories on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 24 Jun 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 31 Aug 2020 22:55:25 -0700</lastBuildDate>
     
 	<atom:link href="https://uthark.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>adblocking</title>
+      <link>https://uthark.github.io/categories/adblocking/</link>
+      <pubDate>Mon, 31 Aug 2020 22:55:25 -0700</pubDate>
+      
+      <guid>https://uthark.github.io/categories/adblocking/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>pihole</title>
+      <link>https://uthark.github.io/categories/pihole/</link>
+      <pubDate>Mon, 31 Aug 2020 22:55:25 -0700</pubDate>
+      
+      <guid>https://uthark.github.io/categories/pihole/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>raspberry</title>
+      <link>https://uthark.github.io/categories/raspberry/</link>
+      <pubDate>Mon, 31 Aug 2020 22:55:25 -0700</pubDate>
+      
+      <guid>https://uthark.github.io/categories/raspberry/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>useful</title>
