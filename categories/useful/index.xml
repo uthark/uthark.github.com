@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Useful on Sharing knowledge</title>
+    <title>useful on Sharing knowledge</title>
     <link>https://uthark.github.io/categories/useful/</link>
-    <description>Recent content in Useful on Sharing knowledge</description>
+    <description>Recent content in useful on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 24 Jun 2018 00:00:00 +0000</lastBuildDate>
@@ -26,11 +26,7 @@
       <pubDate>Tue, 08 Dec 2009 23:17:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2009/12/08/dropbox/</guid>
-      <description>Есть такой замечательный сервис - Dropbox. Этот сервис является онлайн-хранилищем ваших данных. Работает очень просто:
-1. Вы регистрируетесь в сервисе.
-2. Устанавливаете клиент
-3. Пользуетесь.
-Недавно я понял, что этот сервис можно легко и непринуждённо использовать не только для хранения различных документов и фотографий, а также и конфигурационных файлов приложений, что существенно упрощает жизнь, когда у вас несколько рабочих машин (например, у меня домашний компьютер, ноутбук, а также ещё и рабочий) - необходимо каким-то образом синхронизовать конфиги при изменении их на одной из машине с другими.</description>
+      <description>Есть такой замечательный сервис - Dropbox. Этот сервис является онлайн-хранилищем ваших данных. Работает очень просто: Вы регистрируетесь в сервисе. Устанавливаете клиент Пользуетесь.Недавно я понял, что этот сервис можно легко и непринуждённо использовать не только для хранения различных документов и фотографий, а также и конфигурационных файлов приложений, что существенно упрощает жизнь, когда у вас несколько рабочих машин (например, у меня домашний компьютер, ноутбук, а также ещё и рабочий) - необходимо каким-то образом синхронизовать конфиги при изменении их на одной из машине с другими.</description>
     </item>
     
   </channel>

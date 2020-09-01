@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Chromium on Sharing knowledge</title>
+    <title>chromium on Sharing knowledge</title>
     <link>https://uthark.github.io/categories/chromium/</link>
-    <description>Recent content in Chromium on Sharing knowledge</description>
+    <description>Recent content in chromium on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 08 Dec 2009 23:43:00 +0000</lastBuildDate>
@@ -17,9 +17,7 @@
       <pubDate>Tue, 08 Dec 2009 23:43:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2009/12/08/delicious-google-chrome/</guid>
-      <description>Итак, расширение для работы с Delicious доступно на сайте расширений Google Chrome.
-Посмотреть и установить
-Новые версии расширения буду закачить на этот сайт. </description>
+      <description></description>
     </item>
     
     <item>
@@ -28,11 +26,7 @@
       <pubDate>Wed, 25 Nov 2009 23:16:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2009/11/25/delicious-plugin/</guid>
-      <description>Google запустил сайт Chrome Extensions.
-В данный момент сайт доступен только разработчикам расширений. Залил расширение, написал кратенькое описание. Жду запуска сайта. :)
-А пока сайт закрыт для рядовых пользователей последнюю версию можно скачать тут.
-P.S. А тем временем работа над расширением продолжается.
-P.P.S. У расширения появилась своя страничка в сети: Project Home Page</description>
+      <description>Google запустил сайт Chrome Extensions.В данный момент сайт доступен только разработчикам расширений. Залил расширение, написал кратенькое описание. Жду запуска сайта. :)А пока сайт закрыт для рядовых пользователей последнюю версию можно скачать тут.P.S. А тем временем работа над расширением продолжается.P.P.S. У расширения появилась своя страничка в сети: Project Home Page</description>
     </item>
     
     <item>
@@ -41,13 +35,7 @@ P.P.S. У расширения появилась своя страничка в
       <pubDate>Tue, 24 Nov 2009 23:09:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2009/11/24/google-chrome/</guid>
-      <description>В продолжение предыдущей заметки
-Логично предположить, что у расширений могут быть настройки. В Google Chrome/Chromium для этого есть специальный API.
-Для того, чтобы создать собственную страницу настроек необходимо сделать следующее:
-1. Объявить в манифесте страницу настроек
-{ &amp;ldquo;name&amp;rdquo;: &amp;ldquo;Delicious plugin&amp;rdquo;, &amp;ldquo;version&amp;rdquo;: &amp;ldquo;0.2&amp;rdquo;, &amp;ldquo;background_page&amp;rdquo;: &amp;ldquo;background.html&amp;rdquo;, &amp;ldquo;options_page&amp;rdquo;: &amp;ldquo;options.html&amp;rdquo; } 
-2. Реализовать страницу с настройками.
-Страница с настройками - это обычная HTML-страничка. Для доступа к настройкам Google Chrome предоставляет объект localStorage, который умеет сохранять и возвращать значения.</description>
+      <description>В продолжение предыдущей заметкиЛогично предположить, что у расширений могут быть настройки. В Google Chrome/Chromium для этого есть специальный API.Для того, чтобы создать собственную страницу настроек необходимо сделать следующее: Объявить в манифесте страницу настроек  Реализовать страницу с настройками.Страница с настройками - это обычная HTML-страничка. Для доступа к настройкам Google Chrome предоставляет объект localStorage, который умеет сохранять и возвращать значения.С объектом localStorageработа идёт как с обычным hash.   </description>
     </item>
     
     <item>
@@ -56,13 +44,9 @@ P.P.S. У расширения появилась своя страничка в
       <pubDate>Sat, 14 Nov 2009 22:34:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2009/11/14/delicious-bookmarks-google/</guid>
-      <description>Введение
-Решил научиться писать собственные расширения для Google Chrome/Chromium.
-За идею взял официальное расширение от Yahoo! для Firefox - Delicious Bookmarks.
-Структура расширения
-Расширение - файл с расширением .crx. На самом деле это просто ZIP-архив с файлом манифеста внутри.
-Файл манифеста{ &amp;ldquo;name&amp;rdquo;: &amp;ldquo;Delicious plugin&amp;rdquo;, // 1 &amp;ldquo;version&amp;rdquo;: &amp;ldquo;0.2&amp;rdquo;, // 2 &amp;ldquo;background_page&amp;rdquo;: &amp;ldquo;background.html&amp;rdquo;, // 3 &amp;ldquo;permissions&amp;rdquo;: [ // 4 &amp;ldquo;bookmarks&amp;rdquo;, &amp;ldquo;tabs&amp;rdquo; ],
-&amp;ldquo;browser_action&amp;rdquo;: { // 5 &amp;ldquo;name&amp;rdquo;: &amp;ldquo;Save bookmark to delicious.com&amp;rdquo;, &amp;ldquo;default_title&amp;rdquo;: &amp;ldquo;Save bookmark to delicious.</description>
+      <description>&amp;ldquo;browser_action&amp;rdquo;: { // 5 &amp;ldquo;name&amp;rdquo;: &amp;ldquo;Save bookmark to delicious.com&amp;rdquo;, &amp;ldquo;default_title&amp;rdquo;: &amp;ldquo;Save bookmark to delicious.com&amp;rdquo;, &amp;ldquo;default_icon&amp;rdquo;: &amp;ldquo;delicious.20.gif&amp;rdquo; // optional },
+&amp;ldquo;content_scripts&amp;rdquo;: [ // 6 { &amp;ldquo;matches&amp;rdquo;: [&amp;ldquo;http:///&amp;rdquo;, &amp;ldquo;https:///&amp;quot;], &amp;ldquo;js&amp;rdquo;: [&amp;ldquo;getDocumentSelection.js&amp;rdquo;] } ],
+&amp;ldquo;options_page&amp;rdquo;: &amp;ldquo;options.html&amp;rdquo; // 7 } Манифест - файл в формате JSON.Манифест состоит из следующих частей: name- Имя расширения version- Версия расширения background_page- основной файл с расширением. Это обычный HTML-файл с разметкой. permissions- разрешения для расширения. Указываем, что нам нужен доступ к вкладкам (tabs) и закладкам (bookmarks).</description>
     </item>
     
   </channel>

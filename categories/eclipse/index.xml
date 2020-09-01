@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Eclipse on Sharing knowledge</title>
+    <title>eclipse on Sharing knowledge</title>
     <link>https://uthark.github.io/categories/eclipse/</link>
-    <description>Recent content in Eclipse on Sharing knowledge</description>
+    <description>Recent content in eclipse on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 03 May 2009 00:18:00 +0000</lastBuildDate>
@@ -17,9 +17,7 @@
       <pubDate>Sun, 03 May 2009 00:18:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2009/05/03/eclipse/</guid>
-      <description>Многие ругают Eclipse за то, что там нет многого из того, что есть в коробке у Jetbrains Intellij IDEA. Мне всегда казалось это не очень корректным, так как Eclipse в первую очередь платформа, а уже потом - среда для Java разработки.
-Решил собрать воедино весь список используемых мною расширений для Eclipse.
-Subclipse - без этого никуда. Это расширение позволяет работать с системой контроля версий Subversion не выходя из Eclipse. m2eclipse - Расширение для работы с maven.</description>
+      <description>Многие ругают Eclipseза то, что там нет многого из того, что есть в коробке у Jetbrains Intellij IDEA. Мне всегда казалось это не очень корректным, так как Eclipse в первую очередь платформа, а уже потом - среда для Java разработки.Решил собрать воедино весь список используемых мною расширений для Eclipse.</description>
     </item>
     
   </channel>

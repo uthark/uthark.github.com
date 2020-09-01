@@ -155,10 +155,8 @@
           
           
           
-          <p>Продолжая разговор о <a href="http://www.jcp.org/en/jsr/detail?id=339" target="_blank">JAX RS</a> <a href="https://jax-rs-spec.java.net/nonav/2.0/apidocs/javax/ws/rs/client/package-summary.html" target="_blank">Client API</a> - предположим, что мы уже <a href="/blog/2013/06/28/jaxrs/">используем JAX-RS клиент</a></p>
-
+          <p>Продолжая разговор о <a href="http://www.jcp.org/en/jsr/detail?id=339">JAX RS</a> <a href="https://jax-rs-spec.java.net/nonav/2.0/apidocs/javax/ws/rs/client/package-summary.html">Client API</a> - предположим, что мы уже <a href="/blog/2013/06/28/jaxrs/">используем JAX-RS клиент</a></p>
 <p>У нас есть класс, который умеет создавать прокси для любого REST-интерфейса в проекте. Теперь мы хотим сделать так, чтобы эти интерфейсы можно было автоматически создавать в контексте Spring и связывать с другими бинами.</p>
-
 <p>Первое решение, которое приходит в лоб - объявить бин в конфигурации для каждого интерфейса:</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Configuration</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">SpringConfiguration</span> <span class="o">{</span>
@@ -167,27 +165,20 @@
         <span class="n">List</span><span class="o">&lt;?&gt;</span> <span class="n">providers</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="k">new</span> <span class="n">JsonMessageHandler</span><span class="o">(</span><span class="k">new</span> <span class="n">ObjectMapper</span><span class="o">()));</span>
         <span class="k">return</span> <span class="n">JAXRSClientFactory</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="s">&#34;http://localhost:8080&#34;</span><span class="o">,</span> <span class="n">UserRest</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">providers</span><span class="o">);</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre></div>
-<p>Написав объявление нескольких таких бинов можно задуматься - &ldquo;Есть ли способ проще?&rdquo;.</p>
-
+<span class="o">}</span>
+</code></pre></div><p>Написав объявление нескольких таких бинов можно задуматься - &ldquo;Есть ли способ проще?&rdquo;.</p>
 <p>Есть, и я вам сейчас его покажу.</p>
-
-<p>Для того, чтобы добавлять собственные бины в Spring контекст, мы воспользуемся возможностью расширения Spring контекста с использованием <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/beans/factory/config/BeanFactoryPostProcessor.html" target="_blank"><code>BeanFactoryPostProcessor</code></a>.
+<p>Для того, чтобы добавлять собственные бины в Spring контекст, мы воспользуемся возможностью расширения Spring контекста с использованием <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/beans/factory/config/BeanFactoryPostProcessor.html"><code>BeanFactoryPostProcessor</code></a>.
 Метод <code>postProcessBeanFactory</code> данного класса позволяет выполнить дополнительную обработку фабрики бинов Spring, например, удалить, добавить, переопределить бин.
 Это именно то, что нам нужно - автоматически добавить новые бины в фабрику.</p>
-
 <p>Итак, что нам нужно сделать:</p>
-
 <ol>
 <li>Найти все доступные REST интерфейсы в текущем classpath.</li>
 <li>Для каждого из них создать прокси с использованием <code>JAXRSClientFactory</code> .</li>
 <li>Зарегистрировать каждый прокси в фабрике бинов для дальнейшего использования (например, для @Autowired).</li>
 </ol>
-
-<p>По спецификации JAX-RS, чтобы класс распознавался как REST-ресурс, у него должна быть аннотация <a href="https://jax-rs-spec.java.net/nonav/2.0/apidocs/javax/ws/rs/Path.html" target="_blank"><code>@Path()</code></a>.</p>
-
-<p>Для поиска всех возможных классов/интерфейсов воспользуемся классом <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/context/annotation/ClassPathScanningCandidateComponentProvider.html" target="_blank"><code>ClassPathScanningCandidateComponentProvider</code></a>, который умеет сканировать классы в выбранном пакете и применять фильтры, чтобы собрать только нужные. Также нам нужно учесть, что по умолчанию <code>ClassPathScanningCandidateComponentProvider</code> пытается определить, может ли найденный класс быть и бином (например, проверяет, что это не абстрактный класс и не интерфейс), поэтому нам нужно написать подкласс, который позволит нам работать с интерфейсами.</p>
-
+<p>По спецификации JAX-RS, чтобы класс распознавался как REST-ресурс, у него должна быть аннотация <a href="https://jax-rs-spec.java.net/nonav/2.0/apidocs/javax/ws/rs/Path.html"><code>@Path()</code></a>.</p>
+<p>Для поиска всех возможных классов/интерфейсов воспользуемся классом <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/context/annotation/ClassPathScanningCandidateComponentProvider.html"><code>ClassPathScanningCandidateComponentProvider</code></a>, который умеет сканировать классы в выбранном пакете и применять фильтры, чтобы собрать только нужные. Также нам нужно учесть, что по умолчанию <code>ClassPathScanningCandidateComponentProvider</code> пытается определить, может ли найденный класс быть и бином (например, проверяет, что это не абстрактный класс и не интерфейс), поэтому нам нужно написать подкласс, который позволит нам работать с интерфейсами.</p>
 <p>Пишем класс:</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">RestClientPostProcessor</span> <span class="kd">implements</span> <span class="n">BeanFactoryPostProcessor</span> <span class="o">{</span>
 
@@ -246,8 +237,9 @@
 </span><span class="c1"></span>            <span class="k">return</span> <span class="n">beanDefinition</span><span class="o">.</span><span class="na">getMetadata</span><span class="o">().</span><span class="na">isIndependent</span><span class="o">();</span>
         <span class="o">}</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre></div>
-<p>Теперь этот процессор необходимо зарегистрировать в контексте Spring:</p>
+<span class="o">}</span>
+
+</code></pre></div><p>Теперь этот процессор необходимо зарегистрировать в контексте Spring:</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Configuration</span>
 <span class="kd">class</span> <span class="nc">TestAutowiringConfiguration</span> <span class="o">{</span>
 
@@ -255,11 +247,11 @@
     <span class="kd">public</span> <span class="kd">static</span> <span class="n">RestClientPostProcessor</span> <span class="nf">autowiringRestApiProcessor</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="k">new</span> <span class="n">RestClientPostProcessor</span><span class="o">();</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre></div>
-<p>И теперь можно использовать <code>UserRest</code> как обычный бин:</p>
+<span class="o">}</span>
+</code></pre></div><p>И теперь можно использовать <code>UserRest</code> как обычный бин:</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">    <span class="nd">@Autowired</span>
-    <span class="kd">private</span> <span class="n">UserShowRest</span> <span class="n">userShowRest</span><span class="o">;</span></code></pre></div>
-<p>Если есть вопросы - <a href="https://plus.google.com/112372998073079463630/posts" target="_blank">спрашивайте в Google+</a></p>
+    <span class="kd">private</span> <span class="n">UserShowRest</span> <span class="n">userShowRest</span><span class="o">;</span>
+</code></pre></div><p>Если есть вопросы - <a href="https://plus.google.com/112372998073079463630/posts">спрашивайте в Google+</a></p>
 
         </div>
         
@@ -299,7 +291,7 @@
   
     
       <div id="disqus_thread"></div>
-<script>
+<script type="application/javascript">
     var disqus_config = function () {
     
     
@@ -338,6 +330,11 @@
   </section>
 
 
+<section class="even">
+  <div class="toc-header">Table of Contents</div>
+   <nav id="TableOfContents"></nav>
+</section>
+
 
 
 
@@ -365,7 +362,7 @@
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary site:@LinkageError creator:@LinkageError]"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary creator:@LinkageError site:@LinkageError]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 
@@ -382,7 +379,7 @@
             </li>
         </ul>
     </div>
-    <p>Copyright &copy; 2009&nbsp;—&nbsp;2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+    <p>Copyright &copy; 2009&nbsp;—&nbsp;2020 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
         <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a>, uses custom theme based on
             <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.</span>
     </p>

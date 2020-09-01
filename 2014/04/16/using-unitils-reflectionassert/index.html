@@ -156,9 +156,7 @@ First, update parent&rsquo;s pom.xml:
           
           
           <p>Often it is needed to compare two different instances of the class inside test. I.e. we save object into database, then fetch it back from db and we want to be sure if nothing was lost during saving/reading.</p>
-
-<p>In order to make such assertions more easier and maintainable one can use great Unitils library which has useful class <a href="http://www.unitils.org/tutorial-reflectionassert.html" target="_blank">ReflectionAssert</a></p>
-
+<p>In order to make such assertions more easier and maintainable one can use great Unitils library which has useful class <a href="http://www.unitils.org/tutorial-reflectionassert.html">ReflectionAssert</a></p>
 <p>First, update parent&rsquo;s <code>pom.xml</code>:</p>
 <div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;properties&gt;</span>
     <span class="nt">&lt;unitils.version&gt;</span>3.4<span class="nt">&lt;/unitils.version&gt;</span>
@@ -168,34 +166,32 @@ First, update parent&rsquo;s pom.xml:
     <span class="nt">&lt;artifactId&gt;</span>unitils-core<span class="nt">&lt;/artifactId&gt;</span>
     <span class="nt">&lt;version&gt;</span>${unitils.version}<span class="nt">&lt;/version&gt;</span>
     <span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
-<span class="nt">&lt;/dependency&gt;</span></code></pre></div>
-<p>Then add dependency to the child module:</p>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div><p>Then add dependency to the child module:</p>
 <div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.unitils<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>unitils-core<span class="nt">&lt;/artifactId&gt;</span>
-<span class="nt">&lt;/dependency&gt;</span></code></pre></div>
-<p>Usage is very simple:
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div><p>Usage is very simple:
 Add static import to the class.</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import static</span> <span class="nn">org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals</span><span class="o">;</span></code></pre></div>
-<p>and use it instead of regular JUnit assert:</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">assertReflectionEquals</span><span class="o">(</span><span class="n">expected</span><span class="o">,</span> <span class="n">actual</span><span class="o">);</span></code></pre></div>
-<p>It is possible to pass reflection comparator modes as optional parameters to the above method.</p>
-
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import static</span> <span class="nn">org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals</span><span class="o">;</span>
+</code></pre></div><p>and use it instead of regular JUnit assert:</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">assertReflectionEquals</span><span class="o">(</span><span class="n">expected</span><span class="o">,</span> <span class="n">actual</span><span class="o">);</span>
+</code></pre></div><p>It is possible to pass reflection comparator modes as optional parameters to the above method.</p>
 <p>Be ware that this method is not very useful if you want to compare objects which has floating point or double parameters - ReflectionAssert compares <code>double</code> and <code>float</code> values using <code>==</code>, so it is not very useful. It is not possible to pass epsilon for comparison.</p>
-
 <p>excerpt from <code>org.unitils.reflectionassert.comparator.impl.LenientNumberComparator#compare</code>:</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">Double</span> <span class="n">leftDouble</span> <span class="o">=</span> <span class="n">getDoubleValue</span><span class="o">(</span><span class="n">left</span><span class="o">);</span>
 <span class="n">Double</span> <span class="n">rightDouble</span> <span class="o">=</span> <span class="n">getDoubleValue</span><span class="o">(</span><span class="n">right</span><span class="o">);</span>
 <span class="k">if</span> <span class="o">(!</span><span class="n">leftDouble</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">rightDouble</span><span class="o">))</span> <span class="o">{</span>
     <span class="k">return</span> <span class="k">new</span> <span class="n">Difference</span><span class="o">(</span><span class="n">differenceMessage</span><span class="o">,</span> <span class="n">left</span><span class="o">,</span> <span class="n">right</span><span class="o">);</span>
-<span class="o">}</span></code></pre></div>
-<p>If you need to compare double values in JUnit assertions then it is better to use <a href="https://code.google.com/p/hamcrest/" target="_blank">hamcrest library</a>.</p>
+<span class="o">}</span>
+</code></pre></div><p>If you need to compare double values in JUnit assertions then it is better to use <a href="https://code.google.com/p/hamcrest/">hamcrest library</a>.</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import static</span> <span class="nn">org.hamcrest.number.IsCloseTo.closeTo</span><span class="o">;</span>
 <span class="kn">import static</span> <span class="nn">org.junit.Assert.assertThat</span><span class="o">;</span>
 
 <span class="c1">// in @Test method:
-</span><span class="c1"></span><span class="n">assertThat</span><span class="o">(</span><span class="n">actual</span><span class="o">.</span><span class="na">getFederalIncomeTax</span><span class="o">(),</span> <span class="n">closeTo</span><span class="o">(</span><span class="n">expected</span><span class="o">.</span><span class="na">getFederalIncomeTax</span><span class="o">(),</span> <span class="n">EPSILON</span><span class="o">))</span></code></pre></div>
-<p>Happy hacking!</p>
+</span><span class="c1"></span><span class="n">assertThat</span><span class="o">(</span><span class="n">actual</span><span class="o">.</span><span class="na">getFederalIncomeTax</span><span class="o">(),</span> <span class="n">closeTo</span><span class="o">(</span><span class="n">expected</span><span class="o">.</span><span class="na">getFederalIncomeTax</span><span class="o">(),</span> <span class="n">EPSILON</span><span class="o">))</span>
+</code></pre></div><p>Happy hacking!</p>
 
         </div>
         
@@ -235,7 +231,7 @@ Add static import to the class.</p>
   
     
       <div id="disqus_thread"></div>
-<script>
+<script type="application/javascript">
     var disqus_config = function () {
     
     
@@ -274,6 +270,11 @@ Add static import to the class.</p>
   </section>
 
 
+<section class="even">
+  <div class="toc-header">Table of Contents</div>
+   <nav id="TableOfContents"></nav>
+</section>
+
 
 
 
@@ -301,7 +302,7 @@ Add static import to the class.</p>
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary site:@LinkageError creator:@LinkageError]"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary creator:@LinkageError site:@LinkageError]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 
@@ -318,7 +319,7 @@ Add static import to the class.</p>
             </li>
         </ul>
     </div>
-    <p>Copyright &copy; 2009&nbsp;—&nbsp;2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+    <p>Copyright &copy; 2009&nbsp;—&nbsp;2020 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
         <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a>, uses custom theme based on
             <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.</span>
     </p>

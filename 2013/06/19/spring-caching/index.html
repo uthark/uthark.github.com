@@ -154,12 +154,8 @@
           
           
           
-          
-
-<p>В <a href="http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/html/new-in-3.1.html" target="_blank">Spring 3.1</a> появился замечательный модуль - <a href="http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/html/cache.html" target="_blank">Spring Cache</a>, который является абстракцией над кэшированием, что позволяет декларативно реализовывать кэширование в приложении.</p>
-
-<p>Я не буду вдаваться в подробности работы, их можно прочитать в документации, но опишу, каким образом можно настроить <a href="http://memcached.org/" target="_blank">memcached</a> в качестве бэкэнда для работы.</p>
-
+          <p>В <a href="http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/html/new-in-3.1.html">Spring 3.1</a> появился замечательный модуль - <a href="http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/html/cache.html">Spring Cache</a>, который является абстракцией над кэшированием, что позволяет декларативно реализовывать кэширование в приложении.</p>
+<p>Я не буду вдаваться в подробности работы, их можно прочитать в документации, но опишу, каким образом можно настроить <a href="http://memcached.org/">memcached</a> в качестве бэкэнда для работы.</p>
 <h2 id="подключение-зависимостей">Подключение зависимостей</h2>
 <div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>com.google.code.simple-spring-memcached<span class="nt">&lt;/groupId&gt;</span>
@@ -170,18 +166,16 @@
     <span class="nt">&lt;groupId&gt;</span>com.google.code.simple-spring-memcached<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>spring-cache<span class="nt">&lt;/artifactId&gt;</span>
     <span class="nt">&lt;version&gt;</span>3.1.0<span class="nt">&lt;/version&gt;</span>
-<span class="nt">&lt;/dependency&gt;</span></code></pre></div>
-<p><code>spymemcached-provider</code> - это библиотечка для работы с <code>memcached</code> из Java, а <code>spring-cache</code> - модуль интеграции со Spring.</p>
-
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div><p><code>spymemcached-provider</code> - это библиотечка для работы с <code>memcached</code> из Java, а <code>spring-cache</code> - модуль интеграции со Spring.</p>
 <h2 id="включение-кэширования">Включение кэширования</h2>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Configuration</span><span class="o">(</span><span class="s">&#34;serviceConfiguration&#34;</span><span class="o">)</span>
 <span class="nd">@EnableCaching</span><span class="o">(</span><span class="n">proxyTargetClass</span> <span class="o">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="n">AdviceMode</span><span class="o">.</span><span class="na">PROXY</span><span class="o">)</span>
 <span class="nd">@Import</span><span class="o">(</span><span class="n">CacheConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ServiceConfiguration</span> <span class="o">{</span>
   <span class="c1">// bean declarations goes here.
-</span><span class="c1"></span><span class="o">}</span></code></pre></div>
-<p>Аннотация <code>@EnableCaching</code> включает кэширование. Конфигурацию бинов для кэширования мы выносим в отдельный класс, <code>CacheConfiguration</code>, чтобы не смешивать бины, отвечающие за кэширование с бинами, отвечающими за бизнес-логику.</p>
-
+</span><span class="c1"></span><span class="o">}</span>
+</code></pre></div><p>Аннотация <code>@EnableCaching</code> включает кэширование. Конфигурацию бинов для кэширования мы выносим в отдельный класс, <code>CacheConfiguration</code>, чтобы не смешивать бины, отвечающие за кэширование с бинами, отвечающими за бизнес-логику.</p>
 <p>Объявляем необходимые для работы бины:</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Configuration</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">CacheConfiguration</span> <span class="o">{</span>
@@ -227,12 +221,13 @@
         <span class="n">configuration</span><span class="o">.</span><span class="na">setConsistentHashing</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
         <span class="k">return</span> <span class="n">configuration</span><span class="o">;</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre></div>
-<h2 id="использование">Использование</h2>
+<span class="o">}</span>
+</code></pre></div><h2 id="использование">Использование</h2>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Cacheable</span><span class="o">(</span><span class="s">&#34;defaultCache&#34;</span><span class="o">)</span>
 <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">getUser</span><span class="o">(</span><span class="nd">@NotNull</span> <span class="n">String</span> <span class="n">username</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
     <span class="c1">// ...
-</span><span class="c1"></span><span class="o">}</span></code></pre></div>
+</span><span class="c1"></span><span class="o">}</span>
+</code></pre></div>
         </div>
         
 
@@ -271,7 +266,7 @@
   
     
       <div id="disqus_thread"></div>
-<script>
+<script type="application/javascript">
     var disqus_config = function () {
     
     
@@ -313,14 +308,11 @@
 <section class="even">
   <div class="toc-header">Table of Contents</div>
    <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#подключение-зависимостей">Подключение зависимостей</a></li>
-<li><a href="#включение-кэширования">Включение кэширования</a></li>
-<li><a href="#использование">Использование</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#подключение-зависимостей">Подключение зависимостей</a></li>
+    <li><a href="#включение-кэширования">Включение кэширования</a></li>
+    <li><a href="#использование">Использование</a></li>
+  </ul>
 </nav>
 </section>
 
@@ -351,7 +343,7 @@
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[creator:@LinkageError card:summary site:@LinkageError]"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary creator:@LinkageError site:@LinkageError]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 
@@ -368,7 +360,7 @@
             </li>
         </ul>
     </div>
-    <p>Copyright &copy; 2009&nbsp;—&nbsp;2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+    <p>Copyright &copy; 2009&nbsp;—&nbsp;2020 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
         <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a>, uses custom theme based on
             <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.</span>
     </p>

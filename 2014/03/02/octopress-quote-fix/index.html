@@ -63,7 +63,7 @@
 Investigation showed that content in meta tag description contained unquoted quotes, thus resulting in broken HTML.
 After searching within octopress sources I found the issue:
 Rendering of description tag, excerpt from _includes/head.html:
-{% capture  description %} {% if page.description %} {{ page.description }} {% else  %} {{ content | raw_content }} {% endif  %} {% endcapture %} &lt;meta name=&#34;description&#34; content=&#34;{{ description | strip_html | condense_spaces | truncate:150 }}&#34;&gt; After capturing, description is being processed with filters, defined in plugins/octopress_filters." />
+{% capture description %} {% if page.description %} {{ page.description }} {% else %} {{ content | raw_content }} {% endif %} {% endcapture %} &lt;meta name=&#34;description&#34; content=&#34;{{ description | strip_html | condense_spaces | truncate:150 }}&#34;&gt; After capturing, description is being processed with filters, defined in plugins/octopress_filters." />
 
   
 
@@ -157,44 +157,35 @@ Rendering of description tag, excerpt from _includes/head.html:
           
           
           <p>When I created <a href="/about">About Me</a> page I found issue with rendering: for some reason styles and some javascripts were missing on the page.</p>
-
 <p>Investigation showed that content in <code>meta tag</code> description contained unquoted quotes, thus resulting in broken HTML.</p>
-
-<p>After searching within <a href="https://github.com/imathis/octopress/" target="_blank">octopress sources</a> I found the issue:</p>
-
+<p>After searching within <a href="https://github.com/imathis/octopress/">octopress sources</a> I found the issue:</p>
 <p>Rendering of description tag, excerpt from _includes/head.html:</p>
-<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="p">{</span><span class="sx">% capture </span> <span class="n">description</span> <span class="s">%}
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="p">{</span><span class="o">%</span> <span class="n">capture</span> <span class="n">description</span> <span class="s">%}
 </span><span class="s">    {% if page.description %}</span>
         <span class="p">{{</span> <span class="n">page</span><span class="o">.</span><span class="n">description</span> <span class="p">}}</span>
-    <span class="p">{</span><span class="sx">% else </span> <span class="s">%}
+    <span class="p">{</span><span class="o">%</span> <span class="k">else</span> <span class="s">%}
 </span><span class="s">        {{ content | raw_content }</span><span class="p">}</span>
-    <span class="p">{</span><span class="sx">% endif </span> <span class="s">%}
+    <span class="p">{</span><span class="o">%</span> <span class="n">endif</span> <span class="s">%}
 </span><span class="s">{% endcapture %}</span>
-<span class="o">&lt;</span><span class="n">meta</span> <span class="nb">name</span><span class="o">=</span><span class="s2">&#34;description&#34;</span> <span class="n">content</span><span class="o">=</span><span class="s2">&#34;{{ description | strip_html | condense_spaces | truncate:150 }}&#34;</span><span class="o">&gt;</span></code></pre></div>
-<p>After capturing, <code>description</code> is being processed with filters, defined in <code>plugins/octopress_filters.rb</code>. In this case, the following filter are applied:</p>
-
+<span class="o">&lt;</span><span class="n">meta</span> <span class="nb">name</span><span class="o">=</span><span class="s2">&#34;description&#34;</span> <span class="n">content</span><span class="o">=</span><span class="s2">&#34;{{ description | strip_html | condense_spaces | truncate:150 }}&#34;</span><span class="o">&gt;</span>
+</code></pre></div><p>After capturing, <code>description</code> is being processed with filters, defined in <code>plugins/octopress_filters.rb</code>. In this case, the following filter are applied:</p>
 <ul>
 <li>strip_html</li>
 <li>condense_spaces</li>
 <li>truncate</li>
 </ul>
-
 <p>So, as you can see, if description contains quotes, then it will be rendered as is, without any escaping and quotes will break resulting page.</p>
-
 <p>In order to fix this I decided to add new filter, which will just remove quotes.</p>
-
 <p>So, let&rsquo;s add new function, <code>strip_quotes</code> in <code>plugins/octopress_filters.rb</code>:</p>
-
 <p>strip_quotes function:</p>
 <div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="c1"># Strips quotes</span>
 <span class="k">def</span> <span class="nf">strip_quotes</span><span class="p">(</span><span class="n">input</span><span class="p">)</span>
     <span class="n">input</span><span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="sr">/[\&#39;\&#34;&#34;]/</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-<span class="k">end</span></code></pre></div>
-<p>And then we need to update rendering of description tag - add newly created filter:</p>
-<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">&#34;description&#34;</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;{{ description | strip_html | condense_spaces | strip_quotes | truncate:150 }}&#34;</span><span class="p">&gt;</span></code></pre></div>
-<p>After this fix description is being rendered properly.</p>
-
-<p>P.S. In order to render properly <code>{{</code> and <code>}}</code> in the octopress it is required to put content you want to render within <code>raw</code> and <code>endraw</code> tags. See <a href="http://stackoverflow.com/questions/15786144/how-to-escape-in-markdown-on-octopress" target="_blank">StackOverflow</a> <a href="http://stackoverflow.com/questions/3426182/how-to-escape-liquid-template-tags/13582517#13582517" target="_blank">questions</a> for details.</p>
+<span class="k">end</span>
+</code></pre></div><p>And then we need to update rendering of description tag - add newly created filter:</p>
+<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">&#34;description&#34;</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;{{ description | strip_html | condense_spaces | strip_quotes | truncate:150 }}&#34;</span><span class="p">&gt;</span>
+</code></pre></div><p>After this fix description is being rendered properly.</p>
+<p>P.S. In order to render properly <code>{{</code> and <code>}}</code> in the octopress it is required to put content you want to render within <code>raw</code> and <code>endraw</code> tags. See <a href="http://stackoverflow.com/questions/15786144/how-to-escape-in-markdown-on-octopress">StackOverflow</a> <a href="http://stackoverflow.com/questions/3426182/how-to-escape-liquid-template-tags/13582517#13582517">questions</a> for details.</p>
 
         </div>
         
@@ -234,7 +225,7 @@ Rendering of description tag, excerpt from _includes/head.html:
   
     
       <div id="disqus_thread"></div>
-<script>
+<script type="application/javascript">
     var disqus_config = function () {
     
     
@@ -273,6 +264,11 @@ Rendering of description tag, excerpt from _includes/head.html:
   </section>
 
 
+<section class="even">
+  <div class="toc-header">Table of Contents</div>
+   <nav id="TableOfContents"></nav>
+</section>
+
 
 
 
@@ -300,7 +296,7 @@ Rendering of description tag, excerpt from _includes/head.html:
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary site:@LinkageError creator:@LinkageError]"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary creator:@LinkageError site:@LinkageError]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 
@@ -317,7 +313,7 @@ Rendering of description tag, excerpt from _includes/head.html:
             </li>
         </ul>
     </div>
-    <p>Copyright &copy; 2009&nbsp;—&nbsp;2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+    <p>Copyright &copy; 2009&nbsp;—&nbsp;2020 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
         <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a>, uses custom theme based on
             <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.</span>
     </p>

@@ -59,10 +59,7 @@
 
   <meta property="og:title" content="Разработка макроса для TiddlyWiki" />
   <meta property="og:url" content="https://uthark.github.io/2010/03/21/tiddlywiki/" />
-  <meta property="og:description" content="Summary: Пример разработки плагина для TiddlyWiki
-Вступление TiddlyWiki - это вики-движок, полностью написанный на JavaScript и хранящийся в одном файле (как сам движок, так и содержимое). Создатели позиционируют его как &quot;переиспользуемую нелинейную персональную веб записную книжку&quot;.
-Я давно использую TiddlyWiki в различных целях:
-По прямому назначению. Как систему GTD. Как домашнюю страницу на компьютере.  Моя домашняя страница на компьютере - это, если говорить терминами TiddlyWiki, тиддлер, содержащий ссылки на страницы, которые я часто посещаю." />
+  <meta property="og:description" content="/*{{{*/ version.extensions.faviconLinkMacro = {major: 0, minor: 1, revision: 0, date: new Date(2010,3,21)}; // Author: Oleg Atamanenko config.macros.faviconLink = {} config.macros.faviconLink.handler = function(place, macroName, params, wikifier, paramString) { var linkBox = createTiddlyElement(place, &amp;quot;span&amp;quot;, null, &amp;quot;favIcon&amp;quot;, &amp;quot;&amp;quot;); var args = paramString.parseParams(&amp;quot;list&amp;quot;,null,true); var link = getParam(args, &amp;quot;link&amp;quot;, &#39;false&#39;); if (link != &#39;false&#39;){ urlParts = link.split(&#39;/&#39;); imgLink = urlParts[0] &#43; &amp;quot;//&amp;quot; &#43; urlParts[2] &#43; &amp;quot;/favicon.ico&amp;quot;;  var imgElement = createTiddlyElement(linkBox, &amp;quot;img&amp;quot;, null, &amp;quot;faviconImage&amp;quot;, &amp;quot;&amp;quot;); imgElement." />
 
   
 
@@ -155,19 +152,7 @@
           
           
           
-          <p><b>Summary</b>: Пример разработки плагина для TiddlyWiki</p>
-<h4>Вступление</h4>
-<p><a href="http://www.tiddlywiki.com/">TiddlyWiki</a> - это вики-движок, полностью написанный на <a href="http://en.wikipedia.org/wiki/JavaScript">JavaScript</a> и хранящийся в одном файле (как сам движок, так и содержимое). Создатели позиционируют его как &quot;переиспользуемую нелинейную персональную веб записную книжку&quot;.</p>
-<p>Я давно использую TiddlyWiki в различных целях:</p>
-<ol><li>По прямому назначению.</li>
-<li>Как систему <a href="http://mgsd.tiddlyspot.com/#mGSD">GTD</a>.</li>
-<li>Как домашнюю страницу на компьютере.</li>
-</ol>
-<p>Моя домашняя страница на компьютере - это, если говорить терминами TiddlyWiki, <a href="http://en.wikipedia.org/wiki/Tiddler">тиддлер</a>, содержащий ссылки на страницы, которые я часто посещаю.</p>
-<p>Для удобства использования я разработал пару стилей CSS, так что ссылки были крупными.</p>
-<a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://2.bp.blogspot.com/_y8p0_dtMJ38/S6Y0rP2J0eI/AAAAAAAAA9I/xrZhzZf2ad0/s1600-h/tiddly-before.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;width: 172px; height: 132px;" src="http://2.bp.blogspot.com/_y8p0_dtMJ38/S6Y0rP2J0eI/AAAAAAAAA9I/xrZhzZf2ad0/s400/tiddly-before.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5451102316571251170" /></a>
-<h4>Исходный код плагина</h4>
-<p>После длительного использования tiddlywiki в качестве домашней страницы я понял, что мне хочется, чтобы с каждой ссылкой была иконка сайта. Вручную вставлять картинки мне не хотелось, поэтому было решено написать собственный плагин.</p>
+          <!-- raw HTML omitted -->
 <div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="cm">/*{{{*/</span>
 <span class="nx">version</span><span class="p">.</span><span class="nx">extensions</span><span class="p">.</span><span class="nx">faviconLinkMacro</span> <span class="o">=</span> <span class="p">{</span><span class="nx">major</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">minor</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">revision</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">date</span><span class="o">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="mi">2010</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">21</span><span class="p">)};</span>
 <span class="c1">// Author: Oleg Atamanenko
@@ -199,24 +184,8 @@
 <span class="p">}</span>
 
 <span class="cm">/*}&amp;nbsp;}&amp;nbsp;}*/</span>
-</code></pre></div>
-<h4> Установка плагина</h4>
-<ol><li>Создаём новый тиддлер, называем его faviconLinkMacro</li>
-<li>Помечаем тиддлер тегом systemConfig, тогда TiddlyWiki при открытии страницы его подгрузит.</li>
-</ol>
-<h4>Использование плагина</h4>
-<ol><li>Плагин создаёт новый макрос, faviconLink, с двумя параметрами link и title.</li>
-<li>Вызов <tt>&lt;&lt;faviconLink link:'https://mail.google.com/mail' title:'mail'&gt;&gt;</tt> создаёт ссылку с картинкой с GMail</li>
-</ol>
-<a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://1.bp.blogspot.com/_y8p0_dtMJ38/S6Y0qnki7nI/AAAAAAAAA9A/Ic3skFoirY8/s1600-h/favicon-sample.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;width: 161px; height: 64px;" src="http://1.bp.blogspot.com/_y8p0_dtMJ38/S6Y0qnki7nI/AAAAAAAAA9A/Ic3skFoirY8/s400/favicon-sample.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5451102305759981170" /></a>
-
-<h4>Настройка визульных стилей плагина</h4>
-<p>Макрос создаёт следующие классы:</p>
-<ol><li>span.favIcon</li>
-<li>img.faviconImage</li>
-<li>a.faviconLink</li>
-</ol>
-<h4> Пример стилей</h4>
+</code></pre></div><!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <div class="highlight"><pre class="chroma"><code class="language-css" data-lang="css"><span class="p">.</span><span class="nc">links</span> <span class="nt">span</span> <span class="p">{</span>
   <span class="k">display</span><span class="p">:</span> <span class="kc">block</span><span class="p">;</span>
   <span class="k">position</span><span class="p">:</span> <span class="kc">relative</span><span class="p">;</span>
@@ -241,15 +210,10 @@
 <span class="p">.</span><span class="nc">links</span> <span class="nt">img</span><span class="p">.</span><span class="nc">faviconImage</span> <span class="p">{</span>
   <span class="k">position</span><span class="p">:</span> <span class="kc">relative</span><span class="p">;</span>
   <span class="k">padding-right</span><span class="p">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
-<span class="p">}</span></code></pre></div>
-<p><p> Данный CSS необходимо добавить в тиддлер с именем StyleSheet</p>
-<h4>Пример тиддлера со ссылками</h4></p>
-<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html">{{links{
-<span class="ni">&amp;lt;&amp;lt;</span>faviconLink link:&#39;http://delicious.com/dark.schakal/2read&#39; title:&#39;2read&#39;<span class="ni">&amp;gt;&amp;gt;</span> <span class="ni">&amp;lt;&amp;lt;</span>faviconLink link:&#39;https://mail.google.com/mail&#39; title:&#39;mail&#39;<span class="ni">&amp;gt;&amp;gt;</span> <span class="ni">&amp;lt;&amp;lt;</span>faviconLink link:&#39;http://www.google.com/reader/view&#39; title:&#39;rss&#39;<span class="ni">&amp;gt;&amp;gt;</span> <span class="ni">&amp;lt;&amp;lt;</span>faviconLink link:&#39;http://atamanenko.blogspot.com/&#39; title:&#39;blog&#39;<span class="ni">&amp;gt;&amp;gt;</span> <span class="ni">&amp;lt;&amp;lt;</span>faviconLink link:&#39;http://feedburner.google.com/fb/a/myfeeds&#39; title:&#39;feedburner&#39;<span class="ni">&amp;gt;&amp;gt;</span> <span class="ni">&amp;lt;&amp;lt;</span>faviconLink link:&#39;https://www.google.com/analytics/settings/&#39; title:&#39;analytics&#39;<span class="ni">&amp;gt;&amp;gt;</span> <span class="ni">&amp;lt;&amp;lt;</span>faviconLink link:&#39;http://wave.google.com&#39; title:&#39;wave&#39;<span class="ni">&amp;gt;&amp;gt;</span> <span class="ni">&amp;lt;&amp;lt;</span>faviconLink link:&#39;http://www.blogger.com/home&#39; title:&#39;blogger&#39;<span class="ni">&amp;gt;&amp;gt;</span> <span class="ni">&amp;lt;&amp;lt;</span>faviconLink link:&#39;http://twitter.com/&#39; title:&#39;twitter&#39;<span class="ni">&amp;gt;&amp;gt;</span> <span class="ni">&amp;lt;&amp;lt;</span>faviconLink link:&#39;https://www.dropbox.com/home#/&#39; title:&#39;dropbox&#39;<span class="ni">&amp;gt;&amp;gt;</span> <span class="ni">&amp;lt;&amp;lt;</span>faviconLink link:&#39;http://translate.google.com/toolkit/&#39; title:&#39;translator&#39;<span class="ni">&amp;gt;&amp;gt;</span> <span class="ni">&amp;lt;&amp;lt;</span>faviconLink link:&#39;http://sibir.megafon.ru/sendsms/&#39; title:&#39;SendSMS&#39;<span class="ni">&amp;gt;&amp;gt;</span>
-}}}</code></pre></div>
-<p>Вышеприведённый код тиддлера создаёт следующую страницу:</p>
+<span class="p">}</span>
 
-<p><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://1.bp.blogspot.com/_y8p0_dtMJ38/S6Y0qOLAO4I/AAAAAAAAA84/DFkORdMO8gE/s1600-h/favicon-sample-big.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;width: 400px; height: 157px;" src="http://1.bp.blogspot.com/_y8p0_dtMJ38/S6Y0qOLAO4I/AAAAAAAAA84/DFkORdMO8gE/s400/favicon-sample-big.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5451102298941963138" /></a></p>
+</code></pre></div><!-- raw HTML omitted -->
+<p><!-- raw HTML omitted -->&lt;img style=&quot;display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;width: 400px; height: 157px;&rdquo; src=&quot;http://1.bp.blogspot.com/_y8p0_dtMJ38/S6Y0qOLAO4I/AAAAAAAAA84/DFkORdMO8gE/s400/favicon-sample-big.png&rdquo; border=&quot;0&rdquo; alt=&quot;&ldquo;id=&quot;BLOGGER_PHOTO_ID_5451102298941963138&rdquo; /&gt;<!-- raw HTML omitted --></p>
 
         </div>
         
@@ -289,7 +253,7 @@
   
     
       <div id="disqus_thread"></div>
-<script>
+<script type="application/javascript">
     var disqus_config = function () {
     
     
@@ -328,6 +292,11 @@
   </section>
 
 
+<section class="even">
+  <div class="toc-header">Table of Contents</div>
+   <nav id="TableOfContents"></nav>
+</section>
+
 
 
 
@@ -355,7 +324,7 @@
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[site:@LinkageError creator:@LinkageError card:summary]"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary creator:@LinkageError site:@LinkageError]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 
@@ -372,7 +341,7 @@
             </li>
         </ul>
     </div>
-    <p>Copyright &copy; 2009&nbsp;—&nbsp;2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+    <p>Copyright &copy; 2009&nbsp;—&nbsp;2020 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
         <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a>, uses custom theme based on
             <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.</span>
     </p>

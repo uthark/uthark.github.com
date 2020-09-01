@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Mockito on Sharing knowledge</title>
+    <title>mockito on Sharing knowledge</title>
     <link>https://uthark.github.io/categories/mockito/</link>
-    <description>Recent content in Mockito on Sharing knowledge</description>
+    <description>Recent content in mockito on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 28 Mar 2014 13:24:45 +0000</lastBuildDate>
@@ -20,7 +20,7 @@
       <description>In this post I will show how one can implement custom JUnit @Rule.
 As an example let&amp;rsquo;s take Mockito and implement custom rule which will initialize Mocks in test class.
 By default, Mockito provides the following methods of mock initialization:
- Using Mockito.mock
+  Using Mockito.mock
 Initialize mocks with Mockito.mock:
 public void FooTest { private Foo foo; @Before public void setUp() { FooDependency dep = Mockito.mock(FooDependency.class); foo = new Foo(dep); } } This is the simplest case.</description>
     </item>

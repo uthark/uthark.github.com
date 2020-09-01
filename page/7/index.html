@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html prefix="og: http://ogp.me/ns#" lang="en">
 <head>
-	<meta name="generator" content="Hugo 0.44" />
+	<meta name="generator" content="Hugo 0.74.3" />
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
@@ -135,19 +135,7 @@
 
 
         
-        <p><b>Summary</b>: Пример разработки плагина для TiddlyWiki</p>
-<h4>Вступление</h4>
-<p><a href="http://www.tiddlywiki.com/">TiddlyWiki</a> - это вики-движок, полностью написанный на <a href="http://en.wikipedia.org/wiki/JavaScript">JavaScript</a> и хранящийся в одном файле (как сам движок, так и содержимое). Создатели позиционируют его как &quot;переиспользуемую нелинейную персональную веб записную книжку&quot;.</p>
-<p>Я давно использую TiddlyWiki в различных целях:</p>
-<ol><li>По прямому назначению.</li>
-<li>Как систему <a href="http://mgsd.tiddlyspot.com/#mGSD">GTD</a>.</li>
-<li>Как домашнюю страницу на компьютере.</li>
-</ol>
-<p>Моя домашняя страница на компьютере - это, если говорить терминами TiddlyWiki, <a href="http://en.wikipedia.org/wiki/Tiddler">тиддлер</a>, содержащий ссылки на страницы, которые я часто посещаю.</p>
-<p>Для удобства использования я разработал пару стилей CSS, так что ссылки были крупными.</p>
-<a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://2.bp.blogspot.com/_y8p0_dtMJ38/S6Y0rP2J0eI/AAAAAAAAA9I/xrZhzZf2ad0/s1600-h/tiddly-before.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;width: 172px; height: 132px;" src="http://2.bp.blogspot.com/_y8p0_dtMJ38/S6Y0rP2J0eI/AAAAAAAAA9I/xrZhzZf2ad0/s400/tiddly-before.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5451102316571251170" /></a>
-<h4>Исходный код плагина</h4>
-<p>После длительного использования tiddlywiki в качестве домашней страницы я понял, что мне хочется, чтобы с каждой ссылкой была иконка сайта. Вручную вставлять картинки мне не хотелось, поэтому было решено написать собственный плагин.</p>
+        <!-- raw HTML omitted -->
 <div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="cm">/*{{{*/</span>
 <span class="nx">version</span><span class="p">.</span><span class="nx">extensions</span><span class="p">.</span><span class="nx">faviconLinkMacro</span> <span class="o">=</span> <span class="p">{</span><span class="nx">major</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">minor</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">revision</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">date</span><span class="o">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="mi">2010</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">21</span><span class="p">)};</span>
 <span class="c1">// Author: Oleg Atamanenko
@@ -179,24 +167,8 @@
 <span class="p">}</span>
 
 <span class="cm">/*}&amp;nbsp;}&amp;nbsp;}*/</span>
-</code></pre></div>
-<h4> Установка плагина</h4>
-<ol><li>Создаём новый тиддлер, называем его faviconLinkMacro</li>
-<li>Помечаем тиддлер тегом systemConfig, тогда TiddlyWiki при открытии страницы его подгрузит.</li>
-</ol>
-<h4>Использование плагина</h4>
-<ol><li>Плагин создаёт новый макрос, faviconLink, с двумя параметрами link и title.</li>
-<li>Вызов <tt>&lt;&lt;faviconLink link:'https://mail.google.com/mail' title:'mail'&gt;&gt;</tt> создаёт ссылку с картинкой с GMail</li>
-</ol>
-<a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://1.bp.blogspot.com/_y8p0_dtMJ38/S6Y0qnki7nI/AAAAAAAAA9A/Ic3skFoirY8/s1600-h/favicon-sample.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;width: 161px; height: 64px;" src="http://1.bp.blogspot.com/_y8p0_dtMJ38/S6Y0qnki7nI/AAAAAAAAA9A/Ic3skFoirY8/s400/favicon-sample.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5451102305759981170" /></a>
-
-<h4>Настройка визульных стилей плагина</h4>
-<p>Макрос создаёт следующие классы:</p>
-<ol><li>span.favIcon</li>
-<li>img.faviconImage</li>
-<li>a.faviconLink</li>
-</ol>
-<h4> Пример стилей</h4>
+</code></pre></div><!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <div class="highlight"><pre class="chroma"><code class="language-css" data-lang="css"><span class="p">.</span><span class="nc">links</span> <span class="nt">span</span> <span class="p">{</span>
   <span class="k">display</span><span class="p">:</span> <span class="kc">block</span><span class="p">;</span>
   <span class="k">position</span><span class="p">:</span> <span class="kc">relative</span><span class="p">;</span>
@@ -221,15 +193,10 @@
 <span class="p">.</span><span class="nc">links</span> <span class="nt">img</span><span class="p">.</span><span class="nc">faviconImage</span> <span class="p">{</span>
   <span class="k">position</span><span class="p">:</span> <span class="kc">relative</span><span class="p">;</span>
   <span class="k">padding-right</span><span class="p">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
-<span class="p">}</span></code></pre></div>
-<p><p> Данный CSS необходимо добавить в тиддлер с именем StyleSheet</p>
-<h4>Пример тиддлера со ссылками</h4></p>
-<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html">{{links{
-<span class="ni">&amp;lt;&amp;lt;</span>faviconLink link:&#39;http://delicious.com/dark.schakal/2read&#39; title:&#39;2read&#39;<span class="ni">&amp;gt;&amp;gt;</span> <span class="ni">&amp;lt;&amp;lt;</span>faviconLink link:&#39;https://mail.google.com/mail&#39; title:&#39;mail&#39;<span class="ni">&amp;gt;&amp;gt;</span> <span class="ni">&amp;lt;&amp;lt;</span>faviconLink link:&#39;http://www.google.com/reader/view&#39; title:&#39;rss&#39;<span class="ni">&amp;gt;&amp;gt;</span> <span class="ni">&amp;lt;&amp;lt;</span>faviconLink link:&#39;http://atamanenko.blogspot.com/&#39; title:&#39;blog&#39;<span class="ni">&amp;gt;&amp;gt;</span> <span class="ni">&amp;lt;&amp;lt;</span>faviconLink link:&#39;http://feedburner.google.com/fb/a/myfeeds&#39; title:&#39;feedburner&#39;<span class="ni">&amp;gt;&amp;gt;</span> <span class="ni">&amp;lt;&amp;lt;</span>faviconLink link:&#39;https://www.google.com/analytics/settings/&#39; title:&#39;analytics&#39;<span class="ni">&amp;gt;&amp;gt;</span> <span class="ni">&amp;lt;&amp;lt;</span>faviconLink link:&#39;http://wave.google.com&#39; title:&#39;wave&#39;<span class="ni">&amp;gt;&amp;gt;</span> <span class="ni">&amp;lt;&amp;lt;</span>faviconLink link:&#39;http://www.blogger.com/home&#39; title:&#39;blogger&#39;<span class="ni">&amp;gt;&amp;gt;</span> <span class="ni">&amp;lt;&amp;lt;</span>faviconLink link:&#39;http://twitter.com/&#39; title:&#39;twitter&#39;<span class="ni">&amp;gt;&amp;gt;</span> <span class="ni">&amp;lt;&amp;lt;</span>faviconLink link:&#39;https://www.dropbox.com/home#/&#39; title:&#39;dropbox&#39;<span class="ni">&amp;gt;&amp;gt;</span> <span class="ni">&amp;lt;&amp;lt;</span>faviconLink link:&#39;http://translate.google.com/toolkit/&#39; title:&#39;translator&#39;<span class="ni">&amp;gt;&amp;gt;</span> <span class="ni">&amp;lt;&amp;lt;</span>faviconLink link:&#39;http://sibir.megafon.ru/sendsms/&#39; title:&#39;SendSMS&#39;<span class="ni">&amp;gt;&amp;gt;</span>
-}}}</code></pre></div>
-<p>Вышеприведённый код тиддлера создаёт следующую страницу:</p>
+<span class="p">}</span>
 
-<p><a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://1.bp.blogspot.com/_y8p0_dtMJ38/S6Y0qOLAO4I/AAAAAAAAA84/DFkORdMO8gE/s1600-h/favicon-sample-big.png"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;width: 400px; height: 157px;" src="http://1.bp.blogspot.com/_y8p0_dtMJ38/S6Y0qOLAO4I/AAAAAAAAA84/DFkORdMO8gE/s400/favicon-sample-big.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5451102298941963138" /></a></p>
+</code></pre></div><!-- raw HTML omitted -->
+<p><!-- raw HTML omitted -->&lt;img style=&quot;display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;width: 400px; height: 157px;&rdquo; src=&quot;http://1.bp.blogspot.com/_y8p0_dtMJ38/S6Y0qOLAO4I/AAAAAAAAA84/DFkORdMO8gE/s400/favicon-sample-big.png&rdquo; border=&quot;0&rdquo; alt=&quot;&ldquo;id=&quot;BLOGGER_PHOTO_ID_5451102298941963138&rdquo; /&gt;<!-- raw HTML omitted --></p>
 
         
 
@@ -252,44 +219,7 @@
 
 
         
-        <p><strong>Summary</strong>: Мой опыт борьбы с &quot;убийцами производительности&quot;.</p>
-<h3>Постановка проблемы</h3>
-<p> Иногда бывает так, что хочется отвлечься от работы, от поставленной задачи на какую-нибудь фигню, лишь бы не заниматься текущей задачей. У меня это чаще всего сводилось к тому, что я начинал читать что-нибудь в сети (<a href="http://www.google.com/reader/view/" target="_blank">Google Reader</a>, <a href="http://habrahabr.ru/">Habrahabr</a>, <a href="http://www.linux.org.ru/">LOR</a>, etc). </p>
-<p>Истоки проблемы могут быть абсолютно разными, например: </p>
-<ol><li>Долгий запуск среды разработки </li>
-<li>Долгая сборка проекта</li>
-<li>Нудная задача</li>
-<li>Неинтересная задача</li>
-</ol>
-<p>Все эти причины спокойно могут приводить к потере производительности, причём неявным образом, например - &quot;А посижу пока я на хабре, пока полная сборка идёт&quot;, в итоге после 20 минут обнаруживается, что сборка закончилась уже 15 минут назад.</p>
-<p>Так как у меня тайм-киллер вполне простой - интернет, то и решение вполне простое.</p>
-<p>Вот список действий, что я сделал:</p>
-<ol><li>Удалил быстрые браузеры, теперь у меня только <a href="http://www.mozilla.com/firefox">Mozilla Firefox</a> под Linux и страшный <a href="http://www.microsoft.com/windows/ie/ie6/downloads/default.mspx">Internet Explorer 6.0 под Windows</a>.</li>
-<li>Забанил сайты которые не нужны для работы, но на которых я провожу много времени.</li>
-</ol>
-<p>Сначала я сделал радикальный бан - внёс в <tt>/etc/hosts</tt> эти сайты:</p>
-<pre class="brush: bash">
-127.0.0.1 www.linux.org.ru linux.org.ru
-127.0.0.1 www.habrahabr.ru habrahabr.ru
-127.0.0.1 www.lorquotes.ru lorquotes.ru
-</pre>
-<p> Но потом обнаружилось, что есть ещё <a href="http://www.google.com/reader/view/">Google Reader</a>, который также отнимает много времени (у меня было до 200 подписок, что давало до 300 новых статей в сутки). Проблему с <a href="http://www.google.com/reader/view/">Google Reader</a> я решал поэтапно: </p>
-<ol><li>Почистил список лент от юмора, который обновляется практически ежедневно, является пожирателем трафика и времени.</li>
-<li>После этого я почистил список лент от лент, которые достаточно интересные, но при этом без них можно спокойно обходиться (Например, <a href="http://aseigo.blogspot.com/">блог Аарона Сейго</a>, одного из главных разработчиков <a href="http://www.kde.org/">KDE</a>)</li>
-</ol>
-<p>Вышеперечисленные действия помогли мне сократить список фидов с 200 сначала до 100 с небольшим, а затем и до 65. Но я понимал, что это ещё не предел и есть к чему стремиться, поэтому решил перейти к использованию оффлайнового <a href="http://www.whatisrss.com/">RSS</a>-<a href="http://en.wikipedia.org/wiki/RSS_Reader">клиента</a>. </p>
-<p>Для этого я экспортировал <a href="http://www.opml.org/">OPML</a>-файл с подписками из <a href="http://www.google.com/reader/view/">Google Reader</a>, удалил все ленты (к сожалению, <a href="http://www.google.com/support/forum/p/reader/thread?tid=53c0b347fa8cd843&hl=en">удалить аккаунт</a> на <a href="http://www.google.com/reader/view/">Google Reader</a> невозможно, только полностью Google Account) и импортировал на <a href="http://userbase.kde.org/Akregator">Akregator</a> на домашней машинке. Это помогло мне аккумулировать все чтения ленты новостей в один временной промежуток - вечером, дома.</p>
-<p>Но, как оказалось, ещё есть к чему стремиться и гугление на просторах сети дало свои результаты: <a href="http://www.proginosko.com/leechblock.html"><strong>LeechBlock</strong></a>.</p>
-<p>LeechBlock это расширение для Mozilla Firefox, которое позволяет блокировать отдельные сайты на различные промежутки времени.</p>
-<p>Собственно, начав им пользоваться, я понял, что это именно то, что мне нужно:</p>
-<p> <a href="http://picasaweb.google.com/lh/photo/GiOXKIEw3fz0uoNMZxGTlg?authkey=Gv1sRgCOCWw8r8gI-DRQ&feat=embedwebsite"><img src="http://lh6.ggpht.com/_y8p0_dtMJ38/S56FpVJKVHI/AAAAAAAAA8Q/e6hTfBRPkRo/s800/leechblock.png" title="Leechblock Settings UI" alt="Leechblock Settings UI" /></a></p>
-<p> Возможности данного расширения следующие: </p>
-<ol><li>Блокировка сайтов различные периоды времени</li>
-<li>Блокировка сайтов по временному диапазону, в том числе по дням недели.</li>
-<li>Поддержка нескольких наборов сайтов для блокировки</li>
-<li>Возможность быстрого добавления сайта в список для блокировки </li>
-</ol>
-<p>Конечно, данное расширение не является панацеей, его нужно использовать в комплексе с другими средствами.</p>
+        <!-- raw HTML omitted -->
 
         
 
@@ -312,92 +242,70 @@
 
 
         
-        
-
-<p>Выкладываю ниже список задач, которые нужно/можно выполнить для оптимизации приложения, написанного на Grails, может кому пригодится.</p>
-
+        <p>Выкладываю ниже список задач, которые нужно/можно выполнить для оптимизации приложения, написанного на Grails, может кому пригодится.</p>
 <h4 id="тестирование-проведённых-оптимизаций">Тестирование проведённых оптимизаций</h4>
-
 <p>Первым делом необходимо разработать критерии проверки, которые позволят оценить эффективность проведённых оптимизаций.</p>
-
 <ol>
-<li>Установить <a href="http://code.google.com/p/javamelody/">Java Melody</a> <a href="http://www.grails.org/plugin/grails-melody">плагин</a> для Grails для проведения анализа.</li>
+<li>Установить <!-- raw HTML omitted -->Java Melody<!-- raw HTML omitted --> <!-- raw HTML omitted -->плагин<!-- raw HTML omitted --> для Grails для проведения анализа.</li>
 <li>Разработать скрипты для проведения нагрузочного тестирования.</li>
 <li>Прогнать скрипты.</li>
 <li>Проанализировать результаты Java Melody, выявить узкие места, произвести нужные оптимизации.</li>
 </ol>
-
 <h4 id="общие-оптимизации">Общие оптимизации</h4>
-
 <p>Очень часто обновление до последней версии используемых библиотек попутно улучшает производительность.</p>
-
 <ol>
 <li>Обновить Java до последней версии</li>
 <li>Обновить Groovy до последней версии.</li>
 <li>Обновить Grails до последней версии.</li>
 <li>Обновить jQuery до последней версии.</li>
 <li>Оптимизировать настройки виртуальной машины Java (например, -server -Xmx270m -Xms270m -XX:MaxPermSize=80m -Xverify:none -XX:+UseParallelGC -XX:+UseParallelOldGC -XX:+UseAdaptiveSizePolicy -XX:SurvivorRatio=4 -XX:TargetSurvivorRatio=90 -XX:MaxTenuringThreshold=31 -XX:+AggressiveOpts)
-a. <a href="http://java.sun.com/javase/technologies/hotspot/gc/gc_tuning_6.html" target="_blank">http://java.sun.com/javase/technologies/hotspot/gc/gc_tuning_6.html</a>
+a. <a href="http://java.sun.com/javase/technologies/hotspot/gc/gc_tuning_6.html">http://java.sun.com/javase/technologies/hotspot/gc/gc_tuning_6.html</a>
 Вообще, по оптимизации JVM написаны целые книги, так что не буду здесь останавливаться.</li>
 </ol>
-
 <h4 id="оптимизация-клиентской-части">Оптимизация клиентской части</h4>
-
 <ol>
-<li>Настроить <a href="http://tomcat.apache.org/tomcat-5.5-doc/config/context.html">кэширование статических ресурсов</a> в Томкате.</li>
-<li>Настроить <a href="http://tomcat.apache.org/tomcat-5.5-doc/config/http.html">сжатие статических ресурсов</a> в Томкате.</li>
+<li>Настроить <!-- raw HTML omitted -->кэширование статических ресурсов<!-- raw HTML omitted --> в Томкате.</li>
+<li>Настроить <!-- raw HTML omitted -->сжатие статических ресурсов<!-- raw HTML omitted --> в Томкате.</li>
 <li>(поставить прокси на nginx для кэширования статических ресурсов ?)</li>
 <li>Установить плагины для Firebug, которые оценят производительность клиентской части.
-
 <ol>
-<li><a href="http://code.google.com/speed/page-speed">PageSpeed</a> </li></li>
-<li><a href="http://developer.yahoo.com/yslow/">YSlow</a> </li></li>
+<li><!-- raw HTML omitted -->PageSpeed<!-- raw HTML omitted --> <!-- raw HTML omitted --></li>
+<li><!-- raw HTML omitted -->YSlow<!-- raw HTML omitted --> <!-- raw HTML omitted --></li>
 <li>Проанализировать страницы веб-сайта с их помощью</li>
-</ol></li>
+</ol>
+</li>
 <li>Провести предлагаемые оптимизации.</li>
 </ol>
-
 <h4 id="оптимизация-клиентской-части-приложений-написанных-на-grails">Оптимизация клиентской части приложений, написанных на Grails</h4>
-
 <ol>
-<li>Установить плагин <a href="http://www.grails.org/plugin/ui-performance">UI Performance</a></li>
+<li>Установить плагин <!-- raw HTML omitted -->UI Performance<!-- raw HTML omitted --></li>
 <li>Провести оптимизацию с использованием плагина UI Performance</li>
 </ol>
-
 <h4 id="оптимизация-базы-данных">Оптимизация базы данных</h4>
-
 <ol>
 <li>Оптимизировать производительность сервера базы данных (SQL Server)
-a. <a href="http://www.sql-server-performance.com/tips/all_main.aspx" target="_blank">http://www.sql-server-performance.com/tips/all_main.aspx</a>
-a. <a href="http://msdn.microsoft.com/en-us/library/ms998577.aspx" target="_blank">http://msdn.microsoft.com/en-us/library/ms998577.aspx</a></li>
+a. <a href="http://www.sql-server-performance.com/tips/all_main.aspx">http://www.sql-server-performance.com/tips/all_main.aspx</a>
+a. <a href="http://msdn.microsoft.com/en-us/library/ms998577.aspx">http://msdn.microsoft.com/en-us/library/ms998577.aspx</a></li>
 <li>Проверить наличие индексов в базе данных, добавить необходимые</li>
 <li>Найти неоптимальные запросы в БД, оптимизировать</li>
 </ol>
-
 <h4 id="оптимизация-работы-с-базой-данных">Оптимизация работы с базой данных</h4>
-
 <ol>
 <li>Обновить версию JDBC-драйвера</li>
 <li>Настроить кэширование в Hibernate.
-Ресурсов в сети предостаточно, навскидку <a href="http://docs.jboss.org/hibernate/core/3.3/reference/en/html/performance.html">вот</a> <a href="http://www.devx.com/dbzone/Article/29685/1954"> парочка</a>.</li>
+Ресурсов в сети предостаточно, навскидку <!-- raw HTML omitted -->вот<!-- raw HTML omitted --> <!-- raw HTML omitted --> парочка<!-- raw HTML omitted -->.</li>
 </ol>
-
 <h4 id="оптимизация-серверной-части-приложения">Оптимизация серверной части приложения</h4>
-
 <ol>
 <li>Произвести профилирование приложения (использовать Visual VM, YJP Profiler), найти узкие места и оптимизировать их.</li>
 </ol>
-
 <h4 id="оптимизация-серверной-части-приложения-опционально">Оптимизация серверной части приложения (опционально)</h4>
-
 <ol>
-<li>Установить плагин <a href="http://www.grails.org/plugin/perf4j">Perf4J</a> для грэйлза</li>
+<li>Установить плагин <!-- raw HTML omitted -->Perf4J<!-- raw HTML omitted --> для грэйлза</li>
 <li>Добавить необходимые счётчики в код</li>
 <li>Прогнать нагрузочные тесты, найти узкие места, оптимизировать.</li>
 </ol>
-
 <h4 id="заключение">Заключение</h4>
-
 <p>В целом, в данном списке нет ничего нового, это всего лишь компиляция публично доступных материалов. Тем не менее, решил это опубликовать, чтобы сэкономить время другим.</p>
 
         
@@ -421,27 +329,15 @@ a. <a href="http://msdn.microsoft.com/en-us/library/ms998577.aspx" target="_blan
 
 
         
-        <p>Summary: Некоторые особенности вложенных транзакций.<br />
-<br />
-Иногда бывает так, что при обработке запроса необходимо открыть ещё одну транзакцию в рамках текущей транзакции. Это называется вложенной транзакцией. <br />
-<br />
-Очень многие базы данных не поддерживают вложенные транзакции вообще, например, MySQL и Oracle. А те, что поддерживают, делают это на минимальном уровне, например, Sybase поддерживает только псевдовложенные транзакции.<br />
-<br />
-Вложенные транзакции могут быть следующих видов:<br />
-<br />
-<ol><li>Псевдо-вложенные транзакции</li>
-<li>Вложенная субтранзакция</li>
-<li>Вложенная независимая транзакция</li>
-</ol><br />
-<h3>Псевдовложенные транзакции</h3><br />
-Этот тип транзакций поддерживается базой данных Sybase.<br />
-Псевдо-вложенные транзакции позволяют использовать транзакции одна внутри другой, при этом не реализуя механизм вложенных транзакций. Суть состоит в том, что имеется счётчик уровня вложенности транзакций, который увеличивается на 1 при каждом вызове <tt>BEGIN TRANSACTION</tt> и уменьшается на 1 при каждом вызове <tt>COMMIT</tt>. Когда счётчик становится равным 0 происходит коммит всех произведённых изменений.<br />
-<br />
-Если во время проведения транзакции происходит ошибка, то вызывается <tt>ROLLBACK</tt>, но здесь есть загвоздка - что делать с последующими вызовами <tt>BEGIN TRANSACTION</tt>  и <tt>COMMIT</tt>. Оптимальным решением является кидание исключения, но это необходимо отслеживать и учитывать на стадии проектирования и реализации, чтобы не возникло неприятных ситуаций при эксплуатации.<br />
-<br />
-Псевдовложенные транзакции являются самым простым способом реализации вложенных транзакций.<br />
-<br />
-Пример псевдотранзакции для базы данных Sybase:<br /></p>
+        <p>Summary: Некоторые особенности вложенных транзакций.<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+Иногда бывает так, что при обработке запроса необходимо открыть ещё одну транзакцию в рамках текущей транзакции. Это называется вложенной транзакцией. <!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+Очень многие базы данных не поддерживают вложенные транзакции вообще, например, MySQL и Oracle. А те, что поддерживают, делают это на минимальном уровне, например, Sybase поддерживает только псевдовложенные транзакции.<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+Вложенные транзакции могут быть следующих видов:<!-- raw HTML omitted -->
+<!-- raw HTML omitted --></p>
+<!-- raw HTML omitted -->
 <div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">begin</span> <span class="n">tran</span>
     <span class="k">select</span> <span class="o">@@</span><span class="n">trancount</span>
     <span class="cm">/* @@trancount = 1 */</span>
@@ -455,20 +351,8 @@ a. <a href="http://msdn.microsoft.com/en-us/library/ms998577.aspx" target="_blan
     <span class="k">commit</span> <span class="n">tran</span>
 <span class="k">commit</span> <span class="n">tran</span>
 <span class="k">select</span> <span class="o">@@</span><span class="n">trancount</span>
-<span class="cm">/* @@ trancount = 0 */</span></code></pre></div>
-<p><h3>Вложенная субтранзакция</h3><br />
-Данный вид вложенных транзакций решает проблему с обработкой ошибок при <tt>ROLLBACK</tt>. <br />
-При коммите вложенной транзакции происходит коммит, но он не обладает свойством <tt>Durability</tt> - окончательный результат зависит от результата внешней транзакции - если внешняя транзакция заканчивается успешно, то и результат внутренней транзакции также фиксируется. Если же при фиксации изменений внешней транзакции происходит ошибка, то внутренняя транзакция также откатывается. Кроме того, необходимо обратить внимание на то, что если внутренняя транзакция заканчивается неуспешно, то внешняя транзакция может закончиться успешно, если не выкинуть исключение наружу. Таким образом, для данного вида вложенных транзакций необходимо выкидывать исключение наружу, для того, чтобы прервать и откатить внешнюю транзакцию в случае ошибки.<br />
-<br />
-<h3>Вложенная независимая транзакция</h3>Особенность данного вида вложенных транзакций заключается в том, что после создания вложенной транзакции она является полностью независимой от транзакции, внутри которой она была создана. Её результаты фиксируются и откатываются независимо от внешней транзакции.<br />
-<br />
-<h3>Вложенные транзакции и принципы ACID</h3>Вложенные транзакции выглядят достаточно подозрительными в том смысле, что они могут нарушать принципы ACID: <br />
-1. Вложенная субтранзакция может нарушать принцип <tt>Durability</tt>, так как уже зафиксированные изменения могут откатиться в случае отката внешней транзакции.<br />
-2. Вложенная независимая транзакция может нарушать принципы <tt>Atomicity</tt> и <tt>Consistency</tt> при возникновении ошибок во внешней или вложенной транзакции.<br />
-<br />
-Подробнее о принципах <abbr title="Atomicity, Consistency, Isolation, Durability">ACID</abbr> можно прочитать в <a href="//2009/04/blog-post_24.html">этом посте</a>.<br />
-<br />
-<h3>Заключение</h3>Я считаю, что следует избегать ситуаций, когда нужны вложенные транзакции. Кроме того, спецификация Java EE <a href="http://java.sun.com/javaee/6/docs/api/javax/ejb/TransactionAttributeType.html">не поддерживает</a> вложенные транзакции.</p>
+<span class="cm">/* @@ trancount = 0 */</span>
+</code></pre></div><!-- raw HTML omitted -->
 
         
 
@@ -491,35 +375,42 @@ a. <a href="http://msdn.microsoft.com/en-us/library/ms998577.aspx" target="_blan
 
 
         
-        <p>Summary: В данной заметке описана настройка autofs для доступа к сетевым ресурсам, доступным по NFS.<br />
-<br />
-Последние несколько лет (с тех пор, как количество компьютеров дома стало больше одного) возникла проблема беспрепятственного доступа к данным, хранящимся на одном компьютере с другого.<br />
-<br />
-Было найдено самое простое решение - <a href="http://en.wikipedia.org/wiki/Network_File_System_(protocol)">NFS</a>.<br />
-<br />
-Как выяснилось позже это было не самое удачное решение - ноутбук не всегда находился дома, а, значит, домашние сетевые ресурсы не всегда доступны. Соответственно, при загрузке операционной системы происходили задержки из-за поиска компьютера с сетевыми ресурсами. Не очень удобно, но жить можно.<br />
-<br />
-Решил окончательно разобраться с этим и начал искать решение. Оно оказалось на поверхности и затронуло только клиента ресурсов, то есть ноутбук. Решение называется <tt><a href="http://www.autofs.org/">autofs</a></tt>.<br />
-<br />
-1. Устанавливаем <tt>autofs</tt>.<br />
-<pre class="brush: bash">sudo aptitude install autofs5 nfs-common
-</pre><br />
-2. Производим настройку.<br />
-Редактируем файл <tt>/etc/auto.master</tt>. Расскомментируем строку, содержащую строки <tt>/net -hosts</tt>:<br />
-<pre class="brush: bash">/net -hosts
-+auto.master
-</pre><br />
-3. В файл <tt><a href="http://en.wikipedia.org/wiki/Hosts_file">/etc/hosts</a></tt> можно внести адреса серверов с NFS-ресурсами (для того, чтобы избежать <a href="http://en.wikipedia.org/wiki/Domain_Name_System">DNS</a>-запросов). В моём случае:<br />
-<pre class="brush: plain">192.168.18.1 server
-</pre><br />
-4. Перезапускаем сервис <tt>autofs</tt><br />
-<pre class="brush: plain">sudo service autofs restart
-</pre><br />
-5. Теперь открываем в файловом браузер адрес <tt>/net/server</tt> и видим его сетевые ресурсы, доступные для данного клиента.<br />
-<br />
-<div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/_y8p0_dtMJ38/SyZxDikTDxI/AAAAAAAAAvk/LTr3KsGATGk/s1600-h/Screenshot-media+-+administrilo+de+dosieroj.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/_y8p0_dtMJ38/SyZxDikTDxI/AAAAAAAAAvk/LTr3KsGATGk/s320/Screenshot-media+-+administrilo+de+dosieroj.png" /></a><br />
-</div><br />
-6. Пользуемся.</p>
+        <p>Summary: В данной заметке описана настройка autofs для доступа к сетевым ресурсам, доступным по NFS.<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+Последние несколько лет (с тех пор, как количество компьютеров дома стало больше одного) возникла проблема беспрепятственного доступа к данным, хранящимся на одном компьютере с другого.<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+Было найдено самое простое решение - <!-- raw HTML omitted -->NFS<!-- raw HTML omitted -->.<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+Как выяснилось позже это было не самое удачное решение - ноутбук не всегда находился дома, а, значит, домашние сетевые ресурсы не всегда доступны. Соответственно, при загрузке операционной системы происходили задержки из-за поиска компьютера с сетевыми ресурсами. Не очень удобно, но жить можно.<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+Решил окончательно разобраться с этим и начал искать решение. Оно оказалось на поверхности и затронуло только клиента ресурсов, то есть ноутбук. Решение называется <!-- raw HTML omitted --><!-- raw HTML omitted -->autofs<!-- raw HTML omitted --><!-- raw HTML omitted -->.<!-- raw HTML omitted -->
+<!-- raw HTML omitted --></p>
+<ol>
+<li>Устанавливаем <!-- raw HTML omitted -->autofs<!-- raw HTML omitted -->.<!-- raw HTML omitted --></li>
+</ol>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<ol start="2">
+<li>Производим настройку.<!-- raw HTML omitted -->
+Редактируем файл <!-- raw HTML omitted -->/etc/auto.master<!-- raw HTML omitted -->. Расскомментируем строку, содержащую строки <!-- raw HTML omitted -->/net -hosts<!-- raw HTML omitted -->:<!-- raw HTML omitted --></li>
+</ol>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<ol start="3">
+<li>В файл <!-- raw HTML omitted --><!-- raw HTML omitted -->/etc/hosts<!-- raw HTML omitted --><!-- raw HTML omitted --> можно внести адреса серверов с NFS-ресурсами (для того, чтобы избежать <!-- raw HTML omitted -->DNS<!-- raw HTML omitted -->-запросов). В моём случае:<!-- raw HTML omitted --></li>
+</ol>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<ol start="4">
+<li>Перезапускаем сервис <!-- raw HTML omitted -->autofs<!-- raw HTML omitted --><!-- raw HTML omitted --></li>
+</ol>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<ol start="5">
+<li>Теперь открываем в файловом браузер адрес <!-- raw HTML omitted -->/net/server<!-- raw HTML omitted --> и видим его сетевые ресурсы, доступные для данного клиента.<!-- raw HTML omitted -->
+<!-- raw HTML omitted --></li>
+</ol>
+<!-- raw HTML omitted -->
 
         
 
@@ -542,12 +433,7 @@ a. <a href="http://msdn.microsoft.com/en-us/library/ms998577.aspx" target="_blan
 
 
         
-        <div class='post'>
-Итак, <a href="code.google.com/p/chromium-delicious-extension/">расширение для работы с Delicious</a> доступно на <a href="https://chrome.google.com/extensions">сайте расширений Google Chrome</a>.<br />
-<br />
-<a href="https://chrome.google.com/extensions/detail/anlkjppofaicbdanhhpbbogknfodfhfm/">Посмотреть и установить</a><br />
-<br />
-Новые версии расширения буду закачить на этот сайт.</div>
+        <!-- raw HTML omitted -->
 
         
 
@@ -570,67 +456,38 @@ a. <a href="http://msdn.microsoft.com/en-us/library/ms998577.aspx" target="_blan
 
 
         
-        <p>Есть такой замечательный сервис - <a href="https://www.getdropbox.com/">Dropbox</a>. <br />
-<br />
-Этот сервис является онлайн-хранилищем ваших данных. Работает очень просто:<br />
-<br />
-1. Вы регистрируетесь в сервисе.<br />
-2. Устанавливаете клиент<br />
-3. Пользуетесь.<br />
-<br />
-Недавно я понял, что этот сервис можно легко и непринуждённо использовать не только для хранения различных документов и фотографий, а также и конфигурационных файлов приложений, что существенно упрощает жизнь, когда у вас несколько рабочих машин (например, у меня домашний компьютер, ноутбук, а также ещё и рабочий) - необходимо каким-то образом синхронизовать конфиги при изменении их на одной из машине с другими.<br />
-<br />
-Итак, что я сделал.<br />
-<br />
-Нижеприведённые действия я делал на одной машине:<br />
-1. Создал каталог <tt>ConfigFiles</tt><br />
-2. Переместил в него свои конфигурационные файлы (<tt>~/.zshrc</tt>, <tt>~/.zsh</tt>, <tt>~/.vimrc</tt>, <tt>~/.vim</tt>)<br />
-3. Из каталога Dropbox сделал соответствующие симлинки в домашнем каталоге.<br />
-<br />
-<div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/_y8p0_dtMJ38/Sx6K22h5KKI/AAAAAAAAAuU/DRIi7hO5oFw/s1600-h/Screenshot-Dropbox+-+administrilo+de+dosieroj.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/_y8p0_dtMJ38/Sx6K22h5KKI/AAAAAAAAAuU/DRIi7hO5oFw/s320/Screenshot-Dropbox+-+administrilo+de+dosieroj.png" /></a><br />
-</div><br />
-На каждой из машин<br />
-1. Удалил существовавшие конфигурационные файлы<br />
-2. Сделал симлинки файлов из Dropbox на соответствующие конфигурационные файлы.<br />
-<br />
-В случае с <a href="http://www.zsh.org/">ZSH</a> (впрочем, для любого другого шелла это тоже реализуется) есть ещё один приятный лайфхак - если на разных машинах должны быть немного разные конфиги (например, другая переменная PATH, CDPATH, то это тоже реализуется просто: <br />
-<br />
-Внесите в свой <tt>~/.zshrc</tt> следующий код.<br />
-<pre class="brush:bash;">LOCAL<em>ENVIRONMENT=~/.environment</em><code>hostname</code>
-if [[ -a $LOCAL_ENVIRONMENT ]]
-then
-    source $LOCAL_ENVIRONMENT
-fi</p>
-
-<p></pre><br />
-Теперь нужно создать в домашнем каталоге файл с локальной конфигурацией:<br />
-<pre class="brush:bash;">touch ~/.environment_<code>hostname</code></p>
-
-<p></pre><br />
-И внести в него конфигурацию, локальную для машины.<br />
-<br />
-Да, этот файл тоже может быть симлинком на файл из dropbox.<br />
-<br />
-P.S. Если вас заинтересовал сервис, то прошу вас регистироваться по <a href="https://www.dropbox.com/referrals/NTI4MDgzMjc5">реферальной ссылке</a>, тогда и вам и мне добавят +250 мегабайт бесплатно.<br />
-<br />
-P.P.S. Да, ещё забыл сказать, что сервис достаточно умный и отправляет дельты файлов во время синхронизации. Подробнее - <a href="https://www.dropbox.com/help/8">в официальной документации</a>.</div>
-<h2>Comments</h2>
-<div class='comments'>
-<div class='comment'>
-<div class='author'>kmmbvnr</div>
-<div class='content'>
-Да именно так и пользуюсь Dropbox&#39;ом, для хранения конфигов :)</div>
-</div>
-<div class='comment'>
-<div class='author'>uthark</div>
-<div class='content'>
-@karri Да, сложно вам. С другой стороны, в некоторых компаниях политика безопасности вообще запрещает подобные сервисы.</div>
-</div>
-<div class='comment'>
-<div class='author'>karri</div>
-<div class='content'>
-А у нас на работе тестерам не положен инет :&#39;(</div>
-</div></p>
+        <p>Есть такой замечательный сервис - <!-- raw HTML omitted -->Dropbox<!-- raw HTML omitted -->. <!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+Этот сервис является онлайн-хранилищем ваших данных. Работает очень просто:<!-- raw HTML omitted -->
+<!-- raw HTML omitted --></p>
+<ol>
+<li>Вы регистрируетесь в сервисе.<!-- raw HTML omitted --></li>
+<li>Устанавливаете клиент<!-- raw HTML omitted --></li>
+<li>Пользуетесь.<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+Недавно я понял, что этот сервис можно легко и непринуждённо использовать не только для хранения различных документов и фотографий, а также и конфигурационных файлов приложений, что существенно упрощает жизнь, когда у вас несколько рабочих машин (например, у меня домашний компьютер, ноутбук, а также ещё и рабочий) - необходимо каким-то образом синхронизовать конфиги при изменении их на одной из машине с другими.<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+Итак, что я сделал.<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+Нижеприведённые действия я делал на одной машине:<!-- raw HTML omitted --></li>
+<li>Создал каталог <!-- raw HTML omitted -->ConfigFiles<!-- raw HTML omitted --><!-- raw HTML omitted --></li>
+<li>Переместил в него свои конфигурационные файлы (<!-- raw HTML omitted -->~/.zshrc<!-- raw HTML omitted -->, <!-- raw HTML omitted -->~/.zsh<!-- raw HTML omitted -->, <!-- raw HTML omitted -->~/.vimrc<!-- raw HTML omitted -->, <!-- raw HTML omitted -->~/.vim<!-- raw HTML omitted -->)<!-- raw HTML omitted --></li>
+<li>Из каталога Dropbox сделал соответствующие симлинки в домашнем каталоге.<!-- raw HTML omitted -->
+<!-- raw HTML omitted --></li>
+</ol>
+<!-- raw HTML omitted -->
+<p><!-- raw HTML omitted --><!-- raw HTML omitted -->
+Теперь нужно создать в домашнем каталоге файл с локальной конфигурацией:<!-- raw HTML omitted --></p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p>И внести в него конфигурацию, локальную для машины.<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+Да, этот файл тоже может быть симлинком на файл из dropbox.<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+P.S. Если вас заинтересовал сервис, то прошу вас регистироваться по <!-- raw HTML omitted -->реферальной ссылке<!-- raw HTML omitted -->, тогда и вам и мне добавят +250 мегабайт бесплатно.<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+P.P.S. Да, ещё забыл сказать, что сервис достаточно умный и отправляет дельты файлов во время синхронизации. Подробнее - <!-- raw HTML omitted -->в официальной документации<!-- raw HTML omitted -->.<!-- raw HTML omitted --></p>
+<!-- raw HTML omitted -->
 
         
 
@@ -736,7 +593,7 @@ P.P.S. Да, ещё забыл сказать, что сервис достат�
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary site:@LinkageError creator:@LinkageError]"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary creator:@LinkageError site:@LinkageError]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 
@@ -753,7 +610,7 @@ P.P.S. Да, ещё забыл сказать, что сервис достат�
             </li>
         </ul>
     </div>
-    <p>Copyright &copy; 2009&nbsp;—&nbsp;2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+    <p>Copyright &copy; 2009&nbsp;—&nbsp;2020 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
         <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a>, uses custom theme based on
             <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.</span>
     </p>

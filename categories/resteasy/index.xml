@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Resteasy on Sharing knowledge</title>
+    <title>resteasy on Sharing knowledge</title>
     <link>https://uthark.github.io/categories/resteasy/</link>
-    <description>Recent content in Resteasy on Sharing knowledge</description>
+    <description>Recent content in resteasy on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 09 Feb 2012 01:05:00 +0000</lastBuildDate>
@@ -17,7 +17,9 @@
       <pubDate>Thu, 09 Feb 2012 01:05:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2012/02/09/java-rest/</guid>
-      <description>Введение Для разработки REST веб-сервисов Java предлагает JSR-311 - JAX-RS: The Java&amp;trade; API for RESTful Web Services Как это обычно бывает в мире Enterprise Java, существует несколько реализаций данной спецификации:  Jersey - это эталонная реализация спецификации от компании Sun Oracle Apache CXF JBoss RESTEasy  На примере последней реализации, я и расскажу, каким образом можно написать REST-сервис. Пишем REST-сервис import javax.ws.rs.*; import javax.ws.rs.core.MediaType; @Path(&amp;#34;/service/entity&amp;#34;) @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON}) public interface EntityRestService { @GET @Path(&amp;#34;/all&amp;#34;) EntityList listAll(); @GET @Path(&amp;#34;/{id}&amp;#34;) Entity findById(@PathParam(&amp;#34;id&amp;#34;) Integer id); } Создаём интерфейс, в котором расставляем JAX-RS аннотации.</description>
+      <description>import javax.ws.rs.*; import javax.ws.rs.core.MediaType; @Path(&amp;#34;/service/entity&amp;#34;) @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON}) public interface EntityRestService { @GET @Path(&amp;#34;/all&amp;#34;) EntityList listAll(); @GET @Path(&amp;#34;/{id}&amp;#34;) Entity findById(@PathParam(&amp;#34;id&amp;#34;) Integer id); } Создаём интерфейс, в котором расставляем JAX-RS аннотации. Аннотация @Pathуказывает путь, по которому будет доступен наш сервис. Аннотация @GETопределяет, какой HTTP-запрос будет обрабатываться данным методом. Аннотация @Producesпозволяет указать, в каком формате данный сервис предоставляет результаты.
+Конфигурация очень проста, во-первых, нам нужно добавить обновить pom.xmlи добавить необходимые зависимости:
+Добавляем compile-time зависимость на JAX-RS API</description>
     </item>
     
   </channel>

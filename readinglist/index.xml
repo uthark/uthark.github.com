@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Readinglists on Sharing knowledge</title>
@@ -35,7 +35,7 @@
       <pubDate>Mon, 05 May 2014 16:03:09 +0000</pubDate>
       
       <guid>https://uthark.github.io/2014/05/05/reading-list-2014-may-05/</guid>
-      <description> Announcements  Groovy 2.3.0 is out!  General  A Eulogy for Twitter | Adrienne LaFrance and Robinson Meyer How a hoax turned into the biggest Dutch crowdfunding success in history  Software development  Analyzing a large JSON in memory Columnar Storage for Hadoop How could Scala do a merge sort? Load inheritance tree into List by Spring xkcd Phone | xkcd  </description>
+      <description>Announcements  Groovy 2.3.0 is out!  General  A Eulogy for Twitter | Adrienne LaFrance and Robinson Meyer How a hoax turned into the biggest Dutch crowdfunding success in history  Software development  Analyzing a large JSON in memory Columnar Storage for Hadoop How could Scala do a merge sort? Load inheritance tree into List by Spring xkcd Phone | xkcd  </description>
     </item>
     
     <item>
@@ -53,7 +53,7 @@
       <pubDate>Thu, 01 May 2014 16:20:16 +0000</pubDate>
       
       <guid>https://uthark.github.io/2014/05/01/reading-list-2014-may-01/</guid>
-      <description> Announcements  New Release: Java Micro Edition (ME) 8 Spring Framework 4.0.4 released Spring Integration 4.0 Released New mobile apps for Docs, Sheets and Slides - work offline and on the go  Software development  Java Me Embedded Documentation Manifest Merger Recent File List | JavaSpecialists.eu Small and Medium tests should never fail in Continuous Integration ( CI ) Spring 4.1&amp;rsquo;s Upcoming JMS Improvements Spring Boot and Scala with sbt as the build tool Spring Integration - Configure web service client timeout Subscribe to Web Content folders and types (structures)  </description>
+      <description>Announcements  New Release: Java Micro Edition (ME) 8 Spring Framework 4.0.4 released Spring Integration 4.0 Released New mobile apps for Docs, Sheets and Slides - work offline and on the go  Software development  Java Me Embedded Documentation Manifest Merger Recent File List | JavaSpecialists.eu Small and Medium tests should never fail in Continuous Integration ( CI ) Spring 4.1&amp;rsquo;s Upcoming JMS Improvements Spring Boot and Scala with sbt as the build tool Spring Integration - Configure web service client timeout Subscribe to Web Content folders and types (structures)  </description>
     </item>
     
     <item>
@@ -71,7 +71,7 @@
       <pubDate>Tue, 29 Apr 2014 11:28:53 +0000</pubDate>
       
       <guid>https://uthark.github.io/2014/04/29/reading-list-2014-april-29/</guid>
-      <description>Software development  7 First Public Working Drafts of XQuery and XPath 3.1 All About SSL Amazon&amp;rsquo;s Glacier secret: BDXL Blog: Very Short Blog Posts (17): Regression Obsession Creating defensive objects with ES6 proxies Dashboarding with Open Source Tools Follow up to the investigation results | GitHub Go Faster - More SaltStack automation for Google Cloud Platform Google+ won (or why Google never needed a social network) | John Battelle&amp;rsquo;s Search Blog How Burrowing Owls Lead To Vomiting Anarchists (Or SFâs Housing Crisis Explained) Improving Angular Dirty Checking Performance Linux /dev/urandom and concurrency Network performance at AWS, Google, Rackspace and Softlayer Reinventing explanation The CAP FAQ What Can Men Do?</description>
+      <description>Software development  7 First Public Working Drafts of XQuery and XPath 3.1 All About SSL Amazon&#39;s Glacier secret: BDXL Blog: Very Short Blog Posts (17): Regression Obsession Creating defensive objects with ES6 proxies Dashboarding with Open Source Tools Follow up to the investigation results | GitHub Go Faster - More SaltStack automation for Google Cloud Platform Google+ won (or why Google never needed a social network) | John Battelle&amp;rsquo;s Search Blog How Burrowing Owls Lead To Vomiting Anarchists (Or SFâs Housing Crisis Explained) Improving Angular Dirty Checking Performance Linux /dev/urandom and concurrency Network performance at AWS, Google, Rackspace and Softlayer Reinventing explanation The CAP FAQ What Can Men Do?</description>
     </item>
     
     <item>
@@ -80,7 +80,7 @@
       <pubDate>Mon, 28 Apr 2014 16:37:56 +0000</pubDate>
       
       <guid>https://uthark.github.io/2014/04/28/reading-list-2014-april-28/</guid>
-      <description> Software development  Telerik Open Sources Kendo UI Richardson Maturity Model Network performance at AWS, Google, Rackspace and Softlayer Development &amp;ldquo;Methodologies&amp;rdquo; An Introduction to the Web Notifications API Mithril Is this what it&amp;rsquo;s supposed to feel like? One Year Later. This hilarious graph of Netflix speeds shows the importance of net neutrality  Java  JAX-RS 2.0: Custom Content Handling Difference between Connected vs Disconnected RowSet in Java JDBC RowSetProvider, RowSetFactory Example The 7 Log Management Tools Java Developers Should Know Jibx Jersey2 Integration Using Http Session with Spring based web applications  </description>
+      <description>Software development  Telerik Open Sources Kendo UI Richardson Maturity Model Network performance at AWS, Google, Rackspace and Softlayer Development &amp;ldquo;Methodologies&amp;rdquo; An Introduction to the Web Notifications API Mithril Is this what it&amp;rsquo;s supposed to feel like? One Year Later. This hilarious graph of Netflix speeds shows the importance of net neutrality  Java  JAX-RS 2.0: Custom Content Handling Difference between Connected vs Disconnected RowSet in Java JDBC RowSetProvider, RowSetFactory Example The 7 Log Management Tools Java Developers Should Know Jibx Jersey2 Integration Using Http Session with Spring based web applications  </description>
     </item>
     
     <item>
@@ -135,7 +135,7 @@ Announcements  CDI 1.2 Released (The Aquarium) CDI 1.2 is released | Contexts an
       <pubDate>Thu, 17 Apr 2014 14:36:39 +0000</pubDate>
       
       <guid>https://uthark.github.io/2014/04/17/reading-list-2014-april-17/</guid>
-      <description> Software development  Seven Databases in Seven Days – Riak Design, Develop, and Distribute at I/O 2014 | Google Developers Blog Coloring Different Data Sources in IntelliJ IDEA Todon&amp;rsquo;t How to Level Up  Video  Fireside Chat: Android Design  Java  List of all JEPs for JDK8 JEP 174: Nashorn JavaScript Engine Asynchronous CDI Events? (The Aquarium) Conway’s Game of Life and the Flyweight Pattern We’re Hacking JDBC, so You Don’t Have To The Real Cost of Logging JSON Schema (The Aquarium) Spring MVC Test with Geb Some new Guava classes targeted for release 10 | Google Groups  Some background discussions on Java 8 Lambda, Optional and default methods in interfaces  Optional require(s) NonNull When lambdas become objects Allow default methods to override Object&amp;rsquo;s methods Checked exceptions within Block Allow lambdas to implement abstract classes  </description>
+      <description>Software development  Seven Databases in Seven Days – Riak Design, Develop, and Distribute at I/O 2014 | Google Developers Blog Coloring Different Data Sources in IntelliJ IDEA Todon&amp;rsquo;t How to Level Up  Video  Fireside Chat: Android Design  Java  List of all JEPs for JDK8 JEP 174: Nashorn JavaScript Engine Asynchronous CDI Events? (The Aquarium) Conway’s Game of Life and the Flyweight Pattern We’re Hacking JDBC, so You Don’t Have To The Real Cost of Logging JSON Schema (The Aquarium) Spring MVC Test with Geb Some new Guava classes targeted for release 10 | Google Groups  Some background discussions on Java 8 Lambda, Optional and default methods in interfaces  Optional require(s) NonNull When lambdas become objects Allow default methods to override Object&amp;rsquo;s methods Checked exceptions within Block Allow lambdas to implement abstract classes  </description>
     </item>
     
     <item>
@@ -153,7 +153,7 @@ Announcements  CDI 1.2 Released (The Aquarium) CDI 1.2 is released | Contexts an
       <pubDate>Tue, 15 Apr 2014 13:06:12 +0000</pubDate>
       
       <guid>https://uthark.github.io/2014/04/15/reading-list-2014-april-15/</guid>
-      <description> Software development  Building Carousel, Part I: How we made our networked mobile app feel fast and local Write line notes from your phone · GitHub Scaling the Facebook data warehouse to 300 PB Why did we lose the XP Practices? EC2 Update - Previous Generation Instances | Amazon Web Services Blog Working with Google Analytics API v4 for Android The Grails Depedency Injection Inheritance Pitfall  DevOps  Adaptive IT — Why Vagrant is the Best DevOps Tool Ever Using Chef to Automate Google Compute Engine  Java  10 JDK 7 Features to Revisit, Before You Welcome Java 8 5 Features In Java 8 That WILL Change How You Code Cache Abstraction: JCache (JSR-107) Annotations Support Oracle Nashorn: A Next-Generation JavaScript Engine for the JVM Use Nashorn and WebJars to execute Javascript server-side What’s New in Java 8: Lambdas JEP 180: Handle Frequent HashMap Collisions with Balanced Trees JEP 155: Concurrency updates (jsr166e)  Scala  The other 99% — Monadic Reflections on Akka  </description>
+      <description>Software development  Building Carousel, Part I: How we made our networked mobile app feel fast and local Write line notes from your phone · GitHub Scaling the Facebook data warehouse to 300 PB Why did we lose the XP Practices? EC2 Update - Previous Generation Instances | Amazon Web Services Blog Working with Google Analytics API v4 for Android The Grails Depedency Injection Inheritance Pitfall  DevOps  Adaptive IT — Why Vagrant is the Best DevOps Tool Ever Using Chef to Automate Google Compute Engine  Java  10 JDK 7 Features to Revisit, Before You Welcome Java 8 5 Features In Java 8 That WILL Change How You Code Cache Abstraction: JCache (JSR-107) Annotations Support Oracle Nashorn: A Next-Generation JavaScript Engine for the JVM Use Nashorn and WebJars to execute Javascript server-side What’s New in Java 8: Lambdas JEP 180: Handle Frequent HashMap Collisions with Balanced Trees JEP 155: Concurrency updates (jsr166e)  Scala  The other 99% — Monadic Reflections on Akka  </description>
     </item>
     
     <item>
@@ -171,7 +171,7 @@ Announcements  CDI 1.2 Released (The Aquarium) CDI 1.2 is released | Contexts an
       <pubDate>Fri, 11 Apr 2014 12:57:41 +0000</pubDate>
       
       <guid>https://uthark.github.io/2014/04/11/reading-list-2014-april-11/</guid>
-      <description> Software development  Dart improves async and server-side performance Federal Government Releases Health Care Provider Reference Architecture The Cost of Context Switching How Overloading Interacts With C Compatibility Write Code Every Day Consumer Release Testing Google Finds: Centralized Control, Distributed Data Architectures Work Better than Fully Decentralized Architectures Do Developers Love To Build On MongoDB? 10 Reasons Not To Use Infinite Scroll On Your Website First look: MongoDB 2.6, the all-grown-up version  Cloud  Now Available - New Memory-Optimized EC2 Instances (R3)  Java  JEP 169: Value Objects A Docker Maven Plugin for Integration Testing Reactive Programming Patterns in Akka using Java 8 Executing Diagnostic Commands Using Attach Final Results from our Java EE 8 Community Survey (Linda DeMichiel&amp;rsquo;s Blog) CSRF protection in Spring MVC, Thymeleaf, Spring Security application  Android  Anti-Malware Monitoring for Android Apps Expanding Google’s security services for Android  Scala  Memoization of Scala Streams  </description>
+      <description>Software development  Dart improves async and server-side performance Federal Government Releases Health Care Provider Reference Architecture The Cost of Context Switching How Overloading Interacts With C Compatibility Write Code Every Day Consumer Release Testing Google Finds: Centralized Control, Distributed Data Architectures Work Better than Fully Decentralized Architectures Do Developers Love To Build On MongoDB? 10 Reasons Not To Use Infinite Scroll On Your Website First look: MongoDB 2.6, the all-grown-up version  Cloud  Now Available - New Memory-Optimized EC2 Instances (R3)  Java  JEP 169: Value Objects A Docker Maven Plugin for Integration Testing Reactive Programming Patterns in Akka using Java 8 Executing Diagnostic Commands Using Attach Final Results from our Java EE 8 Community Survey (Linda DeMichiel&amp;rsquo;s Blog) CSRF protection in Spring MVC, Thymeleaf, Spring Security application  Android  Anti-Malware Monitoring for Android Apps Expanding Google’s security services for Android  Scala  Memoization of Scala Streams  </description>
     </item>
     
     <item>
@@ -234,7 +234,7 @@ Announcements  CDI 1.2 Released (The Aquarium) CDI 1.2 is released | Contexts an
       <pubDate>Wed, 02 Apr 2014 12:37:17 +0000</pubDate>
       
       <guid>https://uthark.github.io/2014/04/02/reading-list-2014-april-02/</guid>
-      <description> Software development  IAM Best Practices Every Great Product Owner Needs a Great ScrumMaster Manhattan, our real-time, multi-tenant distributed database for Twitter scale The Cache and Multithreading  Android  Useful Tools for Android Apps Test Automation Fixing The Android Camera API  Java  Apache Tomcat 7.0.53 Released Spring Boot 1.0 GA Released Java 8 Friday: Optional Will Remain an Option in Java Eclipse Foundation Announces Java 8 Support Method 2 of N for crashing your JVM :-) Abstract Class Versus Interface in the JDK 8 Era Add Java 8 support to Eclipse Kepler Difference between Stub and Mock object in Java Unit testing - JUnit Introduction to Nashorn  Scala  IntelliJ, Scala and Gradle: Revisiting Hell Spring-boot and Scala  In Russian  Новости Большого адронного коллайдера Одиночное рождение топ-кварка позволило еще тщательнее проверить Стандартную модель  </description>
+      <description>Software development  IAM Best Practices Every Great Product Owner Needs a Great ScrumMaster Manhattan, our real-time, multi-tenant distributed database for Twitter scale The Cache and Multithreading  Android  Useful Tools for Android Apps Test Automation Fixing The Android Camera API  Java  Apache Tomcat 7.0.53 Released Spring Boot 1.0 GA Released Java 8 Friday: Optional Will Remain an Option in Java Eclipse Foundation Announces Java 8 Support Method 2 of N for crashing your JVM :-) Abstract Class Versus Interface in the JDK 8 Era Add Java 8 support to Eclipse Kepler Difference between Stub and Mock object in Java Unit testing - JUnit Introduction to Nashorn  Scala  IntelliJ, Scala and Gradle: Revisiting Hell Spring-boot and Scala  In Russian  Новости Большого адронного коллайдера Одиночное рождение топ-кварка позволило еще тщательнее проверить Стандартную модель  </description>
     </item>
     
     <item>
@@ -429,8 +429,7 @@ General  Cheap Words 5-Year-Olds Can Learn Calculus At the RSA Security Conferen
       
       <guid>https://uthark.github.io/2014/03/04/reading-list-2014-march-04/</guid>
       <description>Reading list for today:
-General  Tesla Is a Car, Not a Revolution Unemployment in America Listen while you work: What music does to your brain  Software development  Announcement: Sync Desktop 1.2 Released for Liferay Portal 6.2 Etsy’s Journey to Continuous Integration for Mobile Apps ASP.NET Web API Versioning with Media Types AirPair Launches Evernote Community Powered API Live Help
- Dependency inversion: the structure logarithm. Failure is an option - Andreas M.</description>
+General  Tesla Is a Car, Not a Revolution Unemployment in America Listen while you work: What music does to your brain  Software development  Announcement: Sync Desktop 1.2 Released for Liferay Portal 6.2 Etsy’s Journey to Continuous Integration for Mobile Apps ASP.NET Web API Versioning with Media Types AirPair Launches Evernote Community Powered API Live Help Dependency inversion: the structure logarithm. Failure is an option - Andreas M.</description>
     </item>
     
     <item>

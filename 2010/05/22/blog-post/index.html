@@ -59,9 +59,7 @@
 
   <meta property="og:title" content="Удаление различных диакритических символов из строки" />
   <meta property="og:url" content="https://uthark.github.io/2010/05/22/blog-post/" />
-  <meta property="og:description" content="Возникла проблема - каким образом заменить в строке символы из национальных кодировок на соответствующие им из латиницы.
-Например, из строки explicación получить explicacion.
-package com.blogspot.atamanenko; import java.text.Normalizer; import java.text.Normalizer.Form; public class StringNormalizer { public static String normalize(String string) { return Normalizer.normalize(string, Form.NFD) .replaceAll(&#34;\\p{InCombiningDiacriticalMarks}&#43;&#34;, &#34;&#34;); } } Вызов Normalizer.normalize проводит нормализацию входной строки. Последующий вызов регулярного выражения удаляет все диакритические знаки, полученные после нормализации." />
+  <meta property="og:description" content="package com.blogspot.atamanenko; import java.text.Normalizer; import java.text.Normalizer.Form; public class StringNormalizer { public static String normalize(String string) { return Normalizer.normalize(string, Form.NFD) .replaceAll(&#34;\\p{InCombiningDiacriticalMarks}&#43;&#34;, &#34;&#34;); } } Вызов Normalizer.normalizeпроводит нормализациювходной строки. Последующий вызов регулярного выражения удаляет все диакритические знаки, полученные после нормализации." />
 
   
 
@@ -154,7 +152,7 @@ package com.blogspot.atamanenko; import java.text.Normalizer; import java.text.N
           
           
           
-          <p>Возникла проблема - каким образом заменить в строке символы из национальных кодировок на соответствующие им из латиницы.</p><p>Например, из строки explicación получить explicacion.</p>
+          <!-- raw HTML omitted -->
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.blogspot.atamanenko</span><span class="o">;</span>
 
 <span class="kn">import</span> <span class="nn">java.text.Normalizer</span><span class="o">;</span>
@@ -166,8 +164,9 @@ package com.blogspot.atamanenko; import java.text.Normalizer; import java.text.N
         <span class="k">return</span> <span class="n">Normalizer</span><span class="o">.</span><span class="na">normalize</span><span class="o">(</span><span class="n">string</span><span class="o">,</span> <span class="n">Form</span><span class="o">.</span><span class="na">NFD</span><span class="o">)</span>
             <span class="o">.</span><span class="na">replaceAll</span><span class="o">(</span><span class="s">&#34;\\p{InCombiningDiacriticalMarks}+&#34;</span><span class="o">,</span> <span class="s">&#34;&#34;</span><span class="o">);</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre></div>
-<p>Вызов <a href='http://java.sun.com/javase/6/docs/api/java/text/Normalizer.html#normalize%28java.lang.CharSequence,%20java.text.Normalizer.Form%29'>Normalizer.normalize</a> проводит <a href='http://www.unicode.org/reports/tr15/tr15-23.html'>нормализацию</a> входной строки. Последующий вызов регулярного выражения удаляет все диакритические знаки, полученные после нормализации.</p>
+<span class="o">}</span>
+
+</code></pre></div><p>Вызов <!-- raw HTML omitted -->Normalizer.normalize<!-- raw HTML omitted --> проводит <!-- raw HTML omitted -->нормализацию<!-- raw HTML omitted --> входной строки. Последующий вызов регулярного выражения удаляет все диакритические знаки, полученные после нормализации.</p>
 
         </div>
         
@@ -207,7 +206,7 @@ package com.blogspot.atamanenko; import java.text.Normalizer; import java.text.N
   
     
       <div id="disqus_thread"></div>
-<script>
+<script type="application/javascript">
     var disqus_config = function () {
     
     
@@ -273,7 +272,7 @@ package com.blogspot.atamanenko; import java.text.Normalizer; import java.text.N
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary site:@LinkageError creator:@LinkageError]"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary creator:@LinkageError site:@LinkageError]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 
@@ -290,7 +289,7 @@ package com.blogspot.atamanenko; import java.text.Normalizer; import java.text.N
             </li>
         </ul>
     </div>
-    <p>Copyright &copy; 2009&nbsp;—&nbsp;2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+    <p>Copyright &copy; 2009&nbsp;—&nbsp;2020 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
         <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a>, uses custom theme based on
             <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.</span>
     </p>

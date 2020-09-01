@@ -61,7 +61,7 @@
   <meta property="og:url" content="https://uthark.github.io/2010/02/06/grails/" />
   <meta property="og:description" content="Выкладываю ниже список задач, которые нужно/можно выполнить для оптимизации приложения, написанного на Grails, может кому пригодится.
 Тестирование проведённых оптимизаций Первым делом необходимо разработать критерии проверки, которые позволят оценить эффективность проведённых оптимизаций.
- Установить Java Melody плагин для Grails для проведения анализа. Разработать скрипты для проведения нагрузочного тестирования. Прогнать скрипты. Проанализировать результаты Java Melody, выявить узкие места, произвести нужные оптимизации.  Общие оптимизации Очень часто обновление до последней версии используемых библиотек попутно улучшает производительность." />
+ Установить Java Melodyплагиндля Grails для проведения анализа. Разработать скрипты для проведения нагрузочного тестирования. Прогнать скрипты. Проанализировать результаты Java Melody, выявить узкие места, произвести нужные оптимизации.  Общие оптимизации Очень часто обновление до последней версии используемых библиотек попутно улучшает производительность." />
 
   
 
@@ -154,92 +154,70 @@
           
           
           
-          
-
-<p>Выкладываю ниже список задач, которые нужно/можно выполнить для оптимизации приложения, написанного на Grails, может кому пригодится.</p>
-
+          <p>Выкладываю ниже список задач, которые нужно/можно выполнить для оптимизации приложения, написанного на Grails, может кому пригодится.</p>
 <h4 id="тестирование-проведённых-оптимизаций">Тестирование проведённых оптимизаций</h4>
-
 <p>Первым делом необходимо разработать критерии проверки, которые позволят оценить эффективность проведённых оптимизаций.</p>
-
 <ol>
-<li>Установить <a href="http://code.google.com/p/javamelody/">Java Melody</a> <a href="http://www.grails.org/plugin/grails-melody">плагин</a> для Grails для проведения анализа.</li>
+<li>Установить <!-- raw HTML omitted -->Java Melody<!-- raw HTML omitted --> <!-- raw HTML omitted -->плагин<!-- raw HTML omitted --> для Grails для проведения анализа.</li>
 <li>Разработать скрипты для проведения нагрузочного тестирования.</li>
 <li>Прогнать скрипты.</li>
 <li>Проанализировать результаты Java Melody, выявить узкие места, произвести нужные оптимизации.</li>
 </ol>
-
 <h4 id="общие-оптимизации">Общие оптимизации</h4>
-
 <p>Очень часто обновление до последней версии используемых библиотек попутно улучшает производительность.</p>
-
 <ol>
 <li>Обновить Java до последней версии</li>
 <li>Обновить Groovy до последней версии.</li>
 <li>Обновить Grails до последней версии.</li>
 <li>Обновить jQuery до последней версии.</li>
 <li>Оптимизировать настройки виртуальной машины Java (например, -server -Xmx270m -Xms270m -XX:MaxPermSize=80m -Xverify:none -XX:+UseParallelGC -XX:+UseParallelOldGC -XX:+UseAdaptiveSizePolicy -XX:SurvivorRatio=4 -XX:TargetSurvivorRatio=90 -XX:MaxTenuringThreshold=31 -XX:+AggressiveOpts)
-a. <a href="http://java.sun.com/javase/technologies/hotspot/gc/gc_tuning_6.html" target="_blank">http://java.sun.com/javase/technologies/hotspot/gc/gc_tuning_6.html</a>
+a. <a href="http://java.sun.com/javase/technologies/hotspot/gc/gc_tuning_6.html">http://java.sun.com/javase/technologies/hotspot/gc/gc_tuning_6.html</a>
 Вообще, по оптимизации JVM написаны целые книги, так что не буду здесь останавливаться.</li>
 </ol>
-
 <h4 id="оптимизация-клиентской-части">Оптимизация клиентской части</h4>
-
 <ol>
-<li>Настроить <a href="http://tomcat.apache.org/tomcat-5.5-doc/config/context.html">кэширование статических ресурсов</a> в Томкате.</li>
-<li>Настроить <a href="http://tomcat.apache.org/tomcat-5.5-doc/config/http.html">сжатие статических ресурсов</a> в Томкате.</li>
+<li>Настроить <!-- raw HTML omitted -->кэширование статических ресурсов<!-- raw HTML omitted --> в Томкате.</li>
+<li>Настроить <!-- raw HTML omitted -->сжатие статических ресурсов<!-- raw HTML omitted --> в Томкате.</li>
 <li>(поставить прокси на nginx для кэширования статических ресурсов ?)</li>
 <li>Установить плагины для Firebug, которые оценят производительность клиентской части.
-
 <ol>
-<li><a href="http://code.google.com/speed/page-speed">PageSpeed</a> </li></li>
-<li><a href="http://developer.yahoo.com/yslow/">YSlow</a> </li></li>
+<li><!-- raw HTML omitted -->PageSpeed<!-- raw HTML omitted --> <!-- raw HTML omitted --></li>
+<li><!-- raw HTML omitted -->YSlow<!-- raw HTML omitted --> <!-- raw HTML omitted --></li>
 <li>Проанализировать страницы веб-сайта с их помощью</li>
-</ol></li>
+</ol>
+</li>
 <li>Провести предлагаемые оптимизации.</li>
 </ol>
-
 <h4 id="оптимизация-клиентской-части-приложений-написанных-на-grails">Оптимизация клиентской части приложений, написанных на Grails</h4>
-
 <ol>
-<li>Установить плагин <a href="http://www.grails.org/plugin/ui-performance">UI Performance</a></li>
+<li>Установить плагин <!-- raw HTML omitted -->UI Performance<!-- raw HTML omitted --></li>
 <li>Провести оптимизацию с использованием плагина UI Performance</li>
 </ol>
-
 <h4 id="оптимизация-базы-данных">Оптимизация базы данных</h4>
-
 <ol>
 <li>Оптимизировать производительность сервера базы данных (SQL Server)
-a. <a href="http://www.sql-server-performance.com/tips/all_main.aspx" target="_blank">http://www.sql-server-performance.com/tips/all_main.aspx</a>
-a. <a href="http://msdn.microsoft.com/en-us/library/ms998577.aspx" target="_blank">http://msdn.microsoft.com/en-us/library/ms998577.aspx</a></li>
+a. <a href="http://www.sql-server-performance.com/tips/all_main.aspx">http://www.sql-server-performance.com/tips/all_main.aspx</a>
+a. <a href="http://msdn.microsoft.com/en-us/library/ms998577.aspx">http://msdn.microsoft.com/en-us/library/ms998577.aspx</a></li>
 <li>Проверить наличие индексов в базе данных, добавить необходимые</li>
 <li>Найти неоптимальные запросы в БД, оптимизировать</li>
 </ol>
-
 <h4 id="оптимизация-работы-с-базой-данных">Оптимизация работы с базой данных</h4>
-
 <ol>
 <li>Обновить версию JDBC-драйвера</li>
 <li>Настроить кэширование в Hibernate.
-Ресурсов в сети предостаточно, навскидку <a href="http://docs.jboss.org/hibernate/core/3.3/reference/en/html/performance.html">вот</a> <a href="http://www.devx.com/dbzone/Article/29685/1954"> парочка</a>.</li>
+Ресурсов в сети предостаточно, навскидку <!-- raw HTML omitted -->вот<!-- raw HTML omitted --> <!-- raw HTML omitted --> парочка<!-- raw HTML omitted -->.</li>
 </ol>
-
 <h4 id="оптимизация-серверной-части-приложения">Оптимизация серверной части приложения</h4>
-
 <ol>
 <li>Произвести профилирование приложения (использовать Visual VM, YJP Profiler), найти узкие места и оптимизировать их.</li>
 </ol>
-
 <h4 id="оптимизация-серверной-части-приложения-опционально">Оптимизация серверной части приложения (опционально)</h4>
-
 <ol>
-<li>Установить плагин <a href="http://www.grails.org/plugin/perf4j">Perf4J</a> для грэйлза</li>
+<li>Установить плагин <!-- raw HTML omitted -->Perf4J<!-- raw HTML omitted --> для грэйлза</li>
 <li>Добавить необходимые счётчики в код</li>
 <li>Прогнать нагрузочные тесты, найти узкие места, оптимизировать.</li>
 </ol>
-
 <h4 id="заключение">Заключение</h4>
-
 <p>В целом, в данном списке нет ничего нового, это всего лишь компиляция публично доступных материалов. Тем не менее, решил это опубликовать, чтобы сэкономить время другим.</p>
 
         </div>
@@ -280,7 +258,7 @@ a. <a href="http://msdn.microsoft.com/en-us/library/ms998577.aspx" target="_blan
   
     
       <div id="disqus_thread"></div>
-<script>
+<script type="application/javascript">
     var disqus_config = function () {
     
     
@@ -322,26 +300,13 @@ a. <a href="http://msdn.microsoft.com/en-us/library/ms998577.aspx" target="_blan
 <section class="even">
   <div class="toc-header">Table of Contents</div>
    <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li>
-<ul>
-<li>
-<ul>
-<li><a href="#тестирование-проведённых-оптимизаций">Тестирование проведённых оптимизаций</a></li>
-<li><a href="#общие-оптимизации">Общие оптимизации</a></li>
-<li><a href="#оптимизация-клиентской-части">Оптимизация клиентской части</a></li>
-<li><a href="#оптимизация-клиентской-части-приложений-написанных-на-grails">Оптимизация клиентской части приложений, написанных на Grails</a></li>
-<li><a href="#оптимизация-базы-данных">Оптимизация базы данных</a></li>
-<li><a href="#оптимизация-работы-с-базой-данных">Оптимизация работы с базой данных</a></li>
-<li><a href="#оптимизация-серверной-части-приложения">Оптимизация серверной части приложения</a></li>
-<li><a href="#оптимизация-серверной-части-приложения-опционально">Оптимизация серверной части приложения (опционально)</a></li>
-<li><a href="#заключение">Заключение</a></li>
-</ul></li>
-</ul></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
 </section>
 
@@ -372,7 +337,7 @@ a. <a href="http://msdn.microsoft.com/en-us/library/ms998577.aspx" target="_blan
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary site:@LinkageError creator:@LinkageError]"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary creator:@LinkageError site:@LinkageError]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 
@@ -389,7 +354,7 @@ a. <a href="http://msdn.microsoft.com/en-us/library/ms998577.aspx" target="_blan
             </li>
         </ul>
     </div>
-    <p>Copyright &copy; 2009&nbsp;—&nbsp;2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+    <p>Copyright &copy; 2009&nbsp;—&nbsp;2020 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
         <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a>, uses custom theme based on
             <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.</span>
     </p>

@@ -62,7 +62,7 @@
   <meta property="og:description" content="In this post I will show how one can implement custom JUnit @Rule.
 As an example let&rsquo;s take Mockito and implement custom rule which will initialize Mocks in test class.
 By default, Mockito provides the following methods of mock initialization:
- Using Mockito.mock
+  Using Mockito.mock
 Initialize mocks with Mockito.mock:
 public void FooTest { private Foo foo; @Before public void setUp() { FooDependency dep = Mockito.mock(FooDependency.class); foo = new Foo(dep); } } This is the simplest case." />
 
@@ -157,18 +157,15 @@ public void FooTest { private Foo foo; @Before public void setUp() { FooDependen
           
           
           
-          <p>In this post I will show how one can implement custom JUnit <a href="http://junit-team.github.io/junit/javadoc/4.11/org/junit/Rule.html" target="_blank">@Rule</a>.</p>
-
-<p>As an example let&rsquo;s take <a href="https://code.google.com/p/mockito/" target="_blank">Mockito</a> and implement custom rule which will initialize Mocks in  test class.</p>
-
+          <p>In this post I will show how one can implement custom JUnit <a href="http://junit-team.github.io/junit/javadoc/4.11/org/junit/Rule.html">@Rule</a>.</p>
+<p>As an example let&rsquo;s take <a href="https://code.google.com/p/mockito/">Mockito</a> and implement custom rule which will initialize Mocks in  test class.</p>
 <p>By default, Mockito provides the following methods of mock initialization:</p>
-
 <ol>
-<li><p>Using <a href="http://docs.mockito.googlecode.com/hg/org/mockito/Mockito.html#mock(java.lang.Class)" target="_blank">Mockito.mock</a></p>
-
+<li>
+<p>Using <a href="http://docs.mockito.googlecode.com/hg/org/mockito/Mockito.html#mock(java.lang.Class)">Mockito.mock</a></p>
 <p>Initialize mocks with Mockito.mock:</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kt">void</span> <span class="n">FooTest</span> <span class="o">{</span>
-        
+       
     <span class="kd">private</span> <span class="n">Foo</span> <span class="n">foo</span><span class="o">;</span>
 
     <span class="nd">@Before</span>
@@ -176,13 +173,14 @@ public void FooTest { private Foo foo; @Before public void setUp() { FooDependen
         <span class="n">FooDependency</span> <span class="n">dep</span> <span class="o">=</span> <span class="n">Mockito</span><span class="o">.</span><span class="na">mock</span><span class="o">(</span><span class="n">FooDependency</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
         <span class="n">foo</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Foo</span><span class="o">(</span><span class="n">dep</span><span class="o">);</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre></div>
-<p>This is the simplest case.</p></li>
-
-<li><p>Using <a href="http://docs.mockito.googlecode.com/hg/org/mockito/MockitoAnnotations.html#initMocks(java.lang.Object)" target="_blank">MockitoAnnotations</a>.
+<span class="o">}</span>
+</code></pre></div><p>This is the simplest case.</p>
+</li>
+<li>
+<p>Using <a href="http://docs.mockito.googlecode.com/hg/org/mockito/MockitoAnnotations.html#initMocks(java.lang.Object)">MockitoAnnotations</a>.
 Initialize mocks with MockitoAnnotations:</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kt">void</span> <span class="n">FooTest</span> <span class="o">{</span>
-        
+       
     <span class="kd">private</span> <span class="n">Foo</span> <span class="n">foo</span><span class="o">;</span>
 
     <span class="nd">@Mock</span>
@@ -193,15 +191,15 @@ Initialize mocks with MockitoAnnotations:</p>
         <span class="n">MockitoAnnotations</span><span class="o">.</span><span class="na">initMocks</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
         <span class="n">foo</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Foo</span><span class="o">(</span><span class="n">dep</span><span class="o">);</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre></div>
-<p>This method is useful when you have a lot of mocks to inject.</p></li>
-
-<li><p>Using <a href="http://docs.mockito.googlecode.com/hg/org/mockito/runners/MockitoJUnitRunner.html" target="_blank">MockitoJUnitRunner</a></p>
-
+<span class="o">}</span>
+</code></pre></div><p>This method is useful when you have a lot of mocks to inject.</p>
+</li>
+<li>
+<p>Using <a href="http://docs.mockito.googlecode.com/hg/org/mockito/runners/MockitoJUnitRunner.html">MockitoJUnitRunner</a></p>
 <p>Initialize mocks with MockitoJUnitRunner:</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@RunWith</span><span class="o">(</span><span class="n">MockitoJUnitRunner</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kt">void</span> <span class="n">FooTest</span> <span class="o">{</span>
-        
+       
     <span class="kd">private</span> <span class="n">Foo</span> <span class="n">foo</span><span class="o">;</span>
 
     <span class="nd">@Mock</span>
@@ -211,13 +209,11 @@ Initialize mocks with MockitoAnnotations:</p>
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setUp</span><span class="o">()</span> <span class="o">{</span>
         <span class="n">foo</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Foo</span><span class="o">(</span><span class="n">dep</span><span class="o">);</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre></div></li>
+<span class="o">}</span>
+</code></pre></div></li>
 </ol>
-
 <p>I want to show you another option, by using custom JUnit <code>@Rule</code>.</p>
-
-<p>First, we need to implement <a href="http://junit-team.github.io/junit/javadoc/4.11/org/junit/rules/TestRule.html" target="_blank">TestRule</a> interface which allows to implement custom behaviour during test execution:</p>
-
+<p>First, we need to implement <a href="http://junit-team.github.io/junit/javadoc/4.11/org/junit/rules/TestRule.html">TestRule</a> interface which allows to implement custom behaviour during test execution:</p>
 <p>MockitoInitializerRule:</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MockitoInitializerRule</span> <span class="kd">implements</span> <span class="n">TestRule</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="n">Object</span> <span class="n">test</span><span class="o">;</span>
@@ -230,9 +226,8 @@ Initialize mocks with MockitoAnnotations:</p>
     <span class="kd">public</span> <span class="n">Statement</span> <span class="nf">apply</span><span class="o">(</span><span class="n">Statement</span> <span class="n">base</span><span class="o">,</span> <span class="n">Description</span> <span class="n">description</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">return</span> <span class="k">new</span> <span class="n">MockitInitilizationStatement</span><span class="o">(</span><span class="n">base</span><span class="o">,</span> <span class="n">test</span><span class="o">);</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre></div>
-<p>We need to pass current test class instance to the rule, so it will be possible inject mocks into class instance. Actual implementation of our rule will go to new class - subclass of <a href="http://junit-team.github.io/junit/javadoc/4.11/org/junit/runners/model/Statement.html" target="_blank">Statement</a>:</p>
-
+<span class="o">}</span>
+</code></pre></div><p>We need to pass current test class instance to the rule, so it will be possible inject mocks into class instance. Actual implementation of our rule will go to new class - subclass of <a href="http://junit-team.github.io/junit/javadoc/4.11/org/junit/runners/model/Statement.html">Statement</a>:</p>
 <p>MockitInitilizationStatement:</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MockitInitilizationStatement</span> <span class="kd">extends</span> <span class="n">Statement</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="kd">final</span> <span class="n">Statement</span> <span class="n">base</span><span class="o">;</span>
@@ -248,11 +243,9 @@ Initialize mocks with MockitoAnnotations:</p>
         <span class="n">MockitoAnnotations</span><span class="o">.</span><span class="na">initMocks</span><span class="o">(</span><span class="n">test</span><span class="o">);</span>
         <span class="n">base</span><span class="o">.</span><span class="na">evaluate</span><span class="o">();</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre></div>
-<p>What we do is basically initialize mocks in the test class and then proceed with the test method execution.</p>
-
+<span class="o">}</span>
+</code></pre></div><p>What we do is basically initialize mocks in the test class and then proceed with the test method execution.</p>
 <p>Now, let&rsquo;s take a look at the usage of newly created Rule:</p>
-
 <p>Example usage of MockitoInitializerRule:</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kt">void</span> <span class="n">FooTest</span> <span class="o">{</span>
     
@@ -268,8 +261,8 @@ Initialize mocks with MockitoAnnotations:</p>
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setUp</span><span class="o">()</span> <span class="o">{</span>
         <span class="n">foo</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Foo</span><span class="o">(</span><span class="n">dep</span><span class="o">);</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre></div>
-<p>Comparing to variant with <code>MockitoJUnitRunner</code> this one provides ability to use custom <a href="http://junit-team.github.io/junit/javadoc/4.11/org/junit/runner/Runner.html" target="_blank">Runner</a>, i.e. we can continue to use <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/test/context/junit4/SpringJUnit4ClassRunner.html" target="_blank">SpringJUnit4ClassRunner</a></p>
+<span class="o">}</span>
+</code></pre></div><p>Comparing to variant with <code>MockitoJUnitRunner</code> this one provides ability to use custom <a href="http://junit-team.github.io/junit/javadoc/4.11/org/junit/runner/Runner.html">Runner</a>, i.e. we can continue to use <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/test/context/junit4/SpringJUnit4ClassRunner.html">SpringJUnit4ClassRunner</a></p>
 
         </div>
         
@@ -309,7 +302,7 @@ Initialize mocks with MockitoAnnotations:</p>
   
     
       <div id="disqus_thread"></div>
-<script>
+<script type="application/javascript">
     var disqus_config = function () {
     
     
@@ -348,6 +341,11 @@ Initialize mocks with MockitoAnnotations:</p>
   </section>
 
 
+<section class="even">
+  <div class="toc-header">Table of Contents</div>
+   <nav id="TableOfContents"></nav>
+</section>
+
 
 
 
@@ -375,7 +373,7 @@ Initialize mocks with MockitoAnnotations:</p>
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[creator:@LinkageError card:summary site:@LinkageError]"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary creator:@LinkageError site:@LinkageError]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 
@@ -392,7 +390,7 @@ Initialize mocks with MockitoAnnotations:</p>
             </li>
         </ul>
     </div>
-    <p>Copyright &copy; 2009&nbsp;—&nbsp;2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+    <p>Copyright &copy; 2009&nbsp;—&nbsp;2020 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
         <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a>, uses custom theme based on
             <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.</span>
     </p>

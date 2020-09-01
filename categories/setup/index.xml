@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>setup on Sharing knowledge</title>
+    <link>https://uthark.github.io/categories/setup/</link>
+    <description>Recent content in setup on Sharing knowledge</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 24 Feb 2018 11:46:41 -0500</lastBuildDate>
+    
+	<atom:link href="https://uthark.github.io/categories/setup/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>My Setup</title>
+      <link>https://uthark.github.io/post/2018-02-24-used-stuff/</link>
+      <pubDate>Sat, 24 Feb 2018 11:46:41 -0500</pubDate>
+      
+      <guid>https://uthark.github.io/post/2018-02-24-used-stuff/</guid>
+      <description>Introduction This is a dump of different things and apps I use on a daily basis. Hope you will find it useful.
+Shell/Terminal Applications  zsh — ZSH is a shell. It is very good alternative to bash which is used by default in most Linux distributions and in macOS. macOS uses very old version of bash because bash changed it&amp;rsquo;s license and Apple doesn&amp;rsquo;t like GPL. oh-my-zsh — framework for easy customization of ZSH.</description>
+    </item>
+    
+  </channel>
+</rss>

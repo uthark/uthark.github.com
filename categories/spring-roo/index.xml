@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Spring Roo on Sharing knowledge</title>
+    <title>spring roo on Sharing knowledge</title>
     <link>https://uthark.github.io/categories/spring-roo/</link>
-    <description>Recent content in Spring Roo on Sharing knowledge</description>
+    <description>Recent content in spring roo on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 06 Jun 2009 22:19:00 +0000</lastBuildDate>
@@ -17,9 +17,8 @@
       <pubDate>Sat, 06 Jun 2009 22:19:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2009/06/06/spring-roo-2/</guid>
-      <description>Архитектура сгенерированного приложения Spring Roo активно использует аспекты. В качестве реализации аспектов была взята библиотека aspectj. Большая часть сгенерированного кода попадает в отдельные файлы-аспекты. Создадим простой класс:
-new persistent class jpa -name ~.domain.Action -testAutomatically add field string name -notNull -sizeMin 1 -sizeMax 80 add field string description -sizeMax 1024 Spring Roo создаст нам следующие файлы:
- Action.java Класс содержит только полезную с точки зрения назначения класса информацию. По сути, то, что вводит разработчик в консоль Roo аккумулируется здесь.</description>
+      <description>Action.java Класс содержит только полезную с точки зрения назначения класса информацию. По сути, то, что вводит разработчик в консоль Roo аккумулируется здесь. Весь дополнительный код разносится по другим классам.  @Entity //1 @RooJavaBean //2 @RooToString //3 @RooEntity(finders = { &amp;#34;findActionsByName&amp;#34; }) //4 public class Action { @NotNull @Size(min = 1, max = 80) private String name; @Size(max = 1024) private String description; } Мы видим, что:
+ Класс является JPA-сущностью.</description>
     </item>
     
     <item>
@@ -28,8 +27,7 @@ new persistent class jpa -name ~.domain.Action -testAutomatically add field stri
       <pubDate>Wed, 03 Jun 2009 00:06:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2009/06/03/spring-roo/</guid>
-      <description>Недавно компания Spring Source презентовала новый продукт - Spring Roo. Цель проекта - повысить продуктивность Java-разработчиков. Почитав обзоры, а также потрогав его руками можно сделать вывод о том, что это, в некотором виде, альтернатива AppFuse и Grails.
-Описание Spring Roo100% программирование на Java, предлагающее разработчикам известную, развитую и популярную платформу разработки.Прозрачные, надёжные и продуктивные сервисы среды разработки, такие как помощник кода, отладчики, визуальные отчёты об ошибка и т.д.Экстремально эффективная производительность во время выполнения, безопасность типов и отсутствие зависимостей на Roo во время выполнения.</description>
+      <description>Недавнокомпания Spring Sourceпрезентовала новый продукт - Spring Roo. Цель проекта- повысить продуктивность Java-разработчиков. Почитавобзоры, а также потрогав его рукамиможно сделать вывод о том, что это, в некотором виде, альтернатива AppFuseи Grails.</description>
     </item>
     
   </channel>

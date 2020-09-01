@@ -155,8 +155,7 @@ import io.github.uthark.blog.assertj.Assertions.assertThat; // ... within @Test 
           
           
           
-          <p><a href="https://github.com/joel-costigliola/assertj-core" target="_blank">AssertJ</a> is a library which provides fluent strongly-typed assertions to use in unit tests.</p>
-
+          <p><a href="https://github.com/joel-costigliola/assertj-core">AssertJ</a> is a library which provides fluent strongly-typed assertions to use in unit tests.</p>
 <p>Example of assertions written with <code>AssertJ</code>:</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">io.github.uthark.blog.assertj.Assertions.assertThat</span><span class="o">;</span>
 
@@ -165,14 +164,14 @@ import io.github.uthark.blog.assertj.Assertions.assertThat; // ... within @Test 
 <span class="n">assertThat</span><span class="o">(</span><span class="n">result</span><span class="o">).</span>
     <span class="n">isNotNull</span><span class="o">().</span>
     <span class="n">isActive</span><span class="o">().</span>
-    <span class="n">hasLogin</span><span class="o">(</span><span class="s">&#34;username&#34;</span><span class="o">);</span></code></pre></div>
-<p>As you can see assertions look much more readable.
+    <span class="n">hasLogin</span><span class="o">(</span><span class="s">&#34;username&#34;</span><span class="o">);</span>
+</code></pre></div><p>As you can see assertions look much more readable.
 The integration of assertj into Maven project is very easy:</p>
-
 <ol>
 <li>Update pom.xml in parent module</li>
 </ol>
-<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;properties&gt;</span>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml">
+<span class="nt">&lt;properties&gt;</span>
     <span class="nt">&lt;assertj-core.version&gt;</span>1.6.0<span class="nt">&lt;/assertj-core.version&gt;</span>
     <span class="nt">&lt;assertj-assertions-generator-maven-plugin.version&gt;</span>1.2.0<span class="nt">&lt;/assertj-assertions-generator-maven-plugin.version&gt;</span>
 <span class="nt">&lt;/properties&gt;</span>
@@ -202,11 +201,13 @@ The integration of assertj into Maven project is very easy:</p>
         <span class="nt">&lt;/executions&gt;</span>
     <span class="nt">&lt;/plugin&gt;</span>
 
-<span class="nt">&lt;/pluginManagement&gt;</span></code></pre></div>
-<ol>
+<span class="nt">&lt;/pluginManagement&gt;</span>
+
+</code></pre></div><ol start="2">
 <li>Update pom.xml in child module</li>
 </ol>
-<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependencies&gt;</span>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml">
+<span class="nt">&lt;dependencies&gt;</span>
     <span class="nt">&lt;dependency&gt;</span>
         <span class="nt">&lt;groupId&gt;</span>org.assertj<span class="nt">&lt;/groupId&gt;</span>
         <span class="nt">&lt;artifactId&gt;</span>assertj-core<span class="nt">&lt;/artifactId&gt;</span>
@@ -230,13 +231,14 @@ The integration of assertj into Maven project is very easy:</p>
             <span class="nt">&lt;/configuration&gt;</span>
         <span class="nt">&lt;/plugin&gt;</span>
     <span class="nt">&lt;/plugins&gt;</span>
-<span class="nt">&lt;/build&gt;</span></code></pre></div>
-<p>After this changes it is possible to generate assertions for the classes you want test:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mvn assertj:generate-assertions</code></pre></div>
-<p>By default assertj will generate assertion classes in <code>target/generated-test-sources/assertj-assertions/</code>, it is possible to override this behaviour by passing configuration element <code>targetDir</code> to plugin.</p>
+<span class="nt">&lt;/build&gt;</span>
 
-<p>Additonal documentation for Maven plugin can be <a href="http://joel-costigliola.github.io/assertj/assertj-assertions-generator-maven-plugin.html" target="_blank">found here</a></p>
+</code></pre></div><p>After this changes it is possible to generate assertions for the classes you want test:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">
+mvn assertj:generate-assertions
 
+</code></pre></div><p>By default assertj will generate assertion classes in <code>target/generated-test-sources/assertj-assertions/</code>, it is possible to override this behaviour by passing configuration element <code>targetDir</code> to plugin.</p>
+<p>Additonal documentation for Maven plugin can be <a href="http://joel-costigliola.github.io/assertj/assertj-assertions-generator-maven-plugin.html">found here</a></p>
 <p>Happy hacking!</p>
 
         </div>
@@ -277,7 +279,7 @@ The integration of assertj into Maven project is very easy:</p>
   
     
       <div id="disqus_thread"></div>
-<script>
+<script type="application/javascript">
     var disqus_config = function () {
     
     
@@ -316,6 +318,11 @@ The integration of assertj into Maven project is very easy:</p>
   </section>
 
 
+<section class="even">
+  <div class="toc-header">Table of Contents</div>
+   <nav id="TableOfContents"></nav>
+</section>
+
 
 
 
@@ -343,7 +350,7 @@ The integration of assertj into Maven project is very easy:</p>
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary site:@LinkageError creator:@LinkageError]"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary creator:@LinkageError site:@LinkageError]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 
@@ -360,7 +367,7 @@ The integration of assertj into Maven project is very easy:</p>
             </li>
         </ul>
     </div>
-    <p>Copyright &copy; 2009&nbsp;—&nbsp;2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+    <p>Copyright &copy; 2009&nbsp;—&nbsp;2020 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
         <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a>, uses custom theme based on
             <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.</span>
     </p>

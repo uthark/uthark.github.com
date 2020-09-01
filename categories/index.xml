@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on Sharing knowledge</title>
@@ -6,868 +6,13 @@
     <description>Recent content in Categories on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 06 Mar 2014 22:38:54 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 24 Jun 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://uthark.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Android</title>
-      <link>https://uthark.github.io/categories/android/</link>
-      <pubDate>Thu, 06 Mar 2014 22:38:54 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/android/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Announcements</title>
-      <link>https://uthark.github.io/categories/announcements/</link>
-      <pubDate>Tue, 21 Nov 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/announcements/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Apache Ant</title>
-      <link>https://uthark.github.io/categories/apache-ant/</link>
-      <pubDate>Tue, 02 Jun 2009 23:31:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/apache-ant/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Article</title>
-      <link>https://uthark.github.io/categories/article/</link>
-      <pubDate>Wed, 16 Apr 2014 00:10:10 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/article/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Assertj</title>
-      <link>https://uthark.github.io/categories/assertj/</link>
-      <pubDate>Tue, 15 Apr 2014 23:37:49 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/assertj/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Autofs</title>
-      <link>https://uthark.github.io/categories/autofs/</link>
-      <pubDate>Mon, 14 Dec 2009 23:14:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/autofs/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Automatization</title>
-      <link>https://uthark.github.io/categories/automatization/</link>
-      <pubDate>Wed, 24 Oct 2012 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/automatization/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Autowiring</title>
-      <link>https://uthark.github.io/categories/autowiring/</link>
-      <pubDate>Sat, 29 Jun 2013 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/autowiring/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Basics</title>
-      <link>https://uthark.github.io/categories/basics/</link>
-      <pubDate>Thu, 21 Jul 2011 12:06:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/basics/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Beanvalidation</title>
-      <link>https://uthark.github.io/categories/beanvalidation/</link>
-      <pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/beanvalidation/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Best Practices</title>
-      <link>https://uthark.github.io/categories/best-practices/</link>
-      <pubDate>Sun, 11 Apr 2010 11:45:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/best-practices/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Bitly</title>
-      <link>https://uthark.github.io/categories/bitly/</link>
-      <pubDate>Mon, 06 Dec 2010 23:11:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/bitly/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Cache</title>
-      <link>https://uthark.github.io/categories/cache/</link>
-      <pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/cache/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Caching</title>
-      <link>https://uthark.github.io/categories/caching/</link>
-      <pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/caching/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Chromium</title>
-      <link>https://uthark.github.io/categories/chromium/</link>
-      <pubDate>Tue, 08 Dec 2009 23:43:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/chromium/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Constraint</title>
-      <link>https://uthark.github.io/categories/constraint/</link>
-      <pubDate>Tue, 07 Jul 2009 22:11:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/constraint/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Db2</title>
-      <link>https://uthark.github.io/categories/db2/</link>
-      <pubDate>Wed, 05 Mar 2014 14:41:54 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/db2/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Dbus</title>
-      <link>https://uthark.github.io/categories/dbus/</link>
-      <pubDate>Mon, 22 Mar 2010 23:50:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/dbus/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Delicious</title>
-      <link>https://uthark.github.io/categories/delicious/</link>
-      <pubDate>Tue, 08 Dec 2009 23:43:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/delicious/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Development</title>
-      <link>https://uthark.github.io/categories/development/</link>
-      <pubDate>Wed, 16 Apr 2014 00:10:10 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/development/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Development Environment</title>
-      <link>https://uthark.github.io/categories/development-environment/</link>
-      <pubDate>Wed, 24 Oct 2012 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/development-environment/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Diary</title>
-      <link>https://uthark.github.io/categories/diary/</link>
-      <pubDate>Tue, 04 Mar 2014 01:04:55 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/diary/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Dropbox</title>
-      <link>https://uthark.github.io/categories/dropbox/</link>
-      <pubDate>Tue, 08 Dec 2009 23:17:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/dropbox/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Eclipse</title>
-      <link>https://uthark.github.io/categories/eclipse/</link>
-      <pubDate>Sun, 03 May 2009 00:18:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/eclipse/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Extension</title>
-      <link>https://uthark.github.io/categories/extension/</link>
-      <pubDate>Tue, 24 Nov 2009 23:09:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/extension/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Extensions</title>
-      <link>https://uthark.github.io/categories/extensions/</link>
-      <pubDate>Wed, 25 Nov 2009 23:16:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/extensions/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Factory Bean</title>
-      <link>https://uthark.github.io/categories/factory-bean/</link>
-      <pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/factory-bean/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Foreign Key</title>
-      <link>https://uthark.github.io/categories/foreign-key/</link>
-      <pubDate>Tue, 07 Jul 2009 22:11:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/foreign-key/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Funny</title>
-      <link>https://uthark.github.io/categories/funny/</link>
-      <pubDate>Fri, 14 Mar 2014 23:42:10 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/funny/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Gae</title>
-      <link>https://uthark.github.io/categories/gae/</link>
-      <pubDate>Sat, 23 May 2009 23:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/gae/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Go Restful</title>
-      <link>https://uthark.github.io/categories/go-restful/</link>
-      <pubDate>Mon, 22 Jan 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/go-restful/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Golang</title>
-      <link>https://uthark.github.io/categories/golang/</link>
-      <pubDate>Mon, 22 Jan 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/golang/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Google Chrome</title>
-      <link>https://uthark.github.io/categories/google-chrome/</link>
-      <pubDate>Tue, 08 Dec 2009 23:43:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/google-chrome/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Gorm</title>
-      <link>https://uthark.github.io/categories/gorm/</link>
-      <pubDate>Sun, 11 Apr 2010 11:45:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/gorm/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Grails</title>
-      <link>https://uthark.github.io/categories/grails/</link>
-      <pubDate>Sun, 11 Apr 2010 11:45:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/grails/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Greenrobot</title>
-      <link>https://uthark.github.io/categories/greenrobot/</link>
-      <pubDate>Thu, 06 Mar 2014 22:38:54 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/greenrobot/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Groovy</title>
-      <link>https://uthark.github.io/categories/groovy/</link>
-      <pubDate>Sat, 06 Feb 2010 23:31:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/groovy/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Hibernate Validator</title>
-      <link>https://uthark.github.io/categories/hibernate-validator/</link>
-      <pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/hibernate-validator/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Howto</title>
-      <link>https://uthark.github.io/categories/howto/</link>
-      <pubDate>Sun, 21 Mar 2010 20:54:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/howto/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Iterm</title>
-      <link>https://uthark.github.io/categories/iterm/</link>
-      <pubDate>Sun, 02 Mar 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/iterm/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Java</title>
-      <link>https://uthark.github.io/categories/java/</link>
-      <pubDate>Wed, 16 Apr 2014 00:10:10 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/java/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Javamail</title>
-      <link>https://uthark.github.io/categories/javamail/</link>
-      <pubDate>Fri, 20 Apr 2012 15:25:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/javamail/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Jax Rs</title>
-      <link>https://uthark.github.io/categories/jax-rs/</link>
-      <pubDate>Thu, 09 Feb 2012 01:05:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/jax-rs/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Jax Rs Client</title>
-      <link>https://uthark.github.io/categories/jax-rs-client/</link>
-      <pubDate>Fri, 28 Jun 2013 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/jax-rs-client/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Jpa</title>
-      <link>https://uthark.github.io/categories/jpa/</link>
-      <pubDate>Sat, 28 Apr 2012 15:03:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/jpa/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Junit</title>
-      <link>https://uthark.github.io/categories/junit/</link>
-      <pubDate>Fri, 28 Mar 2014 13:24:45 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/junit/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Linux</title>
-      <link>https://uthark.github.io/categories/linux/</link>
-      <pubDate>Mon, 14 Dec 2009 23:14:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/linux/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Logging</title>
-      <link>https://uthark.github.io/categories/logging/</link>
-      <pubDate>Fri, 20 Apr 2012 15:51:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/logging/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Macbook</title>
-      <link>https://uthark.github.io/categories/macbook/</link>
-      <pubDate>Wed, 05 Mar 2014 14:41:54 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/macbook/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Memcached</title>
-      <link>https://uthark.github.io/categories/memcached/</link>
-      <pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/memcached/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Mockito</title>
-      <link>https://uthark.github.io/categories/mockito/</link>
-      <pubDate>Fri, 28 Mar 2014 13:24:45 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/mockito/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Mongodb</title>
-      <link>https://uthark.github.io/categories/mongodb/</link>
-      <pubDate>Sat, 01 Mar 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/mongodb/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Mongotemplate</title>
-      <link>https://uthark.github.io/categories/mongotemplate/</link>
-      <pubDate>Sat, 01 Mar 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/mongotemplate/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Music</title>
-      <link>https://uthark.github.io/categories/music/</link>
-      <pubDate>Sun, 02 Mar 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/music/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Mysql</title>
-      <link>https://uthark.github.io/categories/mysql/</link>
-      <pubDate>Fri, 05 Feb 2010 01:20:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/mysql/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Nautilus</title>
-      <link>https://uthark.github.io/categories/nautilus/</link>
-      <pubDate>Sun, 06 Dec 2009 01:03:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/nautilus/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Nfs</title>
-      <link>https://uthark.github.io/categories/nfs/</link>
-      <pubDate>Mon, 14 Dec 2009 23:14:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/nfs/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Nosql</title>
-      <link>https://uthark.github.io/categories/nosql/</link>
-      <pubDate>Sat, 01 Mar 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/nosql/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Octopress</title>
-      <link>https://uthark.github.io/categories/octopress/</link>
-      <pubDate>Sun, 02 Mar 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/octopress/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Opera</title>
-      <link>https://uthark.github.io/categories/opera/</link>
-      <pubDate>Sat, 04 Jul 2009 01:13:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/opera/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Oracle</title>
-      <link>https://uthark.github.io/categories/oracle/</link>
-      <pubDate>Fri, 05 Feb 2010 01:20:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/oracle/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Osx</title>
-      <link>https://uthark.github.io/categories/osx/</link>
-      <pubDate>Sun, 02 Mar 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/osx/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Performance</title>
-      <link>https://uthark.github.io/categories/performance/</link>
-      <pubDate>Sat, 22 May 2010 00:26:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/performance/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Performance Optimization</title>
-      <link>https://uthark.github.io/categories/performance-optimization/</link>
-      <pubDate>Sat, 06 Feb 2010 23:31:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/performance-optimization/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Photostream</title>
-      <link>https://uthark.github.io/categories/photostream/</link>
-      <pubDate>Sun, 02 Mar 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/photostream/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Plugin</title>
-      <link>https://uthark.github.io/categories/plugin/</link>
-      <pubDate>Sun, 03 May 2009 00:18:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/plugin/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Postgresql</title>
-      <link>https://uthark.github.io/categories/postgresql/</link>
-      <pubDate>Tue, 07 Jul 2009 22:11:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/postgresql/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Python</title>
-      <link>https://uthark.github.io/categories/python/</link>
-      <pubDate>Mon, 22 Mar 2010 23:50:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/python/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Rabbitvcs</title>
-      <link>https://uthark.github.io/categories/rabbitvcs/</link>
-      <pubDate>Sun, 06 Dec 2009 01:03:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/rabbitvcs/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Reading List</title>
-      <link>https://uthark.github.io/categories/reading-list/</link>
-      <pubDate>Wed, 24 Jan 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/reading-list/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Reflection</title>
-      <link>https://uthark.github.io/categories/reflection/</link>
-      <pubDate>Fri, 20 Apr 2012 15:51:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/reflection/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Reflectionassert</title>
-      <link>https://uthark.github.io/categories/reflectionassert/</link>
-      <pubDate>Wed, 16 Apr 2014 00:10:10 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/reflectionassert/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Resteasy</title>
-      <link>https://uthark.github.io/categories/resteasy/</link>
-      <pubDate>Thu, 09 Feb 2012 01:05:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/resteasy/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Rss</title>
-      <link>https://uthark.github.io/categories/rss/</link>
-      <pubDate>Mon, 07 Dec 2009 19:25:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/rss/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Russian</title>
-      <link>https://uthark.github.io/categories/russian/</link>
-      <pubDate>Sun, 02 Mar 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/russian/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Scala</title>
-      <link>https://uthark.github.io/categories/scala/</link>
-      <pubDate>Tue, 25 Mar 2014 16:09:42 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/scala/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Self Improvement</title>
-      <link>https://uthark.github.io/categories/self-improvement/</link>
-      <pubDate>Tue, 16 Mar 2010 21:52:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/self-improvement/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Siteupdate</title>
-      <link>https://uthark.github.io/categories/siteupdate/</link>
-      <pubDate>Sat, 01 Mar 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/siteupdate/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Skype</title>
-      <link>https://uthark.github.io/categories/skype/</link>
-      <pubDate>Mon, 22 Mar 2010 23:50:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/skype/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Softwaredesign</title>
-      <link>https://uthark.github.io/categories/softwaredesign/</link>
-      <pubDate>Sat, 30 May 2009 23:45:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/softwaredesign/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Spring</title>
-      <link>https://uthark.github.io/categories/spring/</link>
-      <pubDate>Sat, 01 Mar 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/spring/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Spring Aop</title>
-      <link>https://uthark.github.io/categories/spring-aop/</link>
-      <pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/spring-aop/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Spring Caching</title>
-      <link>https://uthark.github.io/categories/spring-caching/</link>
-      <pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/spring-caching/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Spring Data</title>
-      <link>https://uthark.github.io/categories/spring-data/</link>
-      <pubDate>Sat, 01 Mar 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/spring-data/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Spring Framework</title>
-      <link>https://uthark.github.io/categories/spring-framework/</link>
-      <pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/spring-framework/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Spring Roo</title>
-      <link>https://uthark.github.io/categories/spring-roo/</link>
-      <pubDate>Sat, 06 Jun 2009 22:19:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/spring-roo/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Svn</title>
-      <link>https://uthark.github.io/categories/svn/</link>
-      <pubDate>Sun, 06 Dec 2009 01:03:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/svn/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Sybase</title>
-      <link>https://uthark.github.io/categories/sybase/</link>
-      <pubDate>Fri, 05 Feb 2010 01:20:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/sybase/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Testing</title>
-      <link>https://uthark.github.io/categories/testing/</link>
-      <pubDate>Sat, 22 May 2010 00:26:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/testing/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Textview</title>
-      <link>https://uthark.github.io/categories/textview/</link>
-      <pubDate>Thu, 06 Mar 2014 19:13:17 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/textview/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Tiddlywiki</title>
-      <link>https://uthark.github.io/categories/tiddlywiki/</link>
-      <pubDate>Sun, 21 Mar 2010 20:54:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/tiddlywiki/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Tips</title>
-      <link>https://uthark.github.io/categories/tips/</link>
-      <pubDate>Sun, 02 Mar 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/tips/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Transaction</title>
-      <link>https://uthark.github.io/categories/transaction/</link>
-      <pubDate>Tue, 07 Jul 2009 22:11:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/transaction/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Unit Testing</title>
-      <link>https://uthark.github.io/categories/unit-testing/</link>
-      <pubDate>Wed, 16 Apr 2014 00:10:10 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/unit-testing/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Unitils</title>
-      <link>https://uthark.github.io/categories/unitils/</link>
-      <pubDate>Wed, 16 Apr 2014 00:10:10 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/unitils/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Useful</title>
+      <title>useful</title>
       <link>https://uthark.github.io/categories/useful/</link>
       <pubDate>Sun, 24 Jun 2018 00:00:00 +0000</pubDate>
       
@@ -876,52 +21,61 @@
     </item>
     
     <item>
-      <title>Vagrant</title>
-      <link>https://uthark.github.io/categories/vagrant/</link>
-      <pubDate>Wed, 24 Oct 2012 00:00:00 +0000</pubDate>
+      <title>lists</title>
+      <link>https://uthark.github.io/categories/lists/</link>
+      <pubDate>Sat, 24 Feb 2018 11:46:41 -0500</pubDate>
       
-      <guid>https://uthark.github.io/categories/vagrant/</guid>
+      <guid>https://uthark.github.io/categories/lists/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Validation</title>
-      <link>https://uthark.github.io/categories/validation/</link>
-      <pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate>
+      <title>random</title>
+      <link>https://uthark.github.io/categories/random/</link>
+      <pubDate>Sat, 24 Feb 2018 11:46:41 -0500</pubDate>
       
-      <guid>https://uthark.github.io/categories/validation/</guid>
+      <guid>https://uthark.github.io/categories/random/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Validator</title>
-      <link>https://uthark.github.io/categories/validator/</link>
-      <pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate>
+      <title>setup</title>
+      <link>https://uthark.github.io/categories/setup/</link>
+      <pubDate>Sat, 24 Feb 2018 11:46:41 -0500</pubDate>
       
-      <guid>https://uthark.github.io/categories/validator/</guid>
+      <guid>https://uthark.github.io/categories/setup/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Virtualization</title>
-      <link>https://uthark.github.io/categories/virtualization/</link>
-      <pubDate>Wed, 24 Oct 2012 00:00:00 +0000</pubDate>
+      <title>reading list</title>
+      <link>https://uthark.github.io/categories/reading-list/</link>
+      <pubDate>Wed, 24 Jan 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://uthark.github.io/categories/virtualization/</guid>
+      <guid>https://uthark.github.io/categories/reading-list/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Vmware Fusion</title>
-      <link>https://uthark.github.io/categories/vmware-fusion/</link>
-      <pubDate>Wed, 05 Mar 2014 14:41:54 +0000</pubDate>
+      <title>go-restful</title>
+      <link>https://uthark.github.io/categories/go-restful/</link>
+      <pubDate>Mon, 22 Jan 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://uthark.github.io/categories/vmware-fusion/</guid>
+      <guid>https://uthark.github.io/categories/go-restful/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Yaml</title>
+      <title>golang</title>
+      <link>https://uthark.github.io/categories/golang/</link>
+      <pubDate>Mon, 22 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/golang/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>yaml</title>
       <link>https://uthark.github.io/categories/yaml/</link>
       <pubDate>Mon, 22 Jan 2018 00:00:00 +0000</pubDate>
       
@@ -930,79 +84,457 @@
     </item>
     
     <item>
-      <title>Аспекты</title>
-      <link>https://uthark.github.io/categories/%D0%B0%D1%81%D0%BF%D0%B5%D0%BA%D1%82%D1%8B/</link>
-      <pubDate>Sat, 28 Jan 2012 02:43:00 +0000</pubDate>
+      <title>announcements</title>
+      <link>https://uthark.github.io/categories/announcements/</link>
+      <pubDate>Tue, 21 Nov 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://uthark.github.io/categories/%D0%B0%D1%81%D0%BF%D0%B5%D0%BA%D1%82%D1%8B/</guid>
+      <guid>https://uthark.github.io/categories/announcements/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>База Данных</title>
-      <link>https://uthark.github.io/categories/%D0%B1%D0%B0%D0%B7%D0%B0-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85/</link>
-      <pubDate>Sat, 06 Feb 2010 23:31:00 +0000</pubDate>
+      <title>article</title>
+      <link>https://uthark.github.io/categories/article/</link>
+      <pubDate>Wed, 16 Apr 2014 00:10:10 +0000</pubDate>
       
-      <guid>https://uthark.github.io/categories/%D0%B1%D0%B0%D0%B7%D0%B0-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85/</guid>
+      <guid>https://uthark.github.io/categories/article/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Блокировка</title>
-      <link>https://uthark.github.io/categories/%D0%B1%D0%BB%D0%BE%D0%BA%D0%B8%D1%80%D0%BE%D0%B2%D0%BA%D0%B0/</link>
-      <pubDate>Sun, 26 Apr 2009 15:30:00 +0000</pubDate>
+      <title>development</title>
+      <link>https://uthark.github.io/categories/development/</link>
+      <pubDate>Wed, 16 Apr 2014 00:10:10 +0000</pubDate>
       
-      <guid>https://uthark.github.io/categories/%D0%B1%D0%BB%D0%BE%D0%BA%D0%B8%D1%80%D0%BE%D0%B2%D0%BA%D0%B0/</guid>
+      <guid>https://uthark.github.io/categories/development/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Вложенная Транзакция</title>
-      <link>https://uthark.github.io/categories/%D0%B2%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%BD%D0%B0%D1%8F-%D1%82%D1%80%D0%B0%D0%BD%D0%B7%D0%B0%D0%BA%D1%86%D0%B8%D1%8F/</link>
-      <pubDate>Fri, 05 Feb 2010 01:20:00 +0000</pubDate>
+      <title>java</title>
+      <link>https://uthark.github.io/categories/java/</link>
+      <pubDate>Wed, 16 Apr 2014 00:10:10 +0000</pubDate>
       
-      <guid>https://uthark.github.io/categories/%D0%B2%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%BD%D0%B0%D1%8F-%D1%82%D1%80%D0%B0%D0%BD%D0%B7%D0%B0%D0%BA%D1%86%D0%B8%D1%8F/</guid>
+      <guid>https://uthark.github.io/categories/java/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Грабли</title>
-      <link>https://uthark.github.io/categories/%D0%B3%D1%80%D0%B0%D0%B1%D0%BB%D0%B8/</link>
-      <pubDate>Tue, 02 Jun 2009 23:31:00 +0000</pubDate>
+      <title>reflectionassert</title>
+      <link>https://uthark.github.io/categories/reflectionassert/</link>
+      <pubDate>Wed, 16 Apr 2014 00:10:10 +0000</pubDate>
       
-      <guid>https://uthark.github.io/categories/%D0%B3%D1%80%D0%B0%D0%B1%D0%BB%D0%B8/</guid>
+      <guid>https://uthark.github.io/categories/reflectionassert/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Качество Кода</title>
-      <link>https://uthark.github.io/categories/%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%BE-%D0%BA%D0%BE%D0%B4%D0%B0/</link>
-      <pubDate>Wed, 27 May 2009 01:26:00 +0000</pubDate>
+      <title>unit testing</title>
+      <link>https://uthark.github.io/categories/unit-testing/</link>
+      <pubDate>Wed, 16 Apr 2014 00:10:10 +0000</pubDate>
       
-      <guid>https://uthark.github.io/categories/%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%BE-%D0%BA%D0%BE%D0%B4%D0%B0/</guid>
+      <guid>https://uthark.github.io/categories/unit-testing/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Обзор</title>
-      <link>https://uthark.github.io/categories/%D0%BE%D0%B1%D0%B7%D0%BE%D1%80/</link>
-      <pubDate>Sat, 23 May 2009 23:00:00 +0000</pubDate>
+      <title>unitils</title>
+      <link>https://uthark.github.io/categories/unitils/</link>
+      <pubDate>Wed, 16 Apr 2014 00:10:10 +0000</pubDate>
       
-      <guid>https://uthark.github.io/categories/%D0%BE%D0%B1%D0%B7%D0%BE%D1%80/</guid>
+      <guid>https://uthark.github.io/categories/unitils/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Производительность</title>
-      <link>https://uthark.github.io/categories/%D0%BF%D1%80%D0%BE%D0%B8%D0%B7%D0%B2%D0%BE%D0%B4%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D0%BE%D1%81%D1%82%D1%8C/</link>
-      <pubDate>Tue, 16 Mar 2010 21:52:00 +0000</pubDate>
+      <title>assertj</title>
+      <link>https://uthark.github.io/categories/assertj/</link>
+      <pubDate>Tue, 15 Apr 2014 23:37:49 +0000</pubDate>
       
-      <guid>https://uthark.github.io/categories/%D0%BF%D1%80%D0%BE%D0%B8%D0%B7%D0%B2%D0%BE%D0%B4%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D0%BE%D1%81%D1%82%D1%8C/</guid>
+      <guid>https://uthark.github.io/categories/assertj/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Разработка</title>
+      <title>junit</title>
+      <link>https://uthark.github.io/categories/junit/</link>
+      <pubDate>Fri, 28 Mar 2014 13:24:45 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/junit/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>mockito</title>
+      <link>https://uthark.github.io/categories/mockito/</link>
+      <pubDate>Fri, 28 Mar 2014 13:24:45 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/mockito/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>scala</title>
+      <link>https://uthark.github.io/categories/scala/</link>
+      <pubDate>Tue, 25 Mar 2014 16:09:42 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/scala/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>funny</title>
+      <link>https://uthark.github.io/categories/funny/</link>
+      <pubDate>Fri, 14 Mar 2014 23:42:10 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/funny/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>android</title>
+      <link>https://uthark.github.io/categories/android/</link>
+      <pubDate>Thu, 06 Mar 2014 22:38:54 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/android/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>greenrobot</title>
+      <link>https://uthark.github.io/categories/greenrobot/</link>
+      <pubDate>Thu, 06 Mar 2014 22:38:54 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/greenrobot/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>textview</title>
+      <link>https://uthark.github.io/categories/textview/</link>
+      <pubDate>Thu, 06 Mar 2014 19:13:17 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/textview/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>db2</title>
+      <link>https://uthark.github.io/categories/db2/</link>
+      <pubDate>Wed, 05 Mar 2014 14:41:54 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/db2/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>macbook</title>
+      <link>https://uthark.github.io/categories/macbook/</link>
+      <pubDate>Wed, 05 Mar 2014 14:41:54 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/macbook/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>vmware fusion</title>
+      <link>https://uthark.github.io/categories/vmware-fusion/</link>
+      <pubDate>Wed, 05 Mar 2014 14:41:54 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/vmware-fusion/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>diary</title>
+      <link>https://uthark.github.io/categories/diary/</link>
+      <pubDate>Tue, 04 Mar 2014 01:04:55 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/diary/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>iterm</title>
+      <link>https://uthark.github.io/categories/iterm/</link>
+      <pubDate>Sun, 02 Mar 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/iterm/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>music</title>
+      <link>https://uthark.github.io/categories/music/</link>
+      <pubDate>Sun, 02 Mar 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/music/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>octopress</title>
+      <link>https://uthark.github.io/categories/octopress/</link>
+      <pubDate>Sun, 02 Mar 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/octopress/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>osx</title>
+      <link>https://uthark.github.io/categories/osx/</link>
+      <pubDate>Sun, 02 Mar 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/osx/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>photostream</title>
+      <link>https://uthark.github.io/categories/photostream/</link>
+      <pubDate>Sun, 02 Mar 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/photostream/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>russian</title>
+      <link>https://uthark.github.io/categories/russian/</link>
+      <pubDate>Sun, 02 Mar 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/russian/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>tips</title>
+      <link>https://uthark.github.io/categories/tips/</link>
+      <pubDate>Sun, 02 Mar 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/tips/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>mongodb</title>
+      <link>https://uthark.github.io/categories/mongodb/</link>
+      <pubDate>Sat, 01 Mar 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/mongodb/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>mongotemplate</title>
+      <link>https://uthark.github.io/categories/mongotemplate/</link>
+      <pubDate>Sat, 01 Mar 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/mongotemplate/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>nosql</title>
+      <link>https://uthark.github.io/categories/nosql/</link>
+      <pubDate>Sat, 01 Mar 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/nosql/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>siteupdate</title>
+      <link>https://uthark.github.io/categories/siteupdate/</link>
+      <pubDate>Sat, 01 Mar 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/siteupdate/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>spring</title>
+      <link>https://uthark.github.io/categories/spring/</link>
+      <pubDate>Sat, 01 Mar 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/spring/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>spring data</title>
+      <link>https://uthark.github.io/categories/spring-data/</link>
+      <pubDate>Sat, 01 Mar 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/spring-data/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>autowiring</title>
+      <link>https://uthark.github.io/categories/autowiring/</link>
+      <pubDate>Sat, 29 Jun 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/autowiring/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>jax-rs client</title>
+      <link>https://uthark.github.io/categories/jax-rs-client/</link>
+      <pubDate>Fri, 28 Jun 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/jax-rs-client/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>beanvalidation</title>
+      <link>https://uthark.github.io/categories/beanvalidation/</link>
+      <pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/beanvalidation/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>cache</title>
+      <link>https://uthark.github.io/categories/cache/</link>
+      <pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/cache/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>caching</title>
+      <link>https://uthark.github.io/categories/caching/</link>
+      <pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/caching/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>factory bean</title>
+      <link>https://uthark.github.io/categories/factory-bean/</link>
+      <pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/factory-bean/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>hibernate validator</title>
+      <link>https://uthark.github.io/categories/hibernate-validator/</link>
+      <pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/hibernate-validator/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>memcached</title>
+      <link>https://uthark.github.io/categories/memcached/</link>
+      <pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/memcached/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>spring aop</title>
+      <link>https://uthark.github.io/categories/spring-aop/</link>
+      <pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/spring-aop/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>spring caching</title>
+      <link>https://uthark.github.io/categories/spring-caching/</link>
+      <pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/spring-caching/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>spring framework</title>
+      <link>https://uthark.github.io/categories/spring-framework/</link>
+      <pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/spring-framework/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>validation</title>
+      <link>https://uthark.github.io/categories/validation/</link>
+      <pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/validation/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>validator</title>
+      <link>https://uthark.github.io/categories/validator/</link>
+      <pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/validator/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>automatization</title>
+      <link>https://uthark.github.io/categories/automatization/</link>
+      <pubDate>Wed, 24 Oct 2012 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/automatization/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>development environment</title>
+      <link>https://uthark.github.io/categories/development-environment/</link>
+      <pubDate>Wed, 24 Oct 2012 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/development-environment/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>vagrant</title>
+      <link>https://uthark.github.io/categories/vagrant/</link>
+      <pubDate>Wed, 24 Oct 2012 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/vagrant/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>virtualization</title>
+      <link>https://uthark.github.io/categories/virtualization/</link>
+      <pubDate>Wed, 24 Oct 2012 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/virtualization/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>jpa</title>
+      <link>https://uthark.github.io/categories/jpa/</link>
+      <pubDate>Sat, 28 Apr 2012 15:03:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/jpa/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>разработка</title>
       <link>https://uthark.github.io/categories/%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0/</link>
       <pubDate>Sat, 28 Apr 2012 15:03:00 +0000</pubDate>
       
@@ -1011,7 +543,250 @@
     </item>
     
     <item>
-      <title>Транзакция</title>
+      <title>logging</title>
+      <link>https://uthark.github.io/categories/logging/</link>
+      <pubDate>Fri, 20 Apr 2012 15:51:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/logging/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>reflection</title>
+      <link>https://uthark.github.io/categories/reflection/</link>
+      <pubDate>Fri, 20 Apr 2012 15:51:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/reflection/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>javamail</title>
+      <link>https://uthark.github.io/categories/javamail/</link>
+      <pubDate>Fri, 20 Apr 2012 15:25:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/javamail/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>jax-rs</title>
+      <link>https://uthark.github.io/categories/jax-rs/</link>
+      <pubDate>Thu, 09 Feb 2012 01:05:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/jax-rs/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>resteasy</title>
+      <link>https://uthark.github.io/categories/resteasy/</link>
+      <pubDate>Thu, 09 Feb 2012 01:05:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/resteasy/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>аспекты</title>
+      <link>https://uthark.github.io/categories/%D0%B0%D1%81%D0%BF%D0%B5%D0%BA%D1%82%D1%8B/</link>
+      <pubDate>Sat, 28 Jan 2012 02:43:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/%D0%B0%D1%81%D0%BF%D0%B5%D0%BA%D1%82%D1%8B/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>basics</title>
+      <link>https://uthark.github.io/categories/basics/</link>
+      <pubDate>Thu, 21 Jul 2011 12:06:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/basics/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>bitly</title>
+      <link>https://uthark.github.io/categories/bitly/</link>
+      <pubDate>Mon, 06 Dec 2010 23:11:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/bitly/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>performance</title>
+      <link>https://uthark.github.io/categories/performance/</link>
+      <pubDate>Sat, 22 May 2010 00:26:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/performance/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>testing</title>
+      <link>https://uthark.github.io/categories/testing/</link>
+      <pubDate>Sat, 22 May 2010 00:26:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/testing/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>best practices</title>
+      <link>https://uthark.github.io/categories/best-practices/</link>
+      <pubDate>Sun, 11 Apr 2010 11:45:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/best-practices/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>gorm</title>
+      <link>https://uthark.github.io/categories/gorm/</link>
+      <pubDate>Sun, 11 Apr 2010 11:45:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/gorm/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>grails</title>
+      <link>https://uthark.github.io/categories/grails/</link>
+      <pubDate>Sun, 11 Apr 2010 11:45:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/grails/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>dbus</title>
+      <link>https://uthark.github.io/categories/dbus/</link>
+      <pubDate>Mon, 22 Mar 2010 23:50:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/dbus/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>python</title>
+      <link>https://uthark.github.io/categories/python/</link>
+      <pubDate>Mon, 22 Mar 2010 23:50:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/python/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>skype</title>
+      <link>https://uthark.github.io/categories/skype/</link>
+      <pubDate>Mon, 22 Mar 2010 23:50:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/skype/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>howto</title>
+      <link>https://uthark.github.io/categories/howto/</link>
+      <pubDate>Sun, 21 Mar 2010 20:54:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/howto/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>tiddlywiki</title>
+      <link>https://uthark.github.io/categories/tiddlywiki/</link>
+      <pubDate>Sun, 21 Mar 2010 20:54:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/tiddlywiki/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>self-improvement</title>
+      <link>https://uthark.github.io/categories/self-improvement/</link>
+      <pubDate>Tue, 16 Mar 2010 21:52:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/self-improvement/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>производительность</title>
+      <link>https://uthark.github.io/categories/%D0%BF%D1%80%D0%BE%D0%B8%D0%B7%D0%B2%D0%BE%D0%B4%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D0%BE%D1%81%D1%82%D1%8C/</link>
+      <pubDate>Tue, 16 Mar 2010 21:52:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/%D0%BF%D1%80%D0%BE%D0%B8%D0%B7%D0%B2%D0%BE%D0%B4%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D0%BE%D1%81%D1%82%D1%8C/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>groovy</title>
+      <link>https://uthark.github.io/categories/groovy/</link>
+      <pubDate>Sat, 06 Feb 2010 23:31:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/groovy/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>performance optimization</title>
+      <link>https://uthark.github.io/categories/performance-optimization/</link>
+      <pubDate>Sat, 06 Feb 2010 23:31:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/performance-optimization/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>база данных</title>
+      <link>https://uthark.github.io/categories/%D0%B1%D0%B0%D0%B7%D0%B0-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85/</link>
+      <pubDate>Sat, 06 Feb 2010 23:31:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/%D0%B1%D0%B0%D0%B7%D0%B0-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>mysql</title>
+      <link>https://uthark.github.io/categories/mysql/</link>
+      <pubDate>Fri, 05 Feb 2010 01:20:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/mysql/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>oracle</title>
+      <link>https://uthark.github.io/categories/oracle/</link>
+      <pubDate>Fri, 05 Feb 2010 01:20:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/oracle/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>sybase</title>
+      <link>https://uthark.github.io/categories/sybase/</link>
+      <pubDate>Fri, 05 Feb 2010 01:20:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/sybase/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>вложенная транзакция</title>
+      <link>https://uthark.github.io/categories/%D0%B2%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%BD%D0%B0%D1%8F-%D1%82%D1%80%D0%B0%D0%BD%D0%B7%D0%B0%D0%BA%D1%86%D0%B8%D1%8F/</link>
+      <pubDate>Fri, 05 Feb 2010 01:20:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/%D0%B2%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%BD%D0%B0%D1%8F-%D1%82%D1%80%D0%B0%D0%BD%D0%B7%D0%B0%D0%BA%D1%86%D0%B8%D1%8F/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>транзакция</title>
       <link>https://uthark.github.io/categories/%D1%82%D1%80%D0%B0%D0%BD%D0%B7%D0%B0%D0%BA%D1%86%D0%B8%D1%8F/</link>
       <pubDate>Fri, 05 Feb 2010 01:20:00 +0000</pubDate>
       
@@ -1020,7 +795,259 @@
     </item>
     
     <item>
-      <title>Фолксономия</title>
+      <title>autofs</title>
+      <link>https://uthark.github.io/categories/autofs/</link>
+      <pubDate>Mon, 14 Dec 2009 23:14:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/autofs/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>linux</title>
+      <link>https://uthark.github.io/categories/linux/</link>
+      <pubDate>Mon, 14 Dec 2009 23:14:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/linux/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>nfs</title>
+      <link>https://uthark.github.io/categories/nfs/</link>
+      <pubDate>Mon, 14 Dec 2009 23:14:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/nfs/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>chromium</title>
+      <link>https://uthark.github.io/categories/chromium/</link>
+      <pubDate>Tue, 08 Dec 2009 23:43:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/chromium/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>delicious</title>
+      <link>https://uthark.github.io/categories/delicious/</link>
+      <pubDate>Tue, 08 Dec 2009 23:43:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/delicious/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>google chrome</title>
+      <link>https://uthark.github.io/categories/google-chrome/</link>
+      <pubDate>Tue, 08 Dec 2009 23:43:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/google-chrome/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>dropbox</title>
+      <link>https://uthark.github.io/categories/dropbox/</link>
+      <pubDate>Tue, 08 Dec 2009 23:17:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/dropbox/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>rss</title>
+      <link>https://uthark.github.io/categories/rss/</link>
+      <pubDate>Mon, 07 Dec 2009 19:25:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/rss/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>nautilus</title>
+      <link>https://uthark.github.io/categories/nautilus/</link>
+      <pubDate>Sun, 06 Dec 2009 01:03:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/nautilus/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>rabbitvcs</title>
+      <link>https://uthark.github.io/categories/rabbitvcs/</link>
+      <pubDate>Sun, 06 Dec 2009 01:03:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/rabbitvcs/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>svn</title>
+      <link>https://uthark.github.io/categories/svn/</link>
+      <pubDate>Sun, 06 Dec 2009 01:03:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/svn/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>extensions</title>
+      <link>https://uthark.github.io/categories/extensions/</link>
+      <pubDate>Wed, 25 Nov 2009 23:16:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/extensions/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>extension</title>
+      <link>https://uthark.github.io/categories/extension/</link>
+      <pubDate>Tue, 24 Nov 2009 23:09:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/extension/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>constraint</title>
+      <link>https://uthark.github.io/categories/constraint/</link>
+      <pubDate>Tue, 07 Jul 2009 22:11:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/constraint/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>foreign key</title>
+      <link>https://uthark.github.io/categories/foreign-key/</link>
+      <pubDate>Tue, 07 Jul 2009 22:11:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/foreign-key/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>postgresql</title>
+      <link>https://uthark.github.io/categories/postgresql/</link>
+      <pubDate>Tue, 07 Jul 2009 22:11:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/postgresql/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>transaction</title>
+      <link>https://uthark.github.io/categories/transaction/</link>
+      <pubDate>Tue, 07 Jul 2009 22:11:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/transaction/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>opera</title>
+      <link>https://uthark.github.io/categories/opera/</link>
+      <pubDate>Sat, 04 Jul 2009 01:13:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/opera/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>spring roo</title>
+      <link>https://uthark.github.io/categories/spring-roo/</link>
+      <pubDate>Sat, 06 Jun 2009 22:19:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/spring-roo/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>apache ant</title>
+      <link>https://uthark.github.io/categories/apache-ant/</link>
+      <pubDate>Tue, 02 Jun 2009 23:31:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/apache-ant/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>грабли</title>
+      <link>https://uthark.github.io/categories/%D0%B3%D1%80%D0%B0%D0%B1%D0%BB%D0%B8/</link>
+      <pubDate>Tue, 02 Jun 2009 23:31:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/%D0%B3%D1%80%D0%B0%D0%B1%D0%BB%D0%B8/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>softwaredesign</title>
+      <link>https://uthark.github.io/categories/softwaredesign/</link>
+      <pubDate>Sat, 30 May 2009 23:45:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/softwaredesign/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>качество кода</title>
+      <link>https://uthark.github.io/categories/%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%BE-%D0%BA%D0%BE%D0%B4%D0%B0/</link>
+      <pubDate>Wed, 27 May 2009 01:26:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%BE-%D0%BA%D0%BE%D0%B4%D0%B0/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>GAE</title>
+      <link>https://uthark.github.io/categories/GAE/</link>
+      <pubDate>Sat, 23 May 2009 23:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/GAE/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>обзор</title>
+      <link>https://uthark.github.io/categories/%D0%BE%D0%B1%D0%B7%D0%BE%D1%80/</link>
+      <pubDate>Sat, 23 May 2009 23:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/%D0%BE%D0%B1%D0%B7%D0%BE%D1%80/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>eclipse</title>
+      <link>https://uthark.github.io/categories/eclipse/</link>
+      <pubDate>Sun, 03 May 2009 00:18:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/eclipse/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>plugin</title>
+      <link>https://uthark.github.io/categories/plugin/</link>
+      <pubDate>Sun, 03 May 2009 00:18:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/plugin/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>блокировка</title>
+      <link>https://uthark.github.io/categories/%D0%B1%D0%BB%D0%BE%D0%BA%D0%B8%D1%80%D0%BE%D0%B2%D0%BA%D0%B0/</link>
+      <pubDate>Sun, 26 Apr 2009 15:30:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/%D0%B1%D0%BB%D0%BE%D0%BA%D0%B8%D1%80%D0%BE%D0%B2%D0%BA%D0%B0/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>фолксономия</title>
       <link>https://uthark.github.io/categories/%D1%84%D0%BE%D0%BB%D0%BA%D1%81%D0%BE%D0%BD%D0%BE%D0%BC%D0%B8%D1%8F/</link>
       <pubDate>Wed, 22 Apr 2009 00:14:00 +0000</pubDate>
       

@@ -60,7 +60,7 @@
   <meta property="og:title" content="Opera и del.icio.us" />
   <meta property="og:url" content="https://uthark.github.io/2009/07/04/opera-delicious/" />
   <meta property="og:description" content="Так получилось, что в последнее время я стал пользоваться небезызвестной оперой.
-В связи с этим я стал искать замену часто используемым расширениям, одно из них - delicious bookmarks. Сервис del.icio.us предоставляет букмарклеты для различных браузеров, которые позволяют сохранять закладки быстро и удобно. Вот только есть один недостаток - официальный плагин для Firefox в свойство Notes новой закладки добавляет выделенный текст со страницы, чего букмарклет не делает.
+В связи с этим я стал искать замену часто используемым расширениям, одно из них - delicious bookmarks. Сервис del.icio.usпредоставляет букмарклеты для различных браузеров, которые позволяют сохранять закладки быстро и удобно. Вот только есть один недостаток - официальный плагин для Firefoxв свойство Notes новой закладки добавляет выделенный текст со страницы, чего букмарклет не делает.
 Посмотрев исходник букмарклета, а это обычный javascript, я добавил небольшой кусочек кода, который восстанавливает справедливость и тоже добавляет в поле Notes текст, выделенный на странице." />
 
   
@@ -154,12 +154,9 @@
           
           
           
-          <p>Так получилось, что в последнее время я стал пользоваться небезызвестной <a href="http://www.opera.com">оперой</a>.</p>
-
-<p>В связи с этим я стал искать замену часто используемым расширениям, одно из них - delicious bookmarks. Сервис <a href="http://delicious.com">del.icio.us</a> предоставляет букмарклеты для различных браузеров, которые позволяют сохранять закладки быстро и удобно. Вот только есть один недостаток - <a href="https://addons.mozilla.org/en-US/firefox/addon/3615">официальный плагин для Firefox</a> в свойство Notes новой закладки добавляет выделенный текст со страницы, чего букмарклет не делает.</p>
-
+          <p>Так получилось, что в последнее время я стал пользоваться небезызвестной <!-- raw HTML omitted -->оперой<!-- raw HTML omitted -->.</p>
+<p>В связи с этим я стал искать замену часто используемым расширениям, одно из них - delicious bookmarks. Сервис <!-- raw HTML omitted -->del.icio.us<!-- raw HTML omitted --> предоставляет букмарклеты для различных браузеров, которые позволяют сохранять закладки быстро и удобно. Вот только есть один недостаток - <!-- raw HTML omitted -->официальный плагин для Firefox<!-- raw HTML omitted --> в свойство Notes новой закладки добавляет выделенный текст со страницы, чего букмарклет не делает.</p>
 <p>Посмотрев исходник букмарклета, а это обычный javascript, я добавил небольшой кусочек кода, который восстанавливает справедливость и тоже добавляет в поле Notes текст, выделенный на странице.</p>
-
 <p>Ниже привожу изменённый код букмарклета:</p>
 <div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">javascript</span><span class="o">:</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span><span class="nx">f</span><span class="o">=</span><span class="s1">&#39;http://delicious.com/save?url=&#39;</span><span class="o">+</span><span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">href</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;&amp;title=&#39;</span><span class="o">+</span><span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">title</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;&amp;notes=&#39;</span><span class="o">+</span><span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getSelection</span><span class="p">())</span><span class="o">+</span><span class="s1">&#39;&amp;v=5&amp;&#39;</span><span class="p">;</span><span class="nx">a</span><span class="o">=</span><span class="kd">function</span><span class="p">(){</span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nb">window</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="nx">f</span><span class="o">+</span><span class="s1">&#39;noui=1&amp;jump=doclose&#39;</span><span class="p">,</span><span class="s1">&#39;deliciousuiv5&#39;</span><span class="p">,</span><span class="s1">&#39;location=yes,links=no,scrollbars=no,toolbar=no,width=550,height=550&#39;</span><span class="p">))</span><span class="nx">location</span><span class="p">.</span><span class="nx">href</span><span class="o">=</span><span class="nx">f</span><span class="o">+</span><span class="s1">&#39;jump=yes&#39;</span><span class="p">};</span><span class="k">if</span><span class="p">(</span><span class="sr">/Firefox/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">navigator</span><span class="p">.</span><span class="nx">userAgent</span><span class="p">)){</span><span class="nx">setTimeout</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="mi">0</span><span class="p">)}</span><span class="k">else</span><span class="p">{</span><span class="nx">a</span><span class="p">()}})()</span>
 </code></pre></div>
@@ -201,7 +198,7 @@
   
     
       <div id="disqus_thread"></div>
-<script>
+<script type="application/javascript">
     var disqus_config = function () {
     
     
@@ -267,7 +264,7 @@
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[creator:@LinkageError card:summary site:@LinkageError]"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary creator:@LinkageError site:@LinkageError]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 
@@ -284,7 +281,7 @@
             </li>
         </ul>
     </div>
-    <p>Copyright &copy; 2009&nbsp;—&nbsp;2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+    <p>Copyright &copy; 2009&nbsp;—&nbsp;2020 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
         <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a>, uses custom theme based on
             <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.</span>
     </p>

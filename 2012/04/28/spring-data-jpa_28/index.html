@@ -154,10 +154,8 @@
           
           
           
-          <p>Очевидно, что мы не всегда можем воспользоваться автоматической генерацией кода, предоставляемой <a href="http://www.springsource.org/spring-data/jpa" target="_blank">Spring Data JPA</a>. Например, у нас слишком сложный запрос, или нам необходимо вызвать процедуру в базе данных, либо у нас сложная бизнес-логика.</p>
-
+          <p>Очевидно, что мы не всегда можем воспользоваться автоматической генерацией кода, предоставляемой <a href="http://www.springsource.org/spring-data/jpa">Spring Data JPA</a>. Например, у нас слишком сложный запрос, или нам необходимо вызвать процедуру в базе данных, либо у нас сложная бизнес-логика.</p>
 <p>Рассмотрим следующий пример - например, нам нужна функциональность уникального счётчика, который мы решили реализовать с помощью последовательности (sequence).</p>
-
 <p>Сначала определим интерфейс, в котором опишем все методы, которые мы будем реализовывать самостоятельно. В нашем случае, это будет только один метод:</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UserRepositoryCustom</span> <span class="o">{</span>
     <span class="cm">/**
@@ -166,12 +164,15 @@
 </span><span class="cm">     * @return next unique id.
 </span><span class="cm">     */</span>
     <span class="n">Integer</span> <span class="nf">getNextUniqueId</span><span class="o">();</span>
-<span class="o">}</span></code></pre></div>
-<p>Затем обновим объявление репозитория, чтобы он унаследовал новый интерфейс <tt>UserRepositoryCustom</tt></p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UserRepository</span> <span class="kd">extends</span> <span class="n">JpaRepository</span><span class="o">&lt;</span><span class="n">User</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;,</span> <span class="n">UserRepositoryCustom</span> <span class="o">{</span>
+<span class="o">}</span>
+
+</code></pre></div><p>Затем обновим объявление репозитория, чтобы он унаследовал новый интерфейс <!-- raw HTML omitted -->UserRepositoryCustom<!-- raw HTML omitted --></p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UserRepository</span> <span class="kd">extends</span> <span class="n">JpaRepository</span><span class="o">&lt;</span><span class="n">User</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;,</span> <span class="n">UserRepositoryCustom</span> <span class="o">{</span>
    <span class="o">...</span>
-<span class="o">}</span></code></pre></div>
-<p>Теперь напишем реализацию метода:</p>
+<span class="o">}</span>
+
+</code></pre></div><p>Теперь напишем реализацию метода:</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserRepositoryImpl</span> <span class="kd">implements</span> <span class="n">UserRepositoryCustom</span> <span class="o">{</span>
 
     <span class="nd">@PersistenceContext</span>
@@ -192,16 +193,16 @@
 
         <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="na">intValue</span><span class="o">();</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre></div>
-<p>И, наконец, укажем Spring Data JPA, чтобы в качестве класса для прокси использовался наш класс с реализацией собственных методов. Для этого нам нужна ещё одна секция <tt>repositories</tt> в конфигурационном файле:</p>
+<span class="o">}</span>
+</code></pre></div><p>И, наконец, укажем Spring Data JPA, чтобы в качестве класса для прокси использовался наш класс с реализацией собственных методов. Для этого нам нужна ещё одна секция <!-- raw HTML omitted -->repositories<!-- raw HTML omitted --> в конфигурационном файле:</p>
 <div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml">    <span class="nt">&lt;repositories</span> <span class="na">base-package=</span><span class="s">&#34;[base.repository.package]&#34;</span><span class="nt">/&gt;</span>
 
     <span class="nt">&lt;repositories</span> <span class="na">base-package=</span><span class="s">&#34;[base.repository.package]&#34;</span><span class="nt">&gt;</span>
         <span class="nt">&lt;repository</span> <span class="na">id=</span><span class="s">&#34;userRepository&#34;</span> <span class="na">custom-impl-ref=</span><span class="s">&#34;userRepositoryImpl&#34;</span><span class="nt">/&gt;</span>
     <span class="nt">&lt;/repositories&gt;</span>
 
-    <span class="nt">&lt;beans:bean</span> <span class="na">id=</span><span class="s">&#34;userRepositoryImpl&#34;</span> <span class="na">class=</span><span class="s">&#34;...UserRepositoryImpl&#34;</span><span class="nt">/&gt;</span></code></pre></div>
-<p>Вот и всё.</p>
+    <span class="nt">&lt;beans:bean</span> <span class="na">id=</span><span class="s">&#34;userRepositoryImpl&#34;</span> <span class="na">class=</span><span class="s">&#34;...UserRepositoryImpl&#34;</span><span class="nt">/&gt;</span>
+</code></pre></div><p>Вот и всё.</p>
 
         </div>
         
@@ -241,7 +242,7 @@
   
     
       <div id="disqus_thread"></div>
-<script>
+<script type="application/javascript">
     var disqus_config = function () {
     
     
@@ -280,6 +281,11 @@
   </section>
 
 
+<section class="even">
+  <div class="toc-header">Table of Contents</div>
+   <nav id="TableOfContents"></nav>
+</section>
+
 
 
 
@@ -307,7 +313,7 @@
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary site:@LinkageError creator:@LinkageError]"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary creator:@LinkageError site:@LinkageError]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 
@@ -324,7 +330,7 @@
             </li>
         </ul>
     </div>
-    <p>Copyright &copy; 2009&nbsp;—&nbsp;2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+    <p>Copyright &copy; 2009&nbsp;—&nbsp;2020 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
         <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a>, uses custom theme based on
             <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.</span>
     </p>

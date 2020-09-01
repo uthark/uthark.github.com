@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html prefix="og: http://ogp.me/ns#" lang="en">
 <head>
-	<meta name="generator" content="Hugo 0.44" />
+	<meta name="generator" content="Hugo 0.74.3" />
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
@@ -135,7 +135,7 @@
 
 
         
-        <p>If anyone needs invites to <a href="http://atom.io" target="_blank">atom.io</a>, text editor from github - ask me in comments. I do have 3 invites to share.</p>
+        <p>If anyone needs invites to <a href="http://atom.io">atom.io</a>, text editor from github - ask me in comments. I do have 3 invites to share.</p>
 
         
 
@@ -158,21 +158,20 @@
 
 
         
-        <p>This is a very nice series of posts about Scala by <a href="http://blog.agiledeveloper.com/" target="_blank">Venkat Subramaniam</a></p>
-
+        <p>This is a very nice series of posts about Scala by <a href="http://blog.agiledeveloper.com/">Venkat Subramaniam</a></p>
 <ol>
-<li><a href="http://pragprog.com/magazines/2011-09/scala-for-the-intrigued" target="_blank">The Elegance of Scala</a></li>
-<li><a href="http://pragprog.com/magazines/2011-10/scala-for-the-intrigued" target="_blank">Sensible Typing and Optional Items</a></li>
-<li><a href="http://pragprog.com/magazines/2011-11/scala-for-the-intrigued" target="_blank">Cute Classes and Pure OO</a></li>
-<li><a href="http://pragprog.com/magazines/2011-12/scala-for-the-intrigued" target="_blank">Functional Style of Programming</a></li>
-<li><a href="http://pragprog.com/magazines/2012-01/scala-for-the-intrigued" target="_blank">Working with Collections</a></li>
-<li><a href="http://pragprog.com/magazines/2012-02/scala-for-the-intrigued" target="_blank">Creating Higher Order Functions</a></li>
-<li><a href="http://pragprog.com/magazines/2012-03/scala-for-the-intrigued" target="_blank">Pattern Matching</a></li>
-<li><a href="http://pragprog.com/magazines/2012-04/scala-for-the-intrigued" target="_blank">XML as First Class Citizen</a></li>
-<li><a href="http://pragprog.com/magazines/2012-05/scala-for-the-intrigued" target="_blank">Recursions and Tail Call Optimization</a></li>
-<li><a href="http://pragprog.com/magazines/2012-06/scala-for-the-intrigued" target="_blank">Using Traits</a></li>
-<li><a href="http://pragprog.com/magazines/2012-07/scala-for-the-intrigued" target="_blank">Chaining Traits</a></li>
-<li><a href="http://pragprog.com/magazines/2012-08/scala-for-the-intrigued" target="_blank">Concurrency in Scala</a></li>
+<li><a href="http://pragprog.com/magazines/2011-09/scala-for-the-intrigued">The Elegance of Scala</a></li>
+<li><a href="http://pragprog.com/magazines/2011-10/scala-for-the-intrigued">Sensible Typing and Optional Items</a></li>
+<li><a href="http://pragprog.com/magazines/2011-11/scala-for-the-intrigued">Cute Classes and Pure OO</a></li>
+<li><a href="http://pragprog.com/magazines/2011-12/scala-for-the-intrigued">Functional Style of Programming</a></li>
+<li><a href="http://pragprog.com/magazines/2012-01/scala-for-the-intrigued">Working with Collections</a></li>
+<li><a href="http://pragprog.com/magazines/2012-02/scala-for-the-intrigued">Creating Higher Order Functions</a></li>
+<li><a href="http://pragprog.com/magazines/2012-03/scala-for-the-intrigued">Pattern Matching</a></li>
+<li><a href="http://pragprog.com/magazines/2012-04/scala-for-the-intrigued">XML as First Class Citizen</a></li>
+<li><a href="http://pragprog.com/magazines/2012-05/scala-for-the-intrigued">Recursions and Tail Call Optimization</a></li>
+<li><a href="http://pragprog.com/magazines/2012-06/scala-for-the-intrigued">Using Traits</a></li>
+<li><a href="http://pragprog.com/magazines/2012-07/scala-for-the-intrigued">Chaining Traits</a></li>
+<li><a href="http://pragprog.com/magazines/2012-08/scala-for-the-intrigued">Concurrency in Scala</a></li>
 </ol>
 
         
@@ -201,8 +200,8 @@
     <span class="c1">// do some business logic.
 </span><span class="c1"></span><span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
     <span class="n">errorBean</span><span class="o">.</span><span class="na">addError</span><span class="o">(</span><span class="s">&#34;System exception. Unable to locate life fee.&#34;</span><span class="o">);</span>
-<span class="o">}</span></code></pre></div>
-<p>This is just awesome!</p>
+<span class="o">}</span>
+</code></pre></div><p>This is just awesome!</p>
 
         
 
@@ -225,33 +224,27 @@
 
 
         
-        <p>In one of my projects I used <a href="https://github.com/greenrobot/EventBus" target="_blank">EventBus</a> library. The library is pretty cool and I would recommend everybody to use it.</p>
-
+        <p>In one of my projects I used <a href="https://github.com/greenrobot/EventBus">EventBus</a> library. The library is pretty cool and I would recommend everybody to use it.</p>
 <p>But I found one small issue with this library - in case you send too many events very fast (i.e. more than 1000 per second) you may face issue with application crash due to inability to create new thread.</p>
-
 <p>The problem is lying in the used <code>ExecutorService</code>:</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">de.greenrobot.event</span><span class="o">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">
+<span class="kn">package</span> <span class="nn">de.greenrobot.event</span><span class="o">;</span>
 <span class="c1">// imports
 </span><span class="c1"></span><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">EventBus</span> <span class="o">{</span>
     <span class="kd">static</span> <span class="n">ExecutorService</span> <span class="n">executorService</span> <span class="o">=</span> <span class="n">Executors</span><span class="o">.</span><span class="na">newCachedThreadPool</span><span class="o">();</span>
 
     <span class="c1">// class content skipped 
-</span><span class="c1"></span><span class="o">}</span></code></pre></div>
-<p>As you can see, it calls <code>newCachedThreadPool</code> method to create thread pool.</p>
+</span><span class="c1"></span><span class="o">}</span>
 
-<p>From <a href="http://developer.android.com/reference/java/util/concurrent/Executors.html#newCachedThreadPool()" target="_blank">javadoc</a> for this method:</p>
-
+</code></pre></div><p>As you can see, it calls <code>newCachedThreadPool</code> method to create thread pool.</p>
+<p>From <a href="http://developer.android.com/reference/java/util/concurrent/Executors.html#newCachedThreadPool()">javadoc</a> for this method:</p>
 <blockquote>
 <p>Creates a thread pool that creates new threads as needed, but will reuse
 previously constructed threads when they are available.</p>
 </blockquote>
-
 <p>This is where we hit the wall - if we send too many requests and each request is slow (i.e. saving into database or network request) then we will try to create too many threads and app will crash.</p>
-
 <p>Thankfully, <code>executorService</code> is <code>static</code> but not <code>final</code>. And this will allow us to solve the issue easily.</p>
-
 <p>Let&rsquo;s create our configurer class in package <code>de.greenrobot.event</code> so we will be able to access <code>executorService</code> property which is package-visible and override it with different thread pool:</p>
-
 <p>EventBusExecutorServiceConfigurer:</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">de.greenrobot.event</span><span class="o">;</span>
 
@@ -269,9 +262,8 @@ previously constructed threads when they are available.</p>
         <span class="o">}</span>
         <span class="n">EventBus</span><span class="o">.</span><span class="na">executorService</span> <span class="o">=</span> <span class="n">executorServiceToUse</span><span class="o">;</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre></div>
-<p>Android 3.0+ has special <a href="http://developer.android.com/reference/android/os/AsyncTask.html#THREAD_POOL_EXECUTOR" target="_blank">THREAD_POOL_EXECUTOR</a> which is supposed to be used by asynchronous tasks, so we use it on newer devices. On older, pre-Honeycomb devices we create our own thread pool.</p>
-
+<span class="o">}</span>
+</code></pre></div><p>Android 3.0+ has special <a href="http://developer.android.com/reference/android/os/AsyncTask.html#THREAD_POOL_EXECUTOR">THREAD_POOL_EXECUTOR</a> which is supposed to be used by asynchronous tasks, so we use it on newer devices. On older, pre-Honeycomb devices we create our own thread pool.</p>
 <p>And then in Android application we configure <code>executorService</code>:</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomApplication</span> <span class="kd">extends</span> <span class="n">Application</span> <span class="o">{</span>
     <span class="nd">@Override</span>
@@ -281,7 +273,9 @@ previously constructed threads when they are available.</p>
 
         <span class="c1">// other initialization
 </span><span class="c1"></span>    <span class="o">}</span>
-<span class="o">}</span></code></pre></div>
+<span class="o">}</span>
+
+</code></pre></div>
         
 
     </article>
@@ -303,23 +297,20 @@ previously constructed threads when they are available.</p>
 
 
         
-        
-
-<p>Today I want to share with you custom <a href="http://developer.android.com/reference/android/widget/TextView.html" target="_blank">TextView</a> which allows to set font to be used in xml layout.</p>
-
+        <p>Today I want to share with you custom <a href="http://developer.android.com/reference/android/widget/TextView.html">TextView</a> which allows to set font to be used in xml layout.</p>
 <p>First, we need to declare our custom styleable</p>
-
 <p>attrs.xml:</p>
-<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml">
+<span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span>
 <span class="nt">&lt;resources&gt;</span>
 
     <span class="nt">&lt;declare-styleable</span> <span class="na">name=</span><span class="s">&#34;TypefaceTextView&#34;</span><span class="nt">&gt;</span>
         <span class="nt">&lt;attr</span> <span class="na">name=</span><span class="s">&#34;typeface&#34;</span> <span class="na">format=</span><span class="s">&#34;string&#34;</span><span class="nt">/&gt;</span>
     <span class="nt">&lt;/declare-styleable&gt;</span>
 
-<span class="nt">&lt;/resources&gt;</span></code></pre></div>
-<p>Then we need to create subclass of <code>TextView</code> which will use custom attribute.</p>
+<span class="nt">&lt;/resources&gt;</span>
 
+</code></pre></div><p>Then we need to create subclass of <code>TextView</code> which will use custom attribute.</p>
 <p>TypefaceTextView:</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TypefaceTextView</span> <span class="kd">extends</span> <span class="n">TextView</span> <span class="o">{</span>
 
@@ -349,16 +340,17 @@ previously constructed threads when they are available.</p>
             <span class="n">ta</span><span class="o">.</span><span class="na">recycle</span><span class="o">();</span>
         <span class="o">}</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre></div>
-<p>Also, above class allows to use default custom font, all is needed is to define its name in <code>strings.xml</code></p>
+<span class="o">}</span>
+</code></pre></div><p>Also, above class allows to use default custom font, all is needed is to define its name in <code>strings.xml</code></p>
 <div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span>
 <span class="nt">&lt;resources&gt;</span>
     <span class="nt">&lt;string</span> <span class="na">name=</span><span class="s">&#34;default_font_name&#34;</span> <span class="na">translatable=</span><span class="s">&#34;false&#34;</span><span class="nt">&gt;</span>custom.ttf<span class="nt">&lt;/string&gt;</span>
-<span class="nt">&lt;/resources&gt;</span></code></pre></div>
-<p>Due to the <a href="https://code.google.com/p/android/issues/detail?id=9904" target="_blank">bug in Android</a> we have to cache all created typefaces in cache:</p>
+<span class="nt">&lt;/resources&gt;</span>
 
+</code></pre></div><p>Due to the <a href="https://code.google.com/p/android/issues/detail?id=9904">bug in Android</a> we have to cache all created typefaces in cache:</p>
 <p>TypefaceCache:</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TypefaceCache</span> <span class="o">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">TypefaceCache</span> <span class="o">{</span>
 
     <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Typeface</span><span class="o">&gt;</span> <span class="n">CACHE</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Typeface</span><span class="o">&gt;();</span>
 
@@ -374,18 +366,16 @@ previously constructed threads when they are available.</p>
         <span class="o">}</span>
         <span class="k">return</span> <span class="n">typeface</span><span class="o">;</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre></div>
-<p>Basically, that&rsquo;s it. In order to use it is required to put TTF font in the <code>assets</code> folder and reference the font:</p>
-
+<span class="o">}</span>
+</code></pre></div><p>Basically, that&rsquo;s it. In order to use it is required to put TTF font in the <code>assets</code> folder and reference the font:</p>
 <p>Example usage:</p>
 <div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span>
 <span class="nt">&lt;com.example.android.widget.TypefaceTextView</span> 
     <span class="na">xmlns:a=</span><span class="s">&#34;http://schemas.android.com/apk/res/android&#34;</span>
     <span class="na">xmlns:custom=</span><span class="s">&#34;http://schemas.android.com/apk/res-auto&#34;</span>
     <span class="na">a:layout_width=</span><span class="s">&#34;match_parent&#34;</span>
-    <span class="na">custom:typeface=</span><span class="s">&#34;custom-font.ttf&#34;</span><span class="nt">/&gt;</span></code></pre></div>
-<p>And the last use case it to set custom font for the actionbar title. In this case we can implement custom <a href="http://developer.android.com/reference/android/text/style/CharacterStyle.html" target="_blank"><code>android.text.style.CharacterStyle</code></a></p>
-
+    <span class="na">custom:typeface=</span><span class="s">&#34;custom-font.ttf&#34;</span><span class="nt">/&gt;</span>
+</code></pre></div><p>And the last use case it to set custom font for the actionbar title. In this case we can implement custom <a href="http://developer.android.com/reference/android/text/style/CharacterStyle.html"><code>android.text.style.CharacterStyle</code></a></p>
 <p>TypefaceSpan:</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TypefaceSpan</span> <span class="kd">extends</span> <span class="n">MetricAffectingSpan</span> <span class="o">{</span>
 
@@ -413,9 +403,10 @@ previously constructed threads when they are available.</p>
         <span class="c1">// Note: This flag is required for proper typeface rendering
 </span><span class="c1"></span>        <span class="n">tp</span><span class="o">.</span><span class="na">setFlags</span><span class="o">(</span><span class="n">tp</span><span class="o">.</span><span class="na">getFlags</span><span class="o">()</span> <span class="o">|</span> <span class="n">Paint</span><span class="o">.</span><span class="na">SUBPIXEL_TEXT_FLAG</span><span class="o">);</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre></div>
-<p>Then we can set actionbar title using the following code:</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">setActionBarTitle</span><span class="o">(</span><span class="n">Activity</span> <span class="n">context</span><span class="o">,</span> <span class="n">CharSequence</span> <span class="n">title</span><span class="o">)</span> <span class="o">{</span>
+<span class="o">}</span>
+</code></pre></div><p>Then we can set actionbar title using the following code:</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">
+<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">setActionBarTitle</span><span class="o">(</span><span class="n">Activity</span> <span class="n">context</span><span class="o">,</span> <span class="n">CharSequence</span> <span class="n">title</span><span class="o">)</span> <span class="o">{</span>
     <span class="n">SpannableString</span> <span class="n">s</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SpannableString</span><span class="o">(</span><span class="n">title</span><span class="o">);</span>
     <span class="n">s</span><span class="o">.</span><span class="na">setSpan</span><span class="o">(</span><span class="k">new</span> <span class="n">TypefaceSpan</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">context</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">string</span><span class="o">.</span><span class="na">default_font_name</span><span class="o">)),</span> <span class="n">0</span><span class="o">,</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">(),</span>
         <span class="n">Spannable</span><span class="o">.</span><span class="na">SPAN_EXCLUSIVE_EXCLUSIVE</span><span class="o">);</span>
@@ -423,11 +414,11 @@ previously constructed threads when they are available.</p>
     <span class="k">if</span> <span class="o">(</span><span class="n">Build</span><span class="o">.</span><span class="na">VERSION</span><span class="o">.</span><span class="na">SDK_INT</span> <span class="o">&gt;=</span> <span class="n">Build</span><span class="o">.</span><span class="na">VERSION_CODES</span><span class="o">.</span><span class="na">HONEYCOMB</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">context</span><span class="o">.</span><span class="na">getActionBar</span><span class="o">().</span><span class="na">setTitle</span><span class="o">(</span><span class="n">s</span><span class="o">);</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre></div>
-<h3 id="additional-information">Additional information</h3>
+<span class="o">}</span>
 
+</code></pre></div><h3 id="additional-information">Additional information</h3>
 <ol>
-<li><a href="http://developer.android.com/training/custom-views/#create-view.html" target="_blank">Creating a View Class | Android Developers</a></li>
+<li><a href="http://developer.android.com/training/custom-views/#create-view.html">Creating a View Class | Android Developers</a></li>
 </ol>
 
         
@@ -452,15 +443,14 @@ previously constructed threads when they are available.</p>
 
         
         <p>Today I found issue running DB2 10.1 under VMWare Fusion 6.0.2 on my MacBook - all management services for <code>db2</code> are starting except for the db2 instance itself.</p>
-
 <p>When I tried to start DB2 using <code>db2start</code> it just crashed without any additional information.</p>
-
 <p>After some googling I found out that it is due to the fact that current version of DB2 can&rsquo;t handle more than 4 responses to CPUID query.</p>
-
 <p>The workaround is to update VMWare configuration file for the virtual machine.</p>
-<div class="highlight"><pre class="chroma"><code class="language-ini Changes to *.vmx file" data-lang="ini Changes to *.vmx file">monitor_control.enable_fullcpuid = TRUE
-cpuid.4.4.eax = &#34;0000:0000:0000:0000:0000:0000:0000:0000&#34;</code></pre></div>
-<p>The answer was found on <a href="https://communities.vmware.com/thread/461857" target="_blank">VMWare Community Forums</a></p>
+<div class="highlight"><pre class="chroma"><code class="language-ini" data-lang="ini">
+<span class="na">monitor_control.enable_fullcpuid</span> <span class="o">=</span> <span class="s">TRUE</span>
+<span class="na">cpuid.4.4.eax</span> <span class="o">=</span> <span class="s">&#34;0000:0000:0000:0000:0000:0000:0000:0000&#34;</span>
+
+</code></pre></div><p>The answer was found on <a href="https://communities.vmware.com/thread/461857">VMWare Community Forums</a></p>
 
         
 
@@ -483,9 +473,8 @@ cpuid.4.4.eax = &#34;0000:0000:0000:0000:0000:0000:0000:0000&#34;</code></pre></
 
 
         
-        <p>Today in the evening I got to <a href="http://www.skiwhitetail.com/winter" target="_blank">Whitetail Ski Resort</a>.</p>
-
-<iframe style="overflow: scroll; width: 100%; height: 600px" src="http://www.endomondo.com/embed/workouts?w=tmMEXnSDfDg&width=950&height=600" frameborder="0" scrolling="yes" ></iframe>
+        <p>Today in the evening I got to <a href="http://www.skiwhitetail.com/winter">Whitetail Ski Resort</a>.</p>
+<!-- raw HTML omitted -->
 
         
 
@@ -591,7 +580,7 @@ cpuid.4.4.eax = &#34;0000:0000:0000:0000:0000:0000:0000:0000&#34;</code></pre></
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary site:@LinkageError creator:@LinkageError]"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary creator:@LinkageError site:@LinkageError]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 
@@ -608,7 +597,7 @@ cpuid.4.4.eax = &#34;0000:0000:0000:0000:0000:0000:0000:0000&#34;</code></pre></
             </li>
         </ul>
     </div>
-    <p>Copyright &copy; 2009&nbsp;—&nbsp;2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+    <p>Copyright &copy; 2009&nbsp;—&nbsp;2020 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
         <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a>, uses custom theme based on
             <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.</span>
     </p>

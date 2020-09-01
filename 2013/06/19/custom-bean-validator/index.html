@@ -154,12 +154,8 @@
           
           
           
-          
-
-<p><a href="http://jcp.org/en/jsr/detail?id=303" target="_blank">JSR-303</a> предоставляет удобный API для проверки валидности объектов, а также входных параметров. Очевидно, что <a href="http://docs.oracle.com/javaee/6/tutorial/doc/gircz.html" target="_blank">стандартных валидаторов</a> в какой-то момент может быть недостаточно, поэтому необходимо писать собственный.</p>
-
-<p>Хочу показать на примере валидации запроса к <a href="http://www.mongodb.org/" target="_blank">MongoDB</a>, как легко это делается.</p>
-
+          <p><a href="http://jcp.org/en/jsr/detail?id=303">JSR-303</a> предоставляет удобный API для проверки валидности объектов, а также входных параметров. Очевидно, что <a href="http://docs.oracle.com/javaee/6/tutorial/doc/gircz.html">стандартных валидаторов</a> в какой-то момент может быть недостаточно, поэтому необходимо писать собственный.</p>
+<p>Хочу показать на примере валидации запроса к <a href="http://www.mongodb.org/">MongoDB</a>, как легко это делается.</p>
 <h2 id="создание-аннотации">Создание аннотации</h2>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Target</span><span class="o">({</span><span class="n">FIELD</span><span class="o">,</span> <span class="n">PARAMETER</span><span class="o">})</span>
 <span class="nd">@Retention</span><span class="o">(</span><span class="n">RUNTIME</span><span class="o">)</span>
@@ -172,9 +168,8 @@
     <span class="n">Class</span><span class="o">&lt;?&gt;[]</span> <span class="n">groups</span><span class="o">()</span> <span class="k">default</span> <span class="o">{};</span>
 
     <span class="n">Class</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">Payload</span><span class="o">&gt;[]</span> <span class="nf">payload</span><span class="o">()</span> <span class="k">default</span> <span class="o">{};</span>
-<span class="o">}</span></code></pre></div>
-<p>Обратите внимание на аннотацию <a href="http://docs.oracle.com/javaee/7/api/javax/validation/Constraint.html" target="_blank">@Constraint</a> - она описывает, какой класс будет проводить реальную валидацию. Атрибуты <code>groups()</code> и <code>payload()</code> являются обязательными.</p>
-
+<span class="o">}</span>
+</code></pre></div><p>Обратите внимание на аннотацию <a href="http://docs.oracle.com/javaee/7/api/javax/validation/Constraint.html">@Constraint</a> - она описывает, какой класс будет проводить реальную валидацию. Атрибуты <code>groups()</code> и <code>payload()</code> являются обязательными.</p>
 <h2 id="написание-валидатора">Написание валидатора</h2>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MongoQueryValidator</span> <span class="kd">implements</span> <span class="n">ConstraintValidator</span><span class="o">&lt;</span><span class="n">MongoQuery</span><span class="o">,</span> <span class="n">CharSequence</span><span class="o">&gt;</span> <span class="o">{</span>
 
@@ -196,20 +191,19 @@
             <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
         <span class="o">}</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre></div>
-<p>В данном случае, валидатор у нас простой - мы пытаемся создать Mongo Query из переданной строки, если это не удаётся, то считаем, что строка не является корректным запросом к Mongo и возвращаем <code>false</code>.</p>
-
+<span class="o">}</span>
+</code></pre></div><p>В данном случае, валидатор у нас простой - мы пытаемся создать Mongo Query из переданной строки, если это не удаётся, то считаем, что строка не является корректным запросом к Mongo и возвращаем <code>false</code>.</p>
 <p>Если есть желание возвращать динамическое сообщение об ошибке, то это можно сделать следующим образом:</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">    <span class="n">context</span><span class="o">.</span><span class="na">disableDefaultConstraintViolation</span><span class="o">();</span>
-    <span class="n">context</span><span class="o">.</span><span class="na">buildConstraintViolationWithTemplate</span><span class="o">(</span><span class="s">&#34;&lt;Custom error message&gt;&#34;</span><span class="o">).</span><span class="na">addConstraintViolation</span><span class="o">();</span></code></pre></div>
-<h2 id="использование">Использование</h2>
-
+    <span class="n">context</span><span class="o">.</span><span class="na">buildConstraintViolationWithTemplate</span><span class="o">(</span><span class="s">&#34;&lt;Custom error message&gt;&#34;</span><span class="o">).</span><span class="na">addConstraintViolation</span><span class="o">();</span>
+</code></pre></div><h2 id="использование">Использование</h2>
 <p>На этом всё, теперь нам остаётся только добавить валидацию на нашу модель или входной параметр.</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Model</span> <span class="o">{</span>
     <span class="nd">@MongoQuery</span>
     <span class="kd">private</span> <span class="n">String</span> <span class="n">queryCriteria</span><span class="o">;</span>
 
-<span class="o">}</span></code></pre></div>
+<span class="o">}</span>
+</code></pre></div>
         </div>
         
 
@@ -248,7 +242,7 @@
   
     
       <div id="disqus_thread"></div>
-<script>
+<script type="application/javascript">
     var disqus_config = function () {
     
     
@@ -290,14 +284,11 @@
 <section class="even">
   <div class="toc-header">Table of Contents</div>
    <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#создание-аннотации">Создание аннотации</a></li>
-<li><a href="#написание-валидатора">Написание валидатора</a></li>
-<li><a href="#использование">Использование</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#создание-аннотации">Создание аннотации</a></li>
+    <li><a href="#написание-валидатора">Написание валидатора</a></li>
+    <li><a href="#использование">Использование</a></li>
+  </ul>
 </nav>
 </section>
 
@@ -328,7 +319,7 @@
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary site:@LinkageError creator:@LinkageError]"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary creator:@LinkageError site:@LinkageError]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 
@@ -345,7 +336,7 @@
             </li>
         </ul>
     </div>
-    <p>Copyright &copy; 2009&nbsp;—&nbsp;2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+    <p>Copyright &copy; 2009&nbsp;—&nbsp;2020 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
         <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a>, uses custom theme based on
             <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.</span>
     </p>

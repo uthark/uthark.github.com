@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Java on Sharing knowledge</title>
+    <title>java on Sharing knowledge</title>
     <link>https://uthark.github.io/categories/java/</link>
-    <description>Recent content in Java on Sharing knowledge</description>
+    <description>Recent content in java on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 16 Apr 2014 00:10:10 +0000</lastBuildDate>
@@ -44,7 +44,7 @@ import io.github.uthark.blog.assertj.Assertions.assertThat; // ... within @Test 
       <description>In this post I will show how one can implement custom JUnit @Rule.
 As an example let&amp;rsquo;s take Mockito and implement custom rule which will initialize Mocks in test class.
 By default, Mockito provides the following methods of mock initialization:
- Using Mockito.mock
+  Using Mockito.mock
 Initialize mocks with Mockito.mock:
 public void FooTest { private Foo foo; @Before public void setUp() { FooDependency dep = Mockito.mock(FooDependency.class); foo = new Foo(dep); } } This is the simplest case.</description>
     </item>
@@ -77,8 +77,7 @@ import org.springframework.data.mongodb.core.query.Query; public interface Query
       <pubDate>Fri, 20 Apr 2012 15:51:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2012/04/20/beanpostprocessor/</guid>
-      <description>Сегодня я хочу рассказать, как можно сделать инициализацию логгера в классе с использованием аннотаций и BeanPostProcessor
-Очень часто мы инициализируем логгер следующим образом:
+      <description>Сегодня я хочу рассказать, как можно сделать инициализацию логгера в классе с использованием аннотаций и BeanPostProcessorОчень часто мы инициализируем логгер следующим образом:
 public class MyClass { private static final Logger LOG = LoggerFactory.getLogger(MyClass.class); } Я покажу, как сделать, чтобы можно было писать вот так:
 @Log private Logger LOG; Первым делом нам нужно объявить аннотацию:
 @Retention(RUNTIME) @Target(FIELD) @Documented public @interface Log { String category() default &amp;#34;&amp;#34;; } А вторым делом, написать собственный BeanPostProcessor, который бы устанавливал нам логгер:</description>
@@ -91,8 +90,8 @@ public class MyClass { private static final Logger LOG = LoggerFactory.getLogger
       
       <guid>https://uthark.github.io/2012/04/20/blog-post/</guid>
       <description>Казалось бы, есть простейшая задача - преобразовать строковое представление даты в объект класса java.util.Date.
-Как оказалось, иногда использование DateFormat не помогает. В случае, если строка - это заголовок Date из письма, то нам нужно использовать javax.mail.internet.MailDateFormat для преобразования такой строки.
-String dateStr = ... Date parsedDate = new MailDateFormat().</description>
+Как оказалось, иногда использование DateFormat не помогает. В случае, если строка - это заголовок Dateиз письма, то нам нужно использовать javax.mail.internet.MailDateFormatдля преобразования такой строки.
+String dateStr = ... Date parsedDate = new MailDateFormat().parse(dateStr); </description>
     </item>
     
     <item>
@@ -101,10 +100,7 @@ String dateStr = ... Date parsedDate = new MailDateFormat().</description>
       <pubDate>Thu, 21 Jul 2011 12:06:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2011/07/21/java/</guid>
-      <description>Сегодня я хочу рассмотреть некоторые особенности переопределения методов в Java. В java нельзя переопределить: поля класса конструкторы, инициализаторы класса статические методы статические поля 
-Подробнее об этом можно прочитать в Java Language Specification, §8.4.8
-Итак, в java все нестатические неприватные (то есть, protected, package и public) методы являются виртуальными. Ключевое слово final запрещает возможность дальнейшего переопределения метода в подклассах. Рассмотрим следующий пример:
-public class A { int i = 3; int getI() {return i;} } public class B extends A{ int i = 5; int getI() {return i;} } A a = new B(); System.</description>
+      <description>Сегодня я хочу рассмотреть некоторые особенности переопределения методов в Java. В java нельзя переопределить: public class A { int i = 3; int getI() {return i;} } public class B extends A{ int i = 5; int getI() {return i;} } A a = new B(); System.out.println(a.i); System.out.println(a.getI()); Вопрос: что выведет данный код?Ответ:  Так как поля класса не наследуются, то у класса A своё поле i и у класса B тоже своё поле i.</description>
     </item>
     
     <item>
@@ -113,9 +109,7 @@ public class A { int i = 3; int getI() {return i;} } public class B extends A{ i
       <pubDate>Sat, 22 May 2010 00:52:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2010/05/22/blog-post/</guid>
-      <description>Возникла проблема - каким образом заменить в строке символы из национальных кодировок на соответствующие им из латиницы.
-Например, из строки explicación получить explicacion.
-package com.blogspot.atamanenko; import java.text.Normalizer; import java.text.Normalizer.Form; public class StringNormalizer { public static String normalize(String string) { return Normalizer.normalize(string, Form.NFD) .replaceAll(&amp;#34;\\p{InCombiningDiacriticalMarks}+&amp;#34;, &amp;#34;&amp;#34;); } } Вызов Normalizer.normalize проводит нормализацию входной строки. Последующий вызов регулярного выражения удаляет все диакритические знаки, полученные после нормализации.</description>
+      <description>package com.blogspot.atamanenko; import java.text.Normalizer; import java.text.Normalizer.Form; public class StringNormalizer { public static String normalize(String string) { return Normalizer.normalize(string, Form.NFD) .replaceAll(&amp;#34;\\p{InCombiningDiacriticalMarks}+&amp;#34;, &amp;#34;&amp;#34;); } } Вызов Normalizer.normalizeпроводит нормализациювходной строки. Последующий вызов регулярного выражения удаляет все диакритические знаки, полученные после нормализации.</description>
     </item>
     
     <item>
@@ -126,7 +120,7 @@ package com.blogspot.atamanenko; import java.text.Normalizer; import java.text.N
       <guid>https://uthark.github.io/2010/02/06/grails/</guid>
       <description>Выкладываю ниже список задач, которые нужно/можно выполнить для оптимизации приложения, написанного на Grails, может кому пригодится.
 Тестирование проведённых оптимизаций Первым делом необходимо разработать критерии проверки, которые позволят оценить эффективность проведённых оптимизаций.
- Установить Java Melody плагин для Grails для проведения анализа. Разработать скрипты для проведения нагрузочного тестирования. Прогнать скрипты. Проанализировать результаты Java Melody, выявить узкие места, произвести нужные оптимизации.  Общие оптимизации Очень часто обновление до последней версии используемых библиотек попутно улучшает производительность.</description>
+ Установить Java Melodyплагиндля Grails для проведения анализа. Разработать скрипты для проведения нагрузочного тестирования. Прогнать скрипты. Проанализировать результаты Java Melody, выявить узкие места, произвести нужные оптимизации.  Общие оптимизации Очень часто обновление до последней версии используемых библиотек попутно улучшает производительность.</description>
     </item>
     
     <item>
@@ -135,9 +129,8 @@ package com.blogspot.atamanenko; import java.text.Normalizer; import java.text.N
       <pubDate>Sat, 06 Jun 2009 22:19:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2009/06/06/spring-roo-2/</guid>
-      <description>Архитектура сгенерированного приложения Spring Roo активно использует аспекты. В качестве реализации аспектов была взята библиотека aspectj. Большая часть сгенерированного кода попадает в отдельные файлы-аспекты. Создадим простой класс:
-new persistent class jpa -name ~.domain.Action -testAutomatically add field string name -notNull -sizeMin 1 -sizeMax 80 add field string description -sizeMax 1024 Spring Roo создаст нам следующие файлы:
- Action.java Класс содержит только полезную с точки зрения назначения класса информацию. По сути, то, что вводит разработчик в консоль Roo аккумулируется здесь.</description>
+      <description>Action.java Класс содержит только полезную с точки зрения назначения класса информацию. По сути, то, что вводит разработчик в консоль Roo аккумулируется здесь. Весь дополнительный код разносится по другим классам.  @Entity //1 @RooJavaBean //2 @RooToString //3 @RooEntity(finders = { &amp;#34;findActionsByName&amp;#34; }) //4 public class Action { @NotNull @Size(min = 1, max = 80) private String name; @Size(max = 1024) private String description; } Мы видим, что:
+ Класс является JPA-сущностью.</description>
     </item>
     
     <item>
@@ -146,7 +139,7 @@ new persistent class jpa -name ~.domain.Action -testAutomatically add field stri
       <pubDate>Tue, 02 Jun 2009 23:31:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2009/06/02/apache-ant-metro/</guid>
-      <description>Столкнулся с такой проблемой - в некоторых случаях приложение, собранное антом не работает. Конкретно - не работает десереализация запросов на веб-сервис. Получаемый запрос содержит null в значениях полей.
+      <description>Столкнулся с такой проблемой - в некоторых случаях приложение, собранное антом не работает. Конкретно - не работает десереализация запросов на веб-сервис. Получаемый запрос содержит nullв значениях полей.
 Опытным путём было выяснено, что на это влияет используемая версия Java. Под 1.5 работает корректно, под 1.6 - не работает. Нашли ошибку в метро, связанную именно с версией JDK и на этом успокоились. Но было одно исключение из правил. У одного из разработчиков под 1.</description>
     </item>
     

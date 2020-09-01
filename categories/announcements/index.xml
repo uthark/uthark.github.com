@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Announcements on Sharing knowledge</title>
+    <title>announcements on Sharing knowledge</title>
     <link>https://uthark.github.io/categories/announcements/</link>
-    <description>Recent content in Announcements on Sharing knowledge</description>
+    <description>Recent content in announcements on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 21 Nov 2017 00:00:00 +0000</lastBuildDate>

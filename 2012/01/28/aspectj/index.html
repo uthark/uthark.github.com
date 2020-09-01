@@ -156,39 +156,29 @@
           
           
           
-          
-
-<p>Наверно, вы уже сталкивались с таким понятием, как AOП - <a href="http://en.wikipedia.org/wiki/Aspect-oriented_programming">аспектно-ориентированное программирование</a>.</p>
-
-<p>Обычно, про него вспоминают, когда говорят про <a href="http://static.springsource.org/spring/docs/current/reference/html/transaction.html#transaction-declarative-applying-more-than-just-tx-advice">декларативное использование транзакций</a>,  про <a href="https://docs.jboss.com/aop/1.0/aspect-library/reference/annotation15_security.html">проверку прав доступа</a>, либо про <a href="http://static.springsource.org/spring/docs/3.0.x/javadoc-api/org/springframework/aop/interceptor/CustomizableTraceInterceptor.html">реализацию журналирования</a>.</p>
-
+          <p>Наверно, вы уже сталкивались с таким понятием, как AOП - <!-- raw HTML omitted -->аспектно-ориентированное программирование<!-- raw HTML omitted -->.</p>
+<p>Обычно, про него вспоминают, когда говорят про <!-- raw HTML omitted -->декларативное использование транзакций<!-- raw HTML omitted -->,  про <!-- raw HTML omitted -->проверку прав доступа<!-- raw HTML omitted -->, либо про <!-- raw HTML omitted -->реализацию журналирования<!-- raw HTML omitted -->.</p>
 <p>Но это не единственные области применения АОП.</p>
-
 <p>Я хочу показать ещё пару областей применения из реальных проектов:</p>
-
 <ul>
 <li>Модификация исходного кода для реализации дополнительных возможностей.</li>
 <li>Принудительная проверка контракта между модулями.</li>
 </ul>
-
 <h4 id="модификация-исходного-кода-для-реализации-дополнительных-возможностей">Модификация исходного кода для реализации дополнительных возможностей</h4>
-
 <p>Предположим, что у нас есть модуль в приложении, который предоставляет нужную нам функциональность. С модулем всё в порядке, кроме одного - все его методы могут выбрасывать проверяемые исключения, что ведёт к ухудшению читаемости кода, так как вместо простого вызова метода:</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">service</span><span class="o">.</span><span class="na">doUsefulThing</span><span class="o">();</span></code></pre></div>
-<p>наш вызов превращается в следующую конструкцию</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">service</span><span class="o">.</span><span class="na">doUsefulThing</span><span class="o">();</span>
+</code></pre></div><p>наш вызов превращается в следующую конструкцию</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="k">try</span> <span class="o">{</span>
     <span class="n">service</span><span class="o">.</span><span class="na">doUsefulThing</span><span class="o">();</span>
 <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span> <span class="n">FirstServiceException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
     <span class="n">processException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
 <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span> <span class="n">SecondServiceException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
     <span class="n">processException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
-<span class="o">}</span></code></pre></div>
-<p>Дополнительная проблема в том, что у модуля количество модулей 10+, количество методов также велико, что приводит к тому, что блоки <code>try/catch</code> замусоривают код. Решение с использованием паттерна <a href="https://en.wikipedia.org/wiki/Callback_(computer_programming)"><code>Callback</code></a> также приведёт к замусориванию кода.</p>
+<span class="o">}</span>
 
+</code></pre></div><p>Дополнительная проблема в том, что у модуля количество модулей 10+, количество методов также велико, что приводит к тому, что блоки <code>try/catch</code> замусоривают код. Решение с использованием паттерна <!-- raw HTML omitted --><code>Callback</code><!-- raw HTML omitted --> также приведёт к замусориванию кода.</p>
 <h4 id="вариант-решения-проблемы-с-использованием-aop">Вариант решения проблемы с использованием AOP</h4>
-
 <p>Решение данной проблемы было таким - а что, если используя возможности AOP трансформировать проверяемое исключение в непроверяемое? Таким образом, мы сможем избавиться от скучной проверки на исключения в нашем коде, а для обработки исключения (ведь мы всегда его будем обрабатывать одинаково) достаточно будет использовать обработку исключения на верхнем уровне абстракции.</p>
-
 <p>Для более элегантного решения проблемы было решено добавить собственную аннотацию, которой нужно помечать метод, который использует сервис из «плохого» модуля.</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.blogger.atamanenko</span><span class="o">;</span>
 
@@ -203,34 +193,30 @@
 <span class="nd">@Documented</span>
 <span class="nd">@Inherited</span>
 <span class="kd">public</span> <span class="nd">@interface</span> <span class="n">SuppressExceptions</span> <span class="o">{</span>
-<span class="o">}</span></code></pre></div>
-<p>А также аспект, который бы делал всю нужную нам функциональность:</p>
+<span class="o">}</span>
+</code></pre></div><p>А также аспект, который бы делал всю нужную нам функциональность:</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="n">aspect</span> <span class="n">ExceptionSupressingAspect</span> <span class="o">{</span>
 
-        <span class="n">declare</span> <span class="n">soft</span> <span class="o">:</span><span class="nl">ServiceException:</span>  <span class="n">execution</span><span class="o">(</span><span class="nd">@com.blogger.atamanenko.annotation.SuppressExceptions</span> <span class="o">*</span> <span class="o">*.*(..));</span>
-<span class="o">}</span></code></pre></div>
-<p>Данный аспект делает в точности следующее: &ldquo;Смягчает&rdquo; исключение <code>ServiceException</code> для метода, который помечен аннотацией <code>@SuppressExceptions</code>.</p>
-
+        <span class="n">declare</span> <span class="n">soft</span> <span class="o">:</span><span class="n">ServiceException</span><span class="o">:</span>  <span class="n">execution</span><span class="o">(</span><span class="nd">@com.blogger.atamanenko.annotation.SuppressExceptions</span> <span class="o">*</span> <span class="o">*.*(..));</span>
+<span class="o">}</span>
+</code></pre></div><p>Данный аспект делает в точности следующее: &ldquo;Смягчает&rdquo; исключение <code>ServiceException</code> для метода, который помечен аннотацией <code>@SuppressExceptions</code>.</p>
 <p>Пример использования:</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">    <span class="nd">@SuppressExceptions</span>
     <span class="kd">protected</span> <span class="n">Entity</span> <span class="nf">findEntity</span><span class="o">(</span><span class="kd">final</span> <span class="n">Identifiable</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">return</span> <span class="n">entityService</span><span class="o">.</span><span class="na">findById</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
-    <span class="o">}</span></code></pre></div>
-<h4 id="принудительная-проверка-контракта-между-модулями">Принудительная проверка контракта между модулями</h4>
-
+    <span class="o">}</span>
+</code></pre></div><h4 id="принудительная-проверка-контракта-между-модулями">Принудительная проверка контракта между модулями</h4>
 <p>Часто нам необходимо принудительно требовать выполнения каких-то архитектурных ограничений, например, контроллеры должны работать только с сервисами и им запрещено напрямую обращаться к базе данных.</p>
-
 <p>Для реализации таких проверок можно также использовать возможности AOP.</p>
-
-<p>Предположим, что в нашем приложении модуль сервиса выставляет наружу <a href="http://java.sun.com/blueprints/corej2eepatterns/Patterns/TransferObject.html">DTO</a> для работы, скрывая при этом классы модели. Для того, чтобы явно запретить доступ к классам и методам модели нам необходимо создать аспект, который бы вызывал ошибку компиляции при нарушении ограничения.</p>
+<p>Предположим, что в нашем приложении модуль сервиса выставляет наружу <!-- raw HTML omitted -->DTO<!-- raw HTML omitted --> для работы, скрывая при этом классы модели. Для того, чтобы явно запретить доступ к классам и методам модели нам необходимо создать аспект, который бы вызывал ошибку компиляции при нарушении ограничения.</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">aspect</span> <span class="n">ForbidAccessToModelAspect</span> <span class="o">{</span>
 
 <span class="c1">//      Full prohibition of access to model:
 </span><span class="c1"></span>        <span class="n">pointcut</span> <span class="nf">accessModel</span><span class="o">():</span> <span class="n">call</span><span class="o">(*</span> <span class="n">com</span><span class="o">.</span><span class="na">blogger</span><span class="o">.</span><span class="na">atamanenko</span><span class="o">.</span><span class="na">app</span><span class="o">.</span><span class="na">model</span><span class="o">..*.*(..));</span>
-        <span class="n">declare</span> <span class="nl">error:</span> <span class="n">accessModel</span><span class="o">()</span> <span class="o">:</span> <span class="s">&#34;Illegal call to model&#34;</span><span class="o">;</span>
-<span class="o">}</span></code></pre></div>
-<p>После объявления такого аспекта, мы получим ошибку компиляции, что, очевидным образом, приведёт к выполнению архитектурного ограничения.</p>
+        <span class="n">declare</span> <span class="n">error</span><span class="o">:</span> <span class="n">accessModel</span><span class="o">()</span> <span class="o">:</span> <span class="s">&#34;Illegal call to model&#34;</span><span class="o">;</span>
+<span class="o">}</span>
 
+</code></pre></div><p>После объявления такого аспекта, мы получим ошибку компиляции, что, очевидным образом, приведёт к выполнению архитектурного ограничения.</p>
 <p>Если же нам необходимо разрешить доступ к одному пакету только из какого-то определённого другого, то мы можем модифицировать наш аспект следующим образом:</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">aspect</span> <span class="n">ForbidAccessToModelAspect2</span> <span class="o">{</span>
 
@@ -241,15 +227,12 @@
         <span class="n">pointcut</span> <span class="nf">allowAccessModelFromSpecificPackage2</span><span class="o">():</span> <span class="n">withincode</span><span class="o">(</span><span class="n">com</span><span class="o">.</span><span class="na">blogger</span><span class="o">.</span><span class="na">atamanenko</span><span class="o">.</span><span class="na">app</span><span class="o">.</span><span class="na">allowedpackage</span><span class="o">..*.</span><span class="na">new</span><span class="o">(..));</span>
 
         <span class="c1">// forbid usage from any other methods.
-</span><span class="c1"></span>        <span class="n">declare</span> <span class="nl">error:</span> <span class="n">accessModel</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="o">!(</span><span class="n">allowAccessModelFromSpecificPackage</span><span class="o">()</span> <span class="o">||</span> <span class="n">allowAccessModelFromSpecificPackage</span><span class="o">()):</span><span class="s">&#34;Illegal call to Model from forbidden package&#34;</span><span class="o">;</span>
-<span class="o">}</span></code></pre></div>
-<p>Такой аспект, созданный в нашем модуле запретит нам использовать классы модели из всех пакетов, кроме <code>com.blogger.atamanenko.app.allowedpackage</code></p>
-
+</span><span class="c1"></span>        <span class="n">declare</span> <span class="n">error</span><span class="o">:</span> <span class="n">accessModel</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="o">!(</span><span class="n">allowAccessModelFromSpecificPackage</span><span class="o">()</span> <span class="o">||</span> <span class="n">allowAccessModelFromSpecificPackage</span><span class="o">()):</span><span class="s">&#34;Illegal call to Model from forbidden package&#34;</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div><p>Такой аспект, созданный в нашем модуле запретит нам использовать классы модели из всех пакетов, кроме <code>com.blogger.atamanenko.app.allowedpackage</code></p>
 <h4 id="сборка-приложения">Сборка приложения</h4>
-
-<p>Файл аспекта нужно положить в каталог <code>src/main/aspect</code>, а для сборки приложения необходимо использовать не стандартный Oracle <a href="http://docs.oracle.com/javase/6/docs/technotes/tools/solaris/javac.html">Java Compiler</a>, а <a href="http://eclipse.org/aspectj/downloads.php">AspectJ compiler</a>.</p>
-
-<p>Пример конфигурации для <a href="https://maven.apache.org/">Apache Maven</a>:</p>
+<p>Файл аспекта нужно положить в каталог <code>src/main/aspect</code>, а для сборки приложения необходимо использовать не стандартный Oracle <!-- raw HTML omitted -->Java Compiler<!-- raw HTML omitted -->, а <!-- raw HTML omitted -->AspectJ compiler<!-- raw HTML omitted -->.</p>
+<p>Пример конфигурации для <!-- raw HTML omitted -->Apache Maven<!-- raw HTML omitted -->:</p>
 <div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="ni">&amp;lt;</span>plugin<span class="ni">&amp;gt;</span>
     <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.codehaus.mojo<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
     <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>aspectj-maven-plugin<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
@@ -273,10 +256,9 @@
             <span class="ni">&amp;lt;</span>/goals<span class="ni">&amp;gt;</span>
         <span class="ni">&amp;lt;</span>/execution<span class="ni">&amp;gt;</span>
     <span class="ni">&amp;lt;</span>/executions<span class="ni">&amp;gt;</span>
-<span class="ni">&amp;lt;</span>/plugin<span class="ni">&amp;gt;</span></code></pre></div>
-<h4 id="заключение">Заключение</h4>
-
-<p>Вот в общем-то и всё. Я сознательно не стал описывать языковые конструкции аспектов, так как они подробно описаны в <a href="https://www.eclipse.org/aspectj/doc/next/progguide/index.html">руководстве AspectJ</a></p>
+<span class="ni">&amp;lt;</span>/plugin<span class="ni">&amp;gt;</span>
+</code></pre></div><h4 id="заключение">Заключение</h4>
+<p>Вот в общем-то и всё. Я сознательно не стал описывать языковые конструкции аспектов, так как они подробно описаны в <!-- raw HTML omitted -->руководстве AspectJ<!-- raw HTML omitted --></p>
 
         </div>
         
@@ -316,7 +298,7 @@
   
     
       <div id="disqus_thread"></div>
-<script>
+<script type="application/javascript">
     var disqus_config = function () {
     
     
@@ -358,22 +340,13 @@
 <section class="even">
   <div class="toc-header">Table of Contents</div>
    <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li>
-<ul>
-<li>
-<ul>
-<li><a href="#модификация-исходного-кода-для-реализации-дополнительных-возможностей">Модификация исходного кода для реализации дополнительных возможностей</a></li>
-<li><a href="#вариант-решения-проблемы-с-использованием-aop">Вариант решения проблемы с использованием AOP</a></li>
-<li><a href="#принудительная-проверка-контракта-между-модулями">Принудительная проверка контракта между модулями</a></li>
-<li><a href="#сборка-приложения">Сборка приложения</a></li>
-<li><a href="#заключение">Заключение</a></li>
-</ul></li>
-</ul></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
 </section>
 
@@ -404,7 +377,7 @@
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary site:@LinkageError creator:@LinkageError]"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary creator:@LinkageError site:@LinkageError]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 
@@ -421,7 +394,7 @@
             </li>
         </ul>
     </div>
-    <p>Copyright &copy; 2009&nbsp;—&nbsp;2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+    <p>Copyright &copy; 2009&nbsp;—&nbsp;2020 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
         <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a>, uses custom theme based on
             <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.</span>
     </p>

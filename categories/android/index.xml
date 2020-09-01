@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Android on Sharing knowledge</title>
+    <title>android on Sharing knowledge</title>
     <link>https://uthark.github.io/categories/android/</link>
-    <description>Recent content in Android on Sharing knowledge</description>
+    <description>Recent content in android on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 06 Mar 2014 22:38:54 +0000</lastBuildDate>
@@ -44,8 +44,7 @@ public class TypefaceTextView extends TextView { public TypefaceTextView(Context
       
       <guid>https://uthark.github.io/2014/03/02/lyne-game/</guid>
       <description>Found very addictive and cool game: Lyne.
-The goal of the game is to connect all dots on the playboard. Worth every cent.
-LYNE (Playboard) | LYNE (Play Store)</description>
+The goal of the game is to connect all dots on the playboard. Worth every cent.</description>
     </item>
     
     <item>
@@ -54,7 +53,7 @@ LYNE (Playboard) | LYNE (Play Store)</description>
       <pubDate>Mon, 06 Dec 2010 23:11:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2010/12/06/blog-post/</guid>
-      <description>ВступлениеВстала передо мной задача - сокращать ссылки перед тем, как отправлять их в Twitter. Для решения этой задачи я решил использовать bit.ly, благо, их API внятный и простой. Программируем!Решение нарисовалось в виде следующего класса: import org.apache.http.HttpEntity; import org.apache.http.HttpResponse; import org.apache.http.NameValuePair; import org.apache.http.client.ClientProtocolException; import org.apache.http.client.methods.HttpGet; import org.apache.http.client.utils.URIUtils; import org.apache.http.client.utils.URLEncodedUtils; import org.apache.http.impl.client.DefaultHttpClient; import org.apache.http.message.BasicNameValuePair; import org.apache.http.util.EntityUtils; import org.json.JSONException; import org.json.JSONObject; import android.util.Log; import java.io.IOException; import java.net.URI; import java.net.URISyntaxException; import java.util.ArrayList; import java.util.List; /** * Helper class to work with bitly.</description>
+      <description>import org.apache.http.HttpEntity; import org.apache.http.HttpResponse; import org.apache.http.NameValuePair; import org.apache.http.client.ClientProtocolException; import org.apache.http.client.methods.HttpGet; import org.apache.http.client.utils.URIUtils; import org.apache.http.client.utils.URLEncodedUtils; import org.apache.http.impl.client.DefaultHttpClient; import org.apache.http.message.BasicNameValuePair; import org.apache.http.util.EntityUtils; import org.json.JSONException; import org.json.JSONObject; import android.util.Log; import java.io.IOException; import java.net.URI; import java.net.URISyntaxException; import java.util.ArrayList; import java.util.List; /** * Helper class to work with bitly. * * @author Oleg Atamanenko * @since 06-Dec-2010 12:49:36 */ public class Bitly { private static final String TAG = &amp;#34;Bitly&amp;#34;; private static final String SHORTEN = &amp;#34;/v3/shorten&amp;#34;; private static final String API_URL = &amp;#34;api.</description>
     </item>
     
   </channel>

@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Gorm on Sharing knowledge</title>
+    <title>gorm on Sharing knowledge</title>
     <link>https://uthark.github.io/categories/gorm/</link>
-    <description>Recent content in Gorm on Sharing knowledge</description>
+    <description>Recent content in gorm on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 11 Apr 2010 11:45:00 +0000</lastBuildDate>
@@ -17,10 +17,7 @@
       <pubDate>Sun, 11 Apr 2010 11:45:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2010/04/11/gorm/</guid>
-      <description>В данной заметке хочу поделиться некоторыми моментами использования GORM.
-GORM - это ORM-фреймворк, используемый в Grails. Реализован он поверх Hibernate, но, при этом, с некоторыми отличными умолчаниями.
-Для разработчиков, знающих Hibernate, рекомендую тщательно изучить GORM, так как его поведение в некоторых случаях отлично от Hibernate, что может приводить к различным сюрпризам.
- Маппинг один-ко-многим По умолчанию GORM для связей один ко многим (one-to-many) создаёт таблицу-связку, которая обычно нужна только при связях между сущностями вида многие ко многим.</description>
+      <description>class Person implements Serializable { static hasMany = [ scores: ScoreSheet ] static mapping = { scores joinTable: false }; } class Note implements Serializable { static belongsTo = [ person: Person ] } class Person implements Serializable { // person fields. } class Payment { Long id Long version Integer amount static mapping = { tablePerHierarchy false } } class CreditCardPayment extends Payment { String cardNumber } </description>
     </item>
     
   </channel>

@@ -59,9 +59,8 @@
 
   <meta property="og:title" content="Spring Roo (часть 2)" />
   <meta property="og:url" content="https://uthark.github.io/2009/06/06/spring-roo-2/" />
-  <meta property="og:description" content="Архитектура сгенерированного приложения Spring Roo активно использует аспекты. В качестве реализации аспектов была взята библиотека aspectj. Большая часть сгенерированного кода попадает в отдельные файлы-аспекты. Создадим простой класс:
-new persistent class jpa -name ~.domain.Action -testAutomatically add field string name -notNull -sizeMin 1 -sizeMax 80 add field string description -sizeMax 1024 Spring Roo создаст нам следующие файлы:
- Action.java Класс содержит только полезную с точки зрения назначения класса информацию. По сути, то, что вводит разработчик в консоль Roo аккумулируется здесь." />
+  <meta property="og:description" content="Action.java Класс содержит только полезную с точки зрения назначения класса информацию. По сути, то, что вводит разработчик в консоль Roo аккумулируется здесь. Весь дополнительный код разносится по другим классам.  @Entity //1 @RooJavaBean //2 @RooToString //3 @RooEntity(finders = { &#34;findActionsByName&#34; }) //4 public class Action { @NotNull @Size(min = 1, max = 80) private String name; @Size(max = 1024) private String description; } Мы видим, что:
+ Класс является JPA-сущностью." />
 
   
 
@@ -154,17 +153,7 @@ new persistent class jpa -name ~.domain.Action -testAutomatically add field stri
           
           
           
-          
-
-<p><h1>Архитектура сгенерированного приложения</h1>
-Spring Roo активно использует аспекты. В качестве реализации аспектов была взята библиотека <a href="http://www.eclipse.org/aspectj/">aspectj</a>.
-Большая часть сгенерированного кода попадает в отдельные файлы-аспекты.
-Создадим простой класс:</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">new persistent class jpa -name ~.domain.Action -testAutomatically
-add field string name -notNull -sizeMin <span class="m">1</span> -sizeMax <span class="m">80</span>
-add field string description -sizeMax <span class="m">1024</span></code></pre></div>
-<p>Spring Roo создаст нам следующие файлы:</p>
-
+          <!-- raw HTML omitted -->
 <ul>
 <li><strong>Action.java</strong>
 Класс содержит только полезную с точки зрения назначения класса информацию. По сути, то, что вводит разработчик в консоль Roo аккумулируется здесь. Весь дополнительный код разносится по другим классам.</li>
@@ -182,24 +171,22 @@ add field string description -sizeMax <span class="m">1024</span></code></pre></
 
 <span class="nd">@Size</span><span class="o">(</span><span class="n">max</span> <span class="o">=</span> <span class="n">1024</span><span class="o">)</span>
 <span class="kd">private</span> <span class="n">String</span> <span class="n">description</span><span class="o">;</span>
-<span class="o">}</span></code></pre></div>
-<p>Мы видим, что:</p>
-
+<span class="o">}</span>
+</code></pre></div><p>Мы видим, что:</p>
 <ol>
 <li>Класс является JPA-сущностью.</li>
 <li>Аннотация <code>@RooJavaBean</code> говорит, что этот класс - обычный Java-бин.</li>
 <li>Аннотация <code>@RooToString</code> говорит, что у этого класса есть перегруженный метод toString().</li>
 <li>Аннотация <code>@RooEntity</code> говорит что класс является JPA-сущностью.</li>
 </ol>
-
 <ul>
 <li><strong>Action_Roo_Configurable.aj</strong>
 Данный аспект говорит, что класс Action является конфигурируемым через Spring.</li>
 </ul>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">privileged</span> <span class="n">aspect</span> <span class="n">Action_Roo_Configurable</span> <span class="o">{</span>
-<span class="n">declare</span> <span class="nd">@type</span><span class="o">:</span> <span class="nl">Action:</span> <span class="nd">@org.springframework.beans.factory.annotation.Configurable</span><span class="o">;</span>
-<span class="o">}</span></code></pre></div>
-<ul>
+<span class="n">declare</span> <span class="nd">@type</span><span class="o">:</span> <span class="n">Action</span><span class="o">:</span> <span class="nd">@org.springframework.beans.factory.annotation.Configurable</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div><ul>
 <li><strong>Action_Roo_Entity.aj</strong>
 В данном классе собраны все методы DAO для работы с классом Action.</li>
 </ul>
@@ -278,9 +265,8 @@ add field string description -sizeMax <span class="m">1024</span></code></pre></
 <span class="k">return</span> <span class="k">new</span> <span class="n">Action</span><span class="o">().</span><span class="na">entityManager</span><span class="o">.</span><span class="na">createQuery</span><span class="o">(</span><span class="s">&#34;select o from Action o&#34;</span><span class="o">).</span><span class="na">setFirstResult</span><span class="o">(</span><span class="n">firstResult</span><span class="o">).</span><span class="na">setMaxResults</span><span class="o">(</span><span class="n">maxResults</span><span class="o">).</span><span class="na">getResultList</span><span class="o">();</span>
 <span class="o">}</span>
 
-<span class="o">}</span></code></pre></div>
-<p>Как легко видеть, этот аспект добавляет классу Action CRUD-методы, поля id и version.</p>
-
+<span class="o">}</span>
+</code></pre></div><p>Как легко видеть, этот аспект добавляет классу Action CRUD-методы, поля id и version.</p>
 <ul>
 <li><strong>Action_Roo_Finder.aj</strong>
 Этот аспект аккумулирует все finder-методы, созданные через консоль Spring Roo.</li>
@@ -294,8 +280,8 @@ add field string description -sizeMax <span class="m">1024</span></code></pre></
 <span class="k">return</span> <span class="n">q</span><span class="o">;</span>
 <span class="o">}</span>
 
-<span class="o">}</span></code></pre></div>
-<ul>
+<span class="o">}</span>
+</code></pre></div><ul>
 <li><strong>Action_Roo_JavaBean.aj</strong>
 Для уменьшения загромождения кода ненужными методами для доступа к полям Spring Roo выносит их в отдельный аспект.</li>
 </ul>
@@ -317,8 +303,8 @@ add field string description -sizeMax <span class="m">1024</span></code></pre></
 <span class="k">this</span><span class="o">.</span><span class="na">description</span> <span class="o">=</span> <span class="n">description</span><span class="o">;</span>
 <span class="o">}</span>
 
-<span class="o">}</span></code></pre></div>
-<ul>
+<span class="o">}</span>
+</code></pre></div><ul>
 <li><strong>Action_Roo_Plural.aj</strong>
 В данном аспекте можно определить, как созданная сущность выглядит во множественном числе.</li>
 </ul>
@@ -342,8 +328,8 @@ add field string description -sizeMax <span class="m">1024</span></code></pre></
 <span class="k">this</span><span class="o">.</span><span class="na">description</span> <span class="o">=</span> <span class="n">description</span><span class="o">;</span>
 <span class="o">}</span>
 
-<span class="o">}</span></code></pre></div>
-<ul>
+<span class="o">}</span>
+</code></pre></div><ul>
 <li><strong>Action_Roo_ToString.aj</strong>
 Аспект, переопределяющий <code>toString()</code></li>
 </ul>
@@ -358,8 +344,8 @@ add field string description -sizeMax <span class="m">1024</span></code></pre></
 <span class="k">return</span> <span class="n">sb</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
 <span class="o">}</span>
 
-<span class="o">}</span></code></pre></div>
-<ul>
+<span class="o">}</span>
+</code></pre></div><ul>
 <li><strong>ActionEditor.java</strong>
 Кроме того, при создании контроллеров для работы дополнительно создается <code>ActionEditor</code></li>
 </ul>
@@ -367,14 +353,14 @@ add field string description -sizeMax <span class="m">1024</span></code></pre></
 
 <span class="nd">@RooEditor</span><span class="o">(</span><span class="n">providePropertyEditorFor</span> <span class="o">=</span> <span class="n">Action</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ActionEditor</span> <span class="o">{</span>
-<span class="o">}</span></code></pre></div>
-<ul>
+<span class="o">}</span>
+</code></pre></div><ul>
 <li><strong>ActionEditor_Roo_Editor.aj</strong>
 Аспект с реализацией.</li>
 </ul>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">privileged</span> <span class="n">aspect</span> <span class="n">ActionEditor_Roo_Editor</span> <span class="o">{</span>
 
-<span class="n">declare</span> <span class="nl">parents:</span> <span class="n">ActionEditor</span> <span class="kd">implements</span> <span class="n">java</span><span class="o">.</span><span class="na">beans</span><span class="o">.</span><span class="na">PropertyEditorSupport</span><span class="o">;</span>
+<span class="n">declare</span> <span class="n">parents</span><span class="o">:</span> <span class="n">ActionEditor</span> <span class="kd">implements</span> <span class="n">java</span><span class="o">.</span><span class="na">beans</span><span class="o">.</span><span class="na">PropertyEditorSupport</span><span class="o">;</span>
 
 <span class="n">org</span><span class="o">.</span><span class="na">springframework</span><span class="o">.</span><span class="na">beans</span><span class="o">.</span><span class="na">SimpleTypeConverter</span> <span class="n">ActionEditor</span><span class="o">.</span><span class="na">typeConverter</span> <span class="o">=</span> <span class="k">new</span> <span class="n">org</span><span class="o">.</span><span class="na">springframework</span><span class="o">.</span><span class="na">beans</span><span class="o">.</span><span class="na">SimpleTypeConverter</span><span class="o">();</span>
 
@@ -401,33 +387,23 @@ add field string description -sizeMax <span class="m">1024</span></code></pre></
  <span class="n">setValue</span><span class="o">(</span><span class="n">org</span><span class="o">.</span><span class="na">academ</span><span class="o">.</span><span class="na">uthark</span><span class="o">.</span><span class="na">research</span><span class="o">.</span><span class="na">roo</span><span class="o">.</span><span class="na">domain</span><span class="o">.</span><span class="na">Action</span><span class="o">.</span><span class="na">findAction</span><span class="o">(</span><span class="n">identifier</span><span class="o">));</span> 
 <span class="o">}</span>
 
-<span class="o">}</span></code></pre></div>
-<h3 id="а-где-же-equals-hashcode">А где же equals()/hashCode()?</h3>
+<span class="o">}</span>
 
+</code></pre></div><h3 id="а-где-же-equalshashcode">А где же equals()/hashCode()?</h3>
 <p>Легко заметить, что Spring Roo забыл ещё про один важный аспект - про реализацию методов <code>equals()</code> и <code>hashCode()</code>. К релизу, я думаю, эта недоработка будет исправлена.</p>
-
 <p>Как видно, код скрипта для генерации весьма и весьма лаконичен, а получающий java-код наглядно показывает всю многословность языка Java.</p>
-
 <h3 id="apache-maven-integration">Apache Maven integration</h3>
-
 <p>Spring Roo при создании проекта создаёт pom.xml, хорошо знакомый всем работавшим с maven. Кроме того, консоль позволяет добавлять и удалять зависимости, не правя файл вручную.</p>
-
 <h3 id="расширения">Расширения</h3>
-
-<p>Spring Roo поддерживает расширения, что ещё больше даёт возможностей. На сегодняшний день написано уже как минимум одно расширение - <a href="http://jira.springframework.org/browse/ROO-41">Sitemesh Addon</a>.</p>
-
+<p>Spring Roo поддерживает расширения, что ещё больше даёт возможностей. На сегодняшний день написано уже как минимум одно расширение - <!-- raw HTML omitted -->Sitemesh Addon<!-- raw HTML omitted -->.</p>
 <h3 id="критика">Критика</h3>
-
 <p>В первую очередь критика относится к текущему релизу, а так как он ещё в глубокой альфе, то все может измениться к официальному релизу.</p>
-
 <ol>
 <li>Нет возможности подставлять свои JSP-шаблоны для сгенерированного CRUD</li>
 <li>В сгенерированном коде есть ошибки, например, если заводим поле типа флоат, создаём контроллер, то при редактировании сущности возможна следующая ошибка: вводим достаточно большое число (1234567), сохраняем сущность, открываем на редактирование. В поле, хранящем флоат получаем 1.23456E7, и после этого невозможно сохранить сущность, так как получаем ошибку валидации.</li>
 <li>Ещё одна ошибка связана с отношением один ко многим. Создаём пару сущностей с таким отношением. Запускаем, пробуем создать сущность. Roo умничает, если нет связанных сущностей в БД, то он даже не генерирует <code>&lt;select&gt;</code></li>
 </ol>
-
 <h3 id="вывод">Вывод</h3>
-
 <p>В целом, Spring Roo достойное начинание, но пользоваться им в Production можно будет ещё нескоро.</p>
 
         </div>
@@ -468,7 +444,7 @@ add field string description -sizeMax <span class="m">1024</span></code></pre></
   
     
       <div id="disqus_thread"></div>
-<script>
+<script type="application/javascript">
     var disqus_config = function () {
     
     
@@ -510,19 +486,17 @@ add field string description -sizeMax <span class="m">1024</span></code></pre></
 <section class="even">
   <div class="toc-header">Table of Contents</div>
    <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li>
-<ul>
-<li><a href="#а-где-же-equals-hashcode">А где же equals()/hashCode()?</a></li>
-<li><a href="#apache-maven-integration">Apache Maven integration</a></li>
-<li><a href="#расширения">Расширения</a></li>
-<li><a href="#критика">Критика</a></li>
-<li><a href="#вывод">Вывод</a></li>
-</ul></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#а-где-же-equalshashcode">А где же equals()/hashCode()?</a></li>
+        <li><a href="#apache-maven-integration">Apache Maven integration</a></li>
+        <li><a href="#расширения">Расширения</a></li>
+        <li><a href="#критика">Критика</a></li>
+        <li><a href="#вывод">Вывод</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
 </section>
 
@@ -553,7 +527,7 @@ add field string description -sizeMax <span class="m">1024</span></code></pre></
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary site:@LinkageError creator:@LinkageError]"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary creator:@LinkageError site:@LinkageError]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 
@@ -570,7 +544,7 @@ add field string description -sizeMax <span class="m">1024</span></code></pre></
             </li>
         </ul>
     </div>
-    <p>Copyright &copy; 2009&nbsp;—&nbsp;2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+    <p>Copyright &copy; 2009&nbsp;—&nbsp;2020 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
         <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a>, uses custom theme based on
             <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.</span>
     </p>

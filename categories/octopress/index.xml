@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Octopress on Sharing knowledge</title>
+    <title>octopress on Sharing knowledge</title>
     <link>https://uthark.github.io/categories/octopress/</link>
-    <description>Recent content in Octopress on Sharing knowledge</description>
+    <description>Recent content in octopress on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 02 Mar 2014 00:00:00 +0000</lastBuildDate>
@@ -21,7 +21,7 @@
 Investigation showed that content in meta tag description contained unquoted quotes, thus resulting in broken HTML.
 After searching within octopress sources I found the issue:
 Rendering of description tag, excerpt from _includes/head.html:
-{% capture  description %} {% if page.description %} {{ page.description }} {% else  %} {{ content | raw_content }} {% endif  %} {% endcapture %} &amp;lt;meta name=&amp;#34;description&amp;#34; content=&amp;#34;{{ description | strip_html | condense_spaces | truncate:150 }}&amp;#34;&amp;gt; After capturing, description is being processed with filters, defined in plugins/octopress_filters.</description>
+{% capture description %} {% if page.description %} {{ page.description }} {% else %} {{ content | raw_content }} {% endif %} {% endcapture %} &amp;lt;meta name=&amp;#34;description&amp;#34; content=&amp;#34;{{ description | strip_html | condense_spaces | truncate:150 }}&amp;#34;&amp;gt; After capturing, description is being processed with filters, defined in plugins/octopress_filters.</description>
     </item>
     
   </channel>

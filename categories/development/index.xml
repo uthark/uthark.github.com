@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Development on Sharing knowledge</title>
+    <title>development on Sharing knowledge</title>
     <link>https://uthark.github.io/categories/development/</link>
-    <description>Recent content in Development on Sharing knowledge</description>
+    <description>Recent content in development on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 16 Apr 2014 00:10:10 +0000</lastBuildDate>
@@ -44,7 +44,7 @@ import io.github.uthark.blog.assertj.Assertions.assertThat; // ... within @Test 
       <description>In this post I will show how one can implement custom JUnit @Rule.
 As an example let&amp;rsquo;s take Mockito and implement custom rule which will initialize Mocks in test class.
 By default, Mockito provides the following methods of mock initialization:
- Using Mockito.mock
+  Using Mockito.mock
 Initialize mocks with Mockito.mock:
 public void FooTest { private Foo foo; @Before public void setUp() { FooDependency dep = Mockito.mock(FooDependency.class); foo = new Foo(dep); } } This is the simplest case.</description>
     </item>
@@ -106,7 +106,7 @@ After some googling I found out that it is due to the fact that current version 
 Investigation showed that content in meta tag description contained unquoted quotes, thus resulting in broken HTML.
 After searching within octopress sources I found the issue:
 Rendering of description tag, excerpt from _includes/head.html:
-{% capture  description %} {% if page.description %} {{ page.description }} {% else  %} {{ content | raw_content }} {% endif  %} {% endcapture %} &amp;lt;meta name=&amp;#34;description&amp;#34; content=&amp;#34;{{ description | strip_html | condense_spaces | truncate:150 }}&amp;#34;&amp;gt; After capturing, description is being processed with filters, defined in plugins/octopress_filters.</description>
+{% capture description %} {% if page.description %} {{ page.description }} {% else %} {{ content | raw_content }} {% endif %} {% endcapture %} &amp;lt;meta name=&amp;#34;description&amp;#34; content=&amp;#34;{{ description | strip_html | condense_spaces | truncate:150 }}&amp;#34;&amp;gt; After capturing, description is being processed with filters, defined in plugins/octopress_filters.</description>
     </item>
     
     <item>
@@ -239,8 +239,9 @@ Vagrant - это средство для управления виртуальн
       <description>Рассмотрим подробнее одну из наиболее полезных вещей в Spring Data JPA - генерация JPQL-запросов на основе имени метода.
 Spring Data JPA умеет автоматически генерировать запросы используя для подсказки название метода.
 Например, метод User.findByLoginAndPassword сгенерирует примерно следующий код:
-FROM User u where u.login = :login and password = :password Вообще Spring Data JPA пытается быть умным, поэтому реализация findBy{&amp;hellip;} методов ищется следующим образом:
- Сначала смотрится аннотация @Query на объявлении метода, если она есть, то используется.</description>
+FROM User u where u.login = :login and password = :password Вообще Spring Data JPA пытается быть умным, поэтому реализация findBy{&amp;hellip;}методов ищется следующим образом:
+У @Queryследующие плюсы:
+Очевидно, что при использовании запросов нам необходимо каким-то образом указывать параметры для запросов.</description>
     </item>
     
     <item>
@@ -249,8 +250,7 @@ FROM User u where u.login = :login and password = :password Вообще Spring 
       <pubDate>Fri, 20 Apr 2012 15:51:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2012/04/20/beanpostprocessor/</guid>
-      <description>Сегодня я хочу рассказать, как можно сделать инициализацию логгера в классе с использованием аннотаций и BeanPostProcessor
-Очень часто мы инициализируем логгер следующим образом:
+      <description>Сегодня я хочу рассказать, как можно сделать инициализацию логгера в классе с использованием аннотаций и BeanPostProcessorОчень часто мы инициализируем логгер следующим образом:
 public class MyClass { private static final Logger LOG = LoggerFactory.getLogger(MyClass.class); } Я покажу, как сделать, чтобы можно было писать вот так:
 @Log private Logger LOG; Первым делом нам нужно объявить аннотацию:
 @Retention(RUNTIME) @Target(FIELD) @Documented public @interface Log { String category() default &amp;#34;&amp;#34;; } А вторым делом, написать собственный BeanPostProcessor, который бы устанавливал нам логгер:</description>
@@ -263,8 +263,8 @@ public class MyClass { private static final Logger LOG = LoggerFactory.getLogger
       
       <guid>https://uthark.github.io/2012/04/20/blog-post/</guid>
       <description>Казалось бы, есть простейшая задача - преобразовать строковое представление даты в объект класса java.util.Date.
-Как оказалось, иногда использование DateFormat не помогает. В случае, если строка - это заголовок Date из письма, то нам нужно использовать javax.mail.internet.MailDateFormat для преобразования такой строки.
-String dateStr = ... Date parsedDate = new MailDateFormat().</description>
+Как оказалось, иногда использование DateFormat не помогает. В случае, если строка - это заголовок Dateиз письма, то нам нужно использовать javax.mail.internet.MailDateFormatдля преобразования такой строки.
+String dateStr = ... Date parsedDate = new MailDateFormat().parse(dateStr); </description>
     </item>
     
     <item>
@@ -273,7 +273,11 @@ String dateStr = ... Date parsedDate = new MailDateFormat().</description>
       <pubDate>Thu, 23 Feb 2012 02:17:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2012/02/23/jpa-spring-data-jpa/</guid>
-      <description>Введение Уже прошло несколько лет с тех пор, как появился JPA. Работа с EntityManager увлекательна, но разработчики пишут красивый API, а подробности работы с базой данных скрывают. При этом частая проблема - дублирование имплементации, когда из одного DAO в другой у нас плавно перекочёвывает один и тот же код, в лучшем случае этот код переносится в абстрактный базовый DAO. Spring Data коренным образом решает проблему - при его использовании остаётся только API на уровне интерфейсов, вся имплементация создаётся автоматически с использованием AOP.</description>
+      <description>Несмотря на то, что проект только недавно достиг версии 1.0, у него достаточно богатая история - раньше он развивался в рамках проекта Hades.
+Итак, для начала нам необходимо объявить DAO-интерфейс, в котором мы будем объявлять методы для работы с сущностью.
+public interface UserRepository extends CrudRepository&amp;amp;lt;User, Long&amp;amp;gt; { } Данного кода достаточно для обычного DAO с CRUD-методами.
+Полный список методов, объявленный в CrudRepository можно посмотреть в javadoc.
+В случае, если нам нужны не все методы, то есть возможность произвести наследование от интерфейса Repositoryи перенести в наследника только те методы из интерфейса CrudRepository, которые нужны.</description>
     </item>
     
     <item>
@@ -282,7 +286,9 @@ String dateStr = ... Date parsedDate = new MailDateFormat().</description>
       <pubDate>Thu, 09 Feb 2012 01:05:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2012/02/09/java-rest/</guid>
-      <description>Введение Для разработки REST веб-сервисов Java предлагает JSR-311 - JAX-RS: The Java&amp;trade; API for RESTful Web Services Как это обычно бывает в мире Enterprise Java, существует несколько реализаций данной спецификации:  Jersey - это эталонная реализация спецификации от компании Sun Oracle Apache CXF JBoss RESTEasy  На примере последней реализации, я и расскажу, каким образом можно написать REST-сервис. Пишем REST-сервис import javax.ws.rs.*; import javax.ws.rs.core.MediaType; @Path(&amp;#34;/service/entity&amp;#34;) @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON}) public interface EntityRestService { @GET @Path(&amp;#34;/all&amp;#34;) EntityList listAll(); @GET @Path(&amp;#34;/{id}&amp;#34;) Entity findById(@PathParam(&amp;#34;id&amp;#34;) Integer id); } Создаём интерфейс, в котором расставляем JAX-RS аннотации.</description>
+      <description>import javax.ws.rs.*; import javax.ws.rs.core.MediaType; @Path(&amp;#34;/service/entity&amp;#34;) @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON}) public interface EntityRestService { @GET @Path(&amp;#34;/all&amp;#34;) EntityList listAll(); @GET @Path(&amp;#34;/{id}&amp;#34;) Entity findById(@PathParam(&amp;#34;id&amp;#34;) Integer id); } Создаём интерфейс, в котором расставляем JAX-RS аннотации. Аннотация @Pathуказывает путь, по которому будет доступен наш сервис. Аннотация @GETопределяет, какой HTTP-запрос будет обрабатываться данным методом. Аннотация @Producesпозволяет указать, в каком формате данный сервис предоставляет результаты.
+Конфигурация очень проста, во-первых, нам нужно добавить обновить pom.xmlи добавить необходимые зависимости:
+Добавляем compile-time зависимость на JAX-RS API</description>
     </item>
     
     <item>
@@ -304,10 +310,7 @@ String dateStr = ... Date parsedDate = new MailDateFormat().</description>
       <pubDate>Thu, 21 Jul 2011 12:06:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2011/07/21/java/</guid>
-      <description>Сегодня я хочу рассмотреть некоторые особенности переопределения методов в Java. В java нельзя переопределить: поля класса конструкторы, инициализаторы класса статические методы статические поля 
-Подробнее об этом можно прочитать в Java Language Specification, §8.4.8
-Итак, в java все нестатические неприватные (то есть, protected, package и public) методы являются виртуальными. Ключевое слово final запрещает возможность дальнейшего переопределения метода в подклассах. Рассмотрим следующий пример:
-public class A { int i = 3; int getI() {return i;} } public class B extends A{ int i = 5; int getI() {return i;} } A a = new B(); System.</description>
+      <description>Сегодня я хочу рассмотреть некоторые особенности переопределения методов в Java. В java нельзя переопределить: public class A { int i = 3; int getI() {return i;} } public class B extends A{ int i = 5; int getI() {return i;} } A a = new B(); System.out.println(a.i); System.out.println(a.getI()); Вопрос: что выведет данный код?Ответ:  Так как поля класса не наследуются, то у класса A своё поле i и у класса B тоже своё поле i.</description>
     </item>
     
     <item>
@@ -316,7 +319,7 @@ public class A { int i = 3; int getI() {return i;} } public class B extends A{ i
       <pubDate>Mon, 06 Dec 2010 23:11:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2010/12/06/blog-post/</guid>
-      <description>ВступлениеВстала передо мной задача - сокращать ссылки перед тем, как отправлять их в Twitter. Для решения этой задачи я решил использовать bit.ly, благо, их API внятный и простой. Программируем!Решение нарисовалось в виде следующего класса: import org.apache.http.HttpEntity; import org.apache.http.HttpResponse; import org.apache.http.NameValuePair; import org.apache.http.client.ClientProtocolException; import org.apache.http.client.methods.HttpGet; import org.apache.http.client.utils.URIUtils; import org.apache.http.client.utils.URLEncodedUtils; import org.apache.http.impl.client.DefaultHttpClient; import org.apache.http.message.BasicNameValuePair; import org.apache.http.util.EntityUtils; import org.json.JSONException; import org.json.JSONObject; import android.util.Log; import java.io.IOException; import java.net.URI; import java.net.URISyntaxException; import java.util.ArrayList; import java.util.List; /** * Helper class to work with bitly.</description>
+      <description>import org.apache.http.HttpEntity; import org.apache.http.HttpResponse; import org.apache.http.NameValuePair; import org.apache.http.client.ClientProtocolException; import org.apache.http.client.methods.HttpGet; import org.apache.http.client.utils.URIUtils; import org.apache.http.client.utils.URLEncodedUtils; import org.apache.http.impl.client.DefaultHttpClient; import org.apache.http.message.BasicNameValuePair; import org.apache.http.util.EntityUtils; import org.json.JSONException; import org.json.JSONObject; import android.util.Log; import java.io.IOException; import java.net.URI; import java.net.URISyntaxException; import java.util.ArrayList; import java.util.List; /** * Helper class to work with bitly. * * @author Oleg Atamanenko * @since 06-Dec-2010 12:49:36 */ public class Bitly { private static final String TAG = &amp;#34;Bitly&amp;#34;; private static final String SHORTEN = &amp;#34;/v3/shorten&amp;#34;; private static final String API_URL = &amp;#34;api.</description>
     </item>
     
     <item>
@@ -325,9 +328,7 @@ public class A { int i = 3; int getI() {return i;} } public class B extends A{ i
       <pubDate>Sat, 22 May 2010 00:52:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2010/05/22/blog-post/</guid>
-      <description>Возникла проблема - каким образом заменить в строке символы из национальных кодировок на соответствующие им из латиницы.
-Например, из строки explicación получить explicacion.
-package com.blogspot.atamanenko; import java.text.Normalizer; import java.text.Normalizer.Form; public class StringNormalizer { public static String normalize(String string) { return Normalizer.normalize(string, Form.NFD) .replaceAll(&amp;#34;\\p{InCombiningDiacriticalMarks}+&amp;#34;, &amp;#34;&amp;#34;); } } Вызов Normalizer.normalize проводит нормализацию входной строки. Последующий вызов регулярного выражения удаляет все диакритические знаки, полученные после нормализации.</description>
+      <description>package com.blogspot.atamanenko; import java.text.Normalizer; import java.text.Normalizer.Form; public class StringNormalizer { public static String normalize(String string) { return Normalizer.normalize(string, Form.NFD) .replaceAll(&amp;#34;\\p{InCombiningDiacriticalMarks}+&amp;#34;, &amp;#34;&amp;#34;); } } Вызов Normalizer.normalizeпроводит нормализациювходной строки. Последующий вызов регулярного выражения удаляет все диакритические знаки, полученные после нормализации.</description>
     </item>
     
     <item>
@@ -336,8 +337,7 @@ package com.blogspot.atamanenko; import java.text.Normalizer; import java.text.N
       <pubDate>Sat, 22 May 2010 00:26:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2010/05/22/databene-benerator/</guid>
-      <description>Периодически необходимо решать задачу создания больших ( и не очень) объёмов тестовых данных для проведения различных видов тестирования - функционального, нагрузочного (тестирование стабильности и производительности). При этом часто получается так, что система на тестовых данных ведёт себя совсем иначе, чем на реальных данных. Причина кроется в том, что создать правдоподобные тестовые данные всегда достаточно сложно.
-Изучая данный вопрос я наткнулся на замечательный фреймворк - Databene Benerator, основной целью создания которого как раз и является создание правдоподобных тестовых данных для проведения различных видов тестирования.</description>
+      <description>&amp;amp;lt;project xmlns=&amp;amp;quot;http://maven.apache.org/POM/4.0.0&amp;amp;quot; xmlns:xsi=&amp;amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;amp;quot; xsi:schemaLocation=&amp;amp;quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd&amp;amp;quot;&amp;amp;gt; &amp;amp;lt;modelVersion&amp;amp;gt;4.0.0&amp;amp;lt;/modelVersion&amp;amp;gt; &amp;amp;lt;groupId&amp;amp;gt;com.myorganization&amp;amp;lt;/groupId&amp;amp;gt; &amp;amp;lt;artifactId&amp;amp;gt;databene-benerator-test&amp;amp;lt;/artifactId&amp;amp;gt; &amp;amp;lt;version&amp;amp;gt;1.0&amp;amp;lt;/version&amp;amp;gt; &amp;amp;lt;packaging&amp;amp;gt;jar&amp;amp;lt;/packaging&amp;amp;gt; &amp;amp;lt;name&amp;amp;gt;data generation project&amp;amp;lt;/name&amp;amp;gt; &amp;amp;lt;dependencies&amp;amp;gt; &amp;amp;lt;dependency&amp;amp;gt; &amp;amp;lt;groupId&amp;amp;gt;org.databene&amp;amp;lt;/groupId&amp;amp;gt; &amp;amp;lt;artifactId&amp;amp;gt;databene-benerator&amp;amp;lt;/artifactId&amp;amp;gt; &amp;amp;lt;version&amp;amp;gt;0.5.9&amp;amp;lt;/version&amp;amp;gt; &amp;amp;lt;/dependency&amp;amp;gt; &amp;amp;lt;dependency&amp;amp;gt; &amp;amp;lt;groupId&amp;amp;gt;org.databene&amp;amp;lt;/groupId&amp;amp;gt; &amp;amp;lt;artifactId&amp;amp;gt;databene-webdecs&amp;amp;lt;/artifactId&amp;amp;gt; &amp;amp;lt;version&amp;amp;gt;0.4.9&amp;amp;lt;/version&amp;amp;gt; &amp;amp;lt;/dependency&amp;amp;gt; &amp;amp;lt;dependency&amp;amp;gt; &amp;amp;lt;groupId&amp;amp;gt;org.databene&amp;amp;lt;/groupId&amp;amp;gt; &amp;amp;lt;artifactId&amp;amp;gt;databene-commons&amp;amp;lt;/artifactId&amp;amp;gt; &amp;amp;lt;version&amp;amp;gt;0.4.9&amp;amp;lt;/version&amp;amp;gt; &amp;amp;lt;/dependency&amp;amp;gt; &amp;amp;lt;dependency&amp;amp;gt; &amp;amp;lt;groupId&amp;amp;gt;mysql&amp;amp;lt;/groupId&amp;amp;gt; &amp;amp;lt;artifactId&amp;amp;gt;mysql-connector-java&amp;amp;lt;/artifactId&amp;amp;gt; &amp;amp;lt;version&amp;amp;gt;5.1.6&amp;amp;lt;/version&amp;amp;gt; &amp;amp;lt;/dependency&amp;amp;gt; &amp;amp;lt;/dependencies&amp;amp;gt; &amp;amp;lt;build&amp;amp;gt; &amp;amp;lt;resources&amp;amp;gt; &amp;amp;lt;resource&amp;amp;gt; &amp;amp;lt;directory&amp;amp;gt;src/main/resources&amp;amp;lt;/directory&amp;amp;gt; &amp;amp;lt;filtering&amp;amp;gt;true&amp;amp;lt;/filtering&amp;amp;gt; &amp;amp;lt;/resource&amp;amp;gt; &amp;amp;lt;/resources&amp;amp;gt; &amp;amp;lt;plugins&amp;amp;gt; &amp;amp;lt;plugin&amp;amp;gt; &amp;amp;lt;groupId&amp;amp;gt;org.apache.maven.plugins&amp;amp;lt;/groupId&amp;amp;gt; &amp;amp;lt;artifactId&amp;amp;gt;maven-compiler-plugin&amp;amp;lt;/artifactId&amp;amp;gt; &amp;amp;lt;configuration&amp;amp;gt; &amp;amp;lt;encoding&amp;amp;gt;UTF-8&amp;amp;lt;/encoding&amp;amp;gt; &amp;amp;lt;source&amp;amp;gt;1.5&amp;amp;lt;/source&amp;amp;gt; &amp;amp;lt;target&amp;amp;gt;1.5&amp;amp;lt;/target&amp;amp;gt; &amp;amp;lt;/configuration&amp;amp;gt; &amp;amp;lt;/plugin&amp;amp;gt; &amp;amp;lt;plugin&amp;amp;gt; &amp;amp;lt;groupId&amp;amp;gt;org.databene&amp;amp;lt;/groupId&amp;amp;gt; &amp;amp;lt;artifactId&amp;amp;gt;maven-benerator-plugin&amp;amp;lt;/artifactId&amp;amp;gt; &amp;amp;lt;version&amp;amp;gt;0.5.9&amp;amp;lt;/version&amp;amp;gt; &amp;amp;lt;executions&amp;amp;gt; &amp;amp;lt;execution&amp;amp;gt; &amp;amp;lt;phase&amp;amp;gt;compile&amp;amp;lt;/phase&amp;amp;gt; &amp;amp;lt;goals&amp;amp;gt; &amp;amp;lt;goal&amp;amp;gt;generate&amp;amp;lt;/goal&amp;amp;gt; &amp;amp;lt;/goals&amp;amp;gt; &amp;amp;lt;/execution&amp;amp;gt; &amp;amp;lt;/executions&amp;amp;gt; &amp;amp;lt;configuration&amp;amp;gt; &amp;amp;lt;descriptor&amp;amp;gt;src/main/resources/benerator.ben.xml&amp;amp;lt;/descriptor&amp;amp;gt; &amp;amp;lt;encoding&amp;amp;gt;UTF-8&amp;amp;lt;/encoding&amp;amp;gt; &amp;amp;lt;validate&amp;amp;gt;true&amp;amp;lt;/validate&amp;amp;gt; &amp;amp;lt;dbUrl&amp;amp;gt;jdbc:mysql://localhost:3306/hrtool?useUnicode=true&amp;amp;amp;characterEncoding=UTF-8&amp;amp;lt;/dbUrl&amp;amp;gt; &amp;amp;lt;dbDriver&amp;amp;gt;com.mysql.jdbc.Driver&amp;amp;lt;/dbDriver&amp;amp;gt; &amp;amp;lt;dbSchema&amp;amp;gt;database&amp;amp;lt;/dbSchema&amp;amp;gt; &amp;amp;lt;dbUser&amp;amp;gt;user&amp;amp;lt;/dbUser&amp;amp;gt; &amp;amp;lt;dbPassword&amp;amp;gt;password&amp;amp;lt;/dbPassword&amp;amp;gt; &amp;amp;lt;/configuration&amp;amp;gt; &amp;amp;lt;dependencies&amp;amp;gt; &amp;amp;lt;dependency&amp;amp;gt; &amp;amp;lt;groupId&amp;amp;gt;log4j&amp;amp;lt;/groupId&amp;amp;gt; &amp;amp;lt;artifactId&amp;amp;gt;log4j&amp;amp;lt;/artifactId&amp;amp;gt; &amp;amp;lt;version&amp;amp;gt;1.</description>
     </item>
     
     <item>
@@ -346,10 +346,7 @@ package com.blogspot.atamanenko; import java.text.Normalizer; import java.text.N
       <pubDate>Sun, 11 Apr 2010 11:45:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2010/04/11/gorm/</guid>
-      <description>В данной заметке хочу поделиться некоторыми моментами использования GORM.
-GORM - это ORM-фреймворк, используемый в Grails. Реализован он поверх Hibernate, но, при этом, с некоторыми отличными умолчаниями.
-Для разработчиков, знающих Hibernate, рекомендую тщательно изучить GORM, так как его поведение в некоторых случаях отлично от Hibernate, что может приводить к различным сюрпризам.
- Маппинг один-ко-многим По умолчанию GORM для связей один ко многим (one-to-many) создаёт таблицу-связку, которая обычно нужна только при связях между сущностями вида многие ко многим.</description>
+      <description>class Person implements Serializable { static hasMany = [ scores: ScoreSheet ] static mapping = { scores joinTable: false }; } class Note implements Serializable { static belongsTo = [ person: Person ] } class Person implements Serializable { // person fields. } class Payment { Long id Long version Integer amount static mapping = { tablePerHierarchy false } } class CreditCardPayment extends Payment { String cardNumber } </description>
     </item>
     
     <item>
@@ -358,10 +355,7 @@ GORM - это ORM-фреймворк, используемый в Grails. Реа
       <pubDate>Mon, 22 Mar 2010 23:50:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2010/03/22/skype-d-bus-python/</guid>
-      <description>Summary: в данной заметке описывается работа с программой Skype через D-Bus на Python.
-Введение Захотелось мне странного - когда я ухожу домой, мне нужно выключить amarok, kopete и Skype. Собственно, решено было через D-Bus отправлять вышеперечисленным приложениям релевантные сообщения.
-Используем dbus-send Сначала я использовал обычный dbus-send, что оформилось в виде следующего скрипта go2home:
-#!/bin/sh  # Stop amarok dbus-send --session --type=method_call --dest=org.kde.amarok /Player org.freedesktop.MediaPlayer.Stop # Logout from kopete dbus-send --session --type=method_call --dest=org.</description>
+      <description>#!/bin/sh  # Stop amarok dbus-send --session --type=method_call --dest=org.kde.amarok /Player org.freedesktop.MediaPlayer.Stop # Logout from kopete dbus-send --session --type=method_call --dest=org.kde.kopete /Kopete org.kde.Kopete.disconnectAll # Logout from Skype skypeapi.py &amp;#39;SET USERSTATUS OFFLINE&amp;#39; # Lock screen dbus-send --session --type=method_call --dest=org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.Lock Детали и параметры работы команды dbus-sendописаны в man-странице#!/usr/bin/env python import dbus, sys def main(): remote_bus = dbus.SessionBus() # Check if skype is running. system_service_list = remote_bus.get_object(&amp;#39;org.freedesktop.DBus&amp;#39;, &amp;#39;/org/freedesktop/DBus&amp;#39;).ListNames() skype_api_found = 0 for service in system_service_list: if service==&amp;#39;com.</description>
     </item>
     
     <item>
@@ -370,10 +364,7 @@ GORM - это ORM-фреймворк, используемый в Grails. Реа
       <pubDate>Sun, 21 Mar 2010 20:54:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2010/03/21/tiddlywiki/</guid>
-      <description>Summary: Пример разработки плагина для TiddlyWiki
-Вступление TiddlyWiki - это вики-движок, полностью написанный на JavaScript и хранящийся в одном файле (как сам движок, так и содержимое). Создатели позиционируют его как &amp;quot;переиспользуемую нелинейную персональную веб записную книжку&amp;quot;.
-Я давно использую TiddlyWiki в различных целях:
-По прямому назначению. Как систему GTD. Как домашнюю страницу на компьютере.  Моя домашняя страница на компьютере - это, если говорить терминами TiddlyWiki, тиддлер, содержащий ссылки на страницы, которые я часто посещаю.</description>
+      <description>/*{{{*/ version.extensions.faviconLinkMacro = {major: 0, minor: 1, revision: 0, date: new Date(2010,3,21)}; // Author: Oleg Atamanenko config.macros.faviconLink = {} config.macros.faviconLink.handler = function(place, macroName, params, wikifier, paramString) { var linkBox = createTiddlyElement(place, &amp;amp;quot;span&amp;amp;quot;, null, &amp;amp;quot;favIcon&amp;amp;quot;, &amp;amp;quot;&amp;amp;quot;); var args = paramString.parseParams(&amp;amp;quot;list&amp;amp;quot;,null,true); var link = getParam(args, &amp;amp;quot;link&amp;amp;quot;, &amp;#39;false&amp;#39;); if (link != &amp;#39;false&amp;#39;){ urlParts = link.split(&amp;#39;/&amp;#39;); imgLink = urlParts[0] + &amp;amp;quot;//&amp;amp;quot; + urlParts[2] + &amp;amp;quot;/favicon.ico&amp;amp;quot;;  var imgElement = createTiddlyElement(linkBox, &amp;amp;quot;img&amp;amp;quot;, null, &amp;amp;quot;faviconImage&amp;amp;quot;, &amp;amp;quot;&amp;amp;quot;); imgElement.</description>
     </item>
     
     <item>
@@ -384,7 +375,7 @@ GORM - это ORM-фреймворк, используемый в Grails. Реа
       <guid>https://uthark.github.io/2010/02/06/grails/</guid>
       <description>Выкладываю ниже список задач, которые нужно/можно выполнить для оптимизации приложения, написанного на Grails, может кому пригодится.
 Тестирование проведённых оптимизаций Первым делом необходимо разработать критерии проверки, которые позволят оценить эффективность проведённых оптимизаций.
- Установить Java Melody плагин для Grails для проведения анализа. Разработать скрипты для проведения нагрузочного тестирования. Прогнать скрипты. Проанализировать результаты Java Melody, выявить узкие места, произвести нужные оптимизации.  Общие оптимизации Очень часто обновление до последней версии используемых библиотек попутно улучшает производительность.</description>
+ Установить Java Melodyплагиндля Grails для проведения анализа. Разработать скрипты для проведения нагрузочного тестирования. Прогнать скрипты. Проанализировать результаты Java Melody, выявить узкие места, произвести нужные оптимизации.  Общие оптимизации Очень часто обновление до последней версии используемых библиотек попутно улучшает производительность.</description>
     </item>
     
     <item>
@@ -393,12 +384,7 @@ GORM - это ORM-фреймворк, используемый в Grails. Реа
       <pubDate>Fri, 05 Feb 2010 01:20:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2010/02/05/blog-post/</guid>
-      <description>Summary: Некоторые особенности вложенных транзакций.
-Иногда бывает так, что при обработке запроса необходимо открыть ещё одну транзакцию в рамках текущей транзакции. Это называется вложенной транзакцией. Очень многие базы данных не поддерживают вложенные транзакции вообще, например, MySQL и Oracle. А те, что поддерживают, делают это на минимальном уровне, например, Sybase поддерживает только псевдовложенные транзакции.
-Вложенные транзакции могут быть следующих видов:
-Псевдо-вложенные транзакции Вложенная субтранзакция Вложенная независимая транзакция 
-Псевдовложенные транзакции
-Этот тип транзакций поддерживается базой данных Sybase.</description>
+      <description>Summary: Некоторые особенности вложенных транзакций.Иногда бывает так, что при обработке запроса необходимо открыть ещё одну транзакцию в рамках текущей транзакции. Это называется вложенной транзакцией. Очень многие базы данных не поддерживают вложенные транзакции вообще, например, MySQL и Oracle. А те, что поддерживают, делают это на минимальном уровне, например, Sybase поддерживает только псевдовложенные транзакции.Вложенные транзакции могут быть следующих видов:begin tran select @@trancount /* @@trancount = 1 */ begin tran select @@trancount /* @@trancount = 2 */ begin tran select @@trancount /* @@trancount = 3 */ commit tran commit tran commit tran select @@trancount /* @@ trancount = 0 */ </description>
     </item>
     
     <item>
@@ -407,9 +393,7 @@ GORM - это ORM-фреймворк, используемый в Grails. Реа
       <pubDate>Tue, 08 Dec 2009 23:43:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2009/12/08/delicious-google-chrome/</guid>
-      <description>Итак, расширение для работы с Delicious доступно на сайте расширений Google Chrome.
-Посмотреть и установить
-Новые версии расширения буду закачить на этот сайт. </description>
+      <description></description>
     </item>
     
     <item>
@@ -418,13 +402,7 @@ GORM - это ORM-фреймворк, используемый в Grails. Реа
       <pubDate>Tue, 24 Nov 2009 23:09:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2009/11/24/google-chrome/</guid>
-      <description>В продолжение предыдущей заметки
-Логично предположить, что у расширений могут быть настройки. В Google Chrome/Chromium для этого есть специальный API.
-Для того, чтобы создать собственную страницу настроек необходимо сделать следующее:
-1. Объявить в манифесте страницу настроек
-{ &amp;ldquo;name&amp;rdquo;: &amp;ldquo;Delicious plugin&amp;rdquo;, &amp;ldquo;version&amp;rdquo;: &amp;ldquo;0.2&amp;rdquo;, &amp;ldquo;background_page&amp;rdquo;: &amp;ldquo;background.html&amp;rdquo;, &amp;ldquo;options_page&amp;rdquo;: &amp;ldquo;options.html&amp;rdquo; } 
-2. Реализовать страницу с настройками.
-Страница с настройками - это обычная HTML-страничка. Для доступа к настройкам Google Chrome предоставляет объект localStorage, который умеет сохранять и возвращать значения.</description>
+      <description>В продолжение предыдущей заметкиЛогично предположить, что у расширений могут быть настройки. В Google Chrome/Chromium для этого есть специальный API.Для того, чтобы создать собственную страницу настроек необходимо сделать следующее: Объявить в манифесте страницу настроек  Реализовать страницу с настройками.Страница с настройками - это обычная HTML-страничка. Для доступа к настройкам Google Chrome предоставляет объект localStorage, который умеет сохранять и возвращать значения.С объектом localStorageработа идёт как с обычным hash.   </description>
     </item>
     
     <item>
@@ -433,13 +411,9 @@ GORM - это ORM-фреймворк, используемый в Grails. Реа
       <pubDate>Sat, 14 Nov 2009 22:34:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2009/11/14/delicious-bookmarks-google/</guid>
-      <description>Введение
-Решил научиться писать собственные расширения для Google Chrome/Chromium.
-За идею взял официальное расширение от Yahoo! для Firefox - Delicious Bookmarks.
-Структура расширения
-Расширение - файл с расширением .crx. На самом деле это просто ZIP-архив с файлом манифеста внутри.
-Файл манифеста{ &amp;ldquo;name&amp;rdquo;: &amp;ldquo;Delicious plugin&amp;rdquo;, // 1 &amp;ldquo;version&amp;rdquo;: &amp;ldquo;0.2&amp;rdquo;, // 2 &amp;ldquo;background_page&amp;rdquo;: &amp;ldquo;background.html&amp;rdquo;, // 3 &amp;ldquo;permissions&amp;rdquo;: [ // 4 &amp;ldquo;bookmarks&amp;rdquo;, &amp;ldquo;tabs&amp;rdquo; ],
-&amp;ldquo;browser_action&amp;rdquo;: { // 5 &amp;ldquo;name&amp;rdquo;: &amp;ldquo;Save bookmark to delicious.com&amp;rdquo;, &amp;ldquo;default_title&amp;rdquo;: &amp;ldquo;Save bookmark to delicious.</description>
+      <description>&amp;ldquo;browser_action&amp;rdquo;: { // 5 &amp;ldquo;name&amp;rdquo;: &amp;ldquo;Save bookmark to delicious.com&amp;rdquo;, &amp;ldquo;default_title&amp;rdquo;: &amp;ldquo;Save bookmark to delicious.com&amp;rdquo;, &amp;ldquo;default_icon&amp;rdquo;: &amp;ldquo;delicious.20.gif&amp;rdquo; // optional },
+&amp;ldquo;content_scripts&amp;rdquo;: [ // 6 { &amp;ldquo;matches&amp;rdquo;: [&amp;ldquo;http:///&amp;rdquo;, &amp;ldquo;https:///&amp;quot;], &amp;ldquo;js&amp;rdquo;: [&amp;ldquo;getDocumentSelection.js&amp;rdquo;] } ],
+&amp;ldquo;options_page&amp;rdquo;: &amp;ldquo;options.html&amp;rdquo; // 7 } Манифест - файл в формате JSON.Манифест состоит из следующих частей: name- Имя расширения version- Версия расширения background_page- основной файл с расширением. Это обычный HTML-файл с разметкой. permissions- разрешения для расширения. Указываем, что нам нужен доступ к вкладкам (tabs) и закладкам (bookmarks).</description>
     </item>
     
     <item>
@@ -449,7 +423,7 @@ GORM - это ORM-фреймворк, используемый в Grails. Реа
       
       <guid>https://uthark.github.io/2009/07/07/blog-post/</guid>
       <description>Здравствуйте.
-Я считаю, что разработчику всегда стоит иметь представление о том, как работают низлежащие абстракции. Хотя бы потому, что часто абстракции бывают протекающими.
+Я считаю, что разработчику всегда стоит иметь представление о том, как работают низлежащие абстракции. Хотя бы потому, что часто абстракциибываютпротекающими.
 А веду я это к тому, что когда фреймворк вываливает стектрейс с несколькими вложенными (и, часто, для непосвященных непонятными) исключениями, то бывает непонятно, что с этим делать, особенно, если не знаешь, как реализована абстракция.
 Иногда бывает нужно хранить двунаправленные связи между таблицами. Например, есть игрок и есть его статистика и нужно, чтобы каждая из сущностей знала про другую.</description>
     </item>
@@ -460,9 +434,8 @@ GORM - это ORM-фреймворк, используемый в Grails. Реа
       <pubDate>Sat, 06 Jun 2009 22:19:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2009/06/06/spring-roo-2/</guid>
-      <description>Архитектура сгенерированного приложения Spring Roo активно использует аспекты. В качестве реализации аспектов была взята библиотека aspectj. Большая часть сгенерированного кода попадает в отдельные файлы-аспекты. Создадим простой класс:
-new persistent class jpa -name ~.domain.Action -testAutomatically add field string name -notNull -sizeMin 1 -sizeMax 80 add field string description -sizeMax 1024 Spring Roo создаст нам следующие файлы:
- Action.java Класс содержит только полезную с точки зрения назначения класса информацию. По сути, то, что вводит разработчик в консоль Roo аккумулируется здесь.</description>
+      <description>Action.java Класс содержит только полезную с точки зрения назначения класса информацию. По сути, то, что вводит разработчик в консоль Roo аккумулируется здесь. Весь дополнительный код разносится по другим классам.  @Entity //1 @RooJavaBean //2 @RooToString //3 @RooEntity(finders = { &amp;#34;findActionsByName&amp;#34; }) //4 public class Action { @NotNull @Size(min = 1, max = 80) private String name; @Size(max = 1024) private String description; } Мы видим, что:
+ Класс является JPA-сущностью.</description>
     </item>
     
     <item>
@@ -471,8 +444,7 @@ new persistent class jpa -name ~.domain.Action -testAutomatically add field stri
       <pubDate>Wed, 03 Jun 2009 00:06:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2009/06/03/spring-roo/</guid>
-      <description>Недавно компания Spring Source презентовала новый продукт - Spring Roo. Цель проекта - повысить продуктивность Java-разработчиков. Почитав обзоры, а также потрогав его руками можно сделать вывод о том, что это, в некотором виде, альтернатива AppFuse и Grails.
-Описание Spring Roo100% программирование на Java, предлагающее разработчикам известную, развитую и популярную платформу разработки.Прозрачные, надёжные и продуктивные сервисы среды разработки, такие как помощник кода, отладчики, визуальные отчёты об ошибка и т.д.Экстремально эффективная производительность во время выполнения, безопасность типов и отсутствие зависимостей на Roo во время выполнения.</description>
+      <description>Недавнокомпания Spring Sourceпрезентовала новый продукт - Spring Roo. Цель проекта- повысить продуктивность Java-разработчиков. Почитавобзоры, а также потрогав его рукамиможно сделать вывод о том, что это, в некотором виде, альтернатива AppFuseи Grails.</description>
     </item>
     
     <item>
@@ -481,7 +453,7 @@ new persistent class jpa -name ~.domain.Action -testAutomatically add field stri
       <pubDate>Tue, 02 Jun 2009 23:31:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2009/06/02/apache-ant-metro/</guid>
-      <description>Столкнулся с такой проблемой - в некоторых случаях приложение, собранное антом не работает. Конкретно - не работает десереализация запросов на веб-сервис. Получаемый запрос содержит null в значениях полей.
+      <description>Столкнулся с такой проблемой - в некоторых случаях приложение, собранное антом не работает. Конкретно - не работает десереализация запросов на веб-сервис. Получаемый запрос содержит nullв значениях полей.
 Опытным путём было выяснено, что на это влияет используемая версия Java. Под 1.5 работает корректно, под 1.6 - не работает. Нашли ошибку в метро, связанную именно с версией JDK и на этом успокоились. Но было одно исключение из правил. У одного из разработчиков под 1.</description>
     </item>
     
@@ -502,7 +474,8 @@ new persistent class jpa -name ~.domain.Action -testAutomatically add field stri
       
       <guid>https://uthark.github.io/2009/05/27/fixed-price-2/</guid>
       <description>Причин для написания плохого кода может быть несколько. Некоторые из них лежат на поверхности:
- Отсутствие опытаНевнимательность Некомпетентность Немотивированность Отсутствие опыта - казалось бы, самая простая причина проблемы; решение проблемы выглядит очевидным - со временем, разработчик будет писать код лучше. Но это ошибочное мнение. Бывает, люди с опытом более 5-10 лет разработки коммерческих приложений пишут настолько плохой код, что иногда кажется, что они это нарочно. Решать эту проблему необходимо постоянным указанием на ошибки.</description>
+Невнимательность- через это проходят почти все. Почти каждый сможет вспомнить случай, когда не был сделан svn addперед коммитом. Эта проблема решается обычно самомотивацией человека на хороший код. Впрочем, команда и сервер непрерывной интеграции тоже прилагают усилия для того, чтобы человек проверил ещё раз то, что он хочет выложить в репозиторий.
+Некомпетентность- эта причина пересекается с недостатком опыта, но, при этом отлична от неё.</description>
     </item>
     
     <item>
@@ -512,7 +485,8 @@ new persistent class jpa -name ~.domain.Action -testAutomatically add field stri
       
       <guid>https://uthark.github.io/2009/05/27/fixed-price-1/</guid>
       <description>В последнее время всё чаще задумываюсь о том, почему разработчики пишут плохой и некачественный код. Под кодом я подразумеваю не только сам код, но и, в том числе, архитектуру и дизайн.
-Плохим кодом я считаю следущий: Невыполняющий функциональные требованияНевыполняющий нефункциональные требованияНепокрытый тестамиПлохо тестируемыйПлохо поддерживаемыйС багамиНеоптимальныйЕсли код не выполняет функциональные требования, то этот код вообще ничего не стоит. Заказчику такой код не нужен, именно поэтому этот код плохой. На него были потрачены ресурсы, но при этом сам код не имеет никакой ценности.</description>
+Плохим кодом я считаю следущий:
+Если код не выполняет нефункциональные требования, то это говорит о том, что либо дизайн, либо реализация, не учли требования и это тоже не добавляет удовлетворённости конечному пользователю. Часто здесь можно провести рефакторинг, но бывает и так, что архитектурные ошибки не дают в принципе выполнить нефункциональные требования, либо их реализация требует очень больших временных затрат.</description>
     </item>
     
     <item>
@@ -524,7 +498,7 @@ new persistent class jpa -name ~.domain.Action -testAutomatically add field stri
       <description>Посмотрел на Google App Engine (GAE).
 При своей цене (= бесплатно) это очень хороший сервис.
 GAE - это инфраструктура для запуска веб-приложений на серверах Google. То, что сейчас модно называть cloud computing.
-На презентации платформы в 2008 году Google объявил только о поддержке Python. Год спустя, в апреле 2009 года Google заявил о поддержке Java, правда с ограничениями. Собственно, поддержка Java и была тем самым толчком, что я решил поближе посмотреть на платформу.</description>
+На презентации платформы в 2008 годуGoogle объявил только о поддержке Python. Год спустя, в апреле 2009 года Google заявил о поддержке Java, правда с ограничениями. Собственно, поддержка Javaи была тем самым толчком, что я решил поближе посмотреть на платформу.</description>
     </item>
     
     <item>
@@ -533,9 +507,7 @@ GAE - это инфраструктура для запуска веб-прил�
       <pubDate>Sun, 03 May 2009 00:18:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2009/05/03/eclipse/</guid>
-      <description>Многие ругают Eclipse за то, что там нет многого из того, что есть в коробке у Jetbrains Intellij IDEA. Мне всегда казалось это не очень корректным, так как Eclipse в первую очередь платформа, а уже потом - среда для Java разработки.
-Решил собрать воедино весь список используемых мною расширений для Eclipse.
-Subclipse - без этого никуда. Это расширение позволяет работать с системой контроля версий Subversion не выходя из Eclipse. m2eclipse - Расширение для работы с maven.</description>
+      <description>Многие ругают Eclipseза то, что там нет многого из того, что есть в коробке у Jetbrains Intellij IDEA. Мне всегда казалось это не очень корректным, так как Eclipse в первую очередь платформа, а уже потом - среда для Java разработки.Решил собрать воедино весь список используемых мною расширений для Eclipse.</description>
     </item>
     
     <item>
@@ -544,9 +516,7 @@ Subclipse - без этого никуда. Это расширение позв
       <pubDate>Sun, 26 Apr 2009 15:30:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2009/04/26/blog-post_26/</guid>
-      <description>Так как использование блокировок по-разному влияет на производительность, необходимо выбирать, в каких случаях какой вид блокировок лучше использовать.
-.nobr br { display: none } 
- Условие Пессимистичная Оптимистичная Сверх-оптимистичная   Конфликты часты  +  −  −    Конфликты редки  −  +  −    Данные только добавляются (например, журнал)  −  −  +    Данные только читаются (справочники) − − +  Критерии выбора блокировок</description>
+      <description>Так как использование блокировок по-разному влияет на производительность, необходимо выбирать, в каких случаях какой вид блокировок лучше использовать.</description>
     </item>
     
     <item>
@@ -556,7 +526,7 @@ Subclipse - без этого никуда. Это расширение позв
       
       <guid>https://uthark.github.io/2009/04/24/blog-post_24/</guid>
       <description>При работе в многопользовательском окружении может возникнуть ситуация, когда разные пользователи или системы обновляют одни и те же данные. Это может привести к ситуации, когда один из пользователей изменит данные, которые уже изменял другой пользователь и приведёт либо к потере данных, либо к переводу данных в неконсистентное состояние. Для решения этой проблемы были придуманы транзакции. Целью транзакции является создание абстракции того, что каждый пользователь - единственный в системе.
-Характеристики транзакций В конце 1970-х Джим Грей выделил следующие характеристики транзакций:</description>
+Характеристики транзакций В конце 1970-х Джим Грейвыделил следующие характеристики транзакций:</description>
     </item>
     
     <item>

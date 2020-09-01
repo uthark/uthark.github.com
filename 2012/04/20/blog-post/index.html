@@ -60,8 +60,8 @@
   <meta property="og:title" content="Преобразуем строку в дату" />
   <meta property="og:url" content="https://uthark.github.io/2012/04/20/blog-post/" />
   <meta property="og:description" content="Казалось бы, есть простейшая задача - преобразовать строковое представление даты в объект класса java.util.Date.
-Как оказалось, иногда использование DateFormat не помогает. В случае, если строка - это заголовок Date из письма, то нам нужно использовать javax.mail.internet.MailDateFormat для преобразования такой строки.
-String dateStr = ... Date parsedDate = new MailDateFormat()." />
+Как оказалось, иногда использование DateFormat не помогает. В случае, если строка - это заголовок Dateиз письма, то нам нужно использовать javax.mail.internet.MailDateFormatдля преобразования такой строки.
+String dateStr = ... Date parsedDate = new MailDateFormat().parse(dateStr); " />
 
   
 
@@ -154,11 +154,11 @@ String dateStr = ... Date parsedDate = new MailDateFormat()." />
           
           
           
-          <p>Казалось бы, есть простейшая задача - преобразовать строковое представление даты в объект класса <tt>java.util.Date</tt>.</p>
-
-<p>Как оказалось, иногда использование DateFormat не помогает. В случае, если строка - это заголовок <tt>Date</tt> из письма, то нам нужно использовать <tt><a href="http://docs.oracle.com/javaee/5/api/javax/mail/internet/MailDateFormat.html" target="_blank">javax.mail.internet.MailDateFormat</a></tt> для преобразования такой строки.</p>
+          <p>Казалось бы, есть простейшая задача - преобразовать строковое представление даты в объект класса <!-- raw HTML omitted -->java.util.Date<!-- raw HTML omitted -->.</p>
+<p>Как оказалось, иногда использование DateFormat не помогает. В случае, если строка - это заголовок <!-- raw HTML omitted -->Date<!-- raw HTML omitted --> из письма, то нам нужно использовать <!-- raw HTML omitted --><a href="http://docs.oracle.com/javaee/5/api/javax/mail/internet/MailDateFormat.html">javax.mail.internet.MailDateFormat</a><!-- raw HTML omitted --> для преобразования такой строки.</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">String</span> <span class="n">dateStr</span> <span class="o">=</span> <span class="o">...</span>
-<span class="n">Date</span> <span class="n">parsedDate</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MailDateFormat</span><span class="o">().</span><span class="na">parse</span><span class="o">(</span><span class="n">dateStr</span><span class="o">);</span></code></pre></div>
+<span class="n">Date</span> <span class="n">parsedDate</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MailDateFormat</span><span class="o">().</span><span class="na">parse</span><span class="o">(</span><span class="n">dateStr</span><span class="o">);</span>
+</code></pre></div>
         </div>
         
 
@@ -197,7 +197,7 @@ String dateStr = ... Date parsedDate = new MailDateFormat()." />
   
     
       <div id="disqus_thread"></div>
-<script>
+<script type="application/javascript">
     var disqus_config = function () {
     
     
@@ -263,7 +263,7 @@ String dateStr = ... Date parsedDate = new MailDateFormat()." />
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary site:@LinkageError creator:@LinkageError]"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary creator:@LinkageError site:@LinkageError]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 
@@ -280,7 +280,7 @@ String dateStr = ... Date parsedDate = new MailDateFormat()." />
             </li>
         </ul>
     </div>
-    <p>Copyright &copy; 2009&nbsp;—&nbsp;2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+    <p>Copyright &copy; 2009&nbsp;—&nbsp;2020 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
         <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a>, uses custom theme based on
             <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.</span>
     </p>

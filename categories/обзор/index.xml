@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Обзор on Sharing knowledge</title>
+    <title>обзор on Sharing knowledge</title>
     <link>https://uthark.github.io/categories/%D0%BE%D0%B1%D0%B7%D0%BE%D1%80/</link>
-    <description>Recent content in Обзор on Sharing knowledge</description>
+    <description>Recent content in обзор on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 23 May 2009 23:00:00 +0000</lastBuildDate>
@@ -20,7 +20,7 @@
       <description>Посмотрел на Google App Engine (GAE).
 При своей цене (= бесплатно) это очень хороший сервис.
 GAE - это инфраструктура для запуска веб-приложений на серверах Google. То, что сейчас модно называть cloud computing.
-На презентации платформы в 2008 году Google объявил только о поддержке Python. Год спустя, в апреле 2009 года Google заявил о поддержке Java, правда с ограничениями. Собственно, поддержка Java и была тем самым толчком, что я решил поближе посмотреть на платформу.</description>
+На презентации платформы в 2008 годуGoogle объявил только о поддержке Python. Год спустя, в апреле 2009 года Google заявил о поддержке Java, правда с ограничениями. Собственно, поддержка Javaи была тем самым толчком, что я решил поближе посмотреть на платформу.</description>
     </item>
     
   </channel>

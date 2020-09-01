@@ -59,7 +59,7 @@
 
   <meta property="og:title" content="Сокращаем ссылки на андроиде" />
   <meta property="og:url" content="https://uthark.github.io/2010/12/06/blog-post/" />
-  <meta property="og:description" content="ВступлениеВстала передо мной задача - сокращать ссылки перед тем, как отправлять их в Twitter. Для решения этой задачи я решил использовать bit.ly, благо, их API внятный и простой. Программируем!Решение нарисовалось в виде следующего класса: import org.apache.http.HttpEntity; import org.apache.http.HttpResponse; import org.apache.http.NameValuePair; import org.apache.http.client.ClientProtocolException; import org.apache.http.client.methods.HttpGet; import org.apache.http.client.utils.URIUtils; import org.apache.http.client.utils.URLEncodedUtils; import org.apache.http.impl.client.DefaultHttpClient; import org.apache.http.message.BasicNameValuePair; import org.apache.http.util.EntityUtils; import org.json.JSONException; import org.json.JSONObject; import android.util.Log; import java.io.IOException; import java.net.URI; import java.net.URISyntaxException; import java.util.ArrayList; import java.util.List; /** * Helper class to work with bitly." />
+  <meta property="og:description" content="import org.apache.http.HttpEntity; import org.apache.http.HttpResponse; import org.apache.http.NameValuePair; import org.apache.http.client.ClientProtocolException; import org.apache.http.client.methods.HttpGet; import org.apache.http.client.utils.URIUtils; import org.apache.http.client.utils.URLEncodedUtils; import org.apache.http.impl.client.DefaultHttpClient; import org.apache.http.message.BasicNameValuePair; import org.apache.http.util.EntityUtils; import org.json.JSONException; import org.json.JSONObject; import android.util.Log; import java.io.IOException; import java.net.URI; import java.net.URISyntaxException; import java.util.ArrayList; import java.util.List; /** * Helper class to work with bitly. * * @author Oleg Atamanenko * @since 06-Dec-2010 12:49:36 */ public class Bitly { private static final String TAG = &#34;Bitly&#34;; private static final String SHORTEN = &#34;/v3/shorten&#34;; private static final String API_URL = &#34;api." />
 
   
 
@@ -152,7 +152,7 @@
           
           
           
-          <p><h5>Вступление</h5>Встала передо мной задача - сокращать ссылки перед тем, как отправлять их в Twitter. Для решения этой задачи я решил использовать <a href="http://bit.ly">bit.ly</a>, благо, их API внятный и простой.  <h5>Программируем!</h5>Решение нарисовалось в виде следующего класса:  <br /></p>
+          <!-- raw HTML omitted -->
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">org.apache.http.HttpEntity</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">org.apache.http.HttpResponse</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">org.apache.http.NameValuePair</span><span class="o">;</span>
@@ -247,13 +247,12 @@
         <span class="o">}</span>
     <span class="o">}</span>
 
-<span class="o">}</span></code></pre></div>
-<p>Конструктор класс принимает на вход следующие параметры: <ul><li><code>userName</code> - имя пользователя bit.ly.</li>
-<li><code>apiKey</code> - Ключ для доступа к API, его можно узнать на <a href="https://bit.ly/a/your_api_key">специальной страничке</a></li>
-</ul><a href="https://code.google.com/p/bitly-api/wiki/ApiDocumentation">Полная документация к Bit.ly API</a> расположена на отдельном проекте в Google Code  <h5>Использование</h5>Единственный метод, реализованный сейчас - это метод <code>shorten()</code>. На вход требуется подать полную ссылку <code>longUrl</code>, на выходе получается укороченная версия ссылки, либо кидается исключение с сообщением от bit.ly API.   <h6>Пример вызова</h6></p>
+<span class="o">}</span>
+</code></pre></div><p>Конструктор класс принимает на вход следующие параметры: <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->userName<!-- raw HTML omitted --> - имя пользователя bit.ly.<!-- raw HTML omitted --></p>
+<!-- raw HTML omitted -->
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">Bitly</span> <span class="n">bitly</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Bitly</span><span class="o">(</span><span class="n">BITLY_USERNAME</span><span class="o">,</span> <span class="n">BITLY_API_KEY</span><span class="o">);</span>
-<span class="n">String</span> <span class="n">shortLink</span> <span class="o">=</span> <span class="n">bitly</span><span class="o">.</span><span class="na">shorten</span><span class="o">(</span><span class="n">link</span><span class="o">);</span></code></pre></div>
-<p><h6>Дальнейшие улучшения</h6>Если перед вами стоит задача быстренько сократить ссылку - то вышеприведённого кода достаточно. Но если вам нужно полноценное решение, со всеми возможностями bit.ly - то посмотрите в сторону <a href="https://code.google.com/p/bitlyj/">bitlyj</a>. Правда, я не уверен, что оно взведётся под андроидом.</p>
+<span class="n">String</span> <span class="n">shortLink</span> <span class="o">=</span> <span class="n">bitly</span><span class="o">.</span><span class="na">shorten</span><span class="o">(</span><span class="n">link</span><span class="o">);</span>
+</code></pre></div><!-- raw HTML omitted -->
 
         </div>
         
@@ -293,7 +292,7 @@
   
     
       <div id="disqus_thread"></div>
-<script>
+<script type="application/javascript">
     var disqus_config = function () {
     
     
@@ -332,6 +331,11 @@
   </section>
 
 
+<section class="even">
+  <div class="toc-header">Table of Contents</div>
+   <nav id="TableOfContents"></nav>
+</section>
+
 
 
 
@@ -359,7 +363,7 @@
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary site:@LinkageError creator:@LinkageError]"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary creator:@LinkageError site:@LinkageError]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 
@@ -376,7 +380,7 @@
             </li>
         </ul>
     </div>
-    <p>Copyright &copy; 2009&nbsp;—&nbsp;2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+    <p>Copyright &copy; 2009&nbsp;—&nbsp;2020 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
         <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a>, uses custom theme based on
             <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.</span>
     </p>

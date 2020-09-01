@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html prefix="og: http://ogp.me/ns#" lang="en">
 <head>
-	<meta name="generator" content="Hugo 0.44" />
+	<meta name="generator" content="Hugo 0.74.3" />
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
@@ -136,44 +136,35 @@
 
         
         <p>When I created <a href="/about">About Me</a> page I found issue with rendering: for some reason styles and some javascripts were missing on the page.</p>
-
 <p>Investigation showed that content in <code>meta tag</code> description contained unquoted quotes, thus resulting in broken HTML.</p>
-
-<p>After searching within <a href="https://github.com/imathis/octopress/" target="_blank">octopress sources</a> I found the issue:</p>
-
+<p>After searching within <a href="https://github.com/imathis/octopress/">octopress sources</a> I found the issue:</p>
 <p>Rendering of description tag, excerpt from _includes/head.html:</p>
-<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="p">{</span><span class="sx">% capture </span> <span class="n">description</span> <span class="s">%}
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="p">{</span><span class="o">%</span> <span class="n">capture</span> <span class="n">description</span> <span class="s">%}
 </span><span class="s">    {% if page.description %}</span>
         <span class="p">{{</span> <span class="n">page</span><span class="o">.</span><span class="n">description</span> <span class="p">}}</span>
-    <span class="p">{</span><span class="sx">% else </span> <span class="s">%}
+    <span class="p">{</span><span class="o">%</span> <span class="k">else</span> <span class="s">%}
 </span><span class="s">        {{ content | raw_content }</span><span class="p">}</span>
-    <span class="p">{</span><span class="sx">% endif </span> <span class="s">%}
+    <span class="p">{</span><span class="o">%</span> <span class="n">endif</span> <span class="s">%}
 </span><span class="s">{% endcapture %}</span>
-<span class="o">&lt;</span><span class="n">meta</span> <span class="nb">name</span><span class="o">=</span><span class="s2">&#34;description&#34;</span> <span class="n">content</span><span class="o">=</span><span class="s2">&#34;{{ description | strip_html | condense_spaces | truncate:150 }}&#34;</span><span class="o">&gt;</span></code></pre></div>
-<p>After capturing, <code>description</code> is being processed with filters, defined in <code>plugins/octopress_filters.rb</code>. In this case, the following filter are applied:</p>
-
+<span class="o">&lt;</span><span class="n">meta</span> <span class="nb">name</span><span class="o">=</span><span class="s2">&#34;description&#34;</span> <span class="n">content</span><span class="o">=</span><span class="s2">&#34;{{ description | strip_html | condense_spaces | truncate:150 }}&#34;</span><span class="o">&gt;</span>
+</code></pre></div><p>After capturing, <code>description</code> is being processed with filters, defined in <code>plugins/octopress_filters.rb</code>. In this case, the following filter are applied:</p>
 <ul>
 <li>strip_html</li>
 <li>condense_spaces</li>
 <li>truncate</li>
 </ul>
-
 <p>So, as you can see, if description contains quotes, then it will be rendered as is, without any escaping and quotes will break resulting page.</p>
-
 <p>In order to fix this I decided to add new filter, which will just remove quotes.</p>
-
 <p>So, let&rsquo;s add new function, <code>strip_quotes</code> in <code>plugins/octopress_filters.rb</code>:</p>
-
 <p>strip_quotes function:</p>
 <div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="c1"># Strips quotes</span>
 <span class="k">def</span> <span class="nf">strip_quotes</span><span class="p">(</span><span class="n">input</span><span class="p">)</span>
     <span class="n">input</span><span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="sr">/[\&#39;\&#34;&#34;]/</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-<span class="k">end</span></code></pre></div>
-<p>And then we need to update rendering of description tag - add newly created filter:</p>
-<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">&#34;description&#34;</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;{{ description | strip_html | condense_spaces | strip_quotes | truncate:150 }}&#34;</span><span class="p">&gt;</span></code></pre></div>
-<p>After this fix description is being rendered properly.</p>
-
-<p>P.S. In order to render properly <code>{{</code> and <code>}}</code> in the octopress it is required to put content you want to render within <code>raw</code> and <code>endraw</code> tags. See <a href="http://stackoverflow.com/questions/15786144/how-to-escape-in-markdown-on-octopress" target="_blank">StackOverflow</a> <a href="http://stackoverflow.com/questions/3426182/how-to-escape-liquid-template-tags/13582517#13582517" target="_blank">questions</a> for details.</p>
+<span class="k">end</span>
+</code></pre></div><p>And then we need to update rendering of description tag - add newly created filter:</p>
+<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">&#34;description&#34;</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;{{ description | strip_html | condense_spaces | strip_quotes | truncate:150 }}&#34;</span><span class="p">&gt;</span>
+</code></pre></div><p>After this fix description is being rendered properly.</p>
+<p>P.S. In order to render properly <code>{{</code> and <code>}}</code> in the octopress it is required to put content you want to render within <code>raw</code> and <code>endraw</code> tags. See <a href="http://stackoverflow.com/questions/15786144/how-to-escape-in-markdown-on-octopress">StackOverflow</a> <a href="http://stackoverflow.com/questions/3426182/how-to-escape-liquid-template-tags/13582517#13582517">questions</a> for details.</p>
 
         
 
@@ -197,11 +188,8 @@
 
         
         <p>Found very addictive and cool game: Lyne.</p>
-
 <p>The goal of the game is to connect all dots on the playboard. Worth every cent.</p>
-
-<p><div class="pb-app-box" data-theme="dark" data-lang="en"><a href="http://playboard.me/android/apps/com.thomasbowker.lynerelease">LYNE  (Playboard)</a> | <a href="https://play.google.com/store/apps/details?id=com.thomasbowker.lynerelease&hl=en" rel="nofollow" target="_blank">LYNE (Play Store)</a></div>
-<script type="text/javascript" src="//playboard.me/widgets/pb-app-box/1/pb_load_app_box.js"></script></p>
+<!-- raw HTML omitted -->
 
         
 
@@ -225,13 +213,8 @@
 
         
         <p>Sunset on M St.</p>
-
-<p><a href="https://plus.google.com/photos/112372998073079463630/albums/5986392506066477233/5986392511862419154" target="_blank">
-<figure>
-    
-        <img src="https://lh3.googleusercontent.com/-UdxK_gs0ol0/UxPwRbOeLtI/AAAAAAAAPd4/OatnIV3Z5t0/w1012-h760/IMG_20140226_174149.jpg" />
-    
-    
+<p><a href="https://plus.google.com/photos/112372998073079463630/albums/5986392506066477233/5986392511862419154"><figure>
+    <img src="https://lh3.googleusercontent.com/-UdxK_gs0ol0/UxPwRbOeLtI/AAAAAAAAPd4/OatnIV3Z5t0/w1012-h760/IMG_20140226_174149.jpg"/> 
 </figure>
 </a></p>
 
@@ -256,57 +239,29 @@
 
 
         
-        <p>I want to share one of the cool features which <a href="http://www.iterm2.com/" target="_blank">iTerm.app</a> has - triggers.
-The idea behind triggers is simple - it allows to perform arbitrary action based on the output in console window. For example, it can colorize specified content (based on <a href="http://en.wikipedia.org/wiki/Regular_expression" target="_blank">regular expressions</a>).</p>
-
+        <p>I want to share one of the cool features which <a href="http://www.iterm2.com/">iTerm.app</a> has - triggers.
+The idea behind triggers is simple - it allows to perform arbitrary action based on the output in console window. For example, it can colorize specified content (based on <a href="http://en.wikipedia.org/wiki/Regular_expression">regular expressions</a>).</p>
 <p>Start <code>iTerm</code>, open settings (<code>⌘+,</code>), go to <code>Profiles</code>, then tab <code>Advanced</code>.
 Click on <code>Edit</code> button in <code>Triggers</code> section.</p>
-
-
 <figure>
-    
-        <img src="https://lh4.googleusercontent.com/-n8Ynka3iux0/UxQQDk6VewI/AAAAAAAAPgg/FoQAq7y2a78/w2088-h1242-no/Screen&#43;Shot&#43;2014-03-02&#43;at&#43;11.48.02&#43;PM.png" />
-    
-    
-    <figcaption>
-        <h4>iTerm Settings</h4>
-        
-    </figcaption>
-    
+    <img src="https://lh4.googleusercontent.com/-n8Ynka3iux0/UxQQDk6VewI/AAAAAAAAPgg/FoQAq7y2a78/w2088-h1242-no/Screen&#43;Shot&#43;2014-03-02&#43;at&#43;11.48.02&#43;PM.png"/> <figcaption>
+            <h4>iTerm Settings</h4>
+        </figcaption>
 </figure>
-
 
 <p>Then you can define your own triggers:</p>
-
-
 <figure>
-    
-        <img src="https://lh5.googleusercontent.com/-zXeqBjdPMlE/UxQQMQ4EyXI/AAAAAAAAPhg/0tS9qMw5atw/w2086-h932-no/Screen&#43;Shot&#43;2014-03-02&#43;at&#43;11.48.15&#43;PM.png" />
-    
-    
-    <figcaption>
-        <h4>Triggers Configuration</h4>
-        
-    </figcaption>
-    
+    <img src="https://lh5.googleusercontent.com/-zXeqBjdPMlE/UxQQMQ4EyXI/AAAAAAAAPhg/0tS9qMw5atw/w2086-h932-no/Screen&#43;Shot&#43;2014-03-02&#43;at&#43;11.48.15&#43;PM.png"/> <figcaption>
+            <h4>Triggers Configuration</h4>
+        </figcaption>
 </figure>
-
 
 <p>Example output:</p>
-
-
 <figure>
-    
-        <img src="https://lh6.googleusercontent.com/-hiVCoX2YS60/UxQSnH64xwI/AAAAAAAAPxw/KIlW7dpv-tM/w1816-h1386-no/Screen&#43;Shot&#43;2014-03-03&#43;at&#43;12.26.03&#43;AM.png" />
-    
-    
-    <figcaption>
-        <h4>Example output</h4>
-        
-    </figcaption>
-    
+    <img src="https://lh6.googleusercontent.com/-hiVCoX2YS60/UxQSnH64xwI/AAAAAAAAPxw/KIlW7dpv-tM/w1816-h1386-no/Screen&#43;Shot&#43;2014-03-03&#43;at&#43;12.26.03&#43;AM.png"/> <figcaption>
+            <h4>Example output</h4>
+        </figcaption>
 </figure>
-
 
 <p>Happy coding!</p>
 
@@ -331,11 +286,9 @@ Click on <code>Edit</code> button in <code>Triggers</code> section.</p>
 
 
         
-        <p>Splean <a href="http://www.navigatorrecords.ru/showalbum.php?code=206" target="_blank">released new album</a> - Resonance, part 1.</p>
-
+        <p>Splean <a href="http://www.navigatorrecords.ru/showalbum.php?code=206">released new album</a> - Resonance, part 1.</p>
 <p>Good album, good texts.</p>
-
-<p>You can listen previews <a href="https://play.google.com/music/playpreview?preview=AE9vGKqOscNKDl7gMYDS126d1iINPIg449z4g_bwiXboIi8Qu74XsZRRzinlJnrN3NscIJS-_VgndoHTGYZFCl_l_TvPM2mwqVNg1BOW_rie_WOpZkqaubw%3D" target="_blank">here</a> or <a href="http://music.yandex.ru/#!/album/1801924" target="_blank">here (Russia only)</a>.</p>
+<p>You can listen previews <a href="https://play.google.com/music/playpreview?preview=AE9vGKqOscNKDl7gMYDS126d1iINPIg449z4g_bwiXboIi8Qu74XsZRRzinlJnrN3NscIJS-_VgndoHTGYZFCl_l_TvPM2mwqVNg1BOW_rie_WOpZkqaubw%3D">here</a> or <a href="http://music.yandex.ru/#!/album/1801924">here (Russia only)</a>.</p>
 
         
 
@@ -358,16 +311,12 @@ Click on <code>Edit</code> button in <code>Triggers</code> section.</p>
 
 
         
-        
-
-<h3 id="introduction">Introduction</h3>
-
-<p>Today I want to show how one can automatically apply additional restrictions on <a href="http://www.mongodb.org/" target="_blank">MongoDB</a> Queries with <a href="http://docs.spring.io/spring-data/mongodb/docs/current/api/org/springframework/data/mongodb/core/MongoTemplate.html" target="_blank">MongoTemplate</a> or <a href="http://docs.spring.io/spring-data/mongodb/docs/current/reference/htmlsingle/" target="_blank">Spring Data Mongo</a>.</p>
-
+        <h3 id="introduction">Introduction</h3>
+<p>Today I want to show how one can automatically apply additional restrictions on <a href="http://www.mongodb.org/">MongoDB</a> Queries with <a href="http://docs.spring.io/spring-data/mongodb/docs/current/api/org/springframework/data/mongodb/core/MongoTemplate.html">MongoTemplate</a> or <a href="http://docs.spring.io/spring-data/mongodb/docs/current/reference/htmlsingle/">Spring Data Mongo</a>.</p>
 <h3 id="implementation">Implementation</h3>
-
 <p>First, let&rsquo;s introduce interface <code>QueryModifier</code>.</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">org.springframework.data.mongodb.core.query.Query</span><span class="o">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">
+<span class="kn">import</span> <span class="nn">org.springframework.data.mongodb.core.query.Query</span><span class="o">;</span>
 
 <span class="kd">public</span> <span class="kd">interface</span> <span class="nc">QueryModifier</span> <span class="o">{</span>
 
@@ -378,11 +327,12 @@ Click on <code>Edit</code> button in <code>Triggers</code> section.</p>
 </span><span class="cm">     * @return Modified query.
 </span><span class="cm">     */</span>
     <span class="n">Query</span> <span class="nf">modify</span><span class="o">(</span><span class="n">Query</span> <span class="n">query</span><span class="o">,</span> <span class="n">String</span> <span class="n">collectionName</span><span class="o">);</span>
-<span class="o">}</span></code></pre></div>
-<p>Implementations of this interface will pickup original query and modify it somehow. In order to make it work we need inject this modification after query was generated by <code>Spring Data but before query is sent to the MongoDB instance. The perfect place for this is</code>MongoTemplate`.</p>
+<span class="o">}</span>
 
+</code></pre></div><p>Implementations of this interface will pickup original query and modify it somehow. In order to make it work we need inject this modification after query was generated by <code>Spring Data but before query is sent to the MongoDB instance. The perfect place for this is </code>MongoTemplate`.</p>
 <p>So, let&rsquo;s create subclass of <code>MongoTemplate</code> and override <code>find()</code> and <code>executeQuery()</code> methods.</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">com.mongodb.*</span><span class="o">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">
+<span class="kn">import</span> <span class="nn">com.mongodb.*</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">org.slf4j.*</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">org.springframework.data.authentication.UserCredentials</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">org.springframework.data.mongodb.MongoDbFactory</span><span class="o">;</span>
@@ -421,9 +371,11 @@ Click on <code>Edit</code> button in <code>Triggers</code> section.</p>
         <span class="k">return</span> <span class="kd">super</span><span class="o">.</span><span class="na">find</span><span class="o">(</span><span class="n">query</span><span class="o">,</span> <span class="n">entityClass</span><span class="o">,</span> <span class="n">collectionName</span><span class="o">);</span>
     <span class="o">}</span>
 
-<span class="o">}</span></code></pre></div>
-<p>Let&rsquo;s implement simple QueryModifier which will add restriction to return only active documents from Mongo:</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">model.Document</span><span class="o">;</span>
+<span class="o">}</span>
+
+</code></pre></div><p>Let&rsquo;s implement simple QueryModifier which will add restriction to return only active documents from Mongo:</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">
+<span class="kn">import</span> <span class="nn">model.Document</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">org.springframework.data.mongodb.core.query.Criteria</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">org.springframework.data.mongodb.core.query.Query</span><span class="o">;</span>
 
@@ -436,11 +388,12 @@ Click on <code>Edit</code> button in <code>Triggers</code> section.</p>
         <span class="o">}</span>
         <span class="k">return</span> <span class="n">query</span><span class="o">;</span>
     <span class="o">}</span>
-<span class="o">}</span></code></pre></div>
-<p>Next step is to provide our custom implementation of <code>MongoTemplate</code> to Spring Data:</p>
+<span class="o">}</span>
 
+</code></pre></div><p>Next step is to provide our custom implementation of <code>MongoTemplate</code> to Spring Data:</p>
 <p>Example of Spring Configuration:</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@PropertySource</span><span class="o">(</span><span class="s">&#34;classpath:application.properties&#34;</span><span class="o">)</span>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">
+<span class="nd">@PropertySource</span><span class="o">(</span><span class="s">&#34;classpath:application.properties&#34;</span><span class="o">)</span>
 <span class="nd">@EnableMongoRepositories</span><span class="o">(</span>
         <span class="n">basePackages</span> <span class="o">=</span> <span class="s">&#34;model&#34;</span><span class="o">,</span>
         <span class="n">mongoTemplateRef</span> <span class="o">=</span> <span class="s">&#34;mongoTemplate&#34;</span><span class="o">)</span>
@@ -468,8 +421,9 @@ Click on <code>Edit</code> button in <code>Triggers</code> section.</p>
     <span class="o">}</span>
 
     <span class="c1">// creation of Mongo bean omitted.
-</span><span class="c1"></span><span class="o">}</span></code></pre></div>
-<p>That&rsquo;s all for today. If you have any questions - <a href="https://plus.google.com/112372998073079463630/posts" target="_blank">Ask me on Google+</a></p>
+</span><span class="c1"></span><span class="o">}</span>
+
+</code></pre></div><p>That&rsquo;s all for today. If you have any questions - <a href="https://plus.google.com/112372998073079463630/posts">Ask me on Google+</a></p>
 
         
 
@@ -493,8 +447,8 @@ Click on <code>Edit</code> button in <code>Triggers</code> section.</p>
 
         
         <p>Fixed google+ comments disappearing on the site.</p>
-
-<p>Thanks to <a href="http://blog.code-infection.com/2013/04/google-comments-on-your-none-blogger.html" target="_blank">this blog post</a></p>
+<p>Thanks to [this blog post][codeinf]
+[codeinf]: <a href="http://blog.code-infection.com/2013/04/google-comments-on-your-none-blogger.html">http://blog.code-infection.com/2013/04/google-comments-on-your-none-blogger.html</a></p>
 
         
 
@@ -600,7 +554,7 @@ Click on <code>Edit</code> button in <code>Triggers</code> section.</p>
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary site:@LinkageError creator:@LinkageError]"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary creator:@LinkageError site:@LinkageError]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 
@@ -617,7 +571,7 @@ Click on <code>Edit</code> button in <code>Triggers</code> section.</p>
             </li>
         </ul>
     </div>
-    <p>Copyright &copy; 2009&nbsp;—&nbsp;2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+    <p>Copyright &copy; 2009&nbsp;—&nbsp;2020 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
         <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a>, uses custom theme based on
             <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.</span>
     </p>

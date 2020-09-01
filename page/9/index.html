@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html prefix="og: http://ogp.me/ns#" lang="en">
 <head>
-	<meta name="generator" content="Hugo 0.44" />
+	<meta name="generator" content="Hugo 0.74.3" />
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
@@ -135,41 +135,28 @@
 
 
         
-        
-
-<p>Здравствуйте.</p>
-
-<p>Я считаю, что разработчику всегда стоит иметь представление о том, как работают низлежащие абстракции. Хотя бы потому, что часто <a href="http://c2.com/cgi/wiki?LeakyAbstraction">абстракции</a> <a href="http://en.wikipedia.org/wiki/Leaky_abstraction">бывают</a> <a href="http://www.joelonsoftware.com/articles/LeakyAbstractions.html">протекающими</a>.</p>
-
+        <p>Здравствуйте.</p>
+<p>Я считаю, что разработчику всегда стоит иметь представление о том, как работают низлежащие абстракции. Хотя бы потому, что часто <!-- raw HTML omitted -->абстракции<!-- raw HTML omitted --> <!-- raw HTML omitted -->бывают<!-- raw HTML omitted --> <!-- raw HTML omitted -->протекающими<!-- raw HTML omitted -->.</p>
 <p>А веду я это к тому, что когда фреймворк вываливает стектрейс с несколькими вложенными (и, часто, для непосвященных непонятными) исключениями, то бывает непонятно, что с этим делать, особенно, если не знаешь, как реализована абстракция.</p>
-
 <p>Иногда бывает нужно хранить двунаправленные связи между таблицами. Например, есть игрок и есть его статистика и нужно, чтобы каждая из сущностей знала про другую.</p>
-
 <p>Вопрос - каким образом вставлять в базу данных такие сущности?</p>
-
 <p>При вставке в таблицу в <code>Player</code> нам нужно уже иметь запись в таблице <code>Statistics</code>, а для вставки в таблицу <code>Statistics</code> нужно знать идентификатор игрока, к которому относится эта запись.</p>
-
 <p>Выглядит замкнутым кругом, но решение есть.</p>
-
-<p>Во-первых, вставки в обе таблицы должны происходить в рамках одной транзакции (как я <a href="http://www.blogger.com/2009/04/blog-post_24.html">уже писал</a>, транзакция обеспечивает перевод базы данных из одного непротиворечащего состояния в другое непротиворечащее состояние).</p>
-
+<p>Во-первых, вставки в обе таблицы должны происходить в рамках одной транзакции (как я <!-- raw HTML omitted -->уже писал<!-- raw HTML omitted -->, транзакция обеспечивает перевод базы данных из одного непротиворечащего состояния в другое непротиворечащее состояние).</p>
 <p>К сожалению, этого недостаточно:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">BEGIN</span> <span class="n">TRANSACTION</span><span class="p">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">BEGIN</span> <span class="k">TRANSACTION</span><span class="p">;</span>
 
 <span class="k">INSERT</span> <span class="k">INTO</span> <span class="s2">&#34;Player&#34;</span>  <span class="k">VALUES</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">);</span>
 <span class="k">INSERT</span> <span class="k">INTO</span> <span class="s2">&#34;Statistics&#34;</span>  <span class="k">VALUES</span> <span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
 
-<span class="k">COMMIT</span><span class="p">;</span></code></pre></div>
-<p>выдаёт следующую ошибку:</p>
+<span class="k">COMMIT</span><span class="p">;</span>
+</code></pre></div><p>выдаёт следующую ошибку:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">ERROR: insert or update on table <span class="s2">&#34;Player&#34;</span> violates foreign key constraint <span class="s2">&#34;statisticsId&#34;</span>
 SQL state: <span class="m">23503</span>
-Detail: Key <span class="o">(</span>statisticsId<span class="o">)=(</span><span class="m">20</span><span class="o">)</span> is not present in table <span class="s2">&#34;Statistics&#34;</span>.</code></pre></div>
-<p>И снова кажется, что замкнутый круг не разорвать</p>
-
+Detail: Key <span class="o">(</span>statisticsId<span class="o">)=(</span>20<span class="o">)</span> is not present in table <span class="s2">&#34;Statistics&#34;</span>.
+</code></pre></div><p>И снова кажется, что замкнутый круг не разорвать</p>
 <p>Но решение всё же есть.</p>
-
 <p>Многие базы данных позволяют нарушать консистентность базы данных внутри транзакции. В данном случае можно &ldquo;попросить&rdquo; базу данных отложить проверку ссылочной целостности. На примере <code>PostgreSQL</code> рассмотрим, как это работает.</p>
-
 <h3 id="postgresql">PostgreSQL</h3>
 <div class="highlight"><pre class="chroma"><code class="language-postgresql" data-lang="postgresql"><span class="k">begin</span> <span class="k">transaction</span><span class="p">;</span>
 
@@ -180,59 +167,46 @@ Detail: Key <span class="o">(</span>statisticsId<span class="o">)=(</span><span 
 
 <span class="k">set</span> <span class="k">constraints</span> <span class="k">all</span> <span class="k">immediate</span><span class="p">;</span> <span class="c1">-- 2
 </span><span class="c1"></span>
-<span class="k">commit</span><span class="p">;</span> <span class="c1">-- 3</span></code></pre></div>
-<p>1 - Сделать все ограничения отложенными. Ограничения будут проверены в момент проведения фиксации транзакции (в строке 3)</p>
-
+<span class="k">commit</span><span class="p">;</span> <span class="c1">-- 3
+</span></code></pre></div><p>1 - Сделать все ограничения отложенными. Ограничения будут проверены в момент проведения фиксации транзакции (в строке 3)</p>
 <p>2 - Явно делаем все ограничения немедленными. В данном примере это необязательно, так как в 3) они всё равно будут проверены.</p>
-
 <p>После выполнения данного кода получаем:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">Query returned successfully with no result in <span class="m">24</span> ms.</code></pre></div>
-<p>Это уже полностью рабочий пример, чтобы это заработало нужно явно сделать ограничения отложенными - они должны быть объявлены как <code>DEFERRED</code>. Официальная документация к PostgreSQL гласит:</p>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">Query returned successfully with no result in <span class="m">24</span> ms.
+</code></pre></div><p>Это уже полностью рабочий пример, чтобы это заработало нужно явно сделать ограничения отложенными - они должны быть объявлены как <code>DEFERRED</code>. Официальная документация к PostgreSQL гласит:</p>
 <blockquote>
 <p>Upon creation, a constraint is given one of three characteristics: DEFERRABLE INITIALLY DEFERRED, DEFERRABLE INITIALLY IMMEDIATE, or NOT DEFERRABLE. The third class is always IMMEDIATE and is not affected by the SET CONSTRAINTS command. The first two classes start every transaction in the indicated mode, but their behavior can be changed within a transaction by SET CONSTRAINTS.</p>
 </blockquote>
-
 <p>Так что необходимо также модифицировать объявления ограничений:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="s2">&#34;Player&#34;</span>
 <span class="k">ADD</span> <span class="k">CONSTRAINT</span> <span class="s2">&#34;statisticsId&#34;</span> <span class="k">FOREIGN</span> <span class="k">KEY</span> <span class="p">(</span><span class="s2">&#34;statisticsId&#34;</span><span class="p">)</span>
 <span class="k">REFERENCES</span> <span class="s2">&#34;Statistics&#34;</span> <span class="p">(</span><span class="s2">&#34;statisticsId&#34;</span><span class="p">)</span> <span class="k">MATCH</span> <span class="k">SIMPLE</span>
-<span class="k">ON</span> <span class="k">UPDATE</span> <span class="k">NO</span> <span class="n">ACTION</span> <span class="k">ON</span> <span class="k">DELETE</span> <span class="k">NO</span> <span class="n">ACTION</span> <span class="k">DEFERRABLE</span> <span class="k">INITIALLY</span> <span class="k">IMMEDIATE</span><span class="p">;</span></code></pre></div>
-<p>Данный пример был приведён для PostgreSQL.</p>
+<span class="k">ON</span> <span class="k">UPDATE</span> <span class="k">NO</span> <span class="n">ACTION</span> <span class="k">ON</span> <span class="k">DELETE</span> <span class="k">NO</span> <span class="n">ACTION</span> <span class="k">DEFERRABLE</span> <span class="k">INITIALLY</span> <span class="k">IMMEDIATE</span><span class="p">;</span>
 
+</code></pre></div><p>Данный пример был приведён для PostgreSQL.</p>
 <p>Для других баз данных решения следующие:</p>
-
 <h3 id="sybase">Sybase</h3>
-
-<p>В Sybase есть переменная <a href="http://manuals.sybase.com/onlinebooks/group-sasarc/awg0600e/dbugen6/@Generic__BookTextView/26075;hf=0;pt=25811">WAIT_FOR_COMMIT</a>, которая управляет поведением проверки ограничений. По умолчанию она отключена. Кроме того, это поведение можно переопределить при объявлении можно указывать CHECK ON COMMIT. Подробнее можно посмотреть в <a href="http://manuals.sybase.com/onlinebooks/group-pbarc/conn5/sqlug/@Generic__BookTextView/39397%3Bpt=39951">официальной документации</a>.</p>
-
+<p>В Sybase есть переменная <!-- raw HTML omitted -->WAIT_FOR_COMMIT<!-- raw HTML omitted -->, которая управляет поведением проверки ограничений. По умолчанию она отключена. Кроме того, это поведение можно переопределить при объявлении можно указывать CHECK ON COMMIT. Подробнее можно посмотреть в <!-- raw HTML omitted -->официальной документации<!-- raw HTML omitted -->.</p>
 <h3 id="oracle">Oracle</h3>
-
 <p>Также, как и в PostgreSQL:</p>
-
 <blockquote>
 <p>You can define constraints as either deferrable or not deferrable, and either initially deferred or initially immediate. These attributes can be different for each constraint. You specify them with keywords in the CONSTRAINT clause:
 DEFERRABLE or NOT DEFERRABLE
 INITIALLY DEFERRED or INITIALLY IMMEDIATE</p>
-
-<p>Constraints can be added, dropped, enabled, disabled, or validated. You can also modify a constraint&rsquo;s attributes.<br /></p>
 </blockquote>
-
-<p>Подробнее в <a href="http://download.oracle.com/docs/cd/B10501_01/server.920/a96524/c22integ.htm#4666">официльной документации</a>.</p>
-
+<blockquote>
+<p>Constraints can be added, dropped, enabled, disabled, or validated. You can also modify a constraint&rsquo;s attributes.<!-- raw HTML omitted --></p>
+</blockquote>
+<p>Подробнее в <!-- raw HTML omitted -->официльной документации<!-- raw HTML omitted -->.</p>
 <h2 id="mysql">MySQL</h2>
-
 <p>К сожалению, mySQL не имеет возможности отложенной проверки ограничении, о чём в документации и сказано:</p>
-
 <blockquote>
 <p>Deviation from SQL standards: Like MySQL in general, in an SQL statement that inserts, deletes, or updates many rows, InnoDB checks UNIQUE and FOREIGN KEY constraints row-by-row. According to the SQL standard, the default behavior should be deferred checking. That is, constraints are only checked after the entire SQL statement has been processed. Until InnoDB implements deferred constraint checking, some things will be impossible, such as deleting a record that refers to itself via a foreign key.</p>
 </blockquote>
-
 <p>Но это не конец света, так как можно отключить проверку внешних ключей:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SET</span> <span class="n">foreign_key_checks</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 <span class="c1">-- code goes here
-</span><span class="c1"></span><span class="k">SET</span> <span class="n">foreign_key_checks</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span></code></pre></div>
-<p>Чем эта информация может быть полезна для разработчика? Например, в случае, если ошибки и недоработки Hibernate покажут себя в виде стектрейса в логе(например, <a href="http://opensource.atlassian.com/projects/hibernate/browse/HHH-2248">HHH-2248</a>), то разработчик будет понимать причину ошибки и то, как реализовать work-around.</p>
+</span><span class="c1"></span><span class="k">SET</span> <span class="n">foreign_key_checks</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</code></pre></div><p>Чем эта информация может быть полезна для разработчика? Например, в случае, если ошибки и недоработки Hibernate покажут себя в виде стектрейса в логе(например, <!-- raw HTML omitted -->HHH-2248<!-- raw HTML omitted -->), то разработчик будет понимать причину ошибки и то, как реализовать work-around.</p>
 
         
 
@@ -255,12 +229,9 @@ INITIALLY DEFERRED or INITIALLY IMMEDIATE</p>
 
 
         
-        <p>Так получилось, что в последнее время я стал пользоваться небезызвестной <a href="http://www.opera.com">оперой</a>.</p>
-
-<p>В связи с этим я стал искать замену часто используемым расширениям, одно из них - delicious bookmarks. Сервис <a href="http://delicious.com">del.icio.us</a> предоставляет букмарклеты для различных браузеров, которые позволяют сохранять закладки быстро и удобно. Вот только есть один недостаток - <a href="https://addons.mozilla.org/en-US/firefox/addon/3615">официальный плагин для Firefox</a> в свойство Notes новой закладки добавляет выделенный текст со страницы, чего букмарклет не делает.</p>
-
+        <p>Так получилось, что в последнее время я стал пользоваться небезызвестной <!-- raw HTML omitted -->оперой<!-- raw HTML omitted -->.</p>
+<p>В связи с этим я стал искать замену часто используемым расширениям, одно из них - delicious bookmarks. Сервис <!-- raw HTML omitted -->del.icio.us<!-- raw HTML omitted --> предоставляет букмарклеты для различных браузеров, которые позволяют сохранять закладки быстро и удобно. Вот только есть один недостаток - <!-- raw HTML omitted -->официальный плагин для Firefox<!-- raw HTML omitted --> в свойство Notes новой закладки добавляет выделенный текст со страницы, чего букмарклет не делает.</p>
 <p>Посмотрев исходник букмарклета, а это обычный javascript, я добавил небольшой кусочек кода, который восстанавливает справедливость и тоже добавляет в поле Notes текст, выделенный на странице.</p>
-
 <p>Ниже привожу изменённый код букмарклета:</p>
 <div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">javascript</span><span class="o">:</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span><span class="nx">f</span><span class="o">=</span><span class="s1">&#39;http://delicious.com/save?url=&#39;</span><span class="o">+</span><span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">href</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;&amp;title=&#39;</span><span class="o">+</span><span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">title</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;&amp;notes=&#39;</span><span class="o">+</span><span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getSelection</span><span class="p">())</span><span class="o">+</span><span class="s1">&#39;&amp;v=5&amp;&#39;</span><span class="p">;</span><span class="nx">a</span><span class="o">=</span><span class="kd">function</span><span class="p">(){</span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nb">window</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="nx">f</span><span class="o">+</span><span class="s1">&#39;noui=1&amp;jump=doclose&#39;</span><span class="p">,</span><span class="s1">&#39;deliciousuiv5&#39;</span><span class="p">,</span><span class="s1">&#39;location=yes,links=no,scrollbars=no,toolbar=no,width=550,height=550&#39;</span><span class="p">))</span><span class="nx">location</span><span class="p">.</span><span class="nx">href</span><span class="o">=</span><span class="nx">f</span><span class="o">+</span><span class="s1">&#39;jump=yes&#39;</span><span class="p">};</span><span class="k">if</span><span class="p">(</span><span class="sr">/Firefox/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">navigator</span><span class="p">.</span><span class="nx">userAgent</span><span class="p">)){</span><span class="nx">setTimeout</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="mi">0</span><span class="p">)}</span><span class="k">else</span><span class="p">{</span><span class="nx">a</span><span class="p">()}})()</span>
 </code></pre></div>
@@ -285,17 +256,7 @@ INITIALLY DEFERRED or INITIALLY IMMEDIATE</p>
 
 
         
-        
-
-<p><h1>Архитектура сгенерированного приложения</h1>
-Spring Roo активно использует аспекты. В качестве реализации аспектов была взята библиотека <a href="http://www.eclipse.org/aspectj/">aspectj</a>.
-Большая часть сгенерированного кода попадает в отдельные файлы-аспекты.
-Создадим простой класс:</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">new persistent class jpa -name ~.domain.Action -testAutomatically
-add field string name -notNull -sizeMin <span class="m">1</span> -sizeMax <span class="m">80</span>
-add field string description -sizeMax <span class="m">1024</span></code></pre></div>
-<p>Spring Roo создаст нам следующие файлы:</p>
-
+        <!-- raw HTML omitted -->
 <ul>
 <li><strong>Action.java</strong>
 Класс содержит только полезную с точки зрения назначения класса информацию. По сути, то, что вводит разработчик в консоль Roo аккумулируется здесь. Весь дополнительный код разносится по другим классам.</li>
@@ -313,24 +274,22 @@ add field string description -sizeMax <span class="m">1024</span></code></pre></
 
 <span class="nd">@Size</span><span class="o">(</span><span class="n">max</span> <span class="o">=</span> <span class="n">1024</span><span class="o">)</span>
 <span class="kd">private</span> <span class="n">String</span> <span class="n">description</span><span class="o">;</span>
-<span class="o">}</span></code></pre></div>
-<p>Мы видим, что:</p>
-
+<span class="o">}</span>
+</code></pre></div><p>Мы видим, что:</p>
 <ol>
 <li>Класс является JPA-сущностью.</li>
 <li>Аннотация <code>@RooJavaBean</code> говорит, что этот класс - обычный Java-бин.</li>
 <li>Аннотация <code>@RooToString</code> говорит, что у этого класса есть перегруженный метод toString().</li>
 <li>Аннотация <code>@RooEntity</code> говорит что класс является JPA-сущностью.</li>
 </ol>
-
 <ul>
 <li><strong>Action_Roo_Configurable.aj</strong>
 Данный аспект говорит, что класс Action является конфигурируемым через Spring.</li>
 </ul>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">privileged</span> <span class="n">aspect</span> <span class="n">Action_Roo_Configurable</span> <span class="o">{</span>
-<span class="n">declare</span> <span class="nd">@type</span><span class="o">:</span> <span class="nl">Action:</span> <span class="nd">@org.springframework.beans.factory.annotation.Configurable</span><span class="o">;</span>
-<span class="o">}</span></code></pre></div>
-<ul>
+<span class="n">declare</span> <span class="nd">@type</span><span class="o">:</span> <span class="n">Action</span><span class="o">:</span> <span class="nd">@org.springframework.beans.factory.annotation.Configurable</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div><ul>
 <li><strong>Action_Roo_Entity.aj</strong>
 В данном классе собраны все методы DAO для работы с классом Action.</li>
 </ul>
@@ -409,9 +368,8 @@ add field string description -sizeMax <span class="m">1024</span></code></pre></
 <span class="k">return</span> <span class="k">new</span> <span class="n">Action</span><span class="o">().</span><span class="na">entityManager</span><span class="o">.</span><span class="na">createQuery</span><span class="o">(</span><span class="s">&#34;select o from Action o&#34;</span><span class="o">).</span><span class="na">setFirstResult</span><span class="o">(</span><span class="n">firstResult</span><span class="o">).</span><span class="na">setMaxResults</span><span class="o">(</span><span class="n">maxResults</span><span class="o">).</span><span class="na">getResultList</span><span class="o">();</span>
 <span class="o">}</span>
 
-<span class="o">}</span></code></pre></div>
-<p>Как легко видеть, этот аспект добавляет классу Action CRUD-методы, поля id и version.</p>
-
+<span class="o">}</span>
+</code></pre></div><p>Как легко видеть, этот аспект добавляет классу Action CRUD-методы, поля id и version.</p>
 <ul>
 <li><strong>Action_Roo_Finder.aj</strong>
 Этот аспект аккумулирует все finder-методы, созданные через консоль Spring Roo.</li>
@@ -425,8 +383,8 @@ add field string description -sizeMax <span class="m">1024</span></code></pre></
 <span class="k">return</span> <span class="n">q</span><span class="o">;</span>
 <span class="o">}</span>
 
-<span class="o">}</span></code></pre></div>
-<ul>
+<span class="o">}</span>
+</code></pre></div><ul>
 <li><strong>Action_Roo_JavaBean.aj</strong>
 Для уменьшения загромождения кода ненужными методами для доступа к полям Spring Roo выносит их в отдельный аспект.</li>
 </ul>
@@ -448,8 +406,8 @@ add field string description -sizeMax <span class="m">1024</span></code></pre></
 <span class="k">this</span><span class="o">.</span><span class="na">description</span> <span class="o">=</span> <span class="n">description</span><span class="o">;</span>
 <span class="o">}</span>
 
-<span class="o">}</span></code></pre></div>
-<ul>
+<span class="o">}</span>
+</code></pre></div><ul>
 <li><strong>Action_Roo_Plural.aj</strong>
 В данном аспекте можно определить, как созданная сущность выглядит во множественном числе.</li>
 </ul>
@@ -473,8 +431,8 @@ add field string description -sizeMax <span class="m">1024</span></code></pre></
 <span class="k">this</span><span class="o">.</span><span class="na">description</span> <span class="o">=</span> <span class="n">description</span><span class="o">;</span>
 <span class="o">}</span>
 
-<span class="o">}</span></code></pre></div>
-<ul>
+<span class="o">}</span>
+</code></pre></div><ul>
 <li><strong>Action_Roo_ToString.aj</strong>
 Аспект, переопределяющий <code>toString()</code></li>
 </ul>
@@ -489,8 +447,8 @@ add field string description -sizeMax <span class="m">1024</span></code></pre></
 <span class="k">return</span> <span class="n">sb</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
 <span class="o">}</span>
 
-<span class="o">}</span></code></pre></div>
-<ul>
+<span class="o">}</span>
+</code></pre></div><ul>
 <li><strong>ActionEditor.java</strong>
 Кроме того, при создании контроллеров для работы дополнительно создается <code>ActionEditor</code></li>
 </ul>
@@ -498,14 +456,14 @@ add field string description -sizeMax <span class="m">1024</span></code></pre></
 
 <span class="nd">@RooEditor</span><span class="o">(</span><span class="n">providePropertyEditorFor</span> <span class="o">=</span> <span class="n">Action</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ActionEditor</span> <span class="o">{</span>
-<span class="o">}</span></code></pre></div>
-<ul>
+<span class="o">}</span>
+</code></pre></div><ul>
 <li><strong>ActionEditor_Roo_Editor.aj</strong>
 Аспект с реализацией.</li>
 </ul>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">privileged</span> <span class="n">aspect</span> <span class="n">ActionEditor_Roo_Editor</span> <span class="o">{</span>
 
-<span class="n">declare</span> <span class="nl">parents:</span> <span class="n">ActionEditor</span> <span class="kd">implements</span> <span class="n">java</span><span class="o">.</span><span class="na">beans</span><span class="o">.</span><span class="na">PropertyEditorSupport</span><span class="o">;</span>
+<span class="n">declare</span> <span class="n">parents</span><span class="o">:</span> <span class="n">ActionEditor</span> <span class="kd">implements</span> <span class="n">java</span><span class="o">.</span><span class="na">beans</span><span class="o">.</span><span class="na">PropertyEditorSupport</span><span class="o">;</span>
 
 <span class="n">org</span><span class="o">.</span><span class="na">springframework</span><span class="o">.</span><span class="na">beans</span><span class="o">.</span><span class="na">SimpleTypeConverter</span> <span class="n">ActionEditor</span><span class="o">.</span><span class="na">typeConverter</span> <span class="o">=</span> <span class="k">new</span> <span class="n">org</span><span class="o">.</span><span class="na">springframework</span><span class="o">.</span><span class="na">beans</span><span class="o">.</span><span class="na">SimpleTypeConverter</span><span class="o">();</span>
 
@@ -532,33 +490,23 @@ add field string description -sizeMax <span class="m">1024</span></code></pre></
  <span class="n">setValue</span><span class="o">(</span><span class="n">org</span><span class="o">.</span><span class="na">academ</span><span class="o">.</span><span class="na">uthark</span><span class="o">.</span><span class="na">research</span><span class="o">.</span><span class="na">roo</span><span class="o">.</span><span class="na">domain</span><span class="o">.</span><span class="na">Action</span><span class="o">.</span><span class="na">findAction</span><span class="o">(</span><span class="n">identifier</span><span class="o">));</span> 
 <span class="o">}</span>
 
-<span class="o">}</span></code></pre></div>
-<h3 id="а-где-же-equals-hashcode">А где же equals()/hashCode()?</h3>
+<span class="o">}</span>
 
+</code></pre></div><h3 id="а-где-же-equalshashcode">А где же equals()/hashCode()?</h3>
 <p>Легко заметить, что Spring Roo забыл ещё про один важный аспект - про реализацию методов <code>equals()</code> и <code>hashCode()</code>. К релизу, я думаю, эта недоработка будет исправлена.</p>
-
 <p>Как видно, код скрипта для генерации весьма и весьма лаконичен, а получающий java-код наглядно показывает всю многословность языка Java.</p>
-
 <h3 id="apache-maven-integration">Apache Maven integration</h3>
-
 <p>Spring Roo при создании проекта создаёт pom.xml, хорошо знакомый всем работавшим с maven. Кроме того, консоль позволяет добавлять и удалять зависимости, не правя файл вручную.</p>
-
 <h3 id="расширения">Расширения</h3>
-
-<p>Spring Roo поддерживает расширения, что ещё больше даёт возможностей. На сегодняшний день написано уже как минимум одно расширение - <a href="http://jira.springframework.org/browse/ROO-41">Sitemesh Addon</a>.</p>
-
+<p>Spring Roo поддерживает расширения, что ещё больше даёт возможностей. На сегодняшний день написано уже как минимум одно расширение - <!-- raw HTML omitted -->Sitemesh Addon<!-- raw HTML omitted -->.</p>
 <h3 id="критика">Критика</h3>
-
 <p>В первую очередь критика относится к текущему релизу, а так как он ещё в глубокой альфе, то все может измениться к официальному релизу.</p>
-
 <ol>
 <li>Нет возможности подставлять свои JSP-шаблоны для сгенерированного CRUD</li>
 <li>В сгенерированном коде есть ошибки, например, если заводим поле типа флоат, создаём контроллер, то при редактировании сущности возможна следующая ошибка: вводим достаточно большое число (1234567), сохраняем сущность, открываем на редактирование. В поле, хранящем флоат получаем 1.23456E7, и после этого невозможно сохранить сущность, так как получаем ошибку валидации.</li>
 <li>Ещё одна ошибка связана с отношением один ко многим. Создаём пару сущностей с таким отношением. Запускаем, пробуем создать сущность. Roo умничает, если нет связанных сущностей в БД, то он даже не генерирует <code>&lt;select&gt;</code></li>
 </ol>
-
 <h3 id="вывод">Вывод</h3>
-
 <p>В целом, Spring Roo достойное начинание, но пользоваться им в Production можно будет ещё нескоро.</p>
 
         
@@ -582,12 +530,8 @@ add field string description -sizeMax <span class="m">1024</span></code></pre></
 
 
         
-        <p><a href="http://blog.springsource.com/2009/05/01/roo-part-1/">Недавно</a> компания <a href="http://springsource.com/">Spring Source</a> презентовала новый продукт - <a href="http://www.springsource.org/roo">Spring Roo</a>. <a href="http://jira.springframework.org/browse/ROO-1">Цель проекта</a> - повысить продуктивность Java-разработчиков. <a href="http://stsmedia.net/introducing-spring-roo/">Почитав</a> <a href="http://stsmedia.net/introducing-spring-roo-part-2-security-jms-email-support/">обзоры</a>, а также <a href="http://blog.springsource.com/2009/05/27/roo-part-2/">потрогав его руками</a> можно сделать вывод о том, что это, в некотором виде, альтернатива <a href="http://appfuse.org/">AppFuse</a> и <a href="http://grails.codehaus.org/">Grails</a>.</p>
-
-<p><h2>Описание Spring Roo</h2><li>100% программирование на Java, предлагающее разработчикам известную, развитую и популярную платформу разработки.</li><li>Прозрачные, надёжные и продуктивные сервисы среды разработки, такие как помощник кода, отладчики, визуальные отчёты об ошибка и т.д.</li><li>Экстремально эффективная производительность во время выполнения, безопасность типов и отсутствие зависимостей на Roo во время выполнения.</li><li>Автоматическая архитектура с использование лучших практик Spring Framework 3
-</li><li>Структура проекта основана на <a href="http://maven.apache.org/">Maven2</a>.</li><li>Работа с БД основана на <a href="http://java.sun.com/javaee/technologies/entapps/persistence.jsp">JPA</a> (например, через <a href="http://www.hibernate.org/">Hibernate</a>), 100% совместимость с JPA и переносимость реализации.</li><li>Встроенная поддержка конфигурирования баз данных, с автоматической настройкой JDBC для большинства популярных баз данных.</li><li>Прозрачная поддержка внедрения зависимостей (dependency injection) и методов сохранения для всех сущностей, включая полученные через JPA.</li><li>Поддержка валидации бинов (<a href="http://jcp.org/en/jsr/detail?id=303">JSR 303</a>), включая распространение ограничений вплость до DDL базы данных.</li><li>Автоматические интеграционные тесты на <a href="http://junit.org">JUnit</a>, которые создаются на базе возможностей интеграционного тестирования Spring Framework.</li><li>Автоматическая поддержка REST на уровне бэкэнда.</li><li>Автоматизированные тесты для веб-слоя с использованием <a href="http://seleniumhq.org/">Selenium</a>.</li><li>Динамическое создание finder-методов на JPA QL для сущностей безо всякого кодирования.</li><li>Интеграция <a href="http://static.springsource.org/spring-security/site/">Spring Security</a>, включая безопасность адресов с установкой в одну строку (&ldquo;install security&rdquo;)
-</li><li>Поддеркжа <a href="http://www.springsource.org/webflow">Spring Web Flow</a> одной командой (&ldquo;install web flow&rdquo;)</li><li>Поддержка мгновенной отправки почтовых сообщение - даже через удалённые SMTP сервера, как GMail.</li><li>Встроенная поддержка конфигурирования <a href="http://logging.apache.org/log4j">log4j</a></li><li>Использование URL rewriting которое позволяет оставаться ссылкам чистыми и поддерживающими REST.
-</li><li>Лёгкое ручное создание веб-контроллеров</li><li>Поддержка полного цикла жизни приложения с сохранением высокой продуктивности.</li><li>Использование встроенного сервлет контейнера <a href="http://tomcat.apache.org">Tomcat</a>.</li><li>Полная интеграция с <a href="http://eclipse.org">Eclipse</a> и <a href="http://www.springsource.com/products/sts">SpringSource Tool Suite</a></li><li>Лёгкая в использовании, с поддержка автодополнения, подсказок и контекста командная строка</li><li>Поддержка автоматизации через скрипты</li></p>
+        <p><!-- raw HTML omitted -->Недавно<!-- raw HTML omitted --> компания <!-- raw HTML omitted -->Spring Source<!-- raw HTML omitted --> презентовала новый продукт - <!-- raw HTML omitted -->Spring Roo<!-- raw HTML omitted -->. <!-- raw HTML omitted -->Цель проекта<!-- raw HTML omitted --> - повысить продуктивность Java-разработчиков. <!-- raw HTML omitted -->Почитав<!-- raw HTML omitted --> <!-- raw HTML omitted -->обзоры<!-- raw HTML omitted -->, а также <!-- raw HTML omitted -->потрогав его руками<!-- raw HTML omitted --> можно сделать вывод о том, что это, в некотором виде, альтернатива <!-- raw HTML omitted -->AppFuse<!-- raw HTML omitted --> и <!-- raw HTML omitted -->Grails<!-- raw HTML omitted -->.</p>
+<!-- raw HTML omitted -->
 
         
 
@@ -610,18 +554,15 @@ add field string description -sizeMax <span class="m">1024</span></code></pre></
 
 
         
-        <p>Столкнулся с такой проблемой - в некоторых случаях приложение, собранное антом не работает. Конкретно - не работает десереализация запросов на веб-сервис. Получаемый запрос содержит <tt>null</tt> в значениях полей.</p>
-
-<p>Опытным путём было выяснено, что на это влияет используемая версия Java. Под 1.5 работает корректно, под 1.6 - не работает. Нашли <a href="https://jaxb.dev.java.net/guide/Runtime_Errors.html#Illegal_class_modifiers_for_package_info__0x1600">ошибку в метро</a>, связанную именно с версией JDK и на этом успокоились. Но было одно исключение из правил. У одного из разработчиков под 1.5 тоже не работало.</p>
-
+        <p>Столкнулся с такой проблемой - в некоторых случаях приложение, собранное антом не работает. Конкретно - не работает десереализация запросов на веб-сервис. Получаемый запрос содержит <!-- raw HTML omitted -->null<!-- raw HTML omitted --> в значениях полей.</p>
+<p>Опытным путём было выяснено, что на это влияет используемая версия Java. Под 1.5 работает корректно, под 1.6 - не работает. Нашли <!-- raw HTML omitted -->ошибку в метро<!-- raw HTML omitted -->, связанную именно с версией JDK и на этом успокоились. Но было одно исключение из правил. У одного из разработчиков под 1.5 тоже не работало.</p>
 <p>Как выяснилось позже, виноват был во всё Ant.
 Metro создавал файл package-info.java, в котором было примерно следующее содержание:</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@javax.xml.bind.annotation.XmlSchema</span><span class="o">(</span>
     <span class="n">namespace</span> <span class="o">=</span> <span class="s">&#34;http://z.y.x.com&#34;</span><span class="o">,</span> 
     <span class="n">elementFormDefault</span><span class="o">=</span><span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">bind</span><span class="o">.</span><span class="na">annotation</span><span class="o">.</span><span class="na">XmlNsForm</span><span class="o">.</span><span class="na">UNQUALIFIED</span><span class="o">)</span>
-<span class="kn">package</span> <span class="nn">com.x.y.z</span><span class="o">;</span></code></pre></div>
-<p>Ант, в свою очередь, должен был этот файл компилировать. А <a href="http://ant.apache.org/manual/CoreTasks/javac.html">в реальности этого не происходило</a>, поэтому Metro не мог корректно отобразить XML-запрос на объекты доменной области.</p>
-
+<span class="kn">package</span> <span class="nn">com.x.y.z</span><span class="o">;</span>
+</code></pre></div><p>Ант, в свою очередь, должен был этот файл компилировать. А <!-- raw HTML omitted -->в реальности этого не происходило<!-- raw HTML omitted -->, поэтому Metro не мог корректно отобразить XML-запрос на объекты доменной области.</p>
 <p>Решение было немного кривым, но при этом поразительно простым - принудительный вызов javac на файлах <code>package-info.java</code>.</p>
 
         
@@ -646,9 +587,7 @@ Metro создавал файл package-info.java, в котором было п
 
         
         <p>Недавно задали мне вопрос - что я думаю об использовании модификатора protected для членов базового класса? Под этим вопросом кроются более серьёзные вещи.</p>
-
 <p>Например, любой член класса, имеющий модификатор protected, расширяет интерфейс базового класса для подклассов - подклассы имеют доступ ко всем protected и public методам этого поля. Иногда это сделано специально, например, для того, чтобы подклассы могли иметь доступ к какой-либо функциональности. Однако, если подкласс будет использовать protected поля неправильно (например, он может установить его в null, нарушив, таким образом, поведение базового класса), то это не принесёт пользы.</p>
-
 <p>Поразмыслив над вопросом я пришел к следующему, достаточно логичному и широкоизвестному выводу - необходимо давать наиболее закрытый доступ, какой можно. То есть, если можно объявить член класса как private, то необходимо сделать его private. Если в подклассах необходим доступ к члену класса, то необходимо проанализировать, какие методы нужны в подклассах и открыть только их через делегирование. Если набор методов заранее неизвестен, то можно сделать protected getter для поля.</p>
 
         
@@ -673,27 +612,11 @@ Metro создавал файл package-info.java, в котором было п
 
         
         <p>Причин для написания плохого кода может быть несколько. Некоторые из них лежат на поверхности:</p>
-
-<p><ol><li>  Отсутствие опыта</li><li>Невнимательность</li><li>  Некомпетентность</li><li>  Немотивированность
-</li></ol><span style="font-weight: bold;">Отсутствие опыта</span> - казалось бы, самая простая причина проблемы; решение проблемы выглядит очевидным - со временем, разработчик будет писать код лучше. Но это ошибочное мнение. Бывает, люди с опытом более 5-10 лет разработки коммерческих приложений пишут настолько плохой код, что иногда кажется, что они это нарочно. Решать эту проблему необходимо постоянным указанием на ошибки. Но это решит только часть проблемы - человек узнает, как писать код в конкретных ситуациях. Но не всякий разработчик (к сожалению, по опыту знаю) сможет экстраполировать знание на все подобные проблемы способ решения.</p>
-
-<p><span style="font-weight: bold;">Невнимательность</span> - через это проходят почти все. Почти каждый сможет вспомнить случай, когда не был сделан <tt>svn add</tt> перед коммитом. Эта проблема решается обычно самомотивацией человека на хороший код. Впрочем, команда и сервер непрерывной интеграции тоже прилагают усилия для того, чтобы человек проверил ещё раз то, что он хочет выложить в репозиторий.</p>
-
-<p><span style="font-weight: bold;">Некомпетентность</span> - эта причина пересекается с недостатком опыта, но, при этом отлична от неё. Адекватный разработчик, на мой взгляд, должен стремиться к компетентности в той области, в которой он работает. Но этого, к сожалению часто не происходит. На мой взгляд это из-за следующей причины.</p>
-
-<p><span style="font-weight: bold;">Немотивированность</span>. Самое большое зло, которое может быть. Причины недостаточной мотивации разработчика могут быть весьма разнообразными - не выспался, дома проблемы, зарплата низкая, задача скучная и неинтересная. Список можно продолжать до бесконечности. Решение этой проблемы кроется, в первую очередь, в качественном управлении. Менеджер должен быть тонким и хорошим психологом, чтобы видеть или чувствовать все эти проблемы и предотвращать их.</div>
-<h2>Comments</h2>
-<div class='comments'>
-<div class='comment'>
-<div class='author'>uthark</div>
-<div class='content'>
-Увы, далеко не всякая это делает. Например, ни Eclipse, ни Jetbrains IDEA не предлагают тебе этого. Хотя и могут показать файлы, которые не были добавлены. В случае с idea у неё есть ещё один неприятный момент - не показывает в момент коммита библиотеки, которые не были добавлены. Пару раз натыкался на такую проблему. Правда, сервер непрерывной интеграции быстро нотифицировал о ней. :)</div>
-</div>
-<div class='comment'>
-<div class='author'>Ivan</div>
-<div class='content'>
-&gt;Почти каждый сможет вспомнить случай, <br />&gt;когда не был сделан svn add перед коммитом. <br /><br />хорошая среда разработки предупреждает разработчика о том, что он хочет сделать хуйню %)</div>
-</div></p>
+<!-- raw HTML omitted -->
+<p><!-- raw HTML omitted -->Невнимательность<!-- raw HTML omitted --> - через это проходят почти все. Почти каждый сможет вспомнить случай, когда не был сделан <!-- raw HTML omitted -->svn add<!-- raw HTML omitted --> перед коммитом. Эта проблема решается обычно самомотивацией человека на хороший код. Впрочем, команда и сервер непрерывной интеграции тоже прилагают усилия для того, чтобы человек проверил ещё раз то, что он хочет выложить в репозиторий.</p>
+<p><!-- raw HTML omitted -->Некомпетентность<!-- raw HTML omitted --> - эта причина пересекается с недостатком опыта, но, при этом отлична от неё. Адекватный разработчик, на мой взгляд, должен стремиться к компетентности в той области, в которой он работает. Но этого, к сожалению часто не происходит. На мой взгляд это из-за следующей причины.</p>
+<p><!-- raw HTML omitted -->Немотивированность<!-- raw HTML omitted -->. Самое большое зло, которое может быть. Причины недостаточной мотивации разработчика могут быть весьма разнообразными - не выспался, дома проблемы, зарплата низкая, задача скучная и неинтересная. Список можно продолжать до бесконечности. Решение этой проблемы кроется, в первую очередь, в качественном управлении. Менеджер должен быть тонким и хорошим психологом, чтобы видеть или чувствовать все эти проблемы и предотвращать их.<!-- raw HTML omitted --></p>
+<!-- raw HTML omitted -->
 
         
 
@@ -799,7 +722,7 @@ Metro создавал файл package-info.java, в котором было п
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[site:@LinkageError creator:@LinkageError card:summary]"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary creator:@LinkageError site:@LinkageError]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 
@@ -816,7 +739,7 @@ Metro создавал файл package-info.java, в котором было п
             </li>
         </ul>
     </div>
-    <p>Copyright &copy; 2009&nbsp;—&nbsp;2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+    <p>Copyright &copy; 2009&nbsp;—&nbsp;2020 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
         <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a>, uses custom theme based on
             <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.</span>
     </p>

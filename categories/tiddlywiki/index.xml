@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Tiddlywiki on Sharing knowledge</title>
+    <title>tiddlywiki on Sharing knowledge</title>
     <link>https://uthark.github.io/categories/tiddlywiki/</link>
-    <description>Recent content in Tiddlywiki on Sharing knowledge</description>
+    <description>Recent content in tiddlywiki on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 21 Mar 2010 20:54:00 +0000</lastBuildDate>
@@ -17,10 +17,7 @@
       <pubDate>Sun, 21 Mar 2010 20:54:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2010/03/21/tiddlywiki/</guid>
-      <description>Summary: Пример разработки плагина для TiddlyWiki
-Вступление TiddlyWiki - это вики-движок, полностью написанный на JavaScript и хранящийся в одном файле (как сам движок, так и содержимое). Создатели позиционируют его как &amp;quot;переиспользуемую нелинейную персональную веб записную книжку&amp;quot;.
-Я давно использую TiddlyWiki в различных целях:
-По прямому назначению. Как систему GTD. Как домашнюю страницу на компьютере.  Моя домашняя страница на компьютере - это, если говорить терминами TiddlyWiki, тиддлер, содержащий ссылки на страницы, которые я часто посещаю.</description>
+      <description>/*{{{*/ version.extensions.faviconLinkMacro = {major: 0, minor: 1, revision: 0, date: new Date(2010,3,21)}; // Author: Oleg Atamanenko config.macros.faviconLink = {} config.macros.faviconLink.handler = function(place, macroName, params, wikifier, paramString) { var linkBox = createTiddlyElement(place, &amp;amp;quot;span&amp;amp;quot;, null, &amp;amp;quot;favIcon&amp;amp;quot;, &amp;amp;quot;&amp;amp;quot;); var args = paramString.parseParams(&amp;amp;quot;list&amp;amp;quot;,null,true); var link = getParam(args, &amp;amp;quot;link&amp;amp;quot;, &amp;#39;false&amp;#39;); if (link != &amp;#39;false&amp;#39;){ urlParts = link.split(&amp;#39;/&amp;#39;); imgLink = urlParts[0] + &amp;amp;quot;//&amp;amp;quot; + urlParts[2] + &amp;amp;quot;/favicon.ico&amp;amp;quot;;  var imgElement = createTiddlyElement(linkBox, &amp;amp;quot;img&amp;amp;quot;, null, &amp;amp;quot;faviconImage&amp;amp;quot;, &amp;amp;quot;&amp;amp;quot;); imgElement.</description>
     </item>
     
   </channel>

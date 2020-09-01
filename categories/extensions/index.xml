@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Extensions on Sharing knowledge</title>
+    <title>extensions on Sharing knowledge</title>
     <link>https://uthark.github.io/categories/extensions/</link>
-    <description>Recent content in Extensions on Sharing knowledge</description>
+    <description>Recent content in extensions on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 25 Nov 2009 23:16:00 +0000</lastBuildDate>
@@ -17,11 +17,7 @@
       <pubDate>Wed, 25 Nov 2009 23:16:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2009/11/25/delicious-plugin/</guid>
-      <description>Google запустил сайт Chrome Extensions.
-В данный момент сайт доступен только разработчикам расширений. Залил расширение, написал кратенькое описание. Жду запуска сайта. :)
-А пока сайт закрыт для рядовых пользователей последнюю версию можно скачать тут.
-P.S. А тем временем работа над расширением продолжается.
-P.P.S. У расширения появилась своя страничка в сети: Project Home Page</description>
+      <description>Google запустил сайт Chrome Extensions.В данный момент сайт доступен только разработчикам расширений. Залил расширение, написал кратенькое описание. Жду запуска сайта. :)А пока сайт закрыт для рядовых пользователей последнюю версию можно скачать тут.P.S. А тем временем работа над расширением продолжается.P.P.S. У расширения появилась своя страничка в сети: Project Home Page</description>
     </item>
     
   </channel>

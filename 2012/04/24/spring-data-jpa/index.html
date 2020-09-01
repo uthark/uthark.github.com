@@ -62,8 +62,9 @@
   <meta property="og:description" content="Рассмотрим подробнее одну из наиболее полезных вещей в Spring Data JPA - генерация JPQL-запросов на основе имени метода.
 Spring Data JPA умеет автоматически генерировать запросы используя для подсказки название метода.
 Например, метод User.findByLoginAndPassword сгенерирует примерно следующий код:
-FROM User u where u.login = :login and password = :password Вообще Spring Data JPA пытается быть умным, поэтому реализация findBy{&hellip;} методов ищется следующим образом:
- Сначала смотрится аннотация @Query на объявлении метода, если она есть, то используется." />
+FROM User u where u.login = :login and password = :password Вообще Spring Data JPA пытается быть умным, поэтому реализация findBy{&hellip;}методов ищется следующим образом:
+У @Queryследующие плюсы:
+Очевидно, что при использовании запросов нам необходимо каким-то образом указывать параметры для запросов." />
 
   
 
@@ -157,38 +158,22 @@ FROM User u where u.login = :login and password = :password Вообще Spring 
           
           
           <p>Рассмотрим подробнее одну из наиболее полезных вещей в Spring Data JPA - генерация JPQL-запросов на основе имени метода.</p>
-
 <p>Spring Data JPA умеет автоматически генерировать запросы используя для подсказки название метода.</p>
-
 <p>Например, метод <code>User.findByLoginAndPassword</code> сгенерирует примерно следующий код:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">FROM</span> <span class="k">User</span> <span class="n">u</span> <span class="k">where</span> <span class="n">u</span><span class="p">.</span><span class="n">login</span> <span class="o">=</span> <span class="p">:</span><span class="n">login</span> <span class="k">and</span> <span class="n">password</span> <span class="o">=</span> <span class="p">:</span><span class="n">password</span></code></pre></div>
-<p>Вообще Spring Data JPA пытается быть умным, поэтому реализация <tt>findBy{&hellip;}</tt> методов ищется следующим образом:</p>
-
-<ol>
-<li>Сначала смотрится аннотация <a href="http://static.springsource.org/spring-data/data-jpa/docs/current/api/org/springframework/data/jpa/repository/Query.html">@Query</a> на объявлении метода, если она есть, то используется.</li>
-<li>Затем смотрится аннотация <a href="http://docs.oracle.com/javaee/5/api/javax/persistence/NamedQuery.html">@NamedQuery</a> с именем вида <tt>Entity.findMethodName</tt>, для вышеприведённого случая это будет <tt>User.findByLoginAndPassword</tt>. </li>
-<li>Если ничего не нашли. то по сигнатуре метода <a href="https://github.com/SpringSource/spring-data-jpa/blob/master/src/main/java/org/springframework/data/jpa/repository/query/JpaQueryCreator.java">генерируется запрос</a>.</li>
-</ol>
-
-<p>У <tt>@Query</tt> следующие плюсы:
-<ol>
-<li>Позволяет не засорять объявление доменной сущности.</li>
-<li>Сильно помогает, если у нас в запросе есть неявные джойны, потому что для таких запросов Spring Data JPA <a href="https://jira.springsource.org/browse/DATAJPA-35">не умеет корректно генерировать</a> запрос <tt>SELECT COUNT(*)</tt>, который нужен в тех случаях, когда метод должен вернуть <a href="http://static.springsource.org/spring-data/data-commons/docs/current/api/org/springframework/data/domain/Page.html">Page</a>. </li>
-</ol></p>
-
-<p>Очевидно, что при использовании запросов нам необходимо каким-то образом указывать параметры для запросов. Для этого есть аннотация <a href="http://static.springsource.org/spring-data/data-commons/docs/current/api/org/springframework/data/repository/query/Param.html">@Param</a>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">FROM</span> <span class="k">User</span> <span class="n">u</span> <span class="k">where</span> <span class="n">u</span><span class="p">.</span><span class="n">login</span> <span class="o">=</span> <span class="p">:</span><span class="n">login</span> <span class="k">and</span> <span class="n">password</span> <span class="o">=</span> <span class="p">:</span><span class="n">password</span>
+</code></pre></div><p>Вообще Spring Data JPA пытается быть умным, поэтому реализация <!-- raw HTML omitted -->findBy{&hellip;}<!-- raw HTML omitted --> методов ищется следующим образом:</p>
+<!-- raw HTML omitted -->
+<p>У <!-- raw HTML omitted -->@Query<!-- raw HTML omitted --> следующие плюсы:</p>
+<!-- raw HTML omitted -->
+<p>Очевидно, что при использовании запросов нам необходимо каким-то образом указывать параметры для запросов. Для этого есть аннотация <!-- raw HTML omitted -->@Param<!-- raw HTML omitted -->:</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Query</span><span class="o">(</span><span class="s">&#34;select u from User u where u.login = :login and u.password = :password&#34;</span><span class="o">)</span>
-<span class="n">Page</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">findByLoginAndPassword</span><span class="o">(</span><span class="nd">@Param</span><span class="o">(</span><span class="s">&#34;login&#34;</span><span class="o">)</span> <span class="n">String</span> <span class="n">login</span><span class="o">,</span> <span class="nd">@Param</span><span class="o">(</span><span class="s">&#34;password&#34;</span><span class="o">)</span> <span class="n">String</span> <span class="n">password</span><span class="o">);</span></code></pre></div>
-<p>Кроме того, Spring Data JPA поддерживает отличную <a href="http://www.martinfowler.com/apsupp/spec.pdf">концепцию спецификаций</a>.</p>
-
+<span class="n">Page</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">findByLoginAndPassword</span><span class="o">(</span><span class="nd">@Param</span><span class="o">(</span><span class="s">&#34;login&#34;</span><span class="o">)</span> <span class="n">String</span> <span class="n">login</span><span class="o">,</span> <span class="nd">@Param</span><span class="o">(</span><span class="s">&#34;password&#34;</span><span class="o">)</span> <span class="n">String</span> <span class="n">password</span><span class="o">);</span>
+</code></pre></div><p>Кроме того, Spring Data JPA поддерживает отличную <!-- raw HTML omitted -->концепцию спецификаций<!-- raw HTML omitted -->.</p>
 <p>Спецификации позволяют делать составлять сложные запросы из набора простых.</p>
-
 <p>Для поддержки спецификаций необходимо объявить метод в репозитории:</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">Page</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">findAll</span><span class="o">(</span><span class="n">Specification</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">spec</span><span class="o">,</span> <span class="n">Pageable</span> <span class="n">pageable</span><span class="o">);</span></code></pre></div>
-<p>Спецификация по сути является фильтром и позволяет комбинирование фильтров, что даёт мощный инструмент для построения запросов.</p>
-
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">Page</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">findAll</span><span class="o">(</span><span class="n">Specification</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">spec</span><span class="o">,</span> <span class="n">Pageable</span> <span class="n">pageable</span><span class="o">);</span>
+</code></pre></div><p>Спецификация по сути является фильтром и позволяет комбинирование фильтров, что даёт мощный инструмент для построения запросов.</p>
 <p>Пример использования спецификаций:</p>
-
 <p>Объявляем наши спецификации:</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="n">Specification</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">firstNameOrLastNameOrLoginLike</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span> <span class="n">search</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">return</span> <span class="k">new</span> <span class="n">Specification</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;()</span> <span class="o">{</span>
@@ -211,8 +196,8 @@ FROM User u where u.login = :login and password = :password Вообще Spring 
             <span class="k">return</span> <span class="n">builder</span><span class="o">.</span><span class="na">equal</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">User_</span><span class="o">.</span><span class="na">role</span><span class="o">),</span> <span class="n">role</span><span class="o">);</span>
         <span class="o">}</span>
     <span class="o">};</span>
-<span class="o">}</span></code></pre></div>
-<p>И в нашем сервисе комбинируем их:</p>
+<span class="o">}</span>
+</code></pre></div><p>И в нашем сервисе комбинируем их:</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="n">Page</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">searchUser</span><span class="o">(</span><span class="n">Role</span> <span class="n">role</span><span class="o">,</span> <span class="n">String</span> <span class="n">search</span><span class="o">,</span> <span class="n">Pageable</span> <span class="n">pageable</span><span class="o">)</span> <span class="o">{</span>
     <span class="n">Specifications</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">mainSpec</span> <span class="o">=</span> <span class="n">where</span><span class="o">(</span><span class="n">hasRole</span><span class="o">(</span><span class="n">role</span><span class="o">));</span>
 
@@ -222,7 +207,8 @@ FROM User u where u.login = :login and password = :password Вообще Spring 
     <span class="o">}</span> 
 
     <span class="k">return</span> <span class="n">userRepository</span><span class="o">.</span><span class="na">findAll</span><span class="o">(</span><span class="n">mainSpec</span><span class="o">,</span> <span class="n">pageable</span><span class="o">);</span>
-<span class="o">}</span></code></pre></div>
+<span class="o">}</span>
+</code></pre></div>
         </div>
         
 
@@ -261,7 +247,7 @@ FROM User u where u.login = :login and password = :password Вообще Spring 
   
     
       <div id="disqus_thread"></div>
-<script>
+<script type="application/javascript">
     var disqus_config = function () {
     
     
@@ -300,6 +286,11 @@ FROM User u where u.login = :login and password = :password Вообще Spring 
   </section>
 
 
+<section class="even">
+  <div class="toc-header">Table of Contents</div>
+   <nav id="TableOfContents"></nav>
+</section>
+
 
 
 
@@ -327,7 +318,7 @@ FROM User u where u.login = :login and password = :password Вообще Spring 
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary site:@LinkageError creator:@LinkageError]"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary creator:@LinkageError site:@LinkageError]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 
@@ -344,7 +335,7 @@ FROM User u where u.login = :login and password = :password Вообще Spring 
             </li>
         </ul>
     </div>
-    <p>Copyright &copy; 2009&nbsp;—&nbsp;2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+    <p>Copyright &copy; 2009&nbsp;—&nbsp;2020 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
         <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a>, uses custom theme based on
             <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.</span>
     </p>

@@ -154,35 +154,26 @@ Vagrant - это средство для управления виртуальн
           
           
           
-          
-
-<p>Современные enterprise проекты очень часто имеют очень сложную инфраструктуру для развёртывания. Кроме того, во время разработки часто используются виртуальные машины. Например, может использоваться несколько виртуальных машин, на которых развёрнуты различные конфигурации софта.</p>
-
-<p><a href="http://vagrantup.com/" target="_blank">Vagrant</a> - это средство для управления виртуальными машинами на базе <a href="https://www.virtualbox.org/" target="_blank">Virtualbox</a>.</p>
-
+          <p>Современные enterprise проекты очень часто имеют очень сложную инфраструктуру для развёртывания. Кроме того, во время разработки часто используются виртуальные машины. Например, может использоваться несколько виртуальных машин, на которых развёрнуты различные конфигурации софта.</p>
+<p><a href="http://vagrantup.com/">Vagrant</a> - это средство для управления виртуальными машинами на базе <a href="https://www.virtualbox.org/">Virtualbox</a>.</p>
 <h2 id="возможности">Возможности</h2>
-
 <ul>
 <li>Создание виртуальных машин с определённой, заранее заданной, конфигурацией.</li>
 <li>Лёгкое создание копии виртуальной машины, используя заранее подготовленный образ.</li>
 <li>Осуществление provisioning для новых виртуальных машин.</li>
 </ul>
-
 <h2 id="работа-с-vagrant">Работа с Vagrant</h2>
-
 <p>Для начала необходимо установить Virtualbox и Vagrant.</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo aptitude install virtualbox vagrant</code></pre></div>
-<p>После этого нам нужен образ, из которого мы можем создавать виртуальные машины. Его можно сделать самим или взять уже готовый с сайта Vagrant. Упростим себе жизнь и скачаем образ с сайта:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">    vagrant box add lucid32 http://files.vagrantup.com/lucid32.box</code></pre></div>
-<p>После этого, мы можем начать пользоваться Vagrant.</p>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo aptitude install virtualbox vagrant
+</code></pre></div><p>После этого нам нужен образ, из которого мы можем создавать виртуальные машины. Его можно сделать самим или взять уже готовый с сайта Vagrant. Упростим себе жизнь и скачаем образ с сайта:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">    vagrant box add lucid32 http://files.vagrantup.com/lucid32.box
+</code></pre></div><p>После этого, мы можем начать пользоваться Vagrant.</p>
 <p>Для этого нам нужно создать папку, в которой мы будем работать, например:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">    mkdir vagrant-test
-    <span class="nb">cd</span> vagrant-test</code></pre></div>
-<p>И инициализировать Vagrant:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">    vagrant init</code></pre></div>
-<p>Результатом работы этой команды будет файлик <code>Vagrantfile</code>, который содержит конфигурацию виртуальной машины для использования.</p>
-
+    <span class="nb">cd</span> vagrant-test
+</code></pre></div><p>И инициализировать Vagrant:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">    vagrant init
+</code></pre></div><p>Результатом работы этой команды будет файлик <code>Vagrantfile</code>, который содержит конфигурацию виртуальной машины для использования.</p>
 <p>Пример сгенерированного файла:</p>
 <div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="c1"># -*- mode: ruby -*-</span>
 <span class="c1"># vi: set ft=ruby :</span>
@@ -282,40 +273,31 @@ Vagrant - это средство для управления виртуальн
   <span class="c1"># chef-validator, unless you changed the configuration.</span>
   <span class="c1">#</span>
   <span class="c1">#   chef.validation_client_name = &#34;ORGNAME-validator&#34;</span>
-<span class="k">end</span></code></pre></div>
-<p>Подробнее о том, что этот файл может содержать можно почитать в <a href="http://vagrantup.com/v1/docs/vagrantfile.html" target="_blank">документации</a></p>
+<span class="k">end</span>
 
+</code></pre></div><p>Подробнее о том, что этот файл может содержать можно почитать в <a href="http://vagrantup.com/v1/docs/vagrantfile.html">документации</a></p>
 <p>Например, можно изменить размер RAM, доступный операционной системе:</p>
-<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby">    <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">customize</span> <span class="o">[</span><span class="s2">&#34;modifyvm&#34;</span><span class="p">,</span> <span class="ss">:id</span><span class="p">,</span> <span class="s2">&#34;--memory&#34;</span><span class="p">,</span> <span class="mi">1536</span><span class="o">]</span></code></pre></div>
-<p>Так как очень часто мы хотим взаимодействовать с виртуальной машиной снаружи, там нам необходима возможность пробросить порты из виртуальной машины в хост-систему.</p>
-
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby">    <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">customize</span> <span class="o">[</span><span class="s2">&#34;modifyvm&#34;</span><span class="p">,</span> <span class="ss">:id</span><span class="p">,</span> <span class="s2">&#34;--memory&#34;</span><span class="p">,</span> <span class="mi">1536</span><span class="o">]</span>
+</code></pre></div><p>Так как очень часто мы хотим взаимодействовать с виртуальной машиной снаружи, там нам необходима возможность пробросить порты из виртуальной машины в хост-систему.</p>
 <p>Это достигается следующим изменением конфигурации:</p>
 <div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby">  <span class="c1"># Включаем bridged network в виртуальной машине.</span>
   <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span> <span class="ss">:bridged</span>
 
   <span class="c1"># Пробрасываем порты &lt;порт на виртуальной машине&gt; &lt;порт на хост-системе&gt;</span>
   <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">forward_port</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">8080</span>
-  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">forward_port</span> <span class="mi">443</span><span class="p">,</span> <span class="mi">8443</span></code></pre></div>
-<h2 id="provisioning">Provisioning</h2>
-
+  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">forward_port</span> <span class="mi">443</span><span class="p">,</span> <span class="mi">8443</span>
+</code></pre></div><h2 id="provisioning">Provisioning</h2>
 <p>Vagrant не был бы столь успешен, если бы не позволял управляеть конфигурацией создаваемой виртуальной машины.</p>
-
 <p>Vagrant поддерживает следующие приложения, управляющие конфигурацией:</p>
-
 <ul>
-<li><a href="http://wiki.opscode.com/display/chef/Home" target="_blank">Chef</a></li>
-<li><a href="http://puppetlabs.com/puppet/puppet-open-source/" target="_blank">Puppet</a></li>
-<li><a href="http://www.gnu.org/software/bash/manual/bashref.html" target="_blank">Shell</a></li>
+<li><a href="http://wiki.opscode.com/display/chef/Home">Chef</a></li>
+<li><a href="http://puppetlabs.com/puppet/puppet-open-source/">Puppet</a></li>
+<li><a href="http://www.gnu.org/software/bash/manual/bashref.html">Shell</a></li>
 </ul>
-
-<p>А также позволяет использовать написать <a href="http://vagrantup.com/v1/docs/provisioners/others.html" target="_blank">собственное расширение</a>.</p>
-
+<p>А также позволяет использовать написать <a href="http://vagrantup.com/v1/docs/provisioners/others.html">собственное расширение</a>.</p>
 <h2 id="управление-виртуальной-машиной">Управление виртуальной машиной</h2>
-
 <p>Управление виртуальной машиной осуществляется командой <code>vagrant</code> с переданным аргументом-действием. Полный список можно получить, выполнив <code>vagrant help</code>.</p>
-
 <p>Список наиболее часто используемых действий:</p>
-
 <ul>
 <li><code>up</code> - поднимает виртуальную машину. Если она не была создана, то создаёт её, используя информацию из файла <code>Vagrantfile</code>.</li>
 <li><code>halt</code> - останавливает виртуальную машину.</li>
@@ -323,13 +305,11 @@ Vagrant - это средство для управления виртуальн
 <li><code>reload</code> - перезагружает виртуальную машину.</li>
 <li><code>ssh</code> - запускает SSH-соединение к машине.</li>
 </ul>
-
 <h2 id="документация-и-ссылки">Документация и ссылки</h2>
-
 <ul>
-<li><a href="http://vagrantup.com/" target="_blank">Официальный сайт</a></li>
-<li><a href="http://vagrantup.com/v1/docs/index.html" target="_blank">Документация</a></li>
-<li><a href="https://github.com/mitchellh/vagrant" target="_blank">Исходный код</a></li>
+<li><a href="http://vagrantup.com/">Официальный сайт</a></li>
+<li><a href="http://vagrantup.com/v1/docs/index.html">Документация</a></li>
+<li><a href="https://github.com/mitchellh/vagrant">Исходный код</a></li>
 </ul>
 
         </div>
@@ -370,7 +350,7 @@ Vagrant - это средство для управления виртуальн
   
     
       <div id="disqus_thread"></div>
-<script>
+<script type="application/javascript">
     var disqus_config = function () {
     
     
@@ -412,16 +392,13 @@ Vagrant - это средство для управления виртуальн
 <section class="even">
   <div class="toc-header">Table of Contents</div>
    <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#возможности">Возможности</a></li>
-<li><a href="#работа-с-vagrant">Работа с Vagrant</a></li>
-<li><a href="#provisioning">Provisioning</a></li>
-<li><a href="#управление-виртуальной-машиной">Управление виртуальной машиной</a></li>
-<li><a href="#документация-и-ссылки">Документация и ссылки</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#возможности">Возможности</a></li>
+    <li><a href="#работа-с-vagrant">Работа с Vagrant</a></li>
+    <li><a href="#provisioning">Provisioning</a></li>
+    <li><a href="#управление-виртуальной-машиной">Управление виртуальной машиной</a></li>
+    <li><a href="#документация-и-ссылки">Документация и ссылки</a></li>
+  </ul>
 </nav>
 </section>
 
@@ -452,7 +429,7 @@ Vagrant - это средство для управления виртуальн
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[site:@LinkageError creator:@LinkageError card:summary]"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary creator:@LinkageError site:@LinkageError]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 
@@ -469,7 +446,7 @@ Vagrant - это средство для управления виртуальн
             </li>
         </ul>
     </div>
-    <p>Copyright &copy; 2009&nbsp;—&nbsp;2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+    <p>Copyright &copy; 2009&nbsp;—&nbsp;2020 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
         <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a>, uses custom theme based on
             <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.</span>
     </p>

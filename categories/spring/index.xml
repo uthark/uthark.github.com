@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Spring on Sharing knowledge</title>
+    <title>spring on Sharing knowledge</title>
     <link>https://uthark.github.io/categories/spring/</link>
-    <description>Recent content in Spring on Sharing knowledge</description>
+    <description>Recent content in spring on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 01 Mar 2014 00:00:00 +0000</lastBuildDate>
@@ -52,8 +52,7 @@ import org.springframework.data.mongodb.core.query.Query; public interface Query
       <pubDate>Fri, 20 Apr 2012 15:51:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2012/04/20/beanpostprocessor/</guid>
-      <description>Сегодня я хочу рассказать, как можно сделать инициализацию логгера в классе с использованием аннотаций и BeanPostProcessor
-Очень часто мы инициализируем логгер следующим образом:
+      <description>Сегодня я хочу рассказать, как можно сделать инициализацию логгера в классе с использованием аннотаций и BeanPostProcessorОчень часто мы инициализируем логгер следующим образом:
 public class MyClass { private static final Logger LOG = LoggerFactory.getLogger(MyClass.class); } Я покажу, как сделать, чтобы можно было писать вот так:
 @Log private Logger LOG; Первым делом нам нужно объявить аннотацию:
 @Retention(RUNTIME) @Target(FIELD) @Documented public @interface Log { String category() default &amp;#34;&amp;#34;; } А вторым делом, написать собственный BeanPostProcessor, который бы устанавливал нам логгер:</description>
@@ -65,7 +64,11 @@ public class MyClass { private static final Logger LOG = LoggerFactory.getLogger
       <pubDate>Thu, 23 Feb 2012 02:17:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2012/02/23/jpa-spring-data-jpa/</guid>
-      <description>Введение Уже прошло несколько лет с тех пор, как появился JPA. Работа с EntityManager увлекательна, но разработчики пишут красивый API, а подробности работы с базой данных скрывают. При этом частая проблема - дублирование имплементации, когда из одного DAO в другой у нас плавно перекочёвывает один и тот же код, в лучшем случае этот код переносится в абстрактный базовый DAO. Spring Data коренным образом решает проблему - при его использовании остаётся только API на уровне интерфейсов, вся имплементация создаётся автоматически с использованием AOP.</description>
+      <description>Несмотря на то, что проект только недавно достиг версии 1.0, у него достаточно богатая история - раньше он развивался в рамках проекта Hades.
+Итак, для начала нам необходимо объявить DAO-интерфейс, в котором мы будем объявлять методы для работы с сущностью.
+public interface UserRepository extends CrudRepository&amp;amp;lt;User, Long&amp;amp;gt; { } Данного кода достаточно для обычного DAO с CRUD-методами.
+Полный список методов, объявленный в CrudRepository можно посмотреть в javadoc.
+В случае, если нам нужны не все методы, то есть возможность произвести наследование от интерфейса Repositoryи перенести в наследника только те методы из интерфейса CrudRepository, которые нужны.</description>
     </item>
     
   </channel>

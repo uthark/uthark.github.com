@@ -59,7 +59,9 @@
 
   <meta property="og:title" content="Разработка и тестирование Java REST веб-сервисов" />
   <meta property="og:url" content="https://uthark.github.io/2012/02/09/java-rest/" />
-  <meta property="og:description" content="Введение Для разработки REST веб-сервисов Java предлагает JSR-311 - JAX-RS: The Java&trade; API for RESTful Web Services Как это обычно бывает в мире Enterprise Java, существует несколько реализаций данной спецификации:  Jersey - это эталонная реализация спецификации от компании Sun Oracle Apache CXF JBoss RESTEasy  На примере последней реализации, я и расскажу, каким образом можно написать REST-сервис. Пишем REST-сервис import javax.ws.rs.*; import javax.ws.rs.core.MediaType; @Path(&#34;/service/entity&#34;) @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON}) public interface EntityRestService { @GET @Path(&#34;/all&#34;) EntityList listAll(); @GET @Path(&#34;/{id}&#34;) Entity findById(@PathParam(&#34;id&#34;) Integer id); } Создаём интерфейс, в котором расставляем JAX-RS аннотации." />
+  <meta property="og:description" content="import javax.ws.rs.*; import javax.ws.rs.core.MediaType; @Path(&#34;/service/entity&#34;) @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON}) public interface EntityRestService { @GET @Path(&#34;/all&#34;) EntityList listAll(); @GET @Path(&#34;/{id}&#34;) Entity findById(@PathParam(&#34;id&#34;) Integer id); } Создаём интерфейс, в котором расставляем JAX-RS аннотации. Аннотация @Pathуказывает путь, по которому будет доступен наш сервис. Аннотация @GETопределяет, какой HTTP-запрос будет обрабатываться данным методом. Аннотация @Producesпозволяет указать, в каком формате данный сервис предоставляет результаты.
+Конфигурация очень проста, во-первых, нам нужно добавить обновить pom.xmlи добавить необходимые зависимости:
+Добавляем compile-time зависимость на JAX-RS API" />
 
   
 
@@ -152,18 +154,10 @@
           
           
           
-          <h4>Введение</h4>
-Для разработки <a href="http://restpatterns.org/">REST</a> веб-сервисов Java предлагает <a href="http://jcp.org/en/jsr/detail?id=311">JSR-311 - JAX-RS: The Java&trade; API for RESTful Web Services</a>
-Как это обычно бывает в мире Enterprise Java, существует несколько реализаций данной спецификации:
-<ul>
-<li><a href="http://jersey.java.net/">Jersey</a> - это эталонная реализация спецификации от компании <strike>Sun</strike> Oracle</li>
-<li><a href="http://cxf.apache.org/">Apache CXF</a></li>
-<li><a href="http://www.jboss.org/resteasy">JBoss RESTEasy</a></li>
-</ul>
-На примере последней реализации, я и расскажу, каким образом можно написать REST-сервис.
-
-<h4>Пишем REST-сервис</h4>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">javax.ws.rs.*</span><span class="o">;</span>
+          <!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">
+<span class="kn">import</span> <span class="nn">javax.ws.rs.*</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">javax.ws.rs.core.MediaType</span><span class="o">;</span>
 
 <span class="nd">@Path</span><span class="o">(</span><span class="s">&#34;/service/entity&#34;</span><span class="o">)</span>
@@ -179,21 +173,17 @@
  <span class="n">Entity</span> <span class="nf">findById</span><span class="o">(</span><span class="nd">@PathParam</span><span class="o">(</span><span class="s">&#34;id&#34;</span><span class="o">)</span> <span class="n">Integer</span> <span class="n">id</span><span class="o">);</span>
 
 
-<span class="o">}</span></code></pre></div>
-<p>Создаём интерфейс, в котором расставляем JAX-RS аннотации. Аннотация <a href="http://jsr311.java.net/nonav/releases/1.1/javax/ws/rs/Path.html">@Path</a> указывает путь, по которому будет доступен наш сервис. Аннотация <a href="http://jsr311.java.net/nonav/releases/1.1/javax/ws/rs/GET.html">@GET</a> определяет, какой HTTP-запрос будет обрабатываться данным методом. Аннотация <a href="http://jsr311.java.net/nonav/releases/1.1/javax/ws/rs/Produces.html">@Produces</a> позволяет указать, в каком формате данный сервис предоставляет результаты.</p>
-
-<h4>Конфигурация JBoss RESTEasy</h4>
-
-<p>Конфигурация очень проста, во-первых, нам нужно добавить обновить <tt>pom.xml</tt> и добавить необходимые зависимости:</p>
-
-<h5>Обновляем <tt>pom.xml</tt></h5>
-
+<span class="o">}</span>
+</code></pre></div><p>Создаём интерфейс, в котором расставляем JAX-RS аннотации. Аннотация <!-- raw HTML omitted -->@Path<!-- raw HTML omitted --> указывает путь, по которому будет доступен наш сервис. Аннотация <!-- raw HTML omitted -->@GET<!-- raw HTML omitted --> определяет, какой HTTP-запрос будет обрабатываться данным методом. Аннотация <!-- raw HTML omitted -->@Produces<!-- raw HTML omitted --> позволяет указать, в каком формате данный сервис предоставляет результаты.</p>
+<!-- raw HTML omitted -->
+<p>Конфигурация очень проста, во-первых, нам нужно добавить обновить <!-- raw HTML omitted -->pom.xml<!-- raw HTML omitted --> и добавить необходимые зависимости:</p>
+<!-- raw HTML omitted -->
 <p>Добавляем compile-time зависимость на JAX-RS API</p>
 <div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
     <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.jboss.resteasy<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
     <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>jaxrs-api<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
-<span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span></code></pre></div>
-<p>и runtime зависимости на реализацию</p>
+<span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
+</code></pre></div><p>и runtime зависимости на реализацию</p>
 <div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
     <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.jboss.resteasy<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
     <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>resteasy-jaxrs<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
@@ -205,9 +195,9 @@
     <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>resteasy-jackson-provider<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
     <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>${resteasy-jaxrs.version}<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
     <span class="ni">&amp;lt;</span>scope<span class="ni">&amp;gt;</span>runtime<span class="ni">&amp;lt;</span>/scope<span class="ni">&amp;gt;</span>
-<span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span></code></pre></div>
-<p><h5>Обновляем конфигурацию веб-приложения в <tt>web.xml</tt></h5>
-Необходимо выполнить следующую модификацию <tt>web.xml</tt></p>
+<span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
+
+</code></pre></div><!-- raw HTML omitted -->
 <div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"> <span class="ni">&amp;lt;</span>listener<span class="ni">&amp;gt;</span>
   <span class="ni">&amp;lt;</span>listener-class<span class="ni">&amp;gt;</span>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap<span class="ni">&amp;lt;</span>/listener-class<span class="ni">&amp;gt;</span>
  <span class="ni">&amp;lt;</span>/listener<span class="ni">&amp;gt;</span>
@@ -223,33 +213,29 @@
  <span class="ni">&amp;lt;</span>servlet-mapping<span class="ni">&amp;gt;</span>
   <span class="ni">&amp;lt;</span>servlet-name<span class="ni">&amp;gt;</span>REST Easy<span class="ni">&amp;lt;</span>/servlet-name<span class="ni">&amp;gt;</span>
   <span class="ni">&amp;lt;</span>url-pattern<span class="ni">&amp;gt;</span>/rest/*<span class="ni">&amp;lt;</span>/url-pattern<span class="ni">&amp;gt;</span>
- <span class="ni">&amp;lt;</span>/servlet-mapping<span class="ni">&amp;gt;</span></code></pre></div>
-<p>Данный код объявляет <a href="http://docs.jboss.org/resteasy/docs/2.3.1.GA/javadocs/org/jboss/resteasy/plugins/server/servlet/HttpServletDispatcher.html">сервлет HttpServletDispatcher</a>, который будет обрабатывать все запросы, которые приходят на <tt>/rest/*</tt>. Слушатель <tt><a href="http://docs.jboss.org/resteasy/docs/2.3.1.GA/javadocs/org/jboss/resteasy/plugins/server/servlet/ResteasyBootstrap.html">ResteasyBootstrap</a></tt> выполняет всю необходимую инициализацию JBoss RESTEasy.</p>
-
-<p><h5>Поддержка Spring</h5>
-Для того, чтобы использовать <a href="http://www.springsource.org/spring-framework">Spring Framework</a>, нам необходимо сделать следующие изменения:</p>
-
+ <span class="ni">&amp;lt;</span>/servlet-mapping<span class="ni">&amp;gt;</span>
+</code></pre></div><p>Данный код объявляет <!-- raw HTML omitted -->сервлет HttpServletDispatcher<!-- raw HTML omitted -->, который будет обрабатывать все запросы, которые приходят на <!-- raw HTML omitted -->/rest/*<!-- raw HTML omitted -->. Слушатель <!-- raw HTML omitted --><!-- raw HTML omitted -->ResteasyBootstrap<!-- raw HTML omitted --><!-- raw HTML omitted --> выполняет всю необходимую инициализацию JBoss RESTEasy.</p>
+<!-- raw HTML omitted -->
 <ol>
-<li>Добавить зависимость в <tt>pom.xml</tt></li>
+<li>Добавить зависимость в <!-- raw HTML omitted -->pom.xml<!-- raw HTML omitted --></li>
 </ol>
 <div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
     <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.jboss.resteasy<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
     <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>resteasy-spring<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
     <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>${resteasy-jaxrs.version}<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
     <span class="ni">&amp;lt;</span>scope<span class="ni">&amp;gt;</span>runtime<span class="ni">&amp;lt;</span>/scope<span class="ni">&amp;gt;</span>
-<span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span></code></pre></div>
-<ol>
-<li>Добавить Spring-ового слушателя в <tt>web.xml</tt></li>
+<span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
+</code></pre></div><ol start="2">
+<li>Добавить Spring-ового слушателя в <!-- raw HTML omitted -->web.xml<!-- raw HTML omitted --></li>
 </ol>
 <div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"> <span class="ni">&amp;lt;</span>listener<span class="ni">&amp;gt;</span>
   <span class="ni">&amp;lt;</span>listener-class<span class="ni">&amp;gt;</span>org.jboss.resteasy.plugins.spring.SpringContextLoaderListener<span class="ni">&amp;lt;</span>/listener-class<span class="ni">&amp;gt;</span>
- <span class="ni">&amp;lt;</span>/listener<span class="ni">&amp;gt;</span></code></pre></div>
-<p>После этих изменений JBoss RESTEasy будет в курсе про Spring, это позволит в реализации REST-сервисов полноценно использовать все возможности, предоставляемые Spring Framework.</p>
+ <span class="ni">&amp;lt;</span>/listener<span class="ni">&amp;gt;</span>
 
-<p><h4>Пишем тесты</h4>
-Написание тестов - весьма полезная вещь, ниже я покажу пример теста для REST-сервиса.
-В рамках данного теста у нас будет подниматься <a href="http://docs.jboss.org/resteasy/docs/2.3.1.GA/javadocs/org/jboss/resteasy/plugins/server/tjws/TJWSEmbeddedJaxrsServer.html">встраиваемый веб-сервер TJWSEmbeddedJaxrsServer</a>, к которому мы будем обращаться для тестирования наших REST-сервисов.</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@RunWith</span><span class="o">(</span><span class="n">SpringJUnit4ClassRunner</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+</code></pre></div><p>После этих изменений JBoss RESTEasy будет в курсе про Spring, это позволит в реализации REST-сервисов полноценно использовать все возможности, предоставляемые Spring Framework.</p>
+<!-- raw HTML omitted -->
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">
+<span class="nd">@RunWith</span><span class="o">(</span><span class="n">SpringJUnit4ClassRunner</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
 <span class="nd">@ContextConfiguration</span><span class="o">({</span><span class="s">&#34;/applicationContext-test.xml&#34;</span><span class="o">})</span>
 <span class="nd">@TestExecutionListeners</span><span class="o">({</span><span class="n">DependencyInjectionTestExecutionListener</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">DirtiesContextTestExecutionListener</span><span class="o">.</span><span class="na">class</span><span class="o">})</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestEntityServiceRest</span> <span class="o">{</span>
@@ -374,12 +360,12 @@
   <span class="n">T</span> <span class="n">unmarshal</span> <span class="o">=</span> <span class="o">(</span><span class="n">T</span><span class="o">)</span> <span class="n">ctx</span><span class="o">.</span><span class="na">createUnmarshaller</span><span class="o">().</span><span class="na">unmarshal</span><span class="o">(</span><span class="n">input</span><span class="o">);</span>
   <span class="k">return</span> <span class="n">unmarshal</span><span class="o">;</span>
  <span class="o">}</span>
-<span class="o">}</span></code></pre></div>
-<p><h4>Запуск тестов</h4>
-Половина дела сделана, теперь нам необходимо настроить инфраструктуру для тестирования наших свеженаписанных REST-сервисов.</p>
+<span class="o">}</span>
 
-<p>Для этого нам необходимо внести следующие модификации в <tt>pom.xml</tt>:</p>
-<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="ni">&amp;lt;</span>plugin<span class="ni">&amp;gt;</span>
+</code></pre></div><!-- raw HTML omitted -->
+<p>Для этого нам необходимо внести следующие модификации в <!-- raw HTML omitted -->pom.xml<!-- raw HTML omitted -->:</p>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml">
+<span class="ni">&amp;lt;</span>plugin<span class="ni">&amp;gt;</span>
     <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.apache.maven.plugins<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
     <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>maven-surefire-plugin<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
     <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>2.11<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
@@ -442,9 +428,8 @@
     <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>commons-io<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
     <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>commons-io<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
     <span class="ni">&amp;lt;</span>scope<span class="ni">&amp;gt;</span>test<span class="ni">&amp;lt;</span>/scope<span class="ni">&amp;gt;</span>
-<span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span></code></pre></div>
-<p><h4>Заключение</h4>
-В целом, ничего сложного, главное делать всё аккуратно. Хорошего вам кода!</p>
+<span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
+</code></pre></div><!-- raw HTML omitted -->
 
         </div>
         
@@ -484,7 +469,7 @@
   
     
       <div id="disqus_thread"></div>
-<script>
+<script type="application/javascript">
     var disqus_config = function () {
     
     
@@ -523,6 +508,11 @@
   </section>
 
 
+<section class="even">
+  <div class="toc-header">Table of Contents</div>
+   <nav id="TableOfContents"></nav>
+</section>
+
 
 
 
@@ -550,7 +540,7 @@
             <li class="sidebar-nav-item">    <a target="_blank" href="https://bitbucket.org/uthark/" title="https://bitbucket.org/uthark/"><i
                     class="fa fa-bitbucket fa-3x"></i></a>
             <li class="sidebar-nav-item">
-            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[creator:@LinkageError card:summary site:@LinkageError]"><i
+            <li class="sidebar-nav-item"><a target="_blank" href="#ZgotmplZ" title="map[card:summary creator:@LinkageError site:@LinkageError]"><i
                     class="fa fa-twitter fa-3x"></i></a>
             <li class="sidebar-nav-item"><a target="_blank" href="https://keybase.io/uthark/" title="https://keybase.io/uthark/"><i
                     class="fa fa-key fa-3x"></i></a> 
@@ -567,7 +557,7 @@
             </li>
         </ul>
     </div>
-    <p>Copyright &copy; 2009&nbsp;—&nbsp;2018 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
+    <p>Copyright &copy; 2009&nbsp;—&nbsp;2020 Oleg Atamanenko - <a href="https://uthark.github.io/license/">License</a> -
         <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a>, uses custom theme based on
             <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.</span>
     </p>
