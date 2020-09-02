@@ -59,41 +59,12 @@
 
   <meta property="og:title" content="Configuring Wi-Fi on Ubuntu Server 64-bit on Raspberry Pi 4" />
   <meta property="og:url" content="https://uthark.github.io/post/2020-09-01-raspberry-pi-ubuntu-arm64/" />
-  <meta property="og:description" content="After discovering that by default Raspberry installs 32-bit OS, I wanted to reinstall 64 bit.
+  <meta property="og:description" content="After discovering that by default Raspberry installs 32-bit Raspbian OS, I wanted to reinstall it with a 64 bit - this would allow to run Kubernetes on Raspberry
 Decided to go with Ubuntu Server 64.
 Installed it on SD Card with Raspberry Pi Imager.
 After boot found out that need to connect it to WI-FI.
 Configuring wpa_supplicant didn&rsquo;t help, still had issues with not getting IP Address from DHCP.
-Finally, did the following:
-
-
-Create /etc/netplan/01-netcfg.yaml and put the following content there:
-network:
-  version: 2
-  renderer: networkd
-  wifis:
-    wlan0:
-      dhcp4: true
-      dhcp6: true
-      optional: true
-      access-points:
-        &#34;&lt;replace with your wifi network name/SSID&gt;&#34;:
-          password: &#34;&lt;replace with your password&gt;&#34;
-
-
-Change permissions to make file accessible only to root user:
-chmod 600 /etc/netplan/01-netcfg.yaml
-
-
-Configure Linux wireless central regulatory domain agent. Put your country code in /etc/default/crda
-REGDOMAIN=US
-
-
-After that, need to generate and apply netplan:
-sudo netplan --debug generate
-sudo netplan --debug apply
-
-" />
+Finally, did the following:" />
 
   
 
@@ -186,7 +157,7 @@ sudo netplan --debug apply
           
           
           
-          <p>After discovering that by default Raspberry installs 32-bit OS, I wanted to reinstall 64 bit.</p>
+          <p>After discovering that by default Raspberry installs <a href="https://www.raspberrypi.org/downloads/raspberry-pi-os/">32-bit Raspbian OS</a>, I wanted to reinstall it with a 64 bit - this would allow to run Kubernetes on Raspberry</p>
 <p>Decided to go with <a href="https://ubuntu.com/download/raspberry-pi">Ubuntu Server 64</a>.</p>
 <p>Installed it on SD Card with <a href="https://www.raspberrypi.org/downloads/">Raspberry Pi Imager</a>.</p>
 <p>After boot found out that need to connect it to WI-FI.</p>
@@ -221,6 +192,7 @@ sudo netplan --debug apply
 sudo netplan --debug apply
 </code></pre></div></li>
 </ol>
+
         </div>
         
 
