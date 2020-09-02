@@ -123,6 +123,115 @@
         
         
 <div class="sharing">
+    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2012%2f02%2f23%2fjpa-spring-data-jpa%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
+    <a href="https://twitter.com/intent/tweet?text=%d0%a3%d0%bf%d1%80%d0%be%d1%89%d0%b0%d0%b5%d0%bc%20%d1%80%d0%b0%d0%b1%d0%be%d1%82%d1%83%20%d1%81%20JPA%20%d0%bf%d1%80%d0%b8%20%d0%bf%d0%be%d0%bc%d0%be%d1%89%d0%b8%20Spring%20Data%20JPA&url=https%3a%2f%2futhark.github.io%2f2012%2f02%2f23%2fjpa-spring-data-jpa%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
+</div>
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2012/02/23/jpa-spring-data-jpa/">Упрощаем работу с JPA при помощи Spring Data JPA</a>
+    </h1>
+
+</header>
+
+
+        
+        <!-- raw HTML omitted -->
+<p>Несмотря на то, что проект только недавно достиг версии 1.0, у него достаточно богатая история - раньше он развивался в рамках проекта <!-- raw HTML omitted -->Hades<!-- raw HTML omitted -->.</p>
+<!-- raw HTML omitted -->
+<p>Итак, для начала нам необходимо объявить DAO-интерфейс, в котором мы будем объявлять методы для работы с сущностью.</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UserRepository</span> <span class="kd">extends</span> <span class="n">CrudRepository</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">User</span><span class="o">,</span> <span class="n">Long</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="o">{</span>
+<span class="o">}</span>
+
+</code></pre></div><p>Данного кода достаточно для обычного DAO с <!-- raw HTML omitted -->CRUD<!-- raw HTML omitted -->-методами.</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p>Полный список методов, объявленный в CrudRepository можно посмотреть в <!-- raw HTML omitted -->javadoc<!-- raw HTML omitted -->.</p>
+<p>В случае, если нам нужны не все методы, то есть возможность произвести наследование от интерфейса <!-- raw HTML omitted -->Repository<!-- raw HTML omitted --> и перенести в наследника только те методы из интерфейса CrudRepository, которые нужны.</p>
+<!-- raw HTML omitted -->
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"> <span class="n">Page</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">User</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">findAll</span><span class="o">(</span><span class="n">Pageable</span> <span class="n">pageable</span><span class="o">);</span>
+
+</code></pre></div><p>Интерфейс <!-- raw HTML omitted -->Pageable<!-- raw HTML omitted --> инкапсулирует в себе сведения о номере запрашиваемой страницы, размере страницы, а также требуемой сортировке.</p>
+<!-- raw HTML omitted -->
+<p>Например, нам нужен методы для поиска пользователя по логину и по его e-mail адресу:</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"> <span class="n">User</span> <span class="nf">findByLogin</span><span class="o">(</span><span class="n">String</span> <span class="n">login</span><span class="o">);</span>
+ <span class="n">User</span> <span class="nf">findByEmail</span><span class="o">(</span><span class="n">String</span> <span class="n">email</span><span class="o">);</span>
+</code></pre></div><p>Все просто.</p>
+<p>В случае, если нужны более сложные условия для поиска, то и это тоже реализовано.</p>
+<p>Spring Data поддерживает следующие операторы:</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p>Если необходимо, чтобы в результатах поиска было несколько сущностей, то необходимо называть метод find<!-- raw HTML omitted -->All<!-- raw HTML omitted --></p>
+<!-- raw HTML omitted -->
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Controller</span>
+<span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&#34;/users&#34;</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserController</span> <span class="o">{</span>
+
+  <span class="kd">private</span> <span class="kd">final</span> <span class="n">UserRepository</span> <span class="n">userRepository</span><span class="o">;</span>
+
+  <span class="kd">public</span> <span class="nf">UserController</span><span class="o">(</span><span class="n">UserRepository</span> <span class="n">userRepository</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">userRepository</span> <span class="o">=</span> <span class="n">userRepository</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&#34;/{id}&#34;</span><span class="o">)</span>
+  <span class="kd">public</span> <span class="n">String</span> <span class="nf">showUserForm</span><span class="o">(</span><span class="nd">@PathVariable</span><span class="o">(</span><span class="s">&#34;id&#34;</span><span class="o">)</span> <span class="n">Long</span> <span class="n">id</span><span class="o">,</span> <span class="n">Model</span> <span class="n">model</span><span class="o">)</span> <span class="o">{</span>
+    
+    <span class="c1">// Do null check for id
+</span><span class="c1"></span>    <span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="n">userRepository</span><span class="o">.</span><span class="na">findOne</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
+    <span class="c1">// Do null check for user
+</span><span class="c1"></span>    <span class="c1">// Populate model
+</span><span class="c1"></span>    <span class="k">return</span> <span class="s">&#34;user&#34;</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><p>Во-первых, вы объявляете зависимость на DAO, а во-вторых всегда вызываете метод <!-- raw HTML omitted -->findOne()<!-- raw HTML omitted --> для загрузки сущности. К счастью, Spring позволяет нам преобразовывать строковые значения из HTTP-запросов в любой нужный тип используя либо <!-- raw HTML omitted --><!-- raw HTML omitted -->PropertyEditor<!-- raw HTML omitted --><!-- raw HTML omitted -->, либо <!-- raw HTML omitted --><!-- raw HTML omitted -->ConversionService<!-- raw HTML omitted --><!-- raw HTML omitted -->.</p>
+<p>Если вы используете Spring версии 3.0 и выше, то вам необходимо добавить следующую конфигурацию:</p>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="ni">&amp;lt;</span>mvc:annotation-driven conversion-service=&#34;conversionService&#34; /<span class="ni">&amp;gt;</span>
+<span class="ni">&amp;lt;</span>bean id=&#34;conversionService&#34; class=&#34;<span class="ni">&amp;#8230;</span>.context.support.ConversionServiceFactoryBean&#34;<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>property name=&#34;converters&#34;<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>list<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>bean class=&#34;org.springframework.data.repository.support.DomainClassConverter&#34;<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>constructor-arg ref=&#34;conversionService&#34; /<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>/bean<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>/list<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>/property<span class="ni">&amp;gt;</span>
+<span class="ni">&amp;lt;</span>/bean<span class="ni">&amp;gt;</span>
+</code></pre></div><p>Если же вы используете Spring более старой версии, то вам необходима вот такая конфигурация:</p>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="ni">&amp;lt;</span>bean class=&#34;<span class="ni">&amp;#8230;</span>.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter&#34;<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>property name=&#34;webBindingInitializer&#34;<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>bean class=&#34;<span class="ni">&amp;#8230;</span>.web.bind.support.ConfigurableWebBindingInitializer&#34;<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>property name=&#34;propertyEditorRegistrars&#34;<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>bean class=&#34;org.springframework.data.repository.support.DomainClassPropertyEditorRegistrar&#34; /<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>/property<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>/bean<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>/property<span class="ni">&amp;gt;</span>
+<span class="ni">&amp;lt;</span>/bean<span class="ni">&amp;gt;</span>
+</code></pre></div><p>После данных изменений в конфигурации можно переписать контроллер следующим образом:</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">
+<span class="nd">@Controller</span>
+<span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&#34;/users&#34;</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserController</span> <span class="o">{</span>
+
+  <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&#34;/{id}&#34;</span><span class="o">)</span>
+  <span class="kd">public</span> <span class="n">String</span> <span class="nf">showUserForm</span><span class="o">(</span><span class="nd">@PathVariable</span><span class="o">(</span><span class="s">&#34;id&#34;</span><span class="o">)</span> <span class="n">User</span> <span class="n">user</span><span class="o">,</span> <span class="n">Model</span> <span class="n">model</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="c1">// Do null check for user
+</span><span class="c1"></span>    <span class="c1">// Populate model
+</span><span class="c1"></span>    <span class="k">return</span> <span class="s">&#34;userForm&#34;</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><p>Обратите внимание на то, как упростился код и как мы красиво избавились от его дублирования.</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2012%2f02%2f09%2fjava-rest%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=%d0%a0%d0%b0%d0%b7%d1%80%d0%b0%d0%b1%d0%be%d1%82%d0%ba%d0%b0%20%d0%b8%20%d1%82%d0%b5%d1%81%d1%82%d0%b8%d1%80%d0%be%d0%b2%d0%b0%d0%bd%d0%b8%d0%b5%20Java%20REST%20%d0%b2%d0%b5%d0%b1-%d1%81%d0%b5%d1%80%d0%b2%d0%b8%d1%81%d0%be%d0%b2&url=https%3a%2f%2futhark.github.io%2f2012%2f02%2f09%2fjava-rest%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
 </div>
@@ -872,62 +981,6 @@
 
 </code></pre></div><!-- raw HTML omitted -->
 
-        
-
-    </article>
-    
-    <article>
-
-        
-        
-<div class="sharing">
-    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2010%2f04%2f11%2fgorm%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
-    <a href="https://twitter.com/intent/tweet?text=%d0%9d%d0%b5%d1%81%d0%ba%d0%be%d0%bb%d1%8c%d0%ba%d0%be%20%d1%81%d0%bb%d0%be%d0%b2%20%d0%be%20GORM&url=https%3a%2f%2futhark.github.io%2f2010%2f04%2f11%2fgorm%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
-</div>
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2010/04/11/gorm/">Несколько слов о GORM</a>
-    </h1>
-
-</header>
-
-
-        
-        <!-- raw HTML omitted -->
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">Person</span> <span class="kd">implements</span> <span class="n">Serializable</span> <span class="o">{</span>
-  <span class="kd">static</span> <span class="n">hasMany</span> <span class="o">=</span> <span class="o">[</span>
-    <span class="n">scores</span><span class="o">:</span> <span class="n">ScoreSheet</span>
-  <span class="o">]</span>
-  
-  <span class="kd">static</span> <span class="n">mapping</span> <span class="o">=</span> <span class="o">{</span>
-    <span class="n">scores</span> <span class="n">joinTable</span><span class="o">:</span> <span class="kc">false</span>
-  <span class="o">};</span>
-<span class="o">}</span>
-</code></pre></div><!-- raw HTML omitted -->
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">Note</span> <span class="kd">implements</span> <span class="n">Serializable</span> <span class="o">{</span>
-  <span class="kd">static</span> <span class="n">belongsTo</span> <span class="o">=</span> <span class="o">[</span>
-    <span class="n">person</span><span class="o">:</span> <span class="n">Person</span>
-  <span class="o">]</span>
-<span class="o">}</span>
-
-<span class="kd">class</span> <span class="nc">Person</span> <span class="kd">implements</span> <span class="n">Serializable</span> <span class="o">{</span>
-  <span class="c1">// person fields.
-</span><span class="c1"></span><span class="o">}</span>
-</code></pre></div><!-- raw HTML omitted -->
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">Payment</span> <span class="o">{</span>
-  <span class="n">Long</span> <span class="n">id</span>
-  <span class="n">Long</span> <span class="n">version</span>
-  <span class="n">Integer</span> <span class="n">amount</span>
-
-  <span class="kd">static</span> <span class="n">mapping</span> <span class="o">=</span> <span class="o">{</span>
-    <span class="n">tablePerHierarchy</span> <span class="kc">false</span>
-  <span class="o">}</span>
-<span class="o">}</span>
-
-<span class="kd">class</span> <span class="nc">CreditCardPayment</span> <span class="kd">extends</span> <span class="n">Payment</span> <span class="o">{</span>
-  <span class="n">String</span> <span class="n">cardNumber</span>
-<span class="o">}</span>
-</code></pre></div>
         
 
     </article>

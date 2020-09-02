@@ -6,10 +6,37 @@
     <description>Recent content in Categories on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 31 Aug 2020 22:55:25 -0700</lastBuildDate>
+    <lastBuildDate>Wed, 02 Sep 2020 09:19:21 -0700</lastBuildDate>
     
 	<atom:link href="https://uthark.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>arm64</title>
+      <link>https://uthark.github.io/categories/arm64/</link>
+      <pubDate>Wed, 02 Sep 2020 09:19:21 -0700</pubDate>
+      
+      <guid>https://uthark.github.io/categories/arm64/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>raspberrypi</title>
+      <link>https://uthark.github.io/categories/raspberrypi/</link>
+      <pubDate>Wed, 02 Sep 2020 09:19:21 -0700</pubDate>
+      
+      <guid>https://uthark.github.io/categories/raspberrypi/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>ubuntu</title>
+      <link>https://uthark.github.io/categories/ubuntu/</link>
+      <pubDate>Wed, 02 Sep 2020 09:19:21 -0700</pubDate>
+      
+      <guid>https://uthark.github.io/categories/ubuntu/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>adblocking</title>

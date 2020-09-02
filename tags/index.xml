@@ -6,17 +6,53 @@
     <description>Recent content in Tags on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 31 Aug 2020 22:55:25 -0700</lastBuildDate>
+    <lastBuildDate>Wed, 02 Sep 2020 09:19:21 -0700</lastBuildDate>
     
 	<atom:link href="https://uthark.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>tag1</title>
-      <link>https://uthark.github.io/tags/tag1/</link>
+      <title>netplan</title>
+      <link>https://uthark.github.io/tags/netplan/</link>
+      <pubDate>Wed, 02 Sep 2020 09:19:21 -0700</pubDate>
+      
+      <guid>https://uthark.github.io/tags/netplan/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>ubuntu</title>
+      <link>https://uthark.github.io/tags/ubuntu/</link>
+      <pubDate>Wed, 02 Sep 2020 09:19:21 -0700</pubDate>
+      
+      <guid>https://uthark.github.io/tags/ubuntu/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>wi-fi</title>
+      <link>https://uthark.github.io/tags/wi-fi/</link>
+      <pubDate>Wed, 02 Sep 2020 09:19:21 -0700</pubDate>
+      
+      <guid>https://uthark.github.io/tags/wi-fi/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>wpa_supplicant</title>
+      <link>https://uthark.github.io/tags/wpa_supplicant/</link>
+      <pubDate>Wed, 02 Sep 2020 09:19:21 -0700</pubDate>
+      
+      <guid>https://uthark.github.io/tags/wpa_supplicant/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>raspberry</title>
+      <link>https://uthark.github.io/tags/raspberry/</link>
       <pubDate>Mon, 31 Aug 2020 22:55:25 -0700</pubDate>
       
-      <guid>https://uthark.github.io/tags/tag1/</guid>
+      <guid>https://uthark.github.io/tags/raspberry/</guid>
       <description></description>
     </item>
     

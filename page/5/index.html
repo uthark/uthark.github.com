@@ -123,6 +123,101 @@
         
         
 <div class="sharing">
+    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2013%2f06%2f19%2fspring-caching%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
+    <a href="https://twitter.com/intent/tweet?text=%d0%98%d1%81%d0%bf%d0%be%d0%bb%d1%8c%d0%b7%d0%be%d0%b2%d0%b0%d0%bd%d0%b8%d0%b5%20memcached%20%d0%b2%20%d0%ba%d0%b0%d1%87%d0%b5%d1%81%d1%82%d0%b2%d0%b5%20backend%20%d0%b4%d0%bb%d1%8f%20Spring%20Caching%20Abstraction&url=https%3a%2f%2futhark.github.io%2f2013%2f06%2f19%2fspring-caching%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
+</div>
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2013/06/19/spring-caching/">Использование memcached в качестве backend для Spring Caching Abstraction</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>В <a href="http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/html/new-in-3.1.html">Spring 3.1</a> появился замечательный модуль - <a href="http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/html/cache.html">Spring Cache</a>, который является абстракцией над кэшированием, что позволяет декларативно реализовывать кэширование в приложении.</p>
+<p>Я не буду вдаваться в подробности работы, их можно прочитать в документации, но опишу, каким образом можно настроить <a href="http://memcached.org/">memcached</a> в качестве бэкэнда для работы.</p>
+<h2 id="подключение-зависимостей">Подключение зависимостей</h2>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.google.code.simple-spring-memcached<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spymemcached-provider<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>3.1.0<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.google.code.simple-spring-memcached<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-cache<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>3.1.0<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div><p><code>spymemcached-provider</code> - это библиотечка для работы с <code>memcached</code> из Java, а <code>spring-cache</code> - модуль интеграции со Spring.</p>
+<h2 id="включение-кэширования">Включение кэширования</h2>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Configuration</span><span class="o">(</span><span class="s">&#34;serviceConfiguration&#34;</span><span class="o">)</span>
+<span class="nd">@EnableCaching</span><span class="o">(</span><span class="n">proxyTargetClass</span> <span class="o">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="n">AdviceMode</span><span class="o">.</span><span class="na">PROXY</span><span class="o">)</span>
+<span class="nd">@Import</span><span class="o">(</span><span class="n">CacheConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ServiceConfiguration</span> <span class="o">{</span>
+  <span class="c1">// bean declarations goes here.
+</span><span class="c1"></span><span class="o">}</span>
+</code></pre></div><p>Аннотация <code>@EnableCaching</code> включает кэширование. Конфигурацию бинов для кэширования мы выносим в отдельный класс, <code>CacheConfiguration</code>, чтобы не смешивать бины, отвечающие за кэширование с бинами, отвечающими за бизнес-логику.</p>
+<p>Объявляем необходимые для работы бины:</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Configuration</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CacheConfiguration</span> <span class="o">{</span>
+
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">&#34;${memcached.url}&#34;</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">memcachedUrl</span><span class="o">;</span>
+
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="n">CacheManager</span> <span class="nf">cacheManager</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">SSMCacheManager</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SSMCacheManager</span><span class="o">();</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">setCaches</span><span class="o">(</span><span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span>
+                <span class="k">new</span> <span class="n">SSMCache</span><span class="o">(</span><span class="n">defaultCacheFactory</span><span class="o">().</span><span class="na">getObject</span><span class="o">(),</span> <span class="n">45</span><span class="o">)</span>
+        <span class="o">));</span>
+        <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="n">CacheFactory</span> <span class="nf">defaultCacheFactory</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">CacheFactory</span> <span class="n">factory</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CacheFactory</span><span class="o">();</span>
+        <span class="n">factory</span><span class="o">.</span><span class="na">setCacheName</span><span class="o">(</span><span class="s">&#34;defaultCache&#34;</span><span class="o">);</span>
+        <span class="n">factory</span><span class="o">.</span><span class="na">setAddressProvider</span><span class="o">(</span><span class="n">addressProvider</span><span class="o">());</span>
+        <span class="n">factory</span><span class="o">.</span><span class="na">setCacheClientFactory</span><span class="o">(</span><span class="n">cacheClientFactory</span><span class="o">());</span>
+        <span class="n">factory</span><span class="o">.</span><span class="na">setConfiguration</span><span class="o">(</span><span class="n">cacheConfiguration</span><span class="o">());</span>
+        <span class="k">return</span> <span class="n">factory</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Bean</span>
+    <span class="nd">@Scope</span><span class="o">(</span><span class="n">ConfigurableBeanFactory</span><span class="o">.</span><span class="na">SCOPE_PROTOTYPE</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">CacheClientFactory</span> <span class="nf">cacheClientFactory</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="n">MemcacheClientFactoryImpl</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="n">AddressProvider</span> <span class="nf">addressProvider</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="n">DefaultAddressProvider</span><span class="o">(</span><span class="n">memcachedUrl</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Bean</span>
+    <span class="nd">@Scope</span><span class="o">(</span><span class="n">ConfigurableBeanFactory</span><span class="o">.</span><span class="na">SCOPE_PROTOTYPE</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">com</span><span class="o">.</span><span class="na">google</span><span class="o">.</span><span class="na">code</span><span class="o">.</span><span class="na">ssm</span><span class="o">.</span><span class="na">providers</span><span class="o">.</span><span class="na">CacheConfiguration</span> <span class="nf">cacheConfiguration</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">com</span><span class="o">.</span><span class="na">google</span><span class="o">.</span><span class="na">code</span><span class="o">.</span><span class="na">ssm</span><span class="o">.</span><span class="na">providers</span><span class="o">.</span><span class="na">CacheConfiguration</span> <span class="n">configuration</span> <span class="o">=</span>
+                <span class="k">new</span> <span class="n">com</span><span class="o">.</span><span class="na">google</span><span class="o">.</span><span class="na">code</span><span class="o">.</span><span class="na">ssm</span><span class="o">.</span><span class="na">providers</span><span class="o">.</span><span class="na">CacheConfiguration</span><span class="o">();</span>
+        <span class="n">configuration</span><span class="o">.</span><span class="na">setConsistentHashing</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">configuration</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><h2 id="использование">Использование</h2>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Cacheable</span><span class="o">(</span><span class="s">&#34;defaultCache&#34;</span><span class="o">)</span>
+<span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">getUser</span><span class="o">(</span><span class="nd">@NotNull</span> <span class="n">String</span> <span class="n">username</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+    <span class="c1">// ...
+</span><span class="c1"></span><span class="o">}</span>
+</code></pre></div>
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2013%2f06%2f19%2fcustom-bean-validator%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=%d0%9f%d0%b8%d1%88%d0%b5%d0%bc%20%d0%b2%d0%b0%d0%bb%d0%b8%d0%b4%d0%b0%d1%82%d0%be%d1%80%20%d0%b4%d0%bb%d1%8f%20Bean%20Validation%20API&url=https%3a%2f%2futhark.github.io%2f2013%2f06%2f19%2fcustom-bean-validator%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
 </div>
@@ -634,115 +729,6 @@
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">String</span> <span class="n">dateStr</span> <span class="o">=</span> <span class="o">...</span>
 <span class="n">Date</span> <span class="n">parsedDate</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MailDateFormat</span><span class="o">().</span><span class="na">parse</span><span class="o">(</span><span class="n">dateStr</span><span class="o">);</span>
 </code></pre></div>
-        
-
-    </article>
-    
-    <article>
-
-        
-        
-<div class="sharing">
-    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2012%2f02%2f23%2fjpa-spring-data-jpa%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
-    <a href="https://twitter.com/intent/tweet?text=%d0%a3%d0%bf%d1%80%d0%be%d1%89%d0%b0%d0%b5%d0%bc%20%d1%80%d0%b0%d0%b1%d0%be%d1%82%d1%83%20%d1%81%20JPA%20%d0%bf%d1%80%d0%b8%20%d0%bf%d0%be%d0%bc%d0%be%d1%89%d0%b8%20Spring%20Data%20JPA&url=https%3a%2f%2futhark.github.io%2f2012%2f02%2f23%2fjpa-spring-data-jpa%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
-</div>
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2012/02/23/jpa-spring-data-jpa/">Упрощаем работу с JPA при помощи Spring Data JPA</a>
-    </h1>
-
-</header>
-
-
-        
-        <!-- raw HTML omitted -->
-<p>Несмотря на то, что проект только недавно достиг версии 1.0, у него достаточно богатая история - раньше он развивался в рамках проекта <!-- raw HTML omitted -->Hades<!-- raw HTML omitted -->.</p>
-<!-- raw HTML omitted -->
-<p>Итак, для начала нам необходимо объявить DAO-интерфейс, в котором мы будем объявлять методы для работы с сущностью.</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UserRepository</span> <span class="kd">extends</span> <span class="n">CrudRepository</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">User</span><span class="o">,</span> <span class="n">Long</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="o">{</span>
-<span class="o">}</span>
-
-</code></pre></div><p>Данного кода достаточно для обычного DAO с <!-- raw HTML omitted -->CRUD<!-- raw HTML omitted -->-методами.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>Полный список методов, объявленный в CrudRepository можно посмотреть в <!-- raw HTML omitted -->javadoc<!-- raw HTML omitted -->.</p>
-<p>В случае, если нам нужны не все методы, то есть возможность произвести наследование от интерфейса <!-- raw HTML omitted -->Repository<!-- raw HTML omitted --> и перенести в наследника только те методы из интерфейса CrudRepository, которые нужны.</p>
-<!-- raw HTML omitted -->
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"> <span class="n">Page</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">User</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">findAll</span><span class="o">(</span><span class="n">Pageable</span> <span class="n">pageable</span><span class="o">);</span>
-
-</code></pre></div><p>Интерфейс <!-- raw HTML omitted -->Pageable<!-- raw HTML omitted --> инкапсулирует в себе сведения о номере запрашиваемой страницы, размере страницы, а также требуемой сортировке.</p>
-<!-- raw HTML omitted -->
-<p>Например, нам нужен методы для поиска пользователя по логину и по его e-mail адресу:</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"> <span class="n">User</span> <span class="nf">findByLogin</span><span class="o">(</span><span class="n">String</span> <span class="n">login</span><span class="o">);</span>
- <span class="n">User</span> <span class="nf">findByEmail</span><span class="o">(</span><span class="n">String</span> <span class="n">email</span><span class="o">);</span>
-</code></pre></div><p>Все просто.</p>
-<p>В случае, если нужны более сложные условия для поиска, то и это тоже реализовано.</p>
-<p>Spring Data поддерживает следующие операторы:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>Если необходимо, чтобы в результатах поиска было несколько сущностей, то необходимо называть метод find<!-- raw HTML omitted -->All<!-- raw HTML omitted --></p>
-<!-- raw HTML omitted -->
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Controller</span>
-<span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&#34;/users&#34;</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserController</span> <span class="o">{</span>
-
-  <span class="kd">private</span> <span class="kd">final</span> <span class="n">UserRepository</span> <span class="n">userRepository</span><span class="o">;</span>
-
-  <span class="kd">public</span> <span class="nf">UserController</span><span class="o">(</span><span class="n">UserRepository</span> <span class="n">userRepository</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">userRepository</span> <span class="o">=</span> <span class="n">userRepository</span><span class="o">;</span>
-  <span class="o">}</span>
-
-  <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&#34;/{id}&#34;</span><span class="o">)</span>
-  <span class="kd">public</span> <span class="n">String</span> <span class="nf">showUserForm</span><span class="o">(</span><span class="nd">@PathVariable</span><span class="o">(</span><span class="s">&#34;id&#34;</span><span class="o">)</span> <span class="n">Long</span> <span class="n">id</span><span class="o">,</span> <span class="n">Model</span> <span class="n">model</span><span class="o">)</span> <span class="o">{</span>
-    
-    <span class="c1">// Do null check for id
-</span><span class="c1"></span>    <span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="n">userRepository</span><span class="o">.</span><span class="na">findOne</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
-    <span class="c1">// Do null check for user
-</span><span class="c1"></span>    <span class="c1">// Populate model
-</span><span class="c1"></span>    <span class="k">return</span> <span class="s">&#34;user&#34;</span><span class="o">;</span>
-  <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div><p>Во-первых, вы объявляете зависимость на DAO, а во-вторых всегда вызываете метод <!-- raw HTML omitted -->findOne()<!-- raw HTML omitted --> для загрузки сущности. К счастью, Spring позволяет нам преобразовывать строковые значения из HTTP-запросов в любой нужный тип используя либо <!-- raw HTML omitted --><!-- raw HTML omitted -->PropertyEditor<!-- raw HTML omitted --><!-- raw HTML omitted -->, либо <!-- raw HTML omitted --><!-- raw HTML omitted -->ConversionService<!-- raw HTML omitted --><!-- raw HTML omitted -->.</p>
-<p>Если вы используете Spring версии 3.0 и выше, то вам необходимо добавить следующую конфигурацию:</p>
-<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="ni">&amp;lt;</span>mvc:annotation-driven conversion-service=&#34;conversionService&#34; /<span class="ni">&amp;gt;</span>
-<span class="ni">&amp;lt;</span>bean id=&#34;conversionService&#34; class=&#34;<span class="ni">&amp;#8230;</span>.context.support.ConversionServiceFactoryBean&#34;<span class="ni">&amp;gt;</span>
-  <span class="ni">&amp;lt;</span>property name=&#34;converters&#34;<span class="ni">&amp;gt;</span>
-    <span class="ni">&amp;lt;</span>list<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>bean class=&#34;org.springframework.data.repository.support.DomainClassConverter&#34;<span class="ni">&amp;gt;</span>
-        <span class="ni">&amp;lt;</span>constructor-arg ref=&#34;conversionService&#34; /<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>/bean<span class="ni">&amp;gt;</span>
-    <span class="ni">&amp;lt;</span>/list<span class="ni">&amp;gt;</span>
-  <span class="ni">&amp;lt;</span>/property<span class="ni">&amp;gt;</span>
-<span class="ni">&amp;lt;</span>/bean<span class="ni">&amp;gt;</span>
-</code></pre></div><p>Если же вы используете Spring более старой версии, то вам необходима вот такая конфигурация:</p>
-<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="ni">&amp;lt;</span>bean class=&#34;<span class="ni">&amp;#8230;</span>.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter&#34;<span class="ni">&amp;gt;</span>
-  <span class="ni">&amp;lt;</span>property name=&#34;webBindingInitializer&#34;<span class="ni">&amp;gt;</span>
-    <span class="ni">&amp;lt;</span>bean class=&#34;<span class="ni">&amp;#8230;</span>.web.bind.support.ConfigurableWebBindingInitializer&#34;<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>property name=&#34;propertyEditorRegistrars&#34;<span class="ni">&amp;gt;</span>
-        <span class="ni">&amp;lt;</span>bean class=&#34;org.springframework.data.repository.support.DomainClassPropertyEditorRegistrar&#34; /<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>/property<span class="ni">&amp;gt;</span>
-    <span class="ni">&amp;lt;</span>/bean<span class="ni">&amp;gt;</span>
-  <span class="ni">&amp;lt;</span>/property<span class="ni">&amp;gt;</span>
-<span class="ni">&amp;lt;</span>/bean<span class="ni">&amp;gt;</span>
-</code></pre></div><p>После данных изменений в конфигурации можно переписать контроллер следующим образом:</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">
-<span class="nd">@Controller</span>
-<span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&#34;/users&#34;</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserController</span> <span class="o">{</span>
-
-  <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&#34;/{id}&#34;</span><span class="o">)</span>
-  <span class="kd">public</span> <span class="n">String</span> <span class="nf">showUserForm</span><span class="o">(</span><span class="nd">@PathVariable</span><span class="o">(</span><span class="s">&#34;id&#34;</span><span class="o">)</span> <span class="n">User</span> <span class="n">user</span><span class="o">,</span> <span class="n">Model</span> <span class="n">model</span><span class="o">)</span> <span class="o">{</span>
-
-    <span class="c1">// Do null check for user
-</span><span class="c1"></span>    <span class="c1">// Populate model
-</span><span class="c1"></span>    <span class="k">return</span> <span class="s">&#34;userForm&#34;</span><span class="o">;</span>
-  <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div><p>Обратите внимание на то, как упростился код и как мы красиво избавились от его дублирования.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-
         
 
     </article>

@@ -9,7 +9,7 @@
   <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=5">
 
   
-  <title>Raspberry Pi with pi-hole</title>
+  <title>Configuring Wi-Fi on Ubuntu Server 64-bit on Raspberry Pi 4</title>
 
 
   <meta name="description" content="">
@@ -53,14 +53,47 @@
   <meta name="twitter:site" content="@LinkageError">
   <meta name="twitter:creator" content="@LinkageError">
 
-  <meta name="twitter:title" content="Raspberry Pi with pi-hole">
+  <meta name="twitter:title" content="Configuring Wi-Fi on Ubuntu Server 64-bit on Raspberry Pi 4">
 
   
 
-  <meta property="og:title" content="Raspberry Pi with pi-hole" />
-  <meta property="og:url" content="https://uthark.github.io/post/2020-08-31-pihole/" />
-  <meta property="og:description" content="Several years ago I bought Raspberry Pi 3. It was a nice toy, but it was very slow and almost impossible to use, so it didn&rsquo;t stick. Recently I bought new Raspberry Pi 4 because it has much better hardware (especially 8GB RAM option).
-Idea was to use it as a mini-server and run pi-hole on it. In general, it was a success, after installing raspbian, I installed docker on it and run pi-hole docker installation." />
+  <meta property="og:title" content="Configuring Wi-Fi on Ubuntu Server 64-bit on Raspberry Pi 4" />
+  <meta property="og:url" content="https://uthark.github.io/post/2020-09-01-raspberry-pi-ubuntu-arm64/" />
+  <meta property="og:description" content="After discovering that by default Raspberry installs 32-bit OS, I wanted to reinstall 64 bit.
+Decided to go with Ubuntu Server 64.
+Installed it on SD Card with Raspberry Pi Imager.
+After boot found out that need to connect it to WI-FI.
+Configuring wpa_supplicant didn&rsquo;t help, still had issues with not getting IP Address from DHCP.
+Finally, did the following:
+
+
+Create /etc/netplan/01-netcfg.yaml and put the following content there:
+network:
+  version: 2
+  renderer: networkd
+  wifis:
+    wlan0:
+      dhcp4: true
+      dhcp6: true
+      optional: true
+      access-points:
+        &#34;&lt;replace with your wifi network name/SSID&gt;&#34;:
+          password: &#34;&lt;replace with your password&gt;&#34;
+
+
+Change permissions to make file accessible only to root user:
+chmod 600 /etc/netplan/01-netcfg.yaml
+
+
+Configure Linux wireless central regulatory domain agent. Put your country code in /etc/default/crda
+REGDOMAIN=US
+
+
+After that, need to generate and apply netplan:
+sudo netplan --debug generate
+sudo netplan --debug apply
+
+" />
 
   
 
@@ -137,12 +170,12 @@ Idea was to use it as a mini-server and run pi-hole on it. In general, it was a 
         
         
 <div class="sharing">
-    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2fpost%2f2020-08-31-pihole%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
-    <a href="https://twitter.com/intent/tweet?text=Raspberry%20Pi%20with%20pi-hole&url=https%3a%2f%2futhark.github.io%2fpost%2f2020-08-31-pihole%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
+    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2fpost%2f2020-09-01-raspberry-pi-ubuntu-arm64%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
+    <a href="https://twitter.com/intent/tweet?text=Configuring%20Wi-Fi%20on%20Ubuntu%20Server%2064-bit%20on%20Raspberry%20Pi%204&url=https%3a%2f%2futhark.github.io%2fpost%2f2020-09-01-raspberry-pi-ubuntu-arm64%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
 </div>
 <header>
     <h1 class="entry-title">
-         Raspberry Pi with pi-hole 
+         Configuring Wi-Fi on Ubuntu Server 64-bit on Raspberry Pi 4 
     </h1>
 
 </header>
@@ -153,11 +186,41 @@ Idea was to use it as a mini-server and run pi-hole on it. In general, it was a 
           
           
           
-          <p>Several years ago I bought Raspberry Pi 3. It was a nice toy, but it was very slow and almost impossible to use, so it didn&rsquo;t stick. Recently I bought new Raspberry Pi 4 because it has much better hardware (especially 8GB RAM option).</p>
-<p>Idea was to use it as a mini-server and run <a href="https://pi-hole.net">pi-hole</a> on it. In general, it was a success, after installing raspbian, I installed docker on it and run pi-hole docker installation. Few tweaks were required to configure my router to update DNS, but I&rsquo;m still not happy with the result. My router doesn&rsquo;t allow to customize DNS servers that are distributed via DHCP, so all clients get default DNS which is my router, and router uses Pi Hole. As a result, in pi-hole I see only 2 clients - <code>localhost</code> and my router.</p>
-<p>But still get a lot of benefits by blocking most of the ads on most of my devices, which is really nice, especially in 2020, when amount of ads on the websites is enormous.</p>
-<p>The next idea to try is to install <code>arm64</code> kernel and try to install kubernetes (or at least a <code>kubelet</code>).</p>
-
+          <p>After discovering that by default Raspberry installs 32-bit OS, I wanted to reinstall 64 bit.</p>
+<p>Decided to go with <a href="https://ubuntu.com/download/raspberry-pi">Ubuntu Server 64</a>.</p>
+<p>Installed it on SD Card with <a href="https://www.raspberrypi.org/downloads/">Raspberry Pi Imager</a>.</p>
+<p>After boot found out that need to connect it to WI-FI.</p>
+<p>Configuring <code>wpa_supplicant</code> didn&rsquo;t help, still had issues with not getting IP Address from DHCP.</p>
+<p>Finally, did the following:</p>
+<ol>
+<li>
+<p>Create <code>/etc/netplan/01-netcfg.yaml</code> and put the following content there:</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">network:
+  version: 2
+  renderer: networkd
+  wifis:
+    wlan0:
+      dhcp4: true
+      dhcp6: true
+      optional: true
+      access-points:
+        &#34;&lt;replace with your wifi network name/SSID&gt;&#34;:
+          password: &#34;&lt;replace with your password&gt;&#34;
+</code></pre></div></li>
+<li>
+<p>Change permissions to make file accessible only to <code>root</code> user:</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">chmod 600 /etc/netplan/01-netcfg.yaml
+</code></pre></div></li>
+<li>
+<p>Configure <a href="https://linux.die.net/man/8/crda">Linux wireless central regulatory domain agent</a>. Put your country code in <code>/etc/default/crda</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">REGDOMAIN=US
+</code></pre></div></li>
+<li>
+<p>After that, need to generate and apply netplan:</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">sudo netplan --debug generate
+sudo netplan --debug apply
+</code></pre></div></li>
+</ol>
         </div>
         
 
@@ -170,18 +233,18 @@ Idea was to use it as a mini-server and run pi-hole on it. In general, it was a 
     
     
     
-    Filed under: <a class="label" href="https://uthark.github.io/categories/raspberry/">raspberry</a><a class="label" href="https://uthark.github.io/categories/adblocking/">adblocking</a><a class="label" href="https://uthark.github.io/categories/pihole/">pihole</a>
+    Filed under: <a class="label" href="https://uthark.github.io/categories/raspberrypi/">raspberrypi</a><a class="label" href="https://uthark.github.io/categories/ubuntu/">ubuntu</a><a class="label" href="https://uthark.github.io/categories/arm64/">arm64</a>
     
   </p>
 
   <p class="meta">
     
-    Last update: <time datetime="2020-08-31">Aug 31, 2020</time>
+    Last update: <time datetime="2020-09-02">Sep 2, 2020</time>
     
     <span class="categories">
         Tags:
       
-          <a class="category" href="https://uthark.github.io/tags/raspberry">raspberry</a>  <a class="category" href="https://uthark.github.io/tags/tag2">tag2</a>  
+          <a class="category" href="https://uthark.github.io/tags/ubuntu">ubuntu</a>  <a class="category" href="https://uthark.github.io/tags/wpa_supplicant">wpa_supplicant</a>  <a class="category" href="https://uthark.github.io/tags/netplan">netplan</a>  <a class="category" href="https://uthark.github.io/tags/wi-fi">wi-fi</a>  
     </span>
     
   </p>
@@ -192,11 +255,9 @@ Idea was to use it as a mini-server and run pi-hole on it. In general, it was a 
 
   <p class="meta">
     
-        <a class="basic-alignment left" href="https://uthark.github.io/post/2018-02-24-used-stuff/" title="My Setup">My Setup</a>
+        <a class="basic-alignment left" href="https://uthark.github.io/post/2020-08-31-pihole/" title="Raspberry Pi with pi-hole">Raspberry Pi with pi-hole</a>
     
 
-    
-      <a class="basic-alignment right" href="https://uthark.github.io/post/2020-09-01-raspberry-pi-ubuntu-arm64/" title="Configuring Wi-Fi on Ubuntu Server 64-bit on Raspberry Pi 4">Configuring Wi-Fi on Ubuntu Server 64-bit on Raspberry Pi 4</a>
     
   </p>
   

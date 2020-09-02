@@ -123,6 +123,62 @@
         
         
 <div class="sharing">
+    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2fpost%2f2020-09-01-raspberry-pi-ubuntu-arm64%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
+    <a href="https://twitter.com/intent/tweet?text=Configuring%20Wi-Fi%20on%20Ubuntu%20Server%2064-bit%20on%20Raspberry%20Pi%204&url=https%3a%2f%2futhark.github.io%2fpost%2f2020-09-01-raspberry-pi-ubuntu-arm64%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
+</div>
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/post/2020-09-01-raspberry-pi-ubuntu-arm64/">Configuring Wi-Fi on Ubuntu Server 64-bit on Raspberry Pi 4</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>After discovering that by default Raspberry installs 32-bit OS, I wanted to reinstall 64 bit.</p>
+<p>Decided to go with <a href="https://ubuntu.com/download/raspberry-pi">Ubuntu Server 64</a>.</p>
+<p>Installed it on SD Card with <a href="https://www.raspberrypi.org/downloads/">Raspberry Pi Imager</a>.</p>
+<p>After boot found out that need to connect it to WI-FI.</p>
+<p>Configuring <code>wpa_supplicant</code> didn&rsquo;t help, still had issues with not getting IP Address from DHCP.</p>
+<p>Finally, did the following:</p>
+<ol>
+<li>
+<p>Create <code>/etc/netplan/01-netcfg.yaml</code> and put the following content there:</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">network:
+  version: 2
+  renderer: networkd
+  wifis:
+    wlan0:
+      dhcp4: true
+      dhcp6: true
+      optional: true
+      access-points:
+        &#34;&lt;replace with your wifi network name/SSID&gt;&#34;:
+          password: &#34;&lt;replace with your password&gt;&#34;
+</code></pre></div></li>
+<li>
+<p>Change permissions to make file accessible only to <code>root</code> user:</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">chmod 600 /etc/netplan/01-netcfg.yaml
+</code></pre></div></li>
+<li>
+<p>Configure <a href="https://linux.die.net/man/8/crda">Linux wireless central regulatory domain agent</a>. Put your country code in <code>/etc/default/crda</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">REGDOMAIN=US
+</code></pre></div></li>
+<li>
+<p>After that, need to generate and apply netplan:</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">sudo netplan --debug generate
+sudo netplan --debug apply
+</code></pre></div></li>
+</ol>
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2fpost%2f2020-08-31-pihole%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=Raspberry%20Pi%20with%20pi-hole&url=https%3a%2f%2futhark.github.io%2fpost%2f2020-08-31-pihole%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
 </div>
@@ -504,113 +560,6 @@ Add static import to the class.</p>
 <span class="c1">// in @Test method:
 </span><span class="c1"></span><span class="n">assertThat</span><span class="o">(</span><span class="n">actual</span><span class="o">.</span><span class="na">getFederalIncomeTax</span><span class="o">(),</span> <span class="n">closeTo</span><span class="o">(</span><span class="n">expected</span><span class="o">.</span><span class="na">getFederalIncomeTax</span><span class="o">(),</span> <span class="n">EPSILON</span><span class="o">))</span>
 </code></pre></div><p>Happy hacking!</p>
-
-        
-
-    </article>
-    
-    <article>
-
-        
-        
-<div class="sharing">
-    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2014%2f04%2f15%2fusing-assertj%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
-    <a href="https://twitter.com/intent/tweet?text=Using%20AssertJ&url=https%3a%2f%2futhark.github.io%2f2014%2f04%2f15%2fusing-assertj%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
-</div>
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2014/04/15/using-assertj/">Using AssertJ</a>
-    </h1>
-
-</header>
-
-
-        
-        <p><a href="https://github.com/joel-costigliola/assertj-core">AssertJ</a> is a library which provides fluent strongly-typed assertions to use in unit tests.</p>
-<p>Example of assertions written with <code>AssertJ</code>:</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">io.github.uthark.blog.assertj.Assertions.assertThat</span><span class="o">;</span>
-
-<span class="c1">// ... within @Test
-</span><span class="c1"></span><span class="n">User</span> <span class="n">result</span> <span class="o">=</span> <span class="n">userDao</span><span class="o">.</span><span class="na">findByLogin</span><span class="o">(</span><span class="s">&#34;username&#34;</span><span class="o">);</span>
-<span class="n">assertThat</span><span class="o">(</span><span class="n">result</span><span class="o">).</span>
-    <span class="n">isNotNull</span><span class="o">().</span>
-    <span class="n">isActive</span><span class="o">().</span>
-    <span class="n">hasLogin</span><span class="o">(</span><span class="s">&#34;username&#34;</span><span class="o">);</span>
-</code></pre></div><p>As you can see assertions look much more readable.
-The integration of assertj into Maven project is very easy:</p>
-<ol>
-<li>Update pom.xml in parent module</li>
-</ol>
-<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml">
-<span class="nt">&lt;properties&gt;</span>
-    <span class="nt">&lt;assertj-core.version&gt;</span>1.6.0<span class="nt">&lt;/assertj-core.version&gt;</span>
-    <span class="nt">&lt;assertj-assertions-generator-maven-plugin.version&gt;</span>1.2.0<span class="nt">&lt;/assertj-assertions-generator-maven-plugin.version&gt;</span>
-<span class="nt">&lt;/properties&gt;</span>
-
-<span class="nt">&lt;dependencyManagement&gt;</span>
-    <span class="nt">&lt;dependency&gt;</span>
-        <span class="nt">&lt;groupId&gt;</span>org.assertj<span class="nt">&lt;/groupId&gt;</span>
-        <span class="nt">&lt;artifactId&gt;</span>assertj-core<span class="nt">&lt;/artifactId&gt;</span>
-        <span class="nt">&lt;version&gt;</span>${assertj-core.version}<span class="nt">&lt;/version&gt;</span>
-        <span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
-    <span class="nt">&lt;/dependency&gt;</span>
-<span class="nt">&lt;/dependencyManagement&gt;</span>
-
-<span class="nt">&lt;pluginManagement&gt;</span>
-    <span class="nt">&lt;plugin&gt;</span>
-        <span class="nt">&lt;groupId&gt;</span>org.assertj<span class="nt">&lt;/groupId&gt;</span>
-        <span class="nt">&lt;artifactId&gt;</span>assertj-assertions-generator-maven-plugin<span class="nt">&lt;/artifactId&gt;</span>
-        <span class="nt">&lt;version&gt;</span>${assertj-assertions-generator-maven-plugin.version}<span class="nt">&lt;/version&gt;</span>
-        <span class="nt">&lt;executions&gt;</span>
-            <span class="nt">&lt;execution&gt;</span>
-                <span class="nt">&lt;id&gt;</span>generate-assertions<span class="nt">&lt;/id&gt;</span>
-                <span class="nt">&lt;phase&gt;</span>generate-test-sources<span class="nt">&lt;/phase&gt;</span>
-                <span class="nt">&lt;goals&gt;</span>
-                    <span class="nt">&lt;goal&gt;</span>generate-assertions<span class="nt">&lt;/goal&gt;</span>
-                <span class="nt">&lt;/goals&gt;</span>
-            <span class="nt">&lt;/execution&gt;</span>
-        <span class="nt">&lt;/executions&gt;</span>
-    <span class="nt">&lt;/plugin&gt;</span>
-
-<span class="nt">&lt;/pluginManagement&gt;</span>
-
-</code></pre></div><ol start="2">
-<li>Update pom.xml in child module</li>
-</ol>
-<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml">
-<span class="nt">&lt;dependencies&gt;</span>
-    <span class="nt">&lt;dependency&gt;</span>
-        <span class="nt">&lt;groupId&gt;</span>org.assertj<span class="nt">&lt;/groupId&gt;</span>
-        <span class="nt">&lt;artifactId&gt;</span>assertj-core<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;/dependency&gt;</span>
-<span class="nt">&lt;/dependencies&gt;</span>
-<span class="nt">&lt;build&gt;</span>
-    <span class="nt">&lt;plugins&gt;</span>
-        <span class="nt">&lt;plugin&gt;</span>
-            <span class="nt">&lt;groupId&gt;</span>org.assertj<span class="nt">&lt;/groupId&gt;</span>
-            <span class="nt">&lt;artifactId&gt;</span>assertj-assertions-generator-maven-plugin<span class="nt">&lt;/artifactId&gt;</span>
-            <span class="nt">&lt;configuration&gt;</span>
-                <span class="c">&lt;!-- you can define collection packages: --&gt;</span>
-                <span class="nt">&lt;packages&gt;</span>
-                    <span class="nt">&lt;param&gt;</span>io.github.uthark.blog.assertj<span class="nt">&lt;/param&gt;</span>
-                <span class="nt">&lt;/packages&gt;</span>
-
-                <span class="c">&lt;!-- Or specify classes one by one. --&gt;</span>
-                <span class="nt">&lt;classes&gt;</span>
-                    <span class="nt">&lt;param&gt;</span>io.github.uthark.blog.assertj.User<span class="nt">&lt;/param&gt;</span>
-                <span class="nt">&lt;/classes&gt;</span>
-            <span class="nt">&lt;/configuration&gt;</span>
-        <span class="nt">&lt;/plugin&gt;</span>
-    <span class="nt">&lt;/plugins&gt;</span>
-<span class="nt">&lt;/build&gt;</span>
-
-</code></pre></div><p>After this changes it is possible to generate assertions for the classes you want test:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">
-mvn assertj:generate-assertions
-
-</code></pre></div><p>By default assertj will generate assertion classes in <code>target/generated-test-sources/assertj-assertions/</code>, it is possible to override this behaviour by passing configuration element <code>targetDir</code> to plugin.</p>
-<p>Additonal documentation for Maven plugin can be <a href="http://joel-costigliola.github.io/assertj/assertj-assertions-generator-maven-plugin.html">found here</a></p>
-<p>Happy hacking!</p>
 
         
 

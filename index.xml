@@ -6,10 +6,53 @@
     <description>Recent content on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 31 Aug 2020 22:55:25 -0700</lastBuildDate>
+    <lastBuildDate>Wed, 02 Sep 2020 09:19:21 -0700</lastBuildDate>
     
 	<atom:link href="https://uthark.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Configuring Wi-Fi on Ubuntu Server 64-bit on Raspberry Pi 4</title>
+      <link>https://uthark.github.io/post/2020-09-01-raspberry-pi-ubuntu-arm64/</link>
+      <pubDate>Wed, 02 Sep 2020 09:19:21 -0700</pubDate>
+      
+      <guid>https://uthark.github.io/post/2020-09-01-raspberry-pi-ubuntu-arm64/</guid>
+      <description>&lt;p&gt;After discovering that by default Raspberry installs 32-bit OS, I wanted to reinstall 64 bit.&lt;/p&gt;
+&lt;p&gt;Decided to go with &lt;a href=&#34;https://ubuntu.com/download/raspberry-pi&#34;&gt;Ubuntu Server 64&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Installed it on SD Card with &lt;a href=&#34;https://www.raspberrypi.org/downloads/&#34;&gt;Raspberry Pi Imager&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;After boot found out that need to connect it to WI-FI.&lt;/p&gt;
+&lt;p&gt;Configuring &lt;code&gt;wpa_supplicant&lt;/code&gt; didn&amp;rsquo;t help, still had issues with not getting IP Address from DHCP.&lt;/p&gt;
+&lt;p&gt;Finally, did the following:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Create &lt;code&gt;/etc/netplan/01-netcfg.yaml&lt;/code&gt; and put the following content there:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;network:
+  version: 2
+  renderer: networkd
+  wifis:
+    wlan0:
+      dhcp4: true
+      dhcp6: true
+      optional: true
+      access-points:
+        &amp;#34;&amp;lt;replace with your wifi network name/SSID&amp;gt;&amp;#34;:
+          password: &amp;#34;&amp;lt;replace with your password&amp;gt;&amp;#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Change permissions to make file accessible only to &lt;code&gt;root&lt;/code&gt; user:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;chmod 600 /etc/netplan/01-netcfg.yaml
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Configure &lt;a href=&#34;https://linux.die.net/man/8/crda&#34;&gt;Linux wireless central regulatory domain agent&lt;/a&gt;. Put your country code in &lt;code&gt;/etc/default/crda&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;REGDOMAIN=US
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;After that, need to generate and apply netplan:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;sudo netplan --debug generate
+sudo netplan --debug apply
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;/ol&gt;</description>
+    </item>
     
     <item>
       <title>Raspberry Pi with pi-hole</title>

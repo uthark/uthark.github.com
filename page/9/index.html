@@ -123,6 +123,110 @@
         
         
 <div class="sharing">
+    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2009%2f11%2f14%2fdelicious-bookmarks-google%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
+    <a href="https://twitter.com/intent/tweet?text=%d0%a0%d0%b0%d1%81%d1%88%d0%b8%d1%80%d0%b5%d0%bd%d0%b8%d0%b5%20Delicious%20Bookmarks%20%d0%b4%d0%bb%d1%8f%20Google%20Chrome%2fChromium&url=https%3a%2f%2futhark.github.io%2f2009%2f11%2f14%2fdelicious-bookmarks-google%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
+</div>
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2009/11/14/delicious-bookmarks-google/">Расширение Delicious Bookmarks для Google Chrome/Chromium</a>
+    </h1>
+
+</header>
+
+
+        
+        <!-- raw HTML omitted -->
+<p>&ldquo;browser_action&rdquo;: { // 5
+&ldquo;name&rdquo;: &ldquo;Save bookmark to delicious.com&rdquo;,
+&ldquo;default_title&rdquo;: &ldquo;Save bookmark to delicious.com&rdquo;,
+&ldquo;default_icon&rdquo;: &ldquo;delicious.20.gif&rdquo; // optional
+},</p>
+<p>&ldquo;content_scripts&rdquo;: [ // 6
+{
+&ldquo;matches&rdquo;: [&ldquo;http://<em>/</em>&rdquo;, &ldquo;https://<em>/</em>&quot;],
+&ldquo;js&rdquo;: [&ldquo;getDocumentSelection.js&rdquo;]
+}
+],</p>
+<p>&ldquo;options_page&rdquo;: &ldquo;options.html&rdquo; // 7
+}
+<!-- raw HTML omitted --><!-- raw HTML omitted -->
+Манифест - файл в формате <!-- raw HTML omitted -->JSON<!-- raw HTML omitted -->.<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+Манифест состоит из следующих частей:<!-- raw HTML omitted -->
+<!-- raw HTML omitted --></p>
+<ol>
+<li><!-- raw HTML omitted --><!-- raw HTML omitted -->name<!-- raw HTML omitted --><!-- raw HTML omitted --> - Имя расширения<!-- raw HTML omitted --></li>
+<li><!-- raw HTML omitted --><!-- raw HTML omitted -->version<!-- raw HTML omitted --><!-- raw HTML omitted --> - Версия расширения<!-- raw HTML omitted --></li>
+<li><!-- raw HTML omitted --><!-- raw HTML omitted -->background_page<!-- raw HTML omitted --><!-- raw HTML omitted --> - основной файл с расширением. Это обычный HTML-файл с разметкой.<!-- raw HTML omitted --></li>
+<li><!-- raw HTML omitted --><!-- raw HTML omitted -->permissions<!-- raw HTML omitted --><!-- raw HTML omitted --> - разрешения для расширения. Указываем, что нам нужен доступ к вкладкам (tabs) и закладкам (bookmarks).<!-- raw HTML omitted --></li>
+<li><!-- raw HTML omitted --><!-- raw HTML omitted -->browser_action<!-- raw HTML omitted --><!-- raw HTML omitted --> - указываем, что нужно отобразить на панели инструментов браузера.<!-- raw HTML omitted --></li>
+<li><!-- raw HTML omitted --><!-- raw HTML omitted -->content_scripts<!-- raw HTML omitted --><!-- raw HTML omitted --> - Для доступа к DOM отображаемой страницы необходимы content scripts, данный блок регистрирует скрипт <!-- raw HTML omitted -->getDocumentSelection.js<!-- raw HTML omitted --> для всех <!-- raw HTML omitted -->http<!-- raw HTML omitted --> и <!-- raw HTML omitted -->https<!-- raw HTML omitted --> страниц.<!-- raw HTML omitted --></li>
+<li><!-- raw HTML omitted --><!-- raw HTML omitted -->options_page<!-- raw HTML omitted --><!-- raw HTML omitted --> - страница с настройками.<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+Подробное описание файла манифеста есть <!-- raw HTML omitted -->на официальном сайте<!-- raw HTML omitted -->. <!-- raw HTML omitted -->
+<!-- raw HTML omitted --></li>
+</ol>
+<!-- raw HTML omitted -->
+<p>    function addBookmark(id, bookmark) {
+        console.log(&quot;added bookmark:  &quot; + bookmark);
+        saveBookmark();
+    }</p>
+<p>    chrome.bookmarks.onCreated.addListener(addBookmark);
+    console.log(&quot;Registered listener&quot;);</p>
+<p>    function getShareStatus() {
+        var markPrivate = localStorage[&quot;markPrivate&quot;];
+        var share = &quot;yes&quot;;
+        if (markPrivate == &quot;true&quot;) {
+            share = &quot;no&quot;;
+        }
+        return share;
+    }</p>
+<p>    chrome.extension.onConnect.addListener(function(port) {
+        console.assert(port.name == &quot;deliciousBookmark&quot;);
+        port.onMessage.addListener(function(msg) {
+            var selection = msg.selection;
+            chrome.tabs.getSelected(null, function(tab) {</p>
+<p>                var url = encodeURIComponent(tab.url);</p>
+<p>                if (!url || url === &quot;&quot;) {
+                    return;
+                }</p>
+<p>                var title = encodeURIComponent(tab.title);
+                var description = encodeURIComponent(selection);</p>
+<p>                var share = getShareStatus();</p>
+<p>                var f = &lsquo;<a href="http://delicious.com/save?url='&amp;nbsp;+&amp;nbsp;url&amp;nbsp;+&amp;nbsp;'&amp;amp;title='&amp;nbsp;+&amp;nbsp;title&amp;nbsp;+&amp;nbsp;'&amp;amp;notes='&amp;nbsp;+&amp;nbsp;description">http://delicious.com/save?url='&amp;nbsp;+&amp;nbsp;url&amp;nbsp;+&amp;nbsp;'&amp;amp;title='&amp;nbsp;+&amp;nbsp;title&amp;nbsp;+&amp;nbsp;'&amp;amp;notes='&amp;nbsp;+&amp;nbsp;description</a>
+                        + '&amp;share=&rsquo; + share + '&amp;v=5&amp;';
+                window.open(f + &lsquo;noui=1&amp;jump=doclose&rsquo;, &lsquo;deliciousuiv5&rsquo;,
+                        &lsquo;location=yes,links=no,scrollbars=no,toolbar=no,width=550,height=550&rsquo;);</p>
+<p>            });
+        });
+    });</p>
+<p>    chrome.browserAction.onClicked.addListener(saveBookmark);
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;/html&gt;</p>
+<p><!-- raw HTML omitted --><!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->getDocumentSelection.js<!-- raw HTML omitted --><!-- raw HTML omitted -->
+<!-- raw HTML omitted --></p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p><!-- raw HTML omitted -->
+<!-- raw HTML omitted -->options.html<!-- raw HTML omitted --><!-- raw HTML omitted -->
+<!-- raw HTML omitted --></p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p><!-- raw HTML omitted --></p>
+<!-- raw HTML omitted -->
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2009%2f11%2f02%2fgoogle-wave%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=%d0%98%d0%bd%d0%b2%d0%b0%d0%b9%d1%82%d1%8b%20%d0%bd%d0%b0%20Google%20Wave&url=https%3a%2f%2futhark.github.io%2f2009%2f11%2f02%2fgoogle-wave%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
 </div>
@@ -588,31 +692,6 @@ Metro создавал файл package-info.java, в котором было п
 <span class="kn">package</span> <span class="nn">com.x.y.z</span><span class="o">;</span>
 </code></pre></div><p>Ант, в свою очередь, должен был этот файл компилировать. А <!-- raw HTML omitted -->в реальности этого не происходило<!-- raw HTML omitted -->, поэтому Metro не мог корректно отобразить XML-запрос на объекты доменной области.</p>
 <p>Решение было немного кривым, но при этом поразительно простым - принудительный вызов javac на файлах <code>package-info.java</code>.</p>
-
-        
-
-    </article>
-    
-    <article>
-
-        
-        
-<div class="sharing">
-    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2009%2f05%2f30%2fprotected%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
-    <a href="https://twitter.com/intent/tweet?text=%d0%98%d1%81%d0%bf%d0%be%d0%bb%d1%8c%d0%b7%d0%be%d0%b2%d0%b0%d0%bd%d0%b8%d0%b5%20%d0%bc%d0%be%d0%b4%d0%b8%d1%84%d0%b8%d0%ba%d0%b0%d1%82%d0%be%d1%80%d0%b0%20protected%20%d0%bd%d0%b0%20%d0%bf%d0%be%d0%bb%d1%8f%d1%85%20%d0%b2%20%d0%b1%d0%b0%d0%b7%d0%be%d0%b2%d0%be%d0%bc%20%d0%ba%d0%bb%d0%b0%d1%81%d1%81%d0%b5&url=https%3a%2f%2futhark.github.io%2f2009%2f05%2f30%2fprotected%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
-</div>
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2009/05/30/protected/">Использование модификатора protected на полях в базовом классе</a>
-    </h1>
-
-</header>
-
-
-        
-        <p>Недавно задали мне вопрос - что я думаю об использовании модификатора protected для членов базового класса? Под этим вопросом кроются более серьёзные вещи.</p>
-<p>Например, любой член класса, имеющий модификатор protected, расширяет интерфейс базового класса для подклассов - подклассы имеют доступ ко всем protected и public методам этого поля. Иногда это сделано специально, например, для того, чтобы подклассы могли иметь доступ к какой-либо функциональности. Однако, если подкласс будет использовать protected поля неправильно (например, он может установить его в null, нарушив, таким образом, поведение базового класса), то это не принесёт пользы.</p>
-<p>Поразмыслив над вопросом я пришел к следующему, достаточно логичному и широкоизвестному выводу - необходимо давать наиболее закрытый доступ, какой можно. То есть, если можно объявить член класса как private, то необходимо сделать его private. Если в подклассах необходим доступ к члену класса, то необходимо проанализировать, какие методы нужны в подклассах и открыть только их через делегирование. Если набор методов заранее неизвестен, то можно сделать protected getter для поля.</p>
 
         
 

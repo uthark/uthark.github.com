@@ -123,6 +123,62 @@
         
         
 <div class="sharing">
+    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2010%2f04%2f11%2fgorm%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
+    <a href="https://twitter.com/intent/tweet?text=%d0%9d%d0%b5%d1%81%d0%ba%d0%be%d0%bb%d1%8c%d0%ba%d0%be%20%d1%81%d0%bb%d0%be%d0%b2%20%d0%be%20GORM&url=https%3a%2f%2futhark.github.io%2f2010%2f04%2f11%2fgorm%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
+</div>
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2010/04/11/gorm/">Несколько слов о GORM</a>
+    </h1>
+
+</header>
+
+
+        
+        <!-- raw HTML omitted -->
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">Person</span> <span class="kd">implements</span> <span class="n">Serializable</span> <span class="o">{</span>
+  <span class="kd">static</span> <span class="n">hasMany</span> <span class="o">=</span> <span class="o">[</span>
+    <span class="n">scores</span><span class="o">:</span> <span class="n">ScoreSheet</span>
+  <span class="o">]</span>
+  
+  <span class="kd">static</span> <span class="n">mapping</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">scores</span> <span class="n">joinTable</span><span class="o">:</span> <span class="kc">false</span>
+  <span class="o">};</span>
+<span class="o">}</span>
+</code></pre></div><!-- raw HTML omitted -->
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">Note</span> <span class="kd">implements</span> <span class="n">Serializable</span> <span class="o">{</span>
+  <span class="kd">static</span> <span class="n">belongsTo</span> <span class="o">=</span> <span class="o">[</span>
+    <span class="n">person</span><span class="o">:</span> <span class="n">Person</span>
+  <span class="o">]</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">Person</span> <span class="kd">implements</span> <span class="n">Serializable</span> <span class="o">{</span>
+  <span class="c1">// person fields.
+</span><span class="c1"></span><span class="o">}</span>
+</code></pre></div><!-- raw HTML omitted -->
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">Payment</span> <span class="o">{</span>
+  <span class="n">Long</span> <span class="n">id</span>
+  <span class="n">Long</span> <span class="n">version</span>
+  <span class="n">Integer</span> <span class="n">amount</span>
+
+  <span class="kd">static</span> <span class="n">mapping</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">tablePerHierarchy</span> <span class="kc">false</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">CreditCardPayment</span> <span class="kd">extends</span> <span class="n">Payment</span> <span class="o">{</span>
+  <span class="n">String</span> <span class="n">cardNumber</span>
+<span class="o">}</span>
+</code></pre></div>
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2010%2f03%2f22%2fskype-d-bus-python%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=%d0%9e%d0%b1%d1%89%d0%b5%d0%bd%d0%b8%d0%b5%20%d1%81%d0%be%20Skype%20%d1%87%d0%b5%d1%80%d0%b5%d0%b7%20D-Bus%20%d0%bd%d0%b0%20Python&url=https%3a%2f%2futhark.github.io%2f2010%2f03%2f22%2fskype-d-bus-python%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
 </div>
@@ -493,29 +549,6 @@ a. <a href="http://msdn.microsoft.com/en-us/library/ms998577.aspx">http://msdn.m
 <!-- raw HTML omitted --></li>
 </ol>
 <!-- raw HTML omitted -->
-
-        
-
-    </article>
-    
-    <article>
-
-        
-        
-<div class="sharing">
-    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2009%2f12%2f08%2fdelicious-google-chrome%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
-    <a href="https://twitter.com/intent/tweet?text=%d0%a0%d0%b0%d1%81%d1%88%d0%b8%d1%80%d0%b5%d0%bd%d0%b8%d0%b5%20%d0%b4%d0%bb%d1%8f%20%d1%80%d0%b0%d0%b1%d0%be%d1%82%d1%8b%20%d1%81%20Delicious%20%d0%b4%d0%be%d1%81%d1%82%d1%83%d0%bf%d0%bd%d0%be%20%d0%bd%d0%b0%20%d1%81%d0%b0%d0%b9%d1%82%d0%b5%20%d1%80%d0%b0%d1%81%d1%88%d0%b8%d1%80%d0%b5%d0%bd%d0%b8%d0%b9%20Google%20Chrome&url=https%3a%2f%2futhark.github.io%2f2009%2f12%2f08%2fdelicious-google-chrome%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
-</div>
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2009/12/08/delicious-google-chrome/">Расширение для работы с Delicious доступно на сайте расширений Google Chrome</a>
-    </h1>
-
-</header>
-
-
-        
-        <!-- raw HTML omitted -->
 
         
 
