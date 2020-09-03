@@ -6,10 +6,21 @@
     <description>Recent content in development on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 16 Apr 2014 00:10:10 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 22 Jan 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://uthark.github.io/categories/development/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>How to add YAML support to go-restful</title>
+      <link>https://uthark.github.io/post/2018-01-22-go-restful-yaml/</link>
+      <pubDate>Mon, 22 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/post/2018-01-22-go-restful-yaml/</guid>
+      <description>go-restful is a go package used for building REST-style web services. It is very powerful, but it supports JSON and XML out of the box only. Fortunately, go-restful allows to register custom serialization schemes.
+To do so, it provides a handy interface EntityReaderWriter, which contains only two methods:
+// EntityReaderWriter can read and write values using an encoding such as JSON,XML. type EntityReaderWriter interface { // Read a serialized version of the value from the request.</description>
+    </item>
     
     <item>
       <title>Using Unitils ReflectionAssert</title>

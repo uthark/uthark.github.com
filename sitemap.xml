@@ -183,7 +183,17 @@
   </url>
   
   <url>
-    <loc>https://uthark.github.io/categories/go-restful/</loc>
+    <loc>https://uthark.github.io/categories/development/</loc>
+    <lastmod>2018-01-22T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://uthark.github.io/tags/go-restful/</loc>
+    <lastmod>2018-01-22T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://uthark.github.io/tags/golang/</loc>
     <lastmod>2018-01-22T00:00:00+00:00</lastmod>
   </url>
   
@@ -198,7 +208,7 @@
   </url>
   
   <url>
-    <loc>https://uthark.github.io/categories/yaml/</loc>
+    <loc>https://uthark.github.io/tags/yaml/</loc>
     <lastmod>2018-01-22T00:00:00+00:00</lastmod>
   </url>
   
@@ -299,11 +309,6 @@
   
   <url>
     <loc>https://uthark.github.io/categories/article/</loc>
-    <lastmod>2014-04-16T00:10:10+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://uthark.github.io/categories/development/</loc>
     <lastmod>2014-04-16T00:10:10+00:00</lastmod>
   </url>
   

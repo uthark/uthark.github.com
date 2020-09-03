@@ -119,5 +119,32 @@
       <description></description>
     </item>
     
+    <item>
+      <title>go-restful</title>
+      <link>https://uthark.github.io/tags/go-restful/</link>
+      <pubDate>Mon, 22 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/tags/go-restful/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>golang</title>
+      <link>https://uthark.github.io/tags/golang/</link>
+      <pubDate>Mon, 22 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/tags/golang/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>yaml</title>
+      <link>https://uthark.github.io/tags/yaml/</link>
+      <pubDate>Mon, 22 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/tags/yaml/</guid>
+      <description></description>
+    </item>
+    
   </channel>
 </rss>
