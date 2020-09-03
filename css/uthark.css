@@ -1732,6 +1732,13 @@ div.entry-content > h2 {
     font-size:1.5em;
 }
 
+@media only screen and (min-width: 992px) {
+    div.entry-content > h2 {
+        margin-top: 2em;
+        margin-bottom: 1em;
+    }
+}
+
 /* decrease margin for article headings */
 div.entry-content >
 h1,
