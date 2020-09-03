@@ -123,6 +123,102 @@
         
         
 <div class="sharing">
+    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2013%2f06%2f19%2fvalidation%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
+    <a href="https://twitter.com/intent/tweet?text=%d0%92%d0%b0%d0%bb%d0%b8%d0%b4%d0%b0%d1%86%d0%b8%d1%8f%20%d0%b2%d1%85%d0%be%d0%b4%d0%bd%d1%8b%d1%85%20%d0%bf%d0%b0%d1%80%d0%b0%d0%bc%d0%b5%d1%82%d1%80%d0%be%d0%b2%20%d1%81%20%d0%b8%d1%81%d0%bf%d0%be%d0%bb%d1%8c%d0%b7%d0%be%d0%b2%d0%b0%d0%bd%d0%b8%d0%b5%d0%bc%20Spring&url=https%3a%2f%2futhark.github.io%2f2013%2f06%2f19%2fvalidation%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
+</div>
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2013/06/19/validation/">Валидация входных параметров с использованием Spring</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>Очень часто возникает задача проверки входных параметров в сервис на корректность с точки зрения бизнес логики.</p>
+<p>Эту задачу можно решить в лоб, написав вручную код валидации в каждом из методов сервиса, например, вот так:</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">  <span class="kd">public</span> <span class="n">User</span> <span class="nf">save</span><span class="o">(</span><span class="n">User</span> <span class="n">user</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span><span class="o">(</span><span class="n">user</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&#34;User is null&#34;</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="c1">// other checks
+</span><span class="c1"></span>    <span class="c1">//...
+</span><span class="c1"></span>
+    <span class="c1">// business logic starts here...
+</span><span class="c1"></span>    <span class="c1">//...
+</span><span class="c1"></span>    <span class="k">return</span> <span class="n">savedUser</span><span class="o">;</span>
+  <span class="o">}</span>
+</code></pre></div><p>Очевидно, что если в каждом методе делать такие проверки, то код бизнес-логики загрязняется проверками, что ухудшает читаемость кода. Решить эту проблему можно следующим образом:</p>
+<ol>
+<li>Добавляем аннотации для валидации входных параметров.</li>
+</ol>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">  <span class="kd">public</span> <span class="nd">@NotNull</span> <span class="n">User</span> <span class="nf">save</span><span class="o">(</span><span class="nd">@NotNull</span> <span class="n">User</span> <span class="n">user</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// business logic starts here...
+</span><span class="c1"></span>    <span class="c1">//...
+</span><span class="c1"></span>    <span class="k">return</span> <span class="n">savedUser</span><span class="o">;</span>
+  <span class="o">}</span>
+</code></pre></div><p>Чтобы заставить этот код работать, мы будем использовать возможности Spring Validation.</p>
+<ol>
+<li>Spring предоставляет аннотацию <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/validation/annotation/Validated.html">@Validated</a>, которая в отличие от <a href="http://docs.oracle.com/javaee/7/api/javax/validation/Valid.html">@javax.validation.Valid</a> позволяет определять группу валидации.</li>
+<li>Этой аннотацией необходимо проаннотировать бин, методы которого необходимо валидировать.</li>
+</ol>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Validated</span>
+<span class="nd">@Service</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserService</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nd">@NotNull</span> <span class="n">User</span> <span class="nf">save</span><span class="o">(</span><span class="nd">@NotNull</span> <span class="n">User</span> <span class="n">user</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// business logic starts here...
+</span><span class="c1"></span>        <span class="c1">//...
+</span><span class="c1"></span>        <span class="k">return</span> <span class="n">savedUser</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><ol start="3">
+<li>Для реализации самой валидации нам необходим валидатор. В качестве реализации <a href="http://jcp.org/en/jsr/detail?id=303">JSR-303</a> можно использовать, например, <a href="http://www.hibernate.org/subprojects/validator.html">Hibernate Validator</a>. Для этого в <code>pom.xml</code> необходимо добавить требуемые зависимости:</li>
+</ol>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>javax.validation<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>validation-api<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.0.0.GA<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.hibernate<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>hibernate-validator<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>4.3.1.Final<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div><p>Обращаю внимание, что текущей на данный момент является <a href="http://beanvalidation.org/1.1/spec">спецификация</a> <a href="http://jcp.org/en/jsr/detail?id=349">JSR-349 Bean Validation 1.1</a>, которая поддерживает валидацию методов из коробки, но текущая версия Spring 3.2 - не поддерживает новый API, поэтому необходимо использовать старую версию API, и, соответственно, реализацию. Релевантный баг в Spring <a href="https://jira.springsource.org/browse/SPR-8199">SPR-8199</a>, поддержка нового API ожидается в Spring Framework 4.0.</p>
+<ol start="4">
+<li>Необходимо объявить необходимые бины в конфигурации Spring:</li>
+</ol>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="n">LocalValidatorFactoryBean</span> <span class="nf">validatorFactory</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">LocalValidatorFactoryBean</span> <span class="n">factoryBean</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LocalValidatorFactoryBean</span><span class="o">();</span>
+        <span class="n">factoryBean</span><span class="o">.</span><span class="na">afterPropertiesSet</span><span class="o">();</span>
+        <span class="k">return</span> <span class="n">factoryBean</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="n">Validator</span> <span class="nf">validator</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">validatorFactory</span><span class="o">().</span><span class="na">getValidator</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="n">MethodValidationPostProcessor</span> <span class="nf">methodValidationPostProcessor</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="n">MethodValidationPostProcessor</span><span class="o">();</span>
+    <span class="o">}</span>
+
+</code></pre></div><ol start="5">
+<li>На этом всё. Как видно, декларативная валидация входных параметров реализуется очень просто.</li>
+</ol>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2013%2f06%2f19%2fspring-caching%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=%d0%98%d1%81%d0%bf%d0%be%d0%bb%d1%8c%d0%b7%d0%be%d0%b2%d0%b0%d0%bd%d0%b8%d0%b5%20memcached%20%d0%b2%20%d0%ba%d0%b0%d1%87%d0%b5%d1%81%d1%82%d0%b2%d0%b5%20backend%20%d0%b4%d0%bb%d1%8f%20Spring%20Caching%20Abstraction&url=https%3a%2f%2futhark.github.io%2f2013%2f06%2f19%2fspring-caching%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
 </div>
@@ -703,32 +799,6 @@
 </code></pre></div><p>Если вы используете не <!-- raw HTML omitted -->sfl4j<!-- raw HTML omitted -->, а, например, <!-- raw HTML omitted -->log4j<!-- raw HTML omitted -->, или <!-- raw HTML omitted -->commons-logging<!-- raw HTML omitted -->, то нужно немного поправить код внутри метода <!-- raw HTML omitted -->doWith<!-- raw HTML omitted --></p>
 <p>Попутно, данный код показывает пример использования класса <!-- raw HTML omitted -->org.springframework.util.ReflectionUtils<!-- raw HTML omitted -->.</p>
 
-        
-
-    </article>
-    
-    <article>
-
-        
-        
-<div class="sharing">
-    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2012%2f04%2f20%2fblog-post%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
-    <a href="https://twitter.com/intent/tweet?text=%d0%9f%d1%80%d0%b5%d0%be%d0%b1%d1%80%d0%b0%d0%b7%d1%83%d0%b5%d0%bc%20%d1%81%d1%82%d1%80%d0%be%d0%ba%d1%83%20%d0%b2%20%d0%b4%d0%b0%d1%82%d1%83&url=https%3a%2f%2futhark.github.io%2f2012%2f04%2f20%2fblog-post%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
-</div>
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2012/04/20/blog-post/">Преобразуем строку в дату</a>
-    </h1>
-
-</header>
-
-
-        
-        <p>Казалось бы, есть простейшая задача - преобразовать строковое представление даты в объект класса <!-- raw HTML omitted -->java.util.Date<!-- raw HTML omitted -->.</p>
-<p>Как оказалось, иногда использование DateFormat не помогает. В случае, если строка - это заголовок <!-- raw HTML omitted -->Date<!-- raw HTML omitted --> из письма, то нам нужно использовать <!-- raw HTML omitted --><a href="http://docs.oracle.com/javaee/5/api/javax/mail/internet/MailDateFormat.html">javax.mail.internet.MailDateFormat</a><!-- raw HTML omitted --> для преобразования такой строки.</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">String</span> <span class="n">dateStr</span> <span class="o">=</span> <span class="o">...</span>
-<span class="n">Date</span> <span class="n">parsedDate</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MailDateFormat</span><span class="o">().</span><span class="na">parse</span><span class="o">(</span><span class="n">dateStr</span><span class="o">);</span>
-</code></pre></div>
         
 
     </article>

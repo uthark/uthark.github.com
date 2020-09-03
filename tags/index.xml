@@ -6,10 +6,64 @@
     <description>Recent content in Tags on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 02 Sep 2020 09:19:21 -0700</lastBuildDate>
+    <lastBuildDate>Wed, 02 Sep 2020 20:44:30 -0700</lastBuildDate>
     
 	<atom:link href="https://uthark.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>arm64</title>
+      <link>https://uthark.github.io/tags/arm64/</link>
+      <pubDate>Wed, 02 Sep 2020 20:44:30 -0700</pubDate>
+      
+      <guid>https://uthark.github.io/tags/arm64/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>cgroups</title>
+      <link>https://uthark.github.io/tags/cgroups/</link>
+      <pubDate>Wed, 02 Sep 2020 20:44:30 -0700</pubDate>
+      
+      <guid>https://uthark.github.io/tags/cgroups/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>docker</title>
+      <link>https://uthark.github.io/tags/docker/</link>
+      <pubDate>Wed, 02 Sep 2020 20:44:30 -0700</pubDate>
+      
+      <guid>https://uthark.github.io/tags/docker/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>kubeadm</title>
+      <link>https://uthark.github.io/tags/kubeadm/</link>
+      <pubDate>Wed, 02 Sep 2020 20:44:30 -0700</pubDate>
+      
+      <guid>https://uthark.github.io/tags/kubeadm/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>kubernetes</title>
+      <link>https://uthark.github.io/tags/kubernetes/</link>
+      <pubDate>Wed, 02 Sep 2020 20:44:30 -0700</pubDate>
+      
+      <guid>https://uthark.github.io/tags/kubernetes/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>raspberrypi</title>
+      <link>https://uthark.github.io/tags/raspberrypi/</link>
+      <pubDate>Wed, 02 Sep 2020 20:44:30 -0700</pubDate>
+      
+      <guid>https://uthark.github.io/tags/raspberrypi/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>netplan</title>

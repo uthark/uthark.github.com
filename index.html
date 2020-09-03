@@ -123,6 +123,180 @@
         
         
 <div class="sharing">
+    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2fpost%2f2020-09-02-installing-kubernetes-raspberrypi%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
+    <a href="https://twitter.com/intent/tweet?text=Installing%20Kubernetes%20on%20Raspberry%20Pi&url=https%3a%2f%2futhark.github.io%2fpost%2f2020-09-02-installing-kubernetes-raspberrypi%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
+</div>
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/post/2020-09-02-installing-kubernetes-raspberrypi/">Installing Kubernetes on Raspberry Pi</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>Installing kubernetes on Raspberry Pi is easy, but there are few caveats that you need to be aware of.</p>
+<p><code>arm64</code> is preferred, because 64-bit allows you to use &gt; 4GB of RAM per process.</p>
+<h2 id="enable-cgroups">Enable cgroups</h2>
+<p>Kubernetes relies on cgroups for enforcing limits for the containers, so kernel needs to be booted with cgroups support.
+On Raspberry, edit <code>/boot/firmware/cmdline.txt</code> and add the following options:</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">cgroup_enable=memory swapaccount=1 cgroup_memory=1 cgroup_enable=cpuset
+</code></pre></div><p>Reboot after making the changes.</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">sudo shutdown -r now
+</code></pre></div><h2 id="install-and-configure-docker">Install and configure docker</h2>
+<p>Allow to use HTTPS transport for downloading packages:</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">sudo apt update
+sudo apt install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+</code></pre></div><p>Add docker GPG key used for verifying <code>Packages</code> file used by apt.</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+</code></pre></div><p>Add docker repository:</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">echo &#34;deb [arch=arm64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable&#34; | sudo tee /etc/apt/sources.list.d/docker.list
+</code></pre></div><p>Update apt repository index and install docker</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">sudo apt update
+sudo apt install docker-ce docker-ce-cli containerd.io
+</code></pre></div><p>If you want to communicate with docker with non-root user:</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">sudo usermod -aG docker &#34;your user&#34;
+</code></pre></div><p>To apply changes - logout and login again. If you want to reflect changes immediately run:</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">newgrp docker
+</code></pre></div><p>Configure docker to use systemd as a cgroups driver, put in <code>/etc/docker/daemon.json</code>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">{
+  &#34;exec-opts&#34;: [&#34;native.cgroupdriver=systemd&#34;],
+  &#34;log-driver&#34;: &#34;json-file&#34;,
+  &#34;log-opts&#34;: {
+    &#34;max-size&#34;: &#34;100m&#34;
+  },
+  &#34;storage-driver&#34;: &#34;overlay2&#34;
+}
+
+</code></pre></div><h2 id="installing-kubeadm">Installing kubeadm</h2>
+<p>Add kubernetes repository:</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">echo &#34;deb https://apt.kubernetes.io/ kubernetes-xenial main&#34; | sudo tee /etc/apt/sources.list.d/kubernetes.list
+</code></pre></div><p>To allow iptables properly work with bridged traffic:</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">cat &lt;&lt;EOF | sudo tee /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+EOF
+sudo sysctl --system
+</code></pre></div><p>Install kubeadm, kubelet and kubectl:</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">sudo apt update
+sudo apt install -y kubelet kubeadm kubectl
+</code></pre></div><p>Minor updates of kubernetes may require extra steps, so we need to prevent packages from auto-updating:</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">sudo apt-mark hold kubelet kubeadm kubectl
+</code></pre></div><h2 id="installing-kubernetes-control-plane">Installing Kubernetes Control Plane</h2>
+<p>Generate token for installation</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">TOKEN=$(sudo kubeadm token generate)
+</code></pre></div><p>Install control plane with kubeadm:</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">sudo kubeadm init --token=${TOKEN} --kubernetes-version=v1.19.0
+</code></pre></div><p>If installation is successful, output will look similar to this:</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">W0903 00:29:04.934934  417169 configset.go:348] WARNING: kubeadm cannot validate component configs for API groups [kubelet.config.k8s.io kubeproxy.config.k8s.io]
+[init] Using Kubernetes version: v1.19.0
+[preflight] Running pre-flight checks
+	[WARNING SystemVerification]: missing optional cgroups: hugetlb
+[preflight] Pulling images required for setting up a Kubernetes cluster
+[preflight] This might take a minute or two, depending on the speed of your internet connection
+[preflight] You can also perform this action in beforehand using &#39;kubeadm config images pull&#39;
+[certs] Using certificateDir folder &#34;/etc/kubernetes/pki&#34;
+[certs] Generating &#34;ca&#34; certificate and key
+[certs] Generating &#34;apiserver&#34; certificate and key
+[certs] apiserver serving cert is signed for DNS names [kubernetes kubernetes.default kubernetes.default.svc kubernetes.default.svc.cluster.local ubuntu] and IPs [10.96.0.1 192.168.1.153]
+[certs] Generating &#34;apiserver-kubelet-client&#34; certificate and key
+[certs] Generating &#34;front-proxy-ca&#34; certificate and key
+[certs] Generating &#34;front-proxy-client&#34; certificate and key
+[certs] Generating &#34;etcd/ca&#34; certificate and key
+[certs] Generating &#34;etcd/server&#34; certificate and key
+[certs] etcd/server serving cert is signed for DNS names [localhost ubuntu] and IPs [192.168.1.153 127.0.0.1 ::1]
+[certs] Generating &#34;etcd/peer&#34; certificate and key
+[certs] etcd/peer serving cert is signed for DNS names [localhost ubuntu] and IPs [192.168.1.153 127.0.0.1 ::1]
+[certs] Generating &#34;etcd/healthcheck-client&#34; certificate and key
+[certs] Generating &#34;apiserver-etcd-client&#34; certificate and key
+[certs] Generating &#34;sa&#34; key and public key
+[kubeconfig] Using kubeconfig folder &#34;/etc/kubernetes&#34;
+[kubeconfig] Writing &#34;admin.conf&#34; kubeconfig file
+[kubeconfig] Writing &#34;kubelet.conf&#34; kubeconfig file
+[kubeconfig] Writing &#34;controller-manager.conf&#34; kubeconfig file
+[kubeconfig] Writing &#34;scheduler.conf&#34; kubeconfig file
+[kubelet-start] Writing kubelet environment file with flags to file &#34;/var/lib/kubelet/kubeadm-flags.env&#34;
+[kubelet-start] Writing kubelet configuration to file &#34;/var/lib/kubelet/config.yaml&#34;
+[kubelet-start] Starting the kubelet
+[control-plane] Using manifest folder &#34;/etc/kubernetes/manifests&#34;
+[control-plane] Creating static Pod manifest for &#34;kube-apiserver&#34;
+[control-plane] Creating static Pod manifest for &#34;kube-controller-manager&#34;
+[control-plane] Creating static Pod manifest for &#34;kube-scheduler&#34;
+[etcd] Creating static Pod manifest for local etcd in &#34;/etc/kubernetes/manifests&#34;
+[wait-control-plane] Waiting for the kubelet to boot up the control plane as static Pods from directory &#34;/etc/kubernetes/manifests&#34;. This can take up to 4m0s
+[apiclient] All control plane components are healthy after 30.007706 seconds
+[upload-config] Storing the configuration used in ConfigMap &#34;kubeadm-config&#34; in the &#34;kube-system&#34; Namespace
+[kubelet] Creating a ConfigMap &#34;kubelet-config-1.19&#34; in namespace kube-system with the configuration for the kubelets in the cluster
+[upload-certs] Skipping phase. Please see --upload-certs
+[mark-control-plane] Marking the node ubuntu as control-plane by adding the label &#34;node-role.kubernetes.io/master=&#39;&#39;&#34;
+[mark-control-plane] Marking the node ubuntu as control-plane by adding the taints [node-role.kubernetes.io/master:NoSchedule]
+[bootstrap-token] Using token: 5p4y2w.xxivtzh1lvuukdk7
+[bootstrap-token] Configuring bootstrap tokens, cluster-info ConfigMap, RBAC Roles
+[bootstrap-token] configured RBAC rules to allow Node Bootstrap tokens to get nodes
+[bootstrap-token] configured RBAC rules to allow Node Bootstrap tokens to post CSRs in order for nodes to get long term certificate credentials
+[bootstrap-token] configured RBAC rules to allow the csrapprover controller automatically approve CSRs from a Node Bootstrap Token
+[bootstrap-token] configured RBAC rules to allow certificate rotation for all node client certificates in the cluster
+[bootstrap-token] Creating the &#34;cluster-info&#34; ConfigMap in the &#34;kube-public&#34; namespace
+[kubelet-finalize] Updating &#34;/etc/kubernetes/kubelet.conf&#34; to point to a rotatable kubelet client certificate and key
+[addons] Applied essential addon: CoreDNS
+[addons] Applied essential addon: kube-proxy
+
+Your Kubernetes control-plane has initialized successfully!
+
+To start using your cluster, you need to run the following as a regular user:
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+You should now deploy a pod network to the cluster.
+Run &#34;kubectl apply -f [podnetwork].yaml&#34; with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+Then you can join any number of worker nodes by running the following on each as root:
+
+kubeadm join 192.168.1.153:6443 --token 5p4y2w.xxivtzh1lvuukdk7 \
+    --discovery-token-ca-cert-hash sha256:5638c83bec2b62b5f01d85bc2f4330b03b7e3c4682fe3f5e7e4189fbb63c5a17
+</code></pre></div><h2 id="configure-kubectl-to-communicate-with-the-cluster">Configure kubectl to communicate with the cluster</h2>
+<p>Put kubeconfig file in user&rsquo;s home directory:</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+</code></pre></div><p>Verify it works:</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">kubectl get nodes
+</code></pre></div><p>In my case output was:</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">NAME     STATUS   ROLES    AGE     VERSION
+ubuntu   Ready    master   3h42m   v1.19.0
+
+</code></pre></div><p>As a CNI network provider I use Calico, but you can use any you like. <a href="https://kubernetes.io/docs/concepts/cluster-administration/networking/#how-to-implement-the-kubernetes-networking-model">List of available implementations</a></p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">curl https://docs.projectcalico.org/manifests/calico.yaml -O
+kubectl apply -f calico.yaml
+</code></pre></div><p>Now you have working single node kubernetes cluster. Next things you might need to do:</p>
+<ol>
+<li>Add worker nodes: use <code>kubeadm join</code>.</li>
+<li>Install <a href="https://metallb.universe.tf/">MetalLB</a> – Loadbalancer for bare-metal kubernetes clusters</li>
+<li>Install <a href="https://helm.sh/">Helm</a> to install kubernetes packages.</li>
+<li>If you have only single raspberry pi, you need to remove taint from your control plane node so that it regular workload can be scheduled on it:
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">kubectl taint nodes --all node-role.kubernetes.io/master-
+</code></pre></div></li>
+</ol>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://docs.docker.com/engine/install/ubuntu/">Docker Installation</a></li>
+<li><a href="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/">Bootstrapping clusters with kubeadm</a></li>
+<li><a href="https://kubernetes.io/docs/concepts/cluster-administration/networking/#how-to-implement-the-kubernetes-networking-model">Kubernetes Cluster Networking</a></li>
+</ul>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2fpost%2f2020-09-01-raspberry-pi-ubuntu-arm64%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=Configuring%20Wi-Fi%20on%20Ubuntu%20Server%2064-bit%20on%20Raspberry%20Pi%204&url=https%3a%2f%2futhark.github.io%2fpost%2f2020-09-01-raspberry-pi-ubuntu-arm64%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
 </div>
@@ -502,65 +676,6 @@ It is very powerful, but it supports JSON and XML out of the box only. Fortunate
 
         
         <p>Hi. <a href="https://twitter.com/Pocket/status/458989752432091136">Pocket is down</a> so it means there is no reading list for today. Everyone have a nice day.</p>
-
-        
-
-    </article>
-    
-    <article>
-
-        
-        
-<div class="sharing">
-    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2014%2f04%2f16%2fusing-unitils-reflectionassert%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
-    <a href="https://twitter.com/intent/tweet?text=Using%20Unitils%20ReflectionAssert&url=https%3a%2f%2futhark.github.io%2f2014%2f04%2f16%2fusing-unitils-reflectionassert%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
-</div>
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2014/04/16/using-unitils-reflectionassert/">Using Unitils ReflectionAssert</a>
-    </h1>
-
-</header>
-
-
-        
-        <p>Often it is needed to compare two different instances of the class inside test. I.e. we save object into database, then fetch it back from db and we want to be sure if nothing was lost during saving/reading.</p>
-<p>In order to make such assertions more easier and maintainable one can use great Unitils library which has useful class <a href="http://www.unitils.org/tutorial-reflectionassert.html">ReflectionAssert</a></p>
-<p>First, update parent&rsquo;s <code>pom.xml</code>:</p>
-<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;properties&gt;</span>
-    <span class="nt">&lt;unitils.version&gt;</span>3.4<span class="nt">&lt;/unitils.version&gt;</span>
-<span class="nt">&lt;/properties&gt;</span>
-<span class="nt">&lt;dependency&gt;</span>
-    <span class="nt">&lt;groupId&gt;</span>org.unitils<span class="nt">&lt;/groupId&gt;</span>
-    <span class="nt">&lt;artifactId&gt;</span>unitils-core<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>${unitils.version}<span class="nt">&lt;/version&gt;</span>
-    <span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
-<span class="nt">&lt;/dependency&gt;</span>
-</code></pre></div><p>Then add dependency to the child module:</p>
-<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
-    <span class="nt">&lt;groupId&gt;</span>org.unitils<span class="nt">&lt;/groupId&gt;</span>
-    <span class="nt">&lt;artifactId&gt;</span>unitils-core<span class="nt">&lt;/artifactId&gt;</span>
-<span class="nt">&lt;/dependency&gt;</span>
-</code></pre></div><p>Usage is very simple:
-Add static import to the class.</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import static</span> <span class="nn">org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals</span><span class="o">;</span>
-</code></pre></div><p>and use it instead of regular JUnit assert:</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">assertReflectionEquals</span><span class="o">(</span><span class="n">expected</span><span class="o">,</span> <span class="n">actual</span><span class="o">);</span>
-</code></pre></div><p>It is possible to pass reflection comparator modes as optional parameters to the above method.</p>
-<p>Be ware that this method is not very useful if you want to compare objects which has floating point or double parameters - ReflectionAssert compares <code>double</code> and <code>float</code> values using <code>==</code>, so it is not very useful. It is not possible to pass epsilon for comparison.</p>
-<p>excerpt from <code>org.unitils.reflectionassert.comparator.impl.LenientNumberComparator#compare</code>:</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">Double</span> <span class="n">leftDouble</span> <span class="o">=</span> <span class="n">getDoubleValue</span><span class="o">(</span><span class="n">left</span><span class="o">);</span>
-<span class="n">Double</span> <span class="n">rightDouble</span> <span class="o">=</span> <span class="n">getDoubleValue</span><span class="o">(</span><span class="n">right</span><span class="o">);</span>
-<span class="k">if</span> <span class="o">(!</span><span class="n">leftDouble</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">rightDouble</span><span class="o">))</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="k">new</span> <span class="n">Difference</span><span class="o">(</span><span class="n">differenceMessage</span><span class="o">,</span> <span class="n">left</span><span class="o">,</span> <span class="n">right</span><span class="o">);</span>
-<span class="o">}</span>
-</code></pre></div><p>If you need to compare double values in JUnit assertions then it is better to use <a href="https://code.google.com/p/hamcrest/">hamcrest library</a>.</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import static</span> <span class="nn">org.hamcrest.number.IsCloseTo.closeTo</span><span class="o">;</span>
-<span class="kn">import static</span> <span class="nn">org.junit.Assert.assertThat</span><span class="o">;</span>
-
-<span class="c1">// in @Test method:
-</span><span class="c1"></span><span class="n">assertThat</span><span class="o">(</span><span class="n">actual</span><span class="o">.</span><span class="na">getFederalIncomeTax</span><span class="o">(),</span> <span class="n">closeTo</span><span class="o">(</span><span class="n">expected</span><span class="o">.</span><span class="na">getFederalIncomeTax</span><span class="o">(),</span> <span class="n">EPSILON</span><span class="o">))</span>
-</code></pre></div><p>Happy hacking!</p>
 
         
 

@@ -123,6 +123,38 @@
         
         
 <div class="sharing">
+    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2009%2f06%2f02%2fapache-ant-metro%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
+    <a href="https://twitter.com/intent/tweet?text=Apache%20Ant%20%d0%b8%20Metro&url=https%3a%2f%2futhark.github.io%2f2009%2f06%2f02%2fapache-ant-metro%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
+</div>
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2009/06/02/apache-ant-metro/">Apache Ant и Metro</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>Столкнулся с такой проблемой - в некоторых случаях приложение, собранное антом не работает. Конкретно - не работает десереализация запросов на веб-сервис. Получаемый запрос содержит <!-- raw HTML omitted -->null<!-- raw HTML omitted --> в значениях полей.</p>
+<p>Опытным путём было выяснено, что на это влияет используемая версия Java. Под 1.5 работает корректно, под 1.6 - не работает. Нашли <!-- raw HTML omitted -->ошибку в метро<!-- raw HTML omitted -->, связанную именно с версией JDK и на этом успокоились. Но было одно исключение из правил. У одного из разработчиков под 1.5 тоже не работало.</p>
+<p>Как выяснилось позже, виноват был во всё Ant.
+Metro создавал файл package-info.java, в котором было примерно следующее содержание:</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@javax.xml.bind.annotation.XmlSchema</span><span class="o">(</span>
+    <span class="n">namespace</span> <span class="o">=</span> <span class="s">&#34;http://z.y.x.com&#34;</span><span class="o">,</span> 
+    <span class="n">elementFormDefault</span><span class="o">=</span><span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">bind</span><span class="o">.</span><span class="na">annotation</span><span class="o">.</span><span class="na">XmlNsForm</span><span class="o">.</span><span class="na">UNQUALIFIED</span><span class="o">)</span>
+<span class="kn">package</span> <span class="nn">com.x.y.z</span><span class="o">;</span>
+</code></pre></div><p>Ант, в свою очередь, должен был этот файл компилировать. А <!-- raw HTML omitted -->в реальности этого не происходило<!-- raw HTML omitted -->, поэтому Metro не мог корректно отобразить XML-запрос на объекты доменной области.</p>
+<p>Решение было немного кривым, но при этом поразительно простым - принудительный вызов javac на файлах <code>package-info.java</code>.</p>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2009%2f05%2f30%2fprotected%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=%d0%98%d1%81%d0%bf%d0%be%d0%bb%d1%8c%d0%b7%d0%be%d0%b2%d0%b0%d0%bd%d0%b8%d0%b5%20%d0%bc%d0%be%d0%b4%d0%b8%d1%84%d0%b8%d0%ba%d0%b0%d1%82%d0%be%d1%80%d0%b0%20protected%20%d0%bd%d0%b0%20%d0%bf%d0%be%d0%bb%d1%8f%d1%85%20%d0%b2%20%d0%b1%d0%b0%d0%b7%d0%be%d0%b2%d0%be%d0%bc%20%d0%ba%d0%bb%d0%b0%d1%81%d1%81%d0%b5&url=https%3a%2f%2futhark.github.io%2f2009%2f05%2f30%2fprotected%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
 </div>
@@ -282,69 +314,6 @@
         <p>Так как использование блокировок по-разному влияет на производительность, необходимо выбирать, в каких случаях какой вид блокировок лучше использовать.</p>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-
-        
-
-    </article>
-    
-    <article>
-
-        
-        
-<div class="sharing">
-    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2009%2f04%2f24%2fblog-post_24%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
-    <a href="https://twitter.com/intent/tweet?text=%d0%a2%d1%80%d0%b0%d0%bd%d0%b7%d0%b0%d0%ba%d1%86%d0%b8%d0%b8%20%d0%b2%20%d1%80%d0%b5%d0%bb%d1%8f%d1%86%d0%b8%d0%be%d0%bd%d0%bd%d1%8b%d1%85%20%d0%b1%d0%b0%d0%b7%d0%b0%d1%85%20%d0%b4%d0%b0%d0%bd%d0%bd%d1%8b%d1%85&url=https%3a%2f%2futhark.github.io%2f2009%2f04%2f24%2fblog-post_24%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
-</div>
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2009/04/24/blog-post_24/">Транзакции в реляционных базах данных</a>
-    </h1>
-
-</header>
-
-
-        
-        <p>При работе в многопользовательском окружении может возникнуть ситуация, когда разные пользователи или системы обновляют одни и те же данные. Это может привести к ситуации, когда один из пользователей изменит данные, которые уже изменял другой пользователь и приведёт либо к потере данных, либо к переводу данных в неконсистентное состояние.
-Для решения этой проблемы были придуманы транзакции. Целью транзакции является создание абстракции того, что каждый пользователь - единственный в системе.</p>
-<h3 id="характеристики-транзакций">Характеристики транзакций</h3>
-<p>В конце 1970-х <!-- raw HTML omitted -->Джим Грей<!-- raw HTML omitted --> выделил следующие характеристики транзакций:</p>
-<ul>
-<li>Атомарность (<strong>A</strong>tomicity)</li>
-<li>Непротиворечивость (<strong>C</strong>onsistency)</li>
-<li>Изолированность (<strong>I</strong>solation)</li>
-<li>Долговечность (<strong>D</strong>urability)</li>
-</ul>
-<p><strong>Атомарность</strong> означает, что все действия, производимые в рамках одной транзакции атомарны. Если транзакция заканчивается не успешно, то все изменения, сделанный в рамках этой транзакции откатываются назад. Если транзакция заканчивается успешно, то все её изменения сохраняются.</p>
-<p><strong>Непротиворечивость</strong> означает, что транзакция переводит базу данных из одного непротиворечивого состояния в другое непротиворечивое состояние. При этом, внутри транзакции база данных <strong>может</strong> находиться в противоречивом состоянии.</p>
-<p><strong>Изолированность</strong> означает, что во время работы одной транзакции ей недоступны (с поправками на уровень изоляции) изменения, происходящие в другой транзакции.</p>
-<p>Под <strong>долговечностью</strong> подразумевают, что после окончания транзакции все изменения, сделанные транзакцией фиксируется навсегда, то есть, если происходит программно-аппаратный сбой, то после восстановления системы в рабочее состояние нет потерянных изменений.</p>
-<h3 id="уровни-изоляции-транзакций">Уровни изоляции транзакций</h3>
-<p>При параллельном выполнении нескольких транзакций могут возникнуть следующие проблемы:</p>
-<ul>
-<li>Потерянное обновление</li>
-<li>&ldquo;Грязное&rdquo; чтение</li>
-<li>Неповторяющееся чтение</li>
-<li>Фантомная вставка</li>
-</ul>
-<p><strong>Потерянное обновление</strong> может возникнуть в ситуации, когда две транзакции обновляют одни и те же данные.</p>
-<p><strong>&ldquo;Грязное&rdquo; чтение</strong> возникает, когда одна транзакция видит несохранённые изменения, сделанные другой транзакцией.</p>
-<p><strong>Неповторяющееся чтение</strong> - это ситуация, когда в рамках одной транзакции один и тот же запрос на выборку возвращает разные результаты.</p>
-<p><strong>Фантомная вставка</strong> - ситуация, похожая на неповторяющее чтение - заключается в том, что результаты одной и той же выборки в рамках одной транзакции имеют разное количество возвращаемых строк.</p>
-<p><!-- raw HTML omitted -->Стандарт SQL-92<!-- raw HTML omitted --> определяет следующие уровни изоляции транзакции:</p>
-<ol>
-<li>READ_UNCOMMITED</li>
-<li>READ_COMMITED</li>
-<li>REPEATABLE_READ</li>
-<li>SERIALIZABLE</li>
-</ol>
-<p><strong>READ_UNCOMMITED</strong> - позволяет другим транзакциям видеть несохранённые изменения</p>
-<p><strong>READ_COMMITED</strong> — транзакция во время выполенения видит только зафиксированные изменения. В большинстве баз данных это уровень изоляции по умолчанию.</p>
-<p><strong>REPEATABLE_READ</strong> — данный уровень изоляции решает проблему неповторяющего чтения.</p>
-<p><strong>SERIALIZABLE</strong> - данный уровень изоляции выполняет все транзакции последовательно. Это самый надёжный уровень изоляции, но, при этом, и наименее производительный.</p>
-<p>Каждый уровень решает часть вышеперечисленных проблем.</p>
-<!-- raw HTML omitted -->
-<p>Уровень изоляции<!-- raw HTML omitted --></p>
 <!-- raw HTML omitted -->
 
         

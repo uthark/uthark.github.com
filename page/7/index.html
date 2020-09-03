@@ -123,6 +123,118 @@
         
         
 <div class="sharing">
+    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2010%2f05%2f22%2fdatabene-benerator%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
+    <a href="https://twitter.com/intent/tweet?text=%d0%a1%d0%be%d0%b7%d0%b4%d0%b0%d0%bd%d0%b8%d0%b5%20%d0%b1%d0%be%d0%bb%d1%8c%d1%88%d0%b8%d1%85%20%d0%be%d0%b1%d1%8a%d1%91%d0%bc%d0%be%d0%b2%20%d1%82%d0%b5%d1%81%d1%82%d0%be%d0%b2%d1%8b%d1%85%20%d0%b4%d0%b0%d0%bd%d0%bd%d1%8b%d1%85%20%d1%81%20%d0%bf%d0%be%d0%bc%d0%be%d1%89%d1%8c%d1%8e%20Databene%20Benerator&url=https%3a%2f%2futhark.github.io%2f2010%2f05%2f22%2fdatabene-benerator%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
+</div>
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2010/05/22/databene-benerator/">Создание больших объёмов тестовых данных с помощью Databene Benerator</a>
+    </h1>
+
+</header>
+
+
+        
+        <!-- raw HTML omitted -->
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="ni">&amp;lt;</span>project xmlns=<span class="ni">&amp;quot;</span>http://maven.apache.org/POM/4.0.0<span class="ni">&amp;quot;</span> xmlns:xsi=<span class="ni">&amp;quot;</span>http://www.w3.org/2001/XMLSchema-instance<span class="ni">&amp;quot;</span>
+         xsi:schemaLocation=<span class="ni">&amp;quot;</span>http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd<span class="ni">&amp;quot;&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>modelVersion<span class="ni">&amp;gt;</span>4.0.0<span class="ni">&amp;lt;</span>/modelVersion<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>com.myorganization<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>databene-benerator-test<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>1.0<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>packaging<span class="ni">&amp;gt;</span>jar<span class="ni">&amp;lt;</span>/packaging<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>name<span class="ni">&amp;gt;</span>data generation project<span class="ni">&amp;lt;</span>/name<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>dependencies<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.databene<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>databene-benerator<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>0.5.9<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.databene<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>databene-webdecs<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>0.4.9<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.databene<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>databene-commons<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>0.4.9<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>mysql<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>mysql-connector-java<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>5.1.6<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>/dependencies<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>build<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>resources<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>resource<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>directory<span class="ni">&amp;gt;</span>src/main/resources<span class="ni">&amp;lt;</span>/directory<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>filtering<span class="ni">&amp;gt;</span>true<span class="ni">&amp;lt;</span>/filtering<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>/resource<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>/resources<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>plugins<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>plugin<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.apache.maven.plugins<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>maven-compiler-plugin<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>configuration<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>encoding<span class="ni">&amp;gt;</span>UTF-8<span class="ni">&amp;lt;</span>/encoding<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>source<span class="ni">&amp;gt;</span>1.5<span class="ni">&amp;lt;</span>/source<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>target<span class="ni">&amp;gt;</span>1.5<span class="ni">&amp;lt;</span>/target<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>/configuration<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>/plugin<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>plugin<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.databene<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>maven-benerator-plugin<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>0.5.9<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>executions<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>execution<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>phase<span class="ni">&amp;gt;</span>compile<span class="ni">&amp;lt;</span>/phase<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>goals<span class="ni">&amp;gt;</span>
+              <span class="ni">&amp;lt;</span>goal<span class="ni">&amp;gt;</span>generate<span class="ni">&amp;lt;</span>/goal<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>/goals<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>/execution<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>/executions<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>configuration<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>descriptor<span class="ni">&amp;gt;</span>src/main/resources/benerator.ben.xml<span class="ni">&amp;lt;</span>/descriptor<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>encoding<span class="ni">&amp;gt;</span>UTF-8<span class="ni">&amp;lt;</span>/encoding<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>validate<span class="ni">&amp;gt;</span>true<span class="ni">&amp;lt;</span>/validate<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>dbUrl<span class="ni">&amp;gt;</span>jdbc:mysql://localhost:3306/hrtool?useUnicode=true<span class="ni">&amp;amp;</span>characterEncoding=UTF-8<span class="ni">&amp;lt;</span>/dbUrl<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>dbDriver<span class="ni">&amp;gt;</span>com.mysql.jdbc.Driver<span class="ni">&amp;lt;</span>/dbDriver<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>dbSchema<span class="ni">&amp;gt;</span>database<span class="ni">&amp;lt;</span>/dbSchema<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>dbUser<span class="ni">&amp;gt;</span>user<span class="ni">&amp;lt;</span>/dbUser<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>dbPassword<span class="ni">&amp;gt;</span>password<span class="ni">&amp;lt;</span>/dbPassword<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>/configuration<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>dependencies<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>log4j<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>log4j<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>1.2.13<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>scope<span class="ni">&amp;gt;</span>runtime<span class="ni">&amp;lt;</span>/scope<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.apache.poi<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>poi<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>3.5-beta5<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>scope<span class="ni">&amp;gt;</span>runtime<span class="ni">&amp;lt;</span>/scope<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>/dependencies<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>/plugin<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>/plugins<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>/build<span class="ni">&amp;gt;</span>
+<span class="ni">&amp;lt;</span>/project<span class="ni">&amp;gt;</span>
+
+</code></pre></div><!-- raw HTML omitted -->
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2010%2f04%2f11%2fgorm%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=%d0%9d%d0%b5%d1%81%d0%ba%d0%be%d0%bb%d1%8c%d0%ba%d0%be%20%d1%81%d0%bb%d0%be%d0%b2%20%d0%be%20GORM&url=https%3a%2f%2futhark.github.io%2f2010%2f04%2f11%2fgorm%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
 </div>
@@ -491,64 +603,6 @@ a. <a href="http://msdn.microsoft.com/en-us/library/ms998577.aspx">http://msdn.m
 <span class="k">select</span> <span class="o">@@</span><span class="n">trancount</span>
 <span class="cm">/* @@ trancount = 0 */</span>
 </code></pre></div><!-- raw HTML omitted -->
-
-        
-
-    </article>
-    
-    <article>
-
-        
-        
-<div class="sharing">
-    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2009%2f12%2f14%2fautofs-nfs%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
-    <a href="https://twitter.com/intent/tweet?text=%d0%9d%d0%b0%d1%81%d1%82%d1%80%d0%be%d0%b9%d0%ba%d0%b0%20autofs%20%d0%b4%d0%bb%d1%8f%20%d0%bc%d0%be%d0%bd%d1%82%d0%b8%d1%80%d0%be%d0%b2%d0%b0%d0%bd%d0%b8%d1%8f%20NFS-%d1%80%d0%b5%d1%81%d1%83%d1%80%d1%81%d0%be%d0%b2&url=https%3a%2f%2futhark.github.io%2f2009%2f12%2f14%2fautofs-nfs%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
-</div>
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2009/12/14/autofs-nfs/">Настройка autofs для монтирования NFS-ресурсов</a>
-    </h1>
-
-</header>
-
-
-        
-        <p>Summary: В данной заметке описана настройка autofs для доступа к сетевым ресурсам, доступным по NFS.<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-Последние несколько лет (с тех пор, как количество компьютеров дома стало больше одного) возникла проблема беспрепятственного доступа к данным, хранящимся на одном компьютере с другого.<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-Было найдено самое простое решение - <!-- raw HTML omitted -->NFS<!-- raw HTML omitted -->.<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-Как выяснилось позже это было не самое удачное решение - ноутбук не всегда находился дома, а, значит, домашние сетевые ресурсы не всегда доступны. Соответственно, при загрузке операционной системы происходили задержки из-за поиска компьютера с сетевыми ресурсами. Не очень удобно, но жить можно.<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-Решил окончательно разобраться с этим и начал искать решение. Оно оказалось на поверхности и затронуло только клиента ресурсов, то есть ноутбук. Решение называется <!-- raw HTML omitted --><!-- raw HTML omitted -->autofs<!-- raw HTML omitted --><!-- raw HTML omitted -->.<!-- raw HTML omitted -->
-<!-- raw HTML omitted --></p>
-<ol>
-<li>Устанавливаем <!-- raw HTML omitted -->autofs<!-- raw HTML omitted -->.<!-- raw HTML omitted --></li>
-</ol>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<ol start="2">
-<li>Производим настройку.<!-- raw HTML omitted -->
-Редактируем файл <!-- raw HTML omitted -->/etc/auto.master<!-- raw HTML omitted -->. Расскомментируем строку, содержащую строки <!-- raw HTML omitted -->/net -hosts<!-- raw HTML omitted -->:<!-- raw HTML omitted --></li>
-</ol>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<ol start="3">
-<li>В файл <!-- raw HTML omitted --><!-- raw HTML omitted -->/etc/hosts<!-- raw HTML omitted --><!-- raw HTML omitted --> можно внести адреса серверов с NFS-ресурсами (для того, чтобы избежать <!-- raw HTML omitted -->DNS<!-- raw HTML omitted -->-запросов). В моём случае:<!-- raw HTML omitted --></li>
-</ol>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<ol start="4">
-<li>Перезапускаем сервис <!-- raw HTML omitted -->autofs<!-- raw HTML omitted --><!-- raw HTML omitted --></li>
-</ol>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<ol start="5">
-<li>Теперь открываем в файловом браузер адрес <!-- raw HTML omitted -->/net/server<!-- raw HTML omitted --> и видим его сетевые ресурсы, доступные для данного клиента.<!-- raw HTML omitted -->
-<!-- raw HTML omitted --></li>
-</ol>
-<!-- raw HTML omitted -->
 
         
 

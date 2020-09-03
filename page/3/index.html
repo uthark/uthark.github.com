@@ -123,6 +123,151 @@
         
         
 <div class="sharing">
+    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2014%2f03%2f06%2fcustomizing-font-in-android-textview%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
+    <a href="https://twitter.com/intent/tweet?text=Using%20custom%20font%20in%20Android%20TextView&url=https%3a%2f%2futhark.github.io%2f2014%2f03%2f06%2fcustomizing-font-in-android-textview%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
+</div>
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2014/03/06/customizing-font-in-android-textview/">Using custom font in Android TextView</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>Today I want to share with you custom <a href="http://developer.android.com/reference/android/widget/TextView.html">TextView</a> which allows to set font to be used in xml layout.</p>
+<p>First, we need to declare our custom styleable</p>
+<p>attrs.xml:</p>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml">
+<span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span>
+<span class="nt">&lt;resources&gt;</span>
+
+    <span class="nt">&lt;declare-styleable</span> <span class="na">name=</span><span class="s">&#34;TypefaceTextView&#34;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;attr</span> <span class="na">name=</span><span class="s">&#34;typeface&#34;</span> <span class="na">format=</span><span class="s">&#34;string&#34;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/declare-styleable&gt;</span>
+
+<span class="nt">&lt;/resources&gt;</span>
+
+</code></pre></div><p>Then we need to create subclass of <code>TextView</code> which will use custom attribute.</p>
+<p>TypefaceTextView:</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TypefaceTextView</span> <span class="kd">extends</span> <span class="n">TextView</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="nf">TypefaceTextView</span><span class="o">(</span><span class="n">Context</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nf">TypefaceTextView</span><span class="o">(</span><span class="n">Context</span> <span class="n">context</span><span class="o">,</span> <span class="n">AttributeSet</span> <span class="n">attrs</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">attrs</span><span class="o">,</span> <span class="n">0</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nf">TypefaceTextView</span><span class="o">(</span><span class="n">Context</span> <span class="n">context</span><span class="o">,</span> <span class="n">AttributeSet</span> <span class="n">attrs</span><span class="o">,</span> <span class="kt">int</span> <span class="n">defStyle</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">attrs</span><span class="o">,</span> <span class="n">defStyle</span><span class="o">);</span>
+
+        <span class="n">TypedArray</span> <span class="n">ta</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">getTheme</span><span class="o">().</span><span class="na">obtainStyledAttributes</span><span class="o">(</span><span class="n">attrs</span><span class="o">,</span> <span class="n">R</span><span class="o">.</span><span class="na">styleable</span><span class="o">.</span><span class="na">TypefaceTextView</span><span class="o">,</span> <span class="n">0</span><span class="o">,</span> <span class="n">0</span><span class="o">);</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">String</span> <span class="n">font</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">styleable</span><span class="o">.</span><span class="na">TypefaceTextView_typeface</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="kc">null</span> <span class="o">==</span> <span class="n">font</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">font</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">string</span><span class="o">.</span><span class="na">default_font_name</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="n">Typeface</span> <span class="n">typeface</span> <span class="o">=</span> <span class="n">TypefaceCache</span><span class="o">.</span><span class="na">getTypeface</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">font</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="kc">null</span> <span class="o">!=</span> <span class="n">typeface</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">setTypeface</span><span class="o">(</span><span class="n">typeface</span><span class="o">);</span>
+            <span class="o">}</span>
+
+        <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+            <span class="n">ta</span><span class="o">.</span><span class="na">recycle</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><p>Also, above class allows to use default custom font, all is needed is to define its name in <code>strings.xml</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span>
+<span class="nt">&lt;resources&gt;</span>
+    <span class="nt">&lt;string</span> <span class="na">name=</span><span class="s">&#34;default_font_name&#34;</span> <span class="na">translatable=</span><span class="s">&#34;false&#34;</span><span class="nt">&gt;</span>custom.ttf<span class="nt">&lt;/string&gt;</span>
+<span class="nt">&lt;/resources&gt;</span>
+
+</code></pre></div><p>Due to the <a href="https://code.google.com/p/android/issues/detail?id=9904">bug in Android</a> we have to cache all created typefaces in cache:</p>
+<p>TypefaceCache:</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">TypefaceCache</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Typeface</span><span class="o">&gt;</span> <span class="n">CACHE</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Typeface</span><span class="o">&gt;();</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">Typeface</span> <span class="nf">getTypeface</span><span class="o">(</span><span class="n">Context</span> <span class="n">context</span><span class="o">,</span> <span class="n">String</span> <span class="n">font</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="kc">null</span> <span class="o">==</span> <span class="n">font</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">Typeface</span> <span class="n">typeface</span> <span class="o">=</span> <span class="n">CACHE</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">font</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="kc">null</span> <span class="o">==</span> <span class="n">typeface</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="n">typeface</span> <span class="o">=</span> <span class="n">Typeface</span><span class="o">.</span><span class="na">createFromAsset</span><span class="o">(</span><span class="n">context</span><span class="o">.</span><span class="na">getAssets</span><span class="o">(),</span> <span class="n">font</span><span class="o">);</span>
+            <span class="n">CACHE</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">font</span><span class="o">,</span> <span class="n">typeface</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">typeface</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><p>Basically, that&rsquo;s it. In order to use it is required to put TTF font in the <code>assets</code> folder and reference the font:</p>
+<p>Example usage:</p>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span>
+<span class="nt">&lt;com.example.android.widget.TypefaceTextView</span> 
+    <span class="na">xmlns:a=</span><span class="s">&#34;http://schemas.android.com/apk/res/android&#34;</span>
+    <span class="na">xmlns:custom=</span><span class="s">&#34;http://schemas.android.com/apk/res-auto&#34;</span>
+    <span class="na">a:layout_width=</span><span class="s">&#34;match_parent&#34;</span>
+    <span class="na">custom:typeface=</span><span class="s">&#34;custom-font.ttf&#34;</span><span class="nt">/&gt;</span>
+</code></pre></div><p>And the last use case it to set custom font for the actionbar title. In this case we can implement custom <a href="http://developer.android.com/reference/android/text/style/CharacterStyle.html"><code>android.text.style.CharacterStyle</code></a></p>
+<p>TypefaceSpan:</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TypefaceSpan</span> <span class="kd">extends</span> <span class="n">MetricAffectingSpan</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="n">Typeface</span> <span class="n">mTypeface</span><span class="o">;</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * Load the {@link Typeface} and apply to a {@link Spannable}.
+</span><span class="cm">     */</span>
+    <span class="kd">public</span> <span class="nf">TypefaceSpan</span><span class="o">(</span><span class="n">Context</span> <span class="n">context</span><span class="o">,</span> <span class="n">String</span> <span class="n">typefaceName</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">mTypeface</span> <span class="o">=</span> <span class="n">TypefaceCache</span><span class="o">.</span><span class="na">getTypeface</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">typefaceName</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">updateMeasureState</span><span class="o">(</span><span class="n">TextPaint</span> <span class="n">p</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">p</span><span class="o">.</span><span class="na">setTypeface</span><span class="o">(</span><span class="n">mTypeface</span><span class="o">);</span>
+
+        <span class="c1">// Note: This flag is required for proper typeface rendering
+</span><span class="c1"></span>        <span class="n">p</span><span class="o">.</span><span class="na">setFlags</span><span class="o">(</span><span class="n">p</span><span class="o">.</span><span class="na">getFlags</span><span class="o">()</span> <span class="o">|</span> <span class="n">Paint</span><span class="o">.</span><span class="na">SUBPIXEL_TEXT_FLAG</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">updateDrawState</span><span class="o">(</span><span class="n">TextPaint</span> <span class="n">tp</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">tp</span><span class="o">.</span><span class="na">setTypeface</span><span class="o">(</span><span class="n">mTypeface</span><span class="o">);</span>
+
+        <span class="c1">// Note: This flag is required for proper typeface rendering
+</span><span class="c1"></span>        <span class="n">tp</span><span class="o">.</span><span class="na">setFlags</span><span class="o">(</span><span class="n">tp</span><span class="o">.</span><span class="na">getFlags</span><span class="o">()</span> <span class="o">|</span> <span class="n">Paint</span><span class="o">.</span><span class="na">SUBPIXEL_TEXT_FLAG</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><p>Then we can set actionbar title using the following code:</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">
+<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">setActionBarTitle</span><span class="o">(</span><span class="n">Activity</span> <span class="n">context</span><span class="o">,</span> <span class="n">CharSequence</span> <span class="n">title</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">SpannableString</span> <span class="n">s</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SpannableString</span><span class="o">(</span><span class="n">title</span><span class="o">);</span>
+    <span class="n">s</span><span class="o">.</span><span class="na">setSpan</span><span class="o">(</span><span class="k">new</span> <span class="n">TypefaceSpan</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">context</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">string</span><span class="o">.</span><span class="na">default_font_name</span><span class="o">)),</span> <span class="n">0</span><span class="o">,</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">(),</span>
+        <span class="n">Spannable</span><span class="o">.</span><span class="na">SPAN_EXCLUSIVE_EXCLUSIVE</span><span class="o">);</span>
+
+    <span class="k">if</span> <span class="o">(</span><span class="n">Build</span><span class="o">.</span><span class="na">VERSION</span><span class="o">.</span><span class="na">SDK_INT</span> <span class="o">&gt;=</span> <span class="n">Build</span><span class="o">.</span><span class="na">VERSION_CODES</span><span class="o">.</span><span class="na">HONEYCOMB</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">context</span><span class="o">.</span><span class="na">getActionBar</span><span class="o">().</span><span class="na">setTitle</span><span class="o">(</span><span class="n">s</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div><h3 id="additional-information">Additional information</h3>
+<ol>
+<li><a href="http://developer.android.com/training/custom-views/#create-view.html">Creating a View Class | Android Developers</a></li>
+</ol>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2014%2f03%2f05%2fsolving-issue-with-db2-on-vmware-fusion-on-macbook-pro-2013-late%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=Solving%20issue%20with%20DB2%20on%20VMWare%20Fusion%20on%20MacBook%20Pro%202013%20Late&url=https%3a%2f%2futhark.github.io%2f2014%2f03%2f05%2fsolving-issue-with-db2-on-vmware-fusion-on-macbook-pro-2013-late%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
 </div>
@@ -319,31 +464,6 @@ Click on <code>Edit</code> button in <code>Triggers</code> section.</p>
 </figure>
 
 <p>Happy coding!</p>
-
-        
-
-    </article>
-    
-    <article>
-
-        
-        
-<div class="sharing">
-    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2014%2f03%2f02%2fsplean-resonance%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
-    <a href="https://twitter.com/intent/tweet?text=%d0%a1%d0%bf%d0%bb%d0%b8%d0%bd%20-%20%d0%a0%d0%b5%d0%b7%d0%be%d0%bd%d0%b0%d0%bd%d1%81%2c%20%d1%87%d0%b0%d1%81%d1%82%d1%8c%201.&url=https%3a%2f%2futhark.github.io%2f2014%2f03%2f02%2fsplean-resonance%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
-</div>
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2014/03/02/splean-resonance/">Сплин - Резонанс, часть 1.</a>
-    </h1>
-
-</header>
-
-
-        
-        <p>Splean <a href="http://www.navigatorrecords.ru/showalbum.php?code=206">released new album</a> - Resonance, part 1.</p>
-<p>Good album, good texts.</p>
-<p>You can listen previews <a href="https://play.google.com/music/playpreview?preview=AE9vGKqOscNKDl7gMYDS126d1iINPIg449z4g_bwiXboIi8Qu74XsZRRzinlJnrN3NscIJS-_VgndoHTGYZFCl_l_TvPM2mwqVNg1BOW_rie_WOpZkqaubw%3D">here</a> or <a href="http://music.yandex.ru/#!/album/1801924">here (Russia only)</a>.</p>
 
         
 

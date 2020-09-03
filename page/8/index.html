@@ -123,6 +123,64 @@
         
         
 <div class="sharing">
+    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2009%2f12%2f14%2fautofs-nfs%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
+    <a href="https://twitter.com/intent/tweet?text=%d0%9d%d0%b0%d1%81%d1%82%d1%80%d0%be%d0%b9%d0%ba%d0%b0%20autofs%20%d0%b4%d0%bb%d1%8f%20%d0%bc%d0%be%d0%bd%d1%82%d0%b8%d1%80%d0%be%d0%b2%d0%b0%d0%bd%d0%b8%d1%8f%20NFS-%d1%80%d0%b5%d1%81%d1%83%d1%80%d1%81%d0%be%d0%b2&url=https%3a%2f%2futhark.github.io%2f2009%2f12%2f14%2fautofs-nfs%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
+</div>
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2009/12/14/autofs-nfs/">Настройка autofs для монтирования NFS-ресурсов</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>Summary: В данной заметке описана настройка autofs для доступа к сетевым ресурсам, доступным по NFS.<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+Последние несколько лет (с тех пор, как количество компьютеров дома стало больше одного) возникла проблема беспрепятственного доступа к данным, хранящимся на одном компьютере с другого.<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+Было найдено самое простое решение - <!-- raw HTML omitted -->NFS<!-- raw HTML omitted -->.<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+Как выяснилось позже это было не самое удачное решение - ноутбук не всегда находился дома, а, значит, домашние сетевые ресурсы не всегда доступны. Соответственно, при загрузке операционной системы происходили задержки из-за поиска компьютера с сетевыми ресурсами. Не очень удобно, но жить можно.<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+Решил окончательно разобраться с этим и начал искать решение. Оно оказалось на поверхности и затронуло только клиента ресурсов, то есть ноутбук. Решение называется <!-- raw HTML omitted --><!-- raw HTML omitted -->autofs<!-- raw HTML omitted --><!-- raw HTML omitted -->.<!-- raw HTML omitted -->
+<!-- raw HTML omitted --></p>
+<ol>
+<li>Устанавливаем <!-- raw HTML omitted -->autofs<!-- raw HTML omitted -->.<!-- raw HTML omitted --></li>
+</ol>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<ol start="2">
+<li>Производим настройку.<!-- raw HTML omitted -->
+Редактируем файл <!-- raw HTML omitted -->/etc/auto.master<!-- raw HTML omitted -->. Расскомментируем строку, содержащую строки <!-- raw HTML omitted -->/net -hosts<!-- raw HTML omitted -->:<!-- raw HTML omitted --></li>
+</ol>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<ol start="3">
+<li>В файл <!-- raw HTML omitted --><!-- raw HTML omitted -->/etc/hosts<!-- raw HTML omitted --><!-- raw HTML omitted --> можно внести адреса серверов с NFS-ресурсами (для того, чтобы избежать <!-- raw HTML omitted -->DNS<!-- raw HTML omitted -->-запросов). В моём случае:<!-- raw HTML omitted --></li>
+</ol>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<ol start="4">
+<li>Перезапускаем сервис <!-- raw HTML omitted -->autofs<!-- raw HTML omitted --><!-- raw HTML omitted --></li>
+</ol>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<ol start="5">
+<li>Теперь открываем в файловом браузер адрес <!-- raw HTML omitted -->/net/server<!-- raw HTML omitted --> и видим его сетевые ресурсы, доступные для данного клиента.<!-- raw HTML omitted -->
+<!-- raw HTML omitted --></li>
+</ol>
+<!-- raw HTML omitted -->
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2009%2f12%2f08%2fdelicious-google-chrome%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=%d0%a0%d0%b0%d1%81%d1%88%d0%b8%d1%80%d0%b5%d0%bd%d0%b8%d0%b5%20%d0%b4%d0%bb%d1%8f%20%d1%80%d0%b0%d0%b1%d0%be%d1%82%d1%8b%20%d1%81%20Delicious%20%d0%b4%d0%be%d1%81%d1%82%d1%83%d0%bf%d0%bd%d0%be%20%d0%bd%d0%b0%20%d1%81%d0%b0%d0%b9%d1%82%d0%b5%20%d1%80%d0%b0%d1%81%d1%88%d0%b8%d1%80%d0%b5%d0%bd%d0%b8%d0%b9%20Google%20Chrome&url=https%3a%2f%2futhark.github.io%2f2009%2f12%2f08%2fdelicious-google-chrome%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
 </div>
@@ -299,50 +357,6 @@ P.P.S. Да, ещё забыл сказать, что сервис достат�
 P.S. А тем временем работа над расширением продолжается.<!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 P.P.S. У расширения появилась своя страничка в сети: <!-- raw HTML omitted -->Project Home Page<!-- raw HTML omitted --></p>
-
-        
-
-    </article>
-    
-    <article>
-
-        
-        
-<div class="sharing">
-    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2009%2f11%2f24%2fgoogle-chrome%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
-    <a href="https://twitter.com/intent/tweet?text=%d0%a1%d0%be%d0%b7%d0%b4%d0%b0%d0%bd%d0%b8%d0%b5%20%d1%81%d1%82%d1%80%d0%b0%d0%bd%d0%b8%d1%86%d1%8b%20%d0%bd%d0%b0%d1%81%d1%82%d1%80%d0%be%d0%b5%d0%ba%20%d0%b4%d0%bb%d1%8f%20%d1%80%d0%b0%d1%81%d1%88%d0%b8%d1%80%d0%b5%d0%bd%d0%b8%d0%b9%20Google%20Chrome&url=https%3a%2f%2futhark.github.io%2f2009%2f11%2f24%2fgoogle-chrome%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
-</div>
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2009/11/24/google-chrome/">Создание страницы настроек для расширений Google Chrome</a>
-    </h1>
-
-</header>
-
-
-        
-        <p>В продолжение <!-- raw HTML omitted -->предыдущей заметки<!-- raw HTML omitted --><!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-Логично предположить, что у расширений могут быть настройки. В Google Chrome/Chromium для этого есть специальный API.<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-Для того, чтобы создать собственную страницу настроек необходимо сделать следующее:<!-- raw HTML omitted -->
-<!-- raw HTML omitted --></p>
-<ol>
-<li>Объявить в манифесте страницу настроек<!-- raw HTML omitted --></li>
-</ol>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<ol start="2">
-<li>Реализовать страницу с настройками.<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-Страница с настройками - это обычная HTML-страничка. Для доступа к настройкам Google Chrome предоставляет объект <!-- raw HTML omitted -->localStorage<!-- raw HTML omitted -->, который умеет сохранять и возвращать значения.<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-С объектом <!-- raw HTML omitted -->localStorage<!-- raw HTML omitted --> работа идёт как с обычным hash. <!-- raw HTML omitted -->
-<!-- raw HTML omitted --></li>
-</ol>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 
         
 

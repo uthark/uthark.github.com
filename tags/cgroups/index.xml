@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>raspberrypi on Sharing knowledge</title>
-    <link>https://uthark.github.io/categories/raspberrypi/</link>
-    <description>Recent content in raspberrypi on Sharing knowledge</description>
+    <title>cgroups on Sharing knowledge</title>
+    <link>https://uthark.github.io/tags/cgroups/</link>
+    <description>Recent content in cgroups on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 02 Sep 2020 20:44:30 -0700</lastBuildDate>
     
-	<atom:link href="https://uthark.github.io/categories/raspberrypi/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://uthark.github.io/tags/cgroups/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -21,20 +21,6 @@
 arm64 is preferred, because 64-bit allows you to use &amp;gt; 4GB of RAM per process.
 Enable cgroups Kubernetes relies on cgroups for enforcing limits for the containers, so kernel needs to be booted with cgroups support. On Raspberry, edit /boot/firmware/cmdline.txt and add the following options:
 cgroup_enable=memory swapaccount=1 cgroup_memory=1 cgroup_enable=cpuset Reboot after making the changes.</description>
-    </item>
-    
-    <item>
-      <title>Configuring Wi-Fi on Ubuntu Server 64-bit on Raspberry Pi 4</title>
-      <link>https://uthark.github.io/post/2020-09-01-raspberry-pi-ubuntu-arm64/</link>
-      <pubDate>Wed, 02 Sep 2020 09:19:21 -0700</pubDate>
-      
-      <guid>https://uthark.github.io/post/2020-09-01-raspberry-pi-ubuntu-arm64/</guid>
-      <description>After discovering that by default Raspberry installs 32-bit Raspbian OS, I wanted to reinstall it with a 64 bit - this would allow to run Kubernetes on Raspberry
-Decided to go with Ubuntu Server 64.
-Installed it on SD Card with Raspberry Pi Imager.
-After boot found out that need to connect it to WI-FI.
-Configuring wpa_supplicant didn&amp;rsquo;t help, still had issues with not getting IP Address from DHCP.
-Finally, did the following:</description>
     </item>
     
   </channel>

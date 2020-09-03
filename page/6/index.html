@@ -123,6 +123,32 @@
         
         
 <div class="sharing">
+    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2012%2f04%2f20%2fblog-post%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
+    <a href="https://twitter.com/intent/tweet?text=%d0%9f%d1%80%d0%b5%d0%be%d0%b1%d1%80%d0%b0%d0%b7%d1%83%d0%b5%d0%bc%20%d1%81%d1%82%d1%80%d0%be%d0%ba%d1%83%20%d0%b2%20%d0%b4%d0%b0%d1%82%d1%83&url=https%3a%2f%2futhark.github.io%2f2012%2f04%2f20%2fblog-post%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
+</div>
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2012/04/20/blog-post/">Преобразуем строку в дату</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>Казалось бы, есть простейшая задача - преобразовать строковое представление даты в объект класса <!-- raw HTML omitted -->java.util.Date<!-- raw HTML omitted -->.</p>
+<p>Как оказалось, иногда использование DateFormat не помогает. В случае, если строка - это заголовок <!-- raw HTML omitted -->Date<!-- raw HTML omitted --> из письма, то нам нужно использовать <!-- raw HTML omitted --><a href="http://docs.oracle.com/javaee/5/api/javax/mail/internet/MailDateFormat.html">javax.mail.internet.MailDateFormat</a><!-- raw HTML omitted --> для преобразования такой строки.</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">String</span> <span class="n">dateStr</span> <span class="o">=</span> <span class="o">...</span>
+<span class="n">Date</span> <span class="n">parsedDate</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MailDateFormat</span><span class="o">().</span><span class="na">parse</span><span class="o">(</span><span class="n">dateStr</span><span class="o">);</span>
+</code></pre></div>
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2012%2f02%2f23%2fjpa-spring-data-jpa%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=%d0%a3%d0%bf%d1%80%d0%be%d1%89%d0%b0%d0%b5%d0%bc%20%d1%80%d0%b0%d0%b1%d0%be%d1%82%d1%83%20%d1%81%20JPA%20%d0%bf%d1%80%d0%b8%20%d0%bf%d0%be%d0%bc%d0%be%d1%89%d0%b8%20Spring%20Data%20JPA&url=https%3a%2f%2futhark.github.io%2f2012%2f02%2f23%2fjpa-spring-data-jpa%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
 </div>
@@ -868,118 +894,6 @@
 <span class="o">}</span>
 
 </code></pre></div><p>Вызов <!-- raw HTML omitted -->Normalizer.normalize<!-- raw HTML omitted --> проводит <!-- raw HTML omitted -->нормализацию<!-- raw HTML omitted --> входной строки. Последующий вызов регулярного выражения удаляет все диакритические знаки, полученные после нормализации.</p>
-
-        
-
-    </article>
-    
-    <article>
-
-        
-        
-<div class="sharing">
-    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2010%2f05%2f22%2fdatabene-benerator%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
-    <a href="https://twitter.com/intent/tweet?text=%d0%a1%d0%be%d0%b7%d0%b4%d0%b0%d0%bd%d0%b8%d0%b5%20%d0%b1%d0%be%d0%bb%d1%8c%d1%88%d0%b8%d1%85%20%d0%be%d0%b1%d1%8a%d1%91%d0%bc%d0%be%d0%b2%20%d1%82%d0%b5%d1%81%d1%82%d0%be%d0%b2%d1%8b%d1%85%20%d0%b4%d0%b0%d0%bd%d0%bd%d1%8b%d1%85%20%d1%81%20%d0%bf%d0%be%d0%bc%d0%be%d1%89%d1%8c%d1%8e%20Databene%20Benerator&url=https%3a%2f%2futhark.github.io%2f2010%2f05%2f22%2fdatabene-benerator%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
-</div>
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2010/05/22/databene-benerator/">Создание больших объёмов тестовых данных с помощью Databene Benerator</a>
-    </h1>
-
-</header>
-
-
-        
-        <!-- raw HTML omitted -->
-<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="ni">&amp;lt;</span>project xmlns=<span class="ni">&amp;quot;</span>http://maven.apache.org/POM/4.0.0<span class="ni">&amp;quot;</span> xmlns:xsi=<span class="ni">&amp;quot;</span>http://www.w3.org/2001/XMLSchema-instance<span class="ni">&amp;quot;</span>
-         xsi:schemaLocation=<span class="ni">&amp;quot;</span>http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd<span class="ni">&amp;quot;&amp;gt;</span>
-  <span class="ni">&amp;lt;</span>modelVersion<span class="ni">&amp;gt;</span>4.0.0<span class="ni">&amp;lt;</span>/modelVersion<span class="ni">&amp;gt;</span>
-  <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>com.myorganization<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
-  <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>databene-benerator-test<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
-  <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>1.0<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
-  <span class="ni">&amp;lt;</span>packaging<span class="ni">&amp;gt;</span>jar<span class="ni">&amp;lt;</span>/packaging<span class="ni">&amp;gt;</span>
-  <span class="ni">&amp;lt;</span>name<span class="ni">&amp;gt;</span>data generation project<span class="ni">&amp;lt;</span>/name<span class="ni">&amp;gt;</span>
-  <span class="ni">&amp;lt;</span>dependencies<span class="ni">&amp;gt;</span>
-    <span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.databene<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>databene-benerator<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>0.5.9<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
-    <span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
-    <span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.databene<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>databene-webdecs<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>0.4.9<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
-    <span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
-    <span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.databene<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>databene-commons<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>0.4.9<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
-    <span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
-    <span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>mysql<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>mysql-connector-java<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>5.1.6<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
-    <span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
-  <span class="ni">&amp;lt;</span>/dependencies<span class="ni">&amp;gt;</span>
-  <span class="ni">&amp;lt;</span>build<span class="ni">&amp;gt;</span>
-    <span class="ni">&amp;lt;</span>resources<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>resource<span class="ni">&amp;gt;</span>
-        <span class="ni">&amp;lt;</span>directory<span class="ni">&amp;gt;</span>src/main/resources<span class="ni">&amp;lt;</span>/directory<span class="ni">&amp;gt;</span>
-        <span class="ni">&amp;lt;</span>filtering<span class="ni">&amp;gt;</span>true<span class="ni">&amp;lt;</span>/filtering<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>/resource<span class="ni">&amp;gt;</span>
-    <span class="ni">&amp;lt;</span>/resources<span class="ni">&amp;gt;</span>
-    <span class="ni">&amp;lt;</span>plugins<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>plugin<span class="ni">&amp;gt;</span>
-        <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.apache.maven.plugins<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
-        <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>maven-compiler-plugin<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
-        <span class="ni">&amp;lt;</span>configuration<span class="ni">&amp;gt;</span>
-          <span class="ni">&amp;lt;</span>encoding<span class="ni">&amp;gt;</span>UTF-8<span class="ni">&amp;lt;</span>/encoding<span class="ni">&amp;gt;</span>
-          <span class="ni">&amp;lt;</span>source<span class="ni">&amp;gt;</span>1.5<span class="ni">&amp;lt;</span>/source<span class="ni">&amp;gt;</span>
-          <span class="ni">&amp;lt;</span>target<span class="ni">&amp;gt;</span>1.5<span class="ni">&amp;lt;</span>/target<span class="ni">&amp;gt;</span>
-        <span class="ni">&amp;lt;</span>/configuration<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>/plugin<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>plugin<span class="ni">&amp;gt;</span>
-        <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.databene<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
-        <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>maven-benerator-plugin<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
-        <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>0.5.9<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
-        <span class="ni">&amp;lt;</span>executions<span class="ni">&amp;gt;</span>
-          <span class="ni">&amp;lt;</span>execution<span class="ni">&amp;gt;</span>
-            <span class="ni">&amp;lt;</span>phase<span class="ni">&amp;gt;</span>compile<span class="ni">&amp;lt;</span>/phase<span class="ni">&amp;gt;</span>
-            <span class="ni">&amp;lt;</span>goals<span class="ni">&amp;gt;</span>
-              <span class="ni">&amp;lt;</span>goal<span class="ni">&amp;gt;</span>generate<span class="ni">&amp;lt;</span>/goal<span class="ni">&amp;gt;</span>
-            <span class="ni">&amp;lt;</span>/goals<span class="ni">&amp;gt;</span>
-          <span class="ni">&amp;lt;</span>/execution<span class="ni">&amp;gt;</span>
-        <span class="ni">&amp;lt;</span>/executions<span class="ni">&amp;gt;</span>
-        <span class="ni">&amp;lt;</span>configuration<span class="ni">&amp;gt;</span>
-          <span class="ni">&amp;lt;</span>descriptor<span class="ni">&amp;gt;</span>src/main/resources/benerator.ben.xml<span class="ni">&amp;lt;</span>/descriptor<span class="ni">&amp;gt;</span>
-          <span class="ni">&amp;lt;</span>encoding<span class="ni">&amp;gt;</span>UTF-8<span class="ni">&amp;lt;</span>/encoding<span class="ni">&amp;gt;</span>
-          <span class="ni">&amp;lt;</span>validate<span class="ni">&amp;gt;</span>true<span class="ni">&amp;lt;</span>/validate<span class="ni">&amp;gt;</span>
-          <span class="ni">&amp;lt;</span>dbUrl<span class="ni">&amp;gt;</span>jdbc:mysql://localhost:3306/hrtool?useUnicode=true<span class="ni">&amp;amp;</span>characterEncoding=UTF-8<span class="ni">&amp;lt;</span>/dbUrl<span class="ni">&amp;gt;</span>
-          <span class="ni">&amp;lt;</span>dbDriver<span class="ni">&amp;gt;</span>com.mysql.jdbc.Driver<span class="ni">&amp;lt;</span>/dbDriver<span class="ni">&amp;gt;</span>
-          <span class="ni">&amp;lt;</span>dbSchema<span class="ni">&amp;gt;</span>database<span class="ni">&amp;lt;</span>/dbSchema<span class="ni">&amp;gt;</span>
-          <span class="ni">&amp;lt;</span>dbUser<span class="ni">&amp;gt;</span>user<span class="ni">&amp;lt;</span>/dbUser<span class="ni">&amp;gt;</span>
-          <span class="ni">&amp;lt;</span>dbPassword<span class="ni">&amp;gt;</span>password<span class="ni">&amp;lt;</span>/dbPassword<span class="ni">&amp;gt;</span>
-        <span class="ni">&amp;lt;</span>/configuration<span class="ni">&amp;gt;</span>
-        <span class="ni">&amp;lt;</span>dependencies<span class="ni">&amp;gt;</span>
-        <span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
-            <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>log4j<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
-            <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>log4j<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
-            <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>1.2.13<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
-            <span class="ni">&amp;lt;</span>scope<span class="ni">&amp;gt;</span>runtime<span class="ni">&amp;lt;</span>/scope<span class="ni">&amp;gt;</span>
-          <span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
-          <span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
-            <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.apache.poi<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
-            <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>poi<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
-            <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>3.5-beta5<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
-            <span class="ni">&amp;lt;</span>scope<span class="ni">&amp;gt;</span>runtime<span class="ni">&amp;lt;</span>/scope<span class="ni">&amp;gt;</span>
-          <span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
-        <span class="ni">&amp;lt;</span>/dependencies<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>/plugin<span class="ni">&amp;gt;</span>
-    <span class="ni">&amp;lt;</span>/plugins<span class="ni">&amp;gt;</span>
-  <span class="ni">&amp;lt;</span>/build<span class="ni">&amp;gt;</span>
-<span class="ni">&amp;lt;</span>/project<span class="ni">&amp;gt;</span>
-
-</code></pre></div><!-- raw HTML omitted -->
 
         
 
