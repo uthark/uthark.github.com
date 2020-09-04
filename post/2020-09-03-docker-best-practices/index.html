@@ -189,28 +189,21 @@ Small docker images provide the following benefits:
 </li>
 <li>
 <p>Use digest/<code>@sha256</code> in <code>FROM</code> to specify exact version of the container you’re pulling. Digest is shown on tag page on docker hub or you can get it after running <code>docker pull</code>:</p>
-<pre><code>      ```
-      $ docker pull alpine:3.12.0
-      3.12.0: Pulling from library/alpine
-      df20fa9351a1: Pull complete
-      Digest: sha256:185518070891758909c9f839cf4ca393ee977ac378609f700f60a771a2dfe321
-      Status: Downloaded newer image for alpine:3.12.0
-      docker.io/library/alpine:3.12.0
-      ```
-
- `Dockerfile` will looks like this:
-	
- ```
- FROM alpine@sha256:185518070891758909c9f839cf4ca393ee977ac378609f700f60a771a2dfe321
- COPY ...
- # And so on.
- ``` 
-</code></pre>
-<ol start="4">
+</li>
+</ol>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback"> $ docker pull alpine:3.12.0
+ 3.12.0: Pulling from library/alpine
+ df20fa9351a1: Pull complete
+ Digest: sha256:185518070891758909c9f839cf4ca393ee977ac378609f700f60a771a2dfe321
+ Status: Downloaded newer image for alpine:3.12.0
+ docker.io/library/alpine:3.12.0
+</code></pre></div><p><code>Dockerfile</code> will looks like this:</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">FROM alpine@sha256:185518070891758909c9f839cf4ca393ee977ac378609f700f60a771a2dfe321
+COPY ...
+# And so on.
+</code></pre></div><ol start="4">
 <li>Use own docker registry. Rebuild all required base images yourself and use them. This will allow you to control which base image are being used.</li>
 <li>Prohibit running docker containers from <code>docker.io</code> in production. If you run in kubernetes, use <a href="https://github.com/open-policy-agent/gatekeeper">Open Policy Agent Gatekeeper</a> or similar solution. docker.io contains a lot of images that are build both by well-known companies and by random people, not all of them have good intentions.</li>
-</ol>
-</li>
 </ol>
 <h2 id="improve-maintainability">Improve maintainability</h2>
 <ol>
