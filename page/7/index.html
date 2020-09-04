@@ -123,6 +123,43 @@
         
         
 <div class="sharing">
+    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2010%2f05%2f22%2fblog-post%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
+    <a href="https://twitter.com/intent/tweet?text=%d0%a3%d0%b4%d0%b0%d0%bb%d0%b5%d0%bd%d0%b8%d0%b5%20%d1%80%d0%b0%d0%b7%d0%bb%d0%b8%d1%87%d0%bd%d1%8b%d1%85%20%d0%b4%d0%b8%d0%b0%d0%ba%d1%80%d0%b8%d1%82%d0%b8%d1%87%d0%b5%d1%81%d0%ba%d0%b8%d1%85%20%d1%81%d0%b8%d0%bc%d0%b2%d0%be%d0%bb%d0%be%d0%b2%20%d0%b8%d0%b7%20%d1%81%d1%82%d1%80%d0%be%d0%ba%d0%b8&url=https%3a%2f%2futhark.github.io%2f2010%2f05%2f22%2fblog-post%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
+</div>
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2010/05/22/blog-post/">Удаление различных диакритических символов из строки</a>
+    </h1>
+
+</header>
+
+
+        
+        <!-- raw HTML omitted -->
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.blogspot.atamanenko</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.text.Normalizer</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.text.Normalizer.Form</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">StringNormalizer</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">normalize</span><span class="o">(</span><span class="n">String</span> <span class="n">string</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">Normalizer</span><span class="o">.</span><span class="na">normalize</span><span class="o">(</span><span class="n">string</span><span class="o">,</span> <span class="n">Form</span><span class="o">.</span><span class="na">NFD</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">replaceAll</span><span class="o">(</span><span class="s">&#34;\\p{InCombiningDiacriticalMarks}+&#34;</span><span class="o">,</span> <span class="s">&#34;&#34;</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div><p>Вызов <!-- raw HTML omitted -->Normalizer.normalize<!-- raw HTML omitted --> проводит <!-- raw HTML omitted -->нормализацию<!-- raw HTML omitted --> входной строки. Последующий вызов регулярного выражения удаляет все диакритические знаки, полученные после нормализации.</p>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2010%2f05%2f22%2fdatabene-benerator%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=%d0%a1%d0%be%d0%b7%d0%b4%d0%b0%d0%bd%d0%b8%d0%b5%20%d0%b1%d0%be%d0%bb%d1%8c%d1%88%d0%b8%d1%85%20%d0%be%d0%b1%d1%8a%d1%91%d0%bc%d0%be%d0%b2%20%d1%82%d0%b5%d1%81%d1%82%d0%be%d0%b2%d1%8b%d1%85%20%d0%b4%d0%b0%d0%bd%d0%bd%d1%8b%d1%85%20%d1%81%20%d0%bf%d0%be%d0%bc%d0%be%d1%89%d1%8c%d1%8e%20Databene%20Benerator&url=https%3a%2f%2futhark.github.io%2f2010%2f05%2f22%2fdatabene-benerator%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
 </div>
@@ -557,52 +594,6 @@ a. <a href="http://msdn.microsoft.com/en-us/library/ms998577.aspx">http://msdn.m
 </ol>
 <h4 id="заключение">Заключение</h4>
 <p>В целом, в данном списке нет ничего нового, это всего лишь компиляция публично доступных материалов. Тем не менее, решил это опубликовать, чтобы сэкономить время другим.</p>
-
-        
-
-    </article>
-    
-    <article>
-
-        
-        
-<div class="sharing">
-    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2010%2f02%2f05%2fblog-post%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
-    <a href="https://twitter.com/intent/tweet?text=%d0%92%d0%bb%d0%be%d0%b6%d0%b5%d0%bd%d0%bd%d1%8b%d0%b5%20%d1%82%d1%80%d0%b0%d0%bd%d0%b7%d0%b0%d0%ba%d1%86%d0%b8%d0%b8%20%d0%b2%20%d0%b1%d0%b0%d0%b7%d0%b0%d1%85%20%d0%b4%d0%b0%d0%bd%d0%bd%d1%8b%d1%85&url=https%3a%2f%2futhark.github.io%2f2010%2f02%2f05%2fblog-post%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
-</div>
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2010/02/05/blog-post/">Вложенные транзакции в базах данных</a>
-    </h1>
-
-</header>
-
-
-        
-        <p>Summary: Некоторые особенности вложенных транзакций.<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-Иногда бывает так, что при обработке запроса необходимо открыть ещё одну транзакцию в рамках текущей транзакции. Это называется вложенной транзакцией. <!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-Очень многие базы данных не поддерживают вложенные транзакции вообще, например, MySQL и Oracle. А те, что поддерживают, делают это на минимальном уровне, например, Sybase поддерживает только псевдовложенные транзакции.<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-Вложенные транзакции могут быть следующих видов:<!-- raw HTML omitted -->
-<!-- raw HTML omitted --></p>
-<!-- raw HTML omitted -->
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">begin</span> <span class="n">tran</span>
-    <span class="k">select</span> <span class="o">@@</span><span class="n">trancount</span>
-    <span class="cm">/* @@trancount = 1 */</span>
-    <span class="k">begin</span> <span class="n">tran</span>
-        <span class="k">select</span> <span class="o">@@</span><span class="n">trancount</span>
-        <span class="cm">/* @@trancount = 2 */</span>
-        <span class="k">begin</span> <span class="n">tran</span>
-            <span class="k">select</span> <span class="o">@@</span><span class="n">trancount</span>
-            <span class="cm">/* @@trancount = 3 */</span>
-        <span class="k">commit</span> <span class="n">tran</span>
-    <span class="k">commit</span> <span class="n">tran</span>
-<span class="k">commit</span> <span class="n">tran</span>
-<span class="k">select</span> <span class="o">@@</span><span class="n">trancount</span>
-<span class="cm">/* @@ trancount = 0 */</span>
-</code></pre></div><!-- raw HTML omitted -->
 
         
 

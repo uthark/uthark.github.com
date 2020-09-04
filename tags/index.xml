@@ -6,10 +6,28 @@
     <description>Recent content in Tags on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 02 Sep 2020 20:44:30 -0700</lastBuildDate>
+    <lastBuildDate>Thu, 03 Sep 2020 22:05:41 -0700</lastBuildDate>
     
 	<atom:link href="https://uthark.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>bestpractices</title>
+      <link>https://uthark.github.io/tags/bestpractices/</link>
+      <pubDate>Thu, 03 Sep 2020 22:05:41 -0700</pubDate>
+      
+      <guid>https://uthark.github.io/tags/bestpractices/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>docker</title>
+      <link>https://uthark.github.io/tags/docker/</link>
+      <pubDate>Thu, 03 Sep 2020 22:05:41 -0700</pubDate>
+      
+      <guid>https://uthark.github.io/tags/docker/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>arm64</title>
@@ -26,15 +44,6 @@
       <pubDate>Wed, 02 Sep 2020 20:44:30 -0700</pubDate>
       
       <guid>https://uthark.github.io/tags/cgroups/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>docker</title>
-      <link>https://uthark.github.io/tags/docker/</link>
-      <pubDate>Wed, 02 Sep 2020 20:44:30 -0700</pubDate>
-      
-      <guid>https://uthark.github.io/tags/docker/</guid>
       <description></description>
     </item>
     

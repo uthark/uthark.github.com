@@ -123,6 +123,53 @@
         
         
 <div class="sharing">
+    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2014%2f03%2f02%2fiterm-triggers%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
+    <a href="https://twitter.com/intent/tweet?text=Using%20iTerm%20triggers&url=https%3a%2f%2futhark.github.io%2f2014%2f03%2f02%2fiterm-triggers%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
+</div>
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2014/03/02/iterm-triggers/">Using iTerm triggers</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>I want to share one of the cool features which <a href="http://www.iterm2.com/">iTerm.app</a> has - triggers.
+The idea behind triggers is simple - it allows to perform arbitrary action based on the output in console window. For example, it can colorize specified content (based on <a href="http://en.wikipedia.org/wiki/Regular_expression">regular expressions</a>).</p>
+<p>Start <code>iTerm</code>, open settings (<code>⌘+,</code>), go to <code>Profiles</code>, then tab <code>Advanced</code>.
+Click on <code>Edit</code> button in <code>Triggers</code> section.</p>
+<figure>
+    <img src="https://lh4.googleusercontent.com/-n8Ynka3iux0/UxQQDk6VewI/AAAAAAAAPgg/FoQAq7y2a78/w2088-h1242-no/Screen&#43;Shot&#43;2014-03-02&#43;at&#43;11.48.02&#43;PM.png"/> <figcaption>
+            <h4>iTerm Settings</h4>
+        </figcaption>
+</figure>
+
+<p>Then you can define your own triggers:</p>
+<figure>
+    <img src="https://lh5.googleusercontent.com/-zXeqBjdPMlE/UxQQMQ4EyXI/AAAAAAAAPhg/0tS9qMw5atw/w2086-h932-no/Screen&#43;Shot&#43;2014-03-02&#43;at&#43;11.48.15&#43;PM.png"/> <figcaption>
+            <h4>Triggers Configuration</h4>
+        </figcaption>
+</figure>
+
+<p>Example output:</p>
+<figure>
+    <img src="https://lh6.googleusercontent.com/-hiVCoX2YS60/UxQSnH64xwI/AAAAAAAAPxw/KIlW7dpv-tM/w1816-h1386-no/Screen&#43;Shot&#43;2014-03-03&#43;at&#43;12.26.03&#43;AM.png"/> <figcaption>
+            <h4>Example output</h4>
+        </figcaption>
+</figure>
+
+<p>Happy coding!</p>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2014%2f03%2f02%2fsplean-resonance%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=%d0%a1%d0%bf%d0%bb%d0%b8%d0%bd%20-%20%d0%a0%d0%b5%d0%b7%d0%be%d0%bd%d0%b0%d0%bd%d1%81%2c%20%d1%87%d0%b0%d1%81%d1%82%d1%8c%201.&url=https%3a%2f%2futhark.github.io%2f2014%2f03%2f02%2fsplean-resonance%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
 </div>
@@ -609,79 +656,6 @@
 </code></pre></div><p>Когда вызывается метод <code>findByLogin</code> под капотом создаётся HTTP Request, дёргается сервер и полученный ответ десериализуется. От конечного пользотеля детали реализации API скрыты.</p>
 <p>В <a href="/blog/2013/06/28/jaxrs-spring-autowiring/">следующем посте</a> описано, как автоматически добавить полученные прокси в фабрику бинов Spring для дальнейшего использования.</p>
 
-        
-
-    </article>
-    
-    <article>
-
-        
-        
-<div class="sharing">
-    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2013%2f06%2f19%2fautowiring-factorybean%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
-    <a href="https://twitter.com/intent/tweet?text=%40Autowiring%20EJBs%20with%20Spring&url=https%3a%2f%2futhark.github.io%2f2013%2f06%2f19%2fautowiring-factorybean%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
-</div>
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2013/06/19/autowiring-factorybean/">@Autowiring EJBs with Spring</a>
-    </h1>
-
-</header>
-
-
-        
-        <p>Предположим, что у нас есть проект на Spring, в котором необходимо использовать внешние EJB. Для получения бинов необходимо создавать <a href="http://docs.oracle.com/javase/6/docs/api/javax/naming/InitialContext.html">InitialContext</a> и делать <code>lookup()</code> нужных ejb. Но эту задачу можно автоматизировать и пользоваться <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/beans/factory/annotation/Autowired.html">@Autowired</a>, то есть код будет выглядеть вот так:</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Service</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserService</span> <span class="o">{</span>
-
-  <span class="nd">@Autowired</span>
-  <span class="kd">private</span> <span class="n">UserRemoteBean</span> <span class="n">userRemoteBean</span><span class="o">;</span>
-
-<span class="o">}</span>
-</code></pre></div><p>Для этого в Spring существует <a href="http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/htmlsingle/#beans-factory-extension-factorybean">FactoryBean</a> - класс, который знает, как создавать бины нужного типа. Собственно, нам необходимо написать такой класс (код на <a href="http://www.scala-lang.org/">Scala</a>):</p>
-<div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="nd">@Component</span>
-<span class="k">class</span> <span class="nc">UserRemoteBeanFactoryBean</span> <span class="k">extends</span> <span class="nc">FactoryBean</span><span class="o">[</span><span class="kt">UserRemoteBean</span><span class="o">]</span> <span class="o">{</span>
-
-  <span class="k">def</span> <span class="nc">ACCESS_BEAN_REMOTE_NAME</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">&#34;our ejb name.&#34;</span>
-
-  <span class="k">private</span> <span class="k">val</span> <span class="n">log</span><span class="k">:</span> <span class="kt">Logger</span> <span class="o">=</span> <span class="nc">LoggerFactory</span><span class="o">.</span><span class="n">getLogger</span><span class="o">(</span><span class="n">getObjectType</span><span class="o">)</span>
-
-  <span class="k">var</span> <span class="n">ctx</span><span class="k">:</span> <span class="kt">Context</span> <span class="o">=</span> <span class="kc">null</span>
-
-  <span class="k">def</span> <span class="n">getObject</span><span class="k">:</span> <span class="kt">UserRemoteBean</span> <span class="o">=</span> <span class="o">{</span>
-    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="o">(</span><span class="s">&#34;Requesting new instance of {}&#34;</span><span class="o">,</span> <span class="n">getObjectType</span><span class="o">)</span>
-
-    <span class="k">try</span> <span class="o">{</span>
-      <span class="n">ctx</span><span class="o">.</span><span class="n">lookup</span><span class="o">(</span><span class="nc">ACCESS_BEAN_REMOTE_NAME</span><span class="o">).</span><span class="n">asInstanceOf</span><span class="o">[</span><span class="kt">UserRemoteBean</span><span class="o">]</span>
-    <span class="o">}</span>
-    <span class="k">catch</span> <span class="o">{</span>
-      <span class="k">case</span> <span class="n">e</span><span class="k">:</span> <span class="kt">NamingException</span> <span class="o">=&gt;</span> <span class="o">{</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="o">(</span><span class="s">&#34;Unable to get ejb: {}&#34;</span><span class="o">,</span> <span class="nc">Array</span><span class="o">[</span><span class="kt">AnyRef</span><span class="o">](</span><span class="n">e</span><span class="o">.</span><span class="n">getMessage</span><span class="o">,</span> <span class="n">e</span><span class="o">)</span><span class="k">:</span> <span class="k">_</span><span class="kt">*</span><span class="o">)</span>
-        <span class="k">throw</span> <span class="k">new</span> <span class="nc">RuntimeException</span><span class="o">(</span><span class="s">&#34;Unable to get UserRemoteBean bean &#34;</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="n">getMessage</span><span class="o">,</span> <span class="n">e</span><span class="o">)</span>
-      <span class="o">}</span>
-
-    <span class="o">}</span>
-  <span class="o">}</span>
-
-  <span class="nd">@PostConstruct</span>
-  <span class="k">protected</span> <span class="k">def</span> <span class="n">init</span><span class="o">()</span> <span class="o">{</span>
-    <span class="k">val</span> <span class="n">jndiProperties</span><span class="k">:</span> <span class="kt">Hashtable</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Object</span><span class="o">]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Hashtable</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Object</span><span class="o">]</span>
-    <span class="n">jndiProperties</span><span class="o">.</span><span class="n">put</span><span class="o">(</span><span class="nc">Context</span><span class="o">.</span><span class="nc">URL_PKG_PREFIXES</span><span class="o">,</span> <span class="s">&#34;org.jboss.ejb.client.naming&#34;</span><span class="o">)</span>
-    <span class="n">jndiProperties</span><span class="o">.</span><span class="n">put</span><span class="o">(</span><span class="s">&#34;jboss.naming.client.ejb.context&#34;</span><span class="o">,</span> <span class="k">new</span> <span class="n">java</span><span class="o">.</span><span class="n">lang</span><span class="o">.</span><span class="nc">Boolean</span><span class="o">(</span><span class="kc">true</span><span class="o">))</span>
-    <span class="k">try</span>
-      <span class="n">ctx</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">InitialContext</span><span class="o">(</span><span class="n">jndiProperties</span><span class="o">)</span>
-    <span class="k">catch</span> <span class="o">{</span>
-      <span class="k">case</span> <span class="n">e</span><span class="k">:</span> <span class="kt">NamingException</span> <span class="o">=&gt;</span> <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="o">(</span><span class="s">&#34;Unable to create JNDI Context: {}&#34;</span><span class="o">,</span> <span class="nc">Array</span><span class="o">[</span><span class="kt">AnyRef</span><span class="o">](</span><span class="n">e</span><span class="o">.</span><span class="n">getMessage</span><span class="o">,</span> <span class="n">e</span><span class="o">)</span><span class="k">:</span> <span class="k">_</span><span class="kt">*</span><span class="o">)</span>
-    <span class="o">}</span>
-  <span class="o">}</span>
-
-  <span class="k">def</span> <span class="n">isSingleton</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="o">{</span>
-    <span class="kc">false</span>
-  <span class="o">}</span>
-
-  <span class="k">def</span> <span class="n">getObjectType</span><span class="k">:</span> <span class="kt">Class</span><span class="o">[</span><span class="k">_</span><span class="o">]</span> <span class="k">=</span> <span class="n">classOf</span><span class="o">[</span><span class="kt">UserRemoteBean</span><span class="o">]</span>
-<span class="o">}</span>
-</code></pre></div>
         
 
     </article>

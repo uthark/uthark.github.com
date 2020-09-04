@@ -6,10 +6,22 @@
     <description>Recent content in development on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 22 Jan 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 03 Sep 2020 22:05:41 -0700</lastBuildDate>
     
 	<atom:link href="https://uthark.github.io/categories/development/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Docker Best Practices</title>
+      <link>https://uthark.github.io/post/2020-09-03-docker-best-practices/</link>
+      <pubDate>Thu, 03 Sep 2020 22:05:41 -0700</pubDate>
+      
+      <guid>https://uthark.github.io/post/2020-09-03-docker-best-practices/</guid>
+      <description>Introduction After using docker for last several years I’d like to share best practices that works in production.
+Reduce container image size In Cloud Native world infrastructure is disposable and immutable. As result, if your kubernetes pod is rescheduled to another node, new node need to pull docker image.
+Small docker images provide the following benefits:
+ Smaller attack surface. If image contain only your app binaries and direct dependencies without full blown OS, you will need to apply patches to fix vulnerabilities infrequently.</description>
+    </item>
     
     <item>
       <title>How to add YAML support to go-restful</title>

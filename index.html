@@ -123,6 +123,90 @@
         
         
 <div class="sharing">
+    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2fpost%2f2020-09-03-docker-best-practices%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
+    <a href="https://twitter.com/intent/tweet?text=Docker%20Best%20Practices&url=https%3a%2f%2futhark.github.io%2fpost%2f2020-09-03-docker-best-practices%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
+</div>
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/post/2020-09-03-docker-best-practices/">Docker Best Practices</a>
+    </h1>
+
+</header>
+
+
+        
+        <h2 id="introduction">Introduction</h2>
+<p>After using docker for last several years I’d like to share best practices that works in production.</p>
+<h2 id="reduce-container-image-size">Reduce container image size</h2>
+<p>In Cloud Native world infrastructure is disposable and immutable. As result, if your kubernetes pod is rescheduled to another node, new node need to pull docker image.</p>
+<p>Small docker images provide the following benefits:</p>
+<ol>
+<li>Smaller attack surface. If image contain only your app binaries and direct dependencies without full blown OS, you will need to apply patches to fix vulnerabilities infrequently.</li>
+<li>Faster application startup. Your container runtime will download image faster.</li>
+<li>Less network utilization. You will reduce your network bandwidth utilization.</li>
+<li>Less cost. Smaller images take less space. In modern cloud days you pay for the storage, using less space saves you money.</li>
+</ol>
+<h3 id="how">How?</h3>
+<p>There are several techniques to reduce image size:</p>
+<ol>
+<li>Use <a href="https://github.com/GoogleContainerTools/distroless">distroless</a> base images. &ldquo;Distroless&rdquo; images contain only your application and its runtime dependencies. They do not contain package managers, shells or any other programs you would expect to find in a standard Linux distribution.</li>
+<li>If you need basic shell, try to use <a href="https://hub.docker.com/_/busybox">busybox</a> or try using <a href="https://hub.docker.com/_/alpine">alpine</a> – this is minimalistic linux distribution. One caveat is that you might need to pass extra flags for app during compilation to make it compatible with alpine.</li>
+<li><a href="https://docs.docker.com/develop/develop-images/multistage-build/">Use multi-stage builds</a>. This will allow you to build image in one container and the copy resulting binaries in a final image that doesn’t have compiler tools, source code and other data. Using multistage builds allows you to not use all commands in a single <code>RUN</code> stanza in <code>Dockerfile</code>, which improves source code readability</li>
+</ol>
+<h2 id="security-is-important">Security is important</h2>
+<p>Principle of least privilege should be used as much as possible. Within its cgroup docker container runs as root. If there is a new kernel vulnerability, malicious container might try to use it and escape to the host using 	<code>root</code> permissions.</p>
+<h3 id="how-1">How?</h3>
+<ol>
+<li>
+<p>Set <code>USER</code> in the <code>Dockerfile</code>.</p>
+</li>
+<li>
+<p>Do not use <code>latest</code> in <code>FROM</code>. If you use <code>latest</code>, you will pull latest base image. Downsides of it are the following:</p>
+<ol>
+<li>If upstream repository is compromised, you might get compromised image with <code>latest</code></li>
+<li>If upstream repository bumps version, you might get incompatible version of the software in your image. Dependency updates should be manageable and not happen ad hoc.</li>
+</ol>
+</li>
+<li>
+<p>Use digest/<code>@sha256</code> in <code>FROM</code> to specify exact version of the container you’re pulling. Digest is shown on tag page on docker hub or you can get it after running <code>docker pull</code>:</p>
+<pre><code>      ```
+      $ docker pull alpine:3.12.0
+      3.12.0: Pulling from library/alpine
+      df20fa9351a1: Pull complete
+      Digest: sha256:185518070891758909c9f839cf4ca393ee977ac378609f700f60a771a2dfe321
+      Status: Downloaded newer image for alpine:3.12.0
+      docker.io/library/alpine:3.12.0
+      ```
+
+ `Dockerfile` will looks like this:
+	
+ ```
+ FROM alpine@sha256:185518070891758909c9f839cf4ca393ee977ac378609f700f60a771a2dfe321
+ COPY ...
+ # And so on.
+ ``` 
+</code></pre>
+<ol start="4">
+<li>Use own docker registry. Rebuild all required base images yourself and use them. This will allow you to control which base image are being used.</li>
+<li>Prohibit running docker containers from <code>docker.io</code> in production. If you run in kubernetes, use <a href="https://github.com/open-policy-agent/gatekeeper">Open Policy Agent Gatekeeper</a> or similar solution. docker.io contains a lot of images that are build both by well-known companies and by random people, not all of them have good intentions.</li>
+</ol>
+</li>
+</ol>
+<h2 id="improve-maintainability">Improve maintainability</h2>
+<ol>
+<li>Add <a href="https://docs.docker.com/engine/reference/builder/#label"><code>LABEL</code></a> with information about image maintainer and other information that is relevant for your organization.</li>
+<li>Use <a href="https://docs.docker.com/engine/reference/builder/#arg"><code>ARG</code></a> to pass base IMAGE. This will allow you to configure base image outside and give you ability to manage base image at scale if you have large organization/have hundreds of different images.</li>
+</ol>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2fpost%2f2020-09-02-installing-kubernetes-raspberrypi%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=Installing%20Kubernetes%20on%20Raspberry%20Pi&url=https%3a%2f%2futhark.github.io%2fpost%2f2020-09-02-installing-kubernetes-raspberrypi%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
 </div>
@@ -653,29 +737,6 @@ It is very powerful, but it supports JSON and XML out of the box only. Fortunate
 
         
         <p>Good news, everyone. Migration from octopress to <a href="https://gohugo.io/">hugo</a> was completed. If you find any broken  layout and/or links, please contact me.</p>
-
-        
-
-    </article>
-    
-    <article>
-
-        
-        
-<div class="sharing">
-    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2014%2f04%2f23%2fpocket-is-down%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
-    <a href="https://twitter.com/intent/tweet?text=Pocket%20is%20down&url=https%3a%2f%2futhark.github.io%2f2014%2f04%2f23%2fpocket-is-down%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
-</div>
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2014/04/23/pocket-is-down/">Pocket is down</a>
-    </h1>
-
-</header>
-
-
-        
-        <p>Hi. <a href="https://twitter.com/Pocket/status/458989752432091136">Pocket is down</a> so it means there is no reading list for today. Everyone have a nice day.</p>
 
         
 

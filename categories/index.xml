@@ -6,10 +6,37 @@
     <description>Recent content in Categories on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 02 Sep 2020 20:44:30 -0700</lastBuildDate>
+    <lastBuildDate>Thu, 03 Sep 2020 22:05:41 -0700</lastBuildDate>
     
 	<atom:link href="https://uthark.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>bestpractices</title>
+      <link>https://uthark.github.io/categories/bestpractices/</link>
+      <pubDate>Thu, 03 Sep 2020 22:05:41 -0700</pubDate>
+      
+      <guid>https://uthark.github.io/categories/bestpractices/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>development</title>
+      <link>https://uthark.github.io/categories/development/</link>
+      <pubDate>Thu, 03 Sep 2020 22:05:41 -0700</pubDate>
+      
+      <guid>https://uthark.github.io/categories/development/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>docker</title>
+      <link>https://uthark.github.io/categories/docker/</link>
+      <pubDate>Thu, 03 Sep 2020 22:05:41 -0700</pubDate>
+      
+      <guid>https://uthark.github.io/categories/docker/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>kubernetes</title>
@@ -116,15 +143,6 @@
       <pubDate>Wed, 24 Jan 2018 00:00:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/categories/reading-list/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>development</title>
-      <link>https://uthark.github.io/categories/development/</link>
-      <pubDate>Mon, 22 Jan 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/development/</guid>
       <description></description>
     </item>
     

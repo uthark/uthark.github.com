@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>docker on Sharing knowledge</title>
-    <link>https://uthark.github.io/tags/docker/</link>
-    <description>Recent content in docker on Sharing knowledge</description>
+    <title>bestpractices on Sharing knowledge</title>
+    <link>https://uthark.github.io/categories/bestpractices/</link>
+    <description>Recent content in bestpractices on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 03 Sep 2020 22:05:41 -0700</lastBuildDate>
     
-	<atom:link href="https://uthark.github.io/tags/docker/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://uthark.github.io/categories/bestpractices/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -21,18 +21,6 @@
 Reduce container image size In Cloud Native world infrastructure is disposable and immutable. As result, if your kubernetes pod is rescheduled to another node, new node need to pull docker image.
 Small docker images provide the following benefits:
  Smaller attack surface. If image contain only your app binaries and direct dependencies without full blown OS, you will need to apply patches to fix vulnerabilities infrequently.</description>
-    </item>
-    
-    <item>
-      <title>Installing Kubernetes on Raspberry Pi</title>
-      <link>https://uthark.github.io/post/2020-09-02-installing-kubernetes-raspberrypi/</link>
-      <pubDate>Wed, 02 Sep 2020 20:44:30 -0700</pubDate>
-      
-      <guid>https://uthark.github.io/post/2020-09-02-installing-kubernetes-raspberrypi/</guid>
-      <description>Installing kubernetes on Raspberry Pi is easy, but there are few caveats that you need to be aware of.
-arm64 is preferred, because 64-bit allows you to use &amp;gt; 4GB of RAM per process.
-Enable cgroups Kubernetes relies on cgroups for enforcing limits for the containers, so kernel needs to be booted with cgroups support. On Raspberry, edit /boot/firmware/cmdline.txt and add the following options:
-cgroup_enable=memory swapaccount=1 cgroup_memory=1 cgroup_enable=cpuset Reboot after making the changes.</description>
     </item>
     
   </channel>

@@ -123,6 +123,52 @@
         
         
 <div class="sharing">
+    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2010%2f02%2f05%2fblog-post%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
+    <a href="https://twitter.com/intent/tweet?text=%d0%92%d0%bb%d0%be%d0%b6%d0%b5%d0%bd%d0%bd%d1%8b%d0%b5%20%d1%82%d1%80%d0%b0%d0%bd%d0%b7%d0%b0%d0%ba%d1%86%d0%b8%d0%b8%20%d0%b2%20%d0%b1%d0%b0%d0%b7%d0%b0%d1%85%20%d0%b4%d0%b0%d0%bd%d0%bd%d1%8b%d1%85&url=https%3a%2f%2futhark.github.io%2f2010%2f02%2f05%2fblog-post%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
+</div>
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2010/02/05/blog-post/">Вложенные транзакции в базах данных</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>Summary: Некоторые особенности вложенных транзакций.<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+Иногда бывает так, что при обработке запроса необходимо открыть ещё одну транзакцию в рамках текущей транзакции. Это называется вложенной транзакцией. <!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+Очень многие базы данных не поддерживают вложенные транзакции вообще, например, MySQL и Oracle. А те, что поддерживают, делают это на минимальном уровне, например, Sybase поддерживает только псевдовложенные транзакции.<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+Вложенные транзакции могут быть следующих видов:<!-- raw HTML omitted -->
+<!-- raw HTML omitted --></p>
+<!-- raw HTML omitted -->
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">begin</span> <span class="n">tran</span>
+    <span class="k">select</span> <span class="o">@@</span><span class="n">trancount</span>
+    <span class="cm">/* @@trancount = 1 */</span>
+    <span class="k">begin</span> <span class="n">tran</span>
+        <span class="k">select</span> <span class="o">@@</span><span class="n">trancount</span>
+        <span class="cm">/* @@trancount = 2 */</span>
+        <span class="k">begin</span> <span class="n">tran</span>
+            <span class="k">select</span> <span class="o">@@</span><span class="n">trancount</span>
+            <span class="cm">/* @@trancount = 3 */</span>
+        <span class="k">commit</span> <span class="n">tran</span>
+    <span class="k">commit</span> <span class="n">tran</span>
+<span class="k">commit</span> <span class="n">tran</span>
+<span class="k">select</span> <span class="o">@@</span><span class="n">trancount</span>
+<span class="cm">/* @@ trancount = 0 */</span>
+</code></pre></div><!-- raw HTML omitted -->
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2009%2f12%2f14%2fautofs-nfs%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=%d0%9d%d0%b0%d1%81%d1%82%d1%80%d0%be%d0%b9%d0%ba%d0%b0%20autofs%20%d0%b4%d0%bb%d1%8f%20%d0%bc%d0%be%d0%bd%d1%82%d0%b8%d1%80%d0%be%d0%b2%d0%b0%d0%bd%d0%b8%d1%8f%20NFS-%d1%80%d0%b5%d1%81%d1%83%d1%80%d1%81%d0%be%d0%b2&url=https%3a%2f%2futhark.github.io%2f2009%2f12%2f14%2fautofs-nfs%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
 </div>
@@ -326,37 +372,6 @@ P.P.S. Да, ещё забыл сказать, что сервис достат�
 <p>Установка для других дистрибутивов описана <!-- raw HTML omitted -->на официальном сайте<!-- raw HTML omitted -->.<!-- raw HTML omitted -->
 <!-- raw HTML omitted --></p>
 <!-- raw HTML omitted -->
-
-        
-
-    </article>
-    
-    <article>
-
-        
-        
-<div class="sharing">
-    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2009%2f11%2f25%2fdelicious-plugin%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
-    <a href="https://twitter.com/intent/tweet?text=%d0%a0%d0%b0%d1%81%d1%88%d0%b8%d1%80%d0%b5%d0%bd%d0%b8%d0%b5%20Delicious%20Plugin%20%d0%b8%d0%b4%d1%91%d1%82%20%d0%b2%20%d0%bc%d0%b0%d1%81%d1%81%d1%8b&url=https%3a%2f%2futhark.github.io%2f2009%2f11%2f25%2fdelicious-plugin%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
-</div>
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2009/11/25/delicious-plugin/">Расширение Delicious Plugin идёт в массы</a>
-    </h1>
-
-</header>
-
-
-        
-        <p>Google запустил сайт <!-- raw HTML omitted -->Chrome Extensions<!-- raw HTML omitted -->.<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-В данный момент сайт доступен только разработчикам расширений. Залил расширение, написал кратенькое описание. Жду запуска сайта. :)<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-А пока сайт закрыт для рядовых пользователей последнюю версию можно скачать <!-- raw HTML omitted -->тут<!-- raw HTML omitted -->.<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-P.S. А тем временем работа над расширением продолжается.<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-P.P.S. У расширения появилась своя страничка в сети: <!-- raw HTML omitted -->Project Home Page<!-- raw HTML omitted --></p>
 
         
 

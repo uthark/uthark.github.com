@@ -123,6 +123,29 @@
         
         
 <div class="sharing">
+    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2014%2f04%2f23%2fpocket-is-down%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
+    <a href="https://twitter.com/intent/tweet?text=Pocket%20is%20down&url=https%3a%2f%2futhark.github.io%2f2014%2f04%2f23%2fpocket-is-down%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
+</div>
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2014/04/23/pocket-is-down/">Pocket is down</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>Hi. <a href="https://twitter.com/Pocket/status/458989752432091136">Pocket is down</a> so it means there is no reading list for today. Everyone have a nice day.</p>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2014%2f04%2f16%2fusing-unitils-reflectionassert%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=Using%20Unitils%20ReflectionAssert&url=https%3a%2f%2futhark.github.io%2f2014%2f04%2f16%2fusing-unitils-reflectionassert%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
 </div>
@@ -497,79 +520,6 @@ Initialize mocks with MockitoAnnotations:</p>
 <span class="o">}</span>
 </code></pre></div><p>This is just awesome!</p>
 
-        
-
-    </article>
-    
-    <article>
-
-        
-        
-<div class="sharing">
-    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2014%2f03%2f06%2flimiting-threads-count-for-greenrobot-eventbus%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
-    <a href="https://twitter.com/intent/tweet?text=Limiting%20threads%20count%20for%20GreenRobot%20EventBus&url=https%3a%2f%2futhark.github.io%2f2014%2f03%2f06%2flimiting-threads-count-for-greenrobot-eventbus%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
-</div>
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2014/03/06/limiting-threads-count-for-greenrobot-eventbus/">Limiting threads count for GreenRobot EventBus</a>
-    </h1>
-
-</header>
-
-
-        
-        <p>In one of my projects I used <a href="https://github.com/greenrobot/EventBus">EventBus</a> library. The library is pretty cool and I would recommend everybody to use it.</p>
-<p>But I found one small issue with this library - in case you send too many events very fast (i.e. more than 1000 per second) you may face issue with application crash due to inability to create new thread.</p>
-<p>The problem is lying in the used <code>ExecutorService</code>:</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">
-<span class="kn">package</span> <span class="nn">de.greenrobot.event</span><span class="o">;</span>
-<span class="c1">// imports
-</span><span class="c1"></span><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">EventBus</span> <span class="o">{</span>
-    <span class="kd">static</span> <span class="n">ExecutorService</span> <span class="n">executorService</span> <span class="o">=</span> <span class="n">Executors</span><span class="o">.</span><span class="na">newCachedThreadPool</span><span class="o">();</span>
-
-    <span class="c1">// class content skipped 
-</span><span class="c1"></span><span class="o">}</span>
-
-</code></pre></div><p>As you can see, it calls <code>newCachedThreadPool</code> method to create thread pool.</p>
-<p>From <a href="http://developer.android.com/reference/java/util/concurrent/Executors.html#newCachedThreadPool()">javadoc</a> for this method:</p>
-<blockquote>
-<p>Creates a thread pool that creates new threads as needed, but will reuse
-previously constructed threads when they are available.</p>
-</blockquote>
-<p>This is where we hit the wall - if we send too many requests and each request is slow (i.e. saving into database or network request) then we will try to create too many threads and app will crash.</p>
-<p>Thankfully, <code>executorService</code> is <code>static</code> but not <code>final</code>. And this will allow us to solve the issue easily.</p>
-<p>Let&rsquo;s create our configurer class in package <code>de.greenrobot.event</code> so we will be able to access <code>executorService</code> property which is package-visible and override it with different thread pool:</p>
-<p>EventBusExecutorServiceConfigurer:</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">de.greenrobot.event</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">java.util.concurrent.Executors</span><span class="o">;</span>
-
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">EventBusExecutorServiceConfigurer</span> <span class="o">{</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">configureEventBus</span><span class="o">()</span> <span class="o">{</span>
-        <span class="n">ExecutorService</span> <span class="n">executorServiceToUse</span><span class="o">;</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">Build</span><span class="o">.</span><span class="na">VERSION</span><span class="o">.</span><span class="na">SDK_INT</span> <span class="o">&gt;=</span> <span class="n">Build</span><span class="o">.</span><span class="na">VERSION_CODES</span><span class="o">.</span><span class="na">HONEYCOMB</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">executorServiceToUse</span> <span class="o">=</span> <span class="o">(</span><span class="n">ExecutorService</span><span class="o">)</span> <span class="n">AsyncTask</span><span class="o">.</span><span class="na">THREAD_POOL_EXECUTOR</span><span class="o">;</span>
-        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-            <span class="n">executorServiceToUse</span> <span class="o">=</span> <span class="n">Executors</span><span class="o">.</span><span class="na">newFixedThreadPool</span><span class="o">(</span>
-                <span class="n">Runtime</span><span class="o">.</span><span class="na">getRuntime</span><span class="o">().</span><span class="na">availableProcessors</span><span class="o">());</span>
-        <span class="o">}</span>
-        <span class="n">EventBus</span><span class="o">.</span><span class="na">executorService</span> <span class="o">=</span> <span class="n">executorServiceToUse</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div><p>Android 3.0+ has special <a href="http://developer.android.com/reference/android/os/AsyncTask.html#THREAD_POOL_EXECUTOR">THREAD_POOL_EXECUTOR</a> which is supposed to be used by asynchronous tasks, so we use it on newer devices. On older, pre-Honeycomb devices we create our own thread pool.</p>
-<p>And then in Android application we configure <code>executorService</code>:</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomApplication</span> <span class="kd">extends</span> <span class="n">Application</span> <span class="o">{</span>
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">()</span> <span class="o">{</span>
-        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">();</span>
-        <span class="k">new</span> <span class="n">EventBusExecutorServiceConfigurer</span><span class="o">().</span><span class="na">configureEventBus</span><span class="o">();</span>
-
-        <span class="c1">// other initialization
-</span><span class="c1"></span>    <span class="o">}</span>
-<span class="o">}</span>
-
-</code></pre></div>
         
 
     </article>
