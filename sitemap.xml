@@ -18,6 +18,11 @@
   </url>
   
   <url>
+    <loc>https://uthark.github.io/tags/checklist/</loc>
+    <lastmod>2020-09-04T15:08:37-07:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://uthark.github.io/post/2020-09-04-deploy-project-kubernetes-checklist/</loc>
     <lastmod>2020-09-04T15:08:37-07:00</lastmod>
   </url>
