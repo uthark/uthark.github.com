@@ -123,6 +123,115 @@
         
         
 <div class="sharing">
+    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2fpost%2f2020-09-04-deploy-project-kubernetes-checklist%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
+    <a href="https://twitter.com/intent/tweet?text=Deploying%20in%20Kubernetes.%20Checklist.&url=https%3a%2f%2futhark.github.io%2fpost%2f2020-09-04-deploy-project-kubernetes-checklist%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
+</div>
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/post/2020-09-04-deploy-project-kubernetes-checklist/">Deploying in Kubernetes. Checklist.</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>Deploying to kubernetes is easy: create manifest with your <code>Deployment</code> and then <code>kubectl apply</code> it.</p>
+<p>The most basic deployment manifest looks like this:</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: test-app
+  name: test-app
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: test-app
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: test-app
+    spec:
+      containers:
+      - name: controller
+        image: nginx
+</code></pre></div><p>It works as is, but you may improve reliability of this deployment by configuring additional fields for the manifest.</p>
+<h2 id="metadata">Metadata</h2>
+<p>Use <code>metadata</code> field efficiently. You can add labels who owns the deployment, if they are part of the bigger project, and so on.
+This will allow to discover all deployments that are owned by a specific department:</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">kubectl get deploy -n production -l department=marketing
+</code></pre></div><h2 id="cpumemory-requestsresources">CPU/Memory Requests/Resources</h2>
+<p>Correct configuration is important. Requests are used for scheduling (kubelet reports node configuration to scheduler and scheduler uses this information when decides where the pod will be assigned). Limits are used for enforcing usage in runtime.</p>
+<h3 id="things-to-remember">Things to remember:</h3>
+<ol>
+<li>If you go over memory limit, app will be OOMKilled.</li>
+<li>If you go over CPU limit, app will be throttled. In fact this is more complicated and your app may be throttled before reaching limit, but this is a topic for another post.</li>
+<li>The configuration set affects <a href="https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/">Quality of Service</a> for pod.</li>
+<li>QoS affects what happens with your pod when kubelet on the node is <a href="https://kubernetes.io/docs/tasks/administer-cluster/out-of-resource/#best-practices">out of resources</a></li>
+</ol>
+<h2 id="do-not-use-latest-tag-in-images">Do not use <code>latest</code> tag in images</h2>
+<p>I <a href="https://uthark.github.io/post/2020-09-03-docker-best-practices/">spoke about it previously</a>. Use exact version, i.e. <code>nginx:1.19.2</code>. This is better than <code>latest</code>, but even better to use sha256 of the image:</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">image: nginx@sha256:9d660d69e53c286fbdd472122b4b583a46e8a27f10515e415d2578f8478b9aad
+</code></pre></div><h2 id="update-strategy">Update Strategy</h2>
+<p>Default strategy is <code>RollingUpdate</code>. If you run multiple replicas of the application, consider tuning <code>maxUnavailable</code>/<code>maxSurge</code> based on your requirements.
+If your app have multiple replicas and each replica requires a lot of CPU/Memory, having <code>maxSurge</code> might require autoscaler to provision extra nodes.</p>
+<h2 id="service-accounts">Service Accounts</h2>
+<p>By default, each deployment will use <code>default</code> service account. If app requires access to kubernetes API, consider creating separate service account for the app. This will allow improve your isolation and security:</p>
+<ol>
+<li>Use <a href="https://kubernetes.io/docs/concepts/policy/pod-security-policy/">PodSecurityPolicy</a> for fine-grained authorization of what’s allowed to pod to do on the node.</li>
+<li>Use <a href="https://kubernetes.io/docs/reference/access-authn-authz/rbac/">RBAC ClusterRoleBinding/RoleBinding</a> to control permissions for the resources in Kubernetes.</li>
+</ol>
+<h2 id="securitycontext">SecurityContext</h2>
+<p><code>securityContext</code> allows to control security context of the pod. Recommended to enforce <code>runAsNonRoot</code>. <a href="https://kubernetes.io/docs/tasks/configure-pod-container/security-context/">See documentation</a></p>
+<h2 id="pod-disruption-budget">Pod Disruption Budget</h2>
+<p>If you have multiple replicas of the application, create <code>PodDisruptionBudget</code> for the <code>Deployment</code>. See <a href="https://kubernetes.io/docs/tasks/run-application/configure-pdb/">documentation</a> for more details.</p>
+<h2 id="liveness--readiness-probes">Liveness &amp; Readiness Probes</h2>
+<p>I cannot stress more importance of it. I’ve seen application being taken down when they should not and vice versa. Your biggest nightmare will be if you do a rollout when new pods are crashlooping and olds pods are not terminated when they should.</p>
+<h2 id="lifecycle-hook---post-start--pre-stop">Lifecycle Hook - Post Start / Pre Stop</h2>
+<p>Lifecycle hooks allows gracefully terminate application. I.e. you can finish current request, save state and then terminate. See <a href="https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/">documentation</a></p>
+<h2 id="priority-classes">Priority Classes</h2>
+<p>Not all apps are created equal. Some apps are more important. Consider defining priority classes and use appropriate priority class for the application. <a href="https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/" title="Pod Priority and Preemption">Read more in official documentation</a></p>
+<h2 id="taints-and-tolerations">Taints and tolerations</h2>
+<p>Sometimes there are specific requirements where application should or should not run.
+Taints allows to taint nodes to prevent regular workload from scheduling on those node. To allow workload to be scheduled on the nodes - use Tolerations.
+<a href="https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/">See documentation</a></p>
+<h2 id="affinities-and-anti-affinities">Affinities and anti-affinities</h2>
+<p>Affinities and anti-affinities provides you more control where to schedule the workload. For example, you might want to use pod anti-affinity to distribute replicas of the application across different nodes or availability zones. See <a href="https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/">documentation</a> for details.
+Another great feature that you might need is <a href="https://kubernetes.io/docs/tasks/administer-cluster/topology-manager/">Topology Manager</a> for better allocation of the workload.</p>
+<h2 id="references">References</h2>
+<p>This is a must read documentation to learn / refresh your knowledge:</p>
+<ul>
+<li><a href="https://kubernetes.io/docs/concepts/workloads/controllers/deployment/">Workload - Deployments</a></li>
+<li><a href="https://kubernetes.io/docs/concepts/workloads/pods/disruptions/">Workload – Disruptions</a></li>
+<li><a href="https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/">Container Lifecycle Hooks</a></li>
+<li><a href="https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/">Workload – Pod Lifecycle</a></li>
+<li><a href="https://kubernetes.io/docs/concepts/policy/pod-security-policy/">Pod Security Policies</a></li>
+<li><a href="https://kubernetes.io/docs/tasks/configure-pod-container/security-context/">Configure a Security Context for a Pod or Container</a></li>
+<li><a href="https://kubernetes.io/docs/tasks/run-application/configure-pdb/">Specifying a Disruption Budget for your Application</a></li>
+<li><a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/">Configure Liveness, Readiness and Startup Probes</a></li>
+<li><a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/">Configure Service Accounts for Pods</a></li>
+<li><a href="https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/">Scheduling and Eviction – Assigning Pods to Nodes</a></li>
+<li><a href="https://kubernetes.io/docs/tasks/configure-pod-container/assign-cpu-resource/">Assign CPU Resources to Containers and Pods</a></li>
+<li><a href="https://kubernetes.io/docs/tasks/configure-pod-container/assign-memory-resource/">Assign Memory Resources to Containers and Pods</a></li>
+<li><a href="https://kubernetes.io/docs/tasks/administer-cluster/out-of-resource/#best-practices">Configure Out of Resource Handling</a></li>
+<li><a href="https://kubernetes.io/docs/tasks/administer-cluster/topology-manager/">Topology Manager</a></li>
+<li><a href="https://kubernetes.io/docs/reference/access-authn-authz/rbac/">Using RBAC Authorization</a></li>
+<li><a href="https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/" title="Pod Priority and Preemption">Pod Priority and Preemption</a></li>
+<li><a href="https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/">Configure Quality of Service for Pods</a></li>
+<li><a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#deployment-v1-apps">apps/v1 Deployment API Reference</a></li>
+<li><a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#podspec-v1-core">core/v1 PodSpec API Reference</a></li>
+</ul>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2fpost%2f2020-09-03-docker-best-practices%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=Docker%20Best%20Practices&url=https%3a%2f%2futhark.github.io%2fpost%2f2020-09-03-docker-best-practices%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
 </div>
@@ -709,29 +818,6 @@ It is very powerful, but it supports JSON and XML out of the box only. Fortunate
   <span class="o">}</span>
  <span class="o">]</span>
 </code></pre></div>
-        
-
-    </article>
-    
-    <article>
-
-        
-        
-<div class="sharing">
-    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2017%2f11%2f21%2fmigrate-to-hugo%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
-    <a href="https://twitter.com/intent/tweet?text=Migration%20to%20hugo%20completed&url=https%3a%2f%2futhark.github.io%2f2017%2f11%2f21%2fmigrate-to-hugo%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
-</div>
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2017/11/21/migrate-to-hugo/">Migration to hugo completed</a>
-    </h1>
-
-</header>
-
-
-        
-        <p>Good news, everyone. Migration from octopress to <a href="https://gohugo.io/">hugo</a> was completed. If you find any broken  layout and/or links, please contact me.</p>
-
         
 
     </article>

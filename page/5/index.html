@@ -123,6 +123,112 @@
         
         
 <div class="sharing">
+    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2013%2f06%2f28%2fjaxrs%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
+    <a href="https://twitter.com/intent/tweet?text=JAX-RS%20Client%20API&url=https%3a%2f%2futhark.github.io%2f2013%2f06%2f28%2fjaxrs%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
+</div>
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2013/06/28/jaxrs/">JAX-RS Client API</a>
+    </h1>
+
+</header>
+
+
+        
+        <p><a href="http://jcp.org/en/jsr/detail?id=339">JAX-RS</a> - набор Java API для работы с REST сервисами. Существует несколько реализаций, <a href="/blog/2012/02/08/java-rest/">о которых я уже писал раньше</a>.</p>
+<p>Предположим, что проект А выставляет наружу REST API, который мы хотим использовать в проекте Б. Очевидно, что сразу возникает вопрос - можно ли переиспользовать классы модели и интерфейс в другом проекте. Ответ - да, можно. Client API, появившийся в JAX RS 2.0, упрощает реализацию клиента, но это всё равно не самый оптимальный вариант.</p>
+<p>Есть более интересный способ - в замечательной библиотеке <a href="http://cxf.apache.org/">Apache CXF</a> есть класс <a href="http://cxf.apache.org/javadoc/latest/org/apache/cxf/jaxrs/client/JAXRSClientFactory.html"><code>org.apache.cxf.jaxrs.client.JAXRSClientFactory</code></a>, который позволяет автоматически получать прокси-клиент для работы с сервером.</p>
+<p>К сожалению, у меня не получилось завести его с JSON без JAXB - Проблема с Generic Collections - <a href="http://cxf.apache.org/javadoc/latest/org/apache/cxf/jaxrs/provider/json/JSONProvider.html"><code>org.apache.cxf.jaxrs.provider.json.JSONProvider</code></a> подразумевает, что в проекте используется JAXB, с помощью которого у нас проаннотирована модель. Поэтому пришлось написать собственную реализацию <a href="http://docs.oracle.com/javaee/6/api/javax/ws/rs/ext/MessageBodyReader.html"><code>javax.ws.rs.ext.MessageBodyReader&lt;T&gt;</code></a> и <a href="http://docs.oracle.com/javaee/6/api/javax/ws/rs/ext/MessageBodyWriter.html">javax.ws.rs.ext.MessageBodyWriter<!-- raw HTML omitted --></a>.</p>
+<p>Основная проблема при работе с JSON - это то, что, в общем случае, у нас нет информации об используемых типах данных, а вкупе с тем, что в  Java Generics реализованы с <a href="http://docs.oracle.com/javase/tutorial/java/generics/erasure.html">Type Erasure</a> - ситуация усугубляется, если не предпринять каких-то действий.</p>
+<p>Для реализации чтения будем использовать <a href="http://jackson.codehaus.org/Home">Jackson Java JSON-processor</a> и его возможности <a href="http://fasterxml.github.io/jackson-databind/javadoc/2.2.0/com/fasterxml/jackson/databind/type/TypeFactory.html"><code>com.fasterxml.jackson.databind.type.TypeFactory</code></a></p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">JsonMessageHandler</span> <span class="kd">implements</span> <span class="n">MessageBodyReader</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;,</span> <span class="n">MessageBodyWriter</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span> <span class="o">{</span>
+
+    <span class="kd">protected</span> <span class="kd">final</span> <span class="n">ObjectMapper</span> <span class="n">mapper</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">JsonMessageHandler</span><span class="o">(</span><span class="n">ObjectMapper</span> <span class="n">mapper</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">mapper</span> <span class="o">=</span> <span class="n">mapper</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isReadable</span><span class="o">(</span><span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">type</span><span class="o">,</span> <span class="n">Type</span> <span class="n">genericType</span><span class="o">,</span> <span class="n">Annotation</span><span class="o">[]</span> <span class="n">annotations</span><span class="o">,</span> <span class="n">MediaType</span> <span class="n">mediaType</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">Object</span> <span class="nf">readFrom</span><span class="o">(</span><span class="n">Class</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span> <span class="n">type</span><span class="o">,</span> <span class="n">Type</span> <span class="n">genericType</span><span class="o">,</span> <span class="n">Annotation</span><span class="o">[]</span> <span class="n">annotations</span><span class="o">,</span> <span class="n">MediaType</span> <span class="n">mediaType</span><span class="o">,</span> <span class="n">MultivaluedMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">httpHeaders</span><span class="o">,</span> <span class="n">InputStream</span> <span class="n">entityStream</span><span class="o">)</span>
+            <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">WebApplicationException</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">genericType</span> <span class="k">instanceof</span> <span class="n">ParameterizedType</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">Collection</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">isAssignableFrom</span><span class="o">(</span><span class="n">type</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">CollectionType</span> <span class="n">collectionType</span> <span class="o">=</span> <span class="n">resolveCollectionType</span><span class="o">(</span><span class="n">type</span><span class="o">,</span> <span class="o">(</span><span class="n">ParameterizedType</span><span class="o">)</span> <span class="n">genericType</span><span class="o">);</span>
+                <span class="k">return</span> <span class="n">mapper</span><span class="o">.</span><span class="na">readValue</span><span class="o">(</span><span class="n">entityStream</span><span class="o">,</span> <span class="n">collectionType</span><span class="o">);</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">Map</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">isAssignableFrom</span><span class="o">(</span><span class="n">type</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">MapType</span> <span class="n">mapType</span> <span class="o">=</span> <span class="n">resolveMapType</span><span class="o">(</span><span class="n">type</span><span class="o">,</span> <span class="o">(</span><span class="n">ParameterizedType</span><span class="o">)</span> <span class="n">genericType</span><span class="o">);</span>
+                <span class="k">return</span> <span class="n">mapper</span><span class="o">.</span><span class="na">readValue</span><span class="o">(</span><span class="n">entityStream</span><span class="o">,</span> <span class="n">mapType</span><span class="o">);</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">Type</span><span class="o">[]</span> <span class="n">actualTypeArguments</span> <span class="o">=</span> <span class="o">((</span><span class="n">ParameterizedType</span><span class="o">)</span> <span class="n">genericType</span><span class="o">).</span><span class="na">getActualTypeArguments</span><span class="o">();</span>
+                <span class="n">Class</span><span class="o">[]</span> <span class="n">typeArgs</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Class</span><span class="o">[</span><span class="n">actualTypeArguments</span><span class="o">.</span><span class="na">length</span><span class="o">];</span>
+                <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">actualTypeArguments</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+                    <span class="n">Type</span> <span class="n">actualTypeArgument</span> <span class="o">=</span> <span class="n">actualTypeArguments</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+                    <span class="n">typeArgs</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="o">(</span><span class="n">Class</span><span class="o">)</span> <span class="n">actualTypeArgument</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="n">JavaType</span> <span class="n">javaType</span> <span class="o">=</span>
+                        <span class="n">TypeFactory</span><span class="o">.</span><span class="na">defaultInstance</span><span class="o">().</span><span class="na">constructParametricType</span><span class="o">(</span><span class="n">type</span><span class="o">,</span> <span class="n">typeArgs</span><span class="o">);</span>
+                <span class="k">return</span> <span class="n">mapper</span><span class="o">.</span><span class="na">readValue</span><span class="o">(</span><span class="n">entityStream</span><span class="o">,</span> <span class="n">javaType</span><span class="o">);</span>
+            <span class="o">}</span>
+
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="n">mapper</span><span class="o">.</span><span class="na">readValue</span><span class="o">(</span><span class="n">entityStream</span><span class="o">,</span> <span class="n">type</span><span class="o">);</span>
+
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="n">MapType</span> <span class="nf">resolveMapType</span><span class="o">(</span><span class="n">Class</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span> <span class="n">type</span><span class="o">,</span> <span class="n">ParameterizedType</span> <span class="n">genericType</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Type</span><span class="o">[]</span> <span class="n">args</span> <span class="o">=</span> <span class="n">genericType</span><span class="o">.</span><span class="na">getActualTypeArguments</span><span class="o">();</span>
+        <span class="n">Class</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">Map</span><span class="o">&gt;</span> <span class="n">mapClass</span> <span class="o">=</span> <span class="n">type</span><span class="o">.</span><span class="na">asSubclass</span><span class="o">(</span><span class="n">Map</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">TypeFactory</span><span class="o">.</span><span class="na">defaultInstance</span><span class="o">().</span><span class="na">constructMapType</span><span class="o">(</span><span class="n">mapClass</span><span class="o">,</span> <span class="o">(</span><span class="n">Class</span><span class="o">)</span> <span class="n">args</span><span class="o">[</span><span class="n">0</span><span class="o">],</span> <span class="o">(</span><span class="n">Class</span><span class="o">)</span> <span class="n">args</span><span class="o">[</span><span class="n">1</span><span class="o">]);</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="n">CollectionType</span> <span class="nf">resolveCollectionType</span><span class="o">(</span><span class="n">Class</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span> <span class="n">type</span><span class="o">,</span> <span class="n">ParameterizedType</span> <span class="n">genericType</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Type</span> <span class="n">type1</span> <span class="o">=</span> <span class="n">genericType</span><span class="o">.</span><span class="na">getActualTypeArguments</span><span class="o">()[</span><span class="n">0</span><span class="o">];</span>
+        <span class="n">Class</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">Collection</span><span class="o">&gt;</span> <span class="n">collectionClass</span> <span class="o">=</span> <span class="n">type</span><span class="o">.</span><span class="na">asSubclass</span><span class="o">(</span><span class="n">Collection</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">TypeFactory</span><span class="o">.</span><span class="na">defaultInstance</span><span class="o">().</span><span class="na">constructCollectionType</span><span class="o">(</span><span class="n">collectionClass</span><span class="o">,</span> <span class="o">(</span><span class="n">Class</span><span class="o">)</span> <span class="n">type1</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isWriteable</span><span class="o">(</span><span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">type</span><span class="o">,</span> <span class="n">Type</span> <span class="n">genericType</span><span class="o">,</span> <span class="n">Annotation</span><span class="o">[]</span> <span class="n">annotations</span><span class="o">,</span> <span class="n">MediaType</span> <span class="n">mediaType</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">long</span> <span class="nf">getSize</span><span class="o">(</span><span class="n">Object</span> <span class="n">o</span><span class="o">,</span> <span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">type</span><span class="o">,</span> <span class="n">Type</span> <span class="n">genericType</span><span class="o">,</span> <span class="n">Annotation</span><span class="o">[]</span> <span class="n">annotations</span><span class="o">,</span> <span class="n">MediaType</span> <span class="n">mediaType</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">1L</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">writeTo</span><span class="o">(</span><span class="n">Object</span> <span class="n">o</span><span class="o">,</span> <span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">type</span><span class="o">,</span> <span class="n">Type</span> <span class="n">genericType</span><span class="o">,</span> <span class="n">Annotation</span><span class="o">[]</span> <span class="n">annotations</span><span class="o">,</span> <span class="n">MediaType</span> <span class="n">mediaType</span><span class="o">,</span> <span class="n">MultivaluedMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">httpHeaders</span><span class="o">,</span> <span class="n">OutputStream</span> <span class="n">entityStream</span><span class="o">)</span>
+            <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">WebApplicationException</span> <span class="o">{</span>
+        <span class="n">mapper</span><span class="o">.</span><span class="na">writeValue</span><span class="o">(</span><span class="n">entityStream</span><span class="o">,</span> <span class="n">o</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><p>Основной код класса сосредоточен в методе <code>readFrom</code>, который определяет типизацию класса и создаёт необходимый подкласс <code>com.fasterxml.jackson.databind.JavaType</code>, который будет использован во время десериализации.</p>
+<p>Теперь мы можем создать клиента следующим образом:</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">List</span><span class="o">&lt;?&gt;</span> <span class="n">providers</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="k">new</span> <span class="n">JsonMessageHandler</span><span class="o">(</span><span class="n">objectMapper</span><span class="o">));</span>
+<span class="n">UserRest</span> <span class="n">userRest</span> <span class="o">=</span> <span class="n">JAXRSClientFactory</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="s">&#34;http://localhost:8080&#34;</span><span class="o">,</span> <span class="n">UserRest</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">providers</span><span class="o">);</span>
+
+<span class="c1">// usage:
+</span><span class="c1"></span><span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="n">userRest</span><span class="o">.</span><span class="na">findByLogin</span><span class="o">(</span><span class="s">&#34;uthark&#34;</span><span class="o">);</span>
+</code></pre></div><p>Когда вызывается метод <code>findByLogin</code> под капотом создаётся HTTP Request, дёргается сервер и полученный ответ десериализуется. От конечного пользотеля детали реализации API скрыты.</p>
+<p>В <a href="/blog/2013/06/28/jaxrs-spring-autowiring/">следующем посте</a> описано, как автоматически добавить полученные прокси в фабрику бинов Spring для дальнейшего использования.</p>
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2013%2f06%2f19%2fautowiring-factorybean%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=%40Autowiring%20EJBs%20with%20Spring&url=https%3a%2f%2futhark.github.io%2f2013%2f06%2f19%2fautowiring-factorybean%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
 </div>
@@ -699,79 +805,6 @@
     <span class="nt">&lt;beans:bean</span> <span class="na">id=</span><span class="s">&#34;userRepositoryImpl&#34;</span> <span class="na">class=</span><span class="s">&#34;...UserRepositoryImpl&#34;</span><span class="nt">/&gt;</span>
 </code></pre></div><p>Вот и всё.</p>
 
-        
-
-    </article>
-    
-    <article>
-
-        
-        
-<div class="sharing">
-    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2012%2f04%2f24%2fspring-data-jpa%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
-    <a href="https://twitter.com/intent/tweet?text=%d0%98%d1%89%d0%b5%d0%bc%20%d1%81%20%d0%bf%d0%be%d0%bc%d0%be%d1%89%d1%8c%d1%8e%20Spring%20Data%20JPA&url=https%3a%2f%2futhark.github.io%2f2012%2f04%2f24%2fspring-data-jpa%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
-</div>
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2012/04/24/spring-data-jpa/">Ищем с помощью Spring Data JPA</a>
-    </h1>
-
-</header>
-
-
-        
-        <p>Рассмотрим подробнее одну из наиболее полезных вещей в Spring Data JPA - генерация JPQL-запросов на основе имени метода.</p>
-<p>Spring Data JPA умеет автоматически генерировать запросы используя для подсказки название метода.</p>
-<p>Например, метод <code>User.findByLoginAndPassword</code> сгенерирует примерно следующий код:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">FROM</span> <span class="k">User</span> <span class="n">u</span> <span class="k">where</span> <span class="n">u</span><span class="p">.</span><span class="n">login</span> <span class="o">=</span> <span class="p">:</span><span class="n">login</span> <span class="k">and</span> <span class="n">password</span> <span class="o">=</span> <span class="p">:</span><span class="n">password</span>
-</code></pre></div><p>Вообще Spring Data JPA пытается быть умным, поэтому реализация <!-- raw HTML omitted -->findBy{&hellip;}<!-- raw HTML omitted --> методов ищется следующим образом:</p>
-<!-- raw HTML omitted -->
-<p>У <!-- raw HTML omitted -->@Query<!-- raw HTML omitted --> следующие плюсы:</p>
-<!-- raw HTML omitted -->
-<p>Очевидно, что при использовании запросов нам необходимо каким-то образом указывать параметры для запросов. Для этого есть аннотация <!-- raw HTML omitted -->@Param<!-- raw HTML omitted -->:</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Query</span><span class="o">(</span><span class="s">&#34;select u from User u where u.login = :login and u.password = :password&#34;</span><span class="o">)</span>
-<span class="n">Page</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">findByLoginAndPassword</span><span class="o">(</span><span class="nd">@Param</span><span class="o">(</span><span class="s">&#34;login&#34;</span><span class="o">)</span> <span class="n">String</span> <span class="n">login</span><span class="o">,</span> <span class="nd">@Param</span><span class="o">(</span><span class="s">&#34;password&#34;</span><span class="o">)</span> <span class="n">String</span> <span class="n">password</span><span class="o">);</span>
-</code></pre></div><p>Кроме того, Spring Data JPA поддерживает отличную <!-- raw HTML omitted -->концепцию спецификаций<!-- raw HTML omitted -->.</p>
-<p>Спецификации позволяют делать составлять сложные запросы из набора простых.</p>
-<p>Для поддержки спецификаций необходимо объявить метод в репозитории:</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">Page</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">findAll</span><span class="o">(</span><span class="n">Specification</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">spec</span><span class="o">,</span> <span class="n">Pageable</span> <span class="n">pageable</span><span class="o">);</span>
-</code></pre></div><p>Спецификация по сути является фильтром и позволяет комбинирование фильтров, что даёт мощный инструмент для построения запросов.</p>
-<p>Пример использования спецификаций:</p>
-<p>Объявляем наши спецификации:</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="n">Specification</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">firstNameOrLastNameOrLoginLike</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span> <span class="n">search</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="k">new</span> <span class="n">Specification</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;()</span> <span class="o">{</span>
-        <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="n">Predicate</span> <span class="nf">toPredicate</span><span class="o">(</span><span class="n">Root</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">root</span><span class="o">,</span> <span class="n">CriteriaQuery</span><span class="o">&lt;?&gt;</span> <span class="n">query</span><span class="o">,</span> <span class="n">CriteriaBuilder</span> <span class="n">builder</span><span class="o">)</span> <span class="o">{</span>
-
-            <span class="n">Predicate</span> <span class="n">loginPredicate</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">like</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">User_</span><span class="o">.</span><span class="na">login</span><span class="o">),</span> <span class="n">search</span><span class="o">);</span>
-            <span class="n">Predicate</span> <span class="n">firstnamePredicate</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">like</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">User_</span><span class="o">.</span><span class="na">firstname</span><span class="o">),</span> <span class="n">search</span><span class="o">);</span>
-            <span class="n">Predicate</span> <span class="n">lastnamePredicate</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">like</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">User_</span><span class="o">.</span><span class="na">lastname</span><span class="o">),</span> <span class="n">search</span><span class="o">);</span>
-
-            <span class="k">return</span> <span class="n">builder</span><span class="o">.</span><span class="na">or</span><span class="o">(</span><span class="n">loginPredicate</span><span class="o">,</span> <span class="n">firstnamePredicate</span><span class="o">,</span> <span class="n">lastnamePredicate</span><span class="o">);</span>
-        <span class="o">}</span>
-    <span class="o">};</span>
-<span class="o">}</span>
-
-<span class="kd">public</span> <span class="kd">static</span> <span class="n">Specification</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">hasRole</span><span class="o">(</span><span class="kd">final</span> <span class="n">Role</span> <span class="n">role</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="k">new</span> <span class="n">Specification</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;()</span> <span class="o">{</span>
-        <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="n">Predicate</span> <span class="nf">toPredicate</span><span class="o">(</span><span class="n">Root</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">root</span><span class="o">,</span> <span class="n">CriteriaQuery</span><span class="o">&lt;?&gt;</span> <span class="n">query</span><span class="o">,</span> <span class="n">CriteriaBuilder</span> <span class="n">builder</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">return</span> <span class="n">builder</span><span class="o">.</span><span class="na">equal</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">User_</span><span class="o">.</span><span class="na">role</span><span class="o">),</span> <span class="n">role</span><span class="o">);</span>
-        <span class="o">}</span>
-    <span class="o">};</span>
-<span class="o">}</span>
-</code></pre></div><p>И в нашем сервисе комбинируем их:</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="n">Page</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">searchUser</span><span class="o">(</span><span class="n">Role</span> <span class="n">role</span><span class="o">,</span> <span class="n">String</span> <span class="n">search</span><span class="o">,</span> <span class="n">Pageable</span> <span class="n">pageable</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">Specifications</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">mainSpec</span> <span class="o">=</span> <span class="n">where</span><span class="o">(</span><span class="n">hasRole</span><span class="o">(</span><span class="n">role</span><span class="o">));</span>
-
-    <span class="c1">// уточняем запрос, если была передана строка для поиска
-</span><span class="c1"></span>    <span class="k">if</span> <span class="o">(</span><span class="n">StringUtils</span><span class="o">.</span><span class="na">isNotBlank</span><span class="o">(</span><span class="n">search</span><span class="o">))</span> <span class="o">{</span>
-        <span class="n">mainSpec</span> <span class="o">=</span> <span class="n">mainSpec</span><span class="o">.</span><span class="na">and</span><span class="o">(</span><span class="n">firstNameOrLastNameOrLoginLike</span><span class="o">(</span><span class="n">search</span><span class="o">));</span>
-    <span class="o">}</span> 
-
-    <span class="k">return</span> <span class="n">userRepository</span><span class="o">.</span><span class="na">findAll</span><span class="o">(</span><span class="n">mainSpec</span><span class="o">,</span> <span class="n">pageable</span><span class="o">);</span>
-<span class="o">}</span>
-</code></pre></div>
         
 
     </article>

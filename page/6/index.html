@@ -123,6 +123,79 @@
         
         
 <div class="sharing">
+    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2012%2f04%2f24%2fspring-data-jpa%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
+    <a href="https://twitter.com/intent/tweet?text=%d0%98%d1%89%d0%b5%d0%bc%20%d1%81%20%d0%bf%d0%be%d0%bc%d0%be%d1%89%d1%8c%d1%8e%20Spring%20Data%20JPA&url=https%3a%2f%2futhark.github.io%2f2012%2f04%2f24%2fspring-data-jpa%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
+</div>
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2012/04/24/spring-data-jpa/">Ищем с помощью Spring Data JPA</a>
+    </h1>
+
+</header>
+
+
+        
+        <p>Рассмотрим подробнее одну из наиболее полезных вещей в Spring Data JPA - генерация JPQL-запросов на основе имени метода.</p>
+<p>Spring Data JPA умеет автоматически генерировать запросы используя для подсказки название метода.</p>
+<p>Например, метод <code>User.findByLoginAndPassword</code> сгенерирует примерно следующий код:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">FROM</span> <span class="k">User</span> <span class="n">u</span> <span class="k">where</span> <span class="n">u</span><span class="p">.</span><span class="n">login</span> <span class="o">=</span> <span class="p">:</span><span class="n">login</span> <span class="k">and</span> <span class="n">password</span> <span class="o">=</span> <span class="p">:</span><span class="n">password</span>
+</code></pre></div><p>Вообще Spring Data JPA пытается быть умным, поэтому реализация <!-- raw HTML omitted -->findBy{&hellip;}<!-- raw HTML omitted --> методов ищется следующим образом:</p>
+<!-- raw HTML omitted -->
+<p>У <!-- raw HTML omitted -->@Query<!-- raw HTML omitted --> следующие плюсы:</p>
+<!-- raw HTML omitted -->
+<p>Очевидно, что при использовании запросов нам необходимо каким-то образом указывать параметры для запросов. Для этого есть аннотация <!-- raw HTML omitted -->@Param<!-- raw HTML omitted -->:</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Query</span><span class="o">(</span><span class="s">&#34;select u from User u where u.login = :login and u.password = :password&#34;</span><span class="o">)</span>
+<span class="n">Page</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">findByLoginAndPassword</span><span class="o">(</span><span class="nd">@Param</span><span class="o">(</span><span class="s">&#34;login&#34;</span><span class="o">)</span> <span class="n">String</span> <span class="n">login</span><span class="o">,</span> <span class="nd">@Param</span><span class="o">(</span><span class="s">&#34;password&#34;</span><span class="o">)</span> <span class="n">String</span> <span class="n">password</span><span class="o">);</span>
+</code></pre></div><p>Кроме того, Spring Data JPA поддерживает отличную <!-- raw HTML omitted -->концепцию спецификаций<!-- raw HTML omitted -->.</p>
+<p>Спецификации позволяют делать составлять сложные запросы из набора простых.</p>
+<p>Для поддержки спецификаций необходимо объявить метод в репозитории:</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">Page</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">findAll</span><span class="o">(</span><span class="n">Specification</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">spec</span><span class="o">,</span> <span class="n">Pageable</span> <span class="n">pageable</span><span class="o">);</span>
+</code></pre></div><p>Спецификация по сути является фильтром и позволяет комбинирование фильтров, что даёт мощный инструмент для построения запросов.</p>
+<p>Пример использования спецификаций:</p>
+<p>Объявляем наши спецификации:</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="n">Specification</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">firstNameOrLastNameOrLoginLike</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span> <span class="n">search</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="n">Specification</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;()</span> <span class="o">{</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="n">Predicate</span> <span class="nf">toPredicate</span><span class="o">(</span><span class="n">Root</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">root</span><span class="o">,</span> <span class="n">CriteriaQuery</span><span class="o">&lt;?&gt;</span> <span class="n">query</span><span class="o">,</span> <span class="n">CriteriaBuilder</span> <span class="n">builder</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="n">Predicate</span> <span class="n">loginPredicate</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">like</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">User_</span><span class="o">.</span><span class="na">login</span><span class="o">),</span> <span class="n">search</span><span class="o">);</span>
+            <span class="n">Predicate</span> <span class="n">firstnamePredicate</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">like</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">User_</span><span class="o">.</span><span class="na">firstname</span><span class="o">),</span> <span class="n">search</span><span class="o">);</span>
+            <span class="n">Predicate</span> <span class="n">lastnamePredicate</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">like</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">User_</span><span class="o">.</span><span class="na">lastname</span><span class="o">),</span> <span class="n">search</span><span class="o">);</span>
+
+            <span class="k">return</span> <span class="n">builder</span><span class="o">.</span><span class="na">or</span><span class="o">(</span><span class="n">loginPredicate</span><span class="o">,</span> <span class="n">firstnamePredicate</span><span class="o">,</span> <span class="n">lastnamePredicate</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">};</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kd">static</span> <span class="n">Specification</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">hasRole</span><span class="o">(</span><span class="kd">final</span> <span class="n">Role</span> <span class="n">role</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="n">Specification</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;()</span> <span class="o">{</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="n">Predicate</span> <span class="nf">toPredicate</span><span class="o">(</span><span class="n">Root</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">root</span><span class="o">,</span> <span class="n">CriteriaQuery</span><span class="o">&lt;?&gt;</span> <span class="n">query</span><span class="o">,</span> <span class="n">CriteriaBuilder</span> <span class="n">builder</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">builder</span><span class="o">.</span><span class="na">equal</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">User_</span><span class="o">.</span><span class="na">role</span><span class="o">),</span> <span class="n">role</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">};</span>
+<span class="o">}</span>
+</code></pre></div><p>И в нашем сервисе комбинируем их:</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="n">Page</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">searchUser</span><span class="o">(</span><span class="n">Role</span> <span class="n">role</span><span class="o">,</span> <span class="n">String</span> <span class="n">search</span><span class="o">,</span> <span class="n">Pageable</span> <span class="n">pageable</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">Specifications</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">mainSpec</span> <span class="o">=</span> <span class="n">where</span><span class="o">(</span><span class="n">hasRole</span><span class="o">(</span><span class="n">role</span><span class="o">));</span>
+
+    <span class="c1">// уточняем запрос, если была передана строка для поиска
+</span><span class="c1"></span>    <span class="k">if</span> <span class="o">(</span><span class="n">StringUtils</span><span class="o">.</span><span class="na">isNotBlank</span><span class="o">(</span><span class="n">search</span><span class="o">))</span> <span class="o">{</span>
+        <span class="n">mainSpec</span> <span class="o">=</span> <span class="n">mainSpec</span><span class="o">.</span><span class="na">and</span><span class="o">(</span><span class="n">firstNameOrLastNameOrLoginLike</span><span class="o">(</span><span class="n">search</span><span class="o">));</span>
+    <span class="o">}</span> 
+
+    <span class="k">return</span> <span class="n">userRepository</span><span class="o">.</span><span class="na">findAll</span><span class="o">(</span><span class="n">mainSpec</span><span class="o">,</span> <span class="n">pageable</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div>
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2012%2f04%2f20%2fbeanpostprocessor%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=%d0%98%d1%81%d0%bf%d0%be%d0%bb%d1%8c%d0%b7%d0%be%d0%b2%d0%b0%d0%bd%d0%b8%d0%b5%20BeanPostProcessor%20%d0%bd%d0%b0%20%d0%bf%d1%80%d0%b8%d0%bc%d0%b5%d1%80%d0%b5%20%d0%b6%d1%83%d1%80%d0%bd%d0%b0%d0%bb%d0%b8%d1%80%d0%be%d0%b2%d0%b0%d0%bd%d0%b8%d1%8f&url=https%3a%2f%2futhark.github.io%2f2012%2f04%2f20%2fbeanpostprocessor%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
 </div>
@@ -834,129 +907,6 @@
 <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">a</span><span class="o">.</span><span class="na">getI</span><span class="o">());</span>
 
 </code></pre></div><p>Статические поля и методы виртуальными не являются, поэтому оба вызова выведут нам 3.</p>
-
-        
-
-    </article>
-    
-    <article>
-
-        
-        
-<div class="sharing">
-    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2010%2f12%2f06%2fblog-post%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
-    <a href="https://twitter.com/intent/tweet?text=%d0%a1%d0%be%d0%ba%d1%80%d0%b0%d1%89%d0%b0%d0%b5%d0%bc%20%d1%81%d1%81%d1%8b%d0%bb%d0%ba%d0%b8%20%d0%bd%d0%b0%20%d0%b0%d0%bd%d0%b4%d1%80%d0%be%d0%b8%d0%b4%d0%b5&url=https%3a%2f%2futhark.github.io%2f2010%2f12%2f06%2fblog-post%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
-</div>
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2010/12/06/blog-post/">Сокращаем ссылки на андроиде</a>
-    </h1>
-
-</header>
-
-
-        
-        <!-- raw HTML omitted -->
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">org.apache.http.HttpEntity</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.http.HttpResponse</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.http.NameValuePair</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.http.client.ClientProtocolException</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.http.client.methods.HttpGet</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.http.client.utils.URIUtils</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.http.client.utils.URLEncodedUtils</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.http.impl.client.DefaultHttpClient</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.http.message.BasicNameValuePair</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.http.util.EntityUtils</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.json.JSONException</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.json.JSONObject</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">android.util.Log</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.net.URI</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.net.URISyntaxException</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
-
-
-<span class="cm">/**
-</span><span class="cm"> * Helper class to work with bitly.
-</span><span class="cm"> *
-</span><span class="cm"> * @author Oleg Atamanenko
-</span><span class="cm"> * @since 06-Dec-2010 12:49:36
-</span><span class="cm"> */</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Bitly</span> <span class="o">{</span>
-
-    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">TAG</span> <span class="o">=</span> <span class="s">&#34;Bitly&#34;</span><span class="o">;</span>
-
-    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">SHORTEN</span> <span class="o">=</span> <span class="s">&#34;/v3/shorten&#34;</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">API_URL</span> <span class="o">=</span> <span class="s">&#34;api.bit.ly&#34;</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">RESPONSE_FORMAT</span> <span class="o">=</span> <span class="s">&#34;json&#34;</span><span class="o">;</span>
-
-    <span class="kd">private</span> <span class="n">String</span> <span class="n">username</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="n">String</span> <span class="n">apiKey</span><span class="o">;</span>
-
-
-    <span class="kd">public</span> <span class="nf">Bitly</span><span class="o">(</span><span class="n">String</span> <span class="n">username</span><span class="o">,</span> <span class="n">String</span> <span class="n">apiKey</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">username</span> <span class="o">=</span> <span class="n">username</span><span class="o">;</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">apiKey</span> <span class="o">=</span> <span class="n">apiKey</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="n">String</span> <span class="nf">shorten</span><span class="o">(</span><span class="n">String</span> <span class="n">longUrl</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">BitlyException</span> <span class="o">{</span>
-        <span class="n">DefaultHttpClient</span> <span class="n">httpClient</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DefaultHttpClient</span><span class="o">();</span>
-
-        <span class="k">try</span> <span class="o">{</span>
-            <span class="n">List</span><span class="o">&lt;</span><span class="n">NameValuePair</span><span class="o">&gt;</span> <span class="n">params</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">NameValuePair</span><span class="o">&gt;();</span>
-            <span class="n">params</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">BasicNameValuePair</span><span class="o">(</span><span class="s">&#34;login&#34;</span><span class="o">,</span> <span class="n">username</span><span class="o">));</span>
-            <span class="n">params</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">BasicNameValuePair</span><span class="o">(</span><span class="s">&#34;apiKey&#34;</span><span class="o">,</span> <span class="n">apiKey</span><span class="o">));</span>
-            <span class="n">params</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">BasicNameValuePair</span><span class="o">(</span><span class="s">&#34;longUrl&#34;</span><span class="o">,</span> <span class="n">longUrl</span><span class="o">));</span>
-            <span class="n">params</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">BasicNameValuePair</span><span class="o">(</span><span class="s">&#34;format&#34;</span><span class="o">,</span> <span class="n">RESPONSE_FORMAT</span><span class="o">));</span>
-
-
-            <span class="n">URI</span> <span class="n">uri</span> <span class="o">=</span> <span class="n">URIUtils</span><span class="o">.</span><span class="na">createURI</span><span class="o">(</span><span class="s">&#34;http&#34;</span><span class="o">,</span> <span class="n">API_URL</span><span class="o">,</span> <span class="o">-</span><span class="n">1</span><span class="o">,</span> <span class="n">SHORTEN</span><span class="o">,</span> <span class="n">URLEncodedUtils</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="n">params</span><span class="o">,</span> <span class="s">&#34;UTF-8&#34;</span><span class="o">),</span> <span class="kc">null</span><span class="o">);</span>
-            <span class="n">HttpGet</span> <span class="n">request</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HttpGet</span><span class="o">(</span><span class="n">uri</span><span class="o">);</span>
-
-            <span class="n">Log</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span> <span class="s">&#34;Sending request: &#34;</span> <span class="o">+</span> <span class="n">request</span><span class="o">.</span><span class="na">getURI</span><span class="o">());</span>
-
-            <span class="n">HttpResponse</span> <span class="n">httpResponse</span> <span class="o">=</span> <span class="n">httpClient</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="n">request</span><span class="o">);</span>
-
-            <span class="n">HttpEntity</span> <span class="n">httpEntity</span> <span class="o">=</span> <span class="n">httpResponse</span><span class="o">.</span><span class="na">getEntity</span><span class="o">();</span>
-            <span class="n">String</span> <span class="n">response</span> <span class="o">=</span> <span class="n">EntityUtils</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">httpEntity</span><span class="o">);</span>
-            <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span> <span class="s">&#34;Bitly response is: &#34;</span> <span class="o">+</span> <span class="n">response</span><span class="o">);</span>
-            <span class="n">httpResponse</span><span class="o">.</span><span class="na">getEntity</span><span class="o">().</span><span class="na">consumeContent</span><span class="o">();</span>
-
-            <span class="n">JSONObject</span> <span class="n">jsonResponse</span> <span class="o">=</span> <span class="k">new</span> <span class="n">JSONObject</span><span class="o">(</span><span class="n">response</span><span class="o">);</span>
-
-            <span class="n">checkForExceptions</span><span class="o">(</span><span class="n">jsonResponse</span><span class="o">);</span>
-
-            <span class="n">JSONObject</span> <span class="n">data</span> <span class="o">=</span> <span class="n">jsonResponse</span><span class="o">.</span><span class="na">getJSONObject</span><span class="o">(</span><span class="s">&#34;data&#34;</span><span class="o">);</span>
-            <span class="k">return</span> <span class="n">data</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">&#34;url&#34;</span><span class="o">);</span>
-
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ClientProtocolException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="n">BitlyException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="n">BitlyException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">JSONException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="n">BitlyException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">URISyntaxException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="n">BitlyException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-
-    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">checkForExceptions</span><span class="o">(</span><span class="n">JSONObject</span> <span class="n">jsonResponse</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">JSONException</span><span class="o">,</span> <span class="n">BitlyException</span> <span class="o">{</span>
-        <span class="kt">int</span> <span class="n">statusCode</span> <span class="o">=</span> <span class="n">jsonResponse</span><span class="o">.</span><span class="na">getInt</span><span class="o">(</span><span class="s">&#34;status_code&#34;</span><span class="o">);</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">statusCode</span> <span class="o">!=</span> <span class="n">200</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">String</span> <span class="n">message</span> <span class="o">=</span> <span class="n">jsonResponse</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">&#34;status_txt&#34;</span><span class="o">);</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="n">BitlyException</span><span class="o">(</span><span class="n">message</span><span class="o">);</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-
-<span class="o">}</span>
-</code></pre></div><p>Конструктор класс принимает на вход следующие параметры: <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->userName<!-- raw HTML omitted --> - имя пользователя bit.ly.<!-- raw HTML omitted --></p>
-<!-- raw HTML omitted -->
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">Bitly</span> <span class="n">bitly</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Bitly</span><span class="o">(</span><span class="n">BITLY_USERNAME</span><span class="o">,</span> <span class="n">BITLY_API_KEY</span><span class="o">);</span>
-<span class="n">String</span> <span class="n">shortLink</span> <span class="o">=</span> <span class="n">bitly</span><span class="o">.</span><span class="na">shorten</span><span class="o">(</span><span class="n">link</span><span class="o">);</span>
-</code></pre></div><!-- raw HTML omitted -->
 
         
 

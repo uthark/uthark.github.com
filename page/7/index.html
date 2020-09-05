@@ -123,6 +123,129 @@
         
         
 <div class="sharing">
+    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2010%2f12%2f06%2fblog-post%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
+    <a href="https://twitter.com/intent/tweet?text=%d0%a1%d0%be%d0%ba%d1%80%d0%b0%d1%89%d0%b0%d0%b5%d0%bc%20%d1%81%d1%81%d1%8b%d0%bb%d0%ba%d0%b8%20%d0%bd%d0%b0%20%d0%b0%d0%bd%d0%b4%d1%80%d0%be%d0%b8%d0%b4%d0%b5&url=https%3a%2f%2futhark.github.io%2f2010%2f12%2f06%2fblog-post%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
+</div>
+<header>
+    <h1 class="entry-title">
+        <a href="https://uthark.github.io/2010/12/06/blog-post/">Сокращаем ссылки на андроиде</a>
+    </h1>
+
+</header>
+
+
+        
+        <!-- raw HTML omitted -->
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">org.apache.http.HttpEntity</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.HttpResponse</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.NameValuePair</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.ClientProtocolException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.methods.HttpGet</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.utils.URIUtils</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.utils.URLEncodedUtils</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.impl.client.DefaultHttpClient</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.message.BasicNameValuePair</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.util.EntityUtils</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.json.JSONException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.json.JSONObject</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">android.util.Log</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.net.URI</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.net.URISyntaxException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+
+
+<span class="cm">/**
+</span><span class="cm"> * Helper class to work with bitly.
+</span><span class="cm"> *
+</span><span class="cm"> * @author Oleg Atamanenko
+</span><span class="cm"> * @since 06-Dec-2010 12:49:36
+</span><span class="cm"> */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Bitly</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">TAG</span> <span class="o">=</span> <span class="s">&#34;Bitly&#34;</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">SHORTEN</span> <span class="o">=</span> <span class="s">&#34;/v3/shorten&#34;</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">API_URL</span> <span class="o">=</span> <span class="s">&#34;api.bit.ly&#34;</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">RESPONSE_FORMAT</span> <span class="o">=</span> <span class="s">&#34;json&#34;</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">username</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">apiKey</span><span class="o">;</span>
+
+
+    <span class="kd">public</span> <span class="nf">Bitly</span><span class="o">(</span><span class="n">String</span> <span class="n">username</span><span class="o">,</span> <span class="n">String</span> <span class="n">apiKey</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">username</span> <span class="o">=</span> <span class="n">username</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">apiKey</span> <span class="o">=</span> <span class="n">apiKey</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">shorten</span><span class="o">(</span><span class="n">String</span> <span class="n">longUrl</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">BitlyException</span> <span class="o">{</span>
+        <span class="n">DefaultHttpClient</span> <span class="n">httpClient</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DefaultHttpClient</span><span class="o">();</span>
+
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">List</span><span class="o">&lt;</span><span class="n">NameValuePair</span><span class="o">&gt;</span> <span class="n">params</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">NameValuePair</span><span class="o">&gt;();</span>
+            <span class="n">params</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">BasicNameValuePair</span><span class="o">(</span><span class="s">&#34;login&#34;</span><span class="o">,</span> <span class="n">username</span><span class="o">));</span>
+            <span class="n">params</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">BasicNameValuePair</span><span class="o">(</span><span class="s">&#34;apiKey&#34;</span><span class="o">,</span> <span class="n">apiKey</span><span class="o">));</span>
+            <span class="n">params</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">BasicNameValuePair</span><span class="o">(</span><span class="s">&#34;longUrl&#34;</span><span class="o">,</span> <span class="n">longUrl</span><span class="o">));</span>
+            <span class="n">params</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">BasicNameValuePair</span><span class="o">(</span><span class="s">&#34;format&#34;</span><span class="o">,</span> <span class="n">RESPONSE_FORMAT</span><span class="o">));</span>
+
+
+            <span class="n">URI</span> <span class="n">uri</span> <span class="o">=</span> <span class="n">URIUtils</span><span class="o">.</span><span class="na">createURI</span><span class="o">(</span><span class="s">&#34;http&#34;</span><span class="o">,</span> <span class="n">API_URL</span><span class="o">,</span> <span class="o">-</span><span class="n">1</span><span class="o">,</span> <span class="n">SHORTEN</span><span class="o">,</span> <span class="n">URLEncodedUtils</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="n">params</span><span class="o">,</span> <span class="s">&#34;UTF-8&#34;</span><span class="o">),</span> <span class="kc">null</span><span class="o">);</span>
+            <span class="n">HttpGet</span> <span class="n">request</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HttpGet</span><span class="o">(</span><span class="n">uri</span><span class="o">);</span>
+
+            <span class="n">Log</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span> <span class="s">&#34;Sending request: &#34;</span> <span class="o">+</span> <span class="n">request</span><span class="o">.</span><span class="na">getURI</span><span class="o">());</span>
+
+            <span class="n">HttpResponse</span> <span class="n">httpResponse</span> <span class="o">=</span> <span class="n">httpClient</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="n">request</span><span class="o">);</span>
+
+            <span class="n">HttpEntity</span> <span class="n">httpEntity</span> <span class="o">=</span> <span class="n">httpResponse</span><span class="o">.</span><span class="na">getEntity</span><span class="o">();</span>
+            <span class="n">String</span> <span class="n">response</span> <span class="o">=</span> <span class="n">EntityUtils</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">httpEntity</span><span class="o">);</span>
+            <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span> <span class="s">&#34;Bitly response is: &#34;</span> <span class="o">+</span> <span class="n">response</span><span class="o">);</span>
+            <span class="n">httpResponse</span><span class="o">.</span><span class="na">getEntity</span><span class="o">().</span><span class="na">consumeContent</span><span class="o">();</span>
+
+            <span class="n">JSONObject</span> <span class="n">jsonResponse</span> <span class="o">=</span> <span class="k">new</span> <span class="n">JSONObject</span><span class="o">(</span><span class="n">response</span><span class="o">);</span>
+
+            <span class="n">checkForExceptions</span><span class="o">(</span><span class="n">jsonResponse</span><span class="o">);</span>
+
+            <span class="n">JSONObject</span> <span class="n">data</span> <span class="o">=</span> <span class="n">jsonResponse</span><span class="o">.</span><span class="na">getJSONObject</span><span class="o">(</span><span class="s">&#34;data&#34;</span><span class="o">);</span>
+            <span class="k">return</span> <span class="n">data</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">&#34;url&#34;</span><span class="o">);</span>
+
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ClientProtocolException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="n">BitlyException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="n">BitlyException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">JSONException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="n">BitlyException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">URISyntaxException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="n">BitlyException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">checkForExceptions</span><span class="o">(</span><span class="n">JSONObject</span> <span class="n">jsonResponse</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">JSONException</span><span class="o">,</span> <span class="n">BitlyException</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">statusCode</span> <span class="o">=</span> <span class="n">jsonResponse</span><span class="o">.</span><span class="na">getInt</span><span class="o">(</span><span class="s">&#34;status_code&#34;</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">statusCode</span> <span class="o">!=</span> <span class="n">200</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">String</span> <span class="n">message</span> <span class="o">=</span> <span class="n">jsonResponse</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">&#34;status_txt&#34;</span><span class="o">);</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="n">BitlyException</span><span class="o">(</span><span class="n">message</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+<span class="o">}</span>
+</code></pre></div><p>Конструктор класс принимает на вход следующие параметры: <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->userName<!-- raw HTML omitted --> - имя пользователя bit.ly.<!-- raw HTML omitted --></p>
+<!-- raw HTML omitted -->
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">Bitly</span> <span class="n">bitly</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Bitly</span><span class="o">(</span><span class="n">BITLY_USERNAME</span><span class="o">,</span> <span class="n">BITLY_API_KEY</span><span class="o">);</span>
+<span class="n">String</span> <span class="n">shortLink</span> <span class="o">=</span> <span class="n">bitly</span><span class="o">.</span><span class="na">shorten</span><span class="o">(</span><span class="n">link</span><span class="o">);</span>
+</code></pre></div><!-- raw HTML omitted -->
+
+        
+
+    </article>
+    
+    <article>
+
+        
+        
+<div class="sharing">
     <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2010%2f05%2f22%2fblog-post%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
     <a href="https://twitter.com/intent/tweet?text=%d0%a3%d0%b4%d0%b0%d0%bb%d0%b5%d0%bd%d0%b8%d0%b5%20%d1%80%d0%b0%d0%b7%d0%bb%d0%b8%d1%87%d0%bd%d1%8b%d1%85%20%d0%b4%d0%b8%d0%b0%d0%ba%d1%80%d0%b8%d1%82%d0%b8%d1%87%d0%b5%d1%81%d0%ba%d0%b8%d1%85%20%d1%81%d0%b8%d0%bc%d0%b2%d0%be%d0%bb%d0%be%d0%b2%20%d0%b8%d0%b7%20%d1%81%d1%82%d1%80%d0%be%d0%ba%d0%b8&url=https%3a%2f%2futhark.github.io%2f2010%2f05%2f22%2fblog-post%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
 </div>
@@ -507,93 +630,6 @@ dbus-send --session --type<span class="o">=</span>method_call --dest<span class=
 
         
         <!-- raw HTML omitted -->
-
-        
-
-    </article>
-    
-    <article>
-
-        
-        
-<div class="sharing">
-    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2010%2f02%2f06%2fgrails%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
-    <a href="https://twitter.com/intent/tweet?text=%d0%a1%d0%bf%d0%b8%d1%81%d0%be%d0%ba%20%d0%b4%d0%bb%d1%8f%20%d0%bf%d1%80%d0%be%d0%b2%d0%b5%d1%80%d0%ba%d0%b8%20%d0%bf%d1%80%d0%b8%20%d0%be%d0%bf%d1%82%d0%b8%d0%bc%d0%b8%d0%b7%d0%b0%d1%86%d0%b8%d0%b8%20Grails%20%d0%bf%d1%80%d0%b8%d0%bb%d0%be%d0%b6%d0%b5%d0%bd%d0%b8%d0%b9&url=https%3a%2f%2futhark.github.io%2f2010%2f02%2f06%2fgrails%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
-</div>
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2010/02/06/grails/">Список для проверки при оптимизации Grails приложений</a>
-    </h1>
-
-</header>
-
-
-        
-        <p>Выкладываю ниже список задач, которые нужно/можно выполнить для оптимизации приложения, написанного на Grails, может кому пригодится.</p>
-<h4 id="тестирование-проведённых-оптимизаций">Тестирование проведённых оптимизаций</h4>
-<p>Первым делом необходимо разработать критерии проверки, которые позволят оценить эффективность проведённых оптимизаций.</p>
-<ol>
-<li>Установить <!-- raw HTML omitted -->Java Melody<!-- raw HTML omitted --> <!-- raw HTML omitted -->плагин<!-- raw HTML omitted --> для Grails для проведения анализа.</li>
-<li>Разработать скрипты для проведения нагрузочного тестирования.</li>
-<li>Прогнать скрипты.</li>
-<li>Проанализировать результаты Java Melody, выявить узкие места, произвести нужные оптимизации.</li>
-</ol>
-<h4 id="общие-оптимизации">Общие оптимизации</h4>
-<p>Очень часто обновление до последней версии используемых библиотек попутно улучшает производительность.</p>
-<ol>
-<li>Обновить Java до последней версии</li>
-<li>Обновить Groovy до последней версии.</li>
-<li>Обновить Grails до последней версии.</li>
-<li>Обновить jQuery до последней версии.</li>
-<li>Оптимизировать настройки виртуальной машины Java (например, -server -Xmx270m -Xms270m -XX:MaxPermSize=80m -Xverify:none -XX:+UseParallelGC -XX:+UseParallelOldGC -XX:+UseAdaptiveSizePolicy -XX:SurvivorRatio=4 -XX:TargetSurvivorRatio=90 -XX:MaxTenuringThreshold=31 -XX:+AggressiveOpts)
-a. <a href="http://java.sun.com/javase/technologies/hotspot/gc/gc_tuning_6.html">http://java.sun.com/javase/technologies/hotspot/gc/gc_tuning_6.html</a>
-Вообще, по оптимизации JVM написаны целые книги, так что не буду здесь останавливаться.</li>
-</ol>
-<h4 id="оптимизация-клиентской-части">Оптимизация клиентской части</h4>
-<ol>
-<li>Настроить <!-- raw HTML omitted -->кэширование статических ресурсов<!-- raw HTML omitted --> в Томкате.</li>
-<li>Настроить <!-- raw HTML omitted -->сжатие статических ресурсов<!-- raw HTML omitted --> в Томкате.</li>
-<li>(поставить прокси на nginx для кэширования статических ресурсов ?)</li>
-<li>Установить плагины для Firebug, которые оценят производительность клиентской части.
-<ol>
-<li><!-- raw HTML omitted -->PageSpeed<!-- raw HTML omitted --> <!-- raw HTML omitted --></li>
-<li><!-- raw HTML omitted -->YSlow<!-- raw HTML omitted --> <!-- raw HTML omitted --></li>
-<li>Проанализировать страницы веб-сайта с их помощью</li>
-</ol>
-</li>
-<li>Провести предлагаемые оптимизации.</li>
-</ol>
-<h4 id="оптимизация-клиентской-части-приложений-написанных-на-grails">Оптимизация клиентской части приложений, написанных на Grails</h4>
-<ol>
-<li>Установить плагин <!-- raw HTML omitted -->UI Performance<!-- raw HTML omitted --></li>
-<li>Провести оптимизацию с использованием плагина UI Performance</li>
-</ol>
-<h4 id="оптимизация-базы-данных">Оптимизация базы данных</h4>
-<ol>
-<li>Оптимизировать производительность сервера базы данных (SQL Server)
-a. <a href="http://www.sql-server-performance.com/tips/all_main.aspx">http://www.sql-server-performance.com/tips/all_main.aspx</a>
-a. <a href="http://msdn.microsoft.com/en-us/library/ms998577.aspx">http://msdn.microsoft.com/en-us/library/ms998577.aspx</a></li>
-<li>Проверить наличие индексов в базе данных, добавить необходимые</li>
-<li>Найти неоптимальные запросы в БД, оптимизировать</li>
-</ol>
-<h4 id="оптимизация-работы-с-базой-данных">Оптимизация работы с базой данных</h4>
-<ol>
-<li>Обновить версию JDBC-драйвера</li>
-<li>Настроить кэширование в Hibernate.
-Ресурсов в сети предостаточно, навскидку <!-- raw HTML omitted -->вот<!-- raw HTML omitted --> <!-- raw HTML omitted --> парочка<!-- raw HTML omitted -->.</li>
-</ol>
-<h4 id="оптимизация-серверной-части-приложения">Оптимизация серверной части приложения</h4>
-<ol>
-<li>Произвести профилирование приложения (использовать Visual VM, YJP Profiler), найти узкие места и оптимизировать их.</li>
-</ol>
-<h4 id="оптимизация-серверной-части-приложения-опционально">Оптимизация серверной части приложения (опционально)</h4>
-<ol>
-<li>Установить плагин <!-- raw HTML omitted -->Perf4J<!-- raw HTML omitted --> для грэйлза</li>
-<li>Добавить необходимые счётчики в код</li>
-<li>Прогнать нагрузочные тесты, найти узкие места, оптимизировать.</li>
-</ol>
-<h4 id="заключение">Заключение</h4>
-<p>В целом, в данном списке нет ничего нового, это всего лишь компиляция публично доступных материалов. Тем не менее, решил это опубликовать, чтобы сэкономить время другим.</p>
 
         
 
