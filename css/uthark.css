@@ -161,14 +161,14 @@ ul ol,
 ol,
 ol ul,
 ol ol {
-    margin-left: 1.3em
+    margin-left: 1em;
 }
 
 ul ul,
 ul ol,
 ol ul,
 ol ol {
-    margin-bottom: 0em
+    margin-bottom: 0
 }
 
 strong {

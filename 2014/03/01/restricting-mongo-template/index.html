@@ -28,7 +28,7 @@
     
     
     
-    <link rel="stylesheet" href="https://uthark.github.io/css/theme.3d77bd108312f7b5751e15feb6b2c7ed868bd3bb4092eef60f62bd1b05c1ffff.css">
+    <link rel="stylesheet" href="https://uthark.github.io/css/theme.f760b3cb4d692cb93227c9effd94d678350e44ed87c052175daf716fd128b975.css">
     <link rel="stylesheet" href="https://uthark.github.io/css/uthark.css">
 
 
@@ -85,6 +85,11 @@ import org.springframework.data.mongodb.core.query.Query; public interface Query
 
 
 <nav>
+<div class="menu">
+  <input type="checkbox" id="menu" class="fa fa-bars">
+  <label for="menu" aria-label="Menu"></label>
+
+  <div class="menu-container">
 
 <ul class="main-navigation">
   
@@ -113,17 +118,18 @@ import org.springframework.data.mongodb.core.query.Query; public interface Query
 
 
 <ul class="subscription">
-  
     
         
-        
-        <li><a href="https://feeds.feedburner.com/atamanenko" target="_blank" type="application/rss+xml" title="RSS"><i class="fa fa-rss-square fa-lg"></i></a></li>
-        
+            
+            
+                <li><a href="https://feeds.feedburner.com/atamanenko" target="_blank" type="application/rss+xml" title="RSS"><i class="fa fa-rss-square fa-lg"></i></a></li>
+            
 
+        
     
-  
 
 </ul>
+
 
 
 <form action="https://www.google.com/search" method="get" target="_blank">
@@ -133,6 +139,8 @@ import org.springframework.data.mongodb.core.query.Query; public interface Query
   </fieldset>
 </form>
 
+</div>
+</div>
 </nav>
 
 
@@ -143,10 +151,7 @@ import org.springframework.data.mongodb.core.query.Query; public interface Query
 
         
         
-<div class="sharing">
-    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2014%2f03%2f01%2frestricting-mongo-template%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
-    <a href="https://twitter.com/intent/tweet?text=Automatic%20query%20modification%20with%20Spring%20Data%20Mongo&url=https%3a%2f%2futhark.github.io%2f2014%2f03%2f01%2frestricting-mongo-template%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
-</div>
+
 <header>
     <h1 class="entry-title">
          Automatic query modification with Spring Data Mongo 
@@ -278,10 +283,22 @@ import org.springframework.data.mongodb.core.query.Query; public interface Query
         
 
 <footer>
+  <div class="sharing">
+    Share:
+    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2014%2f03%2f01%2frestricting-mongo-template%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
+    <a href="https://twitter.com/intent/tweet?text=Automatic%20query%20modification%20with%20Spring%20Data%20Mongo&url=https%3a%2f%2futhark.github.io%2f2014%2f03%2f01%2frestricting-mongo-template%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
+  </div>
   <div>
     <hr/>
     <p>If you have any questions, feel free to ping me on Twitter.</p>
   </div>
+  <p class="meta">
+    Reading time: 2 minutes
+  </p>
+  <p class="meta">
+    
+    Last update: <time datetime="2014-03-01">Mar 1, 2014</time>
+  </p>
   <p class="meta">
     
     
@@ -290,11 +307,17 @@ import org.springframework.data.mongodb.core.query.Query; public interface Query
     Categories: <a class="label" href="https://uthark.github.io/categories/article/">#article</a><a class="label" href="https://uthark.github.io/categories/development/">#development</a><a class="label" href="https://uthark.github.io/categories/spring/">#spring</a><a class="label" href="https://uthark.github.io/categories/spring-data/">#spring data</a><a class="label" href="https://uthark.github.io/categories/mongodb/">#mongodb</a><a class="label" href="https://uthark.github.io/categories/mongotemplate/">#mongotemplate</a><a class="label" href="https://uthark.github.io/categories/nosql/">#nosql</a><a class="label" href="https://uthark.github.io/categories/java/">#java</a>
   </p>
 
-  <p class="meta">
-    
-    Last update: <time datetime="2014-03-01">Mar 1, 2014</time>
 
-    
+
+
+
+
+
+
+
+
+
+
   </p>
   
 
@@ -407,6 +430,15 @@ import org.springframework.data.mongodb.core.query.Query; public interface Query
                 
                 
             </li>
+            
+                
+                    
+                    
+                        <li><a href="https://feeds.feedburner.com/atamanenko" target="_blank" type="application/rss+xml" title="RSS"><i class="fa fa-rss-square fa-2x"></i></a></li>
+                    
+
+                
+            
         </ul>
     </div>
     <p>&copy;&nbsp;2009&nbsp;—&nbsp;2020 Oleg Atamanenko - <a href="https://uthark.github.io/license/">CC&nbsp;BY-SA&nbsp;4.0</a>
