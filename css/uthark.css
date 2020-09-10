@@ -161,6 +161,7 @@ ul ol,
 ol,
 ol ul,
 ol ol {
+    padding-left:1em;
     margin-left: 1em;
 }
 
@@ -1443,11 +1444,16 @@ div.blog-index article > div.highlight {
 
 /* decrease h1 size in article body so we can use it in the article as heading */
 div.entry-content > h1 {
-    font-size: 1.7em;
+    font-size: 1.4em;
 }
 
 div.entry-content > h2 {
-    font-size: 1.5em;
+    font-size: 1.3em;
+}
+
+div.entry-content > h3 {
+    font-size: 1.1em;
+    font-weight: bold;
 }
 
 @media only screen and (min-width: 992px) {
