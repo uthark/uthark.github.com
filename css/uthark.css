@@ -1526,6 +1526,12 @@ h6 {
     background-color: #f0f0f0
 }
 
+@media (prefers-color-scheme: dark) {
+    .chroma {
+        background-color: #2b2b2b;
+    }
+}
+
 /* Error */
 .chroma .err {
 }
