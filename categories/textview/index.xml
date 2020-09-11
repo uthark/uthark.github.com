@@ -20,9 +20,7 @@
       <description>Today I want to share with you custom TextView which allows to set font to be used in xml layout.
 First, we need to declare our custom styleable
 attrs.xml:
-&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt; &amp;lt;resources&amp;gt; &amp;lt;declare-styleable name=&amp;#34;TypefaceTextView&amp;#34;&amp;gt; &amp;lt;attr name=&amp;#34;typeface&amp;#34; format=&amp;#34;string&amp;#34;/&amp;gt; &amp;lt;/declare-styleable&amp;gt; &amp;lt;/resources&amp;gt; Then we need to create subclass of TextView which will use custom attribute.
-TypefaceTextView:
-public class TypefaceTextView extends TextView { public TypefaceTextView(Context context) { this(context, null); } public TypefaceTextView(Context context, AttributeSet attrs) { this(context, attrs, 0); } public TypefaceTextView(Context context, AttributeSet attrs, int defStyle) { super(context, attrs, defStyle); TypedArray ta = context.</description>
+&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt; &amp;lt;resources&amp;gt; &amp;lt;declare-styleable name=&amp;#34;TypefaceTextView&amp;#34;&amp;gt; &amp;lt;attr name=&amp;#34;typeface&amp;#34; format=&amp;#34;string&amp;#34;/&amp;gt; &amp;lt;/declare-styleable&amp;gt; &amp;lt;/resources&amp;gt; Then we need to create subclass of TextView which will use custom attribute.</description>
     </item>
     
   </channel>

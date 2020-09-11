@@ -28,7 +28,7 @@
     
     
     
-    <link rel="stylesheet" href="https://uthark.github.io/css/theme.67fdd3de42877d3dd583ad51bb8533496fa520bd4bac49759be34c5b49d2a259.css">
+    <link rel="stylesheet" href="https://uthark.github.io/css/theme.bb5bfcaca08d09361e860384007c0b825b7c510c697d5b6e15af71730899b64b.css">
     <link rel="stylesheet" href="https://uthark.github.io/css/uthark.css">
 
 
@@ -66,9 +66,7 @@
   <meta property="og:title" content="Использование BeanPostProcessor на примере журналирования" />
   <meta property="og:url" content="https://uthark.github.io/2012/04/20/beanpostprocessor/" />
   <meta property="og:description" content="Сегодня я хочу рассказать, как можно сделать инициализацию логгера в классе с использованием аннотаций и BeanPostProcessorОчень часто мы инициализируем логгер следующим образом:
-public class MyClass { private static final Logger LOG = LoggerFactory.getLogger(MyClass.class); } Я покажу, как сделать, чтобы можно было писать вот так:
-@Log private Logger LOG; Первым делом нам нужно объявить аннотацию:
-@Retention(RUNTIME) @Target(FIELD) @Documented public @interface Log { String category() default &#34;&#34;; } А вторым делом, написать собственный BeanPostProcessor, который бы устанавливал нам логгер:" />
+public class MyClass { private static final Logger LOG = LoggerFactory.getLogger(MyClass.class); } Я покажу, как сделать, чтобы можно было писать вот так:" />
 
   
 

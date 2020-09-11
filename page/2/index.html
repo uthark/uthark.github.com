@@ -29,7 +29,7 @@
     
     
     
-    <link rel="stylesheet" href="https://uthark.github.io/css/theme.67fdd3de42877d3dd583ad51bb8533496fa520bd4bac49759be34c5b49d2a259.css">
+    <link rel="stylesheet" href="https://uthark.github.io/css/theme.bb5bfcaca08d09361e860384007c0b825b7c510c697d5b6e15af71730899b64b.css">
     <link rel="stylesheet" href="https://uthark.github.io/css/uthark.css">
 
 
@@ -147,7 +147,7 @@
 
         
           <p>Introduction This is a dump of different things and apps I use on a daily basis. Hope you will find it useful.
-Shell/Terminal Applications  zsh — ZSH is a shell. It is very good alternative to bash which is used by default in most Linux distributions and in macOS. macOS uses very old version of bash because bash changed it&rsquo;s license and Apple doesn&rsquo;t like GPL. oh-my-zsh — framework for easy customization of ZSH.</p>
+Shell/Terminal Applications  zsh — ZSH is a shell. It is very good alternative to bash which is used by default in most Linux distributions and in macOS.</p>
 
           
               <footer>
@@ -174,8 +174,7 @@ Shell/Terminal Applications  zsh — ZSH is a shell. It is very good alternative
 
         
           <p>go-restful is a go package used for building REST-style web services. It is very powerful, but it supports JSON and XML out of the box only. Fortunately, go-restful allows to register custom serialization schemes.
-To do so, it provides a handy interface EntityReaderWriter, which contains only two methods:
-// EntityReaderWriter can read and write values using an encoding such as JSON,XML. type EntityReaderWriter interface { // Read a serialized version of the value from the request.</p>
+To do so, it provides a handy interface EntityReaderWriter, which contains only two methods:</p>
 
           
               <footer>
@@ -246,9 +245,7 @@ To do so, it provides a handy interface EntityReaderWriter, which contains only 
 
         
           <p>Often it is needed to compare two different instances of the class inside test. I.e. we save object into database, then fetch it back from db and we want to be sure if nothing was lost during saving/reading.
-In order to make such assertions more easier and maintainable one can use great Unitils library which has useful class ReflectionAssert
-First, update parent&rsquo;s pom.xml:
-&lt;properties&gt; &lt;unitils.version&gt;3.4&lt;/unitils.version&gt; &lt;/properties&gt; &lt;dependency&gt; &lt;groupId&gt;org.unitils&lt;/groupId&gt; &lt;artifactId&gt;unitils-core&lt;/artifactId&gt; &lt;version&gt;${unitils.version}&lt;/version&gt; &lt;scope&gt;test&lt;/scope&gt; &lt;/dependency&gt; Then add dependency to the child module:</p>
+In order to make such assertions more easier and maintainable one can use great Unitils library which has useful class ReflectionAssert</p>
 
           
               <footer>

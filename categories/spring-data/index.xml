@@ -19,7 +19,7 @@
       <guid>https://uthark.github.io/2014/03/01/restricting-mongo-template/</guid>
       <description>Introduction Today I want to show how one can automatically apply additional restrictions on MongoDB Queries with MongoTemplate or Spring Data Mongo.
 Implementation First, let&amp;rsquo;s introduce interface QueryModifier.
-import org.springframework.data.mongodb.core.query.Query; public interface QueryModifier { /** * Modifies source query according to the rules. * @param query Source query to modify. * @param collectionName name of the collection against which query will be executed. * @return Modified query. */ Query modify(Query query, String collectionName); } Implementations of this interface will pickup original query and modify it somehow.</description>
+import org.springframework.data.mongodb.core.query.Query; public interface QueryModifier { /** * Modifies source query according to the rules.</description>
     </item>
     
     <item>
@@ -29,8 +29,7 @@ import org.springframework.data.mongodb.core.query.Query; public interface Query
       
       <guid>https://uthark.github.io/2012/04/28/spring-data-jpa_28/</guid>
       <description>Очевидно, что мы не всегда можем воспользоваться автоматической генерацией кода, предоставляемой Spring Data JPA. Например, у нас слишком сложный запрос, или нам необходимо вызвать процедуру в базе данных, либо у нас сложная бизнес-логика.
-Рассмотрим следующий пример - например, нам нужна функциональность уникального счётчика, который мы решили реализовать с помощью последовательности (sequence).
-Сначала определим интерфейс, в котором опишем все методы, которые мы будем реализовывать самостоятельно. В нашем случае, это будет только один метод:</description>
+Рассмотрим следующий пример - например, нам нужна функциональность уникального счётчика, который мы решили реализовать с помощью последовательности (sequence).</description>
     </item>
     
     <item>
@@ -42,9 +41,7 @@ import org.springframework.data.mongodb.core.query.Query; public interface Query
       <description>Рассмотрим подробнее одну из наиболее полезных вещей в Spring Data JPA - генерация JPQL-запросов на основе имени метода.
 Spring Data JPA умеет автоматически генерировать запросы используя для подсказки название метода.
 Например, метод User.findByLoginAndPassword сгенерирует примерно следующий код:
-FROM User u where u.login = :login and password = :password Вообще Spring Data JPA пытается быть умным, поэтому реализация findBy{&amp;hellip;}методов ищется следующим образом:
-У @Queryследующие плюсы:
-Очевидно, что при использовании запросов нам необходимо каким-то образом указывать параметры для запросов.</description>
+FROM User u where u.</description>
     </item>
     
     <item>
@@ -54,10 +51,7 @@ FROM User u where u.login = :login and password = :password Вообще Spring 
       
       <guid>https://uthark.github.io/2012/02/23/jpa-spring-data-jpa/</guid>
       <description>Несмотря на то, что проект только недавно достиг версии 1.0, у него достаточно богатая история - раньше он развивался в рамках проекта Hades.
-Итак, для начала нам необходимо объявить DAO-интерфейс, в котором мы будем объявлять методы для работы с сущностью.
-public interface UserRepository extends CrudRepository&amp;amp;lt;User, Long&amp;amp;gt; { } Данного кода достаточно для обычного DAO с CRUD-методами.
-Полный список методов, объявленный в CrudRepository можно посмотреть в javadoc.
-В случае, если нам нужны не все методы, то есть возможность произвести наследование от интерфейса Repositoryи перенести в наследника только те методы из интерфейса CrudRepository, которые нужны.</description>
+Итак, для начала нам необходимо объявить DAO-интерфейс, в котором мы будем объявлять методы для работы с сущностью.</description>
     </item>
     
   </channel>

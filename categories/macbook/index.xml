@@ -18,8 +18,7 @@
       
       <guid>https://uthark.github.io/2014/03/05/solving-issue-with-db2-on-vmware-fusion-on-macbook-pro-2013-late/</guid>
       <description>Today I found issue running DB2 10.1 under VMWare Fusion 6.0.2 on my MacBook - all management services for db2 are starting except for the db2 instance itself.
-When I tried to start DB2 using db2start it just crashed without any additional information.
-After some googling I found out that it is due to the fact that current version of DB2 can&amp;rsquo;t handle more than 4 responses to CPUID query.</description>
+When I tried to start DB2 using db2start it just crashed without any additional information.</description>
     </item>
     
   </channel>

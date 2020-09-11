@@ -17,7 +17,7 @@
       <pubDate>Sun, 21 Mar 2010 20:54:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2010/03/21/tiddlywiki/</guid>
-      <description>/*{{{*/ version.extensions.faviconLinkMacro = {major: 0, minor: 1, revision: 0, date: new Date(2010,3,21)}; // Author: Oleg Atamanenko config.macros.faviconLink = {} config.macros.faviconLink.handler = function(place, macroName, params, wikifier, paramString) { var linkBox = createTiddlyElement(place, &amp;amp;quot;span&amp;amp;quot;, null, &amp;amp;quot;favIcon&amp;amp;quot;, &amp;amp;quot;&amp;amp;quot;); var args = paramString.parseParams(&amp;amp;quot;list&amp;amp;quot;,null,true); var link = getParam(args, &amp;amp;quot;link&amp;amp;quot;, &amp;#39;false&amp;#39;); if (link != &amp;#39;false&amp;#39;){ urlParts = link.split(&amp;#39;/&amp;#39;); imgLink = urlParts[0] + &amp;amp;quot;//&amp;amp;quot; + urlParts[2] + &amp;amp;quot;/favicon.ico&amp;amp;quot;;  var imgElement = createTiddlyElement(linkBox, &amp;amp;quot;img&amp;amp;quot;, null, &amp;amp;quot;faviconImage&amp;amp;quot;, &amp;amp;quot;&amp;amp;quot;); imgElement.</description>
+      <description>/*{{{*/ version.extensions.faviconLinkMacro = {major: 0, minor: 1, revision: 0, date: new Date(2010,3,21)}; // Author: Oleg Atamanenko config.macros.faviconLink = {} config.macros.faviconLink.handler = function(place, macroName, params, wikifier, paramString) { var linkBox = createTiddlyElement(place, &amp;amp;quot;span&amp;amp;quot;, null, &amp;amp;quot;favIcon&amp;amp;quot;, &amp;amp;quot;&amp;amp;quot;); var args = paramString.parseParams(&amp;amp;quot;list&amp;amp;quot;,null,true); var link = getParam(args, &amp;amp;quot;link&amp;amp;quot;, &amp;#39;false&amp;#39;); if (link !</description>
     </item>
     
   </channel>

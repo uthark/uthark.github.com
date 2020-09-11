@@ -29,7 +29,7 @@
     
     
     
-    <link rel="stylesheet" href="https://uthark.github.io/css/theme.67fdd3de42877d3dd583ad51bb8533496fa520bd4bac49759be34c5b49d2a259.css">
+    <link rel="stylesheet" href="https://uthark.github.io/css/theme.bb5bfcaca08d09361e860384007c0b825b7c510c697d5b6e15af71730899b64b.css">
     <link rel="stylesheet" href="https://uthark.github.io/css/uthark.css">
 
 
@@ -146,8 +146,12 @@
 
 
         
-          <p>class Person implements Serializable { static hasMany = [ scores: ScoreSheet ] static mapping = { scores joinTable: false }; } class Note implements Serializable { static belongsTo = [ person: Person ] } class Person implements Serializable { // person fields. } class Payment { Long id Long version Integer amount static mapping = { tablePerHierarchy false } } class CreditCardPayment extends Payment { String cardNumber } </p>
+          <p>class Person implements Serializable { static hasMany = [ scores: ScoreSheet ] static mapping = { scores joinTable: false }; } class Note implements Serializable { static belongsTo = [ person: Person ] } class Person implements Serializable { // person fields.</p>
 
+          
+              <footer>
+                  <a href="https://uthark.github.io/2010/04/11/gorm/" rel="full-article">Continue Reading &rarr;</a>
+              </footer>
           
 
         
@@ -168,7 +172,7 @@
 
 
         
-          <p>#!/bin/sh  # Stop amarok dbus-send --session --type=method_call --dest=org.kde.amarok /Player org.freedesktop.MediaPlayer.Stop # Logout from kopete dbus-send --session --type=method_call --dest=org.kde.kopete /Kopete org.kde.Kopete.disconnectAll # Logout from Skype skypeapi.py &#39;SET USERSTATUS OFFLINE&#39; # Lock screen dbus-send --session --type=method_call --dest=org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.Lock Детали и параметры работы команды dbus-sendописаны в man-странице#!/usr/bin/env python import dbus, sys def main(): remote_bus = dbus.SessionBus() # Check if skype is running. system_service_list = remote_bus.get_object(&#39;org.freedesktop.DBus&#39;, &#39;/org/freedesktop/DBus&#39;).ListNames() skype_api_found = 0 for service in system_service_list: if service==&#39;com.</p>
+          <p>#!/bin/sh  # Stop amarok dbus-send --session --type=method_call --dest=org.kde.amarok /Player org.freedesktop.MediaPlayer.Stop # Logout from kopete dbus-send --session --type=method_call --dest=org.kde.kopete /Kopete org.kde.Kopete.disconnectAll # Logout from Skype skypeapi.py &#39;SET USERSTATUS OFFLINE&#39; # Lock screen dbus-send --session --type=method_call --dest=org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.Lock Детали и параметры работы команды dbus-sendописаны в man-странице#!</p>
 
           
               <footer>
@@ -194,7 +198,7 @@
 
 
         
-          <p>/*{{{*/ version.extensions.faviconLinkMacro = {major: 0, minor: 1, revision: 0, date: new Date(2010,3,21)}; // Author: Oleg Atamanenko config.macros.faviconLink = {} config.macros.faviconLink.handler = function(place, macroName, params, wikifier, paramString) { var linkBox = createTiddlyElement(place, &amp;quot;span&amp;quot;, null, &amp;quot;favIcon&amp;quot;, &amp;quot;&amp;quot;); var args = paramString.parseParams(&amp;quot;list&amp;quot;,null,true); var link = getParam(args, &amp;quot;link&amp;quot;, &#39;false&#39;); if (link != &#39;false&#39;){ urlParts = link.split(&#39;/&#39;); imgLink = urlParts[0] + &amp;quot;//&amp;quot; + urlParts[2] + &amp;quot;/favicon.ico&amp;quot;;  var imgElement = createTiddlyElement(linkBox, &amp;quot;img&amp;quot;, null, &amp;quot;faviconImage&amp;quot;, &amp;quot;&amp;quot;); imgElement.</p>
+          <p>/*{{{*/ version.extensions.faviconLinkMacro = {major: 0, minor: 1, revision: 0, date: new Date(2010,3,21)}; // Author: Oleg Atamanenko config.macros.faviconLink = {} config.macros.faviconLink.handler = function(place, macroName, params, wikifier, paramString) { var linkBox = createTiddlyElement(place, &amp;quot;span&amp;quot;, null, &amp;quot;favIcon&amp;quot;, &amp;quot;&amp;quot;); var args = paramString.parseParams(&amp;quot;list&amp;quot;,null,true); var link = getParam(args, &amp;quot;link&amp;quot;, &#39;false&#39;); if (link !</p>
 
           
               <footer>
@@ -244,7 +248,7 @@
         
           <p>Выкладываю ниже список задач, которые нужно/можно выполнить для оптимизации приложения, написанного на Grails, может кому пригодится.
 Тестирование проведённых оптимизаций Первым делом необходимо разработать критерии проверки, которые позволят оценить эффективность проведённых оптимизаций.
- Установить Java Melodyплагиндля Grails для проведения анализа. Разработать скрипты для проведения нагрузочного тестирования. Прогнать скрипты. Проанализировать результаты Java Melody, выявить узкие места, произвести нужные оптимизации.  Общие оптимизации Очень часто обновление до последней версии используемых библиотек попутно улучшает производительность.</p>
+ Установить Java Melodyплагиндля Grails для проведения анализа. Разработать скрипты для проведения нагрузочного тестирования.</p>
 
           
               <footer>

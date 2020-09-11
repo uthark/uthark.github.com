@@ -37,7 +37,7 @@
       <guid>https://uthark.github.io/2009/11/14/delicious-bookmarks-google/</guid>
       <description>&amp;ldquo;browser_action&amp;rdquo;: { // 5 &amp;ldquo;name&amp;rdquo;: &amp;ldquo;Save bookmark to delicious.com&amp;rdquo;, &amp;ldquo;default_title&amp;rdquo;: &amp;ldquo;Save bookmark to delicious.com&amp;rdquo;, &amp;ldquo;default_icon&amp;rdquo;: &amp;ldquo;delicious.20.gif&amp;rdquo; // optional },
 &amp;ldquo;content_scripts&amp;rdquo;: [ // 6 { &amp;ldquo;matches&amp;rdquo;: [&amp;ldquo;http:///&amp;rdquo;, &amp;ldquo;https:///&amp;quot;], &amp;ldquo;js&amp;rdquo;: [&amp;ldquo;getDocumentSelection.js&amp;rdquo;] } ],
-&amp;ldquo;options_page&amp;rdquo;: &amp;ldquo;options.html&amp;rdquo; // 7 } Манифест - файл в формате JSON.Манифест состоит из следующих частей: name- Имя расширения version- Версия расширения background_page- основной файл с расширением. Это обычный HTML-файл с разметкой. permissions- разрешения для расширения. Указываем, что нам нужен доступ к вкладкам (tabs) и закладкам (bookmarks).</description>
+&amp;ldquo;options_page&amp;rdquo;: &amp;ldquo;options.html&amp;rdquo; // 7 } Манифест - файл в формате JSON.</description>
     </item>
     
     <item>
@@ -47,8 +47,7 @@
       
       <guid>https://uthark.github.io/2009/07/04/opera-delicious/</guid>
       <description>Так получилось, что в последнее время я стал пользоваться небезызвестной оперой.
-В связи с этим я стал искать замену часто используемым расширениям, одно из них - delicious bookmarks. Сервис del.icio.usпредоставляет букмарклеты для различных браузеров, которые позволяют сохранять закладки быстро и удобно. Вот только есть один недостаток - официальный плагин для Firefoxв свойство Notes новой закладки добавляет выделенный текст со страницы, чего букмарклет не делает.
-Посмотрев исходник букмарклета, а это обычный javascript, я добавил небольшой кусочек кода, который восстанавливает справедливость и тоже добавляет в поле Notes текст, выделенный на странице.</description>
+В связи с этим я стал искать замену часто используемым расширениям, одно из них - delicious bookmarks. Сервис del.icio.usпредоставляет букмарклеты для различных браузеров, которые позволяют сохранять закладки быстро и удобно.</description>
     </item>
     
   </channel>

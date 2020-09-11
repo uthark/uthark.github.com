@@ -19,7 +19,7 @@
       <guid>https://uthark.github.io/2014/03/01/restricting-mongo-template/</guid>
       <description>Introduction Today I want to show how one can automatically apply additional restrictions on MongoDB Queries with MongoTemplate or Spring Data Mongo.
 Implementation First, let&amp;rsquo;s introduce interface QueryModifier.
-import org.springframework.data.mongodb.core.query.Query; public interface QueryModifier { /** * Modifies source query according to the rules. * @param query Source query to modify. * @param collectionName name of the collection against which query will be executed. * @return Modified query. */ Query modify(Query query, String collectionName); } Implementations of this interface will pickup original query and modify it somehow.</description>
+import org.springframework.data.mongodb.core.query.Query; public interface QueryModifier { /** * Modifies source query according to the rules.</description>
     </item>
     
   </channel>

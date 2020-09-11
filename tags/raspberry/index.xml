@@ -12,13 +12,12 @@
     
     
     <item>
-      <title>Raspberry Pi with pi-hole</title>
+      <title>Running Pi-Hole on Raspberry Pi</title>
       <link>https://uthark.github.io/post/2020-08-31-pihole/</link>
       <pubDate>Mon, 31 Aug 2020 22:55:25 -0700</pubDate>
       
       <guid>https://uthark.github.io/post/2020-08-31-pihole/</guid>
-      <description>Several years ago I bought Raspberry Pi 3. It was a nice toy, but it was very slow and almost impossible to use, so it didn&amp;rsquo;t stick. Recently I bought new Raspberry Pi 4 because it has much better hardware (especially 8GB RAM option).
-Idea was to use it as a mini-server and run pi-hole on it. In general, it was a success, after installing raspbian, I installed docker on it and run pi-hole docker installation.</description>
+      <description>Several years ago I bought Raspberry Pi 3. It was a nice toy, but it was very slow and almost impossible to use, so it didn&amp;rsquo;t stick. Recently I bought new Raspberry Pi 4 because it has much better hardware (especially 8GB RAM option).</description>
     </item>
     
   </channel>

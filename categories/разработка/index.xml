@@ -18,8 +18,7 @@
       
       <guid>https://uthark.github.io/2012/04/28/spring-data-jpa_28/</guid>
       <description>Очевидно, что мы не всегда можем воспользоваться автоматической генерацией кода, предоставляемой Spring Data JPA. Например, у нас слишком сложный запрос, или нам необходимо вызвать процедуру в базе данных, либо у нас сложная бизнес-логика.
-Рассмотрим следующий пример - например, нам нужна функциональность уникального счётчика, который мы решили реализовать с помощью последовательности (sequence).
-Сначала определим интерфейс, в котором опишем все методы, которые мы будем реализовывать самостоятельно. В нашем случае, это будет только один метод:</description>
+Рассмотрим следующий пример - например, нам нужна функциональность уникального счётчика, который мы решили реализовать с помощью последовательности (sequence).</description>
     </item>
     
     <item>
@@ -29,9 +28,7 @@
       
       <guid>https://uthark.github.io/2012/04/20/beanpostprocessor/</guid>
       <description>Сегодня я хочу рассказать, как можно сделать инициализацию логгера в классе с использованием аннотаций и BeanPostProcessorОчень часто мы инициализируем логгер следующим образом:
-public class MyClass { private static final Logger LOG = LoggerFactory.getLogger(MyClass.class); } Я покажу, как сделать, чтобы можно было писать вот так:
-@Log private Logger LOG; Первым делом нам нужно объявить аннотацию:
-@Retention(RUNTIME) @Target(FIELD) @Documented public @interface Log { String category() default &amp;#34;&amp;#34;; } А вторым делом, написать собственный BeanPostProcessor, который бы устанавливал нам логгер:</description>
+public class MyClass { private static final Logger LOG = LoggerFactory.getLogger(MyClass.class); } Я покажу, как сделать, чтобы можно было писать вот так:</description>
     </item>
     
     <item>
@@ -42,7 +39,7 @@ public class MyClass { private static final Logger LOG = LoggerFactory.getLogger
       <guid>https://uthark.github.io/2012/04/20/blog-post/</guid>
       <description>Казалось бы, есть простейшая задача - преобразовать строковое представление даты в объект класса java.util.Date.
 Как оказалось, иногда использование DateFormat не помогает. В случае, если строка - это заголовок Dateиз письма, то нам нужно использовать javax.mail.internet.MailDateFormatдля преобразования такой строки.
-String dateStr = ... Date parsedDate = new MailDateFormat().parse(dateStr); </description>
+String dateStr = .</description>
     </item>
     
     <item>
@@ -52,10 +49,7 @@ String dateStr = ... Date parsedDate = new MailDateFormat().parse(dateStr); </de
       
       <guid>https://uthark.github.io/2012/02/23/jpa-spring-data-jpa/</guid>
       <description>Несмотря на то, что проект только недавно достиг версии 1.0, у него достаточно богатая история - раньше он развивался в рамках проекта Hades.
-Итак, для начала нам необходимо объявить DAO-интерфейс, в котором мы будем объявлять методы для работы с сущностью.
-public interface UserRepository extends CrudRepository&amp;amp;lt;User, Long&amp;amp;gt; { } Данного кода достаточно для обычного DAO с CRUD-методами.
-Полный список методов, объявленный в CrudRepository можно посмотреть в javadoc.
-В случае, если нам нужны не все методы, то есть возможность произвести наследование от интерфейса Repositoryи перенести в наследника только те методы из интерфейса CrudRepository, которые нужны.</description>
+Итак, для начала нам необходимо объявить DAO-интерфейс, в котором мы будем объявлять методы для работы с сущностью.</description>
     </item>
     
     <item>
@@ -64,9 +58,7 @@ public interface UserRepository extends CrudRepository&amp;amp;lt;User, Long&amp
       <pubDate>Thu, 09 Feb 2012 01:05:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2012/02/09/java-rest/</guid>
-      <description>import javax.ws.rs.*; import javax.ws.rs.core.MediaType; @Path(&amp;#34;/service/entity&amp;#34;) @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON}) public interface EntityRestService { @GET @Path(&amp;#34;/all&amp;#34;) EntityList listAll(); @GET @Path(&amp;#34;/{id}&amp;#34;) Entity findById(@PathParam(&amp;#34;id&amp;#34;) Integer id); } Создаём интерфейс, в котором расставляем JAX-RS аннотации. Аннотация @Pathуказывает путь, по которому будет доступен наш сервис. Аннотация @GETопределяет, какой HTTP-запрос будет обрабатываться данным методом. Аннотация @Producesпозволяет указать, в каком формате данный сервис предоставляет результаты.
-Конфигурация очень проста, во-первых, нам нужно добавить обновить pom.xmlи добавить необходимые зависимости:
-Добавляем compile-time зависимость на JAX-RS API</description>
+      <description>import javax.ws.rs.*; import javax.ws.rs.core.MediaType; @Path(&amp;#34;/service/entity&amp;#34;) @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON}) public interface EntityRestService { @GET @Path(&amp;#34;/all&amp;#34;) EntityList listAll(); @GET @Path(&amp;#34;/{id}&amp;#34;) Entity findById(@PathParam(&amp;#34;id&amp;#34;) Integer id); } Создаём интерфейс, в котором расставляем JAX-RS аннотации. Аннотация @Pathуказывает путь, по которому будет доступен наш сервис. Аннотация @GETопределяет, какой HTTP-запрос будет обрабатываться данным методом.</description>
     </item>
     
     <item>
@@ -78,8 +70,7 @@ public interface UserRepository extends CrudRepository&amp;amp;lt;User, Long&amp
       <description>Наверно, вы уже сталкивались с таким понятием, как AOП - аспектно-ориентированное программирование.
 Обычно, про него вспоминают, когда говорят про декларативное использование транзакций, про проверку прав доступа, либо про реализацию журналирования.
 Но это не единственные области применения АОП.
-Я хочу показать ещё пару областей применения из реальных проектов:
- Модификация исходного кода для реализации дополнительных возможностей. Принудительная проверка контракта между модулями.  Модификация исходного кода для реализации дополнительных возможностей Предположим, что у нас есть модуль в приложении, который предоставляет нужную нам функциональность.</description>
+Я хочу показать ещё пару областей применения из реальных проектов:</description>
     </item>
     
     <item>
@@ -88,7 +79,7 @@ public interface UserRepository extends CrudRepository&amp;amp;lt;User, Long&amp
       <pubDate>Mon, 06 Dec 2010 23:11:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2010/12/06/blog-post/</guid>
-      <description>import org.apache.http.HttpEntity; import org.apache.http.HttpResponse; import org.apache.http.NameValuePair; import org.apache.http.client.ClientProtocolException; import org.apache.http.client.methods.HttpGet; import org.apache.http.client.utils.URIUtils; import org.apache.http.client.utils.URLEncodedUtils; import org.apache.http.impl.client.DefaultHttpClient; import org.apache.http.message.BasicNameValuePair; import org.apache.http.util.EntityUtils; import org.json.JSONException; import org.json.JSONObject; import android.util.Log; import java.io.IOException; import java.net.URI; import java.net.URISyntaxException; import java.util.ArrayList; import java.util.List; /** * Helper class to work with bitly. * * @author Oleg Atamanenko * @since 06-Dec-2010 12:49:36 */ public class Bitly { private static final String TAG = &amp;#34;Bitly&amp;#34;; private static final String SHORTEN = &amp;#34;/v3/shorten&amp;#34;; private static final String API_URL = &amp;#34;api.</description>
+      <description>import org.apache.http.HttpEntity; import org.apache.http.HttpResponse; import org.apache.http.NameValuePair; import org.apache.http.client.ClientProtocolException; import org.apache.http.client.methods.HttpGet; import org.apache.http.client.utils.URIUtils; import org.apache.http.client.utils.URLEncodedUtils; import org.apache.http.impl.client.DefaultHttpClient; import org.apache.http.message.BasicNameValuePair; import org.apache.http.util.EntityUtils; import org.json.JSONException; import org.json.JSONObject; import android.util.Log; import java.io.IOException; import java.net.URI; import java.net.URISyntaxException; import java.util.ArrayList; import java.util.List; /** * Helper class to work with bitly.</description>
     </item>
     
     <item>
@@ -106,7 +97,7 @@ public interface UserRepository extends CrudRepository&amp;amp;lt;User, Long&amp
       <pubDate>Sun, 11 Apr 2010 11:45:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2010/04/11/gorm/</guid>
-      <description>class Person implements Serializable { static hasMany = [ scores: ScoreSheet ] static mapping = { scores joinTable: false }; } class Note implements Serializable { static belongsTo = [ person: Person ] } class Person implements Serializable { // person fields. } class Payment { Long id Long version Integer amount static mapping = { tablePerHierarchy false } } class CreditCardPayment extends Payment { String cardNumber } </description>
+      <description>class Person implements Serializable { static hasMany = [ scores: ScoreSheet ] static mapping = { scores joinTable: false }; } class Note implements Serializable { static belongsTo = [ person: Person ] } class Person implements Serializable { // person fields.</description>
     </item>
     
     <item>
@@ -115,7 +106,7 @@ public interface UserRepository extends CrudRepository&amp;amp;lt;User, Long&amp
       <pubDate>Mon, 22 Mar 2010 23:50:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2010/03/22/skype-d-bus-python/</guid>
-      <description>#!/bin/sh  # Stop amarok dbus-send --session --type=method_call --dest=org.kde.amarok /Player org.freedesktop.MediaPlayer.Stop # Logout from kopete dbus-send --session --type=method_call --dest=org.kde.kopete /Kopete org.kde.Kopete.disconnectAll # Logout from Skype skypeapi.py &amp;#39;SET USERSTATUS OFFLINE&amp;#39; # Lock screen dbus-send --session --type=method_call --dest=org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.Lock Детали и параметры работы команды dbus-sendописаны в man-странице#!/usr/bin/env python import dbus, sys def main(): remote_bus = dbus.SessionBus() # Check if skype is running. system_service_list = remote_bus.get_object(&amp;#39;org.freedesktop.DBus&amp;#39;, &amp;#39;/org/freedesktop/DBus&amp;#39;).ListNames() skype_api_found = 0 for service in system_service_list: if service==&amp;#39;com.</description>
+      <description>#!/bin/sh  # Stop amarok dbus-send --session --type=method_call --dest=org.kde.amarok /Player org.freedesktop.MediaPlayer.Stop # Logout from kopete dbus-send --session --type=method_call --dest=org.kde.kopete /Kopete org.kde.Kopete.disconnectAll # Logout from Skype skypeapi.py &amp;#39;SET USERSTATUS OFFLINE&amp;#39; # Lock screen dbus-send --session --type=method_call --dest=org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.Lock Детали и параметры работы команды dbus-sendописаны в man-странице#!</description>
     </item>
     
     <item>
@@ -124,7 +115,7 @@ public interface UserRepository extends CrudRepository&amp;amp;lt;User, Long&amp
       <pubDate>Sun, 21 Mar 2010 20:54:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2010/03/21/tiddlywiki/</guid>
-      <description>/*{{{*/ version.extensions.faviconLinkMacro = {major: 0, minor: 1, revision: 0, date: new Date(2010,3,21)}; // Author: Oleg Atamanenko config.macros.faviconLink = {} config.macros.faviconLink.handler = function(place, macroName, params, wikifier, paramString) { var linkBox = createTiddlyElement(place, &amp;amp;quot;span&amp;amp;quot;, null, &amp;amp;quot;favIcon&amp;amp;quot;, &amp;amp;quot;&amp;amp;quot;); var args = paramString.parseParams(&amp;amp;quot;list&amp;amp;quot;,null,true); var link = getParam(args, &amp;amp;quot;link&amp;amp;quot;, &amp;#39;false&amp;#39;); if (link != &amp;#39;false&amp;#39;){ urlParts = link.split(&amp;#39;/&amp;#39;); imgLink = urlParts[0] + &amp;amp;quot;//&amp;amp;quot; + urlParts[2] + &amp;amp;quot;/favicon.ico&amp;amp;quot;;  var imgElement = createTiddlyElement(linkBox, &amp;amp;quot;img&amp;amp;quot;, null, &amp;amp;quot;faviconImage&amp;amp;quot;, &amp;amp;quot;&amp;amp;quot;); imgElement.</description>
+      <description>/*{{{*/ version.extensions.faviconLinkMacro = {major: 0, minor: 1, revision: 0, date: new Date(2010,3,21)}; // Author: Oleg Atamanenko config.macros.faviconLink = {} config.macros.faviconLink.handler = function(place, macroName, params, wikifier, paramString) { var linkBox = createTiddlyElement(place, &amp;amp;quot;span&amp;amp;quot;, null, &amp;amp;quot;favIcon&amp;amp;quot;, &amp;amp;quot;&amp;amp;quot;); var args = paramString.parseParams(&amp;amp;quot;list&amp;amp;quot;,null,true); var link = getParam(args, &amp;amp;quot;link&amp;amp;quot;, &amp;#39;false&amp;#39;); if (link !</description>
     </item>
     
     <item>
@@ -133,7 +124,7 @@ public interface UserRepository extends CrudRepository&amp;amp;lt;User, Long&amp
       <pubDate>Fri, 05 Feb 2010 01:20:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2010/02/05/blog-post/</guid>
-      <description>Summary: Некоторые особенности вложенных транзакций.Иногда бывает так, что при обработке запроса необходимо открыть ещё одну транзакцию в рамках текущей транзакции. Это называется вложенной транзакцией. Очень многие базы данных не поддерживают вложенные транзакции вообще, например, MySQL и Oracle. А те, что поддерживают, делают это на минимальном уровне, например, Sybase поддерживает только псевдовложенные транзакции.Вложенные транзакции могут быть следующих видов:begin tran select @@trancount /* @@trancount = 1 */ begin tran select @@trancount /* @@trancount = 2 */ begin tran select @@trancount /* @@trancount = 3 */ commit tran commit tran commit tran select @@trancount /* @@ trancount = 0 */ </description>
+      <description>Summary: Некоторые особенности вложенных транзакций.Иногда бывает так, что при обработке запроса необходимо открыть ещё одну транзакцию в рамках текущей транзакции. Это называется вложенной транзакцией. Очень многие базы данных не поддерживают вложенные транзакции вообще, например, MySQL и Oracle. А те, что поддерживают, делают это на минимальном уровне, например, Sybase поддерживает только псевдовложенные транзакции.</description>
     </item>
     
     <item>
@@ -144,8 +135,7 @@ public interface UserRepository extends CrudRepository&amp;amp;lt;User, Long&amp
       <guid>https://uthark.github.io/2009/07/07/blog-post/</guid>
       <description>Здравствуйте.
 Я считаю, что разработчику всегда стоит иметь представление о том, как работают низлежащие абстракции. Хотя бы потому, что часто абстракциибываютпротекающими.
-А веду я это к тому, что когда фреймворк вываливает стектрейс с несколькими вложенными (и, часто, для непосвященных непонятными) исключениями, то бывает непонятно, что с этим делать, особенно, если не знаешь, как реализована абстракция.
-Иногда бывает нужно хранить двунаправленные связи между таблицами. Например, есть игрок и есть его статистика и нужно, чтобы каждая из сущностей знала про другую.</description>
+А веду я это к тому, что когда фреймворк вываливает стектрейс с несколькими вложенными (и, часто, для непосвященных непонятными) исключениями, то бывает непонятно, что с этим делать, особенно, если не знаешь, как реализована абстракция.</description>
     </item>
     
     <item>
@@ -154,8 +144,7 @@ public interface UserRepository extends CrudRepository&amp;amp;lt;User, Long&amp
       <pubDate>Sat, 06 Jun 2009 22:19:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2009/06/06/spring-roo-2/</guid>
-      <description>Action.java Класс содержит только полезную с точки зрения назначения класса информацию. По сути, то, что вводит разработчик в консоль Roo аккумулируется здесь. Весь дополнительный код разносится по другим классам.  @Entity //1 @RooJavaBean //2 @RooToString //3 @RooEntity(finders = { &amp;#34;findActionsByName&amp;#34; }) //4 public class Action { @NotNull @Size(min = 1, max = 80) private String name; @Size(max = 1024) private String description; } Мы видим, что:
- Класс является JPA-сущностью.</description>
+      <description>Action.java Класс содержит только полезную с точки зрения назначения класса информацию. По сути, то, что вводит разработчик в консоль Roo аккумулируется здесь. Весь дополнительный код разносится по другим классам.  @Entity //1 @RooJavaBean //2 @RooToString //3 @RooEntity(finders = { &amp;#34;findActionsByName&amp;#34; }) //4 public class Action { @NotNull @Size(min = 1, max = 80) private String name; @Size(max = 1024) private String description; } Мы видим, что:</description>
     </item>
     
     <item>
@@ -174,8 +163,7 @@ public interface UserRepository extends CrudRepository&amp;amp;lt;User, Long&amp
       
       <guid>https://uthark.github.io/2009/05/27/fixed-price-2/</guid>
       <description>Причин для написания плохого кода может быть несколько. Некоторые из них лежат на поверхности:
-Невнимательность- через это проходят почти все. Почти каждый сможет вспомнить случай, когда не был сделан svn addперед коммитом. Эта проблема решается обычно самомотивацией человека на хороший код. Впрочем, команда и сервер непрерывной интеграции тоже прилагают усилия для того, чтобы человек проверил ещё раз то, что он хочет выложить в репозиторий.
-Некомпетентность- эта причина пересекается с недостатком опыта, но, при этом отлична от неё.</description>
+Невнимательность- через это проходят почти все. Почти каждый сможет вспомнить случай, когда не был сделан svn addперед коммитом. Эта проблема решается обычно самомотивацией человека на хороший код.</description>
     </item>
     
     <item>
@@ -186,7 +174,7 @@ public interface UserRepository extends CrudRepository&amp;amp;lt;User, Long&amp
       <guid>https://uthark.github.io/2009/05/27/fixed-price-1/</guid>
       <description>В последнее время всё чаще задумываюсь о том, почему разработчики пишут плохой и некачественный код. Под кодом я подразумеваю не только сам код, но и, в том числе, архитектуру и дизайн.
 Плохим кодом я считаю следущий:
-Если код не выполняет нефункциональные требования, то это говорит о том, что либо дизайн, либо реализация, не учли требования и это тоже не добавляет удовлетворённости конечному пользователю. Часто здесь можно провести рефакторинг, но бывает и так, что архитектурные ошибки не дают в принципе выполнить нефункциональные требования, либо их реализация требует очень больших временных затрат.</description>
+Если код не выполняет нефункциональные требования, то это говорит о том, что либо дизайн, либо реализация, не учли требования и это тоже не добавляет удовлетворённости конечному пользователю.</description>
     </item>
     
     <item>
@@ -195,8 +183,7 @@ public interface UserRepository extends CrudRepository&amp;amp;lt;User, Long&amp
       <pubDate>Fri, 24 Apr 2009 21:49:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2009/04/24/blog-post_24/</guid>
-      <description>При работе в многопользовательском окружении может возникнуть ситуация, когда разные пользователи или системы обновляют одни и те же данные. Это может привести к ситуации, когда один из пользователей изменит данные, которые уже изменял другой пользователь и приведёт либо к потере данных, либо к переводу данных в неконсистентное состояние. Для решения этой проблемы были придуманы транзакции. Целью транзакции является создание абстракции того, что каждый пользователь - единственный в системе.
-Характеристики транзакций В конце 1970-х Джим Грейвыделил следующие характеристики транзакций:</description>
+      <description>При работе в многопользовательском окружении может возникнуть ситуация, когда разные пользователи или системы обновляют одни и те же данные. Это может привести к ситуации, когда один из пользователей изменит данные, которые уже изменял другой пользователь и приведёт либо к потере данных, либо к переводу данных в неконсистентное состояние.</description>
     </item>
     
     <item>
@@ -207,7 +194,7 @@ public interface UserRepository extends CrudRepository&amp;amp;lt;User, Long&amp
       <guid>https://uthark.github.io/2009/04/22/blog-post_22/</guid>
       <description>Блокировка - в реляционных базах данных это установка метки на запись, что запись заблокирована для изменений.
 Существует два вида блокировок - оптимистичная и пессимистичная.
-Оптимистичная блокировка При оптимистичной блокировке на базе данных реальной блокировки не происходит. Вместо этого используется следующий подход - если во время выполнения транзакции она изменяет данные, которые были изменены после её начала, то транзакция прерывается с исключением. Использование оптимистичных блокировок позволяет избежать взаимных блокировок (dead-lock). Для реализации оптимистичной блокировки часто используется версионирование данных - в таблицу добавляется колонка, которая хранит текущую версию.</description>
+Оптимистичная блокировка При оптимистичной блокировке на базе данных реальной блокировки не происходит. Вместо этого используется следующий подход - если во время выполнения транзакции она изменяет данные, которые были изменены после её начала, то транзакция прерывается с исключением.</description>
     </item>
     
   </channel>

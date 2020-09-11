@@ -29,7 +29,7 @@
     
     
     
-    <link rel="stylesheet" href="https://uthark.github.io/css/theme.67fdd3de42877d3dd583ad51bb8533496fa520bd4bac49759be34c5b49d2a259.css">
+    <link rel="stylesheet" href="https://uthark.github.io/css/theme.bb5bfcaca08d09361e860384007c0b825b7c510c697d5b6e15af71730899b64b.css">
     <link rel="stylesheet" href="https://uthark.github.io/css/uthark.css">
 
 
@@ -147,9 +147,7 @@
 
         
           <p>In one of my projects I used EventBus library. The library is pretty cool and I would recommend everybody to use it.
-But I found one small issue with this library - in case you send too many events very fast (i.e. more than 1000 per second) you may face issue with application crash due to inability to create new thread.
-The problem is lying in the used ExecutorService:
-package de.</p>
+But I found one small issue with this library - in case you send too many events very fast (i.</p>
 
           
               <footer>
@@ -178,9 +176,7 @@ package de.</p>
           <p>Today I want to share with you custom TextView which allows to set font to be used in xml layout.
 First, we need to declare our custom styleable
 attrs.xml:
-&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt; &lt;resources&gt; &lt;declare-styleable name=&#34;TypefaceTextView&#34;&gt; &lt;attr name=&#34;typeface&#34; format=&#34;string&#34;/&gt; &lt;/declare-styleable&gt; &lt;/resources&gt; Then we need to create subclass of TextView which will use custom attribute.
-TypefaceTextView:
-public class TypefaceTextView extends TextView { public TypefaceTextView(Context context) { this(context, null); } public TypefaceTextView(Context context, AttributeSet attrs) { this(context, attrs, 0); } public TypefaceTextView(Context context, AttributeSet attrs, int defStyle) { super(context, attrs, defStyle); TypedArray ta = context.</p>
+&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt; &lt;resources&gt; &lt;declare-styleable name=&#34;TypefaceTextView&#34;&gt; &lt;attr name=&#34;typeface&#34; format=&#34;string&#34;/&gt; &lt;/declare-styleable&gt; &lt;/resources&gt; Then we need to create subclass of TextView which will use custom attribute.</p>
 
           
               <footer>
@@ -207,8 +203,7 @@ public class TypefaceTextView extends TextView { public TypefaceTextView(Context
 
         
           <p>Today I found issue running DB2 10.1 under VMWare Fusion 6.0.2 on my MacBook - all management services for db2 are starting except for the db2 instance itself.
-When I tried to start DB2 using db2start it just crashed without any additional information.
-After some googling I found out that it is due to the fact that current version of DB2 can&rsquo;t handle more than 4 responses to CPUID query.</p>
+When I tried to start DB2 using db2start it just crashed without any additional information.</p>
 
           
               <footer>
@@ -258,9 +253,7 @@ After some googling I found out that it is due to the fact that current version 
         
           <p>When I created About Me page I found issue with rendering: for some reason styles and some javascripts were missing on the page.
 Investigation showed that content in meta tag description contained unquoted quotes, thus resulting in broken HTML.
-After searching within octopress sources I found the issue:
-Rendering of description tag, excerpt from _includes/head.html:
-{% capture description %} {% if page.description %} {{ page.description }} {% else %} {{ content | raw_content }} {% endif %} {% endcapture %} &lt;meta name=&#34;description&#34; content=&#34;{{ description | strip_html | condense_spaces | truncate:150 }}&#34;&gt; After capturing, description is being processed with filters, defined in plugins/octopress_filters.</p>
+After searching within octopress sources I found the issue:</p>
 
           
               <footer>

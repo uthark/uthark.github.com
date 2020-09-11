@@ -163,11 +163,6 @@
   </url>
   
   <url>
-    <loc>https://uthark.github.io/tags/tag2/</loc>
-    <lastmod>2020-08-31T22:55:25-07:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://uthark.github.io/about/music-i-listen/</loc>
     <lastmod>2020-09-01T00:00:00+00:00</lastmod>
   </url>
@@ -634,6 +629,11 @@
   
   <url>
     <loc>https://uthark.github.io/2014/03/02/octopress-quote-fix/</loc>
+    <lastmod>2014-03-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://uthark.github.io/categories/games/</loc>
     <lastmod>2014-03-02T00:00:00+00:00</lastmod>
   </url>
   

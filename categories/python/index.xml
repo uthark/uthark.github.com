@@ -17,7 +17,7 @@
       <pubDate>Mon, 22 Mar 2010 23:50:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2010/03/22/skype-d-bus-python/</guid>
-      <description>#!/bin/sh  # Stop amarok dbus-send --session --type=method_call --dest=org.kde.amarok /Player org.freedesktop.MediaPlayer.Stop # Logout from kopete dbus-send --session --type=method_call --dest=org.kde.kopete /Kopete org.kde.Kopete.disconnectAll # Logout from Skype skypeapi.py &amp;#39;SET USERSTATUS OFFLINE&amp;#39; # Lock screen dbus-send --session --type=method_call --dest=org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.Lock Детали и параметры работы команды dbus-sendописаны в man-странице#!/usr/bin/env python import dbus, sys def main(): remote_bus = dbus.SessionBus() # Check if skype is running. system_service_list = remote_bus.get_object(&amp;#39;org.freedesktop.DBus&amp;#39;, &amp;#39;/org/freedesktop/DBus&amp;#39;).ListNames() skype_api_found = 0 for service in system_service_list: if service==&amp;#39;com.</description>
+      <description>#!/bin/sh  # Stop amarok dbus-send --session --type=method_call --dest=org.kde.amarok /Player org.freedesktop.MediaPlayer.Stop # Logout from kopete dbus-send --session --type=method_call --dest=org.kde.kopete /Kopete org.kde.Kopete.disconnectAll # Logout from Skype skypeapi.py &amp;#39;SET USERSTATUS OFFLINE&amp;#39; # Lock screen dbus-send --session --type=method_call --dest=org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.Lock Детали и параметры работы команды dbus-sendописаны в man-странице#!</description>
     </item>
     
   </channel>

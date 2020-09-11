@@ -17,7 +17,7 @@
       <pubDate>Sun, 21 Mar 2010 20:54:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2010/03/21/tiddlywiki/</guid>
-      <description>/*{{{*/ version.extensions.faviconLinkMacro = {major: 0, minor: 1, revision: 0, date: new Date(2010,3,21)}; // Author: Oleg Atamanenko config.macros.faviconLink = {} config.macros.faviconLink.handler = function(place, macroName, params, wikifier, paramString) { var linkBox = createTiddlyElement(place, &amp;amp;quot;span&amp;amp;quot;, null, &amp;amp;quot;favIcon&amp;amp;quot;, &amp;amp;quot;&amp;amp;quot;); var args = paramString.parseParams(&amp;amp;quot;list&amp;amp;quot;,null,true); var link = getParam(args, &amp;amp;quot;link&amp;amp;quot;, &amp;#39;false&amp;#39;); if (link != &amp;#39;false&amp;#39;){ urlParts = link.split(&amp;#39;/&amp;#39;); imgLink = urlParts[0] + &amp;amp;quot;//&amp;amp;quot; + urlParts[2] + &amp;amp;quot;/favicon.ico&amp;amp;quot;;  var imgElement = createTiddlyElement(linkBox, &amp;amp;quot;img&amp;amp;quot;, null, &amp;amp;quot;faviconImage&amp;amp;quot;, &amp;amp;quot;&amp;amp;quot;); imgElement.</description>
+      <description>/*{{{*/ version.extensions.faviconLinkMacro = {major: 0, minor: 1, revision: 0, date: new Date(2010,3,21)}; // Author: Oleg Atamanenko config.macros.faviconLink = {} config.macros.faviconLink.handler = function(place, macroName, params, wikifier, paramString) { var linkBox = createTiddlyElement(place, &amp;amp;quot;span&amp;amp;quot;, null, &amp;amp;quot;favIcon&amp;amp;quot;, &amp;amp;quot;&amp;amp;quot;); var args = paramString.parseParams(&amp;amp;quot;list&amp;amp;quot;,null,true); var link = getParam(args, &amp;amp;quot;link&amp;amp;quot;, &amp;#39;false&amp;#39;); if (link !</description>
     </item>
     
     <item>
@@ -26,7 +26,7 @@
       <pubDate>Mon, 14 Dec 2009 23:14:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2009/12/14/autofs-nfs/</guid>
-      <description>Summary: В данной заметке описана настройка autofs для доступа к сетевым ресурсам, доступным по NFS.Последние несколько лет (с тех пор, как количество компьютеров дома стало больше одного) возникла проблема беспрепятственного доступа к данным, хранящимся на одном компьютере с другого.Было найдено самое простое решение - NFS.Как выяснилось позже это было не самое удачное решение - ноутбук не всегда находился дома, а, значит, домашние сетевые ресурсы не всегда доступны. Соответственно, при загрузке операционной системы происходили задержки из-за поиска компьютера с сетевыми ресурсами.</description>
+      <description>Summary: В данной заметке описана настройка autofs для доступа к сетевым ресурсам, доступным по NFS.Последние несколько лет (с тех пор, как количество компьютеров дома стало больше одного) возникла проблема беспрепятственного доступа к данным, хранящимся на одном компьютере с другого.Было найдено самое простое решение - NFS.</description>
     </item>
     
     <item>
@@ -37,7 +37,7 @@
       <guid>https://uthark.github.io/2009/11/14/delicious-bookmarks-google/</guid>
       <description>&amp;ldquo;browser_action&amp;rdquo;: { // 5 &amp;ldquo;name&amp;rdquo;: &amp;ldquo;Save bookmark to delicious.com&amp;rdquo;, &amp;ldquo;default_title&amp;rdquo;: &amp;ldquo;Save bookmark to delicious.com&amp;rdquo;, &amp;ldquo;default_icon&amp;rdquo;: &amp;ldquo;delicious.20.gif&amp;rdquo; // optional },
 &amp;ldquo;content_scripts&amp;rdquo;: [ // 6 { &amp;ldquo;matches&amp;rdquo;: [&amp;ldquo;http:///&amp;rdquo;, &amp;ldquo;https:///&amp;quot;], &amp;ldquo;js&amp;rdquo;: [&amp;ldquo;getDocumentSelection.js&amp;rdquo;] } ],
-&amp;ldquo;options_page&amp;rdquo;: &amp;ldquo;options.html&amp;rdquo; // 7 } Манифест - файл в формате JSON.Манифест состоит из следующих частей: name- Имя расширения version- Версия расширения background_page- основной файл с расширением. Это обычный HTML-файл с разметкой. permissions- разрешения для расширения. Указываем, что нам нужен доступ к вкладкам (tabs) и закладкам (bookmarks).</description>
+&amp;ldquo;options_page&amp;rdquo;: &amp;ldquo;options.html&amp;rdquo; // 7 } Манифест - файл в формате JSON.</description>
     </item>
     
   </channel>

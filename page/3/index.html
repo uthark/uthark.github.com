@@ -29,7 +29,7 @@
     
     
     
-    <link rel="stylesheet" href="https://uthark.github.io/css/theme.67fdd3de42877d3dd583ad51bb8533496fa520bd4bac49759be34c5b49d2a259.css">
+    <link rel="stylesheet" href="https://uthark.github.io/css/theme.bb5bfcaca08d09361e860384007c0b825b7c510c697d5b6e15af71730899b64b.css">
     <link rel="stylesheet" href="https://uthark.github.io/css/uthark.css">
 
 
@@ -148,8 +148,7 @@
         
           <p>AssertJ is a library which provides fluent strongly-typed assertions to use in unit tests.
 Example of assertions written with AssertJ:
-import io.github.uthark.blog.assertj.Assertions.assertThat; // ... within @Test User result = userDao.findByLogin(&#34;username&#34;); assertThat(result). isNotNull(). isActive(). hasLogin(&#34;username&#34;); As you can see assertions look much more readable. The integration of assertj into Maven project is very easy:
- Update pom.xml in parent module  &lt;properties&gt; &lt;assertj-core.version&gt;1.6.0&lt;/assertj-core.version&gt; &lt;assertj-assertions-generator-maven-plugin.version&gt;1.2.0&lt;/assertj-assertions-generator-maven-plugin.version&gt; &lt;/properties&gt; &lt;dependencyManagement&gt; &lt;dependency&gt; &lt;groupId&gt;org.assertj&lt;/groupId&gt; &lt;artifactId&gt;assertj-core&lt;/artifactId&gt; &lt;version&gt;${assertj-core.version}&lt;/version&gt; &lt;scope&gt;test&lt;/scope&gt; &lt;/dependency&gt; &lt;/dependencyManagement&gt; &lt;pluginManagement&gt; &lt;plugin&gt; &lt;groupId&gt;org.</p>
+import io.github.uthark.blog.assertj.Assertions.assertThat; // ... within @Test User result = userDao.findByLogin(&#34;username&#34;); assertThat(result). isNotNull(). isActive(). hasLogin(&#34;username&#34;); As you can see assertions look much more readable.</p>
 
           
               <footer>
@@ -177,10 +176,7 @@ import io.github.uthark.blog.assertj.Assertions.assertThat; // ... within @Test 
         
           <p>In this post I will show how one can implement custom JUnit @Rule.
 As an example let&rsquo;s take Mockito and implement custom rule which will initialize Mocks in test class.
-By default, Mockito provides the following methods of mock initialization:
-  Using Mockito.mock
-Initialize mocks with Mockito.mock:
-public void FooTest { private Foo foo; @Before public void setUp() { FooDependency dep = Mockito.mock(FooDependency.class); foo = new Foo(dep); } } This is the simplest case.</p>
+By default, Mockito provides the following methods of mock initialization:</p>
 
           
               <footer>

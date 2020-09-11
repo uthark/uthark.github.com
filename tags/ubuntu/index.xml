@@ -19,10 +19,7 @@
       <guid>https://uthark.github.io/post/2020-09-01-raspberry-pi-ubuntu-arm64/</guid>
       <description>After discovering that by default Raspberry installs 32-bit Raspbian OS, I wanted to reinstall it with a 64 bit - this would allow to run Kubernetes on Raspberry
 Decided to go with Ubuntu Server 64.
-Installed it on SD Card with Raspberry Pi Imager.
-After boot found out that need to connect it to WI-FI.
-Configuring wpa_supplicant didn&amp;rsquo;t help, still had issues with not getting IP Address from DHCP.
-Finally, did the following:</description>
+Installed it on SD Card with Raspberry Pi Imager.</description>
     </item>
     
   </channel>

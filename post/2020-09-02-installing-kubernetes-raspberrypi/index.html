@@ -28,7 +28,7 @@
     
     
     
-    <link rel="stylesheet" href="https://uthark.github.io/css/theme.67fdd3de42877d3dd583ad51bb8533496fa520bd4bac49759be34c5b49d2a259.css">
+    <link rel="stylesheet" href="https://uthark.github.io/css/theme.bb5bfcaca08d09361e860384007c0b825b7c510c697d5b6e15af71730899b64b.css">
     <link rel="stylesheet" href="https://uthark.github.io/css/uthark.css">
 
 
@@ -67,8 +67,7 @@
   <meta property="og:url" content="https://uthark.github.io/post/2020-09-02-installing-kubernetes-raspberrypi/" />
   <meta property="og:description" content="Installing kubernetes on Raspberry Pi is easy, but there are few caveats that you need to be aware of.
 arm64 is preferred, because 64-bit allows you to use &gt; 4GB of RAM per process.
-Enable cgroups Kubernetes relies on cgroups for enforcing limits for the containers, so kernel needs to be booted with cgroups support. On Raspberry, edit /boot/firmware/cmdline.txt and add the following options:
-cgroup_enable=memory swapaccount=1 cgroup_memory=1 cgroup_enable=cpuset Reboot after making the changes." />
+Enable cgroups Kubernetes relies on cgroups for enforcing limits for the containers, so kernel needs to be booted with cgroups support." />
 
   
 

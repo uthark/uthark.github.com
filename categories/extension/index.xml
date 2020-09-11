@@ -17,7 +17,7 @@
       <pubDate>Tue, 24 Nov 2009 23:09:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2009/11/24/google-chrome/</guid>
-      <description>В продолжение предыдущей заметкиЛогично предположить, что у расширений могут быть настройки. В Google Chrome/Chromium для этого есть специальный API.Для того, чтобы создать собственную страницу настроек необходимо сделать следующее: Объявить в манифесте страницу настроек  Реализовать страницу с настройками.Страница с настройками - это обычная HTML-страничка. Для доступа к настройкам Google Chrome предоставляет объект localStorage, который умеет сохранять и возвращать значения.С объектом localStorageработа идёт как с обычным hash.   </description>
+      <description>В продолжение предыдущей заметкиЛогично предположить, что у расширений могут быть настройки. В Google Chrome/Chromium для этого есть специальный API.Для того, чтобы создать собственную страницу настроек необходимо сделать следующее: Объявить в манифесте страницу настроек  Реализовать страницу с настройками.Страница с настройками - это обычная HTML-страничка.</description>
     </item>
     
     <item>
@@ -28,7 +28,7 @@
       <guid>https://uthark.github.io/2009/11/14/delicious-bookmarks-google/</guid>
       <description>&amp;ldquo;browser_action&amp;rdquo;: { // 5 &amp;ldquo;name&amp;rdquo;: &amp;ldquo;Save bookmark to delicious.com&amp;rdquo;, &amp;ldquo;default_title&amp;rdquo;: &amp;ldquo;Save bookmark to delicious.com&amp;rdquo;, &amp;ldquo;default_icon&amp;rdquo;: &amp;ldquo;delicious.20.gif&amp;rdquo; // optional },
 &amp;ldquo;content_scripts&amp;rdquo;: [ // 6 { &amp;ldquo;matches&amp;rdquo;: [&amp;ldquo;http:///&amp;rdquo;, &amp;ldquo;https:///&amp;quot;], &amp;ldquo;js&amp;rdquo;: [&amp;ldquo;getDocumentSelection.js&amp;rdquo;] } ],
-&amp;ldquo;options_page&amp;rdquo;: &amp;ldquo;options.html&amp;rdquo; // 7 } Манифест - файл в формате JSON.Манифест состоит из следующих частей: name- Имя расширения version- Версия расширения background_page- основной файл с расширением. Это обычный HTML-файл с разметкой. permissions- разрешения для расширения. Указываем, что нам нужен доступ к вкладкам (tabs) и закладкам (bookmarks).</description>
+&amp;ldquo;options_page&amp;rdquo;: &amp;ldquo;options.html&amp;rdquo; // 7 } Манифест - файл в формате JSON.</description>
     </item>
     
   </channel>

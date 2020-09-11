@@ -18,9 +18,7 @@
       
       <guid>https://uthark.github.io/2014/03/06/limiting-threads-count-for-greenrobot-eventbus/</guid>
       <description>In one of my projects I used EventBus library. The library is pretty cool and I would recommend everybody to use it.
-But I found one small issue with this library - in case you send too many events very fast (i.e. more than 1000 per second) you may face issue with application crash due to inability to create new thread.
-The problem is lying in the used ExecutorService:
-package de.</description>
+But I found one small issue with this library - in case you send too many events very fast (i.</description>
     </item>
     
   </channel>

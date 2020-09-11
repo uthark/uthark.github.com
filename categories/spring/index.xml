@@ -19,7 +19,7 @@
       <guid>https://uthark.github.io/2014/03/01/restricting-mongo-template/</guid>
       <description>Introduction Today I want to show how one can automatically apply additional restrictions on MongoDB Queries with MongoTemplate or Spring Data Mongo.
 Implementation First, let&amp;rsquo;s introduce interface QueryModifier.
-import org.springframework.data.mongodb.core.query.Query; public interface QueryModifier { /** * Modifies source query according to the rules. * @param query Source query to modify. * @param collectionName name of the collection against which query will be executed. * @return Modified query. */ Query modify(Query query, String collectionName); } Implementations of this interface will pickup original query and modify it somehow.</description>
+import org.springframework.data.mongodb.core.query.Query; public interface QueryModifier { /** * Modifies source query according to the rules.</description>
     </item>
     
     <item>
@@ -30,8 +30,7 @@ import org.springframework.data.mongodb.core.query.Query; public interface Query
       <guid>https://uthark.github.io/2013/06/29/spring-enable-annotation/</guid>
       <description>Начиная с версии 3.1 Spring поддерживает декларативное включение необходимой функциональности через, так называемые, @Enable* аннотации. Пример таких аннотаций: org.springframework.web.servlet.config.annotation.EnableWebMvc, org.springframework.cache.annotation.EnableCaching, org.springframework.scheduling.annotation.EnableAsync и другие.
 В продолжение темы прошлого поста, я хочу показать, как можно добавить собственную @Enable аннотацию.
-Для автоматического создания клиента для REST-ресурса нам необходима следующая информация:
- Пакет, в котором искать интерфейсы, проаннотированные аннотацией @Path() Базовый адрес REST-приложения.  Для того, чтобы передать эту информацию, мы создадим два атрибута в аннотации: scanPackage() и endpoint()</description>
+Для автоматического создания клиента для REST-ресурса нам необходима следующая информация:</description>
     </item>
     
     <item>
@@ -41,9 +40,7 @@ import org.springframework.data.mongodb.core.query.Query; public interface Query
       
       <guid>https://uthark.github.io/2013/06/28/jaxrs-spring-autowiring/</guid>
       <description>Продолжая разговор о JAX RS Client API - предположим, что мы уже используем JAX-RS клиент
-У нас есть класс, который умеет создавать прокси для любого REST-интерфейса в проекте. Теперь мы хотим сделать так, чтобы эти интерфейсы можно было автоматически создавать в контексте Spring и связывать с другими бинами.
-Первое решение, которое приходит в лоб - объявить бин в конфигурации для каждого интерфейса:
-@Configuration public class SpringConfiguration { @Bean public UserRest userRest(){ List&amp;lt;?</description>
+У нас есть класс, который умеет создавать прокси для любого REST-интерфейса в проекте. Теперь мы хотим сделать так, чтобы эти интерфейсы можно было автоматически создавать в контексте Spring и связывать с другими бинами.</description>
     </item>
     
     <item>
@@ -53,9 +50,7 @@ import org.springframework.data.mongodb.core.query.Query; public interface Query
       
       <guid>https://uthark.github.io/2012/04/20/beanpostprocessor/</guid>
       <description>Сегодня я хочу рассказать, как можно сделать инициализацию логгера в классе с использованием аннотаций и BeanPostProcessorОчень часто мы инициализируем логгер следующим образом:
-public class MyClass { private static final Logger LOG = LoggerFactory.getLogger(MyClass.class); } Я покажу, как сделать, чтобы можно было писать вот так:
-@Log private Logger LOG; Первым делом нам нужно объявить аннотацию:
-@Retention(RUNTIME) @Target(FIELD) @Documented public @interface Log { String category() default &amp;#34;&amp;#34;; } А вторым делом, написать собственный BeanPostProcessor, который бы устанавливал нам логгер:</description>
+public class MyClass { private static final Logger LOG = LoggerFactory.getLogger(MyClass.class); } Я покажу, как сделать, чтобы можно было писать вот так:</description>
     </item>
     
     <item>
@@ -65,10 +60,7 @@ public class MyClass { private static final Logger LOG = LoggerFactory.getLogger
       
       <guid>https://uthark.github.io/2012/02/23/jpa-spring-data-jpa/</guid>
       <description>Несмотря на то, что проект только недавно достиг версии 1.0, у него достаточно богатая история - раньше он развивался в рамках проекта Hades.
-Итак, для начала нам необходимо объявить DAO-интерфейс, в котором мы будем объявлять методы для работы с сущностью.
-public interface UserRepository extends CrudRepository&amp;amp;lt;User, Long&amp;amp;gt; { } Данного кода достаточно для обычного DAO с CRUD-методами.
-Полный список методов, объявленный в CrudRepository можно посмотреть в javadoc.
-В случае, если нам нужны не все методы, то есть возможность произвести наследование от интерфейса Repositoryи перенести в наследника только те методы из интерфейса CrudRepository, которые нужны.</description>
+Итак, для начала нам необходимо объявить DAO-интерфейс, в котором мы будем объявлять методы для работы с сущностью.</description>
     </item>
     
   </channel>

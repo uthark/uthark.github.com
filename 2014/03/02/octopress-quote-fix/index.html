@@ -28,7 +28,7 @@
     
     
     
-    <link rel="stylesheet" href="https://uthark.github.io/css/theme.67fdd3de42877d3dd583ad51bb8533496fa520bd4bac49759be34c5b49d2a259.css">
+    <link rel="stylesheet" href="https://uthark.github.io/css/theme.bb5bfcaca08d09361e860384007c0b825b7c510c697d5b6e15af71730899b64b.css">
     <link rel="stylesheet" href="https://uthark.github.io/css/uthark.css">
 
 
@@ -67,9 +67,7 @@
   <meta property="og:url" content="https://uthark.github.io/2014/03/02/octopress-quote-fix/" />
   <meta property="og:description" content="When I created About Me page I found issue with rendering: for some reason styles and some javascripts were missing on the page.
 Investigation showed that content in meta tag description contained unquoted quotes, thus resulting in broken HTML.
-After searching within octopress sources I found the issue:
-Rendering of description tag, excerpt from _includes/head.html:
-{% capture description %} {% if page.description %} {{ page.description }} {% else %} {{ content | raw_content }} {% endif %} {% endcapture %} &lt;meta name=&#34;description&#34; content=&#34;{{ description | strip_html | condense_spaces | truncate:150 }}&#34;&gt; After capturing, description is being processed with filters, defined in plugins/octopress_filters." />
+After searching within octopress sources I found the issue:" />
 
   
 

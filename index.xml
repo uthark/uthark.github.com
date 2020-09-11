@@ -19,7 +19,7 @@
       <guid>https://uthark.github.io/post/2020-09-04-deploy-project-kubernetes-checklist/</guid>
       <description>Deploying to kubernetes is easy: create manifest with your Deployment and then kubectl apply it.
 The most basic deployment manifest looks like this:
-apiVersion: apps/v1 kind: Deployment metadata: labels: app.kubernetes.io/name: test-app name: test-app namespace: default spec: selector: matchLabels: app.kubernetes.io/name: test-app template: metadata: labels: app.kubernetes.io/name: test-app spec: containers: - name: controller image: nginx It works as is, but you may improve reliability of this deployment by configuring additional fields for the manifest.</description>
+apiVersion: apps/v1 kind: Deployment metadata: labels: app.kubernetes.io/name: test-app name: test-app namespace: default spec: selector: matchLabels: app.kubernetes.io/name: test-app template: metadata: labels: app.</description>
     </item>
     
     <item>
@@ -29,9 +29,7 @@ apiVersion: apps/v1 kind: Deployment metadata: labels: app.kubernetes.io/name: t
       
       <guid>https://uthark.github.io/post/2020-09-03-docker-best-practices/</guid>
       <description>Introduction After using docker for last several years I’d like to share best practices that works in production.
-Reduce container image size In Cloud Native world infrastructure is disposable and immutable. As result, if your kubernetes pod is rescheduled to another node, new node need to pull docker image.
-Small docker images provide the following benefits:
- Smaller attack surface. If image contain only your app binaries and direct dependencies without full blown OS, you will need to apply patches to fix vulnerabilities infrequently.</description>
+Reduce container image size In Cloud Native world infrastructure is disposable and immutable. As result, if your kubernetes pod is rescheduled to another node, new node need to pull docker image.</description>
     </item>
     
     <item>
@@ -42,8 +40,7 @@ Small docker images provide the following benefits:
       <guid>https://uthark.github.io/post/2020-09-02-installing-kubernetes-raspberrypi/</guid>
       <description>Installing kubernetes on Raspberry Pi is easy, but there are few caveats that you need to be aware of.
 arm64 is preferred, because 64-bit allows you to use &amp;gt; 4GB of RAM per process.
-Enable cgroups Kubernetes relies on cgroups for enforcing limits for the containers, so kernel needs to be booted with cgroups support. On Raspberry, edit /boot/firmware/cmdline.txt and add the following options:
-cgroup_enable=memory swapaccount=1 cgroup_memory=1 cgroup_enable=cpuset Reboot after making the changes.</description>
+Enable cgroups Kubernetes relies on cgroups for enforcing limits for the containers, so kernel needs to be booted with cgroups support.</description>
     </item>
     
     <item>
@@ -54,20 +51,16 @@ cgroup_enable=memory swapaccount=1 cgroup_memory=1 cgroup_enable=cpuset Reboot a
       <guid>https://uthark.github.io/post/2020-09-01-raspberry-pi-ubuntu-arm64/</guid>
       <description>After discovering that by default Raspberry installs 32-bit Raspbian OS, I wanted to reinstall it with a 64 bit - this would allow to run Kubernetes on Raspberry
 Decided to go with Ubuntu Server 64.
-Installed it on SD Card with Raspberry Pi Imager.
-After boot found out that need to connect it to WI-FI.
-Configuring wpa_supplicant didn&amp;rsquo;t help, still had issues with not getting IP Address from DHCP.
-Finally, did the following:</description>
+Installed it on SD Card with Raspberry Pi Imager.</description>
     </item>
     
     <item>
-      <title>Raspberry Pi with pi-hole</title>
+      <title>Running Pi-Hole on Raspberry Pi</title>
       <link>https://uthark.github.io/post/2020-08-31-pihole/</link>
       <pubDate>Mon, 31 Aug 2020 22:55:25 -0700</pubDate>
       
       <guid>https://uthark.github.io/post/2020-08-31-pihole/</guid>
-      <description>Several years ago I bought Raspberry Pi 3. It was a nice toy, but it was very slow and almost impossible to use, so it didn&amp;rsquo;t stick. Recently I bought new Raspberry Pi 4 because it has much better hardware (especially 8GB RAM option).
-Idea was to use it as a mini-server and run pi-hole on it. In general, it was a success, after installing raspbian, I installed docker on it and run pi-hole docker installation.</description>
+      <description>Several years ago I bought Raspberry Pi 3. It was a nice toy, but it was very slow and almost impossible to use, so it didn&amp;rsquo;t stick. Recently I bought new Raspberry Pi 4 because it has much better hardware (especially 8GB RAM option).</description>
     </item>
     
     <item>
@@ -86,7 +79,7 @@ Idea was to use it as a mini-server and run pi-hole on it. In general, it was a 
       
       <guid>https://uthark.github.io/post/2018-02-24-used-stuff/</guid>
       <description>Introduction This is a dump of different things and apps I use on a daily basis. Hope you will find it useful.
-Shell/Terminal Applications  zsh — ZSH is a shell. It is very good alternative to bash which is used by default in most Linux distributions and in macOS. macOS uses very old version of bash because bash changed it&amp;rsquo;s license and Apple doesn&amp;rsquo;t like GPL. oh-my-zsh — framework for easy customization of ZSH.</description>
+Shell/Terminal Applications  zsh — ZSH is a shell. It is very good alternative to bash which is used by default in most Linux distributions and in macOS.</description>
     </item>
     
     <item>
@@ -105,8 +98,7 @@ Shell/Terminal Applications  zsh — ZSH is a shell. It is very good alternative
       
       <guid>https://uthark.github.io/post/2018-01-22-go-restful-yaml/</guid>
       <description>go-restful is a go package used for building REST-style web services. It is very powerful, but it supports JSON and XML out of the box only. Fortunately, go-restful allows to register custom serialization schemes.
-To do so, it provides a handy interface EntityReaderWriter, which contains only two methods:
-// EntityReaderWriter can read and write values using an encoding such as JSON,XML. type EntityReaderWriter interface { // Read a serialized version of the value from the request.</description>
+To do so, it provides a handy interface EntityReaderWriter, which contains only two methods:</description>
     </item>
     
     <item>
@@ -124,7 +116,7 @@ To do so, it provides a handy interface EntityReaderWriter, which contains only 
       <pubDate>Fri, 16 May 2014 11:02:55 +0000</pubDate>
       
       <guid>https://uthark.github.io/2014/05/16/reading-list-2014-may-16/</guid>
-      <description>Announcements  1 Billion Saves to Pocket! Spring for Apache Hadoop 2.0 RC3 released Spring Integration Java DSL Milestone 1 Released Reactor 1.1.0.RELEASE now available Spring Tool Suite and Groovy/Grails Tool Suite 3.5.1 released spring-projects/spring-hateoas at 0.11.0.RELEASE · GitHub Google Play services 4.4  Software development  ADAP Open Source REST API Layer For LDAP ADB Debugging: How to test your Android APK on Fire TV Amazon CloudFront Joins the AWS Free Usage Tier Amazon WorkSpaces Now Available in Europe Android Explorations : Using KitKat verified boot Announcing Google Cloud Storage JSON API General Availability Atom: free and open source for everyone Background Task - a.</description>
+      <description>Announcements  1 Billion Saves to Pocket! Spring for Apache Hadoop 2.0 RC3 released Spring Integration Java DSL Milestone 1 Released Reactor 1.1.0.RELEASE now available Spring Tool Suite and Groovy/Grails Tool Suite 3.5.1 released spring-projects/spring-hateoas at 0.11.0.RELEASE · GitHub Google Play services 4.</description>
     </item>
     
     <item>
@@ -133,7 +125,7 @@ To do so, it provides a handy interface EntityReaderWriter, which contains only 
       <pubDate>Mon, 05 May 2014 16:03:09 +0000</pubDate>
       
       <guid>https://uthark.github.io/2014/05/05/reading-list-2014-may-05/</guid>
-      <description>Announcements  Groovy 2.3.0 is out!  General  A Eulogy for Twitter | Adrienne LaFrance and Robinson Meyer How a hoax turned into the biggest Dutch crowdfunding success in history  Software development  Analyzing a large JSON in memory Columnar Storage for Hadoop How could Scala do a merge sort? Load inheritance tree into List by Spring xkcd Phone | xkcd  </description>
+      <description>Announcements  Groovy 2.3.0 is out!  General  A Eulogy for Twitter | Adrienne LaFrance and Robinson Meyer How a hoax turned into the biggest Dutch crowdfunding success in history  Software development  Analyzing a large JSON in memory Columnar Storage for Hadoop How could Scala do a merge sort?</description>
     </item>
     
     <item>
@@ -151,7 +143,7 @@ To do so, it provides a handy interface EntityReaderWriter, which contains only 
       <pubDate>Thu, 01 May 2014 16:20:16 +0000</pubDate>
       
       <guid>https://uthark.github.io/2014/05/01/reading-list-2014-may-01/</guid>
-      <description>Announcements  New Release: Java Micro Edition (ME) 8 Spring Framework 4.0.4 released Spring Integration 4.0 Released New mobile apps for Docs, Sheets and Slides - work offline and on the go  Software development  Java Me Embedded Documentation Manifest Merger Recent File List | JavaSpecialists.eu Small and Medium tests should never fail in Continuous Integration ( CI ) Spring 4.1&amp;rsquo;s Upcoming JMS Improvements Spring Boot and Scala with sbt as the build tool Spring Integration - Configure web service client timeout Subscribe to Web Content folders and types (structures)  </description>
+      <description>Announcements  New Release: Java Micro Edition (ME) 8 Spring Framework 4.0.4 released Spring Integration 4.0 Released New mobile apps for Docs, Sheets and Slides - work offline and on the go  Software development  Java Me Embedded Documentation Manifest Merger Recent File List | JavaSpecialists.</description>
     </item>
     
     <item>
@@ -178,7 +170,7 @@ To do so, it provides a handy interface EntityReaderWriter, which contains only 
       <pubDate>Mon, 28 Apr 2014 16:37:56 +0000</pubDate>
       
       <guid>https://uthark.github.io/2014/04/28/reading-list-2014-april-28/</guid>
-      <description>Software development  Telerik Open Sources Kendo UI Richardson Maturity Model Network performance at AWS, Google, Rackspace and Softlayer Development &amp;ldquo;Methodologies&amp;rdquo; An Introduction to the Web Notifications API Mithril Is this what it&amp;rsquo;s supposed to feel like? One Year Later. This hilarious graph of Netflix speeds shows the importance of net neutrality  Java  JAX-RS 2.0: Custom Content Handling Difference between Connected vs Disconnected RowSet in Java JDBC RowSetProvider, RowSetFactory Example The 7 Log Management Tools Java Developers Should Know Jibx Jersey2 Integration Using Http Session with Spring based web applications  </description>
+      <description>Software development  Telerik Open Sources Kendo UI Richardson Maturity Model Network performance at AWS, Google, Rackspace and Softlayer Development &amp;ldquo;Methodologies&amp;rdquo; An Introduction to the Web Notifications API Mithril Is this what it&amp;rsquo;s supposed to feel like? One Year Later. This hilarious graph of Netflix speeds shows the importance of net neutrality  Java  JAX-RS 2.</description>
     </item>
     
     <item>
@@ -196,7 +188,7 @@ To do so, it provides a handy interface EntityReaderWriter, which contains only 
       <pubDate>Thu, 24 Apr 2014 13:21:05 +0000</pubDate>
       
       <guid>https://uthark.github.io/2014/04/24/reading-list-2014-april-24/</guid>
-      <description>Announcements  Spring Boot 1.0.2.RELEASE Available Now Groovy 2.3 introduces traits GitLab CE 6.8 released  Software development  No, don&amp;rsquo;t enable revocation checking Productive Developers are Smart and Lazy Managers and Individual Contributors in Code Blogging and Sharing - Diversifying New Security Measures Will Affect Older (non-OAuth 2.0) Applications trigger vs triggerHandler in jQuery Bad Password Policies Why Dart Comes with a Virtual Machine Introduction to Backbone.js What to Think About During Exercise Confessions of a Full Stack DevOp Consumer-Driven Contracts: A Service Evolution Pattern IronWASP - Iron Web application Advanced Security testing Platform How &amp;lsquo;DevOps&amp;rsquo; is Killing the Developer You Don&amp;rsquo;t Read Code, You Explore It 10 Ways to Do What You Don&amp;rsquo;t Want to Do  MongoDB  Why the clock is ticking for MongoDB MongoDB is growing up maxTimeMS() and Query Optimizer Introspection in MongoDB 2.</description>
+      <description>Announcements  Spring Boot 1.0.2.RELEASE Available Now Groovy 2.3 introduces traits GitLab CE 6.8 released  Software development  No, don&amp;rsquo;t enable revocation checking Productive Developers are Smart and Lazy Managers and Individual Contributors in Code Blogging and Sharing - Diversifying New Security Measures Will Affect Older (non-OAuth 2.</description>
     </item>
     
     <item>
@@ -233,7 +225,7 @@ To do so, it provides a handy interface EntityReaderWriter, which contains only 
       
       <guid>https://uthark.github.io/2014/04/18/reading-list-2014-april-18/</guid>
       <description>Death of Gabriel Garcia Marquez is definitely the worst yesterday&amp;rsquo;s news. Read more: Gabriel Garcia Marquez dies at 87
-Announcements  CDI 1.2 Released (The Aquarium) CDI 1.2 is released | Contexts and Dependency Injection AlloyUI 2.5.0 Released AngularDart 0.10.0 (ostemad-teleportation) : breaking changes and versioning Spring XD 1.0.0.M6 Released Spring Security OAuth 2.0.0.RC1 Available The New Linode Cloud: SSDs, Double RAM &amp;amp; much more | Linode Blog  Software development  The Heartbleed Aftermath: all CloudFlare certificates revoked and reissued Starbucks Does Not Use Two-Phase Commit When two-factor authentication is not enough Big Data Quality: Certify or Govern?</description>
+Announcements  CDI 1.2 Released (The Aquarium) CDI 1.2 is released | Contexts and Dependency Injection AlloyUI 2.5.0 Released AngularDart 0.10.0 (ostemad-teleportation) : breaking changes and versioning Spring XD 1.</description>
     </item>
     
     <item>
@@ -242,7 +234,7 @@ Announcements  CDI 1.2 Released (The Aquarium) CDI 1.2 is released | Contexts an
       <pubDate>Thu, 17 Apr 2014 14:36:39 +0000</pubDate>
       
       <guid>https://uthark.github.io/2014/04/17/reading-list-2014-april-17/</guid>
-      <description>Software development  Seven Databases in Seven Days – Riak Design, Develop, and Distribute at I/O 2014 | Google Developers Blog Coloring Different Data Sources in IntelliJ IDEA Todon&amp;rsquo;t How to Level Up  Video  Fireside Chat: Android Design  Java  List of all JEPs for JDK8 JEP 174: Nashorn JavaScript Engine Asynchronous CDI Events? (The Aquarium) Conway’s Game of Life and the Flyweight Pattern We’re Hacking JDBC, so You Don’t Have To The Real Cost of Logging JSON Schema (The Aquarium) Spring MVC Test with Geb Some new Guava classes targeted for release 10 | Google Groups  Some background discussions on Java 8 Lambda, Optional and default methods in interfaces  Optional require(s) NonNull When lambdas become objects Allow default methods to override Object&amp;rsquo;s methods Checked exceptions within Block Allow lambdas to implement abstract classes  </description>
+      <description>Software development  Seven Databases in Seven Days – Riak Design, Develop, and Distribute at I/O 2014 | Google Developers Blog Coloring Different Data Sources in IntelliJ IDEA Todon&amp;rsquo;t How to Level Up  Video  Fireside Chat: Android Design  Java  List of all JEPs for JDK8 JEP 174: Nashorn JavaScript Engine Asynchronous CDI Events?</description>
     </item>
     
     <item>
@@ -251,7 +243,7 @@ Announcements  CDI 1.2 Released (The Aquarium) CDI 1.2 is released | Contexts an
       <pubDate>Wed, 16 Apr 2014 13:56:20 +0000</pubDate>
       
       <guid>https://uthark.github.io/2014/04/16/reading-list-2014-april-16/</guid>
-      <description>Announcements  Apache Hadoop 2.4.0 Apache Tomcat Native 1.1.30 released | Mladen Turk Apache Tomcat Connectors 1.2.40 released | Mladen Turk Second Service Release For Spring Data Release Train Codd Released Announcing the Release of Google App Engine 1.9.3 Google Cloud Platform expands to Asia Pacific Announcing Google BigQuery and Datastore Connectors for Hadoop Spring Integration 4.0 Release Candidate Available Final Draft of OSGi Core Release 6 available for download  Software development  The Four Parts of a Minimal Viable Product Better code through code reviews Social Processes and Heartbleed, Part 1 Angular and Durandal Converge What Heartbleed Tells Us About the Need for IT Automation No More Passwords for Apps using Login with Amazon on Kindle Fire Innodb redo log archiving  Java  10 Books Every Java Developer Should Read New BigInteger Methods in Java 8 Java 8 Friday: No More Need for ORMs Everything about Java 8 Maven and Java multi-version modules JDK 8 Security Enhancements Java 8 Nashorn Tutorial 10 Books Every Java Developer Should Read Using jOOQ with Spring: CRUD trackr: An AngularJS app with a Java 8 backend – Part I Spring expression language (spel) and Spring boot in action TimeUnit Enum in Java We hate/love lambda Inject any custom class or service into web content templates | Liferay blogs Covariant Blabbering : Damn smart idea (2) : DynamicVariable  In Russian  Эксперимент LHCb окончательно доказал реальность экзотического мезона Z(4430) FAQ: Биоархеология и трепанация Как открыли новую экзотическую частицу?</description>
+      <description>Announcements  Apache Hadoop 2.4.0 Apache Tomcat Native 1.1.30 released | Mladen Turk Apache Tomcat Connectors 1.2.40 released | Mladen Turk Second Service Release For Spring Data Release Train Codd Released Announcing the Release of Google App Engine 1.9.3 Google Cloud Platform expands to Asia Pacific Announcing Google BigQuery and Datastore Connectors for Hadoop Spring Integration 4.</description>
     </item>
     
     <item>
@@ -261,9 +253,7 @@ Announcements  CDI 1.2 Released (The Aquarium) CDI 1.2 is released | Contexts an
       
       <guid>https://uthark.github.io/2014/04/16/using-unitils-reflectionassert/</guid>
       <description>Often it is needed to compare two different instances of the class inside test. I.e. we save object into database, then fetch it back from db and we want to be sure if nothing was lost during saving/reading.
-In order to make such assertions more easier and maintainable one can use great Unitils library which has useful class ReflectionAssert
-First, update parent&amp;rsquo;s pom.xml:
-&amp;lt;properties&amp;gt; &amp;lt;unitils.version&amp;gt;3.4&amp;lt;/unitils.version&amp;gt; &amp;lt;/properties&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.unitils&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;unitils-core&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;${unitils.version}&amp;lt;/version&amp;gt; &amp;lt;scope&amp;gt;test&amp;lt;/scope&amp;gt; &amp;lt;/dependency&amp;gt; Then add dependency to the child module:</description>
+In order to make such assertions more easier and maintainable one can use great Unitils library which has useful class ReflectionAssert</description>
     </item>
     
     <item>
@@ -274,8 +264,7 @@ First, update parent&amp;rsquo;s pom.xml:
       <guid>https://uthark.github.io/2014/04/15/using-assertj/</guid>
       <description>AssertJ is a library which provides fluent strongly-typed assertions to use in unit tests.
 Example of assertions written with AssertJ:
-import io.github.uthark.blog.assertj.Assertions.assertThat; // ... within @Test User result = userDao.findByLogin(&amp;#34;username&amp;#34;); assertThat(result). isNotNull(). isActive(). hasLogin(&amp;#34;username&amp;#34;); As you can see assertions look much more readable. The integration of assertj into Maven project is very easy:
- Update pom.xml in parent module  &amp;lt;properties&amp;gt; &amp;lt;assertj-core.version&amp;gt;1.6.0&amp;lt;/assertj-core.version&amp;gt; &amp;lt;assertj-assertions-generator-maven-plugin.version&amp;gt;1.2.0&amp;lt;/assertj-assertions-generator-maven-plugin.version&amp;gt; &amp;lt;/properties&amp;gt; &amp;lt;dependencyManagement&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.assertj&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;assertj-core&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;${assertj-core.version}&amp;lt;/version&amp;gt; &amp;lt;scope&amp;gt;test&amp;lt;/scope&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;/dependencyManagement&amp;gt; &amp;lt;pluginManagement&amp;gt; &amp;lt;plugin&amp;gt; &amp;lt;groupId&amp;gt;org.</description>
+import io.github.uthark.blog.assertj.Assertions.assertThat; // ... within @Test User result = userDao.findByLogin(&amp;#34;username&amp;#34;); assertThat(result). isNotNull(). isActive(). hasLogin(&amp;#34;username&amp;#34;); As you can see assertions look much more readable.</description>
     </item>
     
     <item>
@@ -284,7 +273,7 @@ import io.github.uthark.blog.assertj.Assertions.assertThat; // ... within @Test 
       <pubDate>Tue, 15 Apr 2014 13:06:12 +0000</pubDate>
       
       <guid>https://uthark.github.io/2014/04/15/reading-list-2014-april-15/</guid>
-      <description>Software development  Building Carousel, Part I: How we made our networked mobile app feel fast and local Write line notes from your phone · GitHub Scaling the Facebook data warehouse to 300 PB Why did we lose the XP Practices? EC2 Update - Previous Generation Instances | Amazon Web Services Blog Working with Google Analytics API v4 for Android The Grails Depedency Injection Inheritance Pitfall  DevOps  Adaptive IT — Why Vagrant is the Best DevOps Tool Ever Using Chef to Automate Google Compute Engine  Java  10 JDK 7 Features to Revisit, Before You Welcome Java 8 5 Features In Java 8 That WILL Change How You Code Cache Abstraction: JCache (JSR-107) Annotations Support Oracle Nashorn: A Next-Generation JavaScript Engine for the JVM Use Nashorn and WebJars to execute Javascript server-side What’s New in Java 8: Lambdas JEP 180: Handle Frequent HashMap Collisions with Balanced Trees JEP 155: Concurrency updates (jsr166e)  Scala  The other 99% — Monadic Reflections on Akka  </description>
+      <description>Software development  Building Carousel, Part I: How we made our networked mobile app feel fast and local Write line notes from your phone · GitHub Scaling the Facebook data warehouse to 300 PB Why did we lose the XP Practices?</description>
     </item>
     
     <item>
@@ -302,7 +291,7 @@ import io.github.uthark.blog.assertj.Assertions.assertThat; // ... within @Test 
       <pubDate>Fri, 11 Apr 2014 12:57:41 +0000</pubDate>
       
       <guid>https://uthark.github.io/2014/04/11/reading-list-2014-april-11/</guid>
-      <description>Software development  Dart improves async and server-side performance Federal Government Releases Health Care Provider Reference Architecture The Cost of Context Switching How Overloading Interacts With C Compatibility Write Code Every Day Consumer Release Testing Google Finds: Centralized Control, Distributed Data Architectures Work Better than Fully Decentralized Architectures Do Developers Love To Build On MongoDB? 10 Reasons Not To Use Infinite Scroll On Your Website First look: MongoDB 2.6, the all-grown-up version  Cloud  Now Available - New Memory-Optimized EC2 Instances (R3)  Java  JEP 169: Value Objects A Docker Maven Plugin for Integration Testing Reactive Programming Patterns in Akka using Java 8 Executing Diagnostic Commands Using Attach Final Results from our Java EE 8 Community Survey (Linda DeMichiel&amp;rsquo;s Blog) CSRF protection in Spring MVC, Thymeleaf, Spring Security application  Android  Anti-Malware Monitoring for Android Apps Expanding Google’s security services for Android  Scala  Memoization of Scala Streams  </description>
+      <description>Software development  Dart improves async and server-side performance Federal Government Releases Health Care Provider Reference Architecture The Cost of Context Switching How Overloading Interacts With C Compatibility Write Code Every Day Consumer Release Testing Google Finds: Centralized Control, Distributed Data Architectures Work Better than Fully Decentralized Architectures Do Developers Love To Build On MongoDB?</description>
     </item>
     
     <item>
@@ -311,7 +300,7 @@ import io.github.uthark.blog.assertj.Assertions.assertThat; // ... within @Test 
       <pubDate>Thu, 10 Apr 2014 15:35:04 +0000</pubDate>
       
       <guid>https://uthark.github.io/2014/04/10/reading-list-2014-april-10/</guid>
-      <description>General  The Job After Steve Jobs: Tim Cook and Apple In depth: Descriptive Search in Evernote A Powerful New Way to Edit DNA XKCD What if? | Faucet Power Expanding Google’s security services for Android  Cloud  The New Cost Explorer for AWS  Software development  Dart improves async and server-side performance Don’t Estimate Spikes Heartbleed What To Return: IEnumerable or IList?  Java  For Each loop Puzzle in Java Constructor/Method Parameters Metadata Available Via Reflection in JDK 8 How much faster is Java 8?</description>
+      <description>General  The Job After Steve Jobs: Tim Cook and Apple In depth: Descriptive Search in Evernote A Powerful New Way to Edit DNA XKCD What if? | Faucet Power Expanding Google’s security services for Android  Cloud  The New Cost Explorer for AWS  Software development  Dart improves async and server-side performance Don’t Estimate Spikes Heartbleed What To Return: IEnumerable or IList?</description>
     </item>
     
     <item>
@@ -320,7 +309,7 @@ import io.github.uthark.blog.assertj.Assertions.assertThat; // ... within @Test 
       <pubDate>Wed, 09 Apr 2014 14:46:14 +0000</pubDate>
       
       <guid>https://uthark.github.io/2014/04/09/reading-list-2014-april-09/</guid>
-      <description>Security  Security Release of omnibus-gitlab due to CVE-2014-0160 (&amp;lsquo;Heartbleed&amp;rsquo;) Heartbleed Security Bug: Update for Puppet Users Dealing with OpenSSL bug CVE-2014-0160 (Heartbleed) Secure DevOps - Seems Simple  Announcements  Hibernate ORM 4.2.12.Final Released Akka 2.3.2 Released! New book: EJB 3 in Action, Second Edition  Scala  Scala Style Guide — Scala Style Guide v1.3.1 documentation  General  DynDNS: Why We Decided To Stop Offering Free Accounts Yahoo breaks every mailing list in the world including the IETF&amp;rsquo;s The Prototype of Future Knowledge Workers  Software development  Software Estimation: How Misperceptions Mean We Almost Always Get It Wrong Performance Tuning On Android — The Venmo Blog Spring Test Context Caching + AspectJ @Transactional + Ehcache pain Liferay: Searching entities through custom attribute value.</description>
+      <description>Security  Security Release of omnibus-gitlab due to CVE-2014-0160 (&amp;lsquo;Heartbleed&amp;rsquo;) Heartbleed Security Bug: Update for Puppet Users Dealing with OpenSSL bug CVE-2014-0160 (Heartbleed) Secure DevOps - Seems Simple  Announcements  Hibernate ORM 4.2.12.Final Released Akka 2.3.2 Released! New book: EJB 3 in Action, Second Edition  Scala  Scala Style Guide — Scala Style Guide v1.</description>
     </item>
     
     <item>
@@ -329,7 +318,7 @@ import io.github.uthark.blog.assertj.Assertions.assertThat; // ... within @Test 
       <pubDate>Tue, 08 Apr 2014 14:25:34 +0000</pubDate>
       
       <guid>https://uthark.github.io/2014/04/08/reading-list-2014-april-08/</guid>
-      <description>Announces  Spring Boot 1.0.1.RELEASE Available Now Scala 2.11.0-RC4 is now available! MongoDB 2.6: Our Biggest Release Ever | MongoDB Blog Announcing Play 2.3-M1 | Google Groups  General  Fire TV: Amazon gets into the set-top box fray with a powerful media and gaming box How Gmail Happened: The Inside Story of Its Launch 10 Years Ago Can you hear me now? No, I don&amp;rsquo;t have that app.  General Software development  Handling multiple branches in continuous integration If you want fast code, don&amp;rsquo;t use assembly Using Android Location API in Weather App – Search city Numbers Every Programmer Should Know By Year How (NOT TO) measure latency Who Solves Which Problems?</description>
+      <description>Announces  Spring Boot 1.0.1.RELEASE Available Now Scala 2.11.0-RC4 is now available! MongoDB 2.6: Our Biggest Release Ever | MongoDB Blog Announcing Play 2.3-M1 | Google Groups  General  Fire TV: Amazon gets into the set-top box fray with a powerful media and gaming box How Gmail Happened: The Inside Story of Its Launch 10 Years Ago Can you hear me now?</description>
     </item>
     
     <item>
@@ -338,7 +327,7 @@ import io.github.uthark.blog.assertj.Assertions.assertThat; // ... within @Test 
       <pubDate>Mon, 07 Apr 2014 10:56:03 +0000</pubDate>
       
       <guid>https://uthark.github.io/2014/04/07/reading-list-2014-april-07/</guid>
-      <description>Software development  Why Hire Older Engineers Am I really a developer or just a good googler? Facebook open sources code for managing A/B tests — Tech News and Analysis AngularJS Tip - Avoid Multiple Variables in ng-src Introducing Pyston: an upcoming, JIT-based Python implementation The Power of HTML Microsoft TypeScript 1.0 Arrives BlueGreenDeployment Five Funny Moments in Developer History Domain-Driven Design Revisited Application Security – Can you Rely on the Honeymoon Effect?</description>
+      <description>Software development  Why Hire Older Engineers Am I really a developer or just a good googler? Facebook open sources code for managing A/B tests — Tech News and Analysis AngularJS Tip - Avoid Multiple Variables in ng-src Introducing Pyston: an upcoming, JIT-based Python implementation The Power of HTML Microsoft TypeScript 1.</description>
     </item>
     
     <item>
@@ -365,7 +354,7 @@ import io.github.uthark.blog.assertj.Assertions.assertThat; // ... within @Test 
       <pubDate>Wed, 02 Apr 2014 12:37:17 +0000</pubDate>
       
       <guid>https://uthark.github.io/2014/04/02/reading-list-2014-april-02/</guid>
-      <description>Software development  IAM Best Practices Every Great Product Owner Needs a Great ScrumMaster Manhattan, our real-time, multi-tenant distributed database for Twitter scale The Cache and Multithreading  Android  Useful Tools for Android Apps Test Automation Fixing The Android Camera API  Java  Apache Tomcat 7.0.53 Released Spring Boot 1.0 GA Released Java 8 Friday: Optional Will Remain an Option in Java Eclipse Foundation Announces Java 8 Support Method 2 of N for crashing your JVM :-) Abstract Class Versus Interface in the JDK 8 Era Add Java 8 support to Eclipse Kepler Difference between Stub and Mock object in Java Unit testing - JUnit Introduction to Nashorn  Scala  IntelliJ, Scala and Gradle: Revisiting Hell Spring-boot and Scala  In Russian  Новости Большого адронного коллайдера Одиночное рождение топ-кварка позволило еще тщательнее проверить Стандартную модель  </description>
+      <description>Software development  IAM Best Practices Every Great Product Owner Needs a Great ScrumMaster Manhattan, our real-time, multi-tenant distributed database for Twitter scale The Cache and Multithreading  Android  Useful Tools for Android Apps Test Automation Fixing The Android Camera API  Java  Apache Tomcat 7.</description>
     </item>
     
     <item>
@@ -374,7 +363,7 @@ import io.github.uthark.blog.assertj.Assertions.assertThat; // ... within @Test 
       <pubDate>Tue, 01 Apr 2014 13:41:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2014/04/01/reading-list-2014-april-1/</guid>
-      <description>Software development  We lost a customer. This is how we found out… New Linux version will reduce suspend and resume times The Stress Of Being A Computer Programmer Is Literally Driving Many Of Them Crazy Amazing approximation to e raj bala — Amazon Is Downloading Apps From Google Play and Inspecting Them coreos/etcd · GitHub The Python Paradox The Lucene disk format Git smart! 20 essential tips for Git and GitHub users Six Degrees of Kevin Bacon in six languages Why I Don’t Inherit from Collection Types  Java  Spring Integration 3.</description>
+      <description>Software development  We lost a customer. This is how we found out… New Linux version will reduce suspend and resume times The Stress Of Being A Computer Programmer Is Literally Driving Many Of Them Crazy Amazing approximation to e raj bala — Amazon Is Downloading Apps From Google Play and Inspecting Them coreos/etcd · GitHub The Python Paradox The Lucene disk format Git smart!</description>
     </item>
     
     <item>
@@ -383,7 +372,7 @@ import io.github.uthark.blog.assertj.Assertions.assertThat; // ... within @Test 
       <pubDate>Mon, 31 Mar 2014 11:53:51 +0000</pubDate>
       
       <guid>https://uthark.github.io/2014/03/31/reading-list-2014-march-31/</guid>
-      <description>General  Do All People React To The Same Persuasion Strategies? Apps with millions of Google Play downloads covertly mine cryptocurrency Before the Internet | XKCD  Software development  Signs you might be in survival mode Announcing Google Cloud DNS Gold Plating How times have changed for PostgreSQL  Java  Project Sagan: open-sourcing spring.io How to run a standalone OSGi server The Illuminating Javadoc of JDK 8 JDK 8 Javadoc Tweaked For Methods Listings The Builder pattern and the Spring framework Java 8 Default Methods: What Can and Can Not Do?</description>
+      <description>General  Do All People React To The Same Persuasion Strategies? Apps with millions of Google Play downloads covertly mine cryptocurrency Before the Internet | XKCD  Software development  Signs you might be in survival mode Announcing Google Cloud DNS Gold Plating How times have changed for PostgreSQL  Java  Project Sagan: open-sourcing spring.</description>
     </item>
     
     <item>
@@ -392,7 +381,7 @@ import io.github.uthark.blog.assertj.Assertions.assertThat; // ... within @Test 
       <pubDate>Fri, 28 Mar 2014 16:33:34 +0000</pubDate>
       
       <guid>https://uthark.github.io/2014/03/28/reading-list-2014-march-28/</guid>
-      <description>General  How To Reboot A Bad Day In 10 Minutes Or Less  Software development  Taking Chrome Experiments to the TV  Cloud  AWS OpsWorks Now Supports Chef 11.10 Amazon Linux AMI 2014.03 is Now Available  Java  Initializing Mockito @Mocks With JUnit @Rule Apache Tomcat 8.0.5 (beta) available | Mark Thomas Spring Data Redis 1.2.1 Released Spring AMQP 1.3.0 Released Spring Framework 4.0.3 released - with Java 8 support now production-ready 3 ways of handling exceptions in JUnit.</description>
+      <description>General  How To Reboot A Bad Day In 10 Minutes Or Less  Software development  Taking Chrome Experiments to the TV  Cloud  AWS OpsWorks Now Supports Chef 11.10 Amazon Linux AMI 2014.03 is Now Available  Java  Initializing Mockito @Mocks With JUnit @Rule Apache Tomcat 8.</description>
     </item>
     
     <item>
@@ -403,10 +392,7 @@ import io.github.uthark.blog.assertj.Assertions.assertThat; // ... within @Test 
       <guid>https://uthark.github.io/2014/03/28/initializing-at-mocks-with-junit-at-rule/</guid>
       <description>In this post I will show how one can implement custom JUnit @Rule.
 As an example let&amp;rsquo;s take Mockito and implement custom rule which will initialize Mocks in test class.
-By default, Mockito provides the following methods of mock initialization:
-  Using Mockito.mock
-Initialize mocks with Mockito.mock:
-public void FooTest { private Foo foo; @Before public void setUp() { FooDependency dep = Mockito.mock(FooDependency.class); foo = new Foo(dep); } } This is the simplest case.</description>
+By default, Mockito provides the following methods of mock initialization:</description>
     </item>
     
     <item>
@@ -452,7 +438,7 @@ public void FooTest { private Foo foo; @Before public void setUp() { FooDependen
       <pubDate>Tue, 25 Mar 2014 11:31:11 +0000</pubDate>
       
       <guid>https://uthark.github.io/2014/03/25/reading-list-2014-march-25/</guid>
-      <description>Software development  BLAKE2: “Harder, Better, Faster, Stronger” Than MD5 | Least Authority WebP improves while rolling out across Google Automated Testing with Docker  Java  Solr 4.7 – Efficient Deep Paging Tyrus 1.5 released! Just in time for Java 8 (The Aquarium) Liferay 6.2 CE GA2 Now Available Top 5 Reasons to Choose ScalaTest Over JUnit What I miss in Java 8 lambda functions  Android  Report : What content makes up an Android Game?</description>
+      <description>Software development  BLAKE2: “Harder, Better, Faster, Stronger” Than MD5 | Least Authority WebP improves while rolling out across Google Automated Testing with Docker  Java  Solr 4.7 – Efficient Deep Paging Tyrus 1.5 released! Just in time for Java 8 (The Aquarium) Liferay 6.</description>
     </item>
     
     <item>
@@ -461,7 +447,7 @@ public void FooTest { private Foo foo; @Before public void setUp() { FooDependen
       <pubDate>Mon, 24 Mar 2014 10:48:15 +0000</pubDate>
       
       <guid>https://uthark.github.io/2014/03/24/reading-list-2014-march-24/</guid>
-      <description>General  A Startlingly Simple Theory About the Missing Malaysia Airlines Jet The Problem and Future of Education | Arsalan Bashir No One Knows What the F*** They&amp;rsquo;re Doing (or &amp;ldquo;The 3 Types of Knowledge&amp;rdquo;) How Google Does Fundamental Research Without a Separate Research Lab  Cloud  ELB Connection Draining - Remove Instances From Service With Care | Amazon Web Services Blog  Java  Apache Camel 2.13.0 released 5 Features In Java 8 That WILL Change How You Code Spring MVC Test with HtmlUnit Reality check: Java 8 finally catches a multi-core break Getting JUnit Test Names Right Java 8 Friday Goodies: Lean Concurrency  Scala  Scala 2.</description>
+      <description>General  A Startlingly Simple Theory About the Missing Malaysia Airlines Jet The Problem and Future of Education | Arsalan Bashir No One Knows What the F*** They&amp;rsquo;re Doing (or &amp;ldquo;The 3 Types of Knowledge&amp;rdquo;) How Google Does Fundamental Research Without a Separate Research Lab  Cloud  ELB Connection Draining - Remove Instances From Service With Care | Amazon Web Services Blog  Java  Apache Camel 2.</description>
     </item>
     
     <item>
@@ -471,7 +457,7 @@ public void FooTest { private Foo foo; @Before public void setUp() { FooDependen
       
       <guid>https://uthark.github.io/2014/03/21/reading-list-2014-march-21/</guid>
       <description>Hi. Take a look at today&amp;rsquo;s articles on mutation testing.
-General  Google? Evil? You have no idea  Software development  Mutation Testing With PIT: A Step Beyond Normal Code Coverage Mutation Testing Concurrency torture: testing your code within the Java Memory Model Recent activity for authentication credentials · GitHub Rich Object Models and Angular.js: Getter Methods Mule Unit Tests with Inbound Message Properties in Session or Invocation Scope Feature-based development Object-oriented design principles and the 5 ways of creating SOLID applications Android Wear Prototype: Quick Sharing to Pocket  Java  3 Reasons to choose Vert.</description>
+General  Google? Evil? You have no idea  Software development  Mutation Testing With PIT: A Step Beyond Normal Code Coverage Mutation Testing Concurrency torture: testing your code within the Java Memory Model Recent activity for authentication credentials · GitHub Rich Object Models and Angular.</description>
     </item>
     
     <item>
@@ -490,7 +476,7 @@ General  Google? Evil? You have no idea  Software development  Mutation Testing 
       
       <guid>https://uthark.github.io/2014/03/19/reading-list-2014-march-19/</guid>
       <description>I would like to conratulate everyone with Java 8 release.
-Java 8 announces  JDK 8: General Availability Java 8 officially arrives at last Go Reactive with Java 8 Java 8, now what? JDK 8 Is Released! (The Java Tutorials Blog) Java 8 is now released! ~ Java EE Support Patterns Create the Future with Java 8 (The Java Source) Java SE Embedded 8 is Now Available (The Java Source) [#JDK-8036100] Default method returns true for a while, and then returns false java.</description>
+Java 8 announces  JDK 8: General Availability Java 8 officially arrives at last Go Reactive with Java 8 Java 8, now what? JDK 8 Is Released! (The Java Tutorials Blog) Java 8 is now released!</description>
     </item>
     
     <item>
@@ -499,7 +485,7 @@ Java 8 announces  JDK 8: General Availability Java 8 officially arrives at last 
       <pubDate>Tue, 18 Mar 2014 13:59:16 +0000</pubDate>
       
       <guid>https://uthark.github.io/2014/03/18/reading-list-2014-march-18/</guid>
-      <description>Software Development  The Help Vampire: A Spotter’s Guide Go for Java Programmers: Introduction rm is dangerous What&amp;rsquo;s the opposite of duplication? What do developers spend all that time on? Myths about /dev/urandom How to Make Python Faster Without Trying That Much Mighty Spring — Adventures in Dogfooding : Engineers as Recruiters Choosing a Templating Language in Clojure XKCD | Manuals  Java  Spring Test MVC HtmlUnit 1.0.0.M1 Released The Java HotSpot Performance Engine: Method Inlining Example Integration testing with Maven and Docker A quick introduction to Apache Mesos  Scala  The Ultimate Guide to Getting Started with the Play Framework  Android  Google Play services 4.</description>
+      <description>Software Development  The Help Vampire: A Spotter’s Guide Go for Java Programmers: Introduction rm is dangerous What&amp;rsquo;s the opposite of duplication? What do developers spend all that time on? Myths about /dev/urandom How to Make Python Faster Without Trying That Much Mighty Spring — Adventures in Dogfooding : Engineers as Recruiters Choosing a Templating Language in Clojure XKCD | Manuals  Java  Spring Test MVC HtmlUnit 1.</description>
     </item>
     
     <item>
@@ -508,7 +494,7 @@ Java 8 announces  JDK 8: General Availability Java 8 officially arrives at last 
       <pubDate>Mon, 17 Mar 2014 12:14:09 +0000</pubDate>
       
       <guid>https://uthark.github.io/2014/03/17/reading-list-2014-march-17/</guid>
-      <description>General  Life is a game. This is your strategy guide Happy 25th Birthday, Web! or: Honoring the web by embracing It Is the Internet good or bad? Yes.  Josh Timonen — My Brain Has No Space For Your User Interface Inside DuckDuckGo, Google&amp;rsquo;s Tiniest, Fiercest Competitor ⚙ Co.Labs ⚙ code + community 7 Data Presentation Tips: Think, Focus, Simplify, Calibrate, Visualize++  Agile  Agile Best Practice: Executable Specifications  Software development  The 10 Commandments of Programming How to write good software The Git Object Model Git for Computer Scientists Database Versioning: The ignored aspect of version control.</description>
+      <description>General  Life is a game. This is your strategy guide Happy 25th Birthday, Web! or: Honoring the web by embracing It Is the Internet good or bad? Yes.  Josh Timonen — My Brain Has No Space For Your User Interface Inside DuckDuckGo, Google&amp;rsquo;s Tiniest, Fiercest Competitor ⚙ Co.</description>
     </item>
     
     <item>
@@ -545,7 +531,7 @@ try { // do some business logic. } catch (Exception e) { errorBean.addError(&amp
       <pubDate>Wed, 12 Mar 2014 10:46:27 +0000</pubDate>
       
       <guid>https://uthark.github.io/2014/03/12/reading-list-2014-march-12/</guid>
-      <description>General  Nano Workouts help you get in shape and life healthy during everyday activities. How to survive a job you absolutely hate 10  Software development  SoftwareDevelopmentAttitude Updated Amazon Appstore Badges Software is disrupting Industries: are you Trendwatcher or Trendsetter? Because my friend works here… Labeling Ourselves for Others Is goto Still Considered Harmful? Why Puppet/Chef/Ansible aren&amp;rsquo;t good enough (and we can do better) | Domen Kožar&amp;rsquo;s thoughts  Agile  Choosing a leader like an agilist Don’t Estimate Software Defects It’s Far Too Easy To Measure Agile’s Value In The Wrong Way  Project management  The Change Management Challenge Cost of Delay: Why You Should Care, Part 6  Cloud  Common Building Blocks of Cloud APIs Improvements for managing Persistent Disks Help For Moving From Physical Servers to the Cloud  Java  Apache Tomcat Connectors 1.</description>
+      <description>General  Nano Workouts help you get in shape and life healthy during everyday activities. How to survive a job you absolutely hate 10  Software development  SoftwareDevelopmentAttitude Updated Amazon Appstore Badges Software is disrupting Industries: are you Trendwatcher or Trendsetter?</description>
     </item>
     
     <item>
@@ -563,7 +549,7 @@ try { // do some business logic. } catch (Exception e) { errorBean.addError(&amp
       <pubDate>Mon, 10 Mar 2014 10:40:51 +0000</pubDate>
       
       <guid>https://uthark.github.io/2014/03/10/reading-list-2014-march-10/</guid>
-      <description>General  Evernote on the Go: Introducing Evernote for Pebble Noteworthy this Week: Handwriting &amp;amp; Smartwatches Clever Ways to Get Some Exercise at the Office (or Any Small Space) Jumpstarter launches “next-gen hosting platform”, promising sub-second server spin-up — Tech News and Analysis How Can I Best Absorb Information While Reading? The Command-Line Office What the Heck is Happening to Windows? The Solution to Technical Debt 9 Things to Remove From Your Resume Right Now  Cloud  STH Colocation – 1 Year Review with Lessons Learned Amazon EC2 grows 62% in 2 years  Scala  In Defense of Scala: Part 2 The Neophyte&amp;rsquo;s Guide to Scala Part 5: The Option Type The Neophyte&amp;rsquo;s Guide to Scala Part 6: Error Handling With Try When can Liskov be lifted?</description>
+      <description>General  Evernote on the Go: Introducing Evernote for Pebble Noteworthy this Week: Handwriting &amp;amp; Smartwatches Clever Ways to Get Some Exercise at the Office (or Any Small Space) Jumpstarter launches “next-gen hosting platform”, promising sub-second server spin-up — Tech News and Analysis How Can I Best Absorb Information While Reading?</description>
     </item>
     
     <item>
@@ -573,7 +559,7 @@ try { // do some business logic. } catch (Exception e) { errorBean.addError(&amp
       
       <guid>https://uthark.github.io/2014/03/07/reading-list-2014-march-07/</guid>
       <description>It is a pretty long reading list for today, but remember the weekend is coming.
-General  Roku Introduces A New Entry-Level Streaming Stick For $49, Shipping In April  Software development  Use all your favorite tools with GitHub · GitHub Why vacation at tech companies should be mandatory: better code, happier people How two men delivered a baby in 4.5 months — Infinum Throwing in the towel on becomming a programmer Cargo-cult typing, or: Objective-C&amp;rsquo;s default type is id Redneck Conditional Anti-pattern 7 Secret Ingredients to Making Ideas Happen Creating Software for Sysops - Make Sure You Do Not Suck Advice for the New Tech Lead: The Realities of Distributed Development The Magic Testing Challenge: Part 2 The Difference Between Impossible and Really, Really Hard Why I Eat Lunch at My Desk Cost of Delay Due to Indecision, Part 3 A deeper look at Competence debt  Agile  Agile Mindset During Programming Don’t sell me agile, solve my problem  Cloud  Ten Features that make Google Compute Engine (GCE) better than AWS New Features for Amazon CloudFront: Server Name Indication (SNI) and HTTP Redirection Access Logs for Elastic Load Balancers Five features Amazon Web Services must fix — Gigaom Research Say no to SaaS vanity metrics — Tech News and Analysis Modeling Business Transactions – 1 (For SaaS Pricing)  Frontend development  CSS Animated Hamburger Icon Enterprise JavaScript &amp;ndash; Not the best idea Understand the four layers of JavaScript OOP in one short lesson  Android  Android Studio 0.</description>
+General  Roku Introduces A New Entry-Level Streaming Stick For $49, Shipping In April  Software development  Use all your favorite tools with GitHub · GitHub Why vacation at tech companies should be mandatory: better code, happier people How two men delivered a baby in 4.</description>
     </item>
     
     <item>
@@ -583,9 +569,7 @@ General  Roku Introduces A New Entry-Level Streaming Stick For $49, Shipping In 
       
       <guid>https://uthark.github.io/2014/03/06/limiting-threads-count-for-greenrobot-eventbus/</guid>
       <description>In one of my projects I used EventBus library. The library is pretty cool and I would recommend everybody to use it.
-But I found one small issue with this library - in case you send too many events very fast (i.e. more than 1000 per second) you may face issue with application crash due to inability to create new thread.
-The problem is lying in the used ExecutorService:
-package de.</description>
+But I found one small issue with this library - in case you send too many events very fast (i.</description>
     </item>
     
     <item>
@@ -597,9 +581,7 @@ package de.</description>
       <description>Today I want to share with you custom TextView which allows to set font to be used in xml layout.
 First, we need to declare our custom styleable
 attrs.xml:
-&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt; &amp;lt;resources&amp;gt; &amp;lt;declare-styleable name=&amp;#34;TypefaceTextView&amp;#34;&amp;gt; &amp;lt;attr name=&amp;#34;typeface&amp;#34; format=&amp;#34;string&amp;#34;/&amp;gt; &amp;lt;/declare-styleable&amp;gt; &amp;lt;/resources&amp;gt; Then we need to create subclass of TextView which will use custom attribute.
-TypefaceTextView:
-public class TypefaceTextView extends TextView { public TypefaceTextView(Context context) { this(context, null); } public TypefaceTextView(Context context, AttributeSet attrs) { this(context, attrs, 0); } public TypefaceTextView(Context context, AttributeSet attrs, int defStyle) { super(context, attrs, defStyle); TypedArray ta = context.</description>
+&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt; &amp;lt;resources&amp;gt; &amp;lt;declare-styleable name=&amp;#34;TypefaceTextView&amp;#34;&amp;gt; &amp;lt;attr name=&amp;#34;typeface&amp;#34; format=&amp;#34;string&amp;#34;/&amp;gt; &amp;lt;/declare-styleable&amp;gt; &amp;lt;/resources&amp;gt; Then we need to create subclass of TextView which will use custom attribute.</description>
     </item>
     
     <item>
@@ -619,8 +601,7 @@ Software development  The myth of the fall The Technologies that Drive Lob Angul
       
       <guid>https://uthark.github.io/2014/03/05/solving-issue-with-db2-on-vmware-fusion-on-macbook-pro-2013-late/</guid>
       <description>Today I found issue running DB2 10.1 under VMWare Fusion 6.0.2 on my MacBook - all management services for db2 are starting except for the db2 instance itself.
-When I tried to start DB2 using db2start it just crashed without any additional information.
-After some googling I found out that it is due to the fact that current version of DB2 can&amp;rsquo;t handle more than 4 responses to CPUID query.</description>
+When I tried to start DB2 using db2start it just crashed without any additional information.</description>
     </item>
     
     <item>
@@ -630,7 +611,7 @@ After some googling I found out that it is due to the fact that current version 
       
       <guid>https://uthark.github.io/2014/03/05/reading-list-2014-march-05/</guid>
       <description>Reading list for today:
-General  Cheap Words 5-Year-Olds Can Learn Calculus At the RSA Security Conference, Things Get Testy and Then They Get Awkward  Software development  How to Eliminate Bugs Through High Cohesion Stupid Mistakes Devs Make, Part I: Taking App Messages at Face Value A beginner&amp;rsquo;s guide to Git feature branches How to Get a Job at Google Essential Characteristics of PaaS Which hypervisor? Why not all of them!</description>
+General  Cheap Words 5-Year-Olds Can Learn Calculus At the RSA Security Conference, Things Get Testy and Then They Get Awkward  Software development  How to Eliminate Bugs Through High Cohesion Stupid Mistakes Devs Make, Part I: Taking App Messages at Face Value A beginner&amp;rsquo;s guide to Git feature branches How to Get a Job at Google Essential Characteristics of PaaS Which hypervisor?</description>
     </item>
     
     <item>
@@ -640,7 +621,7 @@ General  Cheap Words 5-Year-Olds Can Learn Calculus At the RSA Security Conferen
       
       <guid>https://uthark.github.io/2014/03/04/reading-list-2014-march-04/</guid>
       <description>Reading list for today:
-General  Tesla Is a Car, Not a Revolution Unemployment in America Listen while you work: What music does to your brain  Software development  Announcement: Sync Desktop 1.2 Released for Liferay Portal 6.2 Etsy’s Journey to Continuous Integration for Mobile Apps ASP.NET Web API Versioning with Media Types AirPair Launches Evernote Community Powered API Live Help Dependency inversion: the structure logarithm. Failure is an option - Andreas M.</description>
+General  Tesla Is a Car, Not a Revolution Unemployment in America Listen while you work: What music does to your brain  Software development  Announcement: Sync Desktop 1.2 Released for Liferay Portal 6.2 Etsy’s Journey to Continuous Integration for Mobile Apps ASP.</description>
     </item>
     
     <item>
@@ -658,7 +639,7 @@ General  Tesla Is a Car, Not a Revolution Unemployment in America Listen while y
       <pubDate>Mon, 03 Mar 2014 14:57:23 +0000</pubDate>
       
       <guid>https://uthark.github.io/2014/03/03/reading-list-2014-march-03/</guid>
-      <description>General  The internet is f*cked Comcast makes absurd argument that Google Fiber is a serious competitor Do You Have the Wrong Job Title?  Product Management  Complaint-Driven Development Cost of Delay Due to Indecision, Part 3 Product Roadmaps Are Anti-Agile Splitting User Stories Are You Agile When You&amp;rsquo;re Going Fast?  Software Development  StackOverflow - Best practices for API versioning? [closed] Atlassian Champions Git With Essentials XKCD Now Don’t Play ‘Schedule Chicken’ You shouldn&amp;rsquo;t have to worry about front end optimization Amazon Web Services Blog Fast Remote Service Tests Least Significant Bit - hunting bugs with git bisect and submodules The Art of AngularJS Geoip geolocation with Google BigQuery  Java  Announcement: Liferay Faces 4.</description>
+      <description>General  The internet is f*cked Comcast makes absurd argument that Google Fiber is a serious competitor Do You Have the Wrong Job Title?  Product Management  Complaint-Driven Development Cost of Delay Due to Indecision, Part 3 Product Roadmaps Are Anti-Agile Splitting User Stories Are You Agile When You&amp;rsquo;re Going Fast?</description>
     </item>
     
     <item>
@@ -669,9 +650,7 @@ General  Tesla Is a Car, Not a Revolution Unemployment in America Listen while y
       <guid>https://uthark.github.io/2014/03/02/octopress-quote-fix/</guid>
       <description>When I created About Me page I found issue with rendering: for some reason styles and some javascripts were missing on the page.
 Investigation showed that content in meta tag description contained unquoted quotes, thus resulting in broken HTML.
-After searching within octopress sources I found the issue:
-Rendering of description tag, excerpt from _includes/head.html:
-{% capture description %} {% if page.description %} {{ page.description }} {% else %} {{ content | raw_content }} {% endif %} {% endcapture %} &amp;lt;meta name=&amp;#34;description&amp;#34; content=&amp;#34;{{ description | strip_html | condense_spaces | truncate:150 }}&amp;#34;&amp;gt; After capturing, description is being processed with filters, defined in plugins/octopress_filters.</description>
+After searching within octopress sources I found the issue:</description>
     </item>
     
     <item>
@@ -709,9 +688,7 @@ The goal of the game is to connect all dots on the playboard. Worth every cent.<
       <pubDate>Sun, 02 Mar 2014 00:00:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2014/03/02/iterm-triggers/</guid>
-      <description>I want to share one of the cool features which iTerm.app has - triggers. The idea behind triggers is simple - it allows to perform arbitrary action based on the output in console window. For example, it can colorize specified content (based on regular expressions).
-Start iTerm, open settings (⌘+,), go to Profiles, then tab Advanced. Click on Edit button in Triggers section.
-  iTerm Settings   Then you can define your own triggers:</description>
+      <description>I want to share one of the cool features which iTerm.app has - triggers. The idea behind triggers is simple - it allows to perform arbitrary action based on the output in console window. For example, it can colorize specified content (based on regular expressions).</description>
     </item>
     
     <item>
@@ -733,7 +710,7 @@ You can listen previews here or here (Russia only).</description>
       <guid>https://uthark.github.io/2014/03/01/restricting-mongo-template/</guid>
       <description>Introduction Today I want to show how one can automatically apply additional restrictions on MongoDB Queries with MongoTemplate or Spring Data Mongo.
 Implementation First, let&amp;rsquo;s introduce interface QueryModifier.
-import org.springframework.data.mongodb.core.query.Query; public interface QueryModifier { /** * Modifies source query according to the rules. * @param query Source query to modify. * @param collectionName name of the collection against which query will be executed. * @return Modified query. */ Query modify(Query query, String collectionName); } Implementations of this interface will pickup original query and modify it somehow.</description>
+import org.springframework.data.mongodb.core.query.Query; public interface QueryModifier { /** * Modifies source query according to the rules.</description>
     </item>
     
     <item>
@@ -754,8 +731,7 @@ Thanks to [this blog post][codeinf] [codeinf]: http://blog.code-infection.com/20
       <guid>https://uthark.github.io/2013/06/29/spring-enable-annotation/</guid>
       <description>Начиная с версии 3.1 Spring поддерживает декларативное включение необходимой функциональности через, так называемые, @Enable* аннотации. Пример таких аннотаций: org.springframework.web.servlet.config.annotation.EnableWebMvc, org.springframework.cache.annotation.EnableCaching, org.springframework.scheduling.annotation.EnableAsync и другие.
 В продолжение темы прошлого поста, я хочу показать, как можно добавить собственную @Enable аннотацию.
-Для автоматического создания клиента для REST-ресурса нам необходима следующая информация:
- Пакет, в котором искать интерфейсы, проаннотированные аннотацией @Path() Базовый адрес REST-приложения.  Для того, чтобы передать эту информацию, мы создадим два атрибута в аннотации: scanPackage() и endpoint()</description>
+Для автоматического создания клиента для REST-ресурса нам необходима следующая информация:</description>
     </item>
     
     <item>
@@ -765,9 +741,7 @@ Thanks to [this blog post][codeinf] [codeinf]: http://blog.code-infection.com/20
       
       <guid>https://uthark.github.io/2013/06/28/jaxrs-spring-autowiring/</guid>
       <description>Продолжая разговор о JAX RS Client API - предположим, что мы уже используем JAX-RS клиент
-У нас есть класс, который умеет создавать прокси для любого REST-интерфейса в проекте. Теперь мы хотим сделать так, чтобы эти интерфейсы можно было автоматически создавать в контексте Spring и связывать с другими бинами.
-Первое решение, которое приходит в лоб - объявить бин в конфигурации для каждого интерфейса:
-@Configuration public class SpringConfiguration { @Bean public UserRest userRest(){ List&amp;lt;?</description>
+У нас есть класс, который умеет создавать прокси для любого REST-интерфейса в проекте. Теперь мы хотим сделать так, чтобы эти интерфейсы можно было автоматически создавать в контексте Spring и связывать с другими бинами.</description>
     </item>
     
     <item>
@@ -777,7 +751,7 @@ Thanks to [this blog post][codeinf] [codeinf]: http://blog.code-infection.com/20
       
       <guid>https://uthark.github.io/2013/06/28/jaxrs/</guid>
       <description>JAX-RS - набор Java API для работы с REST сервисами. Существует несколько реализаций, о которых я уже писал раньше.
-Предположим, что проект А выставляет наружу REST API, который мы хотим использовать в проекте Б. Очевидно, что сразу возникает вопрос - можно ли переиспользовать классы модели и интерфейс в другом проекте. Ответ - да, можно. Client API, появившийся в JAX RS 2.0, упрощает реализацию клиента, но это всё равно не самый оптимальный вариант.</description>
+Предположим, что проект А выставляет наружу REST API, который мы хотим использовать в проекте Б. Очевидно, что сразу возникает вопрос - можно ли переиспользовать классы модели и интерфейс в другом проекте.</description>
     </item>
     
     <item>
@@ -786,8 +760,7 @@ Thanks to [this blog post][codeinf] [codeinf]: http://blog.code-infection.com/20
       <pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2013/06/19/autowiring-factorybean/</guid>
-      <description>Предположим, что у нас есть проект на Spring, в котором необходимо использовать внешние EJB. Для получения бинов необходимо создавать InitialContext и делать lookup() нужных ejb. Но эту задачу можно автоматизировать и пользоваться @Autowired, то есть код будет выглядеть вот так:
-@Service public class UserService { @Autowired private UserRemoteBean userRemoteBean; } Для этого в Spring существует FactoryBean - класс, который знает, как создавать бины нужного типа. Собственно, нам необходимо написать такой класс (код на Scala):</description>
+      <description>Предположим, что у нас есть проект на Spring, в котором необходимо использовать внешние EJB. Для получения бинов необходимо создавать InitialContext и делать lookup() нужных ejb. Но эту задачу можно автоматизировать и пользоваться @Autowired, то есть код будет выглядеть вот так:</description>
     </item>
     
     <item>
@@ -798,7 +771,7 @@ Thanks to [this blog post][codeinf] [codeinf]: http://blog.code-infection.com/20
       <guid>https://uthark.github.io/2013/06/19/validation/</guid>
       <description>Очень часто возникает задача проверки входных параметров в сервис на корректность с точки зрения бизнес логики.
 Эту задачу можно решить в лоб, написав вручную код валидации в каждом из методов сервиса, например, вот так:
-public User save(User user) { if(user == null) { throw new IllegalArgumentException(&amp;#34;User is null&amp;#34;); } // other checks  //...  // business logic starts here...  //...  return savedUser; } Очевидно, что если в каждом методе делать такие проверки, то код бизнес-логики загрязняется проверками, что ухудшает читаемость кода.</description>
+public User save(User user) { if(user == null) { throw new IllegalArgumentException(&amp;#34;User is null&amp;#34;); } // other checks  //.</description>
     </item>
     
     <item>
@@ -808,8 +781,7 @@ public User save(User user) { if(user == null) { throw new IllegalArgumentExcept
       
       <guid>https://uthark.github.io/2013/06/19/spring-caching/</guid>
       <description>В Spring 3.1 появился замечательный модуль - Spring Cache, который является абстракцией над кэшированием, что позволяет декларативно реализовывать кэширование в приложении.
-Я не буду вдаваться в подробности работы, их можно прочитать в документации, но опишу, каким образом можно настроить memcached в качестве бэкэнда для работы.
-Подключение зависимостей &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;com.google.code.simple-spring-memcached&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spymemcached-provider&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;3.1.0&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;com.google.code.simple-spring-memcached&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-cache&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;3.1.0&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; spymemcached-provider - это библиотечка для работы с memcached из Java, а spring-cache - модуль интеграции со Spring.</description>
+Я не буду вдаваться в подробности работы, их можно прочитать в документации, но опишу, каким образом можно настроить memcached в качестве бэкэнда для работы.</description>
     </item>
     
     <item>
@@ -820,7 +792,7 @@ public User save(User user) { if(user == null) { throw new IllegalArgumentExcept
       <guid>https://uthark.github.io/2013/06/19/custom-bean-validator/</guid>
       <description>JSR-303 предоставляет удобный API для проверки валидности объектов, а также входных параметров. Очевидно, что стандартных валидаторов в какой-то момент может быть недостаточно, поэтому необходимо писать собственный.
 Хочу показать на примере валидации запроса к MongoDB, как легко это делается.
-Создание аннотации @Target({FIELD, PARAMETER}) @Retention(RUNTIME) @Documented @Constraint(validatedBy = {MongoQueryValidator.class}) public @interface MongoQuery { String message() default &amp;#34;Invalid mongo query&amp;#34;; Class&amp;lt;?&amp;gt;[] groups() default {}; Class&amp;lt;? extends Payload&amp;gt;[] payload() default {}; } Обратите внимание на аннотацию @Constraint - она описывает, какой класс будет проводить реальную валидацию.</description>
+Создание аннотации @Target({FIELD, PARAMETER}) @Retention(RUNTIME) @Documented @Constraint(validatedBy = {MongoQueryValidator.</description>
     </item>
     
     <item>
@@ -830,8 +802,7 @@ public User save(User user) { if(user == null) { throw new IllegalArgumentExcept
       
       <guid>https://uthark.github.io/2012/10/24/vagrant/</guid>
       <description>Современные enterprise проекты очень часто имеют очень сложную инфраструктуру для развёртывания. Кроме того, во время разработки часто используются виртуальные машины. Например, может использоваться несколько виртуальных машин, на которых развёрнуты различные конфигурации софта.
-Vagrant - это средство для управления виртуальными машинами на базе Virtualbox.
-Возможности  Создание виртуальных машин с определённой, заранее заданной, конфигурацией. Лёгкое создание копии виртуальной машины, используя заранее подготовленный образ. Осуществление provisioning для новых виртуальных машин.  Работа с Vagrant Для начала необходимо установить Virtualbox и Vagrant.</description>
+Vagrant - это средство для управления виртуальными машинами на базе Virtualbox.</description>
     </item>
     
     <item>
@@ -841,8 +812,7 @@ Vagrant - это средство для управления виртуальн
       
       <guid>https://uthark.github.io/2012/04/28/spring-data-jpa_28/</guid>
       <description>Очевидно, что мы не всегда можем воспользоваться автоматической генерацией кода, предоставляемой Spring Data JPA. Например, у нас слишком сложный запрос, или нам необходимо вызвать процедуру в базе данных, либо у нас сложная бизнес-логика.
-Рассмотрим следующий пример - например, нам нужна функциональность уникального счётчика, который мы решили реализовать с помощью последовательности (sequence).
-Сначала определим интерфейс, в котором опишем все методы, которые мы будем реализовывать самостоятельно. В нашем случае, это будет только один метод:</description>
+Рассмотрим следующий пример - например, нам нужна функциональность уникального счётчика, который мы решили реализовать с помощью последовательности (sequence).</description>
     </item>
     
     <item>
@@ -854,9 +824,7 @@ Vagrant - это средство для управления виртуальн
       <description>Рассмотрим подробнее одну из наиболее полезных вещей в Spring Data JPA - генерация JPQL-запросов на основе имени метода.
 Spring Data JPA умеет автоматически генерировать запросы используя для подсказки название метода.
 Например, метод User.findByLoginAndPassword сгенерирует примерно следующий код:
-FROM User u where u.login = :login and password = :password Вообще Spring Data JPA пытается быть умным, поэтому реализация findBy{&amp;hellip;}методов ищется следующим образом:
-У @Queryследующие плюсы:
-Очевидно, что при использовании запросов нам необходимо каким-то образом указывать параметры для запросов.</description>
+FROM User u where u.</description>
     </item>
     
     <item>
@@ -866,9 +834,7 @@ FROM User u where u.login = :login and password = :password Вообще Spring 
       
       <guid>https://uthark.github.io/2012/04/20/beanpostprocessor/</guid>
       <description>Сегодня я хочу рассказать, как можно сделать инициализацию логгера в классе с использованием аннотаций и BeanPostProcessorОчень часто мы инициализируем логгер следующим образом:
-public class MyClass { private static final Logger LOG = LoggerFactory.getLogger(MyClass.class); } Я покажу, как сделать, чтобы можно было писать вот так:
-@Log private Logger LOG; Первым делом нам нужно объявить аннотацию:
-@Retention(RUNTIME) @Target(FIELD) @Documented public @interface Log { String category() default &amp;#34;&amp;#34;; } А вторым делом, написать собственный BeanPostProcessor, который бы устанавливал нам логгер:</description>
+public class MyClass { private static final Logger LOG = LoggerFactory.getLogger(MyClass.class); } Я покажу, как сделать, чтобы можно было писать вот так:</description>
     </item>
     
     <item>
@@ -879,7 +845,7 @@ public class MyClass { private static final Logger LOG = LoggerFactory.getLogger
       <guid>https://uthark.github.io/2012/04/20/blog-post/</guid>
       <description>Казалось бы, есть простейшая задача - преобразовать строковое представление даты в объект класса java.util.Date.
 Как оказалось, иногда использование DateFormat не помогает. В случае, если строка - это заголовок Dateиз письма, то нам нужно использовать javax.mail.internet.MailDateFormatдля преобразования такой строки.
-String dateStr = ... Date parsedDate = new MailDateFormat().parse(dateStr); </description>
+String dateStr = .</description>
     </item>
     
     <item>
@@ -889,10 +855,7 @@ String dateStr = ... Date parsedDate = new MailDateFormat().parse(dateStr); </de
       
       <guid>https://uthark.github.io/2012/02/23/jpa-spring-data-jpa/</guid>
       <description>Несмотря на то, что проект только недавно достиг версии 1.0, у него достаточно богатая история - раньше он развивался в рамках проекта Hades.
-Итак, для начала нам необходимо объявить DAO-интерфейс, в котором мы будем объявлять методы для работы с сущностью.
-public interface UserRepository extends CrudRepository&amp;amp;lt;User, Long&amp;amp;gt; { } Данного кода достаточно для обычного DAO с CRUD-методами.
-Полный список методов, объявленный в CrudRepository можно посмотреть в javadoc.
-В случае, если нам нужны не все методы, то есть возможность произвести наследование от интерфейса Repositoryи перенести в наследника только те методы из интерфейса CrudRepository, которые нужны.</description>
+Итак, для начала нам необходимо объявить DAO-интерфейс, в котором мы будем объявлять методы для работы с сущностью.</description>
     </item>
     
     <item>
@@ -901,9 +864,7 @@ public interface UserRepository extends CrudRepository&amp;amp;lt;User, Long&amp
       <pubDate>Thu, 09 Feb 2012 01:05:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2012/02/09/java-rest/</guid>
-      <description>import javax.ws.rs.*; import javax.ws.rs.core.MediaType; @Path(&amp;#34;/service/entity&amp;#34;) @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON}) public interface EntityRestService { @GET @Path(&amp;#34;/all&amp;#34;) EntityList listAll(); @GET @Path(&amp;#34;/{id}&amp;#34;) Entity findById(@PathParam(&amp;#34;id&amp;#34;) Integer id); } Создаём интерфейс, в котором расставляем JAX-RS аннотации. Аннотация @Pathуказывает путь, по которому будет доступен наш сервис. Аннотация @GETопределяет, какой HTTP-запрос будет обрабатываться данным методом. Аннотация @Producesпозволяет указать, в каком формате данный сервис предоставляет результаты.
-Конфигурация очень проста, во-первых, нам нужно добавить обновить pom.xmlи добавить необходимые зависимости:
-Добавляем compile-time зависимость на JAX-RS API</description>
+      <description>import javax.ws.rs.*; import javax.ws.rs.core.MediaType; @Path(&amp;#34;/service/entity&amp;#34;) @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON}) public interface EntityRestService { @GET @Path(&amp;#34;/all&amp;#34;) EntityList listAll(); @GET @Path(&amp;#34;/{id}&amp;#34;) Entity findById(@PathParam(&amp;#34;id&amp;#34;) Integer id); } Создаём интерфейс, в котором расставляем JAX-RS аннотации. Аннотация @Pathуказывает путь, по которому будет доступен наш сервис. Аннотация @GETопределяет, какой HTTP-запрос будет обрабатываться данным методом.</description>
     </item>
     
     <item>
@@ -915,8 +876,7 @@ public interface UserRepository extends CrudRepository&amp;amp;lt;User, Long&amp
       <description>Наверно, вы уже сталкивались с таким понятием, как AOП - аспектно-ориентированное программирование.
 Обычно, про него вспоминают, когда говорят про декларативное использование транзакций, про проверку прав доступа, либо про реализацию журналирования.
 Но это не единственные области применения АОП.
-Я хочу показать ещё пару областей применения из реальных проектов:
- Модификация исходного кода для реализации дополнительных возможностей. Принудительная проверка контракта между модулями.  Модификация исходного кода для реализации дополнительных возможностей Предположим, что у нас есть модуль в приложении, который предоставляет нужную нам функциональность.</description>
+Я хочу показать ещё пару областей применения из реальных проектов:</description>
     </item>
     
     <item>
@@ -925,7 +885,7 @@ public interface UserRepository extends CrudRepository&amp;amp;lt;User, Long&amp
       <pubDate>Thu, 21 Jul 2011 12:06:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2011/07/21/java/</guid>
-      <description>Сегодня я хочу рассмотреть некоторые особенности переопределения методов в Java. В java нельзя переопределить: public class A { int i = 3; int getI() {return i;} } public class B extends A{ int i = 5; int getI() {return i;} } A a = new B(); System.out.println(a.i); System.out.println(a.getI()); Вопрос: что выведет данный код?Ответ:  Так как поля класса не наследуются, то у класса A своё поле i и у класса B тоже своё поле i.</description>
+      <description>Сегодня я хочу рассмотреть некоторые особенности переопределения методов в Java. В java нельзя переопределить: public class A { int i = 3; int getI() {return i;} } public class B extends A{ int i = 5; int getI() {return i;} } A a = new B(); System.</description>
     </item>
     
     <item>
@@ -934,7 +894,7 @@ public interface UserRepository extends CrudRepository&amp;amp;lt;User, Long&amp
       <pubDate>Mon, 06 Dec 2010 23:11:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2010/12/06/blog-post/</guid>
-      <description>import org.apache.http.HttpEntity; import org.apache.http.HttpResponse; import org.apache.http.NameValuePair; import org.apache.http.client.ClientProtocolException; import org.apache.http.client.methods.HttpGet; import org.apache.http.client.utils.URIUtils; import org.apache.http.client.utils.URLEncodedUtils; import org.apache.http.impl.client.DefaultHttpClient; import org.apache.http.message.BasicNameValuePair; import org.apache.http.util.EntityUtils; import org.json.JSONException; import org.json.JSONObject; import android.util.Log; import java.io.IOException; import java.net.URI; import java.net.URISyntaxException; import java.util.ArrayList; import java.util.List; /** * Helper class to work with bitly. * * @author Oleg Atamanenko * @since 06-Dec-2010 12:49:36 */ public class Bitly { private static final String TAG = &amp;#34;Bitly&amp;#34;; private static final String SHORTEN = &amp;#34;/v3/shorten&amp;#34;; private static final String API_URL = &amp;#34;api.</description>
+      <description>import org.apache.http.HttpEntity; import org.apache.http.HttpResponse; import org.apache.http.NameValuePair; import org.apache.http.client.ClientProtocolException; import org.apache.http.client.methods.HttpGet; import org.apache.http.client.utils.URIUtils; import org.apache.http.client.utils.URLEncodedUtils; import org.apache.http.impl.client.DefaultHttpClient; import org.apache.http.message.BasicNameValuePair; import org.apache.http.util.EntityUtils; import org.json.JSONException; import org.json.JSONObject; import android.util.Log; import java.io.IOException; import java.net.URI; import java.net.URISyntaxException; import java.util.ArrayList; import java.util.List; /** * Helper class to work with bitly.</description>
     </item>
     
     <item>
@@ -952,7 +912,7 @@ public interface UserRepository extends CrudRepository&amp;amp;lt;User, Long&amp
       <pubDate>Sat, 22 May 2010 00:26:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2010/05/22/databene-benerator/</guid>
-      <description>&amp;amp;lt;project xmlns=&amp;amp;quot;http://maven.apache.org/POM/4.0.0&amp;amp;quot; xmlns:xsi=&amp;amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;amp;quot; xsi:schemaLocation=&amp;amp;quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd&amp;amp;quot;&amp;amp;gt; &amp;amp;lt;modelVersion&amp;amp;gt;4.0.0&amp;amp;lt;/modelVersion&amp;amp;gt; &amp;amp;lt;groupId&amp;amp;gt;com.myorganization&amp;amp;lt;/groupId&amp;amp;gt; &amp;amp;lt;artifactId&amp;amp;gt;databene-benerator-test&amp;amp;lt;/artifactId&amp;amp;gt; &amp;amp;lt;version&amp;amp;gt;1.0&amp;amp;lt;/version&amp;amp;gt; &amp;amp;lt;packaging&amp;amp;gt;jar&amp;amp;lt;/packaging&amp;amp;gt; &amp;amp;lt;name&amp;amp;gt;data generation project&amp;amp;lt;/name&amp;amp;gt; &amp;amp;lt;dependencies&amp;amp;gt; &amp;amp;lt;dependency&amp;amp;gt; &amp;amp;lt;groupId&amp;amp;gt;org.databene&amp;amp;lt;/groupId&amp;amp;gt; &amp;amp;lt;artifactId&amp;amp;gt;databene-benerator&amp;amp;lt;/artifactId&amp;amp;gt; &amp;amp;lt;version&amp;amp;gt;0.5.9&amp;amp;lt;/version&amp;amp;gt; &amp;amp;lt;/dependency&amp;amp;gt; &amp;amp;lt;dependency&amp;amp;gt; &amp;amp;lt;groupId&amp;amp;gt;org.databene&amp;amp;lt;/groupId&amp;amp;gt; &amp;amp;lt;artifactId&amp;amp;gt;databene-webdecs&amp;amp;lt;/artifactId&amp;amp;gt; &amp;amp;lt;version&amp;amp;gt;0.4.9&amp;amp;lt;/version&amp;amp;gt; &amp;amp;lt;/dependency&amp;amp;gt; &amp;amp;lt;dependency&amp;amp;gt; &amp;amp;lt;groupId&amp;amp;gt;org.databene&amp;amp;lt;/groupId&amp;amp;gt; &amp;amp;lt;artifactId&amp;amp;gt;databene-commons&amp;amp;lt;/artifactId&amp;amp;gt; &amp;amp;lt;version&amp;amp;gt;0.4.9&amp;amp;lt;/version&amp;amp;gt; &amp;amp;lt;/dependency&amp;amp;gt; &amp;amp;lt;dependency&amp;amp;gt; &amp;amp;lt;groupId&amp;amp;gt;mysql&amp;amp;lt;/groupId&amp;amp;gt; &amp;amp;lt;artifactId&amp;amp;gt;mysql-connector-java&amp;amp;lt;/artifactId&amp;amp;gt; &amp;amp;lt;version&amp;amp;gt;5.1.6&amp;amp;lt;/version&amp;amp;gt; &amp;amp;lt;/dependency&amp;amp;gt; &amp;amp;lt;/dependencies&amp;amp;gt; &amp;amp;lt;build&amp;amp;gt; &amp;amp;lt;resources&amp;amp;gt; &amp;amp;lt;resource&amp;amp;gt; &amp;amp;lt;directory&amp;amp;gt;src/main/resources&amp;amp;lt;/directory&amp;amp;gt; &amp;amp;lt;filtering&amp;amp;gt;true&amp;amp;lt;/filtering&amp;amp;gt; &amp;amp;lt;/resource&amp;amp;gt; &amp;amp;lt;/resources&amp;amp;gt; &amp;amp;lt;plugins&amp;amp;gt; &amp;amp;lt;plugin&amp;amp;gt; &amp;amp;lt;groupId&amp;amp;gt;org.apache.maven.plugins&amp;amp;lt;/groupId&amp;amp;gt; &amp;amp;lt;artifactId&amp;amp;gt;maven-compiler-plugin&amp;amp;lt;/artifactId&amp;amp;gt; &amp;amp;lt;configuration&amp;amp;gt; &amp;amp;lt;encoding&amp;amp;gt;UTF-8&amp;amp;lt;/encoding&amp;amp;gt; &amp;amp;lt;source&amp;amp;gt;1.5&amp;amp;lt;/source&amp;amp;gt; &amp;amp;lt;target&amp;amp;gt;1.5&amp;amp;lt;/target&amp;amp;gt; &amp;amp;lt;/configuration&amp;amp;gt; &amp;amp;lt;/plugin&amp;amp;gt; &amp;amp;lt;plugin&amp;amp;gt; &amp;amp;lt;groupId&amp;amp;gt;org.databene&amp;amp;lt;/groupId&amp;amp;gt; &amp;amp;lt;artifactId&amp;amp;gt;maven-benerator-plugin&amp;amp;lt;/artifactId&amp;amp;gt; &amp;amp;lt;version&amp;amp;gt;0.5.9&amp;amp;lt;/version&amp;amp;gt; &amp;amp;lt;executions&amp;amp;gt; &amp;amp;lt;execution&amp;amp;gt; &amp;amp;lt;phase&amp;amp;gt;compile&amp;amp;lt;/phase&amp;amp;gt; &amp;amp;lt;goals&amp;amp;gt; &amp;amp;lt;goal&amp;amp;gt;generate&amp;amp;lt;/goal&amp;amp;gt; &amp;amp;lt;/goals&amp;amp;gt; &amp;amp;lt;/execution&amp;amp;gt; &amp;amp;lt;/executions&amp;amp;gt; &amp;amp;lt;configuration&amp;amp;gt; &amp;amp;lt;descriptor&amp;amp;gt;src/main/resources/benerator.ben.xml&amp;amp;lt;/descriptor&amp;amp;gt; &amp;amp;lt;encoding&amp;amp;gt;UTF-8&amp;amp;lt;/encoding&amp;amp;gt; &amp;amp;lt;validate&amp;amp;gt;true&amp;amp;lt;/validate&amp;amp;gt; &amp;amp;lt;dbUrl&amp;amp;gt;jdbc:mysql://localhost:3306/hrtool?useUnicode=true&amp;amp;amp;characterEncoding=UTF-8&amp;amp;lt;/dbUrl&amp;amp;gt; &amp;amp;lt;dbDriver&amp;amp;gt;com.mysql.jdbc.Driver&amp;amp;lt;/dbDriver&amp;amp;gt; &amp;amp;lt;dbSchema&amp;amp;gt;database&amp;amp;lt;/dbSchema&amp;amp;gt; &amp;amp;lt;dbUser&amp;amp;gt;user&amp;amp;lt;/dbUser&amp;amp;gt; &amp;amp;lt;dbPassword&amp;amp;gt;password&amp;amp;lt;/dbPassword&amp;amp;gt; &amp;amp;lt;/configuration&amp;amp;gt; &amp;amp;lt;dependencies&amp;amp;gt; &amp;amp;lt;dependency&amp;amp;gt; &amp;amp;lt;groupId&amp;amp;gt;log4j&amp;amp;lt;/groupId&amp;amp;gt; &amp;amp;lt;artifactId&amp;amp;gt;log4j&amp;amp;lt;/artifactId&amp;amp;gt; &amp;amp;lt;version&amp;amp;gt;1.</description>
+      <description>&amp;amp;lt;project xmlns=&amp;amp;quot;http://maven.apache.org/POM/4.0.0&amp;amp;quot; xmlns:xsi=&amp;amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;amp;quot; xsi:schemaLocation=&amp;amp;quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd&amp;amp;quot;&amp;amp;gt; &amp;amp;lt;modelVersion&amp;amp;gt;4.0.0&amp;amp;lt;/modelVersion&amp;amp;gt; &amp;amp;lt;groupId&amp;amp;gt;com.myorganization&amp;amp;lt;/groupId&amp;amp;gt; &amp;amp;lt;artifactId&amp;amp;gt;databene-benerator-test&amp;amp;lt;/artifactId&amp;amp;gt; &amp;amp;lt;version&amp;amp;gt;1.0&amp;amp;lt;/version&amp;amp;gt; &amp;amp;lt;packaging&amp;amp;gt;jar&amp;amp;lt;/packaging&amp;amp;gt; &amp;amp;lt;name&amp;amp;gt;data generation project&amp;amp;lt;/name&amp;amp;gt; &amp;amp;lt;dependencies&amp;amp;gt; &amp;amp;lt;dependency&amp;amp;gt; &amp;amp;lt;groupId&amp;amp;gt;org.databene&amp;amp;lt;/groupId&amp;amp;gt; &amp;amp;lt;artifactId&amp;amp;gt;databene-benerator&amp;amp;lt;/artifactId&amp;amp;gt; &amp;amp;lt;version&amp;amp;gt;0.5.9&amp;amp;lt;/version&amp;amp;gt; &amp;amp;lt;/dependency&amp;amp;gt; &amp;amp;lt;dependency&amp;amp;gt; &amp;amp;lt;groupId&amp;amp;gt;org.databene&amp;amp;lt;/groupId&amp;amp;gt; &amp;amp;lt;artifactId&amp;amp;gt;databene-webdecs&amp;amp;lt;/artifactId&amp;amp;gt; &amp;amp;lt;version&amp;amp;gt;0.4.9&amp;amp;lt;/version&amp;amp;gt; &amp;amp;lt;/dependency&amp;amp;gt; &amp;amp;lt;dependency&amp;amp;gt; &amp;amp;lt;groupId&amp;amp;gt;org.databene&amp;amp;lt;/groupId&amp;amp;gt; &amp;amp;lt;artifactId&amp;amp;gt;databene-commons&amp;amp;lt;/artifactId&amp;amp;gt; &amp;amp;lt;version&amp;amp;gt;0.4.9&amp;amp;lt;/version&amp;amp;gt; &amp;amp;lt;/dependency&amp;amp;gt; &amp;amp;lt;dependency&amp;amp;gt; &amp;amp;lt;groupId&amp;amp;gt;mysql&amp;amp;lt;/groupId&amp;amp;gt; &amp;amp;lt;artifactId&amp;amp;gt;mysql-connector-java&amp;amp;lt;/artifactId&amp;amp;gt; &amp;amp;lt;version&amp;amp;gt;5.1.6&amp;amp;lt;/version&amp;amp;gt; &amp;amp;lt;/dependency&amp;amp;gt; &amp;amp;lt;/dependencies&amp;amp;gt; &amp;amp;lt;build&amp;amp;gt; &amp;amp;lt;resources&amp;amp;gt; &amp;amp;lt;resource&amp;amp;gt; &amp;amp;lt;directory&amp;amp;gt;src/main/resources&amp;amp;lt;/directory&amp;amp;gt; &amp;amp;lt;filtering&amp;amp;gt;true&amp;amp;lt;/filtering&amp;amp;gt; &amp;amp;lt;/resource&amp;amp;gt; &amp;amp;lt;/resources&amp;amp;gt; &amp;amp;lt;plugins&amp;amp;gt; &amp;amp;lt;plugin&amp;amp;gt; &amp;amp;lt;groupId&amp;amp;gt;org.</description>
     </item>
     
     <item>
@@ -961,7 +921,7 @@ public interface UserRepository extends CrudRepository&amp;amp;lt;User, Long&amp
       <pubDate>Sun, 11 Apr 2010 11:45:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2010/04/11/gorm/</guid>
-      <description>class Person implements Serializable { static hasMany = [ scores: ScoreSheet ] static mapping = { scores joinTable: false }; } class Note implements Serializable { static belongsTo = [ person: Person ] } class Person implements Serializable { // person fields. } class Payment { Long id Long version Integer amount static mapping = { tablePerHierarchy false } } class CreditCardPayment extends Payment { String cardNumber } </description>
+      <description>class Person implements Serializable { static hasMany = [ scores: ScoreSheet ] static mapping = { scores joinTable: false }; } class Note implements Serializable { static belongsTo = [ person: Person ] } class Person implements Serializable { // person fields.</description>
     </item>
     
     <item>
@@ -970,7 +930,7 @@ public interface UserRepository extends CrudRepository&amp;amp;lt;User, Long&amp
       <pubDate>Mon, 22 Mar 2010 23:50:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2010/03/22/skype-d-bus-python/</guid>
-      <description>#!/bin/sh  # Stop amarok dbus-send --session --type=method_call --dest=org.kde.amarok /Player org.freedesktop.MediaPlayer.Stop # Logout from kopete dbus-send --session --type=method_call --dest=org.kde.kopete /Kopete org.kde.Kopete.disconnectAll # Logout from Skype skypeapi.py &amp;#39;SET USERSTATUS OFFLINE&amp;#39; # Lock screen dbus-send --session --type=method_call --dest=org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.Lock Детали и параметры работы команды dbus-sendописаны в man-странице#!/usr/bin/env python import dbus, sys def main(): remote_bus = dbus.SessionBus() # Check if skype is running. system_service_list = remote_bus.get_object(&amp;#39;org.freedesktop.DBus&amp;#39;, &amp;#39;/org/freedesktop/DBus&amp;#39;).ListNames() skype_api_found = 0 for service in system_service_list: if service==&amp;#39;com.</description>
+      <description>#!/bin/sh  # Stop amarok dbus-send --session --type=method_call --dest=org.kde.amarok /Player org.freedesktop.MediaPlayer.Stop # Logout from kopete dbus-send --session --type=method_call --dest=org.kde.kopete /Kopete org.kde.Kopete.disconnectAll # Logout from Skype skypeapi.py &amp;#39;SET USERSTATUS OFFLINE&amp;#39; # Lock screen dbus-send --session --type=method_call --dest=org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.Lock Детали и параметры работы команды dbus-sendописаны в man-странице#!</description>
     </item>
     
     <item>
@@ -979,7 +939,7 @@ public interface UserRepository extends CrudRepository&amp;amp;lt;User, Long&amp
       <pubDate>Sun, 21 Mar 2010 20:54:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2010/03/21/tiddlywiki/</guid>
-      <description>/*{{{*/ version.extensions.faviconLinkMacro = {major: 0, minor: 1, revision: 0, date: new Date(2010,3,21)}; // Author: Oleg Atamanenko config.macros.faviconLink = {} config.macros.faviconLink.handler = function(place, macroName, params, wikifier, paramString) { var linkBox = createTiddlyElement(place, &amp;amp;quot;span&amp;amp;quot;, null, &amp;amp;quot;favIcon&amp;amp;quot;, &amp;amp;quot;&amp;amp;quot;); var args = paramString.parseParams(&amp;amp;quot;list&amp;amp;quot;,null,true); var link = getParam(args, &amp;amp;quot;link&amp;amp;quot;, &amp;#39;false&amp;#39;); if (link != &amp;#39;false&amp;#39;){ urlParts = link.split(&amp;#39;/&amp;#39;); imgLink = urlParts[0] + &amp;amp;quot;//&amp;amp;quot; + urlParts[2] + &amp;amp;quot;/favicon.ico&amp;amp;quot;;  var imgElement = createTiddlyElement(linkBox, &amp;amp;quot;img&amp;amp;quot;, null, &amp;amp;quot;faviconImage&amp;amp;quot;, &amp;amp;quot;&amp;amp;quot;); imgElement.</description>
+      <description>/*{{{*/ version.extensions.faviconLinkMacro = {major: 0, minor: 1, revision: 0, date: new Date(2010,3,21)}; // Author: Oleg Atamanenko config.macros.faviconLink = {} config.macros.faviconLink.handler = function(place, macroName, params, wikifier, paramString) { var linkBox = createTiddlyElement(place, &amp;amp;quot;span&amp;amp;quot;, null, &amp;amp;quot;favIcon&amp;amp;quot;, &amp;amp;quot;&amp;amp;quot;); var args = paramString.parseParams(&amp;amp;quot;list&amp;amp;quot;,null,true); var link = getParam(args, &amp;amp;quot;link&amp;amp;quot;, &amp;#39;false&amp;#39;); if (link !</description>
     </item>
     
     <item>
@@ -999,7 +959,7 @@ public interface UserRepository extends CrudRepository&amp;amp;lt;User, Long&amp
       <guid>https://uthark.github.io/2010/02/06/grails/</guid>
       <description>Выкладываю ниже список задач, которые нужно/можно выполнить для оптимизации приложения, написанного на Grails, может кому пригодится.
 Тестирование проведённых оптимизаций Первым делом необходимо разработать критерии проверки, которые позволят оценить эффективность проведённых оптимизаций.
- Установить Java Melodyплагиндля Grails для проведения анализа. Разработать скрипты для проведения нагрузочного тестирования. Прогнать скрипты. Проанализировать результаты Java Melody, выявить узкие места, произвести нужные оптимизации.  Общие оптимизации Очень часто обновление до последней версии используемых библиотек попутно улучшает производительность.</description>
+ Установить Java Melodyплагиндля Grails для проведения анализа. Разработать скрипты для проведения нагрузочного тестирования.</description>
     </item>
     
     <item>
@@ -1008,7 +968,7 @@ public interface UserRepository extends CrudRepository&amp;amp;lt;User, Long&amp
       <pubDate>Fri, 05 Feb 2010 01:20:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2010/02/05/blog-post/</guid>
-      <description>Summary: Некоторые особенности вложенных транзакций.Иногда бывает так, что при обработке запроса необходимо открыть ещё одну транзакцию в рамках текущей транзакции. Это называется вложенной транзакцией. Очень многие базы данных не поддерживают вложенные транзакции вообще, например, MySQL и Oracle. А те, что поддерживают, делают это на минимальном уровне, например, Sybase поддерживает только псевдовложенные транзакции.Вложенные транзакции могут быть следующих видов:begin tran select @@trancount /* @@trancount = 1 */ begin tran select @@trancount /* @@trancount = 2 */ begin tran select @@trancount /* @@trancount = 3 */ commit tran commit tran commit tran select @@trancount /* @@ trancount = 0 */ </description>
+      <description>Summary: Некоторые особенности вложенных транзакций.Иногда бывает так, что при обработке запроса необходимо открыть ещё одну транзакцию в рамках текущей транзакции. Это называется вложенной транзакцией. Очень многие базы данных не поддерживают вложенные транзакции вообще, например, MySQL и Oracle. А те, что поддерживают, делают это на минимальном уровне, например, Sybase поддерживает только псевдовложенные транзакции.</description>
     </item>
     
     <item>
@@ -1017,7 +977,7 @@ public interface UserRepository extends CrudRepository&amp;amp;lt;User, Long&amp
       <pubDate>Mon, 14 Dec 2009 23:14:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2009/12/14/autofs-nfs/</guid>
-      <description>Summary: В данной заметке описана настройка autofs для доступа к сетевым ресурсам, доступным по NFS.Последние несколько лет (с тех пор, как количество компьютеров дома стало больше одного) возникла проблема беспрепятственного доступа к данным, хранящимся на одном компьютере с другого.Было найдено самое простое решение - NFS.Как выяснилось позже это было не самое удачное решение - ноутбук не всегда находился дома, а, значит, домашние сетевые ресурсы не всегда доступны. Соответственно, при загрузке операционной системы происходили задержки из-за поиска компьютера с сетевыми ресурсами.</description>
+      <description>Summary: В данной заметке описана настройка autofs для доступа к сетевым ресурсам, доступным по NFS.Последние несколько лет (с тех пор, как количество компьютеров дома стало больше одного) возникла проблема беспрепятственного доступа к данным, хранящимся на одном компьютере с другого.Было найдено самое простое решение - NFS.</description>
     </item>
     
     <item>
@@ -1080,7 +1040,7 @@ public interface UserRepository extends CrudRepository&amp;amp;lt;User, Long&amp
       <pubDate>Tue, 24 Nov 2009 23:09:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2009/11/24/google-chrome/</guid>
-      <description>В продолжение предыдущей заметкиЛогично предположить, что у расширений могут быть настройки. В Google Chrome/Chromium для этого есть специальный API.Для того, чтобы создать собственную страницу настроек необходимо сделать следующее: Объявить в манифесте страницу настроек  Реализовать страницу с настройками.Страница с настройками - это обычная HTML-страничка. Для доступа к настройкам Google Chrome предоставляет объект localStorage, который умеет сохранять и возвращать значения.С объектом localStorageработа идёт как с обычным hash.   </description>
+      <description>В продолжение предыдущей заметкиЛогично предположить, что у расширений могут быть настройки. В Google Chrome/Chromium для этого есть специальный API.Для того, чтобы создать собственную страницу настроек необходимо сделать следующее: Объявить в манифесте страницу настроек  Реализовать страницу с настройками.Страница с настройками - это обычная HTML-страничка.</description>
     </item>
     
     <item>
@@ -1091,7 +1051,7 @@ public interface UserRepository extends CrudRepository&amp;amp;lt;User, Long&amp
       <guid>https://uthark.github.io/2009/11/14/delicious-bookmarks-google/</guid>
       <description>&amp;ldquo;browser_action&amp;rdquo;: { // 5 &amp;ldquo;name&amp;rdquo;: &amp;ldquo;Save bookmark to delicious.com&amp;rdquo;, &amp;ldquo;default_title&amp;rdquo;: &amp;ldquo;Save bookmark to delicious.com&amp;rdquo;, &amp;ldquo;default_icon&amp;rdquo;: &amp;ldquo;delicious.20.gif&amp;rdquo; // optional },
 &amp;ldquo;content_scripts&amp;rdquo;: [ // 6 { &amp;ldquo;matches&amp;rdquo;: [&amp;ldquo;http:///&amp;rdquo;, &amp;ldquo;https:///&amp;quot;], &amp;ldquo;js&amp;rdquo;: [&amp;ldquo;getDocumentSelection.js&amp;rdquo;] } ],
-&amp;ldquo;options_page&amp;rdquo;: &amp;ldquo;options.html&amp;rdquo; // 7 } Манифест - файл в формате JSON.Манифест состоит из следующих частей: name- Имя расширения version- Версия расширения background_page- основной файл с расширением. Это обычный HTML-файл с разметкой. permissions- разрешения для расширения. Указываем, что нам нужен доступ к вкладкам (tabs) и закладкам (bookmarks).</description>
+&amp;ldquo;options_page&amp;rdquo;: &amp;ldquo;options.html&amp;rdquo; // 7 } Манифест - файл в формате JSON.</description>
     </item>
     
     <item>
@@ -1112,8 +1072,7 @@ UPD. Инвайты закончились, всем спасибо.</descriptio
       <guid>https://uthark.github.io/2009/07/07/blog-post/</guid>
       <description>Здравствуйте.
 Я считаю, что разработчику всегда стоит иметь представление о том, как работают низлежащие абстракции. Хотя бы потому, что часто абстракциибываютпротекающими.
-А веду я это к тому, что когда фреймворк вываливает стектрейс с несколькими вложенными (и, часто, для непосвященных непонятными) исключениями, то бывает непонятно, что с этим делать, особенно, если не знаешь, как реализована абстракция.
-Иногда бывает нужно хранить двунаправленные связи между таблицами. Например, есть игрок и есть его статистика и нужно, чтобы каждая из сущностей знала про другую.</description>
+А веду я это к тому, что когда фреймворк вываливает стектрейс с несколькими вложенными (и, часто, для непосвященных непонятными) исключениями, то бывает непонятно, что с этим делать, особенно, если не знаешь, как реализована абстракция.</description>
     </item>
     
     <item>
@@ -1123,8 +1082,7 @@ UPD. Инвайты закончились, всем спасибо.</descriptio
       
       <guid>https://uthark.github.io/2009/07/04/opera-delicious/</guid>
       <description>Так получилось, что в последнее время я стал пользоваться небезызвестной оперой.
-В связи с этим я стал искать замену часто используемым расширениям, одно из них - delicious bookmarks. Сервис del.icio.usпредоставляет букмарклеты для различных браузеров, которые позволяют сохранять закладки быстро и удобно. Вот только есть один недостаток - официальный плагин для Firefoxв свойство Notes новой закладки добавляет выделенный текст со страницы, чего букмарклет не делает.
-Посмотрев исходник букмарклета, а это обычный javascript, я добавил небольшой кусочек кода, который восстанавливает справедливость и тоже добавляет в поле Notes текст, выделенный на странице.</description>
+В связи с этим я стал искать замену часто используемым расширениям, одно из них - delicious bookmarks. Сервис del.icio.usпредоставляет букмарклеты для различных браузеров, которые позволяют сохранять закладки быстро и удобно.</description>
     </item>
     
     <item>
@@ -1133,8 +1091,7 @@ UPD. Инвайты закончились, всем спасибо.</descriptio
       <pubDate>Sat, 06 Jun 2009 22:19:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2009/06/06/spring-roo-2/</guid>
-      <description>Action.java Класс содержит только полезную с точки зрения назначения класса информацию. По сути, то, что вводит разработчик в консоль Roo аккумулируется здесь. Весь дополнительный код разносится по другим классам.  @Entity //1 @RooJavaBean //2 @RooToString //3 @RooEntity(finders = { &amp;#34;findActionsByName&amp;#34; }) //4 public class Action { @NotNull @Size(min = 1, max = 80) private String name; @Size(max = 1024) private String description; } Мы видим, что:
- Класс является JPA-сущностью.</description>
+      <description>Action.java Класс содержит только полезную с точки зрения назначения класса информацию. По сути, то, что вводит разработчик в консоль Roo аккумулируется здесь. Весь дополнительный код разносится по другим классам.  @Entity //1 @RooJavaBean //2 @RooToString //3 @RooEntity(finders = { &amp;#34;findActionsByName&amp;#34; }) //4 public class Action { @NotNull @Size(min = 1, max = 80) private String name; @Size(max = 1024) private String description; } Мы видим, что:</description>
     </item>
     
     <item>
@@ -1153,7 +1110,7 @@ UPD. Инвайты закончились, всем спасибо.</descriptio
       
       <guid>https://uthark.github.io/2009/06/02/apache-ant-metro/</guid>
       <description>Столкнулся с такой проблемой - в некоторых случаях приложение, собранное антом не работает. Конкретно - не работает десереализация запросов на веб-сервис. Получаемый запрос содержит nullв значениях полей.
-Опытным путём было выяснено, что на это влияет используемая версия Java. Под 1.5 работает корректно, под 1.6 - не работает. Нашли ошибку в метро, связанную именно с версией JDK и на этом успокоились. Но было одно исключение из правил. У одного из разработчиков под 1.</description>
+Опытным путём было выяснено, что на это влияет используемая версия Java. Под 1.5 работает корректно, под 1.</description>
     </item>
     
     <item>
@@ -1163,7 +1120,7 @@ UPD. Инвайты закончились, всем спасибо.</descriptio
       
       <guid>https://uthark.github.io/2009/05/30/protected/</guid>
       <description>Недавно задали мне вопрос - что я думаю об использовании модификатора protected для членов базового класса? Под этим вопросом кроются более серьёзные вещи.
-Например, любой член класса, имеющий модификатор protected, расширяет интерфейс базового класса для подклассов - подклассы имеют доступ ко всем protected и public методам этого поля. Иногда это сделано специально, например, для того, чтобы подклассы могли иметь доступ к какой-либо функциональности. Однако, если подкласс будет использовать protected поля неправильно (например, он может установить его в null, нарушив, таким образом, поведение базового класса), то это не принесёт пользы.</description>
+Например, любой член класса, имеющий модификатор protected, расширяет интерфейс базового класса для подклассов - подклассы имеют доступ ко всем protected и public методам этого поля.</description>
     </item>
     
     <item>
@@ -1173,8 +1130,7 @@ UPD. Инвайты закончились, всем спасибо.</descriptio
       
       <guid>https://uthark.github.io/2009/05/27/fixed-price-2/</guid>
       <description>Причин для написания плохого кода может быть несколько. Некоторые из них лежат на поверхности:
-Невнимательность- через это проходят почти все. Почти каждый сможет вспомнить случай, когда не был сделан svn addперед коммитом. Эта проблема решается обычно самомотивацией человека на хороший код. Впрочем, команда и сервер непрерывной интеграции тоже прилагают усилия для того, чтобы человек проверил ещё раз то, что он хочет выложить в репозиторий.
-Некомпетентность- эта причина пересекается с недостатком опыта, но, при этом отлична от неё.</description>
+Невнимательность- через это проходят почти все. Почти каждый сможет вспомнить случай, когда не был сделан svn addперед коммитом. Эта проблема решается обычно самомотивацией человека на хороший код.</description>
     </item>
     
     <item>
@@ -1185,7 +1141,7 @@ UPD. Инвайты закончились, всем спасибо.</descriptio
       <guid>https://uthark.github.io/2009/05/27/fixed-price-1/</guid>
       <description>В последнее время всё чаще задумываюсь о том, почему разработчики пишут плохой и некачественный код. Под кодом я подразумеваю не только сам код, но и, в том числе, архитектуру и дизайн.
 Плохим кодом я считаю следущий:
-Если код не выполняет нефункциональные требования, то это говорит о том, что либо дизайн, либо реализация, не учли требования и это тоже не добавляет удовлетворённости конечному пользователю. Часто здесь можно провести рефакторинг, но бывает и так, что архитектурные ошибки не дают в принципе выполнить нефункциональные требования, либо их реализация требует очень больших временных затрат.</description>
+Если код не выполняет нефункциональные требования, то это говорит о том, что либо дизайн, либо реализация, не учли требования и это тоже не добавляет удовлетворённости конечному пользователю.</description>
     </item>
     
     <item>
@@ -1197,7 +1153,7 @@ UPD. Инвайты закончились, всем спасибо.</descriptio
       <description>Посмотрел на Google App Engine (GAE).
 При своей цене (= бесплатно) это очень хороший сервис.
 GAE - это инфраструктура для запуска веб-приложений на серверах Google. То, что сейчас модно называть cloud computing.
-На презентации платформы в 2008 годуGoogle объявил только о поддержке Python. Год спустя, в апреле 2009 года Google заявил о поддержке Java, правда с ограничениями. Собственно, поддержка Javaи была тем самым толчком, что я решил поближе посмотреть на платформу.</description>
+На презентации платформы в 2008 годуGoogle объявил только о поддержке Python.</description>
     </item>
     
     <item>
@@ -1224,8 +1180,7 @@ GAE - это инфраструктура для запуска веб-прил�
       <pubDate>Fri, 24 Apr 2009 21:49:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2009/04/24/blog-post_24/</guid>
-      <description>При работе в многопользовательском окружении может возникнуть ситуация, когда разные пользователи или системы обновляют одни и те же данные. Это может привести к ситуации, когда один из пользователей изменит данные, которые уже изменял другой пользователь и приведёт либо к потере данных, либо к переводу данных в неконсистентное состояние. Для решения этой проблемы были придуманы транзакции. Целью транзакции является создание абстракции того, что каждый пользователь - единственный в системе.
-Характеристики транзакций В конце 1970-х Джим Грейвыделил следующие характеристики транзакций:</description>
+      <description>При работе в многопользовательском окружении может возникнуть ситуация, когда разные пользователи или системы обновляют одни и те же данные. Это может привести к ситуации, когда один из пользователей изменит данные, которые уже изменял другой пользователь и приведёт либо к потере данных, либо к переводу данных в неконсистентное состояние.</description>
     </item>
     
     <item>
@@ -1236,7 +1191,7 @@ GAE - это инфраструктура для запуска веб-прил�
       <guid>https://uthark.github.io/2009/04/22/blog-post_22/</guid>
       <description>Блокировка - в реляционных базах данных это установка метки на запись, что запись заблокирована для изменений.
 Существует два вида блокировок - оптимистичная и пессимистичная.
-Оптимистичная блокировка При оптимистичной блокировке на базе данных реальной блокировки не происходит. Вместо этого используется следующий подход - если во время выполнения транзакции она изменяет данные, которые были изменены после её начала, то транзакция прерывается с исключением. Использование оптимистичных блокировок позволяет избежать взаимных блокировок (dead-lock). Для реализации оптимистичной блокировки часто используется версионирование данных - в таблицу добавляется колонка, которая хранит текущую версию.</description>
+Оптимистичная блокировка При оптимистичной блокировке на базе данных реальной блокировки не происходит. Вместо этого используется следующий подход - если во время выполнения транзакции она изменяет данные, которые были изменены после её начала, то транзакция прерывается с исключением.</description>
     </item>
     
     <item>
@@ -1248,7 +1203,7 @@ GAE - это инфраструктура для запуска веб-прил�
       <description>В продолжение предыдущей заметки.
 Для работы с del.icio.usя использую официальный плагинот Yahoo!.
 Он предоставляет следующие возможности:
- Синхронизация закладок из Firefox с del.icio.us Переопределение стандартного менеджера закладок. Отслеживание изменений на del.icio.us. Интерфейс для отображения и поиска закладок в панели браузера. Панель инструментов для работы с закладками.  Из всех вышеперечисленных возможностей раньше пользовался только вторым пунктом. Это очень удобно - выделяешь на странице кусок текста и клацаешь ctrl+b. Появляется окошечко с уже заполненной ссылкой, заголовком и описанием ссылки.</description>
+ Синхронизация закладок из Firefox с del.icio.us Переопределение стандартного менеджера закладок. Отслеживание изменений на del.icio.us. Интерфейс для отображения и поиска закладок в панели браузера. Панель инструментов для работы с закладками.</description>
     </item>
     
     <item>
@@ -1258,9 +1213,7 @@ GAE - это инфраструктура для запуска веб-прил�
       
       <guid>https://uthark.github.io/2009/04/19/blog-post/</guid>
       <description>Уже более двух лет я использую del.icio.us.
-Недавно возник вопрос - а вот каким образом можно наиболее эффективно использовать теги? Для себя я придумал вот такой вариант использования - сделал tag bundle Actions, в который поместил теги, диктующие дальнейшие действия.
-Для себя я выделил следующие теги: 2rss - закладки с этим тегом я позже добавляю в свою RSS-читалку.
-2check - этим тегом я помечаю софт или библиотеки, которые хотелось бы изучить и попробовать на деле.</description>
+Недавно возник вопрос - а вот каким образом можно наиболее эффективно использовать теги? Для себя я придумал вот такой вариант использования - сделал tag bundle Actions, в который поместил теги, диктующие дальнейшие действия.</description>
     </item>
     
     <item>

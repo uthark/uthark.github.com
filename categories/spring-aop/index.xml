@@ -19,7 +19,7 @@
       <guid>https://uthark.github.io/2013/06/19/validation/</guid>
       <description>Очень часто возникает задача проверки входных параметров в сервис на корректность с точки зрения бизнес логики.
 Эту задачу можно решить в лоб, написав вручную код валидации в каждом из методов сервиса, например, вот так:
-public User save(User user) { if(user == null) { throw new IllegalArgumentException(&amp;#34;User is null&amp;#34;); } // other checks  //...  // business logic starts here...  //...  return savedUser; } Очевидно, что если в каждом методе делать такие проверки, то код бизнес-логики загрязняется проверками, что ухудшает читаемость кода.</description>
+public User save(User user) { if(user == null) { throw new IllegalArgumentException(&amp;#34;User is null&amp;#34;); } // other checks  //.</description>
     </item>
     
   </channel>

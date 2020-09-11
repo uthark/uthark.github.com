@@ -17,7 +17,7 @@
       <pubDate>Sun, 11 Apr 2010 11:45:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2010/04/11/gorm/</guid>
-      <description>class Person implements Serializable { static hasMany = [ scores: ScoreSheet ] static mapping = { scores joinTable: false }; } class Note implements Serializable { static belongsTo = [ person: Person ] } class Person implements Serializable { // person fields. } class Payment { Long id Long version Integer amount static mapping = { tablePerHierarchy false } } class CreditCardPayment extends Payment { String cardNumber } </description>
+      <description>class Person implements Serializable { static hasMany = [ scores: ScoreSheet ] static mapping = { scores joinTable: false }; } class Note implements Serializable { static belongsTo = [ person: Person ] } class Person implements Serializable { // person fields.</description>
     </item>
     
   </channel>

@@ -18,7 +18,7 @@
       
       <guid>https://uthark.github.io/post/2018-02-24-used-stuff/</guid>
       <description>Introduction This is a dump of different things and apps I use on a daily basis. Hope you will find it useful.
-Shell/Terminal Applications  zsh — ZSH is a shell. It is very good alternative to bash which is used by default in most Linux distributions and in macOS. macOS uses very old version of bash because bash changed it&amp;rsquo;s license and Apple doesn&amp;rsquo;t like GPL. oh-my-zsh — framework for easy customization of ZSH.</description>
+Shell/Terminal Applications  zsh — ZSH is a shell. It is very good alternative to bash which is used by default in most Linux distributions and in macOS.</description>
     </item>
     
   </channel>

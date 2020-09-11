@@ -17,8 +17,7 @@
       <pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2013/06/19/autowiring-factorybean/</guid>
-      <description>Предположим, что у нас есть проект на Spring, в котором необходимо использовать внешние EJB. Для получения бинов необходимо создавать InitialContext и делать lookup() нужных ejb. Но эту задачу можно автоматизировать и пользоваться @Autowired, то есть код будет выглядеть вот так:
-@Service public class UserService { @Autowired private UserRemoteBean userRemoteBean; } Для этого в Spring существует FactoryBean - класс, который знает, как создавать бины нужного типа. Собственно, нам необходимо написать такой класс (код на Scala):</description>
+      <description>Предположим, что у нас есть проект на Spring, в котором необходимо использовать внешние EJB. Для получения бинов необходимо создавать InitialContext и делать lookup() нужных ejb. Но эту задачу можно автоматизировать и пользоваться @Autowired, то есть код будет выглядеть вот так:</description>
     </item>
     
   </channel>

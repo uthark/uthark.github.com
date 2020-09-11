@@ -29,7 +29,7 @@
     
     
     
-    <link rel="stylesheet" href="https://uthark.github.io/css/theme.67fdd3de42877d3dd583ad51bb8533496fa520bd4bac49759be34c5b49d2a259.css">
+    <link rel="stylesheet" href="https://uthark.github.io/css/theme.bb5bfcaca08d09361e860384007c0b825b7c510c697d5b6e15af71730899b64b.css">
     <link rel="stylesheet" href="https://uthark.github.io/css/uthark.css">
 
 
@@ -149,9 +149,7 @@
           <p>Рассмотрим подробнее одну из наиболее полезных вещей в Spring Data JPA - генерация JPQL-запросов на основе имени метода.
 Spring Data JPA умеет автоматически генерировать запросы используя для подсказки название метода.
 Например, метод User.findByLoginAndPassword сгенерирует примерно следующий код:
-FROM User u where u.login = :login and password = :password Вообще Spring Data JPA пытается быть умным, поэтому реализация findBy{&hellip;}методов ищется следующим образом:
-У @Queryследующие плюсы:
-Очевидно, что при использовании запросов нам необходимо каким-то образом указывать параметры для запросов.</p>
+FROM User u where u.</p>
 
           
               <footer>
@@ -178,9 +176,7 @@ FROM User u where u.login = :login and password = :password Вообще Spring 
 
         
           <p>Сегодня я хочу рассказать, как можно сделать инициализацию логгера в классе с использованием аннотаций и BeanPostProcessorОчень часто мы инициализируем логгер следующим образом:
-public class MyClass { private static final Logger LOG = LoggerFactory.getLogger(MyClass.class); } Я покажу, как сделать, чтобы можно было писать вот так:
-@Log private Logger LOG; Первым делом нам нужно объявить аннотацию:
-@Retention(RUNTIME) @Target(FIELD) @Documented public @interface Log { String category() default &#34;&#34;; } А вторым делом, написать собственный BeanPostProcessor, который бы устанавливал нам логгер:</p>
+public class MyClass { private static final Logger LOG = LoggerFactory.getLogger(MyClass.class); } Я покажу, как сделать, чтобы можно было писать вот так:</p>
 
           
               <footer>
@@ -208,8 +204,12 @@ public class MyClass { private static final Logger LOG = LoggerFactory.getLogger
         
           <p>Казалось бы, есть простейшая задача - преобразовать строковое представление даты в объект класса java.util.Date.
 Как оказалось, иногда использование DateFormat не помогает. В случае, если строка - это заголовок Dateиз письма, то нам нужно использовать javax.mail.internet.MailDateFormatдля преобразования такой строки.
-String dateStr = ... Date parsedDate = new MailDateFormat().parse(dateStr); </p>
+String dateStr = .</p>
 
+          
+              <footer>
+                  <a href="https://uthark.github.io/2012/04/20/blog-post/" rel="full-article">Continue Reading &rarr;</a>
+              </footer>
           
 
         
@@ -231,10 +231,7 @@ String dateStr = ... Date parsedDate = new MailDateFormat().parse(dateStr); </p>
 
         
           <p>Несмотря на то, что проект только недавно достиг версии 1.0, у него достаточно богатая история - раньше он развивался в рамках проекта Hades.
-Итак, для начала нам необходимо объявить DAO-интерфейс, в котором мы будем объявлять методы для работы с сущностью.
-public interface UserRepository extends CrudRepository&amp;lt;User, Long&amp;gt; { } Данного кода достаточно для обычного DAO с CRUD-методами.
-Полный список методов, объявленный в CrudRepository можно посмотреть в javadoc.
-В случае, если нам нужны не все методы, то есть возможность произвести наследование от интерфейса Repositoryи перенести в наследника только те методы из интерфейса CrudRepository, которые нужны.</p>
+Итак, для начала нам необходимо объявить DAO-интерфейс, в котором мы будем объявлять методы для работы с сущностью.</p>
 
           
               <footer>
@@ -260,9 +257,7 @@ public interface UserRepository extends CrudRepository&amp;lt;User, Long&amp;gt;
 
 
         
-          <p>import javax.ws.rs.*; import javax.ws.rs.core.MediaType; @Path(&#34;/service/entity&#34;) @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON}) public interface EntityRestService { @GET @Path(&#34;/all&#34;) EntityList listAll(); @GET @Path(&#34;/{id}&#34;) Entity findById(@PathParam(&#34;id&#34;) Integer id); } Создаём интерфейс, в котором расставляем JAX-RS аннотации. Аннотация @Pathуказывает путь, по которому будет доступен наш сервис. Аннотация @GETопределяет, какой HTTP-запрос будет обрабатываться данным методом. Аннотация @Producesпозволяет указать, в каком формате данный сервис предоставляет результаты.
-Конфигурация очень проста, во-первых, нам нужно добавить обновить pom.xmlи добавить необходимые зависимости:
-Добавляем compile-time зависимость на JAX-RS API</p>
+          <p>import javax.ws.rs.*; import javax.ws.rs.core.MediaType; @Path(&#34;/service/entity&#34;) @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON}) public interface EntityRestService { @GET @Path(&#34;/all&#34;) EntityList listAll(); @GET @Path(&#34;/{id}&#34;) Entity findById(@PathParam(&#34;id&#34;) Integer id); } Создаём интерфейс, в котором расставляем JAX-RS аннотации. Аннотация @Pathуказывает путь, по которому будет доступен наш сервис. Аннотация @GETопределяет, какой HTTP-запрос будет обрабатываться данным методом.</p>
 
           
               <footer>

@@ -29,7 +29,7 @@
     
     
     
-    <link rel="stylesheet" href="https://uthark.github.io/css/theme.67fdd3de42877d3dd583ad51bb8533496fa520bd4bac49759be34c5b49d2a259.css">
+    <link rel="stylesheet" href="https://uthark.github.io/css/theme.bb5bfcaca08d09361e860384007c0b825b7c510c697d5b6e15af71730899b64b.css">
     <link rel="stylesheet" href="https://uthark.github.io/css/uthark.css">
 
 
@@ -148,7 +148,7 @@
         
           <p>Очень часто возникает задача проверки входных параметров в сервис на корректность с точки зрения бизнес логики.
 Эту задачу можно решить в лоб, написав вручную код валидации в каждом из методов сервиса, например, вот так:
-public User save(User user) { if(user == null) { throw new IllegalArgumentException(&#34;User is null&#34;); } // other checks  //...  // business logic starts here...  //...  return savedUser; } Очевидно, что если в каждом методе делать такие проверки, то код бизнес-логики загрязняется проверками, что ухудшает читаемость кода.</p>
+public User save(User user) { if(user == null) { throw new IllegalArgumentException(&#34;User is null&#34;); } // other checks  //.</p>
 
           
               <footer>
@@ -175,8 +175,7 @@ public User save(User user) { if(user == null) { throw new IllegalArgumentExcept
 
         
           <p>В Spring 3.1 появился замечательный модуль - Spring Cache, который является абстракцией над кэшированием, что позволяет декларативно реализовывать кэширование в приложении.
-Я не буду вдаваться в подробности работы, их можно прочитать в документации, но опишу, каким образом можно настроить memcached в качестве бэкэнда для работы.
-Подключение зависимостей &lt;dependency&gt; &lt;groupId&gt;com.google.code.simple-spring-memcached&lt;/groupId&gt; &lt;artifactId&gt;spymemcached-provider&lt;/artifactId&gt; &lt;version&gt;3.1.0&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;com.google.code.simple-spring-memcached&lt;/groupId&gt; &lt;artifactId&gt;spring-cache&lt;/artifactId&gt; &lt;version&gt;3.1.0&lt;/version&gt; &lt;/dependency&gt; spymemcached-provider - это библиотечка для работы с memcached из Java, а spring-cache - модуль интеграции со Spring.</p>
+Я не буду вдаваться в подробности работы, их можно прочитать в документации, но опишу, каким образом можно настроить memcached в качестве бэкэнда для работы.</p>
 
           
               <footer>
@@ -204,7 +203,7 @@ public User save(User user) { if(user == null) { throw new IllegalArgumentExcept
         
           <p>JSR-303 предоставляет удобный API для проверки валидности объектов, а также входных параметров. Очевидно, что стандартных валидаторов в какой-то момент может быть недостаточно, поэтому необходимо писать собственный.
 Хочу показать на примере валидации запроса к MongoDB, как легко это делается.
-Создание аннотации @Target({FIELD, PARAMETER}) @Retention(RUNTIME) @Documented @Constraint(validatedBy = {MongoQueryValidator.class}) public @interface MongoQuery { String message() default &#34;Invalid mongo query&#34;; Class&lt;?&gt;[] groups() default {}; Class&lt;? extends Payload&gt;[] payload() default {}; } Обратите внимание на аннотацию @Constraint - она описывает, какой класс будет проводить реальную валидацию.</p>
+Создание аннотации @Target({FIELD, PARAMETER}) @Retention(RUNTIME) @Documented @Constraint(validatedBy = {MongoQueryValidator.</p>
 
           
               <footer>
@@ -231,8 +230,7 @@ public User save(User user) { if(user == null) { throw new IllegalArgumentExcept
 
         
           <p>Современные enterprise проекты очень часто имеют очень сложную инфраструктуру для развёртывания. Кроме того, во время разработки часто используются виртуальные машины. Например, может использоваться несколько виртуальных машин, на которых развёрнуты различные конфигурации софта.
-Vagrant - это средство для управления виртуальными машинами на базе Virtualbox.
-Возможности  Создание виртуальных машин с определённой, заранее заданной, конфигурацией. Лёгкое создание копии виртуальной машины, используя заранее подготовленный образ. Осуществление provisioning для новых виртуальных машин.  Работа с Vagrant Для начала необходимо установить Virtualbox и Vagrant.</p>
+Vagrant - это средство для управления виртуальными машинами на базе Virtualbox.</p>
 
           
               <footer>
@@ -259,8 +257,7 @@ Vagrant - это средство для управления виртуальн
 
         
           <p>Очевидно, что мы не всегда можем воспользоваться автоматической генерацией кода, предоставляемой Spring Data JPA. Например, у нас слишком сложный запрос, или нам необходимо вызвать процедуру в базе данных, либо у нас сложная бизнес-логика.
-Рассмотрим следующий пример - например, нам нужна функциональность уникального счётчика, который мы решили реализовать с помощью последовательности (sequence).
-Сначала определим интерфейс, в котором опишем все методы, которые мы будем реализовывать самостоятельно. В нашем случае, это будет только один метод:</p>
+Рассмотрим следующий пример - например, нам нужна функциональность уникального счётчика, который мы решили реализовать с помощью последовательности (sequence).</p>
 
           
               <footer>

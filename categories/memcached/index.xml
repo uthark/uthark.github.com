@@ -18,8 +18,7 @@
       
       <guid>https://uthark.github.io/2013/06/19/spring-caching/</guid>
       <description>В Spring 3.1 появился замечательный модуль - Spring Cache, который является абстракцией над кэшированием, что позволяет декларативно реализовывать кэширование в приложении.
-Я не буду вдаваться в подробности работы, их можно прочитать в документации, но опишу, каким образом можно настроить memcached в качестве бэкэнда для работы.
-Подключение зависимостей &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;com.google.code.simple-spring-memcached&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spymemcached-provider&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;3.1.0&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;com.google.code.simple-spring-memcached&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-cache&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;3.1.0&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; spymemcached-provider - это библиотечка для работы с memcached из Java, а spring-cache - модуль интеграции со Spring.</description>
+Я не буду вдаваться в подробности работы, их можно прочитать в документации, но опишу, каким образом можно настроить memcached в качестве бэкэнда для работы.</description>
     </item>
     
   </channel>

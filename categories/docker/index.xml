@@ -18,9 +18,7 @@
       
       <guid>https://uthark.github.io/post/2020-09-03-docker-best-practices/</guid>
       <description>Introduction After using docker for last several years I’d like to share best practices that works in production.
-Reduce container image size In Cloud Native world infrastructure is disposable and immutable. As result, if your kubernetes pod is rescheduled to another node, new node need to pull docker image.
-Small docker images provide the following benefits:
- Smaller attack surface. If image contain only your app binaries and direct dependencies without full blown OS, you will need to apply patches to fix vulnerabilities infrequently.</description>
+Reduce container image size In Cloud Native world infrastructure is disposable and immutable. As result, if your kubernetes pod is rescheduled to another node, new node need to pull docker image.</description>
     </item>
     
   </channel>
