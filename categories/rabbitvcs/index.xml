@@ -17,7 +17,10 @@
       <pubDate>Sun, 06 Dec 2009 01:03:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2009/12/06/nautilus-subversion/</guid>
-      <description>Для Ubuntu KarmicУстановка для других дистрибутивов описана на официальном сайте.</description>
+      <description>Раньше я использовал коллекцию скриптов nautilussvn, весьма неудобную в использовании.
+Бродя по просторам сети наткнулся на отличную замену. Встречайте - RabbitVCS.
+ВозможностиИнтеграция с Nautilus Поддержка Subversion Полная локализация Поддержка командной строки Доступны пакеты для различных дистрибутивов Установка
+Для Ubuntu Hardy, Intepid, Jaunty</description>
     </item>
     
   </channel>

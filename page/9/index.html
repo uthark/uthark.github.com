@@ -175,7 +175,9 @@
 
 
         
-          <p>Сегодня я хочу рассмотреть некоторые особенности переопределения методов в Java. В java нельзя переопределить: public class A { int i = 3; int getI() {return i;} } public class B extends A{ int i = 5; int getI() {return i;} } A a = new B(); System.</p>
+          <p>Сегодня я хочу рассмотреть некоторые особенности переопределения методов в Java. В java нельзя переопределить: поля класса конструкторы, инициализаторы класса статические методы статические поля 
+Подробнее об этом можно прочитать в Java Language Specification, §8.4.8
+Итак, в java все нестатические неприватные (то есть, protected, package и public) методы являются виртуальными.</p>
 
           
               <footer>
@@ -201,7 +203,7 @@
 
 
         
-          <p>import org.apache.http.HttpEntity; import org.apache.http.HttpResponse; import org.apache.http.NameValuePair; import org.apache.http.client.ClientProtocolException; import org.apache.http.client.methods.HttpGet; import org.apache.http.client.utils.URIUtils; import org.apache.http.client.utils.URLEncodedUtils; import org.apache.http.impl.client.DefaultHttpClient; import org.apache.http.message.BasicNameValuePair; import org.apache.http.util.EntityUtils; import org.json.JSONException; import org.json.JSONObject; import android.util.Log; import java.io.IOException; import java.net.URI; import java.net.URISyntaxException; import java.util.ArrayList; import java.util.List; /** * Helper class to work with bitly.</p>
+          <p>ВступлениеВстала передо мной задача - сокращать ссылки перед тем, как отправлять их в Twitter. Для решения этой задачи я решил использовать bit.ly, благо, их API внятный и простой. Программируем!Решение нарисовалось в виде следующего класса: import org.apache.http.HttpEntity; import org.apache.http.HttpResponse; import org.apache.http.NameValuePair; import org.</p>
 
           
               <footer>
@@ -227,8 +229,14 @@
 
 
         
-          <p>package com.blogspot.atamanenko; import java.text.Normalizer; import java.text.Normalizer.Form; public class StringNormalizer { public static String normalize(String string) { return Normalizer.normalize(string, Form.NFD) .replaceAll(&#34;\\p{InCombiningDiacriticalMarks}+&#34;, &#34;&#34;); } } Вызов Normalizer.normalizeпроводит нормализациювходной строки. Последующий вызов регулярного выражения удаляет все диакритические знаки, полученные после нормализации.</p>
+          <p>Возникла проблема - каким образом заменить в строке символы из национальных кодировок на соответствующие им из латиницы.
+Например, из строки explicación получить explicacion.
+package com.blogspot.atamanenko; import java.text.Normalizer; import java.text.Normalizer.Form; public class StringNormalizer { public static String normalize(String string) { return Normalizer.</p>
 
+          
+              <footer>
+                  <a href="https://uthark.github.io/2010/05/22/blog-post/" rel="full-article">Continue Reading &rarr;</a>
+              </footer>
           
 
         
@@ -249,7 +257,7 @@
 
 
         
-          <p>&amp;lt;project xmlns=&amp;quot;http://maven.apache.org/POM/4.0.0&amp;quot; xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot; xsi:schemaLocation=&amp;quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd&amp;quot;&amp;gt; &amp;lt;modelVersion&amp;gt;4.0.0&amp;lt;/modelVersion&amp;gt; &amp;lt;groupId&amp;gt;com.myorganization&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;databene-benerator-test&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;1.0&amp;lt;/version&amp;gt; &amp;lt;packaging&amp;gt;jar&amp;lt;/packaging&amp;gt; &amp;lt;name&amp;gt;data generation project&amp;lt;/name&amp;gt; &amp;lt;dependencies&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.databene&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;databene-benerator&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;0.5.9&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.databene&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;databene-webdecs&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;0.4.9&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.databene&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;databene-commons&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;0.4.9&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;mysql&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;mysql-connector-java&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;5.1.6&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;/dependencies&amp;gt; &amp;lt;build&amp;gt; &amp;lt;resources&amp;gt; &amp;lt;resource&amp;gt; &amp;lt;directory&amp;gt;src/main/resources&amp;lt;/directory&amp;gt; &amp;lt;filtering&amp;gt;true&amp;lt;/filtering&amp;gt; &amp;lt;/resource&amp;gt; &amp;lt;/resources&amp;gt; &amp;lt;plugins&amp;gt; &amp;lt;plugin&amp;gt; &amp;lt;groupId&amp;gt;org.</p>
+          <p>Периодически необходимо решать задачу создания больших ( и не очень) объёмов тестовых данных для проведения различных видов тестирования - функционального, нагрузочного (тестирование стабильности и производительности). При этом часто получается так, что система на тестовых данных ведёт себя совсем иначе, чем на реальных данных.</p>
 
           
               <footer>

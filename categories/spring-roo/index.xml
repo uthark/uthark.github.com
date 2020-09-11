@@ -17,7 +17,7 @@
       <pubDate>Sat, 06 Jun 2009 22:19:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2009/06/06/spring-roo-2/</guid>
-      <description>Action.java Класс содержит только полезную с точки зрения назначения класса информацию. По сути, то, что вводит разработчик в консоль Roo аккумулируется здесь. Весь дополнительный код разносится по другим классам.  @Entity //1 @RooJavaBean //2 @RooToString //3 @RooEntity(finders = { &amp;#34;findActionsByName&amp;#34; }) //4 public class Action { @NotNull @Size(min = 1, max = 80) private String name; @Size(max = 1024) private String description; } Мы видим, что:</description>
+      <description>Архитектура сгенерированного приложения Spring Roo активно использует аспекты. В качестве реализации аспектов была взята библиотека aspectj. Большая часть сгенерированного кода попадает в отдельные файлы-аспекты. Создадим простой класс: ```bash new persistent class jpa -name ~.domain.Action -testAutomatically add field string name -notNull -sizeMin 1 -sizeMax 80 add field string description -sizeMax 1024 ``` Spring Roo создаст нам следующие файлы:  Action.</description>
     </item>
     
     <item>
@@ -26,7 +26,8 @@
       <pubDate>Wed, 03 Jun 2009 00:06:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2009/06/03/spring-roo/</guid>
-      <description>Недавнокомпания Spring Sourceпрезентовала новый продукт - Spring Roo. Цель проекта- повысить продуктивность Java-разработчиков. Почитавобзоры, а также потрогав его рукамиможно сделать вывод о том, что это, в некотором виде, альтернатива AppFuseи Grails.</description>
+      <description>Недавно компания Spring Source презентовала новый продукт - Spring Roo. Цель проекта - повысить продуктивность Java-разработчиков. Почитав обзоры, а также потрогав его руками можно сделать вывод о том, что это, в некотором виде, альтернатива AppFuse и Grails.
+Описание Spring Roo100% программирование на Java, предлагающее разработчикам известную, развитую и популярную платформу разработки.</description>
     </item>
     
   </channel>

@@ -17,7 +17,10 @@
       <pubDate>Mon, 07 Dec 2009 19:25:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2009/12/07/rss_07/</guid>
-      <description></description>
+      <description>Решил убрать дайджест ссылок из RSS-ленты.
+Те, кому это нужно могут сделать следующее:
+1. Добавить в свой RSS-аггрегатор ленту http://feeds.delicious.com/v2/rss/dark.schakal?count=15
+2. Если вы используете сервис Delicious, то можете меня добавить меня в свою сеть по ссылке: http://delicious.com/settings/networkadd?networkadd=dark.schakal </description>
     </item>
     
   </channel>

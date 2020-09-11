@@ -17,7 +17,9 @@
       <pubDate>Sun, 11 Apr 2010 11:45:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2010/04/11/gorm/</guid>
-      <description>class Person implements Serializable { static hasMany = [ scores: ScoreSheet ] static mapping = { scores joinTable: false }; } class Note implements Serializable { static belongsTo = [ person: Person ] } class Person implements Serializable { // person fields.</description>
+      <description>В данной заметке хочу поделиться некоторыми моментами использования GORM.
+GORM - это ORM-фреймворк, используемый в Grails. Реализован он поверх Hibernate, но, при этом, с некоторыми отличными умолчаниями.
+Для разработчиков, знающих Hibernate, рекомендую тщательно изучить GORM, так как его поведение в некоторых случаях отлично от Hibernate, что может приводить к различным сюрпризам.</description>
     </item>
     
     <item>
@@ -28,7 +30,7 @@
       <guid>https://uthark.github.io/2010/02/06/grails/</guid>
       <description>Выкладываю ниже список задач, которые нужно/можно выполнить для оптимизации приложения, написанного на Grails, может кому пригодится.
 Тестирование проведённых оптимизаций Первым делом необходимо разработать критерии проверки, которые позволят оценить эффективность проведённых оптимизаций.
- Установить Java Melodyплагиндля Grails для проведения анализа. Разработать скрипты для проведения нагрузочного тестирования.</description>
+ Установить Java Melody плагин для Grails для проведения анализа.</description>
     </item>
     
   </channel>

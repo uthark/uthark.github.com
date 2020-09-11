@@ -17,7 +17,8 @@
       <pubDate>Fri, 20 Apr 2012 15:51:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/2012/04/20/beanpostprocessor/</guid>
-      <description>Сегодня я хочу рассказать, как можно сделать инициализацию логгера в классе с использованием аннотаций и BeanPostProcessorОчень часто мы инициализируем логгер следующим образом:
+      <description>Сегодня я хочу рассказать, как можно сделать инициализацию логгера в классе с использованием аннотаций и BeanPostProcessor
+Очень часто мы инициализируем логгер следующим образом:
 public class MyClass { private static final Logger LOG = LoggerFactory.getLogger(MyClass.class); } Я покажу, как сделать, чтобы можно было писать вот так:</description>
     </item>
     

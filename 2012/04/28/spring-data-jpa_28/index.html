@@ -176,7 +176,7 @@
     <span class="n">Integer</span> <span class="nf">getNextUniqueId</span><span class="o">();</span>
 <span class="o">}</span>
 
-</code></pre></div><p>Затем обновим объявление репозитория, чтобы он унаследовал новый интерфейс <!-- raw HTML omitted -->UserRepositoryCustom<!-- raw HTML omitted --></p>
+</code></pre></div><p>Затем обновим объявление репозитория, чтобы он унаследовал новый интерфейс <tt>UserRepositoryCustom</tt></p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">
 <span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UserRepository</span> <span class="kd">extends</span> <span class="n">JpaRepository</span><span class="o">&lt;</span><span class="n">User</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;,</span> <span class="n">UserRepositoryCustom</span> <span class="o">{</span>
    <span class="o">...</span>
@@ -204,7 +204,7 @@
         <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="na">intValue</span><span class="o">();</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre></div><p>И, наконец, укажем Spring Data JPA, чтобы в качестве класса для прокси использовался наш класс с реализацией собственных методов. Для этого нам нужна ещё одна секция <!-- raw HTML omitted -->repositories<!-- raw HTML omitted --> в конфигурационном файле:</p>
+</code></pre></div><p>И, наконец, укажем Spring Data JPA, чтобы в качестве класса для прокси использовался наш класс с реализацией собственных методов. Для этого нам нужна ещё одна секция <tt>repositories</tt> в конфигурационном файле:</p>
 <div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml">    <span class="nt">&lt;repositories</span> <span class="na">base-package=</span><span class="s">&#34;[base.repository.package]&#34;</span><span class="nt">/&gt;</span>
 
     <span class="nt">&lt;repositories</span> <span class="na">base-package=</span><span class="s">&#34;[base.repository.package]&#34;</span><span class="nt">&gt;</span>

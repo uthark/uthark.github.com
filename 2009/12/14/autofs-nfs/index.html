@@ -65,7 +65,8 @@
 
   <meta property="og:title" content="Настройка autofs для монтирования NFS-ресурсов" />
   <meta property="og:url" content="https://uthark.github.io/2009/12/14/autofs-nfs/" />
-  <meta property="og:description" content="Summary: В данной заметке описана настройка autofs для доступа к сетевым ресурсам, доступным по NFS.Последние несколько лет (с тех пор, как количество компьютеров дома стало больше одного) возникла проблема беспрепятственного доступа к данным, хранящимся на одном компьютере с другого.Было найдено самое простое решение - NFS." />
+  <meta property="og:description" content="Summary: В данной заметке описана настройка autofs для доступа к сетевым ресурсам, доступным по NFS.
+Последние несколько лет (с тех пор, как количество компьютеров дома стало больше одного) возникла проблема беспрепятственного доступа к данным, хранящимся на одном компьютере с другого." />
 
   
 
@@ -163,42 +164,45 @@
           
           
           
-          <p>Summary: В данной заметке описана настройка autofs для доступа к сетевым ресурсам, доступным по NFS.<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-Последние несколько лет (с тех пор, как количество компьютеров дома стало больше одного) возникла проблема беспрепятственного доступа к данным, хранящимся на одном компьютере с другого.<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-Было найдено самое простое решение - <!-- raw HTML omitted -->NFS<!-- raw HTML omitted -->.<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-Как выяснилось позже это было не самое удачное решение - ноутбук не всегда находился дома, а, значит, домашние сетевые ресурсы не всегда доступны. Соответственно, при загрузке операционной системы происходили задержки из-за поиска компьютера с сетевыми ресурсами. Не очень удобно, но жить можно.<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-Решил окончательно разобраться с этим и начал искать решение. Оно оказалось на поверхности и затронуло только клиента ресурсов, то есть ноутбук. Решение называется <!-- raw HTML omitted --><!-- raw HTML omitted -->autofs<!-- raw HTML omitted --><!-- raw HTML omitted -->.<!-- raw HTML omitted -->
-<!-- raw HTML omitted --></p>
+          <p>Summary: В данной заметке описана настройка autofs для доступа к сетевым ресурсам, доступным по NFS.<br />
+<br />
+Последние несколько лет (с тех пор, как количество компьютеров дома стало больше одного) возникла проблема беспрепятственного доступа к данным, хранящимся на одном компьютере с другого.<br />
+<br />
+Было найдено самое простое решение - <a href="http://en.wikipedia.org/wiki/Network_File_System_(protocol)">NFS</a>.<br />
+<br />
+Как выяснилось позже это было не самое удачное решение - ноутбук не всегда находился дома, а, значит, домашние сетевые ресурсы не всегда доступны. Соответственно, при загрузке операционной системы происходили задержки из-за поиска компьютера с сетевыми ресурсами. Не очень удобно, но жить можно.<br />
+<br />
+Решил окончательно разобраться с этим и начал искать решение. Оно оказалось на поверхности и затронуло только клиента ресурсов, то есть ноутбук. Решение называется <tt><a href="http://www.autofs.org/">autofs</a></tt>.<br />
+<br /></p>
 <ol>
-<li>Устанавливаем <!-- raw HTML omitted -->autofs<!-- raw HTML omitted -->.<!-- raw HTML omitted --></li>
+<li>Устанавливаем <tt>autofs</tt>.<br /></li>
 </ol>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<pre class="brush: bash">sudo aptitude install autofs5 nfs-common
+</pre><br />
 <ol start="2">
-<li>Производим настройку.<!-- raw HTML omitted -->
-Редактируем файл <!-- raw HTML omitted -->/etc/auto.master<!-- raw HTML omitted -->. Расскомментируем строку, содержащую строки <!-- raw HTML omitted -->/net -hosts<!-- raw HTML omitted -->:<!-- raw HTML omitted --></li>
+<li>Производим настройку.<br />
+Редактируем файл <tt>/etc/auto.master</tt>. Расскомментируем строку, содержащую строки <tt>/net -hosts</tt>:<br /></li>
 </ol>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<pre class="brush: bash">/net -hosts
++auto.master
+</pre><br />
 <ol start="3">
-<li>В файл <!-- raw HTML omitted --><!-- raw HTML omitted -->/etc/hosts<!-- raw HTML omitted --><!-- raw HTML omitted --> можно внести адреса серверов с NFS-ресурсами (для того, чтобы избежать <!-- raw HTML omitted -->DNS<!-- raw HTML omitted -->-запросов). В моём случае:<!-- raw HTML omitted --></li>
+<li>В файл <tt><a href="http://en.wikipedia.org/wiki/Hosts_file">/etc/hosts</a></tt> можно внести адреса серверов с NFS-ресурсами (для того, чтобы избежать <a href="http://en.wikipedia.org/wiki/Domain_Name_System">DNS</a>-запросов). В моём случае:<br /></li>
 </ol>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<pre class="brush: plain">192.168.18.1 server
+</pre><br />
 <ol start="4">
-<li>Перезапускаем сервис <!-- raw HTML omitted -->autofs<!-- raw HTML omitted --><!-- raw HTML omitted --></li>
+<li>Перезапускаем сервис <tt>autofs</tt><br /></li>
 </ol>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<pre class="brush: plain">sudo service autofs restart
+</pre><br />
 <ol start="5">
-<li>Теперь открываем в файловом браузер адрес <!-- raw HTML omitted -->/net/server<!-- raw HTML omitted --> и видим его сетевые ресурсы, доступные для данного клиента.<!-- raw HTML omitted -->
-<!-- raw HTML omitted --></li>
+<li>Теперь открываем в файловом браузер адрес <tt>/net/server</tt> и видим его сетевые ресурсы, доступные для данного клиента.<br />
+<br /></li>
 </ol>
-<!-- raw HTML omitted -->
+<div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/_y8p0_dtMJ38/SyZxDikTDxI/AAAAAAAAAvk/LTr3KsGATGk/s1600-h/Screenshot-media+-+administrilo+de+dosieroj.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/_y8p0_dtMJ38/SyZxDikTDxI/AAAAAAAAAvk/LTr3KsGATGk/s320/Screenshot-media+-+administrilo+de+dosieroj.png" /></a><br />
+</div><br />
+6. Пользуемся.
 
         </div>
         

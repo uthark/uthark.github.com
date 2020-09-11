@@ -65,7 +65,9 @@
 
   <meta property="og:title" content="Несколько слов о GORM" />
   <meta property="og:url" content="https://uthark.github.io/2010/04/11/gorm/" />
-  <meta property="og:description" content="class Person implements Serializable { static hasMany = [ scores: ScoreSheet ] static mapping = { scores joinTable: false }; } class Note implements Serializable { static belongsTo = [ person: Person ] } class Person implements Serializable { // person fields." />
+  <meta property="og:description" content="В данной заметке хочу поделиться некоторыми моментами использования GORM.
+GORM - это ORM-фреймворк, используемый в Grails. Реализован он поверх Hibernate, но, при этом, с некоторыми отличными умолчаниями.
+Для разработчиков, знающих Hibernate, рекомендую тщательно изучить GORM, так как его поведение в некоторых случаях отлично от Hibernate, что может приводить к различным сюрпризам." />
 
   
 
@@ -163,7 +165,12 @@
           
           
           
-          <!-- raw HTML omitted -->
+          <p>В данной заметке хочу поделиться некоторыми моментами использования GORM.</p>
+<p><a href="http://grails.org/doc/latest/guide/5.%20Object%20Relational%20Mapping%20%28GORM%29.html">GORM</a> - это <a href="http://en.wikipedia.org/wiki/Object-relational_mapping">ORM</a>-фреймворк, используемый в <a href="http://grails.org/">Grails</a>. Реализован он поверх <a href="http://hibernate.org/">Hibernate</a>, но, при этом, с некоторыми отличными умолчаниями.</p>
+<p>Для разработчиков, знающих <tt>Hibernate</tt>, рекомендую тщательно изучить <tt>GORM</tt>, так как его поведение в некоторых случаях отлично от <tt>Hibernate</tt>, что может приводить к различным сюрпризам.</p>
+<h4></h4>
+<h4>Маппинг один-ко-многим</h4>
+<p>По умолчанию <tt>GORM</tt> для связей <em>один ко многим</em> (one-to-many) <a href="http://www.grails.org/doc/latest/guide/5.%20Object%20Relational%20Mapping%20%28GORM%29.html#5.2.1.2%20One-to-many" title="Grails will, by default, map this kind of relationship with a join table.">создаёт таблицу-связку</a>, которая обычно нужна только при связях между сущностями вида <em>многие ко многим</em>. Чтобы исправить это поведение необходимо указать <tt>GORM</tt>, чтобы он не создавал таблицу связку.</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">Person</span> <span class="kd">implements</span> <span class="n">Serializable</span> <span class="o">{</span>
   <span class="kd">static</span> <span class="n">hasMany</span> <span class="o">=</span> <span class="o">[</span>
     <span class="n">scores</span><span class="o">:</span> <span class="n">ScoreSheet</span>
@@ -173,7 +180,8 @@
     <span class="n">scores</span> <span class="n">joinTable</span><span class="o">:</span> <span class="kc">false</span>
   <span class="o">};</span>
 <span class="o">}</span>
-</code></pre></div><!-- raw HTML omitted -->
+</code></pre></div><h4>Использование однонаправленных связей</h4>
+<p>Если в приложении используются двунаправленные связи и вероятность изменения сущности одновременно несколькими пользователями высокая, то лучше использовать однонаправленные связи для сущностей. Кроме того, лучше проектировать доменные классы таким образом, чтобы связь была не один-ко-многим, а многие к одному.</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">Note</span> <span class="kd">implements</span> <span class="n">Serializable</span> <span class="o">{</span>
   <span class="kd">static</span> <span class="n">belongsTo</span> <span class="o">=</span> <span class="o">[</span>
     <span class="n">person</span><span class="o">:</span> <span class="n">Person</span>
@@ -183,7 +191,16 @@
 <span class="kd">class</span> <span class="nc">Person</span> <span class="kd">implements</span> <span class="n">Serializable</span> <span class="o">{</span>
   <span class="c1">// person fields.
 </span><span class="c1"></span><span class="o">}</span>
-</code></pre></div><!-- raw HTML omitted -->
+</code></pre></div><p>Для работы с <tt>Notes</tt> необходимо использовать такие запросы: </p>
+<pre class="brush: java">
+  Note.findByPerson(person).each { -&gt; };
+</pre>
+<p> вместо </p>
+<pre class="brush: java">
+  person.notes.each { -&gt; }
+</pre>
+<h4>Маппинг иерархии классов доменных сущностей</h4>
+<p>GORM поддерживает только <a href="http://www.grails.org/doc/latest/guide/5.%20Object%20Relational%20Mapping%20%28GORM%29.html#5.2.3%20Inheritance%20in%20GORM">два варианта </a>маппинга иерархии классов, в отличии от <a href="http://docs.jboss.org/hibernate/stable/core/reference/en/html/inheritance.html">Hibernate</a>: Таблица на всю иерархию (<tt>table-per-hierarchy</tt>), или таблица на каждый подкласс (<tt>table-per-subclass</tt>). У маппинга <tt>table-per-hierarchy</tt> есть серьёзный недостаток - подклассы не могут иметь ненулевые поля. Поэтому, если этот недостаток критичен, то необходимо использовать маппинг <tt>table-per-subclass</tt>.</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">Payment</span> <span class="o">{</span>
   <span class="n">Long</span> <span class="n">id</span>
   <span class="n">Long</span> <span class="n">version</span>
@@ -213,7 +230,7 @@
   </div>
   
   <p class="meta">
-     Estimated reading time: 1 minute(s)
+     Estimated reading time: 2 minute(s)
   </p>
   
   <p class="meta">
@@ -294,6 +311,11 @@
     </p>
   </section>
 
+
+<section class="even">
+  <div class="toc-header">Table of Contents</div>
+   <nav id="TableOfContents"></nav>
+</section>
 
 
 

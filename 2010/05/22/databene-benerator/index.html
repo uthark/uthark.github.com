@@ -65,7 +65,7 @@
 
   <meta property="og:title" content="Создание больших объёмов тестовых данных с помощью Databene Benerator" />
   <meta property="og:url" content="https://uthark.github.io/2010/05/22/databene-benerator/" />
-  <meta property="og:description" content="&amp;lt;project xmlns=&amp;quot;http://maven.apache.org/POM/4.0.0&amp;quot; xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot; xsi:schemaLocation=&amp;quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd&amp;quot;&amp;gt; &amp;lt;modelVersion&amp;gt;4.0.0&amp;lt;/modelVersion&amp;gt; &amp;lt;groupId&amp;gt;com.myorganization&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;databene-benerator-test&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;1.0&amp;lt;/version&amp;gt; &amp;lt;packaging&amp;gt;jar&amp;lt;/packaging&amp;gt; &amp;lt;name&amp;gt;data generation project&amp;lt;/name&amp;gt; &amp;lt;dependencies&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.databene&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;databene-benerator&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;0.5.9&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.databene&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;databene-webdecs&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;0.4.9&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.databene&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;databene-commons&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;0.4.9&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;mysql&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;mysql-connector-java&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;5.1.6&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;/dependencies&amp;gt; &amp;lt;build&amp;gt; &amp;lt;resources&amp;gt; &amp;lt;resource&amp;gt; &amp;lt;directory&amp;gt;src/main/resources&amp;lt;/directory&amp;gt; &amp;lt;filtering&amp;gt;true&amp;lt;/filtering&amp;gt; &amp;lt;/resource&amp;gt; &amp;lt;/resources&amp;gt; &amp;lt;plugins&amp;gt; &amp;lt;plugin&amp;gt; &amp;lt;groupId&amp;gt;org." />
+  <meta property="og:description" content="Периодически необходимо решать задачу создания больших ( и не очень) объёмов тестовых данных для проведения различных видов тестирования - функционального, нагрузочного (тестирование стабильности и производительности). При этом часто получается так, что система на тестовых данных ведёт себя совсем иначе, чем на реальных данных." />
 
   
 
@@ -163,7 +163,12 @@
           
           
           
-          <!-- raw HTML omitted -->
+          <p>Периодически необходимо решать задачу создания больших ( и не очень) объёмов тестовых данных для проведения различных видов тестирования - функционального, нагрузочного (тестирование стабильности и производительности). При этом часто получается так, что система на тестовых данных ведёт себя совсем иначе, чем на реальных данных. Причина кроется в том, что создать правдоподобные тестовые данные всегда достаточно сложно.</p>
+<p>Изучая данный вопрос я наткнулся на замечательный фреймворк - <a href="http://databene.org/databene-benerator">Databene Benerator</a>, основной целью создания которого как раз и является создание правдоподобных тестовых данных для проведения различных видов тестирования.</p>
+<h4>Установка</h4>
+<p>Установка фреймворка осуществляется двумя способами - как отдельное приложение и как плагин для Maven.</p>
+<h5>Установка под Maven</h5>
+<p>Для использования Databene benerator в проектах, использующих для сборки Apache Maven необходимо добавить в зависимости databene-benerator и сконфигурировать его.</p>
 <div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="ni">&amp;lt;</span>project xmlns=<span class="ni">&amp;quot;</span>http://maven.apache.org/POM/4.0.0<span class="ni">&amp;quot;</span> xmlns:xsi=<span class="ni">&amp;quot;</span>http://www.w3.org/2001/XMLSchema-instance<span class="ni">&amp;quot;</span>
          xsi:schemaLocation=<span class="ni">&amp;quot;</span>http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd<span class="ni">&amp;quot;&amp;gt;</span>
   <span class="ni">&amp;lt;</span>modelVersion<span class="ni">&amp;gt;</span>4.0.0<span class="ni">&amp;lt;</span>/modelVersion<span class="ni">&amp;gt;</span>
@@ -252,8 +257,27 @@
   <span class="ni">&amp;lt;</span>/build<span class="ni">&amp;gt;</span>
 <span class="ni">&amp;lt;</span>/project<span class="ni">&amp;gt;</span>
 
-</code></pre></div><!-- raw HTML omitted -->
-
+</code></pre></div><p>В конфигурации необходимо указать как минимум следующие параметры:</p>
+<ol><li><span style=" font-family:'Courier New,courier';">dbUrl</span> - строка подключения к базе данных в формате JDBC</li>
+<li><span style=" font-family:'Courier New,courier';">dbDriver</span> - используемый драйвер базы данных</li>
+<li><span style=" font-family:'Courier New,courier';">dbSchema</span> - имя схемы базы данных</li>
+<li><span style=" font-family:'Courier New,courier';">dbUser</span> - имя пользователя, под которым подключаемся к базе данных</li>
+<li><span style=" font-family:'Courier New,courier';">dbPassword</span> - пароль пользователя для подключения к базе данных</li>
+</ol>
+<p>Кроме использования файла pom.xml databene поддерживает возможность указания параметров в файле benerator.properties, что может быть удобно.</p>
+<p>Databene benerator обладает следующими возможностями:</p>
+<ol><li>Решение проблемы создания данных в общем виде. На данный момент поддерживаются XML и реляционные базы данных, но не за горами поддержка веб-сервисов, SAP и любых других систем через механизм расширений.</li>
+<li>Юзабилити. Databene-benerator позволяет упростить создание тестовых данных для сложной модели прикладной области.</li>
+<li>Обработка больших объёмов данных.</li>
+<li>Высокая производительность.</li>
+<li>Поддержка доменных областей.</li>
+<li>Качество данных. Фреймворк поддерживает проверку ограничений модели прикладной области.</li>
+<li>Компонентная, легкорасширяемая архитектура.</li>
+<li>Широкие возможности изменения и настройки генерации тестовых данных</li>
+<li>Создание тестовых данных с нуля.</li>
+<li>Импорт и анонимизация реальных данных.</li>
+</ol>
+<p>В комплекте идёт толковая, но, к сожалению, неполная <a href="http://databene.org/download/databene-benerator-manual-0.6.0.pdf">документация</a> по возможностям.</p>
         </div>
         
 
@@ -269,7 +293,7 @@
   </div>
   
   <p class="meta">
-     Estimated reading time: 1 minute(s)
+     Estimated reading time: 2 minute(s)
   </p>
   
   <p class="meta">
@@ -350,6 +374,11 @@
     </p>
   </section>
 
+
+<section class="even">
+  <div class="toc-header">Table of Contents</div>
+   <nav id="TableOfContents"></nav>
+</section>
 
 
 

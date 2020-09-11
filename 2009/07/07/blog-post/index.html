@@ -66,7 +66,7 @@
   <meta property="og:title" content="Двунаправленная ссылочная целостность" />
   <meta property="og:url" content="https://uthark.github.io/2009/07/07/blog-post/" />
   <meta property="og:description" content="Здравствуйте.
-Я считаю, что разработчику всегда стоит иметь представление о том, как работают низлежащие абстракции. Хотя бы потому, что часто абстракциибываютпротекающими.
+Я считаю, что разработчику всегда стоит иметь представление о том, как работают низлежащие абстракции. Хотя бы потому, что часто абстракции бывают протекающими.
 А веду я это к тому, что когда фреймворк вываливает стектрейс с несколькими вложенными (и, часто, для непосвященных непонятными) исключениями, то бывает непонятно, что с этим делать, особенно, если не знаешь, как реализована абстракция." />
 
   
@@ -166,13 +166,13 @@
           
           
           <p>Здравствуйте.</p>
-<p>Я считаю, что разработчику всегда стоит иметь представление о том, как работают низлежащие абстракции. Хотя бы потому, что часто <!-- raw HTML omitted -->абстракции<!-- raw HTML omitted --> <!-- raw HTML omitted -->бывают<!-- raw HTML omitted --> <!-- raw HTML omitted -->протекающими<!-- raw HTML omitted -->.</p>
+<p>Я считаю, что разработчику всегда стоит иметь представление о том, как работают низлежащие абстракции. Хотя бы потому, что часто <a href="http://c2.com/cgi/wiki?LeakyAbstraction">абстракции</a> <a href="http://en.wikipedia.org/wiki/Leaky_abstraction">бывают</a> <a href="http://www.joelonsoftware.com/articles/LeakyAbstractions.html">протекающими</a>.</p>
 <p>А веду я это к тому, что когда фреймворк вываливает стектрейс с несколькими вложенными (и, часто, для непосвященных непонятными) исключениями, то бывает непонятно, что с этим делать, особенно, если не знаешь, как реализована абстракция.</p>
 <p>Иногда бывает нужно хранить двунаправленные связи между таблицами. Например, есть игрок и есть его статистика и нужно, чтобы каждая из сущностей знала про другую.</p>
 <p>Вопрос - каким образом вставлять в базу данных такие сущности?</p>
 <p>При вставке в таблицу в <code>Player</code> нам нужно уже иметь запись в таблице <code>Statistics</code>, а для вставки в таблицу <code>Statistics</code> нужно знать идентификатор игрока, к которому относится эта запись.</p>
 <p>Выглядит замкнутым кругом, но решение есть.</p>
-<p>Во-первых, вставки в обе таблицы должны происходить в рамках одной транзакции (как я <!-- raw HTML omitted -->уже писал<!-- raw HTML omitted -->, транзакция обеспечивает перевод базы данных из одного непротиворечащего состояния в другое непротиворечащее состояние).</p>
+<p>Во-первых, вставки в обе таблицы должны происходить в рамках одной транзакции (как я <a href="http://www.blogger.com/2009/04/blog-post_24.html">уже писал</a>, транзакция обеспечивает перевод базы данных из одного непротиворечащего состояния в другое непротиворечащее состояние).</p>
 <p>К сожалению, этого недостаточно:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">BEGIN</span> <span class="k">TRANSACTION</span><span class="p">;</span>
 
@@ -215,7 +215,7 @@ Detail: Key <span class="o">(</span>statisticsId<span class="o">)=(</span>20<spa
 </code></pre></div><p>Данный пример был приведён для PostgreSQL.</p>
 <p>Для других баз данных решения следующие:</p>
 <h3 id="sybase">Sybase</h3>
-<p>В Sybase есть переменная <!-- raw HTML omitted -->WAIT_FOR_COMMIT<!-- raw HTML omitted -->, которая управляет поведением проверки ограничений. По умолчанию она отключена. Кроме того, это поведение можно переопределить при объявлении можно указывать CHECK ON COMMIT. Подробнее можно посмотреть в <!-- raw HTML omitted -->официальной документации<!-- raw HTML omitted -->.</p>
+<p>В Sybase есть переменная <a href="http://manuals.sybase.com/onlinebooks/group-sasarc/awg0600e/dbugen6/@Generic__BookTextView/26075;hf=0;pt=25811">WAIT_FOR_COMMIT</a>, которая управляет поведением проверки ограничений. По умолчанию она отключена. Кроме того, это поведение можно переопределить при объявлении можно указывать CHECK ON COMMIT. Подробнее можно посмотреть в <a href="http://manuals.sybase.com/onlinebooks/group-pbarc/conn5/sqlug/@Generic__BookTextView/39397%3Bpt=39951">официальной документации</a>.</p>
 <h3 id="oracle">Oracle</h3>
 <p>Также, как и в PostgreSQL:</p>
 <blockquote>
@@ -224,9 +224,9 @@ DEFERRABLE or NOT DEFERRABLE
 INITIALLY DEFERRED or INITIALLY IMMEDIATE</p>
 </blockquote>
 <blockquote>
-<p>Constraints can be added, dropped, enabled, disabled, or validated. You can also modify a constraint&rsquo;s attributes.<!-- raw HTML omitted --></p>
+<p>Constraints can be added, dropped, enabled, disabled, or validated. You can also modify a constraint&rsquo;s attributes.<br /></p>
 </blockquote>
-<p>Подробнее в <!-- raw HTML omitted -->официльной документации<!-- raw HTML omitted -->.</p>
+<p>Подробнее в <a href="http://download.oracle.com/docs/cd/B10501_01/server.920/a96524/c22integ.htm#4666">официльной документации</a>.</p>
 <h2 id="mysql">MySQL</h2>
 <p>К сожалению, mySQL не имеет возможности отложенной проверки ограничении, о чём в документации и сказано:</p>
 <blockquote>
@@ -236,7 +236,7 @@ INITIALLY DEFERRED or INITIALLY IMMEDIATE</p>
 <div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SET</span> <span class="n">foreign_key_checks</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 <span class="c1">-- code goes here
 </span><span class="c1"></span><span class="k">SET</span> <span class="n">foreign_key_checks</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-</code></pre></div><p>Чем эта информация может быть полезна для разработчика? Например, в случае, если ошибки и недоработки Hibernate покажут себя в виде стектрейса в логе(например, <!-- raw HTML omitted -->HHH-2248<!-- raw HTML omitted -->), то разработчик будет понимать причину ошибки и то, как реализовать work-around.</p>
+</code></pre></div><p>Чем эта информация может быть полезна для разработчика? Например, в случае, если ошибки и недоработки Hibernate покажут себя в виде стектрейса в логе(например, <a href="http://opensource.atlassian.com/projects/hibernate/browse/HHH-2248">HHH-2248</a>), то разработчик будет понимать причину ошибки и то, как реализовать work-around.</p>
 
         </div>
         

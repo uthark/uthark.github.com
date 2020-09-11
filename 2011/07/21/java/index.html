@@ -65,7 +65,9 @@
 
   <meta property="og:title" content="Немного о виртуальных методах в Java" />
   <meta property="og:url" content="https://uthark.github.io/2011/07/21/java/" />
-  <meta property="og:description" content="Сегодня я хочу рассмотреть некоторые особенности переопределения методов в Java. В java нельзя переопределить: public class A { int i = 3; int getI() {return i;} } public class B extends A{ int i = 5; int getI() {return i;} } A a = new B(); System." />
+  <meta property="og:description" content="Сегодня я хочу рассмотреть некоторые особенности переопределения методов в Java. В java нельзя переопределить: поля класса конструкторы, инициализаторы класса статические методы статические поля 
+Подробнее об этом можно прочитать в Java Language Specification, §8.4.8
+Итак, в java все нестатические неприватные (то есть, protected, package и public) методы являются виртуальными." />
 
   
 
@@ -163,8 +165,15 @@
           
           
           
-          <p>Сегодня я хочу рассмотреть некоторые особенности переопределения методов в Java.  В java нельзя переопределить:   <!-- raw HTML omitted --></p>
-<!-- raw HTML omitted -->
+          <p>Сегодня я хочу рассмотреть некоторые особенности переопределения методов в Java.  В java нельзя переопределить:   <br /></p>
+<ul><li>поля класса</li>
+<li>конструкторы, инициализаторы класса</li>
+<li>статические методы</li>
+<li>статические поля</li>
+</ul><br />
+Подробнее об этом можно прочитать в <a href="http://java.sun.com/docs/books/jls/third_edition/html/classes.html#228745">Java Language Specification, §8.4.8</a><br />
+<br />
+Итак, в java все нестатические неприватные (то есть, <tt>protected</tt>, <tt>package</tt> и <tt>public</tt>) методы являются виртуальными. Ключевое слово <tt>final</tt> запрещает возможность дальнейшего переопределения метода в подклассах.  Рассмотрим следующий пример:  
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">A</span> <span class="o">{</span>
      <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">3</span><span class="o">;</span>
      <span class="kt">int</span> <span class="nf">getI</span><span class="o">()</span> <span class="o">{</span><span class="k">return</span> <span class="n">i</span><span class="o">;}</span>
@@ -179,15 +188,15 @@
 <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">a</span><span class="o">.</span><span class="na">i</span><span class="o">);</span>
 <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">a</span><span class="o">.</span><span class="na">getI</span><span class="o">());</span>
 
-</code></pre></div><p>Вопрос: что выведет данный код?<!-- raw HTML omitted -->
-Ответ: <!-- raw HTML omitted --></p>
+</code></pre></div><p>Вопрос: что выведет данный код?<br />
+Ответ: <br /></p>
 <ol>
-<li>Так как поля класса не наследуются, то у класса A своё поле i и у класса B тоже своё поле i. Так как для полей полиморфизм не действует, то при обращении a.i мы обращаемся к классу A, поэтому на экран будет выведено 3.<!-- raw HTML omitted --></li>
-<li>При вызове метода a.getI() у нас в дело вступает полиморфизм, поэтому будет вызван метод от класса, инстанс которого был создан. Соответственно, мы получим на выходе 5.<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-Другой пример:<!-- raw HTML omitted -->
-<!-- raw HTML omitted --></li>
+<li>Так как поля класса не наследуются, то у класса A своё поле i и у класса B тоже своё поле i. Так как для полей полиморфизм не действует, то при обращении a.i мы обращаемся к классу A, поэтому на экран будет выведено 3.<br /></li>
+<li>При вызове метода a.getI() у нас в дело вступает полиморфизм, поэтому будет вызван метод от класса, инстанс которого был создан. Соответственно, мы получим на выходе 5.<br />
+<br />
+<br />
+Другой пример:<br />
+<br /></li>
 </ol>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">A</span> <span class="o">{</span>
      <span class="kd">static</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">3</span><span class="o">;</span>
@@ -220,7 +229,7 @@
   </div>
   
   <p class="meta">
-     Estimated reading time: 1 minute(s)
+     Estimated reading time: 2 minute(s)
   </p>
   
   <p class="meta">

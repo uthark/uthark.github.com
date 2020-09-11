@@ -67,7 +67,7 @@
   <meta property="og:url" content="https://uthark.github.io/2010/02/06/grails/" />
   <meta property="og:description" content="Выкладываю ниже список задач, которые нужно/можно выполнить для оптимизации приложения, написанного на Grails, может кому пригодится.
 Тестирование проведённых оптимизаций Первым делом необходимо разработать критерии проверки, которые позволят оценить эффективность проведённых оптимизаций.
- Установить Java Melodyплагиндля Grails для проведения анализа. Разработать скрипты для проведения нагрузочного тестирования." />
+ Установить Java Melody плагин для Grails для проведения анализа." />
 
   
 
@@ -169,7 +169,7 @@
 <h4 id="тестирование-проведённых-оптимизаций">Тестирование проведённых оптимизаций</h4>
 <p>Первым делом необходимо разработать критерии проверки, которые позволят оценить эффективность проведённых оптимизаций.</p>
 <ol>
-<li>Установить <!-- raw HTML omitted -->Java Melody<!-- raw HTML omitted --> <!-- raw HTML omitted -->плагин<!-- raw HTML omitted --> для Grails для проведения анализа.</li>
+<li>Установить <a href="http://code.google.com/p/javamelody/">Java Melody</a> <a href="http://www.grails.org/plugin/grails-melody">плагин</a> для Grails для проведения анализа.</li>
 <li>Разработать скрипты для проведения нагрузочного тестирования.</li>
 <li>Прогнать скрипты.</li>
 <li>Проанализировать результаты Java Melody, выявить узкие места, произвести нужные оптимизации.</li>
@@ -187,13 +187,13 @@ a. <a href="http://java.sun.com/javase/technologies/hotspot/gc/gc_tuning_6.html"
 </ol>
 <h4 id="оптимизация-клиентской-части">Оптимизация клиентской части</h4>
 <ol>
-<li>Настроить <!-- raw HTML omitted -->кэширование статических ресурсов<!-- raw HTML omitted --> в Томкате.</li>
-<li>Настроить <!-- raw HTML omitted -->сжатие статических ресурсов<!-- raw HTML omitted --> в Томкате.</li>
+<li>Настроить <a href="http://tomcat.apache.org/tomcat-5.5-doc/config/context.html">кэширование статических ресурсов</a> в Томкате.</li>
+<li>Настроить <a href="http://tomcat.apache.org/tomcat-5.5-doc/config/http.html">сжатие статических ресурсов</a> в Томкате.</li>
 <li>(поставить прокси на nginx для кэширования статических ресурсов ?)</li>
 <li>Установить плагины для Firebug, которые оценят производительность клиентской части.
 <ol>
-<li><!-- raw HTML omitted -->PageSpeed<!-- raw HTML omitted --> <!-- raw HTML omitted --></li>
-<li><!-- raw HTML omitted -->YSlow<!-- raw HTML omitted --> <!-- raw HTML omitted --></li>
+<li><a href="http://code.google.com/speed/page-speed">PageSpeed</a> </li></li>
+<li><a href="http://developer.yahoo.com/yslow/">YSlow</a> </li></li>
 <li>Проанализировать страницы веб-сайта с их помощью</li>
 </ol>
 </li>
@@ -201,7 +201,7 @@ a. <a href="http://java.sun.com/javase/technologies/hotspot/gc/gc_tuning_6.html"
 </ol>
 <h4 id="оптимизация-клиентской-части-приложений-написанных-на-grails">Оптимизация клиентской части приложений, написанных на Grails</h4>
 <ol>
-<li>Установить плагин <!-- raw HTML omitted -->UI Performance<!-- raw HTML omitted --></li>
+<li>Установить плагин <a href="http://www.grails.org/plugin/ui-performance">UI Performance</a></li>
 <li>Провести оптимизацию с использованием плагина UI Performance</li>
 </ol>
 <h4 id="оптимизация-базы-данных">Оптимизация базы данных</h4>
@@ -216,7 +216,7 @@ a. <a href="http://msdn.microsoft.com/en-us/library/ms998577.aspx">http://msdn.m
 <ol>
 <li>Обновить версию JDBC-драйвера</li>
 <li>Настроить кэширование в Hibernate.
-Ресурсов в сети предостаточно, навскидку <!-- raw HTML omitted -->вот<!-- raw HTML omitted --> <!-- raw HTML omitted --> парочка<!-- raw HTML omitted -->.</li>
+Ресурсов в сети предостаточно, навскидку <a href="http://docs.jboss.org/hibernate/core/3.3/reference/en/html/performance.html">вот</a> <a href="http://www.devx.com/dbzone/Article/29685/1954"> парочка</a>.</li>
 </ol>
 <h4 id="оптимизация-серверной-части-приложения">Оптимизация серверной части приложения</h4>
 <ol>
@@ -224,7 +224,7 @@ a. <a href="http://msdn.microsoft.com/en-us/library/ms998577.aspx">http://msdn.m
 </ol>
 <h4 id="оптимизация-серверной-части-приложения-опционально">Оптимизация серверной части приложения (опционально)</h4>
 <ol>
-<li>Установить плагин <!-- raw HTML omitted -->Perf4J<!-- raw HTML omitted --> для грэйлза</li>
+<li>Установить плагин <a href="http://www.grails.org/plugin/perf4j">Perf4J</a> для грэйлза</li>
 <li>Добавить необходимые счётчики в код</li>
 <li>Прогнать нагрузочные тесты, найти узкие места, оптимизировать.</li>
 </ol>

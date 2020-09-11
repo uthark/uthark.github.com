@@ -166,8 +166,8 @@
           
           
           
-          <p>Наверно, вы уже сталкивались с таким понятием, как AOП - <!-- raw HTML omitted -->аспектно-ориентированное программирование<!-- raw HTML omitted -->.</p>
-<p>Обычно, про него вспоминают, когда говорят про <!-- raw HTML omitted -->декларативное использование транзакций<!-- raw HTML omitted -->,  про <!-- raw HTML omitted -->проверку прав доступа<!-- raw HTML omitted -->, либо про <!-- raw HTML omitted -->реализацию журналирования<!-- raw HTML omitted -->.</p>
+          <p>Наверно, вы уже сталкивались с таким понятием, как AOП - <a href="http://en.wikipedia.org/wiki/Aspect-oriented_programming">аспектно-ориентированное программирование</a>.</p>
+<p>Обычно, про него вспоминают, когда говорят про <a href="http://static.springsource.org/spring/docs/current/reference/html/transaction.html#transaction-declarative-applying-more-than-just-tx-advice">декларативное использование транзакций</a>,  про <a href="https://docs.jboss.com/aop/1.0/aspect-library/reference/annotation15_security.html">проверку прав доступа</a>, либо про <a href="http://static.springsource.org/spring/docs/3.0.x/javadoc-api/org/springframework/aop/interceptor/CustomizableTraceInterceptor.html">реализацию журналирования</a>.</p>
 <p>Но это не единственные области применения АОП.</p>
 <p>Я хочу показать ещё пару областей применения из реальных проектов:</p>
 <ul>
@@ -186,7 +186,7 @@
     <span class="n">processException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
 <span class="o">}</span>
 
-</code></pre></div><p>Дополнительная проблема в том, что у модуля количество модулей 10+, количество методов также велико, что приводит к тому, что блоки <code>try/catch</code> замусоривают код. Решение с использованием паттерна <!-- raw HTML omitted --><code>Callback</code><!-- raw HTML omitted --> также приведёт к замусориванию кода.</p>
+</code></pre></div><p>Дополнительная проблема в том, что у модуля количество модулей 10+, количество методов также велико, что приводит к тому, что блоки <code>try/catch</code> замусоривают код. Решение с использованием паттерна <a href="https://en.wikipedia.org/wiki/Callback_(computer_programming)"><code>Callback</code></a> также приведёт к замусориванию кода.</p>
 <h4 id="вариант-решения-проблемы-с-использованием-aop">Вариант решения проблемы с использованием AOP</h4>
 <p>Решение данной проблемы было таким - а что, если используя возможности AOP трансформировать проверяемое исключение в непроверяемое? Таким образом, мы сможем избавиться от скучной проверки на исключения в нашем коде, а для обработки исключения (ведь мы всегда его будем обрабатывать одинаково) достаточно будет использовать обработку исключения на верхнем уровне абстракции.</p>
 <p>Для более элегантного решения проблемы было решено добавить собственную аннотацию, которой нужно помечать метод, который использует сервис из «плохого» модуля.</p>
@@ -218,7 +218,7 @@
 </code></pre></div><h4 id="принудительная-проверка-контракта-между-модулями">Принудительная проверка контракта между модулями</h4>
 <p>Часто нам необходимо принудительно требовать выполнения каких-то архитектурных ограничений, например, контроллеры должны работать только с сервисами и им запрещено напрямую обращаться к базе данных.</p>
 <p>Для реализации таких проверок можно также использовать возможности AOP.</p>
-<p>Предположим, что в нашем приложении модуль сервиса выставляет наружу <!-- raw HTML omitted -->DTO<!-- raw HTML omitted --> для работы, скрывая при этом классы модели. Для того, чтобы явно запретить доступ к классам и методам модели нам необходимо создать аспект, который бы вызывал ошибку компиляции при нарушении ограничения.</p>
+<p>Предположим, что в нашем приложении модуль сервиса выставляет наружу <a href="http://java.sun.com/blueprints/corej2eepatterns/Patterns/TransferObject.html">DTO</a> для работы, скрывая при этом классы модели. Для того, чтобы явно запретить доступ к классам и методам модели нам необходимо создать аспект, который бы вызывал ошибку компиляции при нарушении ограничения.</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">aspect</span> <span class="n">ForbidAccessToModelAspect</span> <span class="o">{</span>
 
 <span class="c1">//      Full prohibition of access to model:
@@ -241,8 +241,8 @@
 <span class="o">}</span>
 </code></pre></div><p>Такой аспект, созданный в нашем модуле запретит нам использовать классы модели из всех пакетов, кроме <code>com.blogger.atamanenko.app.allowedpackage</code></p>
 <h4 id="сборка-приложения">Сборка приложения</h4>
-<p>Файл аспекта нужно положить в каталог <code>src/main/aspect</code>, а для сборки приложения необходимо использовать не стандартный Oracle <!-- raw HTML omitted -->Java Compiler<!-- raw HTML omitted -->, а <!-- raw HTML omitted -->AspectJ compiler<!-- raw HTML omitted -->.</p>
-<p>Пример конфигурации для <!-- raw HTML omitted -->Apache Maven<!-- raw HTML omitted -->:</p>
+<p>Файл аспекта нужно положить в каталог <code>src/main/aspect</code>, а для сборки приложения необходимо использовать не стандартный Oracle <a href="http://docs.oracle.com/javase/6/docs/technotes/tools/solaris/javac.html">Java Compiler</a>, а <a href="http://eclipse.org/aspectj/downloads.php">AspectJ compiler</a>.</p>
+<p>Пример конфигурации для <a href="https://maven.apache.org/">Apache Maven</a>:</p>
 <div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="ni">&amp;lt;</span>plugin<span class="ni">&amp;gt;</span>
     <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.codehaus.mojo<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
     <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>aspectj-maven-plugin<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
@@ -268,7 +268,7 @@
     <span class="ni">&amp;lt;</span>/executions<span class="ni">&amp;gt;</span>
 <span class="ni">&amp;lt;</span>/plugin<span class="ni">&amp;gt;</span>
 </code></pre></div><h4 id="заключение">Заключение</h4>
-<p>Вот в общем-то и всё. Я сознательно не стал описывать языковые конструкции аспектов, так как они подробно описаны в <!-- raw HTML omitted -->руководстве AspectJ<!-- raw HTML omitted --></p>
+<p>Вот в общем-то и всё. Я сознательно не стал описывать языковые конструкции аспектов, так как они подробно описаны в <a href="https://www.eclipse.org/aspectj/doc/next/progguide/index.html">руководстве AspectJ</a></p>
 
         </div>
         
