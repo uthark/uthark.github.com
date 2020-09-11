@@ -29,7 +29,7 @@
     
     
     
-    <link rel="stylesheet" href="https://uthark.github.io/css/theme.a6d46470328bb42ee2535190c2023e9b102aa93fced95c8de7e210ec2a80314a.css">
+    <link rel="stylesheet" href="https://uthark.github.io/css/theme.67fdd3de42877d3dd583ad51bb8533496fa520bd4bac49759be34c5b49d2a259.css">
     <link rel="stylesheet" href="https://uthark.github.io/css/uthark.css">
 
 
@@ -139,18 +139,23 @@
 
 <header>
     <h1 class="entry-title">
-        <a href="https://uthark.github.io/2014/03/02/sunset/">PhotoStream #1. Sunset</a>
+        <a href="https://uthark.github.io/2014/03/06/limiting-threads-count-for-greenrobot-eventbus/">Limiting threads count for GreenRobot EventBus</a>
     </h1>
 
 </header>
 
 
         
-        <p>Sunset on M St.</p>
-<p><a href="https://plus.google.com/photos/112372998073079463630/albums/5986392506066477233/5986392511862419154"><figure>
-    <img src="https://lh3.googleusercontent.com/-UdxK_gs0ol0/UxPwRbOeLtI/AAAAAAAAPd4/OatnIV3Z5t0/w1012-h760/IMG_20140226_174149.jpg"/> 
-</figure>
-</a></p>
+          <p>In one of my projects I used EventBus library. The library is pretty cool and I would recommend everybody to use it.
+But I found one small issue with this library - in case you send too many events very fast (i.e. more than 1000 per second) you may face issue with application crash due to inability to create new thread.
+The problem is lying in the used ExecutorService:
+package de.</p>
+
+          
+              <footer>
+                  <a href="https://uthark.github.io/2014/03/06/limiting-threads-count-for-greenrobot-eventbus/" rel="full-article">Continue Reading &rarr;</a>
+              </footer>
+          
 
         
 
@@ -163,38 +168,25 @@
 
 <header>
     <h1 class="entry-title">
-        <a href="https://uthark.github.io/2014/03/02/iterm-triggers/">Using iTerm triggers</a>
+        <a href="https://uthark.github.io/2014/03/06/customizing-font-in-android-textview/">Using custom font in Android TextView</a>
     </h1>
 
 </header>
 
 
         
-        <p>I want to share one of the cool features which <a href="http://www.iterm2.com/">iTerm.app</a> has - triggers.
-The idea behind triggers is simple - it allows to perform arbitrary action based on the output in console window. For example, it can colorize specified content (based on <a href="http://en.wikipedia.org/wiki/Regular_expression">regular expressions</a>).</p>
-<p>Start <code>iTerm</code>, open settings (<code>⌘+,</code>), go to <code>Profiles</code>, then tab <code>Advanced</code>.
-Click on <code>Edit</code> button in <code>Triggers</code> section.</p>
-<figure>
-    <img src="https://lh4.googleusercontent.com/-n8Ynka3iux0/UxQQDk6VewI/AAAAAAAAPgg/FoQAq7y2a78/w2088-h1242-no/Screen&#43;Shot&#43;2014-03-02&#43;at&#43;11.48.02&#43;PM.png"/> <figcaption>
-            <h4>iTerm Settings</h4>
-        </figcaption>
-</figure>
+          <p>Today I want to share with you custom TextView which allows to set font to be used in xml layout.
+First, we need to declare our custom styleable
+attrs.xml:
+&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt; &lt;resources&gt; &lt;declare-styleable name=&#34;TypefaceTextView&#34;&gt; &lt;attr name=&#34;typeface&#34; format=&#34;string&#34;/&gt; &lt;/declare-styleable&gt; &lt;/resources&gt; Then we need to create subclass of TextView which will use custom attribute.
+TypefaceTextView:
+public class TypefaceTextView extends TextView { public TypefaceTextView(Context context) { this(context, null); } public TypefaceTextView(Context context, AttributeSet attrs) { this(context, attrs, 0); } public TypefaceTextView(Context context, AttributeSet attrs, int defStyle) { super(context, attrs, defStyle); TypedArray ta = context.</p>
 
-<p>Then you can define your own triggers:</p>
-<figure>
-    <img src="https://lh5.googleusercontent.com/-zXeqBjdPMlE/UxQQMQ4EyXI/AAAAAAAAPhg/0tS9qMw5atw/w2086-h932-no/Screen&#43;Shot&#43;2014-03-02&#43;at&#43;11.48.15&#43;PM.png"/> <figcaption>
-            <h4>Triggers Configuration</h4>
-        </figcaption>
-</figure>
-
-<p>Example output:</p>
-<figure>
-    <img src="https://lh6.googleusercontent.com/-hiVCoX2YS60/UxQSnH64xwI/AAAAAAAAPxw/KIlW7dpv-tM/w1816-h1386-no/Screen&#43;Shot&#43;2014-03-03&#43;at&#43;12.26.03&#43;AM.png"/> <figcaption>
-            <h4>Example output</h4>
-        </figcaption>
-</figure>
-
-<p>Happy coding!</p>
+          
+              <footer>
+                  <a href="https://uthark.github.io/2014/03/06/customizing-font-in-android-textview/" rel="full-article">Continue Reading &rarr;</a>
+              </footer>
+          
 
         
 
@@ -207,16 +199,22 @@ Click on <code>Edit</code> button in <code>Triggers</code> section.</p>
 
 <header>
     <h1 class="entry-title">
-        <a href="https://uthark.github.io/2014/03/02/splean-resonance/">Сплин - Резонанс, часть 1.</a>
+        <a href="https://uthark.github.io/2014/03/05/solving-issue-with-db2-on-vmware-fusion-on-macbook-pro-2013-late/">Solving issue with DB2 on VMWare Fusion on MacBook Pro 2013 Late</a>
     </h1>
 
 </header>
 
 
         
-        <p>Splean <a href="http://www.navigatorrecords.ru/showalbum.php?code=206">released new album</a> - Resonance, part 1.</p>
-<p>Good album, good texts.</p>
-<p>You can listen previews <a href="https://play.google.com/music/playpreview?preview=AE9vGKqOscNKDl7gMYDS126d1iINPIg449z4g_bwiXboIi8Qu74XsZRRzinlJnrN3NscIJS-_VgndoHTGYZFCl_l_TvPM2mwqVNg1BOW_rie_WOpZkqaubw%3D">here</a> or <a href="http://music.yandex.ru/#!/album/1801924">here (Russia only)</a>.</p>
+          <p>Today I found issue running DB2 10.1 under VMWare Fusion 6.0.2 on my MacBook - all management services for db2 are starting except for the db2 instance itself.
+When I tried to start DB2 using db2start it just crashed without any additional information.
+After some googling I found out that it is due to the fact that current version of DB2 can&rsquo;t handle more than 4 responses to CPUID query.</p>
+
+          
+              <footer>
+                  <a href="https://uthark.github.io/2014/03/05/solving-issue-with-db2-on-vmware-fusion-on-macbook-pro-2013-late/" rel="full-article">Continue Reading &rarr;</a>
+              </footer>
+          
 
         
 
@@ -229,126 +227,16 @@ Click on <code>Edit</code> button in <code>Triggers</code> section.</p>
 
 <header>
     <h1 class="entry-title">
-        <a href="https://uthark.github.io/2014/03/01/restricting-mongo-template/">Automatic query modification with Spring Data Mongo</a>
+        <a href="https://uthark.github.io/2014/03/04/snowboarding/">Snowboarding</a>
     </h1>
 
 </header>
 
 
         
-        <h3 id="introduction">Introduction</h3>
-<p>Today I want to show how one can automatically apply additional restrictions on <a href="http://www.mongodb.org/">MongoDB</a> Queries with <a href="http://docs.spring.io/spring-data/mongodb/docs/current/api/org/springframework/data/mongodb/core/MongoTemplate.html">MongoTemplate</a> or <a href="http://docs.spring.io/spring-data/mongodb/docs/current/reference/htmlsingle/">Spring Data Mongo</a>.</p>
-<h3 id="implementation">Implementation</h3>
-<p>First, let&rsquo;s introduce interface <code>QueryModifier</code>.</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">
-<span class="kn">import</span> <span class="nn">org.springframework.data.mongodb.core.query.Query</span><span class="o">;</span>
+          <p>Today in the evening I got to Whitetail Ski Resort.</p>
 
-<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">QueryModifier</span> <span class="o">{</span>
-
-    <span class="cm">/**
-</span><span class="cm">     * Modifies source query according to the rules.
-</span><span class="cm">     * @param query Source query to modify.
-</span><span class="cm">     * @param collectionName name of the collection against which query will be executed.
-</span><span class="cm">     * @return Modified query.
-</span><span class="cm">     */</span>
-    <span class="n">Query</span> <span class="nf">modify</span><span class="o">(</span><span class="n">Query</span> <span class="n">query</span><span class="o">,</span> <span class="n">String</span> <span class="n">collectionName</span><span class="o">);</span>
-<span class="o">}</span>
-
-</code></pre></div><p>Implementations of this interface will pickup original query and modify it somehow. In order to make it work we need inject this modification after query was generated by <code>Spring Data but before query is sent to the MongoDB instance. The perfect place for this is </code>MongoTemplate`.</p>
-<p>So, let&rsquo;s create subclass of <code>MongoTemplate</code> and override <code>find()</code> and <code>executeQuery()</code> methods.</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">
-<span class="kn">import</span> <span class="nn">com.mongodb.*</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.slf4j.*</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.data.authentication.UserCredentials</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.data.mongodb.MongoDbFactory</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.data.mongodb.core.*</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span>
-
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">RestrictingMongoTemplate</span> <span class="kd">extends</span> <span class="n">MongoTemplate</span> <span class="o">{</span>
-
-    <span class="kd">private</span> <span class="n">List</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">QueryModifier</span><span class="o">&gt;</span> <span class="n">queryModifiers</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;();</span>
-
-    <span class="cm">/** omitting constructors */</span>
-    
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setQueryModifiers</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">QueryModifier</span><span class="o">&gt;</span> <span class="n">queryModifiers</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">queryModifiers</span> <span class="o">=</span> <span class="n">queryModifiers</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">executeQuery</span><span class="o">(</span><span class="n">Query</span> <span class="n">query</span><span class="o">,</span> <span class="n">String</span> <span class="n">collectionName</span><span class="o">,</span> <span class="n">DocumentCallbackHandler</span> <span class="n">dch</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">for</span> <span class="o">(</span><span class="n">QueryModifier</span> <span class="n">queryModifier</span> <span class="o">:</span> <span class="n">queryModifiers</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">query</span> <span class="o">=</span> <span class="n">queryModifier</span><span class="o">.</span><span class="na">modify</span><span class="o">(</span><span class="n">query</span><span class="o">,</span> <span class="n">collectionName</span><span class="o">);</span>
-        <span class="o">}</span>
-
-        <span class="kd">super</span><span class="o">.</span><span class="na">executeQuery</span><span class="o">(</span><span class="n">query</span><span class="o">,</span> <span class="n">collectionName</span><span class="o">,</span> <span class="n">dch</span><span class="o">);</span>
-   <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="nf">find</span><span class="o">(</span><span class="n">Query</span> <span class="n">query</span><span class="o">,</span> <span class="n">Class</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">entityClass</span><span class="o">,</span> <span class="n">String</span> <span class="n">collectionName</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kt">int</span> <span class="n">limit</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="na">getLimit</span><span class="o">();</span>
-
-        <span class="k">for</span> <span class="o">(</span><span class="n">QueryModifier</span> <span class="n">queryModifier</span> <span class="o">:</span> <span class="n">queryModifiers</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">query</span> <span class="o">=</span> <span class="n">queryModifier</span><span class="o">.</span><span class="na">modify</span><span class="o">(</span><span class="n">query</span><span class="o">,</span> <span class="n">collectionName</span><span class="o">);</span>
-        <span class="o">}</span>
-
-        <span class="n">query</span><span class="o">.</span><span class="na">limit</span><span class="o">(</span><span class="n">limit</span><span class="o">);</span>
-
-        <span class="k">return</span> <span class="kd">super</span><span class="o">.</span><span class="na">find</span><span class="o">(</span><span class="n">query</span><span class="o">,</span> <span class="n">entityClass</span><span class="o">,</span> <span class="n">collectionName</span><span class="o">);</span>
-    <span class="o">}</span>
-
-<span class="o">}</span>
-
-</code></pre></div><p>Let&rsquo;s implement simple QueryModifier which will add restriction to return only active documents from Mongo:</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">
-<span class="kn">import</span> <span class="nn">model.Document</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.data.mongodb.core.query.Criteria</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.data.mongodb.core.query.Query</span><span class="o">;</span>
-
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ActiveQueryModifier</span> <span class="kd">implements</span> <span class="n">QueryModifier</span> <span class="o">{</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="n">Query</span> <span class="nf">modify</span><span class="o">(</span><span class="n">Query</span> <span class="n">query</span><span class="o">,</span> <span class="n">String</span> <span class="n">collectionName</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">Document</span><span class="o">.</span><span class="na">COLLECTION_NAME</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">collectionName</span><span class="o">))</span> <span class="o">{</span>
-            <span class="k">return</span> <span class="n">query</span><span class="o">.</span><span class="na">addCriteria</span><span class="o">(</span><span class="n">Criteria</span><span class="o">.</span><span class="na">where</span><span class="o">(</span><span class="s">&#34;active&#34;</span><span class="o">).</span><span class="na">is</span><span class="o">(</span><span class="n">Boolean</span><span class="o">.</span><span class="na">TRUE</span><span class="o">));</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="n">query</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-
-</code></pre></div><p>Next step is to provide our custom implementation of <code>MongoTemplate</code> to Spring Data:</p>
-<p>Example of Spring Configuration:</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">
-<span class="nd">@PropertySource</span><span class="o">(</span><span class="s">&#34;classpath:application.properties&#34;</span><span class="o">)</span>
-<span class="nd">@EnableMongoRepositories</span><span class="o">(</span>
-        <span class="n">basePackages</span> <span class="o">=</span> <span class="s">&#34;model&#34;</span><span class="o">,</span>
-        <span class="n">mongoTemplateRef</span> <span class="o">=</span> <span class="s">&#34;mongoTemplate&#34;</span><span class="o">)</span>
-<span class="nd">@Configuration</span><span class="o">(</span><span class="s">&#34;configuration&#34;</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ServiceConfiguration</span> <span class="kd">extends</span> <span class="n">AbstractMongoConfiguration</span> <span class="o">{</span>
-
-    <span class="nd">@Value</span><span class="o">(</span><span class="s">&#34;${mongo.db.name}&#34;</span><span class="o">)</span>
-    <span class="kd">protected</span> <span class="n">String</span> <span class="n">mongoDatabaseName</span><span class="o">;</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">protected</span> <span class="n">String</span> <span class="nf">getDatabaseName</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">mongoDatabaseName</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="n">RestrictingMongoTemplate</span> <span class="nf">mongoTemplate</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">UnknownHostException</span> <span class="o">{</span>
-        <span class="n">RestrictingMongoTemplate</span> <span class="n">mongoTemplate</span> <span class="o">=</span>
-                <span class="k">new</span> <span class="n">RestrictingMongoTemplate</span><span class="o">(</span><span class="n">mongo</span><span class="o">(),</span> <span class="n">mongoDatabaseName</span><span class="o">);</span>
-
-        <span class="n">mongoTemplate</span><span class="o">.</span><span class="na">setQueryModifiers</span><span class="o">(</span><span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span>
-                <span class="k">new</span> <span class="n">ActiveQueryModifier</span><span class="o">()</span>
-        <span class="o">));</span>
-
-        <span class="k">return</span> <span class="n">mongoTemplate</span><span class="o">;</span>    
-    <span class="o">}</span>
-
-    <span class="c1">// creation of Mongo bean omitted.
-</span><span class="c1"></span><span class="o">}</span>
-
-</code></pre></div><p>That&rsquo;s all for today. If you have any questions - <a href="https://plus.google.com/112372998073079463630/posts">Ask me on Google+</a></p>
+          
 
         
 
@@ -361,214 +249,24 @@ Click on <code>Edit</code> button in <code>Triggers</code> section.</p>
 
 <header>
     <h1 class="entry-title">
-        <a href="https://uthark.github.io/2014/03/01/google-plus-comments-fixed/">Fixed Google&#43; comments on the site</a>
+        <a href="https://uthark.github.io/2014/03/02/octopress-quote-fix/">Fixing unescaped quotes in page rendering in Octopress</a>
     </h1>
 
 </header>
 
 
         
-        <p>Fixed google+ comments disappearing on the site.</p>
-<p>Thanks to [this blog post][codeinf]
-[codeinf]: <a href="http://blog.code-infection.com/2013/04/google-comments-on-your-none-blogger.html">http://blog.code-infection.com/2013/04/google-comments-on-your-none-blogger.html</a></p>
+          <p>When I created About Me page I found issue with rendering: for some reason styles and some javascripts were missing on the page.
+Investigation showed that content in meta tag description contained unquoted quotes, thus resulting in broken HTML.
+After searching within octopress sources I found the issue:
+Rendering of description tag, excerpt from _includes/head.html:
+{% capture description %} {% if page.description %} {{ page.description }} {% else %} {{ content | raw_content }} {% endif %} {% endcapture %} &lt;meta name=&#34;description&#34; content=&#34;{{ description | strip_html | condense_spaces | truncate:150 }}&#34;&gt; After capturing, description is being processed with filters, defined in plugins/octopress_filters.</p>
 
-        
-
-    </article>
-    
-    <article>
-
-        
-        
-
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2013/06/29/spring-enable-annotation/">Пишем @Enable*-аннотацию для Spring</a>
-    </h1>
-
-</header>
-
-
-        
-        <p>Начиная с версии 3.1 Spring поддерживает декларативное включение необходимой функциональности через, так называемые, <code>@Enable*</code> аннотации. Пример таких аннотаций:
-<a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/web/servlet/config/annotation/EnableWebMvc.html"><code>org.springframework.web.servlet.config.annotation.EnableWebMvc</code></a>, <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/cache/annotation/EnableCaching.html"><code>org.springframework.cache.annotation.EnableCaching</code></a>, <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/scheduling/annotation/EnableAsync.html"><code>org.springframework.scheduling.annotation.EnableAsync</code></a> и другие.</p>
-<p>В продолжение темы <a href="/blog/2013/06/28/jaxrs-spring-autowiring/">прошлого поста</a>, я хочу показать, как можно добавить собственную <code>@Enable</code> аннотацию.</p>
-<p>Для автоматического создания клиента для REST-ресурса нам необходима следующая информация:</p>
-<ol>
-<li>Пакет, в котором искать интерфейсы, проаннотированные аннотацией <a href="https://jax-rs-spec.java.net/nonav/2.0/apidocs/javax/ws/rs/Path.html"><code>@Path()</code></a></li>
-<li>Базовый адрес REST-приложения.</li>
-</ol>
-<p>Для того, чтобы передать эту информацию, мы создадим два атрибута в аннотации: <code>scanPackage()</code> и <code>endpoint()</code></p>
-<p>Кроме того, для обработки аннотации необходимо указать обработчик. Это можно сделать передав подкласс <a href="http://static.springsource.org/spring-framework/docs/3.2.x/javadoc-api/org/springframework/context/annotation/ImportBeanDefinitionRegistrar.html"><code>org.springframework.context.annotation.ImportBeanDefinitionRegistrar</code></a> через аннотацию <a href="http://static.springsource.org/spring-framework/docs/3.2.x/javadoc-api/org/springframework/context/annotation/Import.html"><code>@Import</code></a></p>
-<p>Пишем аннотацию:</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Target</span><span class="o">(</span><span class="n">ElementType</span><span class="o">.</span><span class="na">TYPE</span><span class="o">)</span>
-<span class="nd">@Retention</span><span class="o">(</span><span class="n">RetentionPolicy</span><span class="o">.</span><span class="na">RUNTIME</span><span class="o">)</span>
-<span class="nd">@Documented</span>
-<span class="nd">@Inherited</span>
-<span class="nd">@Import</span><span class="o">(</span><span class="n">JaxRsRestClientRegistrar</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
-<span class="kd">public</span> <span class="nd">@interface</span> <span class="n">EnableJaxRsRestClient</span> <span class="o">{</span>
-
-    <span class="n">String</span> <span class="nf">scanPackage</span><span class="o">();</span>
-
-    <span class="n">String</span> <span class="nf">endpoint</span><span class="o">();</span>
-<span class="o">}</span>
-</code></pre></div><p>Теперь осталось написать реализацию интерфейса <code>org.springframework.context.annotation.ImportBeanDefinitionRegistrar</code>. Так как у нас уже есть написанный ранее <a href="http://static.springsource.org/spring-framework/docs/3.2.x/javadoc-api/org/springframework/beans/factory/config/BeanFactoryPostProcessor.html">BeanFactoryPostProcessor</a> в виде <code>RestClientPostProcessor</code>, реализация интерфейса будет простой - мы создадим описание бина для Spring и зарегистрируем его в реестре бинов.</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">JaxRsRestClientRegistrar</span> <span class="kd">implements</span> <span class="n">ImportBeanDefinitionRegistrar</span> <span class="o">{</span>
-
-    <span class="kd">protected</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">PROPERTY_ENDPOINT</span> <span class="o">=</span> <span class="s">&#34;endpoint&#34;</span><span class="o">;</span>
-
-    <span class="kd">protected</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">PROPERTY_SCAN_PACKAGE</span> <span class="o">=</span> <span class="s">&#34;basePackage&#34;</span><span class="o">;</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">registerBeanDefinitions</span><span class="o">(</span><span class="n">AnnotationMetadata</span> <span class="n">importingClassMetadata</span><span class="o">,</span> <span class="n">BeanDefinitionRegistry</span> <span class="n">registry</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">EnableJaxRsRestClient</span> <span class="n">annotation</span> <span class="o">=</span>
-                <span class="o">(</span><span class="n">EnableJaxRsRestClient</span><span class="o">)</span> <span class="o">((</span><span class="n">StandardClassMetadata</span><span class="o">)</span> <span class="n">importingClassMetadata</span><span class="o">).</span><span class="na">getIntrospectedClass</span><span class="o">()</span>
-                        <span class="o">.</span><span class="na">getAnnotation</span><span class="o">(</span><span class="n">EnableJaxRsRestClient</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-        <span class="n">String</span> <span class="n">scanPackage</span> <span class="o">=</span> <span class="n">annotation</span><span class="o">.</span><span class="na">scanPackage</span><span class="o">();</span>
-        <span class="n">String</span> <span class="n">endpoint</span> <span class="o">=</span> <span class="n">annotation</span><span class="o">.</span><span class="na">endpoint</span><span class="o">();</span>
-
-        <span class="n">GenericBeanDefinition</span> <span class="n">beanDefinition</span> <span class="o">=</span> <span class="k">new</span> <span class="n">GenericBeanDefinition</span><span class="o">();</span>
-        <span class="n">beanDefinition</span><span class="o">.</span><span class="na">setAbstract</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
-        <span class="n">beanDefinition</span><span class="o">.</span><span class="na">setBeanClass</span><span class="o">(</span><span class="n">RestClientPostProcessor</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-        <span class="n">MutablePropertyValues</span> <span class="n">propertyValues</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MutablePropertyValues</span><span class="o">();</span>
-        <span class="n">propertyValues</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">PROPERTY_ENDPOINT</span><span class="o">,</span> <span class="n">endpoint</span><span class="o">);</span>
-        <span class="n">propertyValues</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">PROPERTY_SCAN_PACKAGE</span><span class="o">,</span> <span class="n">scanPackage</span><span class="o">);</span>
-        <span class="n">beanDefinition</span><span class="o">.</span><span class="na">setPropertyValues</span><span class="o">(</span><span class="n">propertyValues</span><span class="o">);</span>
-
-        <span class="n">registry</span><span class="o">.</span><span class="na">registerBeanDefinition</span><span class="o">(</span><span class="n">ClassUtils</span><span class="o">.</span><span class="na">getShortName</span><span class="o">(</span><span class="n">getClass</span><span class="o">()),</span> <span class="n">beanDefinition</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div><p>Теперь мы можем использовать аннотацию:</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Configuration</span>
-<span class="nd">@EnableJaxRsRestClient</span><span class="o">(</span><span class="n">scanPackage</span> <span class="o">=</span> <span class="s">&#34;&lt;base package&gt;&#34;</span><span class="o">,</span> <span class="n">endpoint</span> <span class="o">=</span> <span class="s">&#34;${remote.rest.endpoint}&#34;</span><span class="o">)</span>
-<span class="kd">class</span> <span class="nc">TestAutowiringConfiguration</span> <span class="o">{</span>
-
-    <span class="nd">@Bean</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="n">PropertyPlaceholderConfigurer</span> <span class="nf">configurer</span><span class="o">()</span> <span class="o">{</span>
-        <span class="n">PropertyPlaceholderConfigurer</span> <span class="n">pph</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PropertyPlaceholderConfigurer</span><span class="o">();</span>
-        <span class="n">pph</span><span class="o">.</span><span class="na">setLocation</span><span class="o">(</span><span class="k">new</span> <span class="n">ClassPathResource</span><span class="o">(</span><span class="s">&#34;application.properties&#34;</span><span class="o">));</span>
-        <span class="k">return</span> <span class="n">pph</span><span class="o">;</span>
-    <span class="o">}</span>
-
-<span class="o">}</span>
-</code></pre></div><p>Обратите внимание, что endpoint можно передавать с использованием подстановочных свойств.</p>
-<p>На этом всё, если есть вопросы - <a href="https://plus.google.com/112372998073079463630/posts">спрашивайте в Google+</a></p>
-
-        
-
-    </article>
-    
-    <article>
-
-        
-        
-
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2013/06/28/jaxrs-spring-autowiring/">@Autowired JAX-RS Client API</a>
-    </h1>
-
-</header>
-
-
-        
-        <p>Продолжая разговор о <a href="http://www.jcp.org/en/jsr/detail?id=339">JAX RS</a> <a href="https://jax-rs-spec.java.net/nonav/2.0/apidocs/javax/ws/rs/client/package-summary.html">Client API</a> - предположим, что мы уже <a href="/blog/2013/06/28/jaxrs/">используем JAX-RS клиент</a></p>
-<p>У нас есть класс, который умеет создавать прокси для любого REST-интерфейса в проекте. Теперь мы хотим сделать так, чтобы эти интерфейсы можно было автоматически создавать в контексте Spring и связывать с другими бинами.</p>
-<p>Первое решение, которое приходит в лоб - объявить бин в конфигурации для каждого интерфейса:</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Configuration</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SpringConfiguration</span> <span class="o">{</span>
-    <span class="nd">@Bean</span>
-    <span class="kd">public</span> <span class="n">UserRest</span> <span class="nf">userRest</span><span class="o">(){</span>
-        <span class="n">List</span><span class="o">&lt;?&gt;</span> <span class="n">providers</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="k">new</span> <span class="n">JsonMessageHandler</span><span class="o">(</span><span class="k">new</span> <span class="n">ObjectMapper</span><span class="o">()));</span>
-        <span class="k">return</span> <span class="n">JAXRSClientFactory</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="s">&#34;http://localhost:8080&#34;</span><span class="o">,</span> <span class="n">UserRest</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">providers</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div><p>Написав объявление нескольких таких бинов можно задуматься - &ldquo;Есть ли способ проще?&rdquo;.</p>
-<p>Есть, и я вам сейчас его покажу.</p>
-<p>Для того, чтобы добавлять собственные бины в Spring контекст, мы воспользуемся возможностью расширения Spring контекста с использованием <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/beans/factory/config/BeanFactoryPostProcessor.html"><code>BeanFactoryPostProcessor</code></a>.
-Метод <code>postProcessBeanFactory</code> данного класса позволяет выполнить дополнительную обработку фабрики бинов Spring, например, удалить, добавить, переопределить бин.
-Это именно то, что нам нужно - автоматически добавить новые бины в фабрику.</p>
-<p>Итак, что нам нужно сделать:</p>
-<ol>
-<li>Найти все доступные REST интерфейсы в текущем classpath.</li>
-<li>Для каждого из них создать прокси с использованием <code>JAXRSClientFactory</code> .</li>
-<li>Зарегистрировать каждый прокси в фабрике бинов для дальнейшего использования (например, для @Autowired).</li>
-</ol>
-<p>По спецификации JAX-RS, чтобы класс распознавался как REST-ресурс, у него должна быть аннотация <a href="https://jax-rs-spec.java.net/nonav/2.0/apidocs/javax/ws/rs/Path.html"><code>@Path()</code></a>.</p>
-<p>Для поиска всех возможных классов/интерфейсов воспользуемся классом <a href="http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/context/annotation/ClassPathScanningCandidateComponentProvider.html"><code>ClassPathScanningCandidateComponentProvider</code></a>, который умеет сканировать классы в выбранном пакете и применять фильтры, чтобы собрать только нужные. Также нам нужно учесть, что по умолчанию <code>ClassPathScanningCandidateComponentProvider</code> пытается определить, может ли найденный класс быть и бином (например, проверяет, что это не абстрактный класс и не интерфейс), поэтому нам нужно написать подкласс, который позволит нам работать с интерфейсами.</p>
-<p>Пишем класс:</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">RestClientPostProcessor</span> <span class="kd">implements</span> <span class="n">BeanFactoryPostProcessor</span> <span class="o">{</span>
-
-    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Logger</span> <span class="n">LOGGER</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">RestClientPostProcessor</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-
-    <span class="kd">protected</span> <span class="n">String</span> <span class="n">endpoint</span> <span class="o">=</span> <span class="s">&#34;http://localhost:8080&#34;</span><span class="o">;</span>
-
-    <span class="kd">private</span> <span class="n">Class</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">Annotation</span><span class="o">&gt;</span> <span class="n">requiredAnnotation</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="na">class</span><span class="o">;</span>
-
-    <span class="kd">private</span> <span class="n">String</span> <span class="n">basePackage</span> <span class="o">=</span> <span class="s">&#34;&lt;base package&gt;&#34;</span><span class="o">;</span>
-
-    <span class="kd">private</span> <span class="n">ObjectMapper</span> <span class="n">objectMapper</span><span class="o">;</span>
-
-    <span class="c1">// getters/setters omitted.
-</span><span class="c1"></span>
-    <span class="kd">protected</span> <span class="n">Object</span> <span class="nf">createBean</span><span class="o">(</span><span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">clazz</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">List</span><span class="o">&lt;?&gt;</span> <span class="n">providers</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="k">new</span> <span class="n">JsonMessageHandler</span><span class="o">(</span><span class="n">objectMapper</span><span class="o">));</span>
-        <span class="k">return</span> <span class="n">JAXRSClientFactory</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">endpoint</span><span class="o">,</span> <span class="n">clazz</span><span class="o">,</span> <span class="n">providers</span><span class="o">);</span>
-    <span class="o">}</span>
-
-    <span class="nd">@Override</span> 
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">postProcessBeanFactory</span><span class="o">(</span><span class="n">ConfigurableListableBeanFactory</span> <span class="n">beanFactory</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">BeansException</span> <span class="o">{</span>
-
-        <span class="n">ClassPathScanningCandidateComponentProvider</span> <span class="n">provider</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ClasspathScanner</span><span class="o">();</span>
-        <span class="n">provider</span><span class="o">.</span><span class="na">addIncludeFilter</span><span class="o">(</span><span class="k">new</span> <span class="n">AnnotationTypeFilter</span><span class="o">(</span><span class="n">requiredAnnotation</span><span class="o">));</span>
-        <span class="n">Set</span><span class="o">&lt;</span><span class="n">BeanDefinition</span><span class="o">&gt;</span> <span class="n">components</span> <span class="o">=</span> <span class="n">provider</span><span class="o">.</span><span class="na">findCandidateComponents</span><span class="o">(</span><span class="n">basePackage</span><span class="o">);</span>
-
-        <span class="k">for</span> <span class="o">(</span><span class="n">BeanDefinition</span> <span class="n">component</span> <span class="o">:</span> <span class="n">components</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">createAndRegisterBean</span><span class="o">(</span><span class="n">beanFactory</span><span class="o">,</span> <span class="n">component</span><span class="o">);</span>
-
-        <span class="o">}</span>
-    <span class="o">}</span>
-
-    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">createAndRegisterBean</span><span class="o">(</span><span class="n">ConfigurableListableBeanFactory</span> <span class="n">beanFactory</span><span class="o">,</span> <span class="n">BeanDefinition</span> <span class="n">component</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">try</span> <span class="o">{</span>
-            <span class="n">String</span> <span class="n">beanClassName</span> <span class="o">=</span> <span class="n">component</span><span class="o">.</span><span class="na">getBeanClassName</span><span class="o">();</span>
-            <span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">clazz</span> <span class="o">=</span> <span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="n">beanClassName</span><span class="o">);</span>
-
-            <span class="n">Object</span> <span class="n">o</span> <span class="o">=</span> <span class="n">createBean</span><span class="o">(</span><span class="n">clazz</span><span class="o">);</span>
-
-            <span class="n">beanFactory</span><span class="o">.</span><span class="na">registerResolvableDependency</span><span class="o">(</span><span class="n">clazz</span><span class="o">,</span> <span class="n">o</span><span class="o">);</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ClassNotFoundException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">LOGGER</span><span class="o">.</span><span class="na">warn</span><span class="o">(</span><span class="s">&#34;Unable to find class: {}&#34;</span><span class="o">,</span> <span class="n">component</span><span class="o">.</span><span class="na">getBeanClassName</span><span class="o">(),</span> <span class="n">e</span><span class="o">);</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-
-    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">ClasspathScanner</span> <span class="kd">extends</span> <span class="n">ClassPathScanningCandidateComponentProvider</span> <span class="o">{</span>
-
-        <span class="kd">public</span> <span class="nf">ClasspathScanner</span><span class="o">()</span> <span class="o">{</span>
-            <span class="kd">super</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
-        <span class="o">}</span>
-
-        <span class="nd">@Override</span> <span class="kd">protected</span> <span class="kt">boolean</span> <span class="nf">isCandidateComponent</span><span class="o">(</span><span class="n">AnnotatedBeanDefinition</span> <span class="n">beanDefinition</span><span class="o">)</span> <span class="o">{</span>
-            <span class="c1">// override this method, because our classes are interfaces, by default interfaces are
-</span><span class="c1"></span>            <span class="c1">// not allowed.
-</span><span class="c1"></span>            <span class="k">return</span> <span class="n">beanDefinition</span><span class="o">.</span><span class="na">getMetadata</span><span class="o">().</span><span class="na">isIndependent</span><span class="o">();</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-
-</code></pre></div><p>Теперь этот процессор необходимо зарегистрировать в контексте Spring:</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Configuration</span>
-<span class="kd">class</span> <span class="nc">TestAutowiringConfiguration</span> <span class="o">{</span>
-
-    <span class="nd">@Bean</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="n">RestClientPostProcessor</span> <span class="nf">autowiringRestApiProcessor</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="n">RestClientPostProcessor</span><span class="o">();</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div><p>И теперь можно использовать <code>UserRest</code> как обычный бин:</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">    <span class="nd">@Autowired</span>
-    <span class="kd">private</span> <span class="n">UserShowRest</span> <span class="n">userShowRest</span><span class="o">;</span>
-</code></pre></div><p>Если есть вопросы - <a href="https://plus.google.com/112372998073079463630/posts">спрашивайте в Google+</a></p>
+          
+              <footer>
+                  <a href="https://uthark.github.io/2014/03/02/octopress-quote-fix/" rel="full-article">Continue Reading &rarr;</a>
+              </footer>
+          
 
         
 
@@ -617,6 +315,16 @@ Click on <code>Edit</code> button in <code>Triggers</code> section.</p>
     
         <a href="/page/11/" class="label-pagination">11</a>
     
+        <a href="/page/12/" class="label-pagination">12</a>
+    
+        <a href="/page/13/" class="label-pagination">13</a>
+    
+        <a href="/page/14/" class="label-pagination">14</a>
+    
+        <a href="/page/15/" class="label-pagination">15</a>
+    
+        <a href="/page/16/" class="label-pagination">16</a>
+    
 
     
     
@@ -625,7 +333,7 @@ Click on <code>Edit</code> button in <code>Triggers</code> section.</p>
 
     
     
-        <a href="/page/11/" aria-label="Last"><i class="fa fa-angle-double-right fa-lg"></i></a>
+        <a href="/page/16/" aria-label="Last"><i class="fa fa-angle-double-right fa-lg"></i></a>
     
 
 </div>

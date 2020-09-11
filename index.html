@@ -29,7 +29,7 @@
     
     
     
-    <link rel="stylesheet" href="https://uthark.github.io/css/theme.a6d46470328bb42ee2535190c2023e9b102aa93fced95c8de7e210ec2a80314a.css">
+    <link rel="stylesheet" href="https://uthark.github.io/css/theme.67fdd3de42877d3dd583ad51bb8533496fa520bd4bac49759be34c5b49d2a259.css">
     <link rel="stylesheet" href="https://uthark.github.io/css/uthark.css">
 
 
@@ -146,93 +146,15 @@
 
 
         
-        <p>Deploying to kubernetes is easy: create manifest with your <code>Deployment</code> and then <code>kubectl apply</code> it.</p>
-<p>The most basic deployment manifest looks like this:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">apiVersion: apps/v1
-kind: Deployment
-metadata:
-  labels:
-    app.kubernetes.io/name: test-app
-  name: test-app
-  namespace: default
-spec:
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: test-app
-  template:
-    metadata:
-      labels:
-        app.kubernetes.io/name: test-app
-    spec:
-      containers:
-      - name: controller
-        image: nginx
-</code></pre></div><p>It works as is, but you may improve reliability of this deployment by configuring additional fields for the manifest.</p>
-<h2 id="metadata">Metadata</h2>
-<p>Use <code>metadata</code> field efficiently. You can add labels who owns the deployment, if they are part of the bigger project, and so on.
-This will allow to discover all deployments that are owned by a specific department:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">kubectl get deploy -n production -l department=marketing
-</code></pre></div><h2 id="cpumemory-requestsresources">CPU/Memory Requests/Resources</h2>
-<p>Correct configuration is important. Requests are used for scheduling (kubelet reports node configuration to scheduler and scheduler uses this information when decides where the pod will be assigned). Limits are used for enforcing usage in runtime.</p>
-<h3 id="things-to-remember">Things to remember:</h3>
-<ol>
-<li>If you go over memory limit, app will be OOMKilled.</li>
-<li>If you go over CPU limit, app will be throttled. In fact this is more complicated and your app may be throttled before reaching limit, but this is a topic for another post.</li>
-<li>The configuration set affects <a href="https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/">Quality of Service</a> for pod.</li>
-<li>QoS affects what happens with your pod when kubelet on the node is <a href="https://kubernetes.io/docs/tasks/administer-cluster/out-of-resource/#best-practices">out of resources</a></li>
-</ol>
-<h2 id="do-not-use-latest-tag-in-images">Do not use <code>latest</code> tag in images</h2>
-<p>I <a href="https://uthark.github.io/post/2020-09-03-docker-best-practices/">spoke about it previously</a>. Use exact version, i.e. <code>nginx:1.19.2</code>. This is better than <code>latest</code>, but even better to use sha256 of the image:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">image: nginx@sha256:9d660d69e53c286fbdd472122b4b583a46e8a27f10515e415d2578f8478b9aad
-</code></pre></div><h2 id="update-strategy">Update Strategy</h2>
-<p>Default strategy is <code>RollingUpdate</code>. If you run multiple replicas of the application, consider tuning <code>maxUnavailable</code>/<code>maxSurge</code> based on your requirements.
-If your app have multiple replicas and each replica requires a lot of CPU/Memory, having <code>maxSurge</code> might require autoscaler to provision extra nodes.</p>
-<h2 id="service-accounts">Service Accounts</h2>
-<p>By default, each deployment will use <code>default</code> service account. If app requires access to kubernetes API, consider creating separate service account for the app. This will allow improve your isolation and security:</p>
-<ol>
-<li>Use <a href="https://kubernetes.io/docs/concepts/policy/pod-security-policy/">PodSecurityPolicy</a> for fine-grained authorization of what’s allowed to pod to do on the node.</li>
-<li>Use <a href="https://kubernetes.io/docs/reference/access-authn-authz/rbac/">RBAC ClusterRoleBinding/RoleBinding</a> to control permissions for the resources in Kubernetes.</li>
-</ol>
-<h2 id="securitycontext">SecurityContext</h2>
-<p><code>securityContext</code> allows to control security context of the pod. Recommended to enforce <code>runAsNonRoot</code>. <a href="https://kubernetes.io/docs/tasks/configure-pod-container/security-context/">See documentation</a></p>
-<h2 id="pod-disruption-budget">Pod Disruption Budget</h2>
-<p>If you have multiple replicas of the application, create <code>PodDisruptionBudget</code> for the <code>Deployment</code>. See <a href="https://kubernetes.io/docs/tasks/run-application/configure-pdb/">documentation</a> for more details.</p>
-<h2 id="liveness--readiness-probes">Liveness &amp; Readiness Probes</h2>
-<p>I cannot stress more importance of it. I’ve seen application being taken down when they should not and vice versa. Your biggest nightmare will be if you do a rollout when new pods are crashlooping and olds pods are not terminated when they should.</p>
-<h2 id="lifecycle-hook---post-start--pre-stop">Lifecycle Hook - Post Start / Pre Stop</h2>
-<p>Lifecycle hooks allows gracefully terminate application. I.e. you can finish current request, save state and then terminate. See <a href="https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/">documentation</a></p>
-<h2 id="priority-classes">Priority Classes</h2>
-<p>Not all apps are created equal. Some apps are more important. Consider defining priority classes and use appropriate priority class for the application. <a href="https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/" title="Pod Priority and Preemption">Read more in official documentation</a></p>
-<h2 id="taints-and-tolerations">Taints and tolerations</h2>
-<p>Sometimes there are specific requirements where application should or should not run.
-Taints allows to taint nodes to prevent regular workload from scheduling on those node. To allow workload to be scheduled on the nodes - use Tolerations.
-<a href="https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/">See documentation</a></p>
-<h2 id="affinities-and-anti-affinities">Affinities and anti-affinities</h2>
-<p>Affinities and anti-affinities provides you more control where to schedule the workload. For example, you might want to use pod anti-affinity to distribute replicas of the application across different nodes or availability zones. See <a href="https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/">documentation</a> for details.
-Another great feature that you might need is <a href="https://kubernetes.io/docs/tasks/administer-cluster/topology-manager/">Topology Manager</a> for better allocation of the workload.</p>
-<h2 id="references">References</h2>
-<p>This is a must read documentation to learn / refresh your knowledge:</p>
-<ul>
-<li><a href="https://kubernetes.io/docs/concepts/workloads/controllers/deployment/">Workload - Deployments</a></li>
-<li><a href="https://kubernetes.io/docs/concepts/workloads/pods/disruptions/">Workload – Disruptions</a></li>
-<li><a href="https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/">Container Lifecycle Hooks</a></li>
-<li><a href="https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/">Workload – Pod Lifecycle</a></li>
-<li><a href="https://kubernetes.io/docs/concepts/policy/pod-security-policy/">Pod Security Policies</a></li>
-<li><a href="https://kubernetes.io/docs/tasks/configure-pod-container/security-context/">Configure a Security Context for a Pod or Container</a></li>
-<li><a href="https://kubernetes.io/docs/tasks/run-application/configure-pdb/">Specifying a Disruption Budget for your Application</a></li>
-<li><a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/">Configure Liveness, Readiness and Startup Probes</a></li>
-<li><a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/">Configure Service Accounts for Pods</a></li>
-<li><a href="https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/">Scheduling and Eviction – Assigning Pods to Nodes</a></li>
-<li><a href="https://kubernetes.io/docs/tasks/configure-pod-container/assign-cpu-resource/">Assign CPU Resources to Containers and Pods</a></li>
-<li><a href="https://kubernetes.io/docs/tasks/configure-pod-container/assign-memory-resource/">Assign Memory Resources to Containers and Pods</a></li>
-<li><a href="https://kubernetes.io/docs/tasks/administer-cluster/out-of-resource/#best-practices">Configure Out of Resource Handling</a></li>
-<li><a href="https://kubernetes.io/docs/tasks/administer-cluster/topology-manager/">Topology Manager</a></li>
-<li><a href="https://kubernetes.io/docs/reference/access-authn-authz/rbac/">Using RBAC Authorization</a></li>
-<li><a href="https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/" title="Pod Priority and Preemption">Pod Priority and Preemption</a></li>
-<li><a href="https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/">Configure Quality of Service for Pods</a></li>
-<li><a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#deployment-v1-apps">apps/v1 Deployment API Reference</a></li>
-<li><a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#podspec-v1-core">core/v1 PodSpec API Reference</a></li>
-</ul>
+          <p>Deploying to kubernetes is easy: create manifest with your Deployment and then kubectl apply it.
+The most basic deployment manifest looks like this:
+apiVersion: apps/v1 kind: Deployment metadata: labels: app.kubernetes.io/name: test-app name: test-app namespace: default spec: selector: matchLabels: app.kubernetes.io/name: test-app template: metadata: labels: app.kubernetes.io/name: test-app spec: containers: - name: controller image: nginx It works as is, but you may improve reliability of this deployment by configuring additional fields for the manifest.</p>
+
+          
+              <footer>
+                  <a href="https://uthark.github.io/post/2020-09-04-deploy-project-kubernetes-checklist/" rel="full-article">Continue Reading &rarr;</a>
+              </footer>
+          
 
         
 
@@ -252,62 +174,16 @@ Another great feature that you might need is <a href="https://kubernetes.io/docs
 
 
         
-        <h2 id="introduction">Introduction</h2>
-<p>After using docker for last several years I’d like to share best practices that works in production.</p>
-<h2 id="reduce-container-image-size">Reduce container image size</h2>
-<p>In Cloud Native world infrastructure is disposable and immutable. As result, if your kubernetes pod is rescheduled to another node, new node need to pull docker image.</p>
-<p>Small docker images provide the following benefits:</p>
-<ol>
-<li>Smaller attack surface. If image contain only your app binaries and direct dependencies without full blown OS, you will need to apply patches to fix vulnerabilities infrequently.</li>
-<li>Faster application startup. Your container runtime will download image faster.</li>
-<li>Less network utilization. You will reduce your network bandwidth utilization.</li>
-<li>Less cost. Smaller images take less space. In modern cloud days you pay for the storage, using less space saves you money.</li>
-</ol>
-<h3 id="how">How?</h3>
-<p>There are several techniques to reduce image size:</p>
-<ol>
-<li>Use <a href="https://github.com/GoogleContainerTools/distroless">distroless</a> base images. &ldquo;Distroless&rdquo; images contain only your application and its runtime dependencies. They do not contain package managers, shells or any other programs you would expect to find in a standard Linux distribution.</li>
-<li>If you need basic shell, try to use <a href="https://hub.docker.com/_/busybox">busybox</a> or try using <a href="https://hub.docker.com/_/alpine">alpine</a> – this is minimalistic linux distribution. One caveat is that you might need to pass extra flags for app during compilation to make it compatible with alpine.</li>
-<li><a href="https://docs.docker.com/develop/develop-images/multistage-build/">Use multi-stage builds</a>. This will allow you to build image in one container and the copy resulting binaries in a final image that doesn’t have compiler tools, source code and other data. Using multistage builds allows you to not use all commands in a single <code>RUN</code> stanza in <code>Dockerfile</code>, which improves source code readability</li>
-</ol>
-<h2 id="security-is-important">Security is important</h2>
-<p>Principle of least privilege should be used as much as possible. Within its cgroup docker container runs as root. If there is a new kernel vulnerability, malicious container might try to use it and escape to the host using 	<code>root</code> permissions.</p>
-<h3 id="how-1">How?</h3>
-<ol>
-<li>
-<p>Set <code>USER</code> in the <code>Dockerfile</code>.</p>
-</li>
-<li>
-<p>Do not use <code>latest</code> in <code>FROM</code>. If you use <code>latest</code>, you will pull latest base image. Downsides of it are the following:</p>
-<ol>
-<li>If upstream repository is compromised, you might get compromised image with <code>latest</code></li>
-<li>If upstream repository bumps version, you might get incompatible version of the software in your image. Dependency updates should be manageable and not happen ad hoc.</li>
-</ol>
-</li>
-<li>
-<p>Use digest/<code>@sha256</code> in <code>FROM</code> to specify exact version of the container you’re pulling. Digest is shown on tag page on docker hub or you can get it after running <code>docker pull</code>:</p>
-</li>
-</ol>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback"> $ docker pull alpine:3.12.0
- 3.12.0: Pulling from library/alpine
- df20fa9351a1: Pull complete
- Digest: sha256:185518070891758909c9f839cf4ca393ee977ac378609f700f60a771a2dfe321
- Status: Downloaded newer image for alpine:3.12.0
- docker.io/library/alpine:3.12.0
-</code></pre></div><p><code>Dockerfile</code> will looks like this:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">FROM alpine@sha256:185518070891758909c9f839cf4ca393ee977ac378609f700f60a771a2dfe321
-COPY ...
-# And so on.
-</code></pre></div><ol start="4">
-<li>Use own docker registry. Rebuild all required base images yourself and use them. This will allow you to control which base image are being used.</li>
-<li>Prohibit running docker containers from <code>docker.io</code> in production. If you run in kubernetes, use <a href="https://github.com/open-policy-agent/gatekeeper">Open Policy Agent Gatekeeper</a> or similar solution. docker.io contains a lot of images that are build both by well-known companies and by random people, not all of them have good intentions.</li>
-<li>Do not store any sensitive information in the image. No passwords, no cloud credentials. Pass them either via mounted volume or via <code>ENV</code> variables.</li>
-</ol>
-<h2 id="improve-maintainability">Improve maintainability</h2>
-<ol>
-<li>Add <a href="https://docs.docker.com/engine/reference/builder/#label"><code>LABEL</code></a> with information about image maintainer and other information that is relevant for your organization.</li>
-<li>Use <a href="https://docs.docker.com/engine/reference/builder/#arg"><code>ARG</code></a> to pass base IMAGE. This will allow you to configure base image outside and give you ability to manage base image at scale if you have large organization/have hundreds of different images.</li>
-</ol>
+          <p>Introduction After using docker for last several years I’d like to share best practices that works in production.
+Reduce container image size In Cloud Native world infrastructure is disposable and immutable. As result, if your kubernetes pod is rescheduled to another node, new node need to pull docker image.
+Small docker images provide the following benefits:
+ Smaller attack surface. If image contain only your app binaries and direct dependencies without full blown OS, you will need to apply patches to fix vulnerabilities infrequently.</p>
+
+          
+              <footer>
+                  <a href="https://uthark.github.io/post/2020-09-03-docker-best-practices/" rel="full-article">Continue Reading &rarr;</a>
+              </footer>
+          
 
         
 
@@ -327,158 +203,16 @@ COPY ...
 
 
         
-        <p>Installing kubernetes on Raspberry Pi is easy, but there are few caveats that you need to be aware of.</p>
-<p><code>arm64</code> is preferred, because 64-bit allows you to use &gt; 4GB of RAM per process.</p>
-<h2 id="enable-cgroups">Enable cgroups</h2>
-<p>Kubernetes relies on cgroups for enforcing limits for the containers, so kernel needs to be booted with cgroups support.
-On Raspberry, edit <code>/boot/firmware/cmdline.txt</code> and add the following options:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">cgroup_enable=memory swapaccount=1 cgroup_memory=1 cgroup_enable=cpuset
-</code></pre></div><p>Reboot after making the changes.</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">sudo shutdown -r now
-</code></pre></div><h2 id="install-and-configure-docker">Install and configure docker</h2>
-<p>Allow to use HTTPS transport for downloading packages:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">sudo apt update
-sudo apt install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
-</code></pre></div><p>Add docker GPG key used for verifying <code>Packages</code> file used by apt.</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-</code></pre></div><p>Add docker repository:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">echo &#34;deb [arch=arm64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable&#34; | sudo tee /etc/apt/sources.list.d/docker.list
-</code></pre></div><p>Update apt repository index and install docker</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">sudo apt update
-sudo apt install docker-ce docker-ce-cli containerd.io
-</code></pre></div><p>If you want to communicate with docker with non-root user:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">sudo usermod -aG docker &#34;your user&#34;
-</code></pre></div><p>To apply changes - logout and login again. If you want to reflect changes immediately run:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">newgrp docker
-</code></pre></div><p>Configure docker to use systemd as a cgroups driver, put in <code>/etc/docker/daemon.json</code>:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">{
-  &#34;exec-opts&#34;: [&#34;native.cgroupdriver=systemd&#34;],
-  &#34;log-driver&#34;: &#34;json-file&#34;,
-  &#34;log-opts&#34;: {
-    &#34;max-size&#34;: &#34;100m&#34;
-  },
-  &#34;storage-driver&#34;: &#34;overlay2&#34;
-}
+          <p>Installing kubernetes on Raspberry Pi is easy, but there are few caveats that you need to be aware of.
+arm64 is preferred, because 64-bit allows you to use &gt; 4GB of RAM per process.
+Enable cgroups Kubernetes relies on cgroups for enforcing limits for the containers, so kernel needs to be booted with cgroups support. On Raspberry, edit /boot/firmware/cmdline.txt and add the following options:
+cgroup_enable=memory swapaccount=1 cgroup_memory=1 cgroup_enable=cpuset Reboot after making the changes.</p>
 
-</code></pre></div><h2 id="installing-kubeadm">Installing kubeadm</h2>
-<p>Add kubernetes repository:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">echo &#34;deb https://apt.kubernetes.io/ kubernetes-xenial main&#34; | sudo tee /etc/apt/sources.list.d/kubernetes.list
-</code></pre></div><p>To allow iptables properly work with bridged traffic:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">cat &lt;&lt;EOF | sudo tee /etc/sysctl.d/k8s.conf
-net.bridge.bridge-nf-call-ip6tables = 1
-net.bridge.bridge-nf-call-iptables = 1
-EOF
-sudo sysctl --system
-</code></pre></div><p>Install kubeadm, kubelet and kubectl:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">sudo apt update
-sudo apt install -y kubelet kubeadm kubectl
-</code></pre></div><p>Minor updates of kubernetes may require extra steps, so we need to prevent packages from auto-updating:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">sudo apt-mark hold kubelet kubeadm kubectl
-</code></pre></div><h2 id="installing-kubernetes-control-plane">Installing Kubernetes Control Plane</h2>
-<p>Generate token for installation</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">TOKEN=$(sudo kubeadm token generate)
-</code></pre></div><p>Install control plane with kubeadm:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">sudo kubeadm init --token=${TOKEN} --kubernetes-version=v1.19.0
-</code></pre></div><p>If installation is successful, output will look similar to this:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">W0903 00:29:04.934934  417169 configset.go:348] WARNING: kubeadm cannot validate component configs for API groups [kubelet.config.k8s.io kubeproxy.config.k8s.io]
-[init] Using Kubernetes version: v1.19.0
-[preflight] Running pre-flight checks
-	[WARNING SystemVerification]: missing optional cgroups: hugetlb
-[preflight] Pulling images required for setting up a Kubernetes cluster
-[preflight] This might take a minute or two, depending on the speed of your internet connection
-[preflight] You can also perform this action in beforehand using &#39;kubeadm config images pull&#39;
-[certs] Using certificateDir folder &#34;/etc/kubernetes/pki&#34;
-[certs] Generating &#34;ca&#34; certificate and key
-[certs] Generating &#34;apiserver&#34; certificate and key
-[certs] apiserver serving cert is signed for DNS names [kubernetes kubernetes.default kubernetes.default.svc kubernetes.default.svc.cluster.local ubuntu] and IPs [10.96.0.1 192.168.1.153]
-[certs] Generating &#34;apiserver-kubelet-client&#34; certificate and key
-[certs] Generating &#34;front-proxy-ca&#34; certificate and key
-[certs] Generating &#34;front-proxy-client&#34; certificate and key
-[certs] Generating &#34;etcd/ca&#34; certificate and key
-[certs] Generating &#34;etcd/server&#34; certificate and key
-[certs] etcd/server serving cert is signed for DNS names [localhost ubuntu] and IPs [192.168.1.153 127.0.0.1 ::1]
-[certs] Generating &#34;etcd/peer&#34; certificate and key
-[certs] etcd/peer serving cert is signed for DNS names [localhost ubuntu] and IPs [192.168.1.153 127.0.0.1 ::1]
-[certs] Generating &#34;etcd/healthcheck-client&#34; certificate and key
-[certs] Generating &#34;apiserver-etcd-client&#34; certificate and key
-[certs] Generating &#34;sa&#34; key and public key
-[kubeconfig] Using kubeconfig folder &#34;/etc/kubernetes&#34;
-[kubeconfig] Writing &#34;admin.conf&#34; kubeconfig file
-[kubeconfig] Writing &#34;kubelet.conf&#34; kubeconfig file
-[kubeconfig] Writing &#34;controller-manager.conf&#34; kubeconfig file
-[kubeconfig] Writing &#34;scheduler.conf&#34; kubeconfig file
-[kubelet-start] Writing kubelet environment file with flags to file &#34;/var/lib/kubelet/kubeadm-flags.env&#34;
-[kubelet-start] Writing kubelet configuration to file &#34;/var/lib/kubelet/config.yaml&#34;
-[kubelet-start] Starting the kubelet
-[control-plane] Using manifest folder &#34;/etc/kubernetes/manifests&#34;
-[control-plane] Creating static Pod manifest for &#34;kube-apiserver&#34;
-[control-plane] Creating static Pod manifest for &#34;kube-controller-manager&#34;
-[control-plane] Creating static Pod manifest for &#34;kube-scheduler&#34;
-[etcd] Creating static Pod manifest for local etcd in &#34;/etc/kubernetes/manifests&#34;
-[wait-control-plane] Waiting for the kubelet to boot up the control plane as static Pods from directory &#34;/etc/kubernetes/manifests&#34;. This can take up to 4m0s
-[apiclient] All control plane components are healthy after 30.007706 seconds
-[upload-config] Storing the configuration used in ConfigMap &#34;kubeadm-config&#34; in the &#34;kube-system&#34; Namespace
-[kubelet] Creating a ConfigMap &#34;kubelet-config-1.19&#34; in namespace kube-system with the configuration for the kubelets in the cluster
-[upload-certs] Skipping phase. Please see --upload-certs
-[mark-control-plane] Marking the node ubuntu as control-plane by adding the label &#34;node-role.kubernetes.io/master=&#39;&#39;&#34;
-[mark-control-plane] Marking the node ubuntu as control-plane by adding the taints [node-role.kubernetes.io/master:NoSchedule]
-[bootstrap-token] Using token: 5p4y2w.xxivtzh1lvuukdk7
-[bootstrap-token] Configuring bootstrap tokens, cluster-info ConfigMap, RBAC Roles
-[bootstrap-token] configured RBAC rules to allow Node Bootstrap tokens to get nodes
-[bootstrap-token] configured RBAC rules to allow Node Bootstrap tokens to post CSRs in order for nodes to get long term certificate credentials
-[bootstrap-token] configured RBAC rules to allow the csrapprover controller automatically approve CSRs from a Node Bootstrap Token
-[bootstrap-token] configured RBAC rules to allow certificate rotation for all node client certificates in the cluster
-[bootstrap-token] Creating the &#34;cluster-info&#34; ConfigMap in the &#34;kube-public&#34; namespace
-[kubelet-finalize] Updating &#34;/etc/kubernetes/kubelet.conf&#34; to point to a rotatable kubelet client certificate and key
-[addons] Applied essential addon: CoreDNS
-[addons] Applied essential addon: kube-proxy
-
-Your Kubernetes control-plane has initialized successfully!
-
-To start using your cluster, you need to run the following as a regular user:
-
-  mkdir -p $HOME/.kube
-  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-  sudo chown $(id -u):$(id -g) $HOME/.kube/config
-
-You should now deploy a pod network to the cluster.
-Run &#34;kubectl apply -f [podnetwork].yaml&#34; with one of the options listed at:
-  https://kubernetes.io/docs/concepts/cluster-administration/addons/
-
-Then you can join any number of worker nodes by running the following on each as root:
-
-kubeadm join 192.168.1.153:6443 --token 5p4y2w.xxivtzh1lvuukdk7 \
-    --discovery-token-ca-cert-hash sha256:5638c83bec2b62b5f01d85bc2f4330b03b7e3c4682fe3f5e7e4189fbb63c5a17
-</code></pre></div><h2 id="configure-kubectl-to-communicate-with-the-cluster">Configure kubectl to communicate with the cluster</h2>
-<p>Put kubeconfig file in user&rsquo;s home directory:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">mkdir -p $HOME/.kube
-sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-sudo chown $(id -u):$(id -g) $HOME/.kube/config
-
-</code></pre></div><p>Verify it works:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">kubectl get nodes
-</code></pre></div><p>In my case output was:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">NAME     STATUS   ROLES    AGE     VERSION
-ubuntu   Ready    master   3h42m   v1.19.0
-
-</code></pre></div><p>As a CNI network provider I use Calico, but you can use any you like. <a href="https://kubernetes.io/docs/concepts/cluster-administration/networking/#how-to-implement-the-kubernetes-networking-model">List of available implementations</a></p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">curl https://docs.projectcalico.org/manifests/calico.yaml -O
-kubectl apply -f calico.yaml
-</code></pre></div><p>Now you have working single node kubernetes cluster. Next things you might need to do:</p>
-<ol>
-<li>Add worker nodes: use <code>kubeadm join</code>.</li>
-<li>Install <a href="https://metallb.universe.tf/">MetalLB</a> – Loadbalancer for bare-metal kubernetes clusters</li>
-<li>Install <a href="https://helm.sh/">Helm</a> to install kubernetes packages.</li>
-<li>If you have only single raspberry pi, you need to remove taint from your control plane node so that it regular workload can be scheduled on it:
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">kubectl taint nodes --all node-role.kubernetes.io/master-
-</code></pre></div></li>
-</ol>
-<h2 id="references">References</h2>
-<ul>
-<li><a href="https://docs.docker.com/engine/install/ubuntu/">Docker Installation</a></li>
-<li><a href="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/">Bootstrapping clusters with kubeadm</a></li>
-<li><a href="https://kubernetes.io/docs/concepts/cluster-administration/networking/#how-to-implement-the-kubernetes-networking-model">Kubernetes Cluster Networking</a></li>
-</ul>
+          
+              <footer>
+                  <a href="https://uthark.github.io/post/2020-09-02-installing-kubernetes-raspberrypi/" rel="full-article">Continue Reading &rarr;</a>
+              </footer>
+          
 
         
 
@@ -498,41 +232,18 @@ kubectl apply -f calico.yaml
 
 
         
-        <p>After discovering that by default Raspberry installs <a href="https://www.raspberrypi.org/downloads/raspberry-pi-os/">32-bit Raspbian OS</a>, I wanted to reinstall it with a 64 bit - this would allow to run Kubernetes on Raspberry</p>
-<p>Decided to go with <a href="https://ubuntu.com/download/raspberry-pi">Ubuntu Server 64</a>.</p>
-<p>Installed it on SD Card with <a href="https://www.raspberrypi.org/downloads/">Raspberry Pi Imager</a>.</p>
-<p>After boot found out that need to connect it to WI-FI.</p>
-<p>Configuring <code>wpa_supplicant</code> didn&rsquo;t help, still had issues with not getting IP Address from DHCP.</p>
-<p>Finally, did the following:</p>
-<ol>
-<li>
-<p>Create <code>/etc/netplan/01-netcfg.yaml</code> and put the following content there:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">network:
-  version: 2
-  renderer: networkd
-  wifis:
-    wlan0:
-      dhcp4: true
-      dhcp6: true
-      optional: true
-      access-points:
-        &#34;&lt;replace with your wifi network name/SSID&gt;&#34;:
-          password: &#34;&lt;replace with your password&gt;&#34;
-</code></pre></div></li>
-<li>
-<p>Change permissions to make file accessible only to <code>root</code> user:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">chmod 600 /etc/netplan/01-netcfg.yaml
-</code></pre></div></li>
-<li>
-<p>Configure <a href="https://linux.die.net/man/8/crda">Linux wireless central regulatory domain agent</a>. Put your country code in <code>/etc/default/crda</code></p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">REGDOMAIN=US
-</code></pre></div></li>
-<li>
-<p>After that, need to generate and apply netplan:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">sudo netplan --debug generate
-sudo netplan --debug apply
-</code></pre></div></li>
-</ol>
+          <p>After discovering that by default Raspberry installs 32-bit Raspbian OS, I wanted to reinstall it with a 64 bit - this would allow to run Kubernetes on Raspberry
+Decided to go with Ubuntu Server 64.
+Installed it on SD Card with Raspberry Pi Imager.
+After boot found out that need to connect it to WI-FI.
+Configuring wpa_supplicant didn&rsquo;t help, still had issues with not getting IP Address from DHCP.
+Finally, did the following:</p>
+
+          
+              <footer>
+                  <a href="https://uthark.github.io/post/2020-09-01-raspberry-pi-ubuntu-arm64/" rel="full-article">Continue Reading &rarr;</a>
+              </footer>
+          
 
         
 
@@ -552,265 +263,15 @@ sudo netplan --debug apply
 
 
         
-        <p>Several years ago I bought Raspberry Pi 3. It was a nice toy, but it was very slow and almost impossible to use, so it didn&rsquo;t stick. Recently I bought new Raspberry Pi 4 because it has much better hardware (especially 8GB RAM option).</p>
-<p>Idea was to use it as a mini-server and run <a href="https://pi-hole.net">pi-hole</a> on it. In general, it was a success, after installing raspbian, I installed docker on it and run pi-hole docker installation. Few tweaks were required to configure my router to update DNS, but I&rsquo;m still not happy with the result. My router doesn&rsquo;t allow to customize DNS servers that are distributed via DHCP, so all clients get default DNS which is my router, and router uses Pi Hole. As a result, in pi-hole I see only 2 clients - <code>localhost</code> and my router.</p>
-<p>But still get a lot of benefits by blocking most of the ads on most of my devices, which is really nice, especially in 2020, when amount of ads on the websites is enormous.</p>
-<p>The next idea to try is to install <code>arm64</code> kernel and try to install kubernetes (or at least a <code>kubelet</code>).</p>
+          <p>Several years ago I bought Raspberry Pi 3. It was a nice toy, but it was very slow and almost impossible to use, so it didn&rsquo;t stick. Recently I bought new Raspberry Pi 4 because it has much better hardware (especially 8GB RAM option).
+Idea was to use it as a mini-server and run pi-hole on it. In general, it was a success, after installing raspbian, I installed docker on it and run pi-hole docker installation.</p>
 
-        
+          
+              <footer>
+                  <a href="https://uthark.github.io/post/2020-08-31-pihole/" rel="full-article">Continue Reading &rarr;</a>
+              </footer>
+          
 
-    </article>
-    
-    <article>
-
-        
-        
-
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/post/2018-02-24-used-stuff/">My Setup</a>
-    </h1>
-
-</header>
-
-
-        
-        <h2 id="introduction">Introduction</h2>
-<p>This is a dump of different things and apps I use on a daily basis.
-Hope you will find it useful.</p>
-<h2 id="shellterminal-applications">Shell/Terminal Applications</h2>
-<ul>
-<li><a href="http://zsh.sourceforge.net/">zsh</a> — ZSH is a shell. It is very good alternative to <a href="https://www.gnu.org/software/bash/">bash</a> which is used by default in most Linux distributions and in macOS. macOS uses very old version of bash because bash changed it&rsquo;s license and Apple doesn&rsquo;t like GPL.</li>
-<li><a href="http://ohmyz.sh/">oh-my-zsh</a> — framework for easy customization of ZSH. Has a lot of additional plugins. Try not to overuse it, otherwise new ZSH session may start several seconds even on a modern hardware.</li>
-<li><a href="https://github.com/junegunn/fzf">fzf</a> — A command-line fuzzy finder. I bind it to <code>Cmd+R</code> to do search in history.</li>
-<li><a href="https://github.com/kennethreitz/autoenv">autoenv</a> — Directory-based environments.</li>
-<li><a href="https://github.com/wting/autojump">autojump</a> — A cd command that learns - easily navigate directories from the command line</li>
-<li><a href="https://brew.sh/">brew</a> — Package Manager for macOS. Must have application for mac. Allows to easily install applications via CLI. Also <code>Brewfile</code> is a lifesaver.</li>
-</ul>
-<h2 id="desktop-applications">Desktop Applications</h2>
-<p>Nowadays I use Apple MacBook Pro primarily, so most applications listed here are macOS specific.</p>
-<h3 id="generic-apps">Generic apps</h3>
-<ul>
-<li><a href="https://www.iterm2.com/">iterm</a> — Very good replacement of macOS Terminal.app.</li>
-<li><a href="http://ilyabirman.ru/projects/typography-layout/">Ilya Birman&rsquo;s Typography Layout</a> — this layout provides improvements over standard layout to allow easy input of specific symbols.</li>
-<li><a href="https://www.alfredapp.com/">alfred</a> - replacement for Spotlight.</li>
-</ul>
-<h3 id="productivity">Productivity</h3>
-<ul>
-<li><a href="https://evernote.com/">Evernote</a> — I used it for storing various information, articles from the web, notes and so on. UI is not very friendly, but it works across web, mobile and desktop, synchronisation works most of the time.</li>
-<li><a href="https://drive.google.com/">Google Drive</a> - Cloud synchronisation.</li>
-<li><a href="https://www.omnigroup.com/omnifocus">OmniFocus</a> — Awesome task manager application for macOS and iOS.</li>
-<li><a href="https://www.omnigroup.com/omnioutliner">OmniOutliner</a> - outline software. I use it for tracking various lists, then move to archive in Evernote.</li>
-<li><a href="https://getpocket.com/">Pocket</a> - Read it later service.</li>
-<li><a href="https://1password.com/">1Password</a> - Password Manager.</li>
-<li><a href="https://ifttt.com/">ifttt</a> - Internet automation across different applications and services.</li>
-<li><a href="https://heyfocus.com/">Focus.app</a> - Blocks web sites and specific apps. When you need to focus and don&rsquo;t want any distractions.</li>
-<li><a href="https://www.macbartender.com/">Bartender</a> — This small application clean top toolbar icons. You can hide those you don&rsquo;t need.</li>
-<li><a href="https://ia.net/writer/">ia Writer</a> — Distraction-free text editor</li>
-<li><a href="https://mindnode.com">MindNode</a> - Mind mapping software.</li>
-<li><a href="http://magnet.crowdcafe.com/">Magnet</a> - application which improves behaviour of standard window manager on macOS. With this app you can easily snap windows, split them and so on. Small and useful utility.</li>
-</ul>
-<h3 id="text-editors--ides">Text Editors / IDEs</h3>
-<ul>
-<li><a href="https://www.jetbrains.com/idea/">IntelliJ IDEA</a> - this my work horse. Most of my code is written in this app.</li>
-<li><a href="https://www.vim.org">vim</a> - exists on most servers and linuxes.</li>
-<li><a href="https://code.visualstudio.com">VSCode</a> – use it for some temporary notes/drafts</li>
-</ul>
-<h3 id="monospace-fonts">Monospace Fonts</h3>
-<ul>
-<li><a href="https://fontlibrary.org/en/font/go-mono">go mono</a> - Monospace font I use in terminal and text editors/IDEs.</li>
-</ul>
-<h4 id="other-good-monospace-fonts">Other good monospace fonts</h4>
-<ul>
-<li><a href="https://github.com/adobe-fonts/source-code-pro">source code pro</a></li>
-<li><a href="https://fonts.google.com/specimen/Anonymous+Pro">anonymous pro</a></li>
-</ul>
-<h4 id="reading">Reading</h4>
-<p>Unfortunately, have books bought via different books stores, so use different devices and applications.</p>
-<ul>
-<li>Amazon Kindle</li>
-<li>Apple Books</li>
-<li>Google Play Books</li>
-<li>Pocket</li>
-</ul>
-<h3 id="games">Games</h3>
-<p>Although, I don&rsquo;t play games heavily, I have few games installed that I would recommend:</p>
-<ul>
-<li>Monument Valley and Monument Valley 2.</li>
-<li>Lumino City</li>
-<li>Shadowmatic</li>
-<li>Machinarium</li>
-<li>Thomas was alone</li>
-<li>Lode Runner</li>
-<li>Limbo</li>
-</ul>
-<h2 id="physical-stuff">Physical stuff</h2>
-<p>In addition to digital things, I continue to use physical things too. We are not completely in Matrix yet.</p>
-<ul>
-<li>
-<p>Backpack North Face Microbyte — my daily backpack. It is small, it holds laptop and a few other things. Probably, I need to make another blog post about the things I have in my backpack. Earlier I used North Face Router a lot, but it is quite bulky. I use it now if we go with my family outside or if I have a work trip.</p>
-</li>
-<li>
-<p>Water Bottle - clean kanteen</p>
-</li>
-<li>
-<p>External USB Charger - anker e4</p>
-</li>
-<li>
-<p>Headphones
-I have several pairs for different use cases:</p>
-<ul>
-<li>Noise cancelling: Bose QC25/QC35</li>
-<li>Music listening: AKG Q701</li>
-<li>Outdoor/to-go: Apple Earpods</li>
-</ul>
-</li>
-<li>
-<p>Kindle Paperwhite</p>
-</li>
-<li>
-<p>For jotting on paper: Moleskine and Pilot precise V5 RT</p>
-</li>
-</ul>
-
-        
-
-    </article>
-    
-    <article>
-
-        
-        
-
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/post/2018-01-22-go-restful-yaml/">How to add YAML support to go-restful</a>
-    </h1>
-
-</header>
-
-
-        
-        <p><a href="https://github.com/emicklei/go-restful">go-restful</a> is a <a href="https://golang.org">go</a> package used for building REST-style web services.
-It is very powerful, but it supports JSON and XML out of the box only. Fortunately, go-restful allows to register custom serialization schemes.</p>
-<p>To do so, it provides a handy interface <a href="https://godoc.org/github.com/emicklei/go-restful#EntityReaderWriter">EntityReaderWriter</a>, which contains only two methods:</p>
-<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// EntityReaderWriter can read and write values using an encoding such as JSON,XML.
-</span><span class="c1"></span><span class="kd">type</span> <span class="nx">EntityReaderWriter</span> <span class="kd">interface</span> <span class="p">{</span>
-    <span class="c1">// Read a serialized version of the value from the request.
-</span><span class="c1"></span>    <span class="c1">// The Request may have a decompressing reader. Depends on Content-Encoding.
-</span><span class="c1"></span>    <span class="nf">Read</span><span class="p">(</span><span class="nx">req</span> <span class="o">*</span><span class="nx">Request</span><span class="p">,</span> <span class="nx">v</span> <span class="kd">interface</span><span class="p">{})</span> <span class="kt">error</span>
-
-    <span class="c1">// Write a serialized version of the value on the response.
-</span><span class="c1"></span>    <span class="c1">// The Response may have a compressing writer. Depends on Accept-Encoding.
-</span><span class="c1"></span>    <span class="c1">// status should be a valid Http Status code
-</span><span class="c1"></span>    <span class="nf">Write</span><span class="p">(</span><span class="nx">resp</span> <span class="o">*</span><span class="nx">Response</span><span class="p">,</span> <span class="nx">status</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">v</span> <span class="kd">interface</span><span class="p">{})</span> <span class="kt">error</span>
-<span class="p">}</span>
-</code></pre></div><p>What we need to do is to implement this interface and register it in go-restful.</p>
-<p>Let’s implement the interface:</p>
-<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">restyaml</span>
-
-<span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;io&#34;</span>
-	<span class="s">&#34;io/ioutil&#34;</span>
-
-	<span class="s">&#34;github.com/emicklei/go-restful&#34;</span>
-	<span class="s">&#34;gopkg.in/yaml.v2&#34;</span>
-<span class="p">)</span>
-
-<span class="c1">// MediaTypeApplicationYaml is a Mime Type for YAML.
-</span><span class="c1"></span><span class="kd">const</span> <span class="nx">MediaTypeApplicationYaml</span> <span class="p">=</span> <span class="s">&#34;application/x-yaml&#34;</span>
-
-<span class="c1">// YamlReaderWriter implements EntityReaderWriter for YAML objects to be used by restful.
-</span><span class="c1"></span><span class="kd">type</span> <span class="nx">YamlReaderWriter</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">contentType</span> <span class="kt">string</span>
-<span class="p">}</span>
-
-<span class="c1">// NewYamlReaderWriter creates new instance.
-</span><span class="c1"></span><span class="kd">func</span> <span class="nf">NewYamlReaderWriter</span><span class="p">(</span><span class="nx">contentType</span> <span class="kt">string</span><span class="p">)</span> <span class="nx">restful</span><span class="p">.</span><span class="nx">EntityReaderWriter</span> <span class="p">{</span>
-	<span class="k">return</span> <span class="nx">YamlReaderWriter</span><span class="p">{</span><span class="nx">contentType</span><span class="p">:</span> <span class="nx">contentType</span><span class="p">}</span>
-<span class="p">}</span>
-
-<span class="kd">func</span> <span class="nf">closeWithErrHandle</span><span class="p">(</span><span class="nx">c</span> <span class="nx">io</span><span class="p">.</span><span class="nx">Closer</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">c</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">logger</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;Unable to close resource: &#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-	<span class="p">}</span>
-<span class="p">}</span>
-
-<span class="c1">// Read a serialized version of the value from the request.
-</span><span class="c1">// The Request may have a decompressing reader. Depends on Content-Encoding.
-</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">e</span> <span class="nx">YamlReaderWriter</span><span class="p">)</span> <span class="nf">Read</span><span class="p">(</span><span class="nx">req</span> <span class="o">*</span><span class="nx">restful</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span> <span class="nx">v</span> <span class="kd">interface</span><span class="p">{})</span> <span class="kt">error</span> <span class="p">{</span>
-	<span class="k">defer</span> <span class="nf">closeWithErrHandle</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">Body</span><span class="p">)</span>
-	<span class="nx">bytes</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ioutil</span><span class="p">.</span><span class="nf">ReadAll</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">Body</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="nx">err</span>
-	<span class="p">}</span>
-	<span class="nx">err</span> <span class="p">=</span> <span class="nx">yaml</span><span class="p">.</span><span class="nf">Unmarshal</span><span class="p">(</span><span class="nx">bytes</span><span class="p">,</span> <span class="nx">v</span><span class="p">)</span>
-	<span class="k">return</span> <span class="nx">err</span>
-<span class="p">}</span>
-
-<span class="c1">// Write a serialized version of the value on the response.
-</span><span class="c1">// The Response may have a compressing writer. Depends on Accept-Encoding.
-</span><span class="c1">// status should be a valid Http Status code
-</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">e</span> <span class="nx">YamlReaderWriter</span><span class="p">)</span> <span class="nf">Write</span><span class="p">(</span><span class="nx">resp</span> <span class="o">*</span><span class="nx">restful</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span> <span class="nx">status</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">v</span> <span class="kd">interface</span><span class="p">{})</span> <span class="kt">error</span> <span class="p">{</span>
-	<span class="nx">bytes</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">yaml</span><span class="p">.</span><span class="nf">Marshal</span><span class="p">(</span><span class="nx">v</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="nx">err</span>
-	<span class="p">}</span>
-
-	<span class="nx">resp</span><span class="p">.</span><span class="nf">WriteHeader</span><span class="p">(</span><span class="nx">status</span><span class="p">)</span>
-	<span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">resp</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="nx">bytes</span><span class="p">)</span>
-	<span class="k">return</span> <span class="nx">err</span>
-<span class="p">}</span>
-
-</code></pre></div><p>For implementing actual reading/writing of YAML I use library called <a href="https://github.com/go-yaml/yaml">go-yaml</a>. The implementation is straightforward, just call <a href="https://godoc.org/gopkg.in/yaml.v2#Marshal"><code>Marshal</code></a> and <a href="https://godoc.org/gopkg.in/yaml.v2#Unmarshal"><code>Unmarshal</code></a> methods and do an error processing.</p>
-<p>The final step is to register newly written <code>YamlReaderWriter</code> in go-restful container during application startup.</p>
-<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go">
-<span class="kn">package</span> <span class="nx">rest</span>
-
-<span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;context&#34;</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;net/http&#34;</span>
-	<span class="s">&#34;os&#34;</span>
-	<span class="s">&#34;os/signal&#34;</span>
-	<span class="s">&#34;strconv&#34;</span>
-	<span class="s">&#34;syscall&#34;</span>
-	<span class="s">&#34;time&#34;</span>
-
-	<span class="s">&#34;bitbucket.org/uthark/yttrium/internal/config&#34;</span>
-	<span class="s">&#34;bitbucket.org/uthark/yttrium/internal/mime&#34;</span>
-	<span class="s">&#34;github.com/emicklei/go-restful&#34;</span>
-<span class="p">)</span>
-
-<span class="c1">// Init initializes server.
-</span><span class="c1"></span><span class="kd">func</span> <span class="nf">init</span><span class="p">()</span> <span class="p">{</span>
-
-	<span class="nx">restful</span><span class="p">.</span><span class="nf">SetLogger</span><span class="p">(</span><span class="nx">logger</span><span class="p">)</span>
-	<span class="nx">restful</span><span class="p">.</span><span class="nf">DefaultResponseContentType</span><span class="p">(</span><span class="nx">restful</span><span class="p">.</span><span class="nx">MIME_JSON</span><span class="p">)</span>
-	<span class="nx">restful</span><span class="p">.</span><span class="nf">RegisterEntityAccessor</span><span class="p">(</span><span class="nx">restyaml</span><span class="p">.</span><span class="nx">MediaTypeApplicationYaml</span><span class="p">,</span> <span class="nx">restyaml</span><span class="p">.</span><span class="nf">NewYamlReaderWriter</span><span class="p">(</span><span class="nx">restyaml</span><span class="p">.</span><span class="nx">MediaTypeApplicationYaml</span><span class="p">))</span>
-
-	<span class="c1">// register web-services in restful and start http…
-</span><span class="c1"></span>	<span class="c1">// omitted for brevity
-</span><span class="c1"></span><span class="p">}</span>
-
-</code></pre></div><p>Now, we can submit requests in YAML format to our API:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">$ curl -H <span class="s2">&#34;Accept: application/x-yaml&#34;</span> http://localhost:8080/task
-- id: dd453ac9-6e8d-4f37-88a9-4e6d5b653e8d
-  name: Another Task
-  dateAdded: 2018-01-20T20:05:09.378Z
-  dateCompleted: 0001-01-01T00:00:00Z
-</code></pre></div><p>If we don’t specify header, the output will be in JSON:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">$ curl http://localhost:8080/task
-<span class="o">[</span>
-  <span class="o">{</span>
-   <span class="s2">&#34;id&#34;</span>: <span class="s2">&#34;dd453ac9-6e8d-4f37-88a9-4e6d5b653e8d&#34;</span>,
-   <span class="s2">&#34;name&#34;</span>: <span class="s2">&#34;Another Task&#34;</span>,
-   <span class="s2">&#34;dateAdded&#34;</span>: <span class="s2">&#34;2018-01-20T20:05:09.378Z&#34;</span>,
-   <span class="s2">&#34;dateCompleted&#34;</span>: <span class="s2">&#34;0001-01-01T00:00:00Z&#34;</span>
-  <span class="o">}</span>
- <span class="o">]</span>
-</code></pre></div>
         
 
     </article>
@@ -855,6 +316,16 @@ It is very powerful, but it supports JSON and XML out of the box only. Fortunate
     
         <a href="/page/11/" class="label-pagination">11</a>
     
+        <a href="/page/12/" class="label-pagination">12</a>
+    
+        <a href="/page/13/" class="label-pagination">13</a>
+    
+        <a href="/page/14/" class="label-pagination">14</a>
+    
+        <a href="/page/15/" class="label-pagination">15</a>
+    
+        <a href="/page/16/" class="label-pagination">16</a>
+    
 
     
     
@@ -863,7 +334,7 @@ It is very powerful, but it supports JSON and XML out of the box only. Fortunate
 
     
     
-        <a href="/page/11/" aria-label="Last"><i class="fa fa-angle-double-right fa-lg"></i></a>
+        <a href="/page/16/" aria-label="Last"><i class="fa fa-angle-double-right fa-lg"></i></a>
     
 
 </div>

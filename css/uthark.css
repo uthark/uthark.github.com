@@ -341,32 +341,6 @@ body {
     font-size: 110%;
 }
 
-body div.pagination {
-    margin-left: 18px;
-    margin-right: 18px
-}
-
-@media only screen and (min-width: 480px) {
-    body div.pagination {
-        margin-left: 25px;
-        margin-right: 25px
-    }
-}
-
-@media only screen and (min-width: 768px) {
-    body div.pagination {
-        margin-left: 35px;
-        margin-right: 35px
-    }
-}
-
-@media only screen and (min-width: 992px) {
-    body div.pagination {
-        margin-left: 55px;
-        margin-right: 55px
-    }
-}
-
 #content {
     overflow: hidden
 }
@@ -892,25 +866,6 @@ article > footer .byline ~ .categories:before {
     content: "\2022 ";
     padding: 0 .4em 0 .2em;
     display: inline-block
-}
-
-/* pagination stuff */
-#content div.pagination {
-    text-align: center;
-    font-size: .95em;
-    position: relative;
-    padding-top: 1.5em;
-    padding-bottom: 1.5em
-}
-
-#content div.pagination a {
-    text-decoration: none;
-    color: #000;
-    padding-left: 0.4em; /* horizontal space between pagination links */
-}
-
-#content div.pagination a:hover { /* hover color for pagination links/icons */
-    color: #0181eb
 }
 
 p.meta + .sharing {

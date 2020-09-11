@@ -29,7 +29,7 @@
     
     
     
-    <link rel="stylesheet" href="https://uthark.github.io/css/theme.a6d46470328bb42ee2535190c2023e9b102aa93fced95c8de7e210ec2a80314a.css">
+    <link rel="stylesheet" href="https://uthark.github.io/css/theme.67fdd3de42877d3dd583ad51bb8533496fa520bd4bac49759be34c5b49d2a259.css">
     <link rel="stylesheet" href="https://uthark.github.io/css/uthark.css">
 
 
@@ -139,114 +139,22 @@
 
 <header>
     <h1 class="entry-title">
-        <a href="https://uthark.github.io/2010/12/06/blog-post/">Сокращаем ссылки на андроиде</a>
+        <a href="https://uthark.github.io/2013/06/19/validation/">Валидация входных параметров с использованием Spring</a>
     </h1>
 
 </header>
 
 
         
-        <!-- raw HTML omitted -->
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">org.apache.http.HttpEntity</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.http.HttpResponse</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.http.NameValuePair</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.http.client.ClientProtocolException</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.http.client.methods.HttpGet</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.http.client.utils.URIUtils</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.http.client.utils.URLEncodedUtils</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.http.impl.client.DefaultHttpClient</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.http.message.BasicNameValuePair</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.http.util.EntityUtils</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.json.JSONException</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.json.JSONObject</span><span class="o">;</span>
+          <p>Очень часто возникает задача проверки входных параметров в сервис на корректность с точки зрения бизнес логики.
+Эту задачу можно решить в лоб, написав вручную код валидации в каждом из методов сервиса, например, вот так:
+public User save(User user) { if(user == null) { throw new IllegalArgumentException(&#34;User is null&#34;); } // other checks  //...  // business logic starts here...  //...  return savedUser; } Очевидно, что если в каждом методе делать такие проверки, то код бизнес-логики загрязняется проверками, что ухудшает читаемость кода.</p>
 
-<span class="kn">import</span> <span class="nn">android.util.Log</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.net.URI</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.net.URISyntaxException</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
-
-
-<span class="cm">/**
-</span><span class="cm"> * Helper class to work with bitly.
-</span><span class="cm"> *
-</span><span class="cm"> * @author Oleg Atamanenko
-</span><span class="cm"> * @since 06-Dec-2010 12:49:36
-</span><span class="cm"> */</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Bitly</span> <span class="o">{</span>
-
-    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">TAG</span> <span class="o">=</span> <span class="s">&#34;Bitly&#34;</span><span class="o">;</span>
-
-    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">SHORTEN</span> <span class="o">=</span> <span class="s">&#34;/v3/shorten&#34;</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">API_URL</span> <span class="o">=</span> <span class="s">&#34;api.bit.ly&#34;</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">RESPONSE_FORMAT</span> <span class="o">=</span> <span class="s">&#34;json&#34;</span><span class="o">;</span>
-
-    <span class="kd">private</span> <span class="n">String</span> <span class="n">username</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="n">String</span> <span class="n">apiKey</span><span class="o">;</span>
-
-
-    <span class="kd">public</span> <span class="nf">Bitly</span><span class="o">(</span><span class="n">String</span> <span class="n">username</span><span class="o">,</span> <span class="n">String</span> <span class="n">apiKey</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">username</span> <span class="o">=</span> <span class="n">username</span><span class="o">;</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">apiKey</span> <span class="o">=</span> <span class="n">apiKey</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="n">String</span> <span class="nf">shorten</span><span class="o">(</span><span class="n">String</span> <span class="n">longUrl</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">BitlyException</span> <span class="o">{</span>
-        <span class="n">DefaultHttpClient</span> <span class="n">httpClient</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DefaultHttpClient</span><span class="o">();</span>
-
-        <span class="k">try</span> <span class="o">{</span>
-            <span class="n">List</span><span class="o">&lt;</span><span class="n">NameValuePair</span><span class="o">&gt;</span> <span class="n">params</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">NameValuePair</span><span class="o">&gt;();</span>
-            <span class="n">params</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">BasicNameValuePair</span><span class="o">(</span><span class="s">&#34;login&#34;</span><span class="o">,</span> <span class="n">username</span><span class="o">));</span>
-            <span class="n">params</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">BasicNameValuePair</span><span class="o">(</span><span class="s">&#34;apiKey&#34;</span><span class="o">,</span> <span class="n">apiKey</span><span class="o">));</span>
-            <span class="n">params</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">BasicNameValuePair</span><span class="o">(</span><span class="s">&#34;longUrl&#34;</span><span class="o">,</span> <span class="n">longUrl</span><span class="o">));</span>
-            <span class="n">params</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">BasicNameValuePair</span><span class="o">(</span><span class="s">&#34;format&#34;</span><span class="o">,</span> <span class="n">RESPONSE_FORMAT</span><span class="o">));</span>
-
-
-            <span class="n">URI</span> <span class="n">uri</span> <span class="o">=</span> <span class="n">URIUtils</span><span class="o">.</span><span class="na">createURI</span><span class="o">(</span><span class="s">&#34;http&#34;</span><span class="o">,</span> <span class="n">API_URL</span><span class="o">,</span> <span class="o">-</span><span class="n">1</span><span class="o">,</span> <span class="n">SHORTEN</span><span class="o">,</span> <span class="n">URLEncodedUtils</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="n">params</span><span class="o">,</span> <span class="s">&#34;UTF-8&#34;</span><span class="o">),</span> <span class="kc">null</span><span class="o">);</span>
-            <span class="n">HttpGet</span> <span class="n">request</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HttpGet</span><span class="o">(</span><span class="n">uri</span><span class="o">);</span>
-
-            <span class="n">Log</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span> <span class="s">&#34;Sending request: &#34;</span> <span class="o">+</span> <span class="n">request</span><span class="o">.</span><span class="na">getURI</span><span class="o">());</span>
-
-            <span class="n">HttpResponse</span> <span class="n">httpResponse</span> <span class="o">=</span> <span class="n">httpClient</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="n">request</span><span class="o">);</span>
-
-            <span class="n">HttpEntity</span> <span class="n">httpEntity</span> <span class="o">=</span> <span class="n">httpResponse</span><span class="o">.</span><span class="na">getEntity</span><span class="o">();</span>
-            <span class="n">String</span> <span class="n">response</span> <span class="o">=</span> <span class="n">EntityUtils</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">httpEntity</span><span class="o">);</span>
-            <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span> <span class="s">&#34;Bitly response is: &#34;</span> <span class="o">+</span> <span class="n">response</span><span class="o">);</span>
-            <span class="n">httpResponse</span><span class="o">.</span><span class="na">getEntity</span><span class="o">().</span><span class="na">consumeContent</span><span class="o">();</span>
-
-            <span class="n">JSONObject</span> <span class="n">jsonResponse</span> <span class="o">=</span> <span class="k">new</span> <span class="n">JSONObject</span><span class="o">(</span><span class="n">response</span><span class="o">);</span>
-
-            <span class="n">checkForExceptions</span><span class="o">(</span><span class="n">jsonResponse</span><span class="o">);</span>
-
-            <span class="n">JSONObject</span> <span class="n">data</span> <span class="o">=</span> <span class="n">jsonResponse</span><span class="o">.</span><span class="na">getJSONObject</span><span class="o">(</span><span class="s">&#34;data&#34;</span><span class="o">);</span>
-            <span class="k">return</span> <span class="n">data</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">&#34;url&#34;</span><span class="o">);</span>
-
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ClientProtocolException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="n">BitlyException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="n">BitlyException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">JSONException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="n">BitlyException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">URISyntaxException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="n">BitlyException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-
-    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">checkForExceptions</span><span class="o">(</span><span class="n">JSONObject</span> <span class="n">jsonResponse</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">JSONException</span><span class="o">,</span> <span class="n">BitlyException</span> <span class="o">{</span>
-        <span class="kt">int</span> <span class="n">statusCode</span> <span class="o">=</span> <span class="n">jsonResponse</span><span class="o">.</span><span class="na">getInt</span><span class="o">(</span><span class="s">&#34;status_code&#34;</span><span class="o">);</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">statusCode</span> <span class="o">!=</span> <span class="n">200</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">String</span> <span class="n">message</span> <span class="o">=</span> <span class="n">jsonResponse</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">&#34;status_txt&#34;</span><span class="o">);</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="n">BitlyException</span><span class="o">(</span><span class="n">message</span><span class="o">);</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-
-<span class="o">}</span>
-</code></pre></div><p>Конструктор класс принимает на вход следующие параметры: <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->userName<!-- raw HTML omitted --> - имя пользователя bit.ly.<!-- raw HTML omitted --></p>
-<!-- raw HTML omitted -->
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">Bitly</span> <span class="n">bitly</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Bitly</span><span class="o">(</span><span class="n">BITLY_USERNAME</span><span class="o">,</span> <span class="n">BITLY_API_KEY</span><span class="o">);</span>
-<span class="n">String</span> <span class="n">shortLink</span> <span class="o">=</span> <span class="n">bitly</span><span class="o">.</span><span class="na">shorten</span><span class="o">(</span><span class="n">link</span><span class="o">);</span>
-</code></pre></div><!-- raw HTML omitted -->
+          
+              <footer>
+                  <a href="https://uthark.github.io/2013/06/19/validation/" rel="full-article">Continue Reading &rarr;</a>
+              </footer>
+          
 
         
 
@@ -259,28 +167,22 @@
 
 <header>
     <h1 class="entry-title">
-        <a href="https://uthark.github.io/2010/05/22/blog-post/">Удаление различных диакритических символов из строки</a>
+        <a href="https://uthark.github.io/2013/06/19/spring-caching/">Использование memcached в качестве backend для Spring Caching Abstraction</a>
     </h1>
 
 </header>
 
 
         
-        <!-- raw HTML omitted -->
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.blogspot.atamanenko</span><span class="o">;</span>
+          <p>В Spring 3.1 появился замечательный модуль - Spring Cache, который является абстракцией над кэшированием, что позволяет декларативно реализовывать кэширование в приложении.
+Я не буду вдаваться в подробности работы, их можно прочитать в документации, но опишу, каким образом можно настроить memcached в качестве бэкэнда для работы.
+Подключение зависимостей &lt;dependency&gt; &lt;groupId&gt;com.google.code.simple-spring-memcached&lt;/groupId&gt; &lt;artifactId&gt;spymemcached-provider&lt;/artifactId&gt; &lt;version&gt;3.1.0&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;com.google.code.simple-spring-memcached&lt;/groupId&gt; &lt;artifactId&gt;spring-cache&lt;/artifactId&gt; &lt;version&gt;3.1.0&lt;/version&gt; &lt;/dependency&gt; spymemcached-provider - это библиотечка для работы с memcached из Java, а spring-cache - модуль интеграции со Spring.</p>
 
-<span class="kn">import</span> <span class="nn">java.text.Normalizer</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.text.Normalizer.Form</span><span class="o">;</span>
-
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">StringNormalizer</span> <span class="o">{</span>
-
-    <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">normalize</span><span class="o">(</span><span class="n">String</span> <span class="n">string</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">Normalizer</span><span class="o">.</span><span class="na">normalize</span><span class="o">(</span><span class="n">string</span><span class="o">,</span> <span class="n">Form</span><span class="o">.</span><span class="na">NFD</span><span class="o">)</span>
-            <span class="o">.</span><span class="na">replaceAll</span><span class="o">(</span><span class="s">&#34;\\p{InCombiningDiacriticalMarks}+&#34;</span><span class="o">,</span> <span class="s">&#34;&#34;</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-
-</code></pre></div><p>Вызов <!-- raw HTML omitted -->Normalizer.normalize<!-- raw HTML omitted --> проводит <!-- raw HTML omitted -->нормализацию<!-- raw HTML omitted --> входной строки. Последующий вызов регулярного выражения удаляет все диакритические знаки, полученные после нормализации.</p>
+          
+              <footer>
+                  <a href="https://uthark.github.io/2013/06/19/spring-caching/" rel="full-article">Continue Reading &rarr;</a>
+              </footer>
+          
 
         
 
@@ -293,103 +195,22 @@
 
 <header>
     <h1 class="entry-title">
-        <a href="https://uthark.github.io/2010/05/22/databene-benerator/">Создание больших объёмов тестовых данных с помощью Databene Benerator</a>
+        <a href="https://uthark.github.io/2013/06/19/custom-bean-validator/">Пишем валидатор для Bean Validation API</a>
     </h1>
 
 </header>
 
 
         
-        <!-- raw HTML omitted -->
-<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="ni">&amp;lt;</span>project xmlns=<span class="ni">&amp;quot;</span>http://maven.apache.org/POM/4.0.0<span class="ni">&amp;quot;</span> xmlns:xsi=<span class="ni">&amp;quot;</span>http://www.w3.org/2001/XMLSchema-instance<span class="ni">&amp;quot;</span>
-         xsi:schemaLocation=<span class="ni">&amp;quot;</span>http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd<span class="ni">&amp;quot;&amp;gt;</span>
-  <span class="ni">&amp;lt;</span>modelVersion<span class="ni">&amp;gt;</span>4.0.0<span class="ni">&amp;lt;</span>/modelVersion<span class="ni">&amp;gt;</span>
-  <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>com.myorganization<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
-  <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>databene-benerator-test<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
-  <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>1.0<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
-  <span class="ni">&amp;lt;</span>packaging<span class="ni">&amp;gt;</span>jar<span class="ni">&amp;lt;</span>/packaging<span class="ni">&amp;gt;</span>
-  <span class="ni">&amp;lt;</span>name<span class="ni">&amp;gt;</span>data generation project<span class="ni">&amp;lt;</span>/name<span class="ni">&amp;gt;</span>
-  <span class="ni">&amp;lt;</span>dependencies<span class="ni">&amp;gt;</span>
-    <span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.databene<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>databene-benerator<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>0.5.9<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
-    <span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
-    <span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.databene<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>databene-webdecs<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>0.4.9<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
-    <span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
-    <span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.databene<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>databene-commons<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>0.4.9<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
-    <span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
-    <span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>mysql<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>mysql-connector-java<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>5.1.6<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
-    <span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
-  <span class="ni">&amp;lt;</span>/dependencies<span class="ni">&amp;gt;</span>
-  <span class="ni">&amp;lt;</span>build<span class="ni">&amp;gt;</span>
-    <span class="ni">&amp;lt;</span>resources<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>resource<span class="ni">&amp;gt;</span>
-        <span class="ni">&amp;lt;</span>directory<span class="ni">&amp;gt;</span>src/main/resources<span class="ni">&amp;lt;</span>/directory<span class="ni">&amp;gt;</span>
-        <span class="ni">&amp;lt;</span>filtering<span class="ni">&amp;gt;</span>true<span class="ni">&amp;lt;</span>/filtering<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>/resource<span class="ni">&amp;gt;</span>
-    <span class="ni">&amp;lt;</span>/resources<span class="ni">&amp;gt;</span>
-    <span class="ni">&amp;lt;</span>plugins<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>plugin<span class="ni">&amp;gt;</span>
-        <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.apache.maven.plugins<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
-        <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>maven-compiler-plugin<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
-        <span class="ni">&amp;lt;</span>configuration<span class="ni">&amp;gt;</span>
-          <span class="ni">&amp;lt;</span>encoding<span class="ni">&amp;gt;</span>UTF-8<span class="ni">&amp;lt;</span>/encoding<span class="ni">&amp;gt;</span>
-          <span class="ni">&amp;lt;</span>source<span class="ni">&amp;gt;</span>1.5<span class="ni">&amp;lt;</span>/source<span class="ni">&amp;gt;</span>
-          <span class="ni">&amp;lt;</span>target<span class="ni">&amp;gt;</span>1.5<span class="ni">&amp;lt;</span>/target<span class="ni">&amp;gt;</span>
-        <span class="ni">&amp;lt;</span>/configuration<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>/plugin<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>plugin<span class="ni">&amp;gt;</span>
-        <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.databene<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
-        <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>maven-benerator-plugin<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
-        <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>0.5.9<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
-        <span class="ni">&amp;lt;</span>executions<span class="ni">&amp;gt;</span>
-          <span class="ni">&amp;lt;</span>execution<span class="ni">&amp;gt;</span>
-            <span class="ni">&amp;lt;</span>phase<span class="ni">&amp;gt;</span>compile<span class="ni">&amp;lt;</span>/phase<span class="ni">&amp;gt;</span>
-            <span class="ni">&amp;lt;</span>goals<span class="ni">&amp;gt;</span>
-              <span class="ni">&amp;lt;</span>goal<span class="ni">&amp;gt;</span>generate<span class="ni">&amp;lt;</span>/goal<span class="ni">&amp;gt;</span>
-            <span class="ni">&amp;lt;</span>/goals<span class="ni">&amp;gt;</span>
-          <span class="ni">&amp;lt;</span>/execution<span class="ni">&amp;gt;</span>
-        <span class="ni">&amp;lt;</span>/executions<span class="ni">&amp;gt;</span>
-        <span class="ni">&amp;lt;</span>configuration<span class="ni">&amp;gt;</span>
-          <span class="ni">&amp;lt;</span>descriptor<span class="ni">&amp;gt;</span>src/main/resources/benerator.ben.xml<span class="ni">&amp;lt;</span>/descriptor<span class="ni">&amp;gt;</span>
-          <span class="ni">&amp;lt;</span>encoding<span class="ni">&amp;gt;</span>UTF-8<span class="ni">&amp;lt;</span>/encoding<span class="ni">&amp;gt;</span>
-          <span class="ni">&amp;lt;</span>validate<span class="ni">&amp;gt;</span>true<span class="ni">&amp;lt;</span>/validate<span class="ni">&amp;gt;</span>
-          <span class="ni">&amp;lt;</span>dbUrl<span class="ni">&amp;gt;</span>jdbc:mysql://localhost:3306/hrtool?useUnicode=true<span class="ni">&amp;amp;</span>characterEncoding=UTF-8<span class="ni">&amp;lt;</span>/dbUrl<span class="ni">&amp;gt;</span>
-          <span class="ni">&amp;lt;</span>dbDriver<span class="ni">&amp;gt;</span>com.mysql.jdbc.Driver<span class="ni">&amp;lt;</span>/dbDriver<span class="ni">&amp;gt;</span>
-          <span class="ni">&amp;lt;</span>dbSchema<span class="ni">&amp;gt;</span>database<span class="ni">&amp;lt;</span>/dbSchema<span class="ni">&amp;gt;</span>
-          <span class="ni">&amp;lt;</span>dbUser<span class="ni">&amp;gt;</span>user<span class="ni">&amp;lt;</span>/dbUser<span class="ni">&amp;gt;</span>
-          <span class="ni">&amp;lt;</span>dbPassword<span class="ni">&amp;gt;</span>password<span class="ni">&amp;lt;</span>/dbPassword<span class="ni">&amp;gt;</span>
-        <span class="ni">&amp;lt;</span>/configuration<span class="ni">&amp;gt;</span>
-        <span class="ni">&amp;lt;</span>dependencies<span class="ni">&amp;gt;</span>
-        <span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
-            <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>log4j<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
-            <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>log4j<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
-            <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>1.2.13<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
-            <span class="ni">&amp;lt;</span>scope<span class="ni">&amp;gt;</span>runtime<span class="ni">&amp;lt;</span>/scope<span class="ni">&amp;gt;</span>
-          <span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
-          <span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
-            <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.apache.poi<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
-            <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>poi<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
-            <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>3.5-beta5<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
-            <span class="ni">&amp;lt;</span>scope<span class="ni">&amp;gt;</span>runtime<span class="ni">&amp;lt;</span>/scope<span class="ni">&amp;gt;</span>
-          <span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
-        <span class="ni">&amp;lt;</span>/dependencies<span class="ni">&amp;gt;</span>
-      <span class="ni">&amp;lt;</span>/plugin<span class="ni">&amp;gt;</span>
-    <span class="ni">&amp;lt;</span>/plugins<span class="ni">&amp;gt;</span>
-  <span class="ni">&amp;lt;</span>/build<span class="ni">&amp;gt;</span>
-<span class="ni">&amp;lt;</span>/project<span class="ni">&amp;gt;</span>
+          <p>JSR-303 предоставляет удобный API для проверки валидности объектов, а также входных параметров. Очевидно, что стандартных валидаторов в какой-то момент может быть недостаточно, поэтому необходимо писать собственный.
+Хочу показать на примере валидации запроса к MongoDB, как легко это делается.
+Создание аннотации @Target({FIELD, PARAMETER}) @Retention(RUNTIME) @Documented @Constraint(validatedBy = {MongoQueryValidator.class}) public @interface MongoQuery { String message() default &#34;Invalid mongo query&#34;; Class&lt;?&gt;[] groups() default {}; Class&lt;? extends Payload&gt;[] payload() default {}; } Обратите внимание на аннотацию @Constraint - она описывает, какой класс будет проводить реальную валидацию.</p>
 
-</code></pre></div><!-- raw HTML omitted -->
+          
+              <footer>
+                  <a href="https://uthark.github.io/2013/06/19/custom-bean-validator/" rel="full-article">Continue Reading &rarr;</a>
+              </footer>
+          
 
         
 
@@ -402,126 +223,22 @@
 
 <header>
     <h1 class="entry-title">
-        <a href="https://uthark.github.io/2010/04/11/gorm/">Несколько слов о GORM</a>
+        <a href="https://uthark.github.io/2012/10/24/vagrant/">Автоматизируем работу с виртуальными машинами с помощью Vagrant</a>
     </h1>
 
 </header>
 
 
         
-        <!-- raw HTML omitted -->
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">Person</span> <span class="kd">implements</span> <span class="n">Serializable</span> <span class="o">{</span>
-  <span class="kd">static</span> <span class="n">hasMany</span> <span class="o">=</span> <span class="o">[</span>
-    <span class="n">scores</span><span class="o">:</span> <span class="n">ScoreSheet</span>
-  <span class="o">]</span>
-  
-  <span class="kd">static</span> <span class="n">mapping</span> <span class="o">=</span> <span class="o">{</span>
-    <span class="n">scores</span> <span class="n">joinTable</span><span class="o">:</span> <span class="kc">false</span>
-  <span class="o">};</span>
-<span class="o">}</span>
-</code></pre></div><!-- raw HTML omitted -->
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">Note</span> <span class="kd">implements</span> <span class="n">Serializable</span> <span class="o">{</span>
-  <span class="kd">static</span> <span class="n">belongsTo</span> <span class="o">=</span> <span class="o">[</span>
-    <span class="n">person</span><span class="o">:</span> <span class="n">Person</span>
-  <span class="o">]</span>
-<span class="o">}</span>
+          <p>Современные enterprise проекты очень часто имеют очень сложную инфраструктуру для развёртывания. Кроме того, во время разработки часто используются виртуальные машины. Например, может использоваться несколько виртуальных машин, на которых развёрнуты различные конфигурации софта.
+Vagrant - это средство для управления виртуальными машинами на базе Virtualbox.
+Возможности  Создание виртуальных машин с определённой, заранее заданной, конфигурацией. Лёгкое создание копии виртуальной машины, используя заранее подготовленный образ. Осуществление provisioning для новых виртуальных машин.  Работа с Vagrant Для начала необходимо установить Virtualbox и Vagrant.</p>
 
-<span class="kd">class</span> <span class="nc">Person</span> <span class="kd">implements</span> <span class="n">Serializable</span> <span class="o">{</span>
-  <span class="c1">// person fields.
-</span><span class="c1"></span><span class="o">}</span>
-</code></pre></div><!-- raw HTML omitted -->
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">Payment</span> <span class="o">{</span>
-  <span class="n">Long</span> <span class="n">id</span>
-  <span class="n">Long</span> <span class="n">version</span>
-  <span class="n">Integer</span> <span class="n">amount</span>
-
-  <span class="kd">static</span> <span class="n">mapping</span> <span class="o">=</span> <span class="o">{</span>
-    <span class="n">tablePerHierarchy</span> <span class="kc">false</span>
-  <span class="o">}</span>
-<span class="o">}</span>
-
-<span class="kd">class</span> <span class="nc">CreditCardPayment</span> <span class="kd">extends</span> <span class="n">Payment</span> <span class="o">{</span>
-  <span class="n">String</span> <span class="n">cardNumber</span>
-<span class="o">}</span>
-</code></pre></div>
-        
-
-    </article>
-    
-    <article>
-
-        
-        
-
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2010/03/22/skype-d-bus-python/">Общение со Skype через D-Bus на Python</a>
-    </h1>
-
-</header>
-
-
-        
-        <!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="cp">#!/bin/sh
-</span><span class="cp"></span>
-<span class="c1"># Stop amarok</span>
-dbus-send --session --type<span class="o">=</span>method_call --dest<span class="o">=</span>org.kde.amarok /Player org.freedesktop.MediaPlayer.Stop
-
-<span class="c1"># Logout from kopete</span>
-dbus-send --session --type<span class="o">=</span>method_call --dest<span class="o">=</span>org.kde.kopete /Kopete org.kde.Kopete.disconnectAll 
-
-<span class="c1"># Logout from Skype</span>
-skypeapi.py <span class="s1">&#39;SET USERSTATUS OFFLINE&#39;</span>
-
-<span class="c1"># Lock screen</span>
-dbus-send --session --type<span class="o">=</span>method_call --dest<span class="o">=</span>org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.Lock
-</code></pre></div><p>Детали и параметры работы команды <!-- raw HTML omitted -->dbus-send<!-- raw HTML omitted --> описаны в <!-- raw HTML omitted -->man-странице<!-- raw HTML omitted --></p>
-<!-- raw HTML omitted -->
-<div class="highlight"><pre class="chroma"><code class="language-Python" data-lang="Python"><span class="ch">#!/usr/bin/env python</span>
-<span class="kn">import</span> <span class="nn">dbus</span><span class="o">,</span> <span class="nn">sys</span>
-
-<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="n">remote_bus</span> <span class="o">=</span> <span class="n">dbus</span><span class="o">.</span><span class="n">SessionBus</span><span class="p">()</span>
-    
-    <span class="c1"># Check if skype is running.</span>
-    <span class="n">system_service_list</span> <span class="o">=</span> <span class="n">remote_bus</span><span class="o">.</span><span class="n">get_object</span><span class="p">(</span><span class="s1">&#39;org.freedesktop.DBus&#39;</span><span class="p">,</span> <span class="s1">&#39;/org/freedesktop/DBus&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">ListNames</span><span class="p">()</span>
-    <span class="n">skype_api_found</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">system_service_list</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">service</span><span class="o">==</span><span class="s1">&#39;com.Skype.API&#39;</span><span class="p">:</span>
-            <span class="n">skype_api_found</span> <span class="o">=</span> <span class="mi">1</span>
-            <span class="k">break</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">skype_api_found</span><span class="p">:</span>
-        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s1">&#39;No running API-capable Skype found&#39;</span><span class="p">)</span>
-
-    <span class="c1"># Get skype dbus api</span>
-    <span class="n">skype_service</span> <span class="o">=</span> <span class="n">remote_bus</span><span class="o">.</span><span class="n">get_object</span><span class="p">(</span><span class="s1">&#39;com.Skype.API&#39;</span><span class="p">,</span> <span class="s1">&#39;/com/Skype&#39;</span><span class="p">)</span>
-
-    <span class="c1"># Connect to skype.</span>
-    <span class="n">answer</span> <span class="o">=</span> <span class="n">skype_service</span><span class="o">.</span><span class="n">Invoke</span><span class="p">(</span><span class="s1">&#39;NAME SkypeApiClient&#39;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">answer</span> <span class="o">!=</span> <span class="s1">&#39;OK&#39;</span><span class="p">:</span>
-        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s1">&#39;Could not bind to Skype client&#39;</span><span class="p">)</span>
-
-    <span class="c1"># Check if protocol is supported.</span>
-    <span class="n">answer</span> <span class="o">=</span> <span class="n">skype_service</span><span class="o">.</span><span class="n">Invoke</span><span class="p">(</span><span class="s1">&#39;PROTOCOL 1&#39;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">answer</span> <span class="o">!=</span> <span class="s1">&#39;PROTOCOL 1&#39;</span><span class="p">:</span>
-        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s1">&#39;This test program only supports Skype API protocol version 1&#39;</span><span class="p">)</span>
-
-    <span class="c1"># Invoke operations</span>
-    <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">:</span>
-        <span class="n">skype_service</span><span class="o">.</span><span class="n">Invoke</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
-    
-    <span class="k">return</span> <span class="mi">0</span>    
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="o">&amp;</span><span class="n">quot</span><span class="p">;</span><span class="n">__main__</span><span class="o">&amp;</span><span class="n">quot</span><span class="p">;:</span>
-    <span class="n">main</span><span class="p">()</span>
-</code></pre></div><!-- raw HTML omitted -->
-<p><!-- raw HTML omitted -->&lt;img style=&quot;display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;width: 376px; height: 185px;&rdquo; src=&quot;http://2.bp.blogspot.com/_y8p0_dtMJ38/S6ev4yVZkJI/AAAAAAAAA9Q/O87mz2Qnku0/s400/skype.png&rdquo; border=&quot;0&rdquo; alt=&quot;&ldquo;id=&quot;BLOGGER_PHOTO_ID_5451519264074338450&rdquo; /&gt;<!-- raw HTML omitted --></p>
-<p>После этого для скрипта <!-- raw HTML omitted -->go2home<!-- raw HTML omitted --> был создана иконка на панели.</p>
-<!-- raw HTML omitted -->
-<p>В качестве домашнего упражнения предлагаю написать скрипт, который после разблокирования экрана будет запускать все нужные приложения.</p>
+          
+              <footer>
+                  <a href="https://uthark.github.io/2012/10/24/vagrant/" rel="full-article">Continue Reading &rarr;</a>
+              </footer>
+          
 
         
 
@@ -534,95 +251,22 @@ dbus-send --session --type<span class="o">=</span>method_call --dest<span class=
 
 <header>
     <h1 class="entry-title">
-        <a href="https://uthark.github.io/2010/03/21/tiddlywiki/">Разработка макроса для TiddlyWiki</a>
+        <a href="https://uthark.github.io/2012/04/28/spring-data-jpa_28/">Собственная реализация методов в Spring Data JPA</a>
     </h1>
 
 </header>
 
 
         
-        <!-- raw HTML omitted -->
-<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="cm">/*{{{*/</span>
-<span class="nx">version</span><span class="p">.</span><span class="nx">extensions</span><span class="p">.</span><span class="nx">faviconLinkMacro</span> <span class="o">=</span> <span class="p">{</span><span class="nx">major</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">minor</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">revision</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">date</span><span class="o">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="mi">2010</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">21</span><span class="p">)};</span>
-<span class="c1">// Author: Oleg Atamanenko
-</span><span class="c1"></span><span class="nx">config</span><span class="p">.</span><span class="nx">macros</span><span class="p">.</span><span class="nx">faviconLink</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="nx">config</span><span class="p">.</span><span class="nx">macros</span><span class="p">.</span><span class="nx">faviconLink</span><span class="p">.</span><span class="nx">handler</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">place</span><span class="p">,</span> <span class="nx">macroName</span><span class="p">,</span>  <span class="nx">params</span><span class="p">,</span> <span class="nx">wikifier</span><span class="p">,</span> <span class="nx">paramString</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">linkBox</span> <span class="o">=</span> <span class="nx">createTiddlyElement</span><span class="p">(</span><span class="nx">place</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">quot</span><span class="p">;</span><span class="nx">span</span><span class="o">&amp;</span><span class="nx">quot</span><span class="p">;,</span> <span class="kc">null</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">quot</span><span class="p">;</span><span class="nx">favIcon</span><span class="o">&amp;</span><span class="nx">quot</span><span class="p">;,</span> <span class="o">&amp;</span><span class="nx">quot</span><span class="p">;</span><span class="o">&amp;</span><span class="nx">quot</span><span class="p">;);</span>
+          <p>Очевидно, что мы не всегда можем воспользоваться автоматической генерацией кода, предоставляемой Spring Data JPA. Например, у нас слишком сложный запрос, или нам необходимо вызвать процедуру в базе данных, либо у нас сложная бизнес-логика.
+Рассмотрим следующий пример - например, нам нужна функциональность уникального счётчика, который мы решили реализовать с помощью последовательности (sequence).
+Сначала определим интерфейс, в котором опишем все методы, которые мы будем реализовывать самостоятельно. В нашем случае, это будет только один метод:</p>
 
-  <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="nx">paramString</span><span class="p">.</span><span class="nx">parseParams</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">quot</span><span class="p">;</span><span class="nx">list</span><span class="o">&amp;</span><span class="nx">quot</span><span class="p">;,</span><span class="kc">null</span><span class="p">,</span><span class="kc">true</span><span class="p">);</span>
-  <span class="kd">var</span> <span class="nx">link</span> <span class="o">=</span> <span class="nx">getParam</span><span class="p">(</span><span class="nx">args</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">quot</span><span class="p">;</span><span class="nx">link</span><span class="o">&amp;</span><span class="nx">quot</span><span class="p">;,</span> <span class="s1">&#39;false&#39;</span><span class="p">);</span>
-
-  <span class="k">if</span> <span class="p">(</span><span class="nx">link</span> <span class="o">!=</span> <span class="s1">&#39;false&#39;</span><span class="p">){</span>
-    <span class="nx">urlParts</span> <span class="o">=</span> <span class="nx">link</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">);</span>
-    <span class="nx">imgLink</span> <span class="o">=</span> <span class="nx">urlParts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="o">&amp;</span><span class="nx">quot</span><span class="p">;</span><span class="c1">//&amp;quot; + urlParts[2] + &amp;quot;/favicon.ico&amp;quot;;
-</span><span class="c1"></span>
-    <span class="kd">var</span> <span class="nx">imgElement</span> <span class="o">=</span> <span class="nx">createTiddlyElement</span><span class="p">(</span><span class="nx">linkBox</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">quot</span><span class="p">;</span><span class="nx">img</span><span class="o">&amp;</span><span class="nx">quot</span><span class="p">;,</span> <span class="kc">null</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">quot</span><span class="p">;</span><span class="nx">faviconImage</span><span class="o">&amp;</span><span class="nx">quot</span><span class="p">;,</span> <span class="o">&amp;</span><span class="nx">quot</span><span class="p">;</span><span class="o">&amp;</span><span class="nx">quot</span><span class="p">;);</span>
-    <span class="nx">imgElement</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">imgLink</span><span class="p">;</span>
-    <span class="nx">imgElement</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span>
-    <span class="nx">imgElement</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span>
-
-    <span class="kd">var</span> <span class="nx">linkTitle</span> <span class="o">=</span> <span class="nx">getParam</span><span class="p">(</span><span class="nx">args</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">quot</span><span class="p">;</span><span class="nx">title</span><span class="o">&amp;</span><span class="nx">quot</span><span class="p">;,</span> <span class="s1">&#39;false&#39;</span><span class="p">);</span>
-
-    <span class="k">if</span><span class="p">(</span><span class="nx">linkTitle</span> <span class="o">==</span> <span class="s1">&#39;false&#39;</span><span class="p">){</span>
-      <span class="nx">linkTitle</span> <span class="o">=</span> <span class="nx">link</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="kd">var</span> <span class="nx">linkElement</span> <span class="o">=</span> <span class="nx">createTiddlyElement</span><span class="p">(</span><span class="nx">linkBox</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">quot</span><span class="p">;</span><span class="nx">a</span><span class="o">&amp;</span><span class="nx">quot</span><span class="p">;,</span> <span class="kc">null</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">quot</span><span class="p">;</span><span class="nx">faviconLink</span><span class="o">&amp;</span><span class="nx">quot</span><span class="p">;,</span> <span class="nx">linkTitle</span><span class="p">);</span>
-    <span class="nx">linkElement</span><span class="p">.</span><span class="nx">href</span> <span class="o">=</span> <span class="nx">link</span><span class="p">;</span>
-    <span class="nx">linkElement</span><span class="p">.</span><span class="nx">target</span> <span class="o">=</span> <span class="s1">&#39;_blank&#39;</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="cm">/*}&amp;nbsp;}&amp;nbsp;}*/</span>
-</code></pre></div><!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<div class="highlight"><pre class="chroma"><code class="language-css" data-lang="css"><span class="p">.</span><span class="nc">links</span> <span class="nt">span</span> <span class="p">{</span>
-  <span class="k">display</span><span class="p">:</span> <span class="kc">block</span><span class="p">;</span>
-  <span class="k">position</span><span class="p">:</span> <span class="kc">relative</span><span class="p">;</span>
-  <span class="k">padding</span><span class="p">:</span> <span class="mf">0.7</span><span class="kt">em</span><span class="p">;</span>
-  <span class="k">margin</span><span class="p">:</span> <span class="mf">0.3</span><span class="kt">em</span><span class="p">;</span>
-  <span class="k">min-width</span><span class="p">:</span> <span class="mi">6</span><span class="kt">em</span><span class="p">;</span>
-  <span class="k">float</span><span class="p">:</span><span class="kc">left</span><span class="p">;</span>
-  <span class="k">text-align</span><span class="p">:</span> <span class="kc">center</span><span class="p">;</span>
-  <span class="k">font-weight</span><span class="p">:</span> <span class="kc">bold</span><span class="p">;</span>
-  <span class="k">font-size</span><span class="p">:</span> <span class="mf">1.5</span><span class="kt">em</span><span class="p">;</span>
-  <span class="k">font-family</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">quot</span><span class="p">;</span><span class="err">Gill</span> <span class="err">Sans</span> <span class="err">MT&amp;quot</span><span class="p">;</span><span class="err">,</span> <span class="err">&amp;quot</span><span class="p">;</span><span class="err">Candara&amp;quot</span><span class="p">;</span><span class="err">,</span> <span class="err">&amp;quot</span><span class="p">;</span><span class="err">Arial&amp;quot</span><span class="p">;;</span>
-  <span class="k">border</span><span class="p">:</span> <span class="mi">2</span><span class="kt">px</span> <span class="kc">solid</span> <span class="p">[[</span><span class="n">ColorPalette</span><span class="o">::</span><span class="n">SecondaryLight</span><span class="p">]];</span>
-  <span class="k">background-color</span><span class="p">:</span> <span class="p">[[</span><span class="n">ColorPalette</span><span class="o">::</span><span class="n">SecondaryPale</span><span class="p">]];</span>
-<span class="p">}</span>
-
-<span class="p">.</span><span class="nc">links</span> <span class="nt">span</span><span class="p">:</span><span class="nd">hover</span> <span class="p">{</span>
-  <span class="k">border</span><span class="p">:</span> <span class="mi">2</span><span class="kt">px</span> <span class="kc">solid</span> <span class="p">[[</span><span class="n">ColorPalette</span><span class="o">::</span><span class="n">SecondaryMid</span><span class="p">]];</span>
-  <span class="k">background-color</span><span class="p">:</span> <span class="p">[[</span><span class="n">ColorPalette</span><span class="o">::</span><span class="n">SecondaryLight</span><span class="p">]];</span>
-  <span class="k">color</span><span class="p">:</span> <span class="p">[[</span><span class="n">ColorPalette</span><span class="o">::</span><span class="n">PrimaryMid</span><span class="p">]];</span>
-<span class="p">}</span>
-
-<span class="p">.</span><span class="nc">links</span> <span class="nt">img</span><span class="p">.</span><span class="nc">faviconImage</span> <span class="p">{</span>
-  <span class="k">position</span><span class="p">:</span> <span class="kc">relative</span><span class="p">;</span>
-  <span class="k">padding-right</span><span class="p">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
-<span class="p">}</span>
-
-</code></pre></div><!-- raw HTML omitted -->
-<p><!-- raw HTML omitted -->&lt;img style=&quot;display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;width: 400px; height: 157px;&rdquo; src=&quot;http://1.bp.blogspot.com/_y8p0_dtMJ38/S6Y0qOLAO4I/AAAAAAAAA84/DFkORdMO8gE/s400/favicon-sample-big.png&rdquo; border=&quot;0&rdquo; alt=&quot;&ldquo;id=&quot;BLOGGER_PHOTO_ID_5451102298941963138&rdquo; /&gt;<!-- raw HTML omitted --></p>
-
-        
-
-    </article>
-    
-    <article>
-
-        
-        
-
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2010/03/16/blog-post/">Борьба с убийцами производительности</a>
-    </h1>
-
-</header>
-
-
-        
-        <!-- raw HTML omitted -->
+          
+              <footer>
+                  <a href="https://uthark.github.io/2012/04/28/spring-data-jpa_28/" rel="full-article">Continue Reading &rarr;</a>
+              </footer>
+          
 
         
 
@@ -671,6 +315,16 @@ dbus-send --session --type<span class="o">=</span>method_call --dest<span class=
     
         <a href="/page/11/" class="label-pagination">11</a>
     
+        <a href="/page/12/" class="label-pagination">12</a>
+    
+        <a href="/page/13/" class="label-pagination">13</a>
+    
+        <a href="/page/14/" class="label-pagination">14</a>
+    
+        <a href="/page/15/" class="label-pagination">15</a>
+    
+        <a href="/page/16/" class="label-pagination">16</a>
+    
 
     
     
@@ -679,7 +333,7 @@ dbus-send --session --type<span class="o">=</span>method_call --dest<span class=
 
     
     
-        <a href="/page/11/" aria-label="Last"><i class="fa fa-angle-double-right fa-lg"></i></a>
+        <a href="/page/16/" aria-label="Last"><i class="fa fa-angle-double-right fa-lg"></i></a>
     
 
 </div>

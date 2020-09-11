@@ -29,7 +29,7 @@
     
     
     
-    <link rel="stylesheet" href="https://uthark.github.io/css/theme.a6d46470328bb42ee2535190c2023e9b102aa93fced95c8de7e210ec2a80314a.css">
+    <link rel="stylesheet" href="https://uthark.github.io/css/theme.67fdd3de42877d3dd583ad51bb8533496fa520bd4bac49759be34c5b49d2a259.css">
     <link rel="stylesheet" href="https://uthark.github.io/css/uthark.css">
 
 
@@ -139,265 +139,16 @@
 
 <header>
     <h1 class="entry-title">
-        <a href="https://uthark.github.io/2009/06/06/spring-roo-2/">Spring Roo (часть 2)</a>
+        <a href="https://uthark.github.io/2010/04/11/gorm/">Несколько слов о GORM</a>
     </h1>
 
 </header>
 
 
         
-        <!-- raw HTML omitted -->
-<ul>
-<li><strong>Action.java</strong>
-Класс содержит только полезную с точки зрения назначения класса информацию. По сути, то, что вводит разработчик в консоль Roo аккумулируется здесь. Весь дополнительный код разносится по другим классам.</li>
-</ul>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Entity</span> <span class="c1">//1
-</span><span class="c1"></span><span class="nd">@RooJavaBean</span> <span class="c1">//2
-</span><span class="c1"></span><span class="nd">@RooToString</span> <span class="c1">//3
-</span><span class="c1"></span><span class="nd">@RooEntity</span><span class="o">(</span><span class="n">finders</span> <span class="o">=</span> <span class="o">{</span> <span class="s">&#34;findActionsByName&#34;</span> <span class="o">})</span> <span class="c1">//4
-</span><span class="c1"></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Action</span> <span class="o">{</span>
+          <p>class Person implements Serializable { static hasMany = [ scores: ScoreSheet ] static mapping = { scores joinTable: false }; } class Note implements Serializable { static belongsTo = [ person: Person ] } class Person implements Serializable { // person fields. } class Payment { Long id Long version Integer amount static mapping = { tablePerHierarchy false } } class CreditCardPayment extends Payment { String cardNumber } </p>
 
-<span class="nd">@NotNull</span>
-<span class="nd">@Size</span><span class="o">(</span><span class="n">min</span> <span class="o">=</span> <span class="n">1</span><span class="o">,</span> <span class="n">max</span> <span class="o">=</span> <span class="n">80</span><span class="o">)</span>
-<span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
-
-
-<span class="nd">@Size</span><span class="o">(</span><span class="n">max</span> <span class="o">=</span> <span class="n">1024</span><span class="o">)</span>
-<span class="kd">private</span> <span class="n">String</span> <span class="n">description</span><span class="o">;</span>
-<span class="o">}</span>
-</code></pre></div><p>Мы видим, что:</p>
-<ol>
-<li>Класс является JPA-сущностью.</li>
-<li>Аннотация <code>@RooJavaBean</code> говорит, что этот класс - обычный Java-бин.</li>
-<li>Аннотация <code>@RooToString</code> говорит, что у этого класса есть перегруженный метод toString().</li>
-<li>Аннотация <code>@RooEntity</code> говорит что класс является JPA-сущностью.</li>
-</ol>
-<ul>
-<li><strong>Action_Roo_Configurable.aj</strong>
-Данный аспект говорит, что класс Action является конфигурируемым через Spring.</li>
-</ul>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">privileged</span> <span class="n">aspect</span> <span class="n">Action_Roo_Configurable</span> <span class="o">{</span>
-<span class="n">declare</span> <span class="nd">@type</span><span class="o">:</span> <span class="n">Action</span><span class="o">:</span> <span class="nd">@org.springframework.beans.factory.annotation.Configurable</span><span class="o">;</span>
-<span class="o">}</span>
-</code></pre></div><ul>
-<li><strong>Action_Roo_Entity.aj</strong>
-В данном классе собраны все методы DAO для работы с классом Action.</li>
-</ul>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">org.academ.uthark.research.roo.domain</span><span class="o">;</span>
-
-<span class="n">privileged</span> <span class="n">aspect</span> <span class="n">Action_Roo_Entity</span> <span class="o">{</span>
-
-<span class="nd">@javax.persistence.PersistenceContext</span>
-<span class="kd">transient</span> <span class="n">javax</span><span class="o">.</span><span class="na">persistence</span><span class="o">.</span><span class="na">EntityManager</span> <span class="n">Action</span><span class="o">.</span><span class="na">entityManager</span><span class="o">;</span>
-
-<span class="nd">@javax.persistence.Id</span>
-<span class="nd">@javax.persistence.GeneratedValue</span><span class="o">(</span><span class="n">strategy</span> <span class="o">=</span> <span class="n">javax</span><span class="o">.</span><span class="na">persistence</span><span class="o">.</span><span class="na">GenerationType</span><span class="o">.</span><span class="na">AUTO</span><span class="o">)</span>
-<span class="nd">@javax.persistence.Column</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#34;id&#34;</span><span class="o">)</span>
-<span class="kd">private</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">Long</span> <span class="n">Action</span><span class="o">.</span><span class="na">id</span><span class="o">;</span>
-
-<span class="nd">@javax.persistence.Version</span>
-<span class="nd">@javax.persistence.Column</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#34;version&#34;</span><span class="o">)</span>
-<span class="kd">private</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">Integer</span> <span class="n">Action</span><span class="o">.</span><span class="na">version</span><span class="o">;</span>
-
-<span class="kd">public</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">Long</span> <span class="n">Action</span><span class="o">.</span><span class="na">getId</span><span class="o">()</span> <span class="o">{</span>
-<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">id</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="kd">public</span> <span class="kt">void</span> <span class="n">Action</span><span class="o">.</span><span class="na">setId</span><span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">Long</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
-<span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">id</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="kd">public</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">Integer</span> <span class="n">Action</span><span class="o">.</span><span class="na">getVersion</span><span class="o">()</span> <span class="o">{</span>
-<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">version</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="kd">public</span> <span class="kt">void</span> <span class="n">Action</span><span class="o">.</span><span class="na">setVersion</span><span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">Integer</span> <span class="n">version</span><span class="o">)</span> <span class="o">{</span>
-<span class="k">this</span><span class="o">.</span><span class="na">version</span> <span class="o">=</span> <span class="n">version</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="nd">@org.springframework.transaction.annotation.Transactional</span>
-<span class="kd">public</span> <span class="kt">void</span> <span class="n">Action</span><span class="o">.</span><span class="na">persist</span><span class="o">()</span> <span class="o">{</span>
-<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">entityManager</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalStateException</span><span class="o">(</span><span class="s">&#34;Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)&#34;</span><span class="o">);</span>
-<span class="k">this</span><span class="o">.</span><span class="na">entityManager</span><span class="o">.</span><span class="na">persist</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
-<span class="o">}</span>
-
-<span class="nd">@org.springframework.transaction.annotation.Transactional</span>
-<span class="kd">public</span> <span class="kt">void</span> <span class="n">Action</span><span class="o">.</span><span class="na">remove</span><span class="o">()</span> <span class="o">{</span>
-<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">entityManager</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalStateException</span><span class="o">(</span><span class="s">&#34;Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)&#34;</span><span class="o">);</span>
-<span class="k">this</span><span class="o">.</span><span class="na">entityManager</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
-<span class="o">}</span>
-
-<span class="nd">@org.springframework.transaction.annotation.Transactional</span>
-<span class="kd">public</span> <span class="kt">void</span> <span class="n">Action</span><span class="o">.</span><span class="na">flush</span><span class="o">()</span> <span class="o">{</span>
-<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">entityManager</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalStateException</span><span class="o">(</span><span class="s">&#34;Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)&#34;</span><span class="o">);</span>
-<span class="k">this</span><span class="o">.</span><span class="na">entityManager</span><span class="o">.</span><span class="na">flush</span><span class="o">();</span>
-<span class="o">}</span>
-
-<span class="nd">@org.springframework.transaction.annotation.Transactional</span>
-<span class="kd">public</span> <span class="kt">void</span> <span class="n">Action</span><span class="o">.</span><span class="na">merge</span><span class="o">()</span> <span class="o">{</span>
-<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">entityManager</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalStateException</span><span class="o">(</span><span class="s">&#34;Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)&#34;</span><span class="o">);</span>
-<span class="n">Action</span> <span class="n">merged</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">entityManager</span><span class="o">.</span><span class="na">merge</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
-<span class="k">this</span><span class="o">.</span><span class="na">entityManager</span><span class="o">.</span><span class="na">flush</span><span class="o">();</span>
-<span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
-<span class="o">}</span>
-
-<span class="kd">public</span> <span class="kd">static</span> <span class="kt">long</span> <span class="n">Action</span><span class="o">.</span><span class="na">countActions</span><span class="o">()</span> <span class="o">{</span>
-<span class="k">return</span> <span class="o">(</span><span class="n">Long</span><span class="o">)</span> <span class="k">new</span> <span class="n">Action</span><span class="o">().</span><span class="na">entityManager</span><span class="o">.</span><span class="na">createQuery</span><span class="o">(</span><span class="s">&#34;select count(o) from Action o&#34;</span><span class="o">).</span><span class="na">getSingleResult</span><span class="o">();</span>
-<span class="o">}</span>
-
-<span class="kd">public</span> <span class="kd">static</span> <span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">List</span><span class="o">&lt;</span><span class="n">org</span><span class="o">.</span><span class="na">academ</span><span class="o">.</span><span class="na">uthark</span><span class="o">.</span><span class="na">research</span><span class="o">.</span><span class="na">roo</span><span class="o">.</span><span class="na">domain</span><span class="o">.</span><span class="na">action</span><span class="o">&gt;</span> <span class="n">Action</span><span class="o">.</span><span class="na">findAllActions</span><span class="o">()</span> <span class="o">{</span>
-<span class="k">return</span> <span class="k">new</span> <span class="n">Action</span><span class="o">().</span><span class="na">entityManager</span><span class="o">.</span><span class="na">createQuery</span><span class="o">(</span><span class="s">&#34;select o from Action o&#34;</span><span class="o">).</span><span class="na">getResultList</span><span class="o">();</span>
-<span class="o">}</span>
-
-<span class="kd">public</span> <span class="kd">static</span> <span class="n">org</span><span class="o">.</span><span class="na">academ</span><span class="o">.</span><span class="na">uthark</span><span class="o">.</span><span class="na">research</span><span class="o">.</span><span class="na">roo</span><span class="o">.</span><span class="na">domain</span><span class="o">.</span><span class="na">Action</span> <span class="n">Action</span><span class="o">.</span><span class="na">findAction</span><span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">Long</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
-<span class="k">if</span> <span class="o">(</span><span class="n">id</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&#34;An identifier is required to retrieve an instance of Action&#34;</span><span class="o">);</span>
-<span class="k">return</span> <span class="k">new</span> <span class="n">Action</span><span class="o">().</span><span class="na">entityManager</span><span class="o">.</span><span class="na">find</span><span class="o">(</span><span class="n">Action</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">id</span><span class="o">);</span>
-<span class="o">}</span>
-
-<span class="kd">public</span> <span class="kd">static</span> <span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">List</span><span class="o">&lt;</span><span class="n">org</span><span class="o">.</span><span class="na">academ</span><span class="o">.</span><span class="na">uthark</span><span class="o">.</span><span class="na">research</span><span class="o">.</span><span class="na">roo</span><span class="o">.</span><span class="na">domain</span><span class="o">.</span><span class="na">action</span><span class="o">&gt;</span> <span class="n">Action</span><span class="o">.</span><span class="na">findActionEntries</span><span class="o">(</span><span class="kt">int</span> <span class="n">firstResult</span><span class="o">,</span> <span class="kt">int</span> <span class="n">maxResults</span><span class="o">)</span> <span class="o">{</span>
-<span class="k">return</span> <span class="k">new</span> <span class="n">Action</span><span class="o">().</span><span class="na">entityManager</span><span class="o">.</span><span class="na">createQuery</span><span class="o">(</span><span class="s">&#34;select o from Action o&#34;</span><span class="o">).</span><span class="na">setFirstResult</span><span class="o">(</span><span class="n">firstResult</span><span class="o">).</span><span class="na">setMaxResults</span><span class="o">(</span><span class="n">maxResults</span><span class="o">).</span><span class="na">getResultList</span><span class="o">();</span>
-<span class="o">}</span>
-
-<span class="o">}</span>
-</code></pre></div><p>Как легко видеть, этот аспект добавляет классу Action CRUD-методы, поля id и version.</p>
-<ul>
-<li><strong>Action_Roo_Finder.aj</strong>
-Этот аспект аккумулирует все finder-методы, созданные через консоль Spring Roo.</li>
-</ul>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">privileged</span> <span class="n">aspect</span> <span class="n">Action_Roo_Finder</span> <span class="o">{</span>
-
-<span class="kd">public</span> <span class="kd">static</span> <span class="n">javax</span><span class="o">.</span><span class="na">persistence</span><span class="o">.</span><span class="na">Query</span> <span class="n">Action</span><span class="o">.</span><span class="na">findActionsByName</span><span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
-<span class="k">if</span> <span class="o">(</span><span class="n">name</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&#34;The name argument is required&#34;</span><span class="o">);</span>
-<span class="n">javax</span><span class="o">.</span><span class="na">persistence</span><span class="o">.</span><span class="na">Query</span> <span class="n">q</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Action</span><span class="o">().</span><span class="na">entityManager</span><span class="o">.</span><span class="na">createQuery</span><span class="o">(</span><span class="s">&#34;FROM Action AS action WHERE action.name = :name&#34;</span><span class="o">);</span>
-<span class="n">q</span><span class="o">.</span><span class="na">setParameter</span><span class="o">(</span><span class="s">&#34;name&#34;</span><span class="o">,</span> <span class="n">name</span><span class="o">);</span>
-<span class="k">return</span> <span class="n">q</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="o">}</span>
-</code></pre></div><ul>
-<li><strong>Action_Roo_JavaBean.aj</strong>
-Для уменьшения загромождения кода ненужными методами для доступа к полям Spring Roo выносит их в отдельный аспект.</li>
-</ul>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">privileged</span> <span class="n">aspect</span> <span class="n">Action_Roo_JavaBean</span> <span class="o">{</span>
-
-<span class="kd">public</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">String</span> <span class="n">Action</span><span class="o">.</span><span class="na">getName</span><span class="o">()</span> <span class="o">{</span>
-<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">name</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="kd">public</span> <span class="kt">void</span> <span class="n">Action</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
-<span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="kd">public</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">String</span> <span class="n">Action</span><span class="o">.</span><span class="na">getDescription</span><span class="o">()</span> <span class="o">{</span>
-<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">description</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="kd">public</span> <span class="kt">void</span> <span class="n">Action</span><span class="o">.</span><span class="na">setDescription</span><span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">String</span> <span class="n">description</span><span class="o">)</span> <span class="o">{</span>
-<span class="k">this</span><span class="o">.</span><span class="na">description</span> <span class="o">=</span> <span class="n">description</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="o">}</span>
-</code></pre></div><ul>
-<li><strong>Action_Roo_Plural.aj</strong>
-В данном аспекте можно определить, как созданная сущность выглядит во множественном числе.</li>
-</ul>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">org.academ.uthark.research.roo.domain</span><span class="o">;</span>
-
-<span class="n">privileged</span> <span class="n">aspect</span> <span class="n">Action_Roo_JavaBean</span> <span class="o">{</span>
-
-<span class="kd">public</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">String</span> <span class="n">Action</span><span class="o">.</span><span class="na">getName</span><span class="o">()</span> <span class="o">{</span>
-<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">name</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="kd">public</span> <span class="kt">void</span> <span class="n">Action</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
-<span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="kd">public</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">String</span> <span class="n">Action</span><span class="o">.</span><span class="na">getDescription</span><span class="o">()</span> <span class="o">{</span>
-<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">description</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="kd">public</span> <span class="kt">void</span> <span class="n">Action</span><span class="o">.</span><span class="na">setDescription</span><span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">String</span> <span class="n">description</span><span class="o">)</span> <span class="o">{</span>
-<span class="k">this</span><span class="o">.</span><span class="na">description</span> <span class="o">=</span> <span class="n">description</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="o">}</span>
-</code></pre></div><ul>
-<li><strong>Action_Roo_ToString.aj</strong>
-Аспект, переопределяющий <code>toString()</code></li>
-</ul>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">privileged</span> <span class="n">aspect</span> <span class="n">Action_Roo_ToString</span> <span class="o">{</span>
-
-<span class="kd">public</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">String</span> <span class="n">Action</span><span class="o">.</span><span class="na">toString</span><span class="o">()</span> <span class="o">{</span>
-<span class="n">StringBuilder</span> <span class="n">sb</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">();</span>
-<span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">&#34;id: &#34;</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">getId</span><span class="o">()).</span><span class="na">append</span><span class="o">(</span><span class="s">&#34;, &#34;</span><span class="o">);</span>
-<span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">&#34;version: &#34;</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">getVersion</span><span class="o">()).</span><span class="na">append</span><span class="o">(</span><span class="s">&#34;, &#34;</span><span class="o">);</span>
-<span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">&#34;name: &#34;</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">getName</span><span class="o">()).</span><span class="na">append</span><span class="o">(</span><span class="s">&#34;, &#34;</span><span class="o">);</span>
-<span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">&#34;description: &#34;</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">getDescription</span><span class="o">()).</span><span class="na">append</span><span class="o">(</span><span class="s">&#34;, &#34;</span><span class="o">);</span>
-<span class="k">return</span> <span class="n">sb</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
-<span class="o">}</span>
-
-<span class="o">}</span>
-</code></pre></div><ul>
-<li><strong>ActionEditor.java</strong>
-Кроме того, при создании контроллеров для работы дополнительно создается <code>ActionEditor</code></li>
-</ul>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">org.springframework.roo.addon.property.editor.RooEditor</span><span class="o">;</span>
-
-<span class="nd">@RooEditor</span><span class="o">(</span><span class="n">providePropertyEditorFor</span> <span class="o">=</span> <span class="n">Action</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ActionEditor</span> <span class="o">{</span>
-<span class="o">}</span>
-</code></pre></div><ul>
-<li><strong>ActionEditor_Roo_Editor.aj</strong>
-Аспект с реализацией.</li>
-</ul>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">privileged</span> <span class="n">aspect</span> <span class="n">ActionEditor_Roo_Editor</span> <span class="o">{</span>
-
-<span class="n">declare</span> <span class="n">parents</span><span class="o">:</span> <span class="n">ActionEditor</span> <span class="kd">implements</span> <span class="n">java</span><span class="o">.</span><span class="na">beans</span><span class="o">.</span><span class="na">PropertyEditorSupport</span><span class="o">;</span>
-
-<span class="n">org</span><span class="o">.</span><span class="na">springframework</span><span class="o">.</span><span class="na">beans</span><span class="o">.</span><span class="na">SimpleTypeConverter</span> <span class="n">ActionEditor</span><span class="o">.</span><span class="na">typeConverter</span> <span class="o">=</span> <span class="k">new</span> <span class="n">org</span><span class="o">.</span><span class="na">springframework</span><span class="o">.</span><span class="na">beans</span><span class="o">.</span><span class="na">SimpleTypeConverter</span><span class="o">();</span>
-
-<span class="kd">public</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">String</span> <span class="n">ActionEditor</span><span class="o">.</span><span class="na">getAsText</span><span class="o">()</span> <span class="o">{</span>
- <span class="n">Object</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">getValue</span><span class="o">();</span> 
- <span class="k">if</span> <span class="o">(</span><span class="n">obj</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span> 
-     <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>     
- <span class="o">}</span> 
- <span class="k">return</span> <span class="o">(</span><span class="n">String</span><span class="o">)</span> <span class="n">typeConverter</span><span class="o">.</span><span class="na">convertIfNecessary</span><span class="o">(((</span><span class="n">org</span><span class="o">.</span><span class="na">academ</span><span class="o">.</span><span class="na">uthark</span><span class="o">.</span><span class="na">research</span><span class="o">.</span><span class="na">roo</span><span class="o">.</span><span class="na">domain</span><span class="o">.</span><span class="na">Action</span><span class="o">)</span> <span class="n">obj</span><span class="o">).</span><span class="na">getId</span><span class="o">()</span> <span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">class</span><span class="o">);</span> 
-<span class="o">}</span>
-
-<span class="kd">public</span> <span class="kt">void</span> <span class="n">ActionEditor</span><span class="o">.</span><span class="na">setAsText</span><span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">String</span> <span class="n">text</span><span class="o">)</span> <span class="o">{</span>
- <span class="k">if</span> <span class="o">(</span><span class="n">text</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="s">&#34;&#34;</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">text</span><span class="o">))</span> <span class="o">{</span> 
-     <span class="n">setValue</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>     
-     <span class="k">return</span><span class="o">;</span>     
- <span class="o">}</span> 
-
- <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">Long</span> <span class="n">identifier</span> <span class="o">=</span> <span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">Long</span><span class="o">)</span> <span class="n">typeConverter</span><span class="o">.</span><span class="na">convertIfNecessary</span><span class="o">(</span><span class="n">text</span><span class="o">,</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">Long</span><span class="o">.</span><span class="na">class</span><span class="o">);</span> 
- <span class="k">if</span> <span class="o">(</span><span class="n">identifier</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span> 
-     <span class="n">setValue</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>     
-     <span class="k">return</span><span class="o">;</span>     
- <span class="o">}</span> 
-
- <span class="n">setValue</span><span class="o">(</span><span class="n">org</span><span class="o">.</span><span class="na">academ</span><span class="o">.</span><span class="na">uthark</span><span class="o">.</span><span class="na">research</span><span class="o">.</span><span class="na">roo</span><span class="o">.</span><span class="na">domain</span><span class="o">.</span><span class="na">Action</span><span class="o">.</span><span class="na">findAction</span><span class="o">(</span><span class="n">identifier</span><span class="o">));</span> 
-<span class="o">}</span>
-
-<span class="o">}</span>
-
-</code></pre></div><h3 id="а-где-же-equalshashcode">А где же equals()/hashCode()?</h3>
-<p>Легко заметить, что Spring Roo забыл ещё про один важный аспект - про реализацию методов <code>equals()</code> и <code>hashCode()</code>. К релизу, я думаю, эта недоработка будет исправлена.</p>
-<p>Как видно, код скрипта для генерации весьма и весьма лаконичен, а получающий java-код наглядно показывает всю многословность языка Java.</p>
-<h3 id="apache-maven-integration">Apache Maven integration</h3>
-<p>Spring Roo при создании проекта создаёт pom.xml, хорошо знакомый всем работавшим с maven. Кроме того, консоль позволяет добавлять и удалять зависимости, не правя файл вручную.</p>
-<h3 id="расширения">Расширения</h3>
-<p>Spring Roo поддерживает расширения, что ещё больше даёт возможностей. На сегодняшний день написано уже как минимум одно расширение - <!-- raw HTML omitted -->Sitemesh Addon<!-- raw HTML omitted -->.</p>
-<h3 id="критика">Критика</h3>
-<p>В первую очередь критика относится к текущему релизу, а так как он ещё в глубокой альфе, то все может измениться к официальному релизу.</p>
-<ol>
-<li>Нет возможности подставлять свои JSP-шаблоны для сгенерированного CRUD</li>
-<li>В сгенерированном коде есть ошибки, например, если заводим поле типа флоат, создаём контроллер, то при редактировании сущности возможна следующая ошибка: вводим достаточно большое число (1234567), сохраняем сущность, открываем на редактирование. В поле, хранящем флоат получаем 1.23456E7, и после этого невозможно сохранить сущность, так как получаем ошибку валидации.</li>
-<li>Ещё одна ошибка связана с отношением один ко многим. Создаём пару сущностей с таким отношением. Запускаем, пробуем создать сущность. Roo умничает, если нет связанных сущностей в БД, то он даже не генерирует <code>&lt;select&gt;</code></li>
-</ol>
-<h3 id="вывод">Вывод</h3>
-<p>В целом, Spring Roo достойное начинание, но пользоваться им в Production можно будет ещё нескоро.</p>
+          
 
         
 
@@ -410,15 +161,20 @@
 
 <header>
     <h1 class="entry-title">
-        <a href="https://uthark.github.io/2009/06/03/spring-roo/">Введение в Spring Roo</a>
+        <a href="https://uthark.github.io/2010/03/22/skype-d-bus-python/">Общение со Skype через D-Bus на Python</a>
     </h1>
 
 </header>
 
 
         
-        <p><!-- raw HTML omitted -->Недавно<!-- raw HTML omitted --> компания <!-- raw HTML omitted -->Spring Source<!-- raw HTML omitted --> презентовала новый продукт - <!-- raw HTML omitted -->Spring Roo<!-- raw HTML omitted -->. <!-- raw HTML omitted -->Цель проекта<!-- raw HTML omitted --> - повысить продуктивность Java-разработчиков. <!-- raw HTML omitted -->Почитав<!-- raw HTML omitted --> <!-- raw HTML omitted -->обзоры<!-- raw HTML omitted -->, а также <!-- raw HTML omitted -->потрогав его руками<!-- raw HTML omitted --> можно сделать вывод о том, что это, в некотором виде, альтернатива <!-- raw HTML omitted -->AppFuse<!-- raw HTML omitted --> и <!-- raw HTML omitted -->Grails<!-- raw HTML omitted -->.</p>
-<!-- raw HTML omitted -->
+          <p>#!/bin/sh  # Stop amarok dbus-send --session --type=method_call --dest=org.kde.amarok /Player org.freedesktop.MediaPlayer.Stop # Logout from kopete dbus-send --session --type=method_call --dest=org.kde.kopete /Kopete org.kde.Kopete.disconnectAll # Logout from Skype skypeapi.py &#39;SET USERSTATUS OFFLINE&#39; # Lock screen dbus-send --session --type=method_call --dest=org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.Lock Детали и параметры работы команды dbus-sendописаны в man-странице#!/usr/bin/env python import dbus, sys def main(): remote_bus = dbus.SessionBus() # Check if skype is running. system_service_list = remote_bus.get_object(&#39;org.freedesktop.DBus&#39;, &#39;/org/freedesktop/DBus&#39;).ListNames() skype_api_found = 0 for service in system_service_list: if service==&#39;com.</p>
+
+          
+              <footer>
+                  <a href="https://uthark.github.io/2010/03/22/skype-d-bus-python/" rel="full-article">Continue Reading &rarr;</a>
+              </footer>
+          
 
         
 
@@ -431,23 +187,20 @@
 
 <header>
     <h1 class="entry-title">
-        <a href="https://uthark.github.io/2009/06/02/apache-ant-metro/">Apache Ant и Metro</a>
+        <a href="https://uthark.github.io/2010/03/21/tiddlywiki/">Разработка макроса для TiddlyWiki</a>
     </h1>
 
 </header>
 
 
         
-        <p>Столкнулся с такой проблемой - в некоторых случаях приложение, собранное антом не работает. Конкретно - не работает десереализация запросов на веб-сервис. Получаемый запрос содержит <!-- raw HTML omitted -->null<!-- raw HTML omitted --> в значениях полей.</p>
-<p>Опытным путём было выяснено, что на это влияет используемая версия Java. Под 1.5 работает корректно, под 1.6 - не работает. Нашли <!-- raw HTML omitted -->ошибку в метро<!-- raw HTML omitted -->, связанную именно с версией JDK и на этом успокоились. Но было одно исключение из правил. У одного из разработчиков под 1.5 тоже не работало.</p>
-<p>Как выяснилось позже, виноват был во всё Ant.
-Metro создавал файл package-info.java, в котором было примерно следующее содержание:</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@javax.xml.bind.annotation.XmlSchema</span><span class="o">(</span>
-    <span class="n">namespace</span> <span class="o">=</span> <span class="s">&#34;http://z.y.x.com&#34;</span><span class="o">,</span> 
-    <span class="n">elementFormDefault</span><span class="o">=</span><span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">bind</span><span class="o">.</span><span class="na">annotation</span><span class="o">.</span><span class="na">XmlNsForm</span><span class="o">.</span><span class="na">UNQUALIFIED</span><span class="o">)</span>
-<span class="kn">package</span> <span class="nn">com.x.y.z</span><span class="o">;</span>
-</code></pre></div><p>Ант, в свою очередь, должен был этот файл компилировать. А <!-- raw HTML omitted -->в реальности этого не происходило<!-- raw HTML omitted -->, поэтому Metro не мог корректно отобразить XML-запрос на объекты доменной области.</p>
-<p>Решение было немного кривым, но при этом поразительно простым - принудительный вызов javac на файлах <code>package-info.java</code>.</p>
+          <p>/*{{{*/ version.extensions.faviconLinkMacro = {major: 0, minor: 1, revision: 0, date: new Date(2010,3,21)}; // Author: Oleg Atamanenko config.macros.faviconLink = {} config.macros.faviconLink.handler = function(place, macroName, params, wikifier, paramString) { var linkBox = createTiddlyElement(place, &amp;quot;span&amp;quot;, null, &amp;quot;favIcon&amp;quot;, &amp;quot;&amp;quot;); var args = paramString.parseParams(&amp;quot;list&amp;quot;,null,true); var link = getParam(args, &amp;quot;link&amp;quot;, &#39;false&#39;); if (link != &#39;false&#39;){ urlParts = link.split(&#39;/&#39;); imgLink = urlParts[0] + &amp;quot;//&amp;quot; + urlParts[2] + &amp;quot;/favicon.ico&amp;quot;;  var imgElement = createTiddlyElement(linkBox, &amp;quot;img&amp;quot;, null, &amp;quot;faviconImage&amp;quot;, &amp;quot;&amp;quot;); imgElement.</p>
+
+          
+              <footer>
+                  <a href="https://uthark.github.io/2010/03/21/tiddlywiki/" rel="full-article">Continue Reading &rarr;</a>
+              </footer>
+          
 
         
 
@@ -460,16 +213,16 @@ Metro создавал файл package-info.java, в котором было п
 
 <header>
     <h1 class="entry-title">
-        <a href="https://uthark.github.io/2009/05/30/protected/">Использование модификатора protected на полях в базовом классе</a>
+        <a href="https://uthark.github.io/2010/03/16/blog-post/">Борьба с убийцами производительности</a>
     </h1>
 
 </header>
 
 
         
-        <p>Недавно задали мне вопрос - что я думаю об использовании модификатора protected для членов базового класса? Под этим вопросом кроются более серьёзные вещи.</p>
-<p>Например, любой член класса, имеющий модификатор protected, расширяет интерфейс базового класса для подклассов - подклассы имеют доступ ко всем protected и public методам этого поля. Иногда это сделано специально, например, для того, чтобы подклассы могли иметь доступ к какой-либо функциональности. Однако, если подкласс будет использовать protected поля неправильно (например, он может установить его в null, нарушив, таким образом, поведение базового класса), то это не принесёт пользы.</p>
-<p>Поразмыслив над вопросом я пришел к следующему, достаточно логичному и широкоизвестному выводу - необходимо давать наиболее закрытый доступ, какой можно. То есть, если можно объявить член класса как private, то необходимо сделать его private. Если в подклассах необходим доступ к члену класса, то необходимо проанализировать, какие методы нужны в подклассах и открыть только их через делегирование. Если набор методов заранее неизвестен, то можно сделать protected getter для поля.</p>
+          <p></p>
+
+          
 
         
 
@@ -482,79 +235,22 @@ Metro создавал файл package-info.java, в котором было п
 
 <header>
     <h1 class="entry-title">
-        <a href="https://uthark.github.io/2009/05/27/fixed-price-2/">Сферический программист в вакууме и абстрактное понятие качества кода в условиях Fixed-Price проектов (часть 2)</a>
+        <a href="https://uthark.github.io/2010/02/06/grails/">Список для проверки при оптимизации Grails приложений</a>
     </h1>
 
 </header>
 
 
         
-        <p>Причин для написания плохого кода может быть несколько. Некоторые из них лежат на поверхности:</p>
-<!-- raw HTML omitted -->
-<p><!-- raw HTML omitted -->Невнимательность<!-- raw HTML omitted --> - через это проходят почти все. Почти каждый сможет вспомнить случай, когда не был сделан <!-- raw HTML omitted -->svn add<!-- raw HTML omitted --> перед коммитом. Эта проблема решается обычно самомотивацией человека на хороший код. Впрочем, команда и сервер непрерывной интеграции тоже прилагают усилия для того, чтобы человек проверил ещё раз то, что он хочет выложить в репозиторий.</p>
-<p><!-- raw HTML omitted -->Некомпетентность<!-- raw HTML omitted --> - эта причина пересекается с недостатком опыта, но, при этом отлична от неё. Адекватный разработчик, на мой взгляд, должен стремиться к компетентности в той области, в которой он работает. Но этого, к сожалению часто не происходит. На мой взгляд это из-за следующей причины.</p>
-<p><!-- raw HTML omitted -->Немотивированность<!-- raw HTML omitted -->. Самое большое зло, которое может быть. Причины недостаточной мотивации разработчика могут быть весьма разнообразными - не выспался, дома проблемы, зарплата низкая, задача скучная и неинтересная. Список можно продолжать до бесконечности. Решение этой проблемы кроется, в первую очередь, в качественном управлении. Менеджер должен быть тонким и хорошим психологом, чтобы видеть или чувствовать все эти проблемы и предотвращать их.<!-- raw HTML omitted --></p>
-<!-- raw HTML omitted -->
+          <p>Выкладываю ниже список задач, которые нужно/можно выполнить для оптимизации приложения, написанного на Grails, может кому пригодится.
+Тестирование проведённых оптимизаций Первым делом необходимо разработать критерии проверки, которые позволят оценить эффективность проведённых оптимизаций.
+ Установить Java Melodyплагиндля Grails для проведения анализа. Разработать скрипты для проведения нагрузочного тестирования. Прогнать скрипты. Проанализировать результаты Java Melody, выявить узкие места, произвести нужные оптимизации.  Общие оптимизации Очень часто обновление до последней версии используемых библиотек попутно улучшает производительность.</p>
 
-        
-
-    </article>
-    
-    <article>
-
-        
-        
-
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2009/05/27/fixed-price-1/">Сферический программист в вакууме и абстрактное понятие качества кода в условиях Fixed-Price проектов (часть 1)</a>
-    </h1>
-
-</header>
-
-
-        
-        <p>В последнее время всё чаще задумываюсь о том, почему разработчики пишут плохой и некачественный код. Под кодом я подразумеваю не только сам код, но и, в том числе, архитектуру и дизайн.</p>
-<p>Плохим кодом я считаю следущий:</p>
-<!-- raw HTML omitted -->
-<p>Если код не выполняет нефункциональные требования, то это говорит о том, что либо дизайн, либо реализация, не учли требования и это тоже не добавляет удовлетворённости конечному пользователю. Часто здесь можно провести рефакторинг, но бывает и так, что архитектурные ошибки не дают в принципе выполнить нефункциональные требования, либо их реализация требует очень больших временных затрат.</p>
-<p>Если код не покрыт тестами, то этот код не работает. Эта аксиома должна всегда быть перед глазами разработчика. Как говорится, самая большая проблема с компьютерами это то, что они делают не то, что разработчик подразумевал, а то, что он написал. Именно поэтому тесты - гарантия того, что код выполняет то, что подразумевает разработчик. Хотя здесь тоже есть проблема, что разработчик не понимает, что именно ему нужно от кода, либо не знает, как протестировать нужную ему функциональность.</p>
-<p>Плохо тестируемый код. Такой код часто встречается, когда не используется TDD, в связи с этим разработчик не понимает или не знает, что именно он хочет от кода. Также, плохо тестируемый код это признак того, что код имеет не самую лучшую архитектуру (например, высокий coupling)</p>
-<p>Плохо поддерживаемый код это любой код, который сложно поддерживать. Сюда относятся любые ошибки в коде, которые осложняют поддержку - нет единого стиля форматирования, неясные имена переменных, методов, классов, плохая декомпозиция, отсутствие или наличие устаревших тестов, комментариев, документации, или, что ещё хуже ошибки в комментариях, документации, плохая архитектура (как её отсутствие, так и overdesigned). Все эти проблемы в конечном итоге влияют на качество проекта и на удовлетворённость заказчика.</p>
-<p>Код с багами. Логично, что это плохой код, и это, к сожалению, часто встречающийся код. По статистике, на 1000 строк кода приходится 10-12 багов. К сожалению, этот показатель меняется в зависимости от различных факторов (компетентность разработчика, сроки, сложность архитектуры, используемый язык и технологии и т.д.) и часто в сторону ухудшения.</p>
-<p>Неоптимальный код не всегда плохой, при условии, что он выполняет функциональные и нефункциональные требования, а также лёгок в поддерживании.</p>
-<p>Продолжение следует&hellip;</p>
-
-        
-
-    </article>
-    
-    <article>
-
-        
-        
-
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2009/05/23/google-application-engine/">Google Application Engine</a>
-    </h1>
-
-</header>
-
-
-        
-        <p>Посмотрел на <!-- raw HTML omitted -->Google App Engine <!-- raw HTML omitted -->(GAE).</p>
-<p>При своей цене (= бесплатно) это очень хороший сервис.</p>
-<p>GAE - это <!-- raw HTML omitted -->инфраструктура для запуска веб-приложений на серверах Google<!-- raw HTML omitted -->. То, что сейчас модно называть <!-- raw HTML omitted -->cloud computing<!-- raw HTML omitted -->.</p>
-<p>На <!-- raw HTML omitted -->презентации платформы в 2008 году<!-- raw HTML omitted --> Google объявил только о поддержке Python. <!-- raw HTML omitted -->Год спустя, в апреле 2009 года Google заявил о поддержке Java<!-- raw HTML omitted -->, правда <!-- raw HTML omitted -->с ограничениями<!-- raw HTML omitted -->.
-Собственно, <!-- raw HTML omitted -->поддержка Java<!-- raw HTML omitted --> и была тем самым толчком, что я решил поближе посмотреть на платформу.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>Google предоставляе SDK для работы с платформой. В SDK входят скрипты для создания приложения, загрузки их на сервера Google и API для доступа к вышеперечисленным сервисам платформы. Кроме того, при разработке используются заглушки для сервисов (например, для User Service API), которые позволяют локально писать и отлаживать приложение.</p>
-<p>Компания SpringSource объявила о <!-- raw HTML omitted -->поддержке Grails<!-- raw HTML omitted --> на платформе Google App Engine. Это не может не радовать, но первые впечатления были смазаны, так как <!-- raw HTML omitted -->плагин appengine для Grails<!-- raw HTML omitted --> ещё нужно дорабатывать. Например, кодогенератор заточен для gorm, который сделан поверх hibernate, но так как appengine не поддерживает hibernate, для генерации CRUD приходится делать следующие пассы: включать hibernate плагин, генерировать CRUD, отключать hibernate плагин. Надеюсь, в следующей версии appengine плагина эта проблема будет решена. Остальные проблемы можно почитать как в комментариях к анонсу, так и в <!-- raw HTML omitted -->джире проекта<!-- raw HTML omitted -->.</p>
-<!-- raw HTML omitted -->
+          
+              <footer>
+                  <a href="https://uthark.github.io/2010/02/06/grails/" rel="full-article">Continue Reading &rarr;</a>
+              </footer>
+          
 
         
 
@@ -603,6 +299,16 @@ Metro создавал файл package-info.java, в котором было п
     
         <a href="/page/11/" class="label-pagination">11</a>
     
+        <a href="/page/12/" class="label-pagination">12</a>
+    
+        <a href="/page/13/" class="label-pagination">13</a>
+    
+        <a href="/page/14/" class="label-pagination">14</a>
+    
+        <a href="/page/15/" class="label-pagination">15</a>
+    
+        <a href="/page/16/" class="label-pagination">16</a>
+    
 
     
     
@@ -611,7 +317,7 @@ Metro создавал файл package-info.java, в котором было п
 
     
     
-        <a href="/page/11/" aria-label="Last"><i class="fa fa-angle-double-right fa-lg"></i></a>
+        <a href="/page/16/" aria-label="Last"><i class="fa fa-angle-double-right fa-lg"></i></a>
     
 
 </div>
