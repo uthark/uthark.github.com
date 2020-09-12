@@ -102,6 +102,15 @@
     </item>
     
     <item>
+      <title>music</title>
+      <link>https://uthark.github.io/categories/music/</link>
+      <pubDate>Tue, 01 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://uthark.github.io/categories/music/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>useful</title>
       <link>https://uthark.github.io/categories/useful/</link>
       <pubDate>Sun, 24 Jun 2018 00:00:00 +0000</pubDate>
@@ -332,15 +341,6 @@
       <pubDate>Sun, 02 Mar 2014 00:00:00 +0000</pubDate>
       
       <guid>https://uthark.github.io/categories/iterm/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>music</title>
-      <link>https://uthark.github.io/categories/music/</link>
-      <pubDate>Sun, 02 Mar 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/categories/music/</guid>
       <description></description>
     </item>
     

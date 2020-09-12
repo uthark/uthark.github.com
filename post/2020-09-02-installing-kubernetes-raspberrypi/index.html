@@ -22,13 +22,13 @@
 
     <meta name="author" content="Oleg Atamanenko">
 
-    <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
-    <link rel="stylesheet" media="screen" href="https://fonts.googleapis.com/css?family=Arvo" type="text/css"/>
+
+    <link rel="stylesheet" media="screen" href="https://fonts.googleapis.com/css2?family=Lora:wght@500&family=Source+Code+Pro:wght@300&family=Bitter&display=swap" type="text/css"/>
 
     
     
     
-    <link rel="stylesheet" href="https://uthark.github.io/css/theme.bb5bfcaca08d09361e860384007c0b825b7c510c697d5b6e15af71730899b64b.css">
+    <link rel="stylesheet" href="https://uthark.github.io/css/theme.ece432f7079ca01d330e9ffb9c020c5284eb3ad54e44ea5145897b54f5d1f2d9.css">
     <link rel="stylesheet" href="https://uthark.github.io/css/uthark.css">
 
 
@@ -175,48 +175,48 @@ On Raspberry, edit <code>/boot/firmware/cmdline.txt</code> and add the following
 <div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">sudo shutdown -r now
 </code></pre></div><h2 id="install-and-configure-docker">Install and configure docker</h2>
 <p>Allow to use HTTPS transport for downloading packages:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">sudo apt update
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">sudo apt update
 sudo apt install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
 </code></pre></div><p>Add docker GPG key used for verifying <code>Packages</code> file used by apt.</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">curl -fsSL https://download.docker.com/linux/ubuntu/gpg <span class="p">|</span> sudo apt-key add -
 </code></pre></div><p>Add docker repository:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">echo &#34;deb [arch=arm64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable&#34; | sudo tee /etc/apt/sources.list.d/docker.list
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">echo</span> <span class="s2">&#34;deb [arch=arm64] https://download.docker.com/linux/ubuntu </span><span class="k">$(</span>lsb_release -cs<span class="k">)</span><span class="s2"> stable&#34;</span> <span class="p">|</span> sudo tee /etc/apt/sources.list.d/docker.list
 </code></pre></div><p>Update apt repository index and install docker</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">sudo apt update
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">sudo apt update
 sudo apt install docker-ce docker-ce-cli containerd.io
 </code></pre></div><p>If you want to communicate with docker with non-root user:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">sudo usermod -aG docker &#34;your user&#34;
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">sudo usermod -aG docker <span class="s2">&#34;your user&#34;</span>
 </code></pre></div><p>To apply changes - logout and login again. If you want to reflect changes immediately run:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">newgrp docker
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">newgrp docker
 </code></pre></div><p>Configure docker to use systemd as a cgroups driver, put in <code>/etc/docker/daemon.json</code>:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">{
-  &#34;exec-opts&#34;: [&#34;native.cgroupdriver=systemd&#34;],
-  &#34;log-driver&#34;: &#34;json-file&#34;,
-  &#34;log-opts&#34;: {
-    &#34;max-size&#34;: &#34;100m&#34;
-  },
-  &#34;storage-driver&#34;: &#34;overlay2&#34;
-}
+<div class="highlight"><pre class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&#34;exec-opts&#34;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&#34;native.cgroupdriver=systemd&#34;</span><span class="p">],</span>
+  <span class="nt">&#34;log-driver&#34;</span><span class="p">:</span> <span class="s2">&#34;json-file&#34;</span><span class="p">,</span>
+  <span class="nt">&#34;log-opts&#34;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&#34;max-size&#34;</span><span class="p">:</span> <span class="s2">&#34;100m&#34;</span>
+  <span class="p">},</span>
+  <span class="nt">&#34;storage-driver&#34;</span><span class="p">:</span> <span class="s2">&#34;overlay2&#34;</span>
+<span class="p">}</span>
 
 </code></pre></div><h2 id="installing-kubeadm">Installing kubeadm</h2>
 <p>Add kubernetes repository:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">echo &#34;deb https://apt.kubernetes.io/ kubernetes-xenial main&#34; | sudo tee /etc/apt/sources.list.d/kubernetes.list
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">echo</span> <span class="s2">&#34;deb https://apt.kubernetes.io/ kubernetes-xenial main&#34;</span> <span class="p">|</span> sudo tee /etc/apt/sources.list.d/kubernetes.list
 </code></pre></div><p>To allow iptables properly work with bridged traffic:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">cat &lt;&lt;EOF | sudo tee /etc/sysctl.d/k8s.conf
-net.bridge.bridge-nf-call-ip6tables = 1
-net.bridge.bridge-nf-call-iptables = 1
-EOF
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">cat <span class="s">&lt;&lt;EOF | sudo tee /etc/sysctl.d/k8s.conf
+</span><span class="s">net.bridge.bridge-nf-call-ip6tables = 1
+</span><span class="s">net.bridge.bridge-nf-call-iptables = 1
+</span><span class="s">EOF</span>
 sudo sysctl --system
 </code></pre></div><p>Install kubeadm, kubelet and kubectl:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">sudo apt update
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">sudo apt update
 sudo apt install -y kubelet kubeadm kubectl
 </code></pre></div><p>Minor updates of kubernetes may require extra steps, so we need to prevent packages from auto-updating:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">sudo apt-mark hold kubelet kubeadm kubectl
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">sudo apt-mark hold kubelet kubeadm kubectl
 </code></pre></div><h2 id="installing-kubernetes-control-plane">Installing Kubernetes Control Plane</h2>
 <p>Generate token for installation</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">TOKEN=$(sudo kubeadm token generate)
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nv">TOKEN</span><span class="o">=</span><span class="k">$(</span>sudo kubeadm token generate<span class="k">)</span>
 </code></pre></div><p>Install control plane with kubeadm:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">sudo kubeadm init --token=${TOKEN} --kubernetes-version=v1.19.0
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">sudo kubeadm init --token<span class="o">=</span><span class="si">${</span><span class="nv">TOKEN</span><span class="si">}</span> --kubernetes-version<span class="o">=</span>v1.19.0
 </code></pre></div><p>If installation is successful, output will look similar to this:</p>
 <div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">W0903 00:29:04.934934  417169 configset.go:348] WARNING: kubeadm cannot validate component configs for API groups [kubelet.config.k8s.io kubeproxy.config.k8s.io]
 [init] Using Kubernetes version: v1.19.0
@@ -289,18 +289,18 @@ kubeadm join 192.168.1.153:6443 --token 5p4y2w.xxivtzh1lvuukdk7 \
     --discovery-token-ca-cert-hash sha256:5638c83bec2b62b5f01d85bc2f4330b03b7e3c4682fe3f5e7e4189fbb63c5a17
 </code></pre></div><h2 id="configure-kubectl-to-communicate-with-the-cluster">Configure kubectl to communicate with the cluster</h2>
 <p>Put kubeconfig file in user&rsquo;s home directory:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">mkdir -p $HOME/.kube
-sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-sudo chown $(id -u):$(id -g) $HOME/.kube/config
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">mkdir -p <span class="nv">$HOME</span>/.kube
+sudo cp -i /etc/kubernetes/admin.conf <span class="nv">$HOME</span>/.kube/config
+sudo chown <span class="k">$(</span>id -u<span class="k">)</span>:<span class="k">$(</span>id -g<span class="k">)</span> <span class="nv">$HOME</span>/.kube/config
 
 </code></pre></div><p>Verify it works:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">kubectl get nodes
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">kubectl get nodes
 </code></pre></div><p>In my case output was:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">NAME     STATUS   ROLES    AGE     VERSION
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">NAME     STATUS   ROLES    AGE     VERSION
 ubuntu   Ready    master   3h42m   v1.19.0
 
 </code></pre></div><p>As a CNI network provider I use Calico, but you can use any you like. <a href="https://kubernetes.io/docs/concepts/cluster-administration/networking/#how-to-implement-the-kubernetes-networking-model">List of available implementations</a></p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">curl https://docs.projectcalico.org/manifests/calico.yaml -O
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">curl https://docs.projectcalico.org/manifests/calico.yaml -O
 kubectl apply -f calico.yaml
 </code></pre></div><p>Now you have working single node kubernetes cluster. Next things you might need to do:</p>
 <ol>

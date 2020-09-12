@@ -22,13 +22,13 @@
 
     <meta name="author" content="Oleg Atamanenko">
 
-    <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
-    <link rel="stylesheet" media="screen" href="https://fonts.googleapis.com/css?family=Arvo" type="text/css"/>
+
+    <link rel="stylesheet" media="screen" href="https://fonts.googleapis.com/css2?family=Lora:wght@500&family=Source+Code+Pro:wght@300&family=Bitter&display=swap" type="text/css"/>
 
     
     
     
-    <link rel="stylesheet" href="https://uthark.github.io/css/theme.bb5bfcaca08d09361e860384007c0b825b7c510c697d5b6e15af71730899b64b.css">
+    <link rel="stylesheet" href="https://uthark.github.io/css/theme.ece432f7079ca01d330e9ffb9c020c5284eb3ad54e44ea5145897b54f5d1f2d9.css">
     <link rel="stylesheet" href="https://uthark.github.io/css/uthark.css">
 
 
@@ -200,17 +200,17 @@ Reduce container image size In Cloud Native world infrastructure is disposable a
 <p>Use digest/<code>@sha256</code> in <code>FROM</code> to specify exact version of the container you’re pulling. Digest is shown on tag page on docker hub or you can get it after running <code>docker pull</code>:</p>
 </li>
 </ol>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback"> $ docker pull alpine:3.12.0
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"> $ docker pull alpine:3.12.0
  3.12.0: Pulling from library/alpine
- df20fa9351a1: Pull complete
+ df20fa9351a1: Pull <span class="nb">complete</span>
  Digest: sha256:185518070891758909c9f839cf4ca393ee977ac378609f700f60a771a2dfe321
- Status: Downloaded newer image for alpine:3.12.0
+ Status: Downloaded newer image <span class="k">for</span> alpine:3.12.0
  docker.io/library/alpine:3.12.0
 </code></pre></div><p><code>Dockerfile</code> will looks like this:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">FROM alpine@sha256:185518070891758909c9f839cf4ca393ee977ac378609f700f60a771a2dfe321
-COPY ...
-# And so on.
-</code></pre></div><ol start="4">
+<div class="highlight"><pre class="chroma"><code class="language-docker" data-lang="docker"><span class="k">FROM</span><span class="s"> alpine@sha256:185518070891758909c9f839cf4ca393ee977ac378609f700f60a771a2dfe321</span><span class="err">
+</span><span class="err"></span><span class="k">COPY</span> ...<span class="err">
+</span><span class="err"></span><span class="c"># And so on.</span><span class="err">
+</span></code></pre></div><ol start="4">
 <li>Use own docker registry. Rebuild all required base images yourself and use them. This will allow you to control which base image are being used.</li>
 <li>Prohibit running docker containers from <code>docker.io</code> in production. If you run in kubernetes, use <a href="https://github.com/open-policy-agent/gatekeeper">Open Policy Agent Gatekeeper</a> or similar solution. docker.io contains a lot of images that are build both by well-known companies and by random people, not all of them have good intentions.</li>
 <li>Do not store any sensitive information in the image. No passwords, no cloud credentials. Pass them either via mounted volume or via <code>ENV</code> variables.</li>

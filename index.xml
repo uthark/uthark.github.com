@@ -19,7 +19,7 @@
       <guid>https://uthark.github.io/post/2020-09-04-deploy-project-kubernetes-checklist/</guid>
       <description>Deploying to kubernetes is easy: create manifest with your Deployment and then kubectl apply it.
 The most basic deployment manifest looks like this:
-apiVersion: apps/v1 kind: Deployment metadata: labels: app.kubernetes.io/name: test-app name: test-app namespace: default spec: selector: matchLabels: app.kubernetes.io/name: test-app template: metadata: labels: app.</description>
+apiVersion:apps/v1kind:Deploymentmetadata:labels:app.kubernetes.io/name:test-appname:test-appnamespace:defaultspec:selector:matchLabels:app.kubernetes.io/name:test-apptemplate:metadata:labels:app.kubernetes.io/name:test-appspec:containers:- name:controllerimage:nginxIt works as is, but you may improve reliability of this deployment by configuring additional fields for the manifest.</description>
     </item>
     
     <item>
@@ -64,7 +64,7 @@ Installed it on SD Card with Raspberry Pi Imager.</description>
     </item>
     
     <item>
-      <title>Music</title>
+      <title>Music I listen</title>
       <link>https://uthark.github.io/about/music-i-listen/</link>
       <pubDate>Tue, 01 Sep 2020 00:00:00 +0000</pubDate>
       

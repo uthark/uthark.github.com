@@ -23,13 +23,13 @@
 
     <meta name="author" content="Oleg Atamanenko">
 
-    <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
-    <link rel="stylesheet" media="screen" href="https://fonts.googleapis.com/css?family=Arvo" type="text/css"/>
+
+    <link rel="stylesheet" media="screen" href="https://fonts.googleapis.com/css2?family=Lora:wght@500&family=Source+Code+Pro:wght@300&family=Bitter&display=swap" type="text/css"/>
 
     
     
     
-    <link rel="stylesheet" href="https://uthark.github.io/css/theme.bb5bfcaca08d09361e860384007c0b825b7c510c697d5b6e15af71730899b64b.css">
+    <link rel="stylesheet" href="https://uthark.github.io/css/theme.ece432f7079ca01d330e9ffb9c020c5284eb3ad54e44ea5145897b54f5d1f2d9.css">
     <link rel="stylesheet" href="https://uthark.github.io/css/uthark.css">
 
 
@@ -148,7 +148,7 @@
         
           <p>Deploying to kubernetes is easy: create manifest with your Deployment and then kubectl apply it.
 The most basic deployment manifest looks like this:
-apiVersion: apps/v1 kind: Deployment metadata: labels: app.kubernetes.io/name: test-app name: test-app namespace: default spec: selector: matchLabels: app.kubernetes.io/name: test-app template: metadata: labels: app.</p>
+apiVersion:apps/v1kind:Deploymentmetadata:labels:app.kubernetes.io/name:test-appname:test-appnamespace:defaultspec:selector:matchLabels:app.kubernetes.io/name:test-apptemplate:metadata:labels:app.kubernetes.io/name:test-appspec:containers:- name:controllerimage:nginxIt works as is, but you may improve reliability of this deployment by configuring additional fields for the manifest.</p>
 
           
               <footer>

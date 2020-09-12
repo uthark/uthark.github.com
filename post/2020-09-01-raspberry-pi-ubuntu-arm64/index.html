@@ -22,13 +22,13 @@
 
     <meta name="author" content="Oleg Atamanenko">
 
-    <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/go-mono" type="text/css"/>
-    <link rel="stylesheet" media="screen" href="https://fonts.googleapis.com/css?family=Arvo" type="text/css"/>
+
+    <link rel="stylesheet" media="screen" href="https://fonts.googleapis.com/css2?family=Lora:wght@500&family=Source+Code+Pro:wght@300&family=Bitter&display=swap" type="text/css"/>
 
     
     
     
-    <link rel="stylesheet" href="https://uthark.github.io/css/theme.bb5bfcaca08d09361e860384007c0b825b7c510c697d5b6e15af71730899b64b.css">
+    <link rel="stylesheet" href="https://uthark.github.io/css/theme.ece432f7079ca01d330e9ffb9c020c5284eb3ad54e44ea5145897b54f5d1f2d9.css">
     <link rel="stylesheet" href="https://uthark.github.io/css/uthark.css">
 
 
@@ -172,35 +172,33 @@ Installed it on SD Card with Raspberry Pi Imager." />
 <p>Configuring <code>wpa_supplicant</code> didn&rsquo;t help, still had issues with not getting IP Address from DHCP.</p>
 <p>Finally, did the following:</p>
 <ol>
-<li>
-<p>Create <code>/etc/netplan/01-netcfg.yaml</code> and put the following content there:</p>
-<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">network:
-  version: 2
-  renderer: networkd
-  wifis:
-    wlan0:
-      dhcp4: true
-      dhcp6: true
-      optional: true
-      access-points:
-        &#34;&lt;replace with your wifi network name/SSID&gt;&#34;:
-          password: &#34;&lt;replace with your password&gt;&#34;
-</code></pre></div></li>
-<li>
-<p>Change permissions to make file accessible only to <code>root</code> user:</p>
+<li>Create <code>/etc/netplan/01-netcfg.yaml</code> and put the following content there:</li>
+</ol>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">network</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">version</span><span class="p">:</span><span class="w"> </span><span class="m">2</span><span class="w">
+</span><span class="w">  </span><span class="k">renderer</span><span class="p">:</span><span class="w"> </span>networkd<span class="w">
+</span><span class="w">  </span><span class="k">wifis</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="k">wlan0</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="k">dhcp4</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">      </span><span class="k">dhcp6</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">      </span><span class="k">optional</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">      </span><span class="k">access-points</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="s2">&#34;&lt;replace with your wifi network name/SSID&gt;&#34;</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span><span class="k">password</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&lt;replace with your password&gt;&#34;</span><span class="w">
+</span></code></pre></div><ol start="2">
+<li>Change permissions to make file accessible only to <code>root</code> user:</li>
+</ol>
 <div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">chmod 600 /etc/netplan/01-netcfg.yaml
-</code></pre></div></li>
-<li>
-<p>Configure <a href="https://linux.die.net/man/8/crda">Linux wireless central regulatory domain agent</a>. Put your country code in <code>/etc/default/crda</code></p>
+</code></pre></div><ol start="3">
+<li>Configure <a href="https://linux.die.net/man/8/crda">Linux wireless central regulatory domain agent</a>. Put your country code in <code>/etc/default/crda</code></li>
+</ol>
 <div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">REGDOMAIN=US
-</code></pre></div></li>
-<li>
-<p>After that, need to generate and apply netplan:</p>
+</code></pre></div><ol start="4">
+<li>After that, need to generate and apply netplan:</li>
+</ol>
 <div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">sudo netplan --debug generate
 sudo netplan --debug apply
-</code></pre></div></li>
-</ol>
-
+</code></pre></div>
         </div>
         
 
