@@ -65,9 +65,7 @@
 
   <meta property="og:title" content="Deploying in Kubernetes. Checklist." />
   <meta property="og:url" content="https://uthark.github.io/post/2020-09-04-deploy-project-kubernetes-checklist/" />
-  <meta property="og:description" content="Deploying to kubernetes is easy: create manifest with your Deployment and then kubectl apply it.
-The most basic deployment manifest looks like this:
-apiVersion:apps/v1kind:Deploymentmetadata:labels:app.kubernetes.io/name:test-appname:test-appnamespace:defaultspec:selector:matchLabels:app.kubernetes.io/name:test-apptemplate:metadata:labels:app.kubernetes.io/name:test-appspec:containers:- name:controllerimage:nginxIt works as is, but you may improve reliability of this deployment by configuring additional fields for the manifest." />
+  <meta property="og:description" content="While kubernetes is easy to start with, it is quite challenging to master and know all details. In this post I will provide checklist of important manifest stanzas that are applicable to most applications that are targeted to run in production and which are expected to not have downtime during cluster maintenance and/or application updates." />
 
   
 
@@ -165,7 +163,12 @@ apiVersion:apps/v1kind:Deploymentmetadata:labels:app.kubernetes.io/name:test-app
           
           
           
-          <p>Deploying to kubernetes is easy: create manifest with your <code>Deployment</code> and then <code>kubectl apply</code> it.</p>
+          <p>While kubernetes is easy to start with, it is quite challenging to master and
+know all details. In this post I will provide checklist of important manifest
+stanzas that are applicable to most applications that are targeted to run in
+production and which are expected to not have downtime during cluster
+maintenance and/or application updates.</p>
+<p>Deploying to kubernetes is easy: create manifest with your <code>Deployment</code> and then <code>kubectl apply</code> it.</p>
 <p>The most basic deployment manifest looks like this:</p>
 <div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">apiVersion</span><span class="p">:</span><span class="w"> </span>apps/v1<span class="w">
 </span><span class="w"></span><span class="k">kind</span><span class="p">:</span><span class="w"> </span>Deployment<span class="w">
