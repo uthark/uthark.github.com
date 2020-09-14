@@ -4,7 +4,7 @@ a {
 }
 
 a:visited {
-    color: blue
+    color: #1863a1
 }
 
 a:focus {
@@ -402,6 +402,7 @@ ul.sidebar-nav {
 
 ul.sidebar-nav li {
     display: inline;
+    padding: 0 0.5em;
 }
 
 .basic-alignment.left,
@@ -516,8 +517,6 @@ body.sidebar-footer .toggle-sidebar {
 
     #content {
         overflow: visible;
-        margin-right: 240px;
-        position: relative
     }
 
     .no-sidebar #content {
@@ -595,6 +594,7 @@ body.sidebar-footer .toggle-sidebar {
 @media only screen and (min-width: 992px) {
     #content {
         margin-right: 320px; /* increase this by X where X is the increase in width of aside.sidebar a few line down */
+        position: relative;
     }
 
     #content > div,
@@ -906,7 +906,11 @@ figure.code figcaption a:hover {
 #blog-archives a.category,
 #blog-archives time {
     color: #aaa;
-
+}
+#blog-archives a.category-title {
+    margin-top: 1em;
+    display: inline-block;
+    font-weight: bold;
 }
 
 #blog-archives .entry-content {
@@ -1157,6 +1161,9 @@ footer span.categories a.label:first-child {
     font-weight: bold;
     text-align: center;
     vertical-align: baseline;
+}
+.label:first-of-type {
+    padding-left: 0;
 }
 
 a.label:hover,
