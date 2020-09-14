@@ -746,7 +746,7 @@ article > footer p.meta {
     left: -1em;
     position: absolute;
     padding-right: 0.5em;
-    font-size: 0.5em;
+    font-size: 1em;
     content: "→"
 }
 

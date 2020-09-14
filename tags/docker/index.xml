@@ -17,8 +17,8 @@
       <pubDate>Thu, 03 Sep 2020 22:05:41 -0700</pubDate>
       
       <guid>https://uthark.github.io/post/2020-09-03-docker-best-practices/</guid>
-      <description>Introduction After using docker for last several years I’d like to share best practices that works in production.
-Reduce container image size In Cloud Native world infrastructure is disposable and immutable. As result, if your kubernetes pod is rescheduled to another node, new node need to pull docker image.</description>
+      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;After using docker for last several years I’d like to share best practices that works in production.&lt;/p&gt;</description>
     </item>
     
     <item>

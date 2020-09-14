@@ -65,8 +65,8 @@
 
   <meta property="og:title" content="Docker Best Practices" />
   <meta property="og:url" content="https://uthark.github.io/post/2020-09-03-docker-best-practices/" />
-  <meta property="og:description" content="Introduction After using docker for last several years I’d like to share best practices that works in production.
-Reduce container image size In Cloud Native world infrastructure is disposable and immutable. As result, if your kubernetes pod is rescheduled to another node, new node need to pull docker image." />
+  <meta property="og:description" content="Introduction
+After using docker for last several years I’d like to share best practices that works in production." />
 
   
 
@@ -220,7 +220,6 @@ Reduce container image size In Cloud Native world infrastructure is disposable a
 <li>Add <a href="https://docs.docker.com/engine/reference/builder/#label"><code>LABEL</code></a> with information about image maintainer and other information that is relevant for your organization.</li>
 <li>Use <a href="https://docs.docker.com/engine/reference/builder/#arg"><code>ARG</code></a> to pass base IMAGE. This will allow you to configure base image outside and give you ability to manage base image at scale if you have large organization/have hundreds of different images.</li>
 </ol>
-
         </div>
         
 
