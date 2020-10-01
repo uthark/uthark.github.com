@@ -6,11 +6,7 @@
     <description>Recent content in arm64 on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 02 Sep 2020 20:44:30 -0700</lastBuildDate>
-    
-	<atom:link href="https://uthark.github.io/tags/arm64/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Wed, 02 Sep 2020 20:44:30 -0700</lastBuildDate><atom:link href="https://uthark.github.io/tags/arm64/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Installing Kubernetes on Raspberry Pi</title>
       <link>https://uthark.github.io/post/2020-09-02-installing-kubernetes-raspberrypi/</link>

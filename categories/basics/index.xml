@@ -6,11 +6,7 @@
     <description>Recent content in basics on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 21 Jul 2011 12:06:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://uthark.github.io/categories/basics/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Thu, 21 Jul 2011 12:06:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/basics/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Немного о виртуальных методах в Java</title>
       <link>https://uthark.github.io/2011/07/21/java/</link>

@@ -6,11 +6,7 @@
     <description>Recent content in resteasy on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 09 Feb 2012 01:05:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://uthark.github.io/categories/resteasy/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Thu, 09 Feb 2012 01:05:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/resteasy/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Разработка и тестирование Java REST веб-сервисов</title>
       <link>https://uthark.github.io/2012/02/09/java-rest/</link>

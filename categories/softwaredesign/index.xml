@@ -6,11 +6,7 @@
     <description>Recent content in softwaredesign on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 30 May 2009 23:45:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://uthark.github.io/categories/softwaredesign/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Sat, 30 May 2009 23:45:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/softwaredesign/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Использование модификатора protected на полях в базовом классе</title>
       <link>https://uthark.github.io/2009/05/30/protected/</link>

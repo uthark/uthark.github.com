@@ -6,11 +6,7 @@
     <description>Recent content in announcements on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 21 Nov 2017 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://uthark.github.io/categories/announcements/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Tue, 21 Nov 2017 00:00:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/announcements/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Migration to hugo completed</title>
       <link>https://uthark.github.io/2017/11/21/migrate-to-hugo/</link>

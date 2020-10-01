@@ -6,11 +6,7 @@
     <description>Recent content in apache ant on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 02 Jun 2009 23:31:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://uthark.github.io/categories/apache-ant/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Tue, 02 Jun 2009 23:31:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/apache-ant/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Apache Ant и Metro</title>
       <link>https://uthark.github.io/2009/06/02/apache-ant-metro/</link>

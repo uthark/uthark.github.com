@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html prefix="og: https://ogp.me/ns#" lang="en">
 <head>
-	<meta name="generator" content="Hugo 0.74.3" />
+	<meta name="generator" content="Hugo 0.75.1" />
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
     
@@ -138,6 +138,45 @@
 
 <header>
     <h1 class="entry-title">
+        <a href="https://uthark.github.io/2014/03/02/octopress-quote-fix/">Fixing unescaped quotes in page rendering in Octopress</a>
+    </h1>
+
+</header>
+
+
+        
+        <div class="list-post-tags">
+         
+         <a class="label" href="https://uthark.github.io/categories/development/">#development</a>
+         
+         <a class="label" href="https://uthark.github.io/categories/article/">#article</a>
+         
+         <a class="label" href="https://uthark.github.io/categories/octopress/">#octopress</a>
+         
+        </div>
+        
+
+        
+          <p>When I created About Me page I found issue with rendering: for some reason styles and some javascripts were missing on the page.
+Investigation showed that content in meta tag description contained unquoted quotes, thus resulting in broken HTML.
+After searching within octopress sources I found the issue:</p>
+
+          
+              <footer>
+                  <a href="https://uthark.github.io/2014/03/02/octopress-quote-fix/" rel="full-article">Continue Reading &rarr;</a>
+              </footer>
+          
+
+        
+
+    </article>
+    
+    <article class="list">
+        
+        
+
+<header>
+    <h1 class="entry-title">
         <a href="https://uthark.github.io/2014/03/02/lyne-game/">Lyne Game</a>
     </h1>
 
@@ -259,45 +298,6 @@ The goal of the game is to connect all dots on the playboard. Worth every cent.<
 Good album, good texts.
 You can listen previews here or here (Russia only).</p>
 
-          
-
-        
-
-    </article>
-    
-    <article class="list">
-        
-        
-
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2014/03/01/restricting-mongo-template/">Automatic query modification with Spring Data Mongo</a>
-    </h1>
-
-</header>
-
-
-        
-        <div class="list-post-tags">
-         
-         <a class="label" href="https://uthark.github.io/categories/article/">#article</a>
-         
-         <a class="label" href="https://uthark.github.io/categories/development/">#development</a>
-         
-         <a class="label" href="https://uthark.github.io/categories/spring/">#spring</a>
-         
-        </div>
-        
-
-        
-          <p>Introduction Today I want to show how one can automatically apply additional restrictions on MongoDB Queries with MongoTemplate or Spring Data Mongo.
-Implementation First, let&rsquo;s introduce interface QueryModifier.
-import org.springframework.data.mongodb.core.query.Query; public interface QueryModifier { /** * Modifies source query according to the rules.</p>
-
-          
-              <footer>
-                  <a href="https://uthark.github.io/2014/03/01/restricting-mongo-template/" rel="full-article">Continue Reading &rarr;</a>
-              </footer>
           
 
         

@@ -174,17 +174,17 @@ Installed it on SD Card with Raspberry Pi Imager." />
 <ol>
 <li>Create <code>/etc/netplan/01-netcfg.yaml</code> and put the following content there:</li>
 </ol>
-<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">network</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="k">version</span><span class="p">:</span><span class="w"> </span><span class="m">2</span><span class="w">
-</span><span class="w">  </span><span class="k">renderer</span><span class="p">:</span><span class="w"> </span>networkd<span class="w">
-</span><span class="w">  </span><span class="k">wifis</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="k">wlan0</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span><span class="k">dhcp4</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-</span><span class="w">      </span><span class="k">dhcp6</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-</span><span class="w">      </span><span class="k">optional</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-</span><span class="w">      </span><span class="k">access-points</span><span class="p">:</span><span class="w">
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">network</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="m">2</span><span class="w">
+</span><span class="w">  </span><span class="nt">renderer</span><span class="p">:</span><span class="w"> </span><span class="l">networkd</span><span class="w">
+</span><span class="w">  </span><span class="nt">wifis</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">wlan0</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">dhcp4</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">      </span><span class="nt">dhcp6</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">      </span><span class="nt">optional</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">      </span><span class="nt">access-points</span><span class="p">:</span><span class="w">
 </span><span class="w">        </span><span class="s2">&#34;&lt;replace with your wifi network name/SSID&gt;&#34;</span><span class="p">:</span><span class="w">
-</span><span class="w">          </span><span class="k">password</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&lt;replace with your password&gt;&#34;</span><span class="w">
+</span><span class="w">          </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&lt;replace with your password&gt;&#34;</span><span class="w">
 </span></code></pre></div><ol start="2">
 <li>Change permissions to make file accessible only to <code>root</code> user:</li>
 </ol>

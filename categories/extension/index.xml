@@ -6,11 +6,7 @@
     <description>Recent content in extension on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 24 Nov 2009 23:09:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://uthark.github.io/categories/extension/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Tue, 24 Nov 2009 23:09:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/extension/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Создание страницы настроек для расширений Google Chrome</title>
       <link>https://uthark.github.io/2009/11/24/google-chrome/</link>

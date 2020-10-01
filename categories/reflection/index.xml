@@ -6,11 +6,7 @@
     <description>Recent content in reflection on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 20 Apr 2012 15:51:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://uthark.github.io/categories/reflection/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Fri, 20 Apr 2012 15:51:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/reflection/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Использование BeanPostProcessor на примере журналирования</title>
       <link>https://uthark.github.io/2012/04/20/beanpostprocessor/</link>

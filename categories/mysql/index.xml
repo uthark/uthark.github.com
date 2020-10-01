@@ -6,11 +6,7 @@
     <description>Recent content in mysql on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 05 Feb 2010 01:20:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://uthark.github.io/categories/mysql/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Fri, 05 Feb 2010 01:20:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/mysql/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Вложенные транзакции в базах данных</title>
       <link>https://uthark.github.io/2010/02/05/blog-post/</link>

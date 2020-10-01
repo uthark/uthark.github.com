@@ -6,11 +6,7 @@
     <description>Recent content in cache on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 19 Jun 2013 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://uthark.github.io/categories/cache/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Wed, 19 Jun 2013 00:00:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/cache/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Использование memcached в качестве backend для Spring Caching Abstraction</title>
       <link>https://uthark.github.io/2013/06/19/spring-caching/</link>

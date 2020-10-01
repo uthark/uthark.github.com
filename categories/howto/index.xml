@@ -6,11 +6,7 @@
     <description>Recent content in howto on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 21 Mar 2010 20:54:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://uthark.github.io/categories/howto/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Sun, 21 Mar 2010 20:54:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/howto/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Разработка макроса для TiddlyWiki</title>
       <link>https://uthark.github.io/2010/03/21/tiddlywiki/</link>

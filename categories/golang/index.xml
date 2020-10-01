@@ -6,11 +6,7 @@
     <description>Recent content in golang on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 22 Jan 2018 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://uthark.github.io/categories/golang/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Mon, 22 Jan 2018 00:00:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/golang/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>How to add YAML support to go-restful</title>
       <link>https://uthark.github.io/post/2018-01-22-go-restful-yaml/</link>

@@ -6,11 +6,7 @@
     <description>Recent content in nfs on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 14 Dec 2009 23:14:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://uthark.github.io/categories/nfs/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Mon, 14 Dec 2009 23:14:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/nfs/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Настройка autofs для монтирования NFS-ресурсов</title>
       <link>https://uthark.github.io/2009/12/14/autofs-nfs/</link>

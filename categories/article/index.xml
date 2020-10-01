@@ -6,11 +6,7 @@
     <description>Recent content in article on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 16 Apr 2014 00:10:10 +0000</lastBuildDate>
-    
-	<atom:link href="https://uthark.github.io/categories/article/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Wed, 16 Apr 2014 00:10:10 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/article/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Using Unitils ReflectionAssert</title>
       <link>https://uthark.github.io/2014/04/16/using-unitils-reflectionassert/</link>

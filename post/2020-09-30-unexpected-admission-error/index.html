@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html prefix="og: https://ogp.me/ns#" lang="en">
 <head>
-	<meta name="generator" content="Hugo 0.75.1" />
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
     
-        <link rel="canonical" href="https://uthark.github.io/">
+        <link rel="canonical" href="https://uthark.github.io/post/2020-09-30-unexpected-admission-error/">
     
 
     
@@ -14,7 +13,7 @@
     <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=5">
 
     
-    <title>Sharing knowledge</title>
+    <title>Causes of UnexpectedAdmissionError in Kubernetes</title>
 
     <meta name="description"
           content="">
@@ -55,6 +54,25 @@
     
 
     
+  
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@real_atamanenko">
+  <meta name="twitter:creator" content="@real_atamanenko">
+
+  <meta name="twitter:title" content="Causes of UnexpectedAdmissionError in Kubernetes">
+
+  
+
+  <meta property="og:title" content="Causes of UnexpectedAdmissionError in Kubernetes" />
+  <meta property="og:url" content="https://uthark.github.io/post/2020-09-30-unexpected-admission-error/" />
+  <meta property="og:description" content="Recently I found that sometimes kubernetes pods are not starting. They were failing
+with enigmatic UnexpectedAdmissionError. Time to deep dive into what may cause it.
+After searching through the kubernetes codebase
+I found several places where this status was set." />
+
+  
+
+
 
 
 </head>
@@ -128,152 +146,132 @@
 
 
 <div id="main">
- <div id="content">
-  <div class="blog-index">
-    
-    
-    <article class="list">
-        
-        
+  <div id="content">
+    <div>
+      <article class="hentry">
 
-<header>
-    <h1 class="entry-title">
-        <a href="https://uthark.github.io/2009/04/22/2/">Практический опыт использования фолксономии в условиях неограниченной свободы расстановки меток  (часть 2)</a>
-    </h1>
-
-</header>
-
-
-        
-        <div class="list-post-tags">
-         
-         <a class="label" href="https://uthark.github.io/categories/%d1%84%d0%be%d0%bb%d0%ba%d1%81%d0%be%d0%bd%d0%be%d0%bc%d0%b8%d1%8f/">#фолксономия</a>
-         
-         <a class="label" href="https://uthark.github.io/categories/article/">#article</a>
-         
-        </div>
-        
-
-        
-          <p>В продолжение предыдущей заметки.
-Для работы с del.icio.us я использую официальный плагин от Yahoo!.
-Он предоставляет следующие возможности:
- Синхронизация закладок из Firefox с del.icio.us Переопределение стандартного менеджера закладок. Отслеживание изменений на del.icio.us. Интерфейс для отображения и поиска закладок в панели браузера.</p>
-
-          
-              <footer>
-                  <a href="https://uthark.github.io/2009/04/22/2/" rel="full-article">Continue Reading &rarr;</a>
-              </footer>
-          
-
-        
-
-    </article>
-    
-    <article class="list">
         
         
 
 <header>
     <h1 class="entry-title">
-        <a href="https://uthark.github.io/2009/04/19/blog-post/">Практический опыт использования фолксономии в условиях неограниченной свободы расстановки меток</a>
+         Causes of UnexpectedAdmissionError in Kubernetes 
     </h1>
 
 </header>
 
 
-        
-        <div class="list-post-tags">
-         
-         <a class="label" href="https://uthark.github.io/categories/%d1%84%d0%be%d0%bb%d0%ba%d1%81%d0%be%d0%bd%d0%be%d0%bc%d0%b8%d1%8f/">#фолксономия</a>
-         
-         <a class="label" href="https://uthark.github.io/categories/article/">#article</a>
-         
+        <div class="entry-content">
+          
+          
+          
+          
+          <p>Recently I found that sometimes kubernetes pods are not starting. They were failing
+with enigmatic <code>UnexpectedAdmissionError</code>. Time to deep dive into what may cause it.</p>
+<p>After searching through the <a href="https://github.com/kubernetes/kubernetes">kubernetes codebase</a>
+I found several places where this status was set.</p>
+<p>As of Kubernetes 1.19, this error will be set in the following cases:</p>
+<ol>
+<li><a href="https://kubernetes.io/blog/2018/07/24/feature-highlight-cpu-manager/">CPU</a>
+<a href="https://kubernetes.io/docs/tasks/administer-cluster/cpu-management-policies/">Manager</a> can’t admit the pod.</li>
+<li><a href="https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/device-plugins/">Device Manager</a> can’t admit the pod.</li>
+<li><a href="https://kubernetes.io/docs/tasks/administer-cluster/topology-manager/">Topology</a>
+<a href="https://kubernetes.io/blog/2020/04/01/kubernetes-1-18-feature-topoloy-manager-beta/">Manager</a>
+can’t admit the pod.</li>
+<li>Unable to provision <a href="https://kubernetes.io/docs/tasks/administer-cluster/extended-resource-node/">extended resource</a></li>
+<li>Plugin Resource failure.</li>
+<li>Pod can&rsquo;t be admitted due to unknown reason.</li>
+</ol>
+<p>In my particular case it was caused by CPU Manager - there were CPU and Memory to
+admit the pod, but it was not possible to give the pods exclusive number of CPUs.</p>
         </div>
         
 
-        
-          <p>Уже более двух лет я использую del.icio.us.
-Недавно возник вопрос - а вот каким образом можно наиболее эффективно использовать теги? Для себя я придумал вот такой вариант использования - сделал tag bundle Actions, в который поместил теги, диктующие дальнейшие действия.</p>
+<footer>
+  <div class="sharing">
+    Share:
+    <a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2fpost%2f2020-09-30-unexpected-admission-error%2f" target="_blank" ><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden="true"></i></a>
+    <a href="https://twitter.com/intent/tweet?text=Causes%20of%20UnexpectedAdmissionError%20in%20Kubernetes&url=https%3a%2f%2futhark.github.io%2fpost%2f2020-09-30-unexpected-admission-error%2f" target="_blank" title="Post to Twitter" aria-hidden="true"><i class="fa fa-twitter"></i></a>
+  </div>
+  <div>
+    <hr/>
+    <p>If you have any questions, feel free to ping me on Twitter.</p>
+  </div>
+  
+  <p class="meta">
+     Estimated reading time: 1 minute(s)
+  </p>
+  
+  <p class="meta">
+    
+    Last update: <time datetime="2020-10-01">Oct 1, 2020</time>
+  </p>
+  <p class="meta">
+    
+    
+    
+    Categories: <a class="label" href="https://uthark.github.io/categories/kubernetes/">#kubernetes</a>
+  </p>
 
-          
-              <footer>
-                  <a href="https://uthark.github.io/2009/04/19/blog-post/" rel="full-article">Continue Reading &rarr;</a>
-              </footer>
-          
-
-        
-
-    </article>
-    
-    
-    
 
 
 
 
-<div class="pagination">
 
-    
-        
-        
-        
-        <a href="/" aria-label="First" class="label-pagination"><i class="fa fa-angle-double-left fa-lg"></i></a>
-    
 
-    
-    
-        <a href="/page/15/" aria-label="Previous" class="label-pagination"><i class="fa fa-angle-left fa-lg"></i></a>
-    
 
-    
-        <a href="/" class="label-pagination">1</a>
-    
-        <a href="/page/2/" class="label-pagination">2</a>
-    
-        <a href="/page/3/" class="label-pagination">3</a>
-    
-        <a href="/page/4/" class="label-pagination">4</a>
-    
-        <a href="/page/5/" class="label-pagination">5</a>
-    
-        <a href="/page/6/" class="label-pagination">6</a>
-    
-        <a href="/page/7/" class="label-pagination">7</a>
-    
-        <a href="/page/8/" class="label-pagination">8</a>
-    
-        <a href="/page/9/" class="label-pagination">9</a>
-    
-        <a href="/page/10/" class="label-pagination">10</a>
-    
-        <a href="/page/11/" class="label-pagination">11</a>
-    
-        <a href="/page/12/" class="label-pagination">12</a>
-    
-        <a href="/page/13/" class="label-pagination">13</a>
-    
-        <a href="/page/14/" class="label-pagination">14</a>
-    
-        <a href="/page/15/" class="label-pagination">15</a>
-    
-        <a href="/page/16/" class="label-pagination">16</a>
-    
 
-    
 
-    
-    
-        <a href="/page/16/" aria-label="Last"><i class="fa fa-angle-double-right fa-lg"></i></a>
-    
 
-</div>
+
+  </p>
+  
+
 
   
 
-  </div>
+  <p class="meta">
+    
+    <a class="basic-alignment left" href="https://uthark.github.io/post/2020-09-04-deploy-project-kubernetes-checklist/" title="Deploying in Kubernetes. Checklist.">&lt;&lt;&nbsp;Deploying in Kubernetes. Checklist.</a>
+    
 
- </div>
+    
+  </p>
+  
+  
+  
+</footer>
+
+      </article>
+      
+    </div>
+    
+
+<aside class="sidebar thirds">
+  <section class="first odd">
+
+    
+
+    <p>
+      
+    </p>
+  </section>
+
+
+<section class="even">
+  <div class="toc-header">Table of Contents</div>
+   <nav id="TableOfContents"></nav>
+</section>
+
+  
+
+  
+  
+  
+
+</aside>
+
+  </div>
 </div>
 
 <footer>
@@ -329,4 +327,4 @@
 
 </body>
 </html>
-   
+

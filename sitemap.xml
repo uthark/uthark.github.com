@@ -3,17 +3,52 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://uthark.github.io/categories/</loc>
+    <lastmod>2020-10-01T00:00:29-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://uthark.github.io/post/2020-09-30-unexpected-admission-error/</loc>
+    <lastmod>2020-10-01T00:00:29-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://uthark.github.io/tags/kubernetes/</loc>
+    <lastmod>2020-10-01T00:00:29-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://uthark.github.io/categories/kubernetes/</loc>
+    <lastmod>2020-10-01T00:00:29-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://uthark.github.io/post/</loc>
+    <lastmod>2020-10-01T00:00:29-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://uthark.github.io/</loc>
+    <lastmod>2020-10-01T00:00:29-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://uthark.github.io/tags/</loc>
+    <lastmod>2020-10-01T00:00:29-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://uthark.github.io/tags/unexpectedadmissionerror/</loc>
+    <lastmod>2020-10-01T00:00:29-07:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://uthark.github.io/tags/bestpractices/</loc>
     <lastmod>2020-09-04T15:08:37-07:00</lastmod>
   </url>
   
   <url>
     <loc>https://uthark.github.io/categories/bestpractices/</loc>
-    <lastmod>2020-09-04T15:08:37-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://uthark.github.io/categories/</loc>
     <lastmod>2020-09-04T15:08:37-07:00</lastmod>
   </url>
   
@@ -29,31 +64,6 @@
   
   <url>
     <loc>https://uthark.github.io/categories/development/</loc>
-    <lastmod>2020-09-04T15:08:37-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://uthark.github.io/tags/kubernetes/</loc>
-    <lastmod>2020-09-04T15:08:37-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://uthark.github.io/categories/kubernetes/</loc>
-    <lastmod>2020-09-04T15:08:37-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://uthark.github.io/post/</loc>
-    <lastmod>2020-09-04T15:08:37-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://uthark.github.io/</loc>
-    <lastmod>2020-09-04T15:08:37-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://uthark.github.io/tags/</loc>
     <lastmod>2020-09-04T15:08:37-07:00</lastmod>
   </url>
   

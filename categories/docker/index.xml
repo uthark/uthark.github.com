@@ -6,11 +6,7 @@
     <description>Recent content in docker on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 03 Sep 2020 22:05:41 -0700</lastBuildDate>
-    
-	<atom:link href="https://uthark.github.io/categories/docker/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Thu, 03 Sep 2020 22:05:41 -0700</lastBuildDate><atom:link href="https://uthark.github.io/categories/docker/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Docker Best Practices</title>
       <link>https://uthark.github.io/post/2020-09-03-docker-best-practices/</link>

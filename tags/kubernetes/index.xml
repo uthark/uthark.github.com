@@ -6,10 +6,18 @@
     <description>Recent content in kubernetes on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 04 Sep 2020 15:08:37 -0700</lastBuildDate>
-    
-	<atom:link href="https://uthark.github.io/tags/kubernetes/index.xml" rel="self" type="application/rss+xml" />
-    
+    <lastBuildDate>Thu, 01 Oct 2020 00:00:29 -0700</lastBuildDate><atom:link href="https://uthark.github.io/tags/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Causes of UnexpectedAdmissionError in Kubernetes</title>
+      <link>https://uthark.github.io/post/2020-09-30-unexpected-admission-error/</link>
+      <pubDate>Thu, 01 Oct 2020 00:00:29 -0700</pubDate>
+      
+      <guid>https://uthark.github.io/post/2020-09-30-unexpected-admission-error/</guid>
+      <description>&lt;p&gt;Recently I found that sometimes kubernetes pods are not starting. They were failing
+with enigmatic &lt;code&gt;UnexpectedAdmissionError&lt;/code&gt;. Time to deep dive into what may cause it.&lt;/p&gt;
+&lt;p&gt;After searching through the &lt;a href=&#34;https://github.com/kubernetes/kubernetes&#34;&gt;kubernetes codebase&lt;/a&gt;
+I found several places where this status was set.&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Deploying in Kubernetes. Checklist.</title>

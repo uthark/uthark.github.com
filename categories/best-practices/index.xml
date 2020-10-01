@@ -6,11 +6,7 @@
     <description>Recent content in best practices on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 11 Apr 2010 11:45:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://uthark.github.io/categories/best-practices/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Sun, 11 Apr 2010 11:45:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/best-practices/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Несколько слов о GORM</title>
       <link>https://uthark.github.io/2010/04/11/gorm/</link>

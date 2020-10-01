@@ -6,11 +6,7 @@
     <description>Recent content in wi-fi on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 02 Sep 2020 09:19:21 -0700</lastBuildDate>
-    
-	<atom:link href="https://uthark.github.io/tags/wi-fi/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Wed, 02 Sep 2020 09:19:21 -0700</lastBuildDate><atom:link href="https://uthark.github.io/tags/wi-fi/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Configuring Wi-Fi on Ubuntu Server 64-bit on Raspberry Pi 4</title>
       <link>https://uthark.github.io/post/2020-09-01-raspberry-pi-ubuntu-arm64/</link>

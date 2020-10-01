@@ -6,11 +6,7 @@
     <description>Recent content in разработка on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 28 Apr 2012 15:03:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://uthark.github.io/categories/%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Sat, 28 Apr 2012 15:03:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Собственная реализация методов в Spring Data JPA</title>
       <link>https://uthark.github.io/2012/04/28/spring-data-jpa_28/</link>

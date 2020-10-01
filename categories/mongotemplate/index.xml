@@ -6,11 +6,7 @@
     <description>Recent content in mongotemplate on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 01 Mar 2014 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://uthark.github.io/categories/mongotemplate/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Sat, 01 Mar 2014 00:00:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/mongotemplate/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Automatic query modification with Spring Data Mongo</title>
       <link>https://uthark.github.io/2014/03/01/restricting-mongo-template/</link>

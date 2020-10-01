@@ -6,11 +6,7 @@
     <description>Recent content in groovy on Sharing knowledge</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 06 Feb 2010 23:31:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://uthark.github.io/categories/groovy/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Sat, 06 Feb 2010 23:31:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/groovy/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Список для проверки при оптимизации Grails приложений</title>
       <link>https://uthark.github.io/2010/02/06/grails/</link>

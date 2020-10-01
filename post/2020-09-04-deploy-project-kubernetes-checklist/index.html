@@ -174,25 +174,25 @@ production and which are expected to not have downtime during cluster
 maintenance and/or application updates.</p>
 <p>Deploying to kubernetes is easy: create manifest with your <code>Deployment</code> and then <code>kubectl apply</code> it.</p>
 <p>The most basic deployment manifest looks like this:</p>
-<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">apiVersion</span><span class="p">:</span><span class="w"> </span>apps/v1<span class="w">
-</span><span class="w"></span><span class="k">kind</span><span class="p">:</span><span class="w"> </span>Deployment<span class="w">
-</span><span class="w"></span><span class="k">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="k">labels</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="k">app.kubernetes.io/name</span><span class="p">:</span><span class="w"> </span>test-app<span class="w">
-</span><span class="w">  </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>test-app<span class="w">
-</span><span class="w">  </span><span class="k">namespace</span><span class="p">:</span><span class="w"> </span>default<span class="w">
-</span><span class="w"></span><span class="k">spec</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="k">selector</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="k">matchLabels</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span><span class="k">app.kubernetes.io/name</span><span class="p">:</span><span class="w"> </span>test-app<span class="w">
-</span><span class="w">  </span><span class="k">template</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="k">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span><span class="k">labels</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span><span class="k">app.kubernetes.io/name</span><span class="p">:</span><span class="w"> </span>test-app<span class="w">
-</span><span class="w">    </span><span class="k">spec</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span><span class="k">containers</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span>- <span class="k">name</span><span class="p">:</span><span class="w"> </span>controller<span class="w">
-</span><span class="w">        </span><span class="k">image</span><span class="p">:</span><span class="w"> </span>nginx<span class="w">
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">app.kubernetes.io/name</span><span class="p">:</span><span class="w"> </span><span class="l">test-app</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">test-app</span><span class="w">
+</span><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">default</span><span class="w">
+</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">app.kubernetes.io/name</span><span class="p">:</span><span class="w"> </span><span class="l">test-app</span><span class="w">
+</span><span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">app.kubernetes.io/name</span><span class="p">:</span><span class="w"> </span><span class="l">test-app</span><span class="w">
+</span><span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">controller</span><span class="w">
+</span><span class="w">        </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">nginx</span><span class="w">
 </span></code></pre></div><p>It works as is, but you may improve reliability of this deployment by configuring additional fields for the manifest.</p>
 <h2 id="metadata">Metadata</h2>
 <p>Use <code>metadata</code> field efficiently. You can add labels who owns the deployment, if they are part of the bigger project, and so on.
@@ -310,6 +310,8 @@ Another great feature that you might need is <a href="https://kubernetes.io/docs
     <a class="basic-alignment left" href="https://uthark.github.io/post/2020-09-03-docker-best-practices/" title="Docker Best Practices">&lt;&lt;&nbsp;Docker Best Practices</a>
     
 
+    
+    <a class="basic-alignment right" href="https://uthark.github.io/post/2020-09-30-unexpected-admission-error/" title="Causes of UnexpectedAdmissionError in Kubernetes">Causes of UnexpectedAdmissionError in Kubernetes&nbsp;&gt;&gt;</a>
     
   </p>
   
