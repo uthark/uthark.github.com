@@ -1,32 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>качество кода on Sharing knowledge</title>
-    <link>https://uthark.github.io/categories/%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%BE-%D0%BA%D0%BE%D0%B4%D0%B0/</link>
-    <description>Recent content in качество кода on Sharing knowledge</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Wed, 27 May 2009 01:26:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%BE-%D0%BA%D0%BE%D0%B4%D0%B0/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Сферический программист в вакууме и абстрактное понятие качества кода в условиях Fixed-Price проектов (часть 2)</title>
-      <link>https://uthark.github.io/2009/05/27/fixed-price-2/</link>
-      <pubDate>Wed, 27 May 2009 01:26:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/2009/05/27/fixed-price-2/</guid>
-      <description>Причин для написания плохого кода может быть несколько. Некоторые из них лежат на поверхности:
- Отсутствие опытаНевнимательность Некомпетентность Немотивированность Отсутствие опыта - казалось бы, самая простая причина проблемы; решение проблемы выглядит очевидным - со временем, разработчик будет писать код лучше. Но это ошибочное мнение.</description>
-    </item>
-    
-    <item>
-      <title>Сферический программист в вакууме и абстрактное понятие качества кода в условиях Fixed-Price проектов (часть 1)</title>
-      <link>https://uthark.github.io/2009/05/27/fixed-price-1/</link>
-      <pubDate>Wed, 27 May 2009 00:36:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/2009/05/27/fixed-price-1/</guid>
-      <description>В последнее время всё чаще задумываюсь о том, почему разработчики пишут плохой и некачественный код. Под кодом я подразумеваю не только сам код, но и, в том числе, архитектуру и дизайн.
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>качество кода on Sharing knowledge</title><link>https://uthark.github.io/categories/%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%BE-%D0%BA%D0%BE%D0%B4%D0%B0/</link><description>Recent content in качество кода on Sharing knowledge</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 27 May 2009 01:26:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%BE-%D0%BA%D0%BE%D0%B4%D0%B0/index.xml" rel="self" type="application/rss+xml"/><item><title>Сферический программист в вакууме и абстрактное понятие качества кода в условиях Fixed-Price проектов (часть 2)</title><link>https://uthark.github.io/2009/05/27/fixed-price-2/</link><pubDate>Wed, 27 May 2009 01:26:00 +0000</pubDate><guid>https://uthark.github.io/2009/05/27/fixed-price-2/</guid><description>Причин для написания плохого кода может быть несколько. Некоторые из них лежат на поверхности:
+Отсутствие опытаНевнимательность Некомпетентность Немотивированность Отсутствие опыта - казалось бы, самая простая причина проблемы; решение проблемы выглядит очевидным - со временем, разработчик будет писать код лучше. Но это ошибочное мнение.</description></item><item><title>Сферический программист в вакууме и абстрактное понятие качества кода в условиях Fixed-Price проектов (часть 1)</title><link>https://uthark.github.io/2009/05/27/fixed-price-1/</link><pubDate>Wed, 27 May 2009 00:36:00 +0000</pubDate><guid>https://uthark.github.io/2009/05/27/fixed-price-1/</guid><description>В последнее время всё чаще задумываюсь о том, почему разработчики пишут плохой и некачественный код. Под кодом я подразумеваю не только сам код, но и, в том числе, архитектуру и дизайн.
 Плохим кодом я считаю следущий:
-Невыполняющий функциональные требованияНевыполняющий нефункциональные требованияНепокрытый тестамиПлохо тестируемыйПлохо поддерживаемыйС багамиНеоптимальныйЕсли код не выполняет функциональные требования, то этот код вообще ничего не стоит.</description>
-    </item>
-    
-  </channel>
-</rss>
+Невыполняющий функциональные требованияНевыполняющий нефункциональные требованияНепокрытый тестамиПлохо тестируемыйПлохо поддерживаемыйС багамиНеоптимальныйЕсли код не выполняет функциональные требования, то этот код вообще ничего не стоит.</description></item></channel></rss>

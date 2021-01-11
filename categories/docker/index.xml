@@ -1,21 +1,2 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>docker on Sharing knowledge</title>
-    <link>https://uthark.github.io/categories/docker/</link>
-    <description>Recent content in docker on Sharing knowledge</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Thu, 03 Sep 2020 22:05:41 -0700</lastBuildDate><atom:link href="https://uthark.github.io/categories/docker/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Docker Best Practices</title>
-      <link>https://uthark.github.io/post/2020-09-03-docker-best-practices/</link>
-      <pubDate>Thu, 03 Sep 2020 22:05:41 -0700</pubDate>
-      
-      <guid>https://uthark.github.io/post/2020-09-03-docker-best-practices/</guid>
-      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
-&lt;p&gt;After using docker for last several years I’d like to share best practices that works in production.&lt;/p&gt;</description>
-    </item>
-    
-  </channel>
-</rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>docker on Sharing knowledge</title><link>https://uthark.github.io/categories/docker/</link><description>Recent content in docker on Sharing knowledge</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 03 Sep 2020 22:05:41 -0700</lastBuildDate><atom:link href="https://uthark.github.io/categories/docker/index.xml" rel="self" type="application/rss+xml"/><item><title>Docker Best Practices</title><link>https://uthark.github.io/post/2020-09-03-docker-best-practices/</link><pubDate>Thu, 03 Sep 2020 22:05:41 -0700</pubDate><guid>https://uthark.github.io/post/2020-09-03-docker-best-practices/</guid><description>&lt;h2 id="introduction">Introduction&lt;/h2>
+&lt;p>After using docker for last several years I’d like to share best practices that works in production.&lt;/p></description></item></channel></rss>

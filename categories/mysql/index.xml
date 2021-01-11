@@ -1,32 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>mysql on Sharing knowledge</title>
-    <link>https://uthark.github.io/categories/mysql/</link>
-    <description>Recent content in mysql on Sharing knowledge</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Fri, 05 Feb 2010 01:20:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/mysql/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Вложенные транзакции в базах данных</title>
-      <link>https://uthark.github.io/2010/02/05/blog-post/</link>
-      <pubDate>Fri, 05 Feb 2010 01:20:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/2010/02/05/blog-post/</guid>
-      <description>Summary: Некоторые особенности вложенных транзакций.
-Иногда бывает так, что при обработке запроса необходимо открыть ещё одну транзакцию в рамках текущей транзакции. Это называется вложенной транзакцией. Очень многие базы данных не поддерживают вложенные транзакции вообще, например, MySQL и Oracle. А те, что поддерживают, делают это на минимальном уровне, например, Sybase поддерживает только псевдовложенные транзакции.</description>
-    </item>
-    
-    <item>
-      <title>Двунаправленная ссылочная целостность</title>
-      <link>https://uthark.github.io/2009/07/07/blog-post/</link>
-      <pubDate>Tue, 07 Jul 2009 22:11:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/2009/07/07/blog-post/</guid>
-      <description>Здравствуйте.
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>mysql on Sharing knowledge</title><link>https://uthark.github.io/categories/mysql/</link><description>Recent content in mysql on Sharing knowledge</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 05 Feb 2010 01:20:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/mysql/index.xml" rel="self" type="application/rss+xml"/><item><title>Вложенные транзакции в базах данных</title><link>https://uthark.github.io/2010/02/05/blog-post/</link><pubDate>Fri, 05 Feb 2010 01:20:00 +0000</pubDate><guid>https://uthark.github.io/2010/02/05/blog-post/</guid><description>Summary: Некоторые особенности вложенных транзакций.
+Иногда бывает так, что при обработке запроса необходимо открыть ещё одну транзакцию в рамках текущей транзакции. Это называется вложенной транзакцией. Очень многие базы данных не поддерживают вложенные транзакции вообще, например, MySQL и Oracle. А те, что поддерживают, делают это на минимальном уровне, например, Sybase поддерживает только псевдовложенные транзакции.</description></item><item><title>Двунаправленная ссылочная целостность</title><link>https://uthark.github.io/2009/07/07/blog-post/</link><pubDate>Tue, 07 Jul 2009 22:11:00 +0000</pubDate><guid>https://uthark.github.io/2009/07/07/blog-post/</guid><description>Здравствуйте.
 Я считаю, что разработчику всегда стоит иметь представление о том, как работают низлежащие абстракции. Хотя бы потому, что часто абстракции бывают протекающими.
-А веду я это к тому, что когда фреймворк вываливает стектрейс с несколькими вложенными (и, часто, для непосвященных непонятными) исключениями, то бывает непонятно, что с этим делать, особенно, если не знаешь, как реализована абстракция.</description>
-    </item>
-    
-  </channel>
-</rss>
+А веду я это к тому, что когда фреймворк вываливает стектрейс с несколькими вложенными (и, часто, для непосвященных непонятными) исключениями, то бывает непонятно, что с этим делать, особенно, если не знаешь, как реализована абстракция.</description></item></channel></rss>

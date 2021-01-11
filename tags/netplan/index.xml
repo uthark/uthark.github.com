@@ -1,22 +1,3 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>netplan on Sharing knowledge</title>
-    <link>https://uthark.github.io/tags/netplan/</link>
-    <description>Recent content in netplan on Sharing knowledge</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Wed, 02 Sep 2020 09:19:21 -0700</lastBuildDate><atom:link href="https://uthark.github.io/tags/netplan/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Configuring Wi-Fi on Ubuntu Server 64-bit on Raspberry Pi 4</title>
-      <link>https://uthark.github.io/post/2020-09-01-raspberry-pi-ubuntu-arm64/</link>
-      <pubDate>Wed, 02 Sep 2020 09:19:21 -0700</pubDate>
-      
-      <guid>https://uthark.github.io/post/2020-09-01-raspberry-pi-ubuntu-arm64/</guid>
-      <description>After discovering that by default Raspberry installs 32-bit Raspbian OS, I wanted to reinstall it with a 64 bit - this would allow to run Kubernetes on Raspberry
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>netplan on Sharing knowledge</title><link>https://uthark.github.io/tags/netplan/</link><description>Recent content in netplan on Sharing knowledge</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 02 Sep 2020 09:19:21 -0700</lastBuildDate><atom:link href="https://uthark.github.io/tags/netplan/index.xml" rel="self" type="application/rss+xml"/><item><title>Configuring Wi-Fi on Ubuntu Server 64-bit on Raspberry Pi 4</title><link>https://uthark.github.io/post/2020-09-01-raspberry-pi-ubuntu-arm64/</link><pubDate>Wed, 02 Sep 2020 09:19:21 -0700</pubDate><guid>https://uthark.github.io/post/2020-09-01-raspberry-pi-ubuntu-arm64/</guid><description>After discovering that by default Raspberry installs 32-bit Raspbian OS, I wanted to reinstall it with a 64 bit - this would allow to run Kubernetes on Raspberry
 Decided to go with Ubuntu Server 64.
-Installed it on SD Card with Raspberry Pi Imager.</description>
-    </item>
-    
-  </channel>
-</rss>
+Installed it on SD Card with Raspberry Pi Imager.</description></item></channel></rss>

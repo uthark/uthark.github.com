@@ -1,22 +1,3 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>logging on Sharing knowledge</title>
-    <link>https://uthark.github.io/categories/logging/</link>
-    <description>Recent content in logging on Sharing knowledge</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Fri, 20 Apr 2012 15:51:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/logging/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Использование BeanPostProcessor на примере журналирования</title>
-      <link>https://uthark.github.io/2012/04/20/beanpostprocessor/</link>
-      <pubDate>Fri, 20 Apr 2012 15:51:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/2012/04/20/beanpostprocessor/</guid>
-      <description>Сегодня я хочу рассказать, как можно сделать инициализацию логгера в классе с использованием аннотаций и BeanPostProcessor
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>logging on Sharing knowledge</title><link>https://uthark.github.io/categories/logging/</link><description>Recent content in logging on Sharing knowledge</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 20 Apr 2012 15:51:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/logging/index.xml" rel="self" type="application/rss+xml"/><item><title>Использование BeanPostProcessor на примере журналирования</title><link>https://uthark.github.io/2012/04/20/beanpostprocessor/</link><pubDate>Fri, 20 Apr 2012 15:51:00 +0000</pubDate><guid>https://uthark.github.io/2012/04/20/beanpostprocessor/</guid><description>Сегодня я хочу рассказать, как можно сделать инициализацию логгера в классе с использованием аннотаций и BeanPostProcessor
 Очень часто мы инициализируем логгер следующим образом:
-public class MyClass { private static final Logger LOG = LoggerFactory.getLogger(MyClass.class); } Я покажу, как сделать, чтобы можно было писать вот так:</description>
-    </item>
-    
-  </channel>
-</rss>
+public class MyClass { private static final Logger LOG = LoggerFactory.getLogger(MyClass.class); } Я покажу, как сделать, чтобы можно было писать вот так:</description></item></channel></rss>

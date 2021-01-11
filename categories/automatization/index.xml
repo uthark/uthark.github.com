@@ -1,21 +1,2 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>automatization on Sharing knowledge</title>
-    <link>https://uthark.github.io/categories/automatization/</link>
-    <description>Recent content in automatization on Sharing knowledge</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Wed, 24 Oct 2012 00:00:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/automatization/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Автоматизируем работу с виртуальными машинами с помощью Vagrant</title>
-      <link>https://uthark.github.io/2012/10/24/vagrant/</link>
-      <pubDate>Wed, 24 Oct 2012 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/2012/10/24/vagrant/</guid>
-      <description>Современные enterprise проекты очень часто имеют очень сложную инфраструктуру для развёртывания. Кроме того, во время разработки часто используются виртуальные машины. Например, может использоваться несколько виртуальных машин, на которых развёрнуты различные конфигурации софта.
-Vagrant - это средство для управления виртуальными машинами на базе Virtualbox.</description>
-    </item>
-    
-  </channel>
-</rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>automatization on Sharing knowledge</title><link>https://uthark.github.io/categories/automatization/</link><description>Recent content in automatization on Sharing knowledge</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 24 Oct 2012 00:00:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/automatization/index.xml" rel="self" type="application/rss+xml"/><item><title>Автоматизируем работу с виртуальными машинами с помощью Vagrant</title><link>https://uthark.github.io/2012/10/24/vagrant/</link><pubDate>Wed, 24 Oct 2012 00:00:00 +0000</pubDate><guid>https://uthark.github.io/2012/10/24/vagrant/</guid><description>Современные enterprise проекты очень часто имеют очень сложную инфраструктуру для развёртывания. Кроме того, во время разработки часто используются виртуальные машины. Например, может использоваться несколько виртуальных машин, на которых развёрнуты различные конфигурации софта.
+Vagrant - это средство для управления виртуальными машинами на базе Virtualbox.</description></item></channel></rss>

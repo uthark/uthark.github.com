@@ -1,21 +1,2 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>cache on Sharing knowledge</title>
-    <link>https://uthark.github.io/categories/cache/</link>
-    <description>Recent content in cache on Sharing knowledge</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Wed, 19 Jun 2013 00:00:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/cache/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Использование memcached в качестве backend для Spring Caching Abstraction</title>
-      <link>https://uthark.github.io/2013/06/19/spring-caching/</link>
-      <pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/2013/06/19/spring-caching/</guid>
-      <description>В Spring 3.1 появился замечательный модуль - Spring Cache, который является абстракцией над кэшированием, что позволяет декларативно реализовывать кэширование в приложении.
-Я не буду вдаваться в подробности работы, их можно прочитать в документации, но опишу, каким образом можно настроить memcached в качестве бэкэнда для работы.</description>
-    </item>
-    
-  </channel>
-</rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>cache on Sharing knowledge</title><link>https://uthark.github.io/categories/cache/</link><description>Recent content in cache on Sharing knowledge</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 19 Jun 2013 00:00:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/cache/index.xml" rel="self" type="application/rss+xml"/><item><title>Использование memcached в качестве backend для Spring Caching Abstraction</title><link>https://uthark.github.io/2013/06/19/spring-caching/</link><pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate><guid>https://uthark.github.io/2013/06/19/spring-caching/</guid><description>В Spring 3.1 появился замечательный модуль - Spring Cache, который является абстракцией над кэшированием, что позволяет декларативно реализовывать кэширование в приложении.
+Я не буду вдаваться в подробности работы, их можно прочитать в документации, но опишу, каким образом можно настроить memcached в качестве бэкэнда для работы.</description></item></channel></rss>

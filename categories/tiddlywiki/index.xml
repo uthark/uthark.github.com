@@ -1,22 +1,3 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>tiddlywiki on Sharing knowledge</title>
-    <link>https://uthark.github.io/categories/tiddlywiki/</link>
-    <description>Recent content in tiddlywiki on Sharing knowledge</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Sun, 21 Mar 2010 20:54:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/tiddlywiki/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Разработка макроса для TiddlyWiki</title>
-      <link>https://uthark.github.io/2010/03/21/tiddlywiki/</link>
-      <pubDate>Sun, 21 Mar 2010 20:54:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/2010/03/21/tiddlywiki/</guid>
-      <description>Summary: Пример разработки плагина для TiddlyWiki
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>tiddlywiki on Sharing knowledge</title><link>https://uthark.github.io/categories/tiddlywiki/</link><description>Recent content in tiddlywiki on Sharing knowledge</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 21 Mar 2010 20:54:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/tiddlywiki/index.xml" rel="self" type="application/rss+xml"/><item><title>Разработка макроса для TiddlyWiki</title><link>https://uthark.github.io/2010/03/21/tiddlywiki/</link><pubDate>Sun, 21 Mar 2010 20:54:00 +0000</pubDate><guid>https://uthark.github.io/2010/03/21/tiddlywiki/</guid><description>Summary: Пример разработки плагина для TiddlyWiki
 Вступление TiddlyWiki - это вики-движок, полностью написанный на JavaScript и хранящийся в одном файле (как сам движок, так и содержимое). Создатели позиционируют его как &amp;quot;переиспользуемую нелинейную персональную веб записную книжку&amp;quot;.
-Я давно использую TiddlyWiki в различных целях:</description>
-    </item>
-    
-  </channel>
-</rss>
+Я давно использую TiddlyWiki в различных целях:</description></item></channel></rss>

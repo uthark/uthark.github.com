@@ -1,21 +1,2 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>scala on Sharing knowledge</title>
-    <link>https://uthark.github.io/categories/scala/</link>
-    <description>Recent content in scala on Sharing knowledge</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Tue, 25 Mar 2014 16:09:42 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/scala/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Scala for the Intrigued</title>
-      <link>https://uthark.github.io/2014/03/25/scala-for-the-intrigued/</link>
-      <pubDate>Tue, 25 Mar 2014 16:09:42 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/2014/03/25/scala-for-the-intrigued/</guid>
-      <description>This is a very nice series of posts about Scala by Venkat Subramaniam
- The Elegance of Scala Sensible Typing and Optional Items Cute Classes and Pure OO Functional Style of Programming Working with Collections Creating Higher Order Functions Pattern Matching XML as First Class Citizen Recursions and Tail Call Optimization Using Traits Chaining Traits Concurrency in Scala  </description>
-    </item>
-    
-  </channel>
-</rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>scala on Sharing knowledge</title><link>https://uthark.github.io/categories/scala/</link><description>Recent content in scala on Sharing knowledge</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 25 Mar 2014 16:09:42 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/scala/index.xml" rel="self" type="application/rss+xml"/><item><title>Scala for the Intrigued</title><link>https://uthark.github.io/2014/03/25/scala-for-the-intrigued/</link><pubDate>Tue, 25 Mar 2014 16:09:42 +0000</pubDate><guid>https://uthark.github.io/2014/03/25/scala-for-the-intrigued/</guid><description>This is a very nice series of posts about Scala by Venkat Subramaniam
+The Elegance of Scala Sensible Typing and Optional Items Cute Classes and Pure OO Functional Style of Programming Working with Collections Creating Higher Order Functions Pattern Matching XML as First Class Citizen Recursions and Tail Call Optimization Using Traits Chaining Traits Concurrency in Scala</description></item></channel></rss>

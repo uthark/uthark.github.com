@@ -1,21 +1,2 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>games on Sharing knowledge</title>
-    <link>https://uthark.github.io/categories/games/</link>
-    <description>Recent content in games on Sharing knowledge</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Sun, 02 Mar 2014 00:00:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/games/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Lyne Game</title>
-      <link>https://uthark.github.io/2014/03/02/lyne-game/</link>
-      <pubDate>Sun, 02 Mar 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/2014/03/02/lyne-game/</guid>
-      <description>Found very addictive and cool game: Lyne.
-The goal of the game is to connect all dots on the playboard. Worth every cent.</description>
-    </item>
-    
-  </channel>
-</rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>games on Sharing knowledge</title><link>https://uthark.github.io/categories/games/</link><description>Recent content in games on Sharing knowledge</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 02 Mar 2014 00:00:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/games/index.xml" rel="self" type="application/rss+xml"/><item><title>Lyne Game</title><link>https://uthark.github.io/2014/03/02/lyne-game/</link><pubDate>Sun, 02 Mar 2014 00:00:00 +0000</pubDate><guid>https://uthark.github.io/2014/03/02/lyne-game/</guid><description>Found very addictive and cool game: Lyne.
+The goal of the game is to connect all dots on the playboard. Worth every cent.</description></item></channel></rss>

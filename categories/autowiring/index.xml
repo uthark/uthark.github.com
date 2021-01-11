@@ -1,41 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>autowiring on Sharing knowledge</title>
-    <link>https://uthark.github.io/categories/autowiring/</link>
-    <description>Recent content in autowiring on Sharing knowledge</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Sat, 29 Jun 2013 00:00:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/autowiring/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Пишем @Enable*-аннотацию для Spring</title>
-      <link>https://uthark.github.io/2013/06/29/spring-enable-annotation/</link>
-      <pubDate>Sat, 29 Jun 2013 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/2013/06/29/spring-enable-annotation/</guid>
-      <description>Начиная с версии 3.1 Spring поддерживает декларативное включение необходимой функциональности через, так называемые, @Enable* аннотации. Пример таких аннотаций: org.springframework.web.servlet.config.annotation.EnableWebMvc, org.springframework.cache.annotation.EnableCaching, org.springframework.scheduling.annotation.EnableAsync и другие.
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>autowiring on Sharing knowledge</title><link>https://uthark.github.io/categories/autowiring/</link><description>Recent content in autowiring on Sharing knowledge</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 29 Jun 2013 00:00:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/autowiring/index.xml" rel="self" type="application/rss+xml"/><item><title>Пишем @Enable*-аннотацию для Spring</title><link>https://uthark.github.io/2013/06/29/spring-enable-annotation/</link><pubDate>Sat, 29 Jun 2013 00:00:00 +0000</pubDate><guid>https://uthark.github.io/2013/06/29/spring-enable-annotation/</guid><description>Начиная с версии 3.1 Spring поддерживает декларативное включение необходимой функциональности через, так называемые, @Enable* аннотации. Пример таких аннотаций: org.springframework.web.servlet.config.annotation.EnableWebMvc, org.springframework.cache.annotation.EnableCaching, org.springframework.scheduling.annotation.EnableAsync и другие.
 В продолжение темы прошлого поста, я хочу показать, как можно добавить собственную @Enable аннотацию.
-Для автоматического создания клиента для REST-ресурса нам необходима следующая информация:</description>
-    </item>
-    
-    <item>
-      <title>@Autowired JAX-RS Client API</title>
-      <link>https://uthark.github.io/2013/06/28/jaxrs-spring-autowiring/</link>
-      <pubDate>Fri, 28 Jun 2013 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/2013/06/28/jaxrs-spring-autowiring/</guid>
-      <description>Продолжая разговор о JAX RS Client API - предположим, что мы уже используем JAX-RS клиент
-У нас есть класс, который умеет создавать прокси для любого REST-интерфейса в проекте. Теперь мы хотим сделать так, чтобы эти интерфейсы можно было автоматически создавать в контексте Spring и связывать с другими бинами.</description>
-    </item>
-    
-    <item>
-      <title>@Autowiring EJBs with Spring</title>
-      <link>https://uthark.github.io/2013/06/19/autowiring-factorybean/</link>
-      <pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/2013/06/19/autowiring-factorybean/</guid>
-      <description>Предположим, что у нас есть проект на Spring, в котором необходимо использовать внешние EJB. Для получения бинов необходимо создавать InitialContext и делать lookup() нужных ejb. Но эту задачу можно автоматизировать и пользоваться @Autowired, то есть код будет выглядеть вот так:</description>
-    </item>
-    
-  </channel>
-</rss>
+Для автоматического создания клиента для REST-ресурса нам необходима следующая информация:</description></item><item><title>@Autowired JAX-RS Client API</title><link>https://uthark.github.io/2013/06/28/jaxrs-spring-autowiring/</link><pubDate>Fri, 28 Jun 2013 00:00:00 +0000</pubDate><guid>https://uthark.github.io/2013/06/28/jaxrs-spring-autowiring/</guid><description>Продолжая разговор о JAX RS Client API - предположим, что мы уже используем JAX-RS клиент
+У нас есть класс, который умеет создавать прокси для любого REST-интерфейса в проекте. Теперь мы хотим сделать так, чтобы эти интерфейсы можно было автоматически создавать в контексте Spring и связывать с другими бинами.</description></item><item><title>@Autowiring EJBs with Spring</title><link>https://uthark.github.io/2013/06/19/autowiring-factorybean/</link><pubDate>Wed, 19 Jun 2013 00:00:00 +0000</pubDate><guid>https://uthark.github.io/2013/06/19/autowiring-factorybean/</guid><description>Предположим, что у нас есть проект на Spring, в котором необходимо использовать внешние EJB. Для получения бинов необходимо создавать InitialContext и делать lookup() нужных ejb. Но эту задачу можно автоматизировать и пользоваться @Autowired, то есть код будет выглядеть вот так:</description></item></channel></rss>

@@ -1,21 +1,2 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>autofs on Sharing knowledge</title>
-    <link>https://uthark.github.io/categories/autofs/</link>
-    <description>Recent content in autofs on Sharing knowledge</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Mon, 14 Dec 2009 23:14:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/autofs/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Настройка autofs для монтирования NFS-ресурсов</title>
-      <link>https://uthark.github.io/2009/12/14/autofs-nfs/</link>
-      <pubDate>Mon, 14 Dec 2009 23:14:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/2009/12/14/autofs-nfs/</guid>
-      <description>Summary: В данной заметке описана настройка autofs для доступа к сетевым ресурсам, доступным по NFS.
-Последние несколько лет (с тех пор, как количество компьютеров дома стало больше одного) возникла проблема беспрепятственного доступа к данным, хранящимся на одном компьютере с другого.</description>
-    </item>
-    
-  </channel>
-</rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>autofs on Sharing knowledge</title><link>https://uthark.github.io/categories/autofs/</link><description>Recent content in autofs on Sharing knowledge</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 14 Dec 2009 23:14:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/autofs/index.xml" rel="self" type="application/rss+xml"/><item><title>Настройка autofs для монтирования NFS-ресурсов</title><link>https://uthark.github.io/2009/12/14/autofs-nfs/</link><pubDate>Mon, 14 Dec 2009 23:14:00 +0000</pubDate><guid>https://uthark.github.io/2009/12/14/autofs-nfs/</guid><description>Summary: В данной заметке описана настройка autofs для доступа к сетевым ресурсам, доступным по NFS.
+Последние несколько лет (с тех пор, как количество компьютеров дома стало больше одного) возникла проблема беспрепятственного доступа к данным, хранящимся на одном компьютере с другого.</description></item></channel></rss>

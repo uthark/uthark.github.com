@@ -1,22 +1,3 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>junit on Sharing knowledge</title>
-    <link>https://uthark.github.io/categories/junit/</link>
-    <description>Recent content in junit on Sharing knowledge</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Fri, 28 Mar 2014 13:24:45 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/junit/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Initializing Mockito @Mocks with JUnit @Rule</title>
-      <link>https://uthark.github.io/2014/03/28/initializing-at-mocks-with-junit-at-rule/</link>
-      <pubDate>Fri, 28 Mar 2014 13:24:45 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/2014/03/28/initializing-at-mocks-with-junit-at-rule/</guid>
-      <description>In this post I will show how one can implement custom JUnit @Rule.
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>junit on Sharing knowledge</title><link>https://uthark.github.io/categories/junit/</link><description>Recent content in junit on Sharing knowledge</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 28 Mar 2014 13:24:45 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/junit/index.xml" rel="self" type="application/rss+xml"/><item><title>Initializing Mockito @Mocks with JUnit @Rule</title><link>https://uthark.github.io/2014/03/28/initializing-at-mocks-with-junit-at-rule/</link><pubDate>Fri, 28 Mar 2014 13:24:45 +0000</pubDate><guid>https://uthark.github.io/2014/03/28/initializing-at-mocks-with-junit-at-rule/</guid><description>In this post I will show how one can implement custom JUnit @Rule.
 As an example let&amp;rsquo;s take Mockito and implement custom rule which will initialize Mocks in test class.
-By default, Mockito provides the following methods of mock initialization:</description>
-    </item>
-    
-  </channel>
-</rss>
+By default, Mockito provides the following methods of mock initialization:</description></item></channel></rss>

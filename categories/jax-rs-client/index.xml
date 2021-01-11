@@ -1,31 +1,3 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>jax-rs client on Sharing knowledge</title>
-    <link>https://uthark.github.io/categories/jax-rs-client/</link>
-    <description>Recent content in jax-rs client on Sharing knowledge</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Fri, 28 Jun 2013 00:00:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/jax-rs-client/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>@Autowired JAX-RS Client API</title>
-      <link>https://uthark.github.io/2013/06/28/jaxrs-spring-autowiring/</link>
-      <pubDate>Fri, 28 Jun 2013 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/2013/06/28/jaxrs-spring-autowiring/</guid>
-      <description>Продолжая разговор о JAX RS Client API - предположим, что мы уже используем JAX-RS клиент
-У нас есть класс, который умеет создавать прокси для любого REST-интерфейса в проекте. Теперь мы хотим сделать так, чтобы эти интерфейсы можно было автоматически создавать в контексте Spring и связывать с другими бинами.</description>
-    </item>
-    
-    <item>
-      <title>JAX-RS Client API</title>
-      <link>https://uthark.github.io/2013/06/28/jaxrs/</link>
-      <pubDate>Fri, 28 Jun 2013 00:00:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/2013/06/28/jaxrs/</guid>
-      <description>JAX-RS - набор Java API для работы с REST сервисами. Существует несколько реализаций, о которых я уже писал раньше.
-Предположим, что проект А выставляет наружу REST API, который мы хотим использовать в проекте Б. Очевидно, что сразу возникает вопрос - можно ли переиспользовать классы модели и интерфейс в другом проекте.</description>
-    </item>
-    
-  </channel>
-</rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>jax-rs client on Sharing knowledge</title><link>https://uthark.github.io/categories/jax-rs-client/</link><description>Recent content in jax-rs client on Sharing knowledge</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 28 Jun 2013 00:00:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/jax-rs-client/index.xml" rel="self" type="application/rss+xml"/><item><title>@Autowired JAX-RS Client API</title><link>https://uthark.github.io/2013/06/28/jaxrs-spring-autowiring/</link><pubDate>Fri, 28 Jun 2013 00:00:00 +0000</pubDate><guid>https://uthark.github.io/2013/06/28/jaxrs-spring-autowiring/</guid><description>Продолжая разговор о JAX RS Client API - предположим, что мы уже используем JAX-RS клиент
+У нас есть класс, который умеет создавать прокси для любого REST-интерфейса в проекте. Теперь мы хотим сделать так, чтобы эти интерфейсы можно было автоматически создавать в контексте Spring и связывать с другими бинами.</description></item><item><title>JAX-RS Client API</title><link>https://uthark.github.io/2013/06/28/jaxrs/</link><pubDate>Fri, 28 Jun 2013 00:00:00 +0000</pubDate><guid>https://uthark.github.io/2013/06/28/jaxrs/</guid><description>JAX-RS - набор Java API для работы с REST сервисами. Существует несколько реализаций, о которых я уже писал раньше.
+Предположим, что проект А выставляет наружу REST API, который мы хотим использовать в проекте Б. Очевидно, что сразу возникает вопрос - можно ли переиспользовать классы модели и интерфейс в другом проекте.</description></item></channel></rss>

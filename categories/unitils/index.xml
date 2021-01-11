@@ -1,21 +1,2 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>unitils on Sharing knowledge</title>
-    <link>https://uthark.github.io/categories/unitils/</link>
-    <description>Recent content in unitils on Sharing knowledge</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Wed, 16 Apr 2014 00:10:10 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/unitils/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Using Unitils ReflectionAssert</title>
-      <link>https://uthark.github.io/2014/04/16/using-unitils-reflectionassert/</link>
-      <pubDate>Wed, 16 Apr 2014 00:10:10 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/2014/04/16/using-unitils-reflectionassert/</guid>
-      <description>Often it is needed to compare two different instances of the class inside test. I.e. we save object into database, then fetch it back from db and we want to be sure if nothing was lost during saving/reading.
-In order to make such assertions more easier and maintainable one can use great Unitils library which has useful class ReflectionAssert</description>
-    </item>
-    
-  </channel>
-</rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>unitils on Sharing knowledge</title><link>https://uthark.github.io/categories/unitils/</link><description>Recent content in unitils on Sharing knowledge</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 16 Apr 2014 00:10:10 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/unitils/index.xml" rel="self" type="application/rss+xml"/><item><title>Using Unitils ReflectionAssert</title><link>https://uthark.github.io/2014/04/16/using-unitils-reflectionassert/</link><pubDate>Wed, 16 Apr 2014 00:10:10 +0000</pubDate><guid>https://uthark.github.io/2014/04/16/using-unitils-reflectionassert/</guid><description>Often it is needed to compare two different instances of the class inside test. I.e. we save object into database, then fetch it back from db and we want to be sure if nothing was lost during saving/reading.
+In order to make such assertions more easier and maintainable one can use great Unitils library which has useful class ReflectionAssert</description></item></channel></rss>

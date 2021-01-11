@@ -1,33 +1,5 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>фолксономия on Sharing knowledge</title>
-    <link>https://uthark.github.io/categories/%D1%84%D0%BE%D0%BB%D0%BA%D1%81%D0%BE%D0%BD%D0%BE%D0%BC%D0%B8%D1%8F/</link>
-    <description>Recent content in фолксономия on Sharing knowledge</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Wed, 22 Apr 2009 00:14:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/%D1%84%D0%BE%D0%BB%D0%BA%D1%81%D0%BE%D0%BD%D0%BE%D0%BC%D0%B8%D1%8F/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Практический опыт использования фолксономии в условиях неограниченной свободы расстановки меток  (часть 2)</title>
-      <link>https://uthark.github.io/2009/04/22/2/</link>
-      <pubDate>Wed, 22 Apr 2009 00:14:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/2009/04/22/2/</guid>
-      <description>В продолжение предыдущей заметки.
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>фолксономия on Sharing knowledge</title><link>https://uthark.github.io/categories/%D1%84%D0%BE%D0%BB%D0%BA%D1%81%D0%BE%D0%BD%D0%BE%D0%BC%D0%B8%D1%8F/</link><description>Recent content in фолксономия on Sharing knowledge</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 22 Apr 2009 00:14:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/%D1%84%D0%BE%D0%BB%D0%BA%D1%81%D0%BE%D0%BD%D0%BE%D0%BC%D0%B8%D1%8F/index.xml" rel="self" type="application/rss+xml"/><item><title>Практический опыт использования фолксономии в условиях неограниченной свободы расстановки меток (часть 2)</title><link>https://uthark.github.io/2009/04/22/2/</link><pubDate>Wed, 22 Apr 2009 00:14:00 +0000</pubDate><guid>https://uthark.github.io/2009/04/22/2/</guid><description>В продолжение предыдущей заметки.
 Для работы с del.icio.us я использую официальный плагин от Yahoo!.
 Он предоставляет следующие возможности:
- Синхронизация закладок из Firefox с del.icio.us Переопределение стандартного менеджера закладок. Отслеживание изменений на del.icio.us. Интерфейс для отображения и поиска закладок в панели браузера.</description>
-    </item>
-    
-    <item>
-      <title>Практический опыт использования фолксономии в условиях неограниченной свободы расстановки меток</title>
-      <link>https://uthark.github.io/2009/04/19/blog-post/</link>
-      <pubDate>Sun, 19 Apr 2009 12:48:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/2009/04/19/blog-post/</guid>
-      <description>Уже более двух лет я использую del.icio.us.
-Недавно возник вопрос - а вот каким образом можно наиболее эффективно использовать теги? Для себя я придумал вот такой вариант использования - сделал tag bundle Actions, в который поместил теги, диктующие дальнейшие действия.</description>
-    </item>
-    
-  </channel>
-</rss>
+Синхронизация закладок из Firefox с del.icio.us Переопределение стандартного менеджера закладок. Отслеживание изменений на del.icio.us. Интерфейс для отображения и поиска закладок в панели браузера.</description></item><item><title>Практический опыт использования фолксономии в условиях неограниченной свободы расстановки меток</title><link>https://uthark.github.io/2009/04/19/blog-post/</link><pubDate>Sun, 19 Apr 2009 12:48:00 +0000</pubDate><guid>https://uthark.github.io/2009/04/19/blog-post/</guid><description>Уже более двух лет я использую del.icio.us.
+Недавно возник вопрос - а вот каким образом можно наиболее эффективно использовать теги? Для себя я придумал вот такой вариант использования - сделал tag bundle Actions, в который поместил теги, диктующие дальнейшие действия.</description></item></channel></rss>

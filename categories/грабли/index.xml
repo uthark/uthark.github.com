@@ -1,21 +1,2 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>грабли on Sharing knowledge</title>
-    <link>https://uthark.github.io/categories/%D0%B3%D1%80%D0%B0%D0%B1%D0%BB%D0%B8/</link>
-    <description>Recent content in грабли on Sharing knowledge</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Tue, 02 Jun 2009 23:31:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/%D0%B3%D1%80%D0%B0%D0%B1%D0%BB%D0%B8/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Apache Ant и Metro</title>
-      <link>https://uthark.github.io/2009/06/02/apache-ant-metro/</link>
-      <pubDate>Tue, 02 Jun 2009 23:31:00 +0000</pubDate>
-      
-      <guid>https://uthark.github.io/2009/06/02/apache-ant-metro/</guid>
-      <description>Столкнулся с такой проблемой - в некоторых случаях приложение, собранное антом не работает. Конкретно - не работает десереализация запросов на веб-сервис. Получаемый запрос содержит null в значениях полей.
-Опытным путём было выяснено, что на это влияет используемая версия Java. Под 1.</description>
-    </item>
-    
-  </channel>
-</rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>грабли on Sharing knowledge</title><link>https://uthark.github.io/categories/%D0%B3%D1%80%D0%B0%D0%B1%D0%BB%D0%B8/</link><description>Recent content in грабли on Sharing knowledge</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 02 Jun 2009 23:31:00 +0000</lastBuildDate><atom:link href="https://uthark.github.io/categories/%D0%B3%D1%80%D0%B0%D0%B1%D0%BB%D0%B8/index.xml" rel="self" type="application/rss+xml"/><item><title>Apache Ant и Metro</title><link>https://uthark.github.io/2009/06/02/apache-ant-metro/</link><pubDate>Tue, 02 Jun 2009 23:31:00 +0000</pubDate><guid>https://uthark.github.io/2009/06/02/apache-ant-metro/</guid><description>Столкнулся с такой проблемой - в некоторых случаях приложение, собранное антом не работает. Конкретно - не работает десереализация запросов на веб-сервис. Получаемый запрос содержит null в значениях полей.
+Опытным путём было выяснено, что на это влияет используемая версия Java. Под 1.</description></item></channel></rss>
