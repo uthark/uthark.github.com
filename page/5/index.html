@@ -1,141 +1,21 @@
-<!doctype html><html prefix="og: https://ogp.me/ns#" lang=en>
-<head>
-<meta name=generator content="Hugo 0.88.1">
-<meta charset=utf-8>
-<link rel=canonical href=https://uthark.github.io/>
-<meta name=HandheldFriendly content="True">
-<meta name=MobileOptimized content="320">
-<meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=5">
-<title>Sharing knowledge</title>
-<meta name=description content>
-<meta name=keywords content>
-<meta name=author content="Oleg Atamanenko">
-<link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=Lora:wght@500&family=Source+Code+Pro:wght@300&family=Bitter&display=swap" type=text/css>
-<link rel=stylesheet href=https://uthark.github.io/css/theme.e2ab29fcebb06aaf6e0d5f5685d4c3f28ae29e6bdab99de41ced527d1770a0f6.css>
-<link rel=stylesheet href=https://uthark.github.io/css/uthark.css>
-<link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css>
-<link href=https://uthark.github.io/favicon.png rel=icon>
-<link href=https://feeds.feedburner.com/atamanenko rel=alternate type=application/rss+xml title="Sharing knowledge">
-</head>
-<body>
-<header class=site>
-<h1><a href=https://uthark.github.io/>Sharing knowledge</a></h1>
-<h2>by Oleg Atamanenko</h2>
-</header>
-<nav>
-<div class=menu>
-<input type=checkbox id=menu class="fa fa-bars">
-<label for=menu aria-label=Menu></label>
-<div class=menu-container>
-<ul class=main-navigation>
-<li><a href=https://uthark.github.io/ title=Posts>Posts</a></li>
-<li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li>
-<li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li>
-<li><a href=https://uthark.github.io/readinglist/ title="Reading Lists">Reading Lists</a></li>
-<li><a href=https://uthark.github.io/about/ title=About>About</a></li>
-</ul>
-<ul class=subscription>
-<li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-lg"></i></a></li>
-</ul>
-<form action=https://www.google.com/search method=get target=_blank>
-<fieldset role=search>
-<input class=search type=text name=q placeholder=Search>
-<input type=hidden name=q value=site:https://uthark.github.io/>
-</fieldset>
-</form>
-</div>
-</div>
-</nav>
-<div id=main>
-<div id=content>
-<div class=blog-index>
-<article class=list>
-<header>
-<h1 class=entry-title>
-<a href=https://uthark.github.io/2014/03/06/limiting-threads-count-for-greenrobot-eventbus/>Limiting threads count for GreenRobot EventBus</a>
-</h1>
-</header>
-<div class=list-post-tags>
-<a class=label href=https://uthark.github.io/categories/development/>#development</a>
+<!doctype html><html prefix="og: https://ogp.me/ns#" lang=en><head><meta name=generator content="Hugo 0.80.0"><meta charset=utf-8><link rel=canonical href=https://uthark.github.io/><meta name=HandheldFriendly content="True"><meta name=MobileOptimized content="320"><meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=5"><title>Sharing knowledge</title><meta name=description content><meta name=keywords content><meta name=author content="Oleg Atamanenko"><link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=Lora:wght@500&family=Source+Code+Pro:wght@300&family=Bitter&display=swap" type=text/css><link rel=stylesheet href=https://uthark.github.io/css/theme.e2ab29fcebb06aaf6e0d5f5685d4c3f28ae29e6bdab99de41ced527d1770a0f6.css><link rel=stylesheet href=https://uthark.github.io/css/uthark.css><link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css><link href=https://uthark.github.io/favicon.png rel=icon><link href=https://feeds.feedburner.com/atamanenko rel=alternate type=application/rss+xml title="Sharing knowledge"></head><body><header class=site><h1><a href=https://uthark.github.io/>Sharing knowledge</a></h1><h2>by Oleg Atamanenko</h2></header><nav><div class=menu><input type=checkbox id=menu class="fa fa-bars">
+<label for=menu aria-label=Menu></label><div class=menu-container><ul class=main-navigation><li><a href=https://uthark.github.io/ title=Posts>Posts</a></li><li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li><li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li><li><a href=https://uthark.github.io/readinglist/ title="Reading Lists">Reading Lists</a></li><li><a href=https://uthark.github.io/about/ title=About>About</a></li></ul><ul class=subscription><li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-lg"></i></a></li></ul><form action=https://www.google.com/search method=get target=_blank><fieldset role=search><input class=search type=text name=q placeholder=Search>
+<input type=hidden name=q value=site:https://uthark.github.io/></fieldset></form></div></div></nav><div id=main><div id=content><div class=blog-index><article class=list><header><h1 class=entry-title><a href=https://uthark.github.io/2014/03/06/limiting-threads-count-for-greenrobot-eventbus/>Limiting threads count for GreenRobot EventBus</a></h1></header><div class=list-post-tags><a class=label href=https://uthark.github.io/categories/development/>#development</a>
 <a class=label href=https://uthark.github.io/categories/greenrobot/>#greenrobot</a>
-<a class=label href=https://uthark.github.io/categories/android/>#android</a>
-</div>
-<p>In one of my projects I used EventBus library. The library is pretty cool and I would recommend everybody to use it.
-But I found one small issue with this library - in case you send too many events very fast (i.</p>
-<footer>
-<a href=https://uthark.github.io/2014/03/06/limiting-threads-count-for-greenrobot-eventbus/ rel=full-article>Continue Reading &rarr;</a>
-</footer>
-</article>
-<article class=list>
-<header>
-<h1 class=entry-title>
-<a href=https://uthark.github.io/2014/03/06/customizing-font-in-android-textview/>Using custom font in Android TextView</a>
-</h1>
-</header>
-<div class=list-post-tags>
-<a class=label href=https://uthark.github.io/categories/android/>#android</a>
+<a class=label href=https://uthark.github.io/categories/android/>#android</a></div><p>In one of my projects I used EventBus library. The library is pretty cool and I would recommend everybody to use it.
+But I found one small issue with this library - in case you send too many events very fast (i.</p><footer><a href=https://uthark.github.io/2014/03/06/limiting-threads-count-for-greenrobot-eventbus/ rel=full-article>Continue Reading &rarr;</a></footer></article><article class=list><header><h1 class=entry-title><a href=https://uthark.github.io/2014/03/06/customizing-font-in-android-textview/>Using custom font in Android TextView</a></h1></header><div class=list-post-tags><a class=label href=https://uthark.github.io/categories/android/>#android</a>
 <a class=label href=https://uthark.github.io/categories/development/>#development</a>
-<a class=label href=https://uthark.github.io/categories/textview/>#textview</a>
-</div>
-<p>Today I want to share with you custom TextView which allows to set font to be used in xml layout.
+<a class=label href=https://uthark.github.io/categories/textview/>#textview</a></div><p>Today I want to share with you custom TextView which allows to set font to be used in xml layout.
 First, we need to declare our custom styleable
 attrs.xml:
-&lt;?xml version="1.0" encoding="utf-8"?> &lt;resources> &lt;declare-styleable name="TypefaceTextView"> &lt;attr name="typeface" format="string"/> &lt;/declare-styleable> &lt;/resources> Then we need to create subclass of TextView which will use custom attribute.</p>
-<footer>
-<a href=https://uthark.github.io/2014/03/06/customizing-font-in-android-textview/ rel=full-article>Continue Reading &rarr;</a>
-</footer>
-</article>
-<article class=list>
-<header>
-<h1 class=entry-title>
-<a href=https://uthark.github.io/2014/03/05/solving-issue-with-db2-on-vmware-fusion-on-macbook-pro-2013-late/>Solving issue with DB2 on VMWare Fusion on MacBook Pro 2013 Late</a>
-</h1>
-</header>
-<div class=list-post-tags>
-<a class=label href=https://uthark.github.io/categories/development/>#development</a>
+&lt;?xml version="1.0" encoding="utf-8"?> &lt;resources> &lt;declare-styleable name="TypefaceTextView"> &lt;attr name="typeface" format="string"/> &lt;/declare-styleable> &lt;/resources> Then we need to create subclass of TextView which will use custom attribute.</p><footer><a href=https://uthark.github.io/2014/03/06/customizing-font-in-android-textview/ rel=full-article>Continue Reading &rarr;</a></footer></article><article class=list><header><h1 class=entry-title><a href=https://uthark.github.io/2014/03/05/solving-issue-with-db2-on-vmware-fusion-on-macbook-pro-2013-late/>Solving issue with DB2 on VMWare Fusion on MacBook Pro 2013 Late</a></h1></header><div class=list-post-tags><a class=label href=https://uthark.github.io/categories/development/>#development</a>
 <a class=label href=https://uthark.github.io/categories/macbook/>#macbook</a>
-<a class=label href=https://uthark.github.io/categories/vmware-fusion/>#vmware fusion</a>
-</div>
-<p>Today I found issue running DB2 10.1 under VMWare Fusion 6.0.2 on my MacBook - all management services for db2 are starting except for the db2 instance itself.
-When I tried to start DB2 using db2start it just crashed without any additional information.</p>
-<footer>
-<a href=https://uthark.github.io/2014/03/05/solving-issue-with-db2-on-vmware-fusion-on-macbook-pro-2013-late/ rel=full-article>Continue Reading &rarr;</a>
-</footer>
-</article>
-<article class=list>
-<header>
-<h1 class=entry-title>
-<a href=https://uthark.github.io/2014/03/04/snowboarding/>Snowboarding</a>
-</h1>
-</header>
-<div class=list-post-tags>
-<a class=label href=https://uthark.github.io/categories/diary/>#diary</a>
-</div>
-<p>Today in the evening I got to Whitetail Ski Resort.
-</p>
-</article>
-<article class=list>
-<header>
-<h1 class=entry-title>
-<a href=https://uthark.github.io/2014/03/02/octopress-quote-fix/>Fixing unescaped quotes in page rendering in Octopress</a>
-</h1>
-</header>
-<div class=list-post-tags>
-<a class=label href=https://uthark.github.io/categories/development/>#development</a>
+<a class=label href=https://uthark.github.io/categories/vmware-fusion/>#vmware fusion</a></div><p>Today I found issue running DB2 10.1 under VMWare Fusion 6.0.2 on my MacBook - all management services for db2 are starting except for the db2 instance itself.
+When I tried to start DB2 using db2start it just crashed without any additional information.</p><footer><a href=https://uthark.github.io/2014/03/05/solving-issue-with-db2-on-vmware-fusion-on-macbook-pro-2013-late/ rel=full-article>Continue Reading &rarr;</a></footer></article><article class=list><header><h1 class=entry-title><a href=https://uthark.github.io/2014/03/04/snowboarding/>Snowboarding</a></h1></header><div class=list-post-tags><a class=label href=https://uthark.github.io/categories/diary/>#diary</a></div><p>Today in the evening I got to Whitetail Ski Resort.</p></article><article class=list><header><h1 class=entry-title><a href=https://uthark.github.io/2014/03/02/octopress-quote-fix/>Fixing unescaped quotes in page rendering in Octopress</a></h1></header><div class=list-post-tags><a class=label href=https://uthark.github.io/categories/development/>#development</a>
 <a class=label href=https://uthark.github.io/categories/article/>#article</a>
-<a class=label href=https://uthark.github.io/categories/octopress/>#octopress</a>
-</div>
-<p>When I created About Me page I found issue with rendering: for some reason styles and some javascripts were missing on the page.
+<a class=label href=https://uthark.github.io/categories/octopress/>#octopress</a></div><p>When I created About Me page I found issue with rendering: for some reason styles and some javascripts were missing on the page.
 Investigation showed that content in meta tag description contained unquoted quotes, thus resulting in broken HTML.
-After searching within octopress sources I found the issue:</p>
-<footer>
-<a href=https://uthark.github.io/2014/03/02/octopress-quote-fix/ rel=full-article>Continue Reading &rarr;</a>
-</footer>
-</article>
-<div class=pagination>
-<a href=/ aria-label=First class=label-pagination><i class="fa fa-angle-double-left fa-lg"></i></a>
-<a href=/page/4/ aria-label=Previous class=label-pagination><i class="fa fa-angle-left fa-lg"></i></a>
-<a href=/ class=label-pagination>1</a>
+After searching within octopress sources I found the issue:</p><footer><a href=https://uthark.github.io/2014/03/02/octopress-quote-fix/ rel=full-article>Continue Reading &rarr;</a></footer></article><div class=pagination><a href=/ aria-label=First class=label-pagination><i class="fa fa-angle-double-left fa-lg"></i></a><a href=/page/4/ aria-label=Previous class=label-pagination><i class="fa fa-angle-left fa-lg"></i></a><a href=/ class=label-pagination>1</a>
 <a href=/page/2/ class=label-pagination>2</a>
 <a href=/page/3/ class=label-pagination>3</a>
 <a href=/page/4/ class=label-pagination>4</a>
@@ -152,28 +32,5 @@ After searching within octopress sources I found the issue:</p>
 <a href=/page/15/ class=label-pagination>15</a>
 <a href=/page/16/ class=label-pagination>16</a>
 <a href=/page/17/ class=label-pagination>17</a>
-<a href=/page/6/ aria-label=Next class=label-pagination><i class="fa fa-angle-right fa-lg"></i></a>
-<a href=/page/17/ aria-label=Last><i class="fa fa-angle-double-right fa-lg"></i></a>
-</div>
-</div>
-</div>
-</div>
-<footer>
-<div class=center>
-<ul class=sidebar-nav>
-<li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a>
-</li>
-<li class=sidebar-nav-item> <a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a>
-</li>
-<li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li>
-</ul>
-</div>
-<p>&copy;&nbsp;2009&nbsp;—&nbsp;2021 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a>
-</p>
-</footer>
-<script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(b,c){var d=b.createElement(c),a=b.getElementsByTagName(c)[0];a.async='async',d.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js',a.parentNode.insertBefore(d,a)})(document,'script')</script>
-</body>
-</html>
+<a href=/page/6/ aria-label=Next class=label-pagination><i class="fa fa-angle-right fa-lg"></i></a><a href=/page/17/ aria-label=Last><i class="fa fa-angle-double-right fa-lg"></i></a></div></div></div></div><footer><div class=center><ul class=sidebar-nav><li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a></li><li class=sidebar-nav-item><a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a></li><li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li></ul></div><p>&copy;&nbsp;2009&nbsp;—&nbsp;2021 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a></p></footer><script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];s.async='async'
+g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';s.parentNode.insertBefore(g,s)}(document,'script'));</script></body></html>

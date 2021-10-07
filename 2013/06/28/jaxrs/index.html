@@ -1,75 +1,7 @@
-<!doctype html><html prefix="og: https://ogp.me/ns#" lang=en>
-<head>
-<meta charset=utf-8>
-<link rel=canonical href=https://uthark.github.io/2013/06/28/jaxrs/>
-<meta name=HandheldFriendly content="True">
-<meta name=MobileOptimized content="320">
-<meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=5">
-<title>JAX-RS Client API</title>
-<meta name=description content>
-<meta name=keywords content>
-<meta name=author content="Oleg Atamanenko">
-<link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=Lora:wght@500&family=Source+Code+Pro:wght@300&family=Bitter&display=swap" type=text/css>
-<link rel=stylesheet href=https://uthark.github.io/css/theme.e2ab29fcebb06aaf6e0d5f5685d4c3f28ae29e6bdab99de41ced527d1770a0f6.css>
-<link rel=stylesheet href=https://uthark.github.io/css/uthark.css>
-<link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css>
-<link href=https://uthark.github.io/favicon.png rel=icon>
-<link href=https://feeds.feedburner.com/atamanenko rel=alternate type=application/rss+xml title="Sharing knowledge">
-<meta name=twitter:card content="summary">
-<meta name=twitter:site content="@real_atamanenko">
-<meta name=twitter:creator content="@real_atamanenko">
-<meta name=twitter:title content="JAX-RS Client API">
-<meta property="og:title" content="JAX-RS Client API">
-<meta property="og:url" content="https://uthark.github.io/2013/06/28/jaxrs/">
-<meta property="og:description" content="JAX-RS - набор Java API для работы с REST сервисами. Существует несколько реализаций, о которых я уже писал раньше.
-Предположим, что проект А выставляет наружу REST API, который мы хотим использовать в проекте Б. Очевидно, что сразу возникает вопрос - можно ли переиспользовать классы модели и интерфейс в другом проекте.">
-</head>
-<body>
-<header class=site>
-<h1><a href=https://uthark.github.io/>Sharing knowledge</a></h1>
-<h2>by Oleg Atamanenko</h2>
-</header>
-<nav>
-<div class=menu>
-<input type=checkbox id=menu class="fa fa-bars">
-<label for=menu aria-label=Menu></label>
-<div class=menu-container>
-<ul class=main-navigation>
-<li><a href=https://uthark.github.io/ title=Posts>Posts</a></li>
-<li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li>
-<li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li>
-<li><a href=https://uthark.github.io/readinglist/ title="Reading Lists">Reading Lists</a></li>
-<li><a href=https://uthark.github.io/about/ title=About>About</a></li>
-</ul>
-<ul class=subscription>
-<li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-lg"></i></a></li>
-</ul>
-<form action=https://www.google.com/search method=get target=_blank>
-<fieldset role=search>
-<input class=search type=text name=q placeholder=Search>
-<input type=hidden name=q value=site:https://uthark.github.io/>
-</fieldset>
-</form>
-</div>
-</div>
-</nav>
-<div id=main>
-<div id=content>
-<div>
-<article class=hentry>
-<header>
-<h1 class=entry-title>
-JAX-RS Client API
-</h1>
-</header>
-<div class=entry-content>
-<p><a href="http://jcp.org/en/jsr/detail?id=339">JAX-RS</a> - набор Java API для работы с REST сервисами. Существует несколько реализаций, <a href=/blog/2012/02/08/java-rest/>о которых я уже писал раньше</a>.</p>
-<p>Предположим, что проект А выставляет наружу REST API, который мы хотим использовать в проекте Б. Очевидно, что сразу возникает вопрос - можно ли переиспользовать классы модели и интерфейс в другом проекте. Ответ - да, можно. Client API, появившийся в JAX RS 2.0, упрощает реализацию клиента, но это всё равно не самый оптимальный вариант.</p>
-<p>Есть более интересный способ - в замечательной библиотеке <a href=http://cxf.apache.org/>Apache CXF</a> есть класс <a href=http://cxf.apache.org/javadoc/latest/org/apache/cxf/jaxrs/client/JAXRSClientFactory.html><code>org.apache.cxf.jaxrs.client.JAXRSClientFactory</code></a>, который позволяет автоматически получать прокси-клиент для работы с сервером.</p>
-<p>К сожалению, у меня не получилось завести его с JSON без JAXB - Проблема с Generic Collections - <a href=http://cxf.apache.org/javadoc/latest/org/apache/cxf/jaxrs/provider/json/JSONProvider.html><code>org.apache.cxf.jaxrs.provider.json.JSONProvider</code></a> подразумевает, что в проекте используется JAXB, с помощью которого у нас проаннотирована модель. Поэтому пришлось написать собственную реализацию <a href=http://docs.oracle.com/javaee/6/api/javax/ws/rs/ext/MessageBodyReader.html><code>javax.ws.rs.ext.MessageBodyReader&lt;T></code></a> и <a href=http://docs.oracle.com/javaee/6/api/javax/ws/rs/ext/MessageBodyWriter.html>javax.ws.rs.ext.MessageBodyWriter<t></a>.</p>
-<p>Основная проблема при работе с JSON - это то, что, в общем случае, у нас нет информации об используемых типах данных, а вкупе с тем, что в Java Generics реализованы с <a href=http://docs.oracle.com/javase/tutorial/java/generics/erasure.html>Type Erasure</a> - ситуация усугубляется, если не предпринять каких-то действий.</p>
-<p>Для реализации чтения будем использовать <a href=http://jackson.codehaus.org/Home>Jackson Java JSON-processor</a> и его возможности <a href=http://fasterxml.github.io/jackson-databind/javadoc/2.2.0/com/fasterxml/jackson/databind/type/TypeFactory.html><code>com.fasterxml.jackson.databind.type.TypeFactory</code></a></p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=kd>public</span> <span class=kd>class</span> <span class=nc>JsonMessageHandler</span> <span class=kd>implements</span> <span class=n>MessageBodyReader</span><span class=o>&lt;</span><span class=n>Object</span><span class=o>&gt;,</span> <span class=n>MessageBodyWriter</span><span class=o>&lt;</span><span class=n>Object</span><span class=o>&gt;</span> <span class=o>{</span>
+<!doctype html><html prefix="og: https://ogp.me/ns#" lang=en><head><meta charset=utf-8><link rel=canonical href=https://uthark.github.io/2013/06/28/jaxrs/><meta name=HandheldFriendly content="True"><meta name=MobileOptimized content="320"><meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=5"><title>JAX-RS Client API</title><meta name=description content><meta name=keywords content><meta name=author content="Oleg Atamanenko"><link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=Lora:wght@500&family=Source+Code+Pro:wght@300&family=Bitter&display=swap" type=text/css><link rel=stylesheet href=https://uthark.github.io/css/theme.e2ab29fcebb06aaf6e0d5f5685d4c3f28ae29e6bdab99de41ced527d1770a0f6.css><link rel=stylesheet href=https://uthark.github.io/css/uthark.css><link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css><link href=https://uthark.github.io/favicon.png rel=icon><link href=https://feeds.feedburner.com/atamanenko rel=alternate type=application/rss+xml title="Sharing knowledge"><meta name=twitter:card content="summary"><meta name=twitter:site content="@real_atamanenko"><meta name=twitter:creator content="@real_atamanenko"><meta name=twitter:title content="JAX-RS Client API"><meta property="og:title" content="JAX-RS Client API"><meta property="og:url" content="https://uthark.github.io/2013/06/28/jaxrs/"><meta property="og:description" content="JAX-RS - набор Java API для работы с REST сервисами. Существует несколько реализаций, о которых я уже писал раньше.
+Предположим, что проект А выставляет наружу REST API, который мы хотим использовать в проекте Б. Очевидно, что сразу возникает вопрос - можно ли переиспользовать классы модели и интерфейс в другом проекте."></head><body><header class=site><h1><a href=https://uthark.github.io/>Sharing knowledge</a></h1><h2>by Oleg Atamanenko</h2></header><nav><div class=menu><input type=checkbox id=menu class="fa fa-bars">
+<label for=menu aria-label=Menu></label><div class=menu-container><ul class=main-navigation><li><a href=https://uthark.github.io/ title=Posts>Posts</a></li><li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li><li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li><li><a href=https://uthark.github.io/readinglist/ title="Reading Lists">Reading Lists</a></li><li><a href=https://uthark.github.io/about/ title=About>About</a></li></ul><ul class=subscription><li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-lg"></i></a></li></ul><form action=https://www.google.com/search method=get target=_blank><fieldset role=search><input class=search type=text name=q placeholder=Search>
+<input type=hidden name=q value=site:https://uthark.github.io/></fieldset></form></div></div></nav><div id=main><div id=content><div><article class=hentry><header><h1 class=entry-title>JAX-RS Client API</h1></header><div class=entry-content><p><a href="http://jcp.org/en/jsr/detail?id=339">JAX-RS</a> - набор Java API для работы с REST сервисами. Существует несколько реализаций, <a href=/blog/2012/02/08/java-rest/>о которых я уже писал раньше</a>.</p><p>Предположим, что проект А выставляет наружу REST API, который мы хотим использовать в проекте Б. Очевидно, что сразу возникает вопрос - можно ли переиспользовать классы модели и интерфейс в другом проекте. Ответ - да, можно. Client API, появившийся в JAX RS 2.0, упрощает реализацию клиента, но это всё равно не самый оптимальный вариант.</p><p>Есть более интересный способ - в замечательной библиотеке <a href=http://cxf.apache.org/>Apache CXF</a> есть класс <a href=http://cxf.apache.org/javadoc/latest/org/apache/cxf/jaxrs/client/JAXRSClientFactory.html><code>org.apache.cxf.jaxrs.client.JAXRSClientFactory</code></a>, который позволяет автоматически получать прокси-клиент для работы с сервером.</p><p>К сожалению, у меня не получилось завести его с JSON без JAXB - Проблема с Generic Collections - <a href=http://cxf.apache.org/javadoc/latest/org/apache/cxf/jaxrs/provider/json/JSONProvider.html><code>org.apache.cxf.jaxrs.provider.json.JSONProvider</code></a> подразумевает, что в проекте используется JAXB, с помощью которого у нас проаннотирована модель. Поэтому пришлось написать собственную реализацию <a href=http://docs.oracle.com/javaee/6/api/javax/ws/rs/ext/MessageBodyReader.html><code>javax.ws.rs.ext.MessageBodyReader&lt;T></code></a> и <a href=http://docs.oracle.com/javaee/6/api/javax/ws/rs/ext/MessageBodyWriter.html>javax.ws.rs.ext.MessageBodyWriter<t></a>.</p><p>Основная проблема при работе с JSON - это то, что, в общем случае, у нас нет информации об используемых типах данных, а вкупе с тем, что в Java Generics реализованы с <a href=http://docs.oracle.com/javase/tutorial/java/generics/erasure.html>Type Erasure</a> - ситуация усугубляется, если не предпринять каких-то действий.</p><p>Для реализации чтения будем использовать <a href=http://jackson.codehaus.org/Home>Jackson Java JSON-processor</a> и его возможности <a href=http://fasterxml.github.io/jackson-databind/javadoc/2.2.0/com/fasterxml/jackson/databind/type/TypeFactory.html><code>com.fasterxml.jackson.databind.type.TypeFactory</code></a></p><div class=highlight><pre class=chroma><code class=language-java data-lang=java><span class=kd>public</span> <span class=kd>class</span> <span class=nc>JsonMessageHandler</span> <span class=kd>implements</span> <span class=n>MessageBodyReader</span><span class=o>&lt;</span><span class=n>Object</span><span class=o>&gt;,</span> <span class=n>MessageBodyWriter</span><span class=o>&lt;</span><span class=n>Object</span><span class=o>&gt;</span> <span class=o>{</span>
 
     <span class=kd>protected</span> <span class=kd>final</span> <span class=n>ObjectMapper</span> <span class=n>mapper</span><span class=o>;</span>
 
@@ -138,75 +70,13 @@ JAX-RS Client API
         <span class=n>mapper</span><span class=o>.</span><span class=na>writeValue</span><span class=o>(</span><span class=n>entityStream</span><span class=o>,</span> <span class=n>o</span><span class=o>);</span>
     <span class=o>}</span>
 <span class=o>}</span>
-</code></pre></div><p>Основной код класса сосредоточен в методе <code>readFrom</code>, который определяет типизацию класса и создаёт необходимый подкласс <code>com.fasterxml.jackson.databind.JavaType</code>, который будет использован во время десериализации.</p>
-<p>Теперь мы можем создать клиента следующим образом:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=n>List</span><span class=o>&lt;?&gt;</span> <span class=n>providers</span> <span class=o>=</span> <span class=n>Arrays</span><span class=o>.</span><span class=na>asList</span><span class=o>(</span><span class=k>new</span> <span class=n>JsonMessageHandler</span><span class=o>(</span><span class=n>objectMapper</span><span class=o>));</span>
+</code></pre></div><p>Основной код класса сосредоточен в методе <code>readFrom</code>, который определяет типизацию класса и создаёт необходимый подкласс <code>com.fasterxml.jackson.databind.JavaType</code>, который будет использован во время десериализации.</p><p>Теперь мы можем создать клиента следующим образом:</p><div class=highlight><pre class=chroma><code class=language-java data-lang=java><span class=n>List</span><span class=o>&lt;?&gt;</span> <span class=n>providers</span> <span class=o>=</span> <span class=n>Arrays</span><span class=o>.</span><span class=na>asList</span><span class=o>(</span><span class=k>new</span> <span class=n>JsonMessageHandler</span><span class=o>(</span><span class=n>objectMapper</span><span class=o>));</span>
 <span class=n>UserRest</span> <span class=n>userRest</span> <span class=o>=</span> <span class=n>JAXRSClientFactory</span><span class=o>.</span><span class=na>create</span><span class=o>(</span><span class=s>&#34;http://localhost:8080&#34;</span><span class=o>,</span> <span class=n>UserRest</span><span class=o>.</span><span class=na>class</span><span class=o>,</span> <span class=n>providers</span><span class=o>);</span>
 
 <span class=c1>// usage:
 </span><span class=c1></span><span class=n>User</span> <span class=n>user</span> <span class=o>=</span> <span class=n>userRest</span><span class=o>.</span><span class=na>findByLogin</span><span class=o>(</span><span class=s>&#34;uthark&#34;</span><span class=o>);</span>
-</code></pre></div><p>Когда вызывается метод <code>findByLogin</code> под капотом создаётся HTTP Request, дёргается сервер и полученный ответ десериализуется. От конечного пользотеля детали реализации API скрыты.</p>
-<p>В <a href=/blog/2013/06/28/jaxrs-spring-autowiring/>следующем посте</a> описано, как автоматически добавить полученные прокси в фабрику бинов Spring для дальнейшего использования.</p>
-</div>
-<footer>
-<div class=sharing>
-Share:
-<a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2013%2f06%2f28%2fjaxrs%2f" target=_blank><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden=true></i></a>
-<a href="https://twitter.com/intent/tweet?text=JAX-RS%20Client%20API&url=https%3a%2f%2futhark.github.io%2f2013%2f06%2f28%2fjaxrs%2f" target=_blank title="Post to Twitter" aria-hidden=true><i class="fa fa-twitter"></i></a>
-</div>
-<div>
-<hr>
-<p>If you have any questions, feel free to ping me on Twitter.</p>
-</div>
-<p class=meta>
-Estimated reading time: 3 minute(s)
-</p>
-<p class=meta>
-Last update: <time datetime=2013-06-28>Jun 28, 2013</time>
-</p>
-<p class=meta>
-Categories: <a class=label href=https://uthark.github.io/categories/jax-rs-client/>#jax-rs client</a><a class=label href=https://uthark.github.io/categories/development/>#development</a><a class=label href=https://uthark.github.io/categories/article/>#article</a>
-</p>
-</p>
-<p class=meta>
-<a class="basic-alignment left" href=https://uthark.github.io/2013/06/19/autowiring-factorybean/ title="@Autowiring EJBs with Spring">&lt;&lt;&nbsp;@Autowiring EJBs with Spring</a>
-<a class="basic-alignment right" href=https://uthark.github.io/2013/06/28/jaxrs-spring-autowiring/ title="@Autowired JAX-RS Client API">@Autowired JAX-RS Client API&nbsp;>></a>
-</p>
-<div id=disqus_thread></div>
-<script type=application/javascript>var disqus_config=function(){};(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById('disqus_thread').innerHTML='Disqus comments not available by default when the website is previewed locally.';return}var b=document,a=b.createElement('script');a.async=!0,a.src='//uthark.disqus.com/embed.js',a.setAttribute('data-timestamp',+new Date),(b.head||b.body).appendChild(a)})()</script>
-<noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript>
-<a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a>
-</footer>
-</article>
-</div>
-<aside class="sidebar thirds">
-<section class="first odd">
-<p>
-</p>
-</section>
-<section class=even>
-<div class=toc-header>Table of Contents</div>
-<nav id=TableOfContents></nav>
-</section>
-</aside>
-</div>
-</div>
-<footer>
-<div class=center>
-<ul class=sidebar-nav>
-<li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a>
-</li>
-<li class=sidebar-nav-item> <a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a>
-</li>
-<li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li>
-</ul>
-</div>
-<p>&copy;&nbsp;2009&nbsp;—&nbsp;2021 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a>
-</p>
-</footer>
-<script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(b,c){var d=b.createElement(c),a=b.getElementsByTagName(c)[0];a.async='async',d.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js',a.parentNode.insertBefore(d,a)})(document,'script')</script>
-</body>
-</html>
+</code></pre></div><p>Когда вызывается метод <code>findByLogin</code> под капотом создаётся HTTP Request, дёргается сервер и полученный ответ десериализуется. От конечного пользотеля детали реализации API скрыты.</p><p>В <a href=/blog/2013/06/28/jaxrs-spring-autowiring/>следующем посте</a> описано, как автоматически добавить полученные прокси в фабрику бинов Spring для дальнейшего использования.</p></div><footer><div class=sharing>Share:
+<a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2013%2f06%2f28%2fjaxrs%2f" target=_blank><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden=true></i></a><a href="https://twitter.com/intent/tweet?text=JAX-RS%20Client%20API&url=https%3a%2f%2futhark.github.io%2f2013%2f06%2f28%2fjaxrs%2f" target=_blank title="Post to Twitter" aria-hidden=true><i class="fa fa-twitter"></i></a></div><div><hr><p>If you have any questions, feel free to ping me on Twitter.</p></div><p class=meta>Estimated reading time: 3 minute(s)</p><p class=meta>Last update: <time datetime=2013-06-28>Jun 28, 2013</time></p><p class=meta>Categories: <a class=label href=https://uthark.github.io/categories/jax-rs-client/>#jax-rs client</a><a class=label href=https://uthark.github.io/categories/development/>#development</a><a class=label href=https://uthark.github.io/categories/article/>#article</a></p></p><p class=meta><a class="basic-alignment left" href=https://uthark.github.io/2013/06/19/autowiring-factorybean/ title="@Autowiring EJBs with Spring">&lt;&lt;&nbsp;@Autowiring EJBs with Spring</a>
+<a class="basic-alignment right" href=https://uthark.github.io/2013/06/28/jaxrs-spring-autowiring/ title="@Autowired JAX-RS Client API">@Autowired JAX-RS Client API&nbsp;>></a></p><div id=disqus_thread></div><script type=application/javascript>var disqus_config=function(){};(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById('disqus_thread').innerHTML='Disqus comments not available by default when the website is previewed locally.';return;}
+var d=document,s=d.createElement('script');s.async=true;s.src='//'+"uthark"+'.disqus.com/embed.js';s.setAttribute('data-timestamp',+new Date());(d.head||d.body).appendChild(s);})();</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></footer></article></div><aside class="sidebar thirds"><section class="first odd"><p></p></section><section class=even><div class=toc-header>Table of Contents</div><nav id=TableOfContents></nav></section></aside></div></div><footer><div class=center><ul class=sidebar-nav><li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a></li><li class=sidebar-nav-item><a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a></li><li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li></ul></div><p>&copy;&nbsp;2009&nbsp;—&nbsp;2021 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a></p></footer><script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];s.async='async'
+g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';s.parentNode.insertBefore(g,s)}(document,'script'));</script></body></html>

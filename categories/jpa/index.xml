@@ -2,4 +2,4 @@
 Рассмотрим следующий пример - например, нам нужна функциональность уникального счётчика, который мы решили реализовать с помощью последовательности (sequence).</description></item><item><title>Ищем с помощью Spring Data JPA</title><link>https://uthark.github.io/2012/04/24/spring-data-jpa/</link><pubDate>Tue, 24 Apr 2012 14:04:00 +0000</pubDate><guid>https://uthark.github.io/2012/04/24/spring-data-jpa/</guid><description>Рассмотрим подробнее одну из наиболее полезных вещей в Spring Data JPA - генерация JPQL-запросов на основе имени метода.
 Spring Data JPA умеет автоматически генерировать запросы используя для подсказки название метода.
 Например, метод User.findByLoginAndPassword сгенерирует примерно следующий код:
-FROMUseruwhereu.login=:loginandpassword=:passwordВообще Spring Data JPA пытается быть умным, поэтому реализация findBy{&amp;hellip;} методов ищется следующим образом:</description></item></channel></rss>
+FROM User u where u.</description></item></channel></rss>

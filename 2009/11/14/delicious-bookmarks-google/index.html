@@ -1,81 +1,11 @@
-<!doctype html><html prefix="og: https://ogp.me/ns#" lang=en>
-<head>
-<meta charset=utf-8>
-<link rel=canonical href=https://uthark.github.io/2009/11/14/delicious-bookmarks-google/>
-<meta name=HandheldFriendly content="True">
-<meta name=MobileOptimized content="320">
-<meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=5">
-<title>Расширение Delicious Bookmarks для Google Chrome/Chromium</title>
-<meta name=description content>
-<meta name=keywords content>
-<meta name=author content="Oleg Atamanenko">
-<link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=Lora:wght@500&family=Source+Code+Pro:wght@300&family=Bitter&display=swap" type=text/css>
-<link rel=stylesheet href=https://uthark.github.io/css/theme.e2ab29fcebb06aaf6e0d5f5685d4c3f28ae29e6bdab99de41ced527d1770a0f6.css>
-<link rel=stylesheet href=https://uthark.github.io/css/uthark.css>
-<link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css>
-<link href=https://uthark.github.io/favicon.png rel=icon>
-<link href=https://feeds.feedburner.com/atamanenko rel=alternate type=application/rss+xml title="Sharing knowledge">
-<meta name=twitter:card content="summary">
-<meta name=twitter:site content="@real_atamanenko">
-<meta name=twitter:creator content="@real_atamanenko">
-<meta name=twitter:title content="Расширение Delicious Bookmarks для Google Chrome/Chromium">
-<meta property="og:title" content="Расширение Delicious Bookmarks для Google Chrome/Chromium">
-<meta property="og:url" content="https://uthark.github.io/2009/11/14/delicious-bookmarks-google/">
-<meta property="og:description" content="Введение
+<!doctype html><html prefix="og: https://ogp.me/ns#" lang=en><head><meta charset=utf-8><link rel=canonical href=https://uthark.github.io/2009/11/14/delicious-bookmarks-google/><meta name=HandheldFriendly content="True"><meta name=MobileOptimized content="320"><meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=5"><title>Расширение Delicious Bookmarks для Google Chrome/Chromium</title><meta name=description content><meta name=keywords content><meta name=author content="Oleg Atamanenko"><link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=Lora:wght@500&family=Source+Code+Pro:wght@300&family=Bitter&display=swap" type=text/css><link rel=stylesheet href=https://uthark.github.io/css/theme.e2ab29fcebb06aaf6e0d5f5685d4c3f28ae29e6bdab99de41ced527d1770a0f6.css><link rel=stylesheet href=https://uthark.github.io/css/uthark.css><link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css><link href=https://uthark.github.io/favicon.png rel=icon><link href=https://feeds.feedburner.com/atamanenko rel=alternate type=application/rss+xml title="Sharing knowledge"><meta name=twitter:card content="summary"><meta name=twitter:site content="@real_atamanenko"><meta name=twitter:creator content="@real_atamanenko"><meta name=twitter:title content="Расширение Delicious Bookmarks для Google Chrome/Chromium"><meta property="og:title" content="Расширение Delicious Bookmarks для Google Chrome/Chromium"><meta property="og:url" content="https://uthark.github.io/2009/11/14/delicious-bookmarks-google/"><meta property="og:description" content="Введение
 Решил научиться писать собственные расширения для Google Chrome/Chromium.
 За идею взял официальное расширение от Yahoo! для Firefox - Delicious Bookmarks.
 Структура расширения
 Расширение - файл с расширением .crx. На самом деле это просто ZIP-архив с файлом манифеста внутри.
-Файл манифеста{ &#34;">
-</head>
-<body>
-<header class=site>
-<h1><a href=https://uthark.github.io/>Sharing knowledge</a></h1>
-<h2>by Oleg Atamanenko</h2>
-</header>
-<nav>
-<div class=menu>
-<input type=checkbox id=menu class="fa fa-bars">
-<label for=menu aria-label=Menu></label>
-<div class=menu-container>
-<ul class=main-navigation>
-<li><a href=https://uthark.github.io/ title=Posts>Posts</a></li>
-<li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li>
-<li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li>
-<li><a href=https://uthark.github.io/readinglist/ title="Reading Lists">Reading Lists</a></li>
-<li><a href=https://uthark.github.io/about/ title=About>About</a></li>
-</ul>
-<ul class=subscription>
-<li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-lg"></i></a></li>
-</ul>
-<form action=https://www.google.com/search method=get target=_blank>
-<fieldset role=search>
-<input class=search type=text name=q placeholder=Search>
-<input type=hidden name=q value=site:https://uthark.github.io/>
-</fieldset>
-</form>
-</div>
-</div>
-</nav>
-<div id=main>
-<div id=content>
-<div>
-<article class=hentry>
-<header>
-<h1 class=entry-title>
-Расширение Delicious Bookmarks для Google Chrome/Chromium
-</h1>
-</header>
-<div class=entry-content>
-<h1>Введение</h1><br>
-Решил научиться писать собственные расширения для <a href=http://www.google.com/chrome>Google Chrome</a>/<a href=http://www.chromium.org/>Chromium</a>.<br>
-<br>
-За идею взял официальное расширение от <a href=http://m.www.yahoo.com/>Yahoo!</a> для <a href=http://www.mozilla.com/en-US/firefox/firefox.html>Firefox</a> - <a href=https://addons.mozilla.org/en-US/firefox/addon/3615>Delicious Bookmarks</a>.<br>
-<br>
-<h1>Структура расширения</h1><br>
-Расширение - файл с расширением <tt>.crx</tt>. На самом деле это просто <tt>ZIP</tt>-архив с файлом манифеста внутри.<br>
-<br>
-<h1>Файл манифеста</h1><pre class="brush:js; highlight: [2, 3, 4, 5, 10, 16, 23]">{
+Файл манифеста{ &#34;"></head><body><header class=site><h1><a href=https://uthark.github.io/>Sharing knowledge</a></h1><h2>by Oleg Atamanenko</h2></header><nav><div class=menu><input type=checkbox id=menu class="fa fa-bars">
+<label for=menu aria-label=Menu></label><div class=menu-container><ul class=main-navigation><li><a href=https://uthark.github.io/ title=Posts>Posts</a></li><li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li><li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li><li><a href=https://uthark.github.io/readinglist/ title="Reading Lists">Reading Lists</a></li><li><a href=https://uthark.github.io/about/ title=About>About</a></li></ul><ul class=subscription><li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-lg"></i></a></li></ul><form action=https://www.google.com/search method=get target=_blank><fieldset role=search><input class=search type=text name=q placeholder=Search>
+<input type=hidden name=q value=site:https://uthark.github.io/></fieldset></form></div></div></nav><div id=main><div id=content><div><article class=hentry><header><h1 class=entry-title>Расширение Delicious Bookmarks для Google Chrome/Chromium</h1></header><div class=entry-content><h1>Введение</h1><br>Решил научиться писать собственные расширения для <a href=http://www.google.com/chrome>Google Chrome</a>/<a href=http://www.chromium.org/>Chromium</a>.<br><br>За идею взял официальное расширение от <a href=http://m.www.yahoo.com/>Yahoo!</a> для <a href=http://www.mozilla.com/en-US/firefox/firefox.html>Firefox</a> - <a href=https://addons.mozilla.org/en-US/firefox/addon/3615>Delicious Bookmarks</a>.<br><br><h1>Структура расширения</h1><br>Расширение - файл с расширением <tt>.crx</tt>. На самом деле это просто <tt>ZIP</tt>-архив с файлом манифеста внутри.<br><br><h1>Файл манифеста</h1><pre class="brush:js; highlight: [2, 3, 4, 5, 10, 16, 23]">{
 "name": "Delicious plugin", // 1
 "version": "0.2", // 2
 "background_page": "background.html", // 3
@@ -96,35 +26,7 @@
 ],</p>
 <p>&ldquo;options_page&rdquo;: &ldquo;options.html&rdquo; // 7
 }
-</pre><br>
-Манифест - файл в формате <a href=http://json.org/>JSON</a>.<br>
-<br>
-Манифест состоит из следующих частей:<br>
-<br></p>
-<ol>
-<li><span style=font-weight:700><tt>name</tt></span> - Имя расширения<br></li>
-<li><span style=font-weight:700><tt>version</tt></span> - Версия расширения<br></li>
-<li><span style=font-weight:700><tt>background_page</tt></span> - основной файл с расширением. Это обычный HTML-файл с разметкой.<br></li>
-<li><span style=font-weight:700><tt>permissions</tt></span> - разрешения для расширения. Указываем, что нам нужен доступ к вкладкам (tabs) и закладкам (bookmarks).<br></li>
-<li><span style=font-weight:700><tt>browser_action</tt></span> - указываем, что нужно отобразить на панели инструментов браузера.<br></li>
-<li><span style=font-weight:700><tt>content_scripts</tt></span> - Для доступа к DOM отображаемой страницы необходимы content scripts, данный блок регистрирует скрипт <tt>getDocumentSelection.js</tt> для всех <tt>http</tt> и <tt>https</tt> страниц.<br></li>
-<li><span style=font-weight:700><tt>options_page</tt></span> - страница с настройками.<br>
-<br>
-Подробное описание файла манифеста есть <a href=http://code.google.com/chrome/extensions/manifest.html>на официальном сайте</a>. <br>
-<br></li>
-</ol>
-<h1>Описание работы расширения</h1><br>
-<br>
-Расширение работает следующим образом:<br>
-1. При клике на значок расширения вызывается обработчик <tt>addBookmark</tt><br>
-2. Обработчик открывает коммуникационный порт и отправляет сообщение скрипту содержимого.<br>
-3. Скрипт содержимого забирает выделенный текст и отправляет назад расширению выделенный текст.<br>
-4. Расширение забирает выделенный текст, определяет настройки сохранения (Private/Public) и вызывает окно сохранения <span style=font-style:italic>Delicious</span>.<br>
-<br>
-<h1>Реализация расширения</h1><br>
-<br>
-<span style=font-weight:700>background.html</span>:<br>
-<pre class="brush:js; html-script: true">&lt;html&gt;
+</pre><br>Манифест - файл в формате <a href=http://json.org/>JSON</a>.<br><br>Манифест состоит из следующих частей:<br><br></p><ol><li><span style=font-weight:700><tt>name</tt></span> - Имя расширения<br></li><li><span style=font-weight:700><tt>version</tt></span> - Версия расширения<br></li><li><span style=font-weight:700><tt>background_page</tt></span> - основной файл с расширением. Это обычный HTML-файл с разметкой.<br></li><li><span style=font-weight:700><tt>permissions</tt></span> - разрешения для расширения. Указываем, что нам нужен доступ к вкладкам (tabs) и закладкам (bookmarks).<br></li><li><span style=font-weight:700><tt>browser_action</tt></span> - указываем, что нужно отобразить на панели инструментов браузера.<br></li><li><span style=font-weight:700><tt>content_scripts</tt></span> - Для доступа к DOM отображаемой страницы необходимы content scripts, данный блок регистрирует скрипт <tt>getDocumentSelection.js</tt> для всех <tt>http</tt> и <tt>https</tt> страниц.<br></li><li><span style=font-weight:700><tt>options_page</tt></span> - страница с настройками.<br><br>Подробное описание файла манифеста есть <a href=http://code.google.com/chrome/extensions/manifest.html>на официальном сайте</a>.<br><br></li></ol><h1>Описание работы расширения</h1><br><br>Расширение работает следующим образом:<br>1. При клике на значок расширения вызывается обработчик <tt>addBookmark</tt><br>2. Обработчик открывает коммуникационный порт и отправляет сообщение скрипту содержимого.<br>3. Скрипт содержимого забирает выделенный текст и отправляет назад расширению выделенный текст.<br>4. Расширение забирает выделенный текст, определяет настройки сохранения (Private/Public) и вызывает окно сохранения <span style=font-style:italic>Delicious</span>.<br><br><h1>Реализация расширения</h1><br><br><span style=font-weight:700>background.html</span>:<br><pre class="brush:js; html-script: true">&lt;html&gt;
 &lt;head&gt;
 &lt;script&nbsp;type=&quot;text/javascript&quot;&gt;
 &nbsp;&nbsp;&nbsp;&nbsp;function&nbsp;saveBookmark()&nbsp;{
@@ -175,11 +77,7 @@
 &lt;/script&gt;
 &lt;/head&gt;
 &lt;/html&gt;</p>
-<p></pre><br>
-<br>
-<span style=font-weight:700>getDocumentSelection.js</span><br>
-<br></p>
-<pre class=brush:js>var port = chrome.extension.connect( {
+<p></pre><br><br><span style=font-weight:700>getDocumentSelection.js</span><br><br></p><pre class=brush:js>var port = chrome.extension.connect( {
 name : "deliciousBookmark"
 });
 
@@ -201,11 +99,7 @@ selection : description
 });
 
 
-</pre><br>
-<p><br>
-<span style=font-weight:700>options.html</span><br>
-<br></p>
-<pre class="brush:js; html-script: true">&lt;html&gt;
+</pre><br><p><br><span style=font-weight:700>options.html</span><br><br></p><pre class="brush:js; html-script: true">&lt;html&gt;
 &lt;html&gt;
 &lt;head&gt;
 &lt;title&gt;Delicious Bookmarks Options&lt;/title&gt;
@@ -249,89 +143,8 @@ selection : description
 &lt;div id=&quot;status&quot;&gt;&amp;nbsp;&lt;/div&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-</pre><br>
-<p><br></p>
-<h1>Сборка расширения</h1><br>
-В Chromium есть возможность собрать расширение.<br>
-1. Открываем адрес <tt>chrome://extensions/</tt><br>
-2. В правом верхнем углу нажимаем Developer Mode.<br>
-3. На появившейся панели инструментов кликаем Pack Extension<br>
-4. Выбираем каталог, в котором находится расширение<br>
-5. Chromium автоматически собирает расширение в каталоге с исходниками расширения.<br>
-<br>
-<h1>Заключение</h1><br>
-Писать расширения для Google Chrome не просто, а очень просто. <br>
-<br>
-Готовое и собранное расширение можно <a href=http://bit.ly/2KYnr8>скачать здесь</a>.<br>
-<br>
-<h1>Дополнительная информация</h1><br>
-<ol><li><a href=http://code.google.com/chrome/extensions/devguide.html>Google Chrome Extensions Developer's Guide</a></li>
-<li><a href=http://code.google.com/chrome/extensions/manifest.html>Manifest file description</a></li>
-<li><a href=http://code.google.com/chrome/extensions/api_index.html>Chrome Extensions API</a></li>
-<li><a href=http://code.google.com/chrome/extensions/packaging.html>Extension Packaging</a></li>
-</ol><br>
-<br>
-В следующей заметке опишу работу messaging для коммуникации расширения со скриптами содержимого.
-</div>
-<footer>
-<div class=sharing>
-Share:
-<a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2009%2f11%2f14%2fdelicious-bookmarks-google%2f" target=_blank><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden=true></i></a>
-<a href="https://twitter.com/intent/tweet?text=%d0%a0%d0%b0%d1%81%d1%88%d0%b8%d1%80%d0%b5%d0%bd%d0%b8%d0%b5%20Delicious%20Bookmarks%20%d0%b4%d0%bb%d1%8f%20Google%20Chrome%2fChromium&url=https%3a%2f%2futhark.github.io%2f2009%2f11%2f14%2fdelicious-bookmarks-google%2f" target=_blank title="Post to Twitter" aria-hidden=true><i class="fa fa-twitter"></i></a>
-</div>
-<div>
-<hr>
-<p>If you have any questions, feel free to ping me on Twitter.</p>
-</div>
-<p class=meta>
-Estimated reading time: 3 minute(s)
-</p>
-<p class=meta>
-Last update: <time datetime=2009-11-14>Nov 14, 2009</time>
-</p>
-<p class=meta>
-Categories: <a class=label href=https://uthark.github.io/categories/extension/>#extension</a><a class=label href=https://uthark.github.io/categories/delicious/>#delicious</a><a class=label href=https://uthark.github.io/categories/howto/>#howto</a><a class=label href=https://uthark.github.io/categories/chromium/>#chromium</a><a class=label href=https://uthark.github.io/categories/article/>#article</a><a class=label href=https://uthark.github.io/categories/development/>#development</a>
-</p>
-</p>
-<p class=meta>
-<a class="basic-alignment left" href=https://uthark.github.io/2009/11/02/google-wave/ title="Инвайты на Google Wave">&lt;&lt;&nbsp;Инвайты на Google Wave</a>
-<a class="basic-alignment right" href=https://uthark.github.io/2009/11/24/google-chrome/ title="Создание страницы настроек для расширений Google Chrome">Создание страницы настроек для расширений Google Chrome&nbsp;>></a>
-</p>
-<div id=disqus_thread></div>
-<script type=application/javascript>var disqus_config=function(){};(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById('disqus_thread').innerHTML='Disqus comments not available by default when the website is previewed locally.';return}var b=document,a=b.createElement('script');a.async=!0,a.src='//uthark.disqus.com/embed.js',a.setAttribute('data-timestamp',+new Date),(b.head||b.body).appendChild(a)})()</script>
-<noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript>
-<a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a>
-</footer>
-</article>
-</div>
-<aside class="sidebar thirds">
-<section class="first odd">
-<p>
-</p>
-</section>
-<section class=even>
-<div class=toc-header>Table of Contents</div>
-<nav id=TableOfContents></nav>
-</section>
-</aside>
-</div>
-</div>
-<footer>
-<div class=center>
-<ul class=sidebar-nav>
-<li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a>
-</li>
-<li class=sidebar-nav-item> <a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a>
-</li>
-<li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li>
-</ul>
-</div>
-<p>&copy;&nbsp;2009&nbsp;—&nbsp;2021 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a>
-</p>
-</footer>
-<script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(b,c){var d=b.createElement(c),a=b.getElementsByTagName(c)[0];a.async='async',d.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js',a.parentNode.insertBefore(d,a)})(document,'script')</script>
-</body>
-</html>
+</pre><br><p><br></p><h1>Сборка расширения</h1><br>В Chromium есть возможность собрать расширение.<br>1. Открываем адрес <tt>chrome://extensions/</tt><br>2. В правом верхнем углу нажимаем Developer Mode.<br>3. На появившейся панели инструментов кликаем Pack Extension<br>4. Выбираем каталог, в котором находится расширение<br>5. Chromium автоматически собирает расширение в каталоге с исходниками расширения.<br><br><h1>Заключение</h1><br>Писать расширения для Google Chrome не просто, а очень просто.<br><br>Готовое и собранное расширение можно <a href=http://bit.ly/2KYnr8>скачать здесь</a>.<br><br><h1>Дополнительная информация</h1><br><ol><li><a href=http://code.google.com/chrome/extensions/devguide.html>Google Chrome Extensions Developer's Guide</a></li><li><a href=http://code.google.com/chrome/extensions/manifest.html>Manifest file description</a></li><li><a href=http://code.google.com/chrome/extensions/api_index.html>Chrome Extensions API</a></li><li><a href=http://code.google.com/chrome/extensions/packaging.html>Extension Packaging</a></li></ol><br><br>В следующей заметке опишу работу messaging для коммуникации расширения со скриптами содержимого.</div><footer><div class=sharing>Share:
+<a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2009%2f11%2f14%2fdelicious-bookmarks-google%2f" target=_blank><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden=true></i></a><a href="https://twitter.com/intent/tweet?text=%d0%a0%d0%b0%d1%81%d1%88%d0%b8%d1%80%d0%b5%d0%bd%d0%b8%d0%b5%20Delicious%20Bookmarks%20%d0%b4%d0%bb%d1%8f%20Google%20Chrome%2fChromium&url=https%3a%2f%2futhark.github.io%2f2009%2f11%2f14%2fdelicious-bookmarks-google%2f" target=_blank title="Post to Twitter" aria-hidden=true><i class="fa fa-twitter"></i></a></div><div><hr><p>If you have any questions, feel free to ping me on Twitter.</p></div><p class=meta>Estimated reading time: 3 minute(s)</p><p class=meta>Last update: <time datetime=2009-11-14>Nov 14, 2009</time></p><p class=meta>Categories: <a class=label href=https://uthark.github.io/categories/extension/>#extension</a><a class=label href=https://uthark.github.io/categories/delicious/>#delicious</a><a class=label href=https://uthark.github.io/categories/howto/>#howto</a><a class=label href=https://uthark.github.io/categories/chromium/>#chromium</a><a class=label href=https://uthark.github.io/categories/article/>#article</a><a class=label href=https://uthark.github.io/categories/development/>#development</a></p></p><p class=meta><a class="basic-alignment left" href=https://uthark.github.io/2009/11/02/google-wave/ title="Инвайты на Google Wave">&lt;&lt;&nbsp;Инвайты на Google Wave</a>
+<a class="basic-alignment right" href=https://uthark.github.io/2009/11/24/google-chrome/ title="Создание страницы настроек для расширений Google Chrome">Создание страницы настроек для расширений Google Chrome&nbsp;>></a></p><div id=disqus_thread></div><script type=application/javascript>var disqus_config=function(){};(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById('disqus_thread').innerHTML='Disqus comments not available by default when the website is previewed locally.';return;}
+var d=document,s=d.createElement('script');s.async=true;s.src='//'+"uthark"+'.disqus.com/embed.js';s.setAttribute('data-timestamp',+new Date());(d.head||d.body).appendChild(s);})();</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></footer></article></div><aside class="sidebar thirds"><section class="first odd"><p></p></section><section class=even><div class=toc-header>Table of Contents</div><nav id=TableOfContents></nav></section></aside></div></div><footer><div class=center><ul class=sidebar-nav><li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a></li><li class=sidebar-nav-item><a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a></li><li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li></ul></div><p>&copy;&nbsp;2009&nbsp;—&nbsp;2021 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a></p></footer><script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];s.async='async'
+g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';s.parentNode.insertBefore(g,s)}(document,'script'));</script></body></html>
