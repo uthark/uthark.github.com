@@ -1,7 +1,146 @@
-<!doctype html><html prefix="og: https://ogp.me/ns#" lang=en><head><meta charset=utf-8><link rel=canonical href=https://uthark.github.io/2009/05/03/eclipse/><meta name=HandheldFriendly content="True"><meta name=MobileOptimized content="320"><meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=5"><title>Eclipse и его расширения</title><meta name=description content><meta name=keywords content><meta name=author content="Oleg Atamanenko"><link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=Lora:wght@500&family=Source+Code+Pro:wght@300&family=Bitter&display=swap" type=text/css><link rel=stylesheet href=https://uthark.github.io/css/theme.f98ae173ea806bb32a531ccc162d9ad4120465789080cf2bdb4f6fa2214f0e68.css><link rel=stylesheet href=https://uthark.github.io/css/uthark.css><link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css><link href=https://uthark.github.io/favicon.png rel=icon><link href=https://feeds.feedburner.com/atamanenko rel=alternate type=application/rss+xml title="Sharing knowledge"><meta name=twitter:card content="summary"><meta name=twitter:site content="@real_atamanenko"><meta name=twitter:creator content="@real_atamanenko"><meta name=twitter:title content="Eclipse и его расширения"><meta property="og:title" content="Eclipse и его расширения"><meta property="og:url" content="https://uthark.github.io/2009/05/03/eclipse/"><meta property="og:description" content="Многие ругают Eclipse за то, что там нет многого из того, что есть в коробке у Jetbrains Intellij IDEA. Мне всегда казалось это не очень корректным, так как Eclipse в первую очередь платформа, а уже потом - среда для Java разработки."></head><body><header class=site><h1><a href=https://uthark.github.io/>Sharing knowledge</a></h1><h2>by Oleg Atamanenko</h2></header><nav><div class=menu><input type=checkbox id=menu class="fa fa-bars">
-<label for=menu aria-label=Menu></label><div class=menu-container><ul class=main-navigation><li><a href=https://uthark.github.io/ title=Posts>Posts</a></li><li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li><li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li><li><a href=https://uthark.github.io/readinglist/ title="Reading Lists">Reading Lists</a></li><li><a href=https://uthark.github.io/about/ title=About>About</a></li></ul><ul class=subscription><li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-lg"></i></a></li></ul><form action=https://www.google.com/search method=get target=_blank><fieldset role=search><input class=search type=text name=q placeholder=Search>
-<input type=hidden name=q value=site:https://uthark.github.io/></fieldset></form></div></div></nav><div id=main><div id=content><div><article class=hentry><header><h1 class=entry-title>Eclipse и его расширения</h1></header><div class=entry-content><p>Многие ругают <a href=http://www.eclipse.org/>Eclipse</a> за то, что там нет многого из того, что есть в коробке у <a href=http://www.jetbrains.com/idea/>Jetbrains Intellij IDEA</a>. Мне всегда казалось это не очень корректным, так как Eclipse в первую очередь платформа, а уже потом - среда для Java разработки.<br>Решил собрать воедино весь список используемых мною расширений для Eclipse.<br></p><ol><li><a href=http://subclipse.tigris.org/>Subclipse</a> - без этого никуда. Это расширение позволяет работать с системой контроля версий <a href=http://subversion.tigris.org/>Subversion</a> не выходя из Eclipse.</li><li><a href=http://m2eclipse.codehaus.org/>m2eclipse</a> - Расширение для работы с <a href=http://maven.apache.org/>maven</a>. Графический редактор pom.xml позволяет избавиться от редактирования pom.xml вручную. В качестве приятного дополнения - возможность посмотреть графически список зависимостей проекта (вместе с транзитивными), а так же увидеть ситуации, когда 2 разные библиотеки зависят от разных версий одной и той же библиотеки.</li><li><a href=http://code.google.com/eclipse/>Google Plugin for Eclipse</a> - официальное расширение от Google для работы с <a href=http://code.google.com/webtoolkit>Google Web Toolkit</a> и <a href=http://code.google.com/appengine>Google Application Engine</a>.</li><li><a href=http://eclipse-cs.sourceforge.net/>Eclipse-CS</a> - Нет, это не запускалка Counter Strike, а всего лишь расширение, интегрирующее статический анализатор исходного кода <a href=http://checkstyle.sourceforge.net/>Checkstyle</a> в Eclipse. Проверяет правильность форматирования кода согласно заданным правилам. Обязательное расширение при работе в команде.</li><li><a href=http://springide.org/project/wiki>Spring IDE</a> - расширение от команды SpringSource для работы с проектами, использующими Spring, в том числе Spring AOP и Spring Webflow.</li><li><a href=http://www.xmind.net/>XMind</a> - отличное расширение, предоставляющее <a href=http://en.wikipedia.org/wiki/Mindmap>mind-mapping</a> возможности в Eclipse.</li><li><a href=http://www.jboss.org/tools>JBoss Tools</a> - наборо расширений для работы с продуктами JBoss - Hibernate, JBoss AS, Drools, jBPM, JSF, (X)HTML, Seam, Smooks, JBoss ESB, JBoss Portal...</li><li><a href=http://www.eclemma.org/>EclEmma</a> - интеграция отличной библиотеки <a href=http://emma.sourceforge.net/>EMMA</a> в Eclipse. EMMA - приложение для подсчёта покрытия кода тестами. Must-have расширение.</li><li><a href=http://www.eclipse.org/tptp/>TPTP</a> - Под этой странной аббревиатурой скрывается Test & Performance Tools Platform. Набор расширений для тестирования и профилирования приложений.</li><li><a href=http://pmd.sourceforge.net/integrations.html#eclipse>PMD</a> - Интеграция библиотеки <a href=http://pmd.sourceforge.net/>PMD</a>, которая выполняет статический анализ кода на предмет возможных ошибок в коде.</li><li><a href=http://www.eclipse.org/webtools/>WTP</a> - Web Tools Platform - официальный набор расширений для разработки Web и Java EE приложений.</li><li><a href=http://groovy.codehaus.org/Eclipse+Plugin>Groovy & Grails</a> - расширение для работы с языком <a href=http://groovy.codehaus.org/>Groovy</a> и фреймворком <a href=http://grails.org/>Grails</a>.</li><li><a href=http://code.google.com/p/egit/>eGit</a> - расширение предоставляет возможность работы с распределенной системой контроля версий <a href=http://git-scm.com/>git</a>.</li><li><a href=http://eclipsesql.sourceforge.net/>Eclipse SQL Explorer</a> - тонкий SQL-клиент, который позволяет просматривать различные JDBC-совместимые базы данных.</li></ol>Очень много расширений есть на <a href=http://www.eclipseplugincentral.com/>Eclipse Plugin Central</a><br><br>Также, все плагины, на которые я обращаю внимание можно найти на <a href=http://delicious.com/dark.schakal/EclipsePlugin>del.icio.us</a></div><footer><div class=sharing>Share:
-<a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2009%2f05%2f03%2feclipse%2f" target=_blank><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden=true></i></a><a href="https://twitter.com/intent/tweet?text=Eclipse%20%d0%b8%20%d0%b5%d0%b3%d0%be%20%d1%80%d0%b0%d1%81%d1%88%d0%b8%d1%80%d0%b5%d0%bd%d0%b8%d1%8f&url=https%3a%2f%2futhark.github.io%2f2009%2f05%2f03%2feclipse%2f" target=_blank title="Post to Twitter" aria-hidden=true><i class="fa fa-twitter"></i></a></div><div><hr><p>If you have any questions, feel free to ping me on Twitter.</p></div><p class=meta>Estimated reading time: 2 minute(s)</p><p class=meta>Last update: <time datetime=2009-05-03>May 3, 2009</time></p><p class=meta>Categories: <a class=label href=https://uthark.github.io/categories/plugin/>#plugin</a><a class=label href=https://uthark.github.io/categories/eclipse/>#eclipse</a><a class=label href=https://uthark.github.io/categories/development/>#development</a><a class=label href=https://uthark.github.io/categories/article/>#article</a></p></p><p class=meta><a class="basic-alignment left" href=https://uthark.github.io/2009/04/26/blog-post_26/ title="Критерии выбора блокировок">&lt;&lt;&nbsp;Критерии выбора блокировок</a>
-<a class="basic-alignment right" href=https://uthark.github.io/2009/05/23/google-application-engine/ title="Google Application Engine">Google Application Engine&nbsp;>></a></p><div id=disqus_thread></div><script type=application/javascript>var disqus_config=function(){};(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById('disqus_thread').innerHTML='Disqus comments not available by default when the website is previewed locally.';return;}
-var d=document,s=d.createElement('script');s.async=true;s.src='//'+"uthark"+'.disqus.com/embed.js';s.setAttribute('data-timestamp',+new Date());(d.head||d.body).appendChild(s);})();</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></footer></article></div><aside class="sidebar thirds"><section class="first odd"><p></p></section><section class=even><div class=toc-header>Table of Contents</div><nav id=TableOfContents></nav></section></aside></div></div><footer><div class=center><ul class=sidebar-nav><li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a></li><li class=sidebar-nav-item><a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a></li><li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li></ul></div><p>&copy;&nbsp;2009&nbsp;—&nbsp;2021 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a></p></footer><script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];s.async='async'
-g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';s.parentNode.insertBefore(g,s)}(document,'script'));</script></body></html>
+<!doctype html><html prefix="og: https://ogp.me/ns#" lang=en>
+<head>
+<meta charset=utf-8>
+<link rel=canonical href=https://uthark.github.io/2009/05/03/eclipse/>
+<meta name=HandheldFriendly content="True">
+<meta name=MobileOptimized content="320">
+<meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=5">
+<title>Eclipse и его расширения</title>
+<meta name=description content>
+<meta name=keywords content>
+<meta name=author content="Oleg Atamanenko">
+<link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=Lora:wght@500&family=Source+Code+Pro:wght@300&family=Bitter&display=swap" type=text/css>
+<link rel=stylesheet href=https://uthark.github.io/css/theme.e2ab29fcebb06aaf6e0d5f5685d4c3f28ae29e6bdab99de41ced527d1770a0f6.css>
+<link rel=stylesheet href=https://uthark.github.io/css/uthark.css>
+<link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css>
+<link href=https://uthark.github.io/favicon.png rel=icon>
+<link href=https://feeds.feedburner.com/atamanenko rel=alternate type=application/rss+xml title="Sharing knowledge">
+<meta name=twitter:card content="summary">
+<meta name=twitter:site content="@real_atamanenko">
+<meta name=twitter:creator content="@real_atamanenko">
+<meta name=twitter:title content="Eclipse и его расширения">
+<meta property="og:title" content="Eclipse и его расширения">
+<meta property="og:url" content="https://uthark.github.io/2009/05/03/eclipse/">
+<meta property="og:description" content="Многие ругают Eclipse за то, что там нет многого из того, что есть в коробке у Jetbrains Intellij IDEA. Мне всегда казалось это не очень корректным, так как Eclipse в первую очередь платформа, а уже потом - среда для Java разработки.">
+</head>
+<body>
+<header class=site>
+<h1><a href=https://uthark.github.io/>Sharing knowledge</a></h1>
+<h2>by Oleg Atamanenko</h2>
+</header>
+<nav>
+<div class=menu>
+<input type=checkbox id=menu class="fa fa-bars">
+<label for=menu aria-label=Menu></label>
+<div class=menu-container>
+<ul class=main-navigation>
+<li><a href=https://uthark.github.io/ title=Posts>Posts</a></li>
+<li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li>
+<li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li>
+<li><a href=https://uthark.github.io/readinglist/ title="Reading Lists">Reading Lists</a></li>
+<li><a href=https://uthark.github.io/about/ title=About>About</a></li>
+</ul>
+<ul class=subscription>
+<li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-lg"></i></a></li>
+</ul>
+<form action=https://www.google.com/search method=get target=_blank>
+<fieldset role=search>
+<input class=search type=text name=q placeholder=Search>
+<input type=hidden name=q value=site:https://uthark.github.io/>
+</fieldset>
+</form>
+</div>
+</div>
+</nav>
+<div id=main>
+<div id=content>
+<div>
+<article class=hentry>
+<header>
+<h1 class=entry-title>
+Eclipse и его расширения
+</h1>
+</header>
+<div class=entry-content>
+<p>Многие ругают <a href=http://www.eclipse.org/>Eclipse</a> за то, что там нет многого из того, что есть в коробке у <a href=http://www.jetbrains.com/idea/>Jetbrains Intellij IDEA</a>. Мне всегда казалось это не очень корректным, так как Eclipse в первую очередь платформа, а уже потом - среда для Java разработки.<br>
+Решил собрать воедино весь список используемых мною расширений для Eclipse.<br></p>
+<ol><li><a href=http://subclipse.tigris.org/>Subclipse</a> - без этого никуда. Это расширение позволяет работать с системой контроля версий <a href=http://subversion.tigris.org/>Subversion</a> не выходя из Eclipse.</li>
+<li><a href=http://m2eclipse.codehaus.org/>m2eclipse</a> - Расширение для работы с <a href=http://maven.apache.org/>maven</a>. Графический редактор pom.xml позволяет избавиться от редактирования pom.xml вручную. В качестве приятного дополнения - возможность посмотреть графически список зависимостей проекта (вместе с транзитивными), а так же увидеть ситуации, когда 2 разные библиотеки зависят от разных версий одной и той же библиотеки.</li>
+<li><a href=http://code.google.com/eclipse/>Google Plugin for Eclipse</a> - официальное расширение от Google для работы с <a href=http://code.google.com/webtoolkit>Google Web Toolkit</a> и <a href=http://code.google.com/appengine>Google Application Engine</a>.</li>
+<li><a href=http://eclipse-cs.sourceforge.net/>Eclipse-CS</a> - Нет, это не запускалка Counter Strike, а всего лишь расширение, интегрирующее статический анализатор исходного кода <a href=http://checkstyle.sourceforge.net/>Checkstyle</a> в Eclipse. Проверяет правильность форматирования кода согласно заданным правилам. Обязательное расширение при работе в команде.</li>
+<li><a href=http://springide.org/project/wiki>Spring IDE</a> - расширение от команды SpringSource для работы с проектами, использующими Spring, в том числе Spring AOP и Spring Webflow.</li>
+<li><a href=http://www.xmind.net/>XMind</a> - отличное расширение, предоставляющее <a href=http://en.wikipedia.org/wiki/Mindmap>mind-mapping</a> возможности в Eclipse.</li>
+<li><a href=http://www.jboss.org/tools>JBoss Tools</a> - наборо расширений для работы с продуктами JBoss - Hibernate, JBoss AS, Drools, jBPM, JSF, (X)HTML, Seam, Smooks, JBoss ESB, JBoss Portal...</li>
+<li><a href=http://www.eclemma.org/>EclEmma</a> - интеграция отличной библиотеки <a href=http://emma.sourceforge.net/>EMMA</a> в Eclipse. EMMA - приложение для подсчёта покрытия кода тестами. Must-have расширение.</li>
+<li><a href=http://www.eclipse.org/tptp/>TPTP</a> - Под этой странной аббревиатурой скрывается Test & Performance Tools Platform. Набор расширений для тестирования и профилирования приложений.</li>
+<li><a href=http://pmd.sourceforge.net/integrations.html#eclipse>PMD</a> - Интеграция библиотеки <a href=http://pmd.sourceforge.net/>PMD</a>, которая выполняет статический анализ кода на предмет возможных ошибок в коде.</li>
+<li><a href=http://www.eclipse.org/webtools/>WTP</a> - Web Tools Platform - официальный набор расширений для разработки Web и Java EE приложений.</li>
+<li><a href=http://groovy.codehaus.org/Eclipse+Plugin>Groovy & Grails</a> - расширение для работы с языком <a href=http://groovy.codehaus.org/>Groovy</a> и фреймворком <a href=http://grails.org/>Grails</a>.</li>
+<li><a href=http://code.google.com/p/egit/>eGit</a> - расширение предоставляет возможность работы с распределенной системой контроля версий <a href=http://git-scm.com/>git</a>.</li>
+<li><a href=http://eclipsesql.sourceforge.net/>Eclipse SQL Explorer</a> - тонкий SQL-клиент, который позволяет просматривать различные JDBC-совместимые базы данных.</li>
+</ol>Очень много расширений есть на <a href=http://www.eclipseplugincentral.com/>Eclipse Plugin Central</a><br>
+<br>
+Также, все плагины, на которые я обращаю внимание можно найти на <a href=http://delicious.com/dark.schakal/EclipsePlugin>del.icio.us</a>
+</div>
+<footer>
+<div class=sharing>
+Share:
+<a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2009%2f05%2f03%2feclipse%2f" target=_blank><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden=true></i></a>
+<a href="https://twitter.com/intent/tweet?text=Eclipse%20%d0%b8%20%d0%b5%d0%b3%d0%be%20%d1%80%d0%b0%d1%81%d1%88%d0%b8%d1%80%d0%b5%d0%bd%d0%b8%d1%8f&url=https%3a%2f%2futhark.github.io%2f2009%2f05%2f03%2feclipse%2f" target=_blank title="Post to Twitter" aria-hidden=true><i class="fa fa-twitter"></i></a>
+</div>
+<div>
+<hr>
+<p>If you have any questions, feel free to ping me on Twitter.</p>
+</div>
+<p class=meta>
+Estimated reading time: 2 minute(s)
+</p>
+<p class=meta>
+Last update: <time datetime=2009-05-03>May 3, 2009</time>
+</p>
+<p class=meta>
+Categories: <a class=label href=https://uthark.github.io/categories/plugin/>#plugin</a><a class=label href=https://uthark.github.io/categories/eclipse/>#eclipse</a><a class=label href=https://uthark.github.io/categories/development/>#development</a><a class=label href=https://uthark.github.io/categories/article/>#article</a>
+</p>
+</p>
+<p class=meta>
+<a class="basic-alignment left" href=https://uthark.github.io/2009/04/26/blog-post_26/ title="Критерии выбора блокировок">&lt;&lt;&nbsp;Критерии выбора блокировок</a>
+<a class="basic-alignment right" href=https://uthark.github.io/2009/05/23/google-application-engine/ title="Google Application Engine">Google Application Engine&nbsp;>></a>
+</p>
+<div id=disqus_thread></div>
+<script type=application/javascript>var disqus_config=function(){};(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById('disqus_thread').innerHTML='Disqus comments not available by default when the website is previewed locally.';return}var b=document,a=b.createElement('script');a.async=!0,a.src='//uthark.disqus.com/embed.js',a.setAttribute('data-timestamp',+new Date),(b.head||b.body).appendChild(a)})()</script>
+<noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript>
+<a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a>
+</footer>
+</article>
+</div>
+<aside class="sidebar thirds">
+<section class="first odd">
+<p>
+</p>
+</section>
+<section class=even>
+<div class=toc-header>Table of Contents</div>
+<nav id=TableOfContents></nav>
+</section>
+</aside>
+</div>
+</div>
+<footer>
+<div class=center>
+<ul class=sidebar-nav>
+<li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a>
+</li>
+<li class=sidebar-nav-item> <a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a>
+<li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a>
+<li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a>
+<li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a>
+</li>
+<li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li>
+</ul>
+</div>
+<p>&copy;&nbsp;2009&nbsp;—&nbsp;2021 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a>
+</p>
+</footer>
+<script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(b,c){var d=b.createElement(c),a=b.getElementsByTagName(c)[0];a.async='async',d.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js',a.parentNode.insertBefore(d,a)})(document,'script')</script>
+</body>
+</html>

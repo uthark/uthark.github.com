@@ -1,7 +1,72 @@
-<!doctype html><html prefix="og: https://ogp.me/ns#" lang=en><head><meta charset=utf-8><link rel=canonical href=https://uthark.github.io/2013/06/28/jaxrs-spring-autowiring/><meta name=HandheldFriendly content="True"><meta name=MobileOptimized content="320"><meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=5"><title>@Autowired JAX-RS Client API</title><meta name=description content><meta name=keywords content><meta name=author content="Oleg Atamanenko"><link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=Lora:wght@500&family=Source+Code+Pro:wght@300&family=Bitter&display=swap" type=text/css><link rel=stylesheet href=https://uthark.github.io/css/theme.f98ae173ea806bb32a531ccc162d9ad4120465789080cf2bdb4f6fa2214f0e68.css><link rel=stylesheet href=https://uthark.github.io/css/uthark.css><link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css><link href=https://uthark.github.io/favicon.png rel=icon><link href=https://feeds.feedburner.com/atamanenko rel=alternate type=application/rss+xml title="Sharing knowledge"><meta name=twitter:card content="summary"><meta name=twitter:site content="@real_atamanenko"><meta name=twitter:creator content="@real_atamanenko"><meta name=twitter:title content="@Autowired JAX-RS Client API"><meta property="og:title" content="@Autowired JAX-RS Client API"><meta property="og:url" content="https://uthark.github.io/2013/06/28/jaxrs-spring-autowiring/"><meta property="og:description" content="Продолжая разговор о JAX RS Client API - предположим, что мы уже используем JAX-RS клиент
-У нас есть класс, который умеет создавать прокси для любого REST-интерфейса в проекте. Теперь мы хотим сделать так, чтобы эти интерфейсы можно было автоматически создавать в контексте Spring и связывать с другими бинами."></head><body><header class=site><h1><a href=https://uthark.github.io/>Sharing knowledge</a></h1><h2>by Oleg Atamanenko</h2></header><nav><div class=menu><input type=checkbox id=menu class="fa fa-bars">
-<label for=menu aria-label=Menu></label><div class=menu-container><ul class=main-navigation><li><a href=https://uthark.github.io/ title=Posts>Posts</a></li><li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li><li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li><li><a href=https://uthark.github.io/readinglist/ title="Reading Lists">Reading Lists</a></li><li><a href=https://uthark.github.io/about/ title=About>About</a></li></ul><ul class=subscription><li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-lg"></i></a></li></ul><form action=https://www.google.com/search method=get target=_blank><fieldset role=search><input class=search type=text name=q placeholder=Search>
-<input type=hidden name=q value=site:https://uthark.github.io/></fieldset></form></div></div></nav><div id=main><div id=content><div><article class=hentry><header><h1 class=entry-title>@Autowired JAX-RS Client API</h1></header><div class=entry-content><p>Продолжая разговор о <a href="http://www.jcp.org/en/jsr/detail?id=339">JAX RS</a> <a href=https://jax-rs-spec.java.net/nonav/2.0/apidocs/javax/ws/rs/client/package-summary.html>Client API</a> - предположим, что мы уже <a href=/blog/2013/06/28/jaxrs/>используем JAX-RS клиент</a></p><p>У нас есть класс, который умеет создавать прокси для любого REST-интерфейса в проекте. Теперь мы хотим сделать так, чтобы эти интерфейсы можно было автоматически создавать в контексте Spring и связывать с другими бинами.</p><p>Первое решение, которое приходит в лоб - объявить бин в конфигурации для каждого интерфейса:</p><div class=highlight><pre class=chroma><code class=language-java data-lang=java><span class=nd>@Configuration</span>
+<!doctype html><html prefix="og: https://ogp.me/ns#" lang=en>
+<head>
+<meta charset=utf-8>
+<link rel=canonical href=https://uthark.github.io/2013/06/28/jaxrs-spring-autowiring/>
+<meta name=HandheldFriendly content="True">
+<meta name=MobileOptimized content="320">
+<meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=5">
+<title>@Autowired JAX-RS Client API</title>
+<meta name=description content>
+<meta name=keywords content>
+<meta name=author content="Oleg Atamanenko">
+<link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=Lora:wght@500&family=Source+Code+Pro:wght@300&family=Bitter&display=swap" type=text/css>
+<link rel=stylesheet href=https://uthark.github.io/css/theme.e2ab29fcebb06aaf6e0d5f5685d4c3f28ae29e6bdab99de41ced527d1770a0f6.css>
+<link rel=stylesheet href=https://uthark.github.io/css/uthark.css>
+<link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css>
+<link href=https://uthark.github.io/favicon.png rel=icon>
+<link href=https://feeds.feedburner.com/atamanenko rel=alternate type=application/rss+xml title="Sharing knowledge">
+<meta name=twitter:card content="summary">
+<meta name=twitter:site content="@real_atamanenko">
+<meta name=twitter:creator content="@real_atamanenko">
+<meta name=twitter:title content="@Autowired JAX-RS Client API">
+<meta property="og:title" content="@Autowired JAX-RS Client API">
+<meta property="og:url" content="https://uthark.github.io/2013/06/28/jaxrs-spring-autowiring/">
+<meta property="og:description" content="Продолжая разговор о JAX RS Client API - предположим, что мы уже используем JAX-RS клиент
+У нас есть класс, который умеет создавать прокси для любого REST-интерфейса в проекте. Теперь мы хотим сделать так, чтобы эти интерфейсы можно было автоматически создавать в контексте Spring и связывать с другими бинами.">
+</head>
+<body>
+<header class=site>
+<h1><a href=https://uthark.github.io/>Sharing knowledge</a></h1>
+<h2>by Oleg Atamanenko</h2>
+</header>
+<nav>
+<div class=menu>
+<input type=checkbox id=menu class="fa fa-bars">
+<label for=menu aria-label=Menu></label>
+<div class=menu-container>
+<ul class=main-navigation>
+<li><a href=https://uthark.github.io/ title=Posts>Posts</a></li>
+<li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li>
+<li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li>
+<li><a href=https://uthark.github.io/readinglist/ title="Reading Lists">Reading Lists</a></li>
+<li><a href=https://uthark.github.io/about/ title=About>About</a></li>
+</ul>
+<ul class=subscription>
+<li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-lg"></i></a></li>
+</ul>
+<form action=https://www.google.com/search method=get target=_blank>
+<fieldset role=search>
+<input class=search type=text name=q placeholder=Search>
+<input type=hidden name=q value=site:https://uthark.github.io/>
+</fieldset>
+</form>
+</div>
+</div>
+</nav>
+<div id=main>
+<div id=content>
+<div>
+<article class=hentry>
+<header>
+<h1 class=entry-title>
+@Autowired JAX-RS Client API
+</h1>
+</header>
+<div class=entry-content>
+<p>Продолжая разговор о <a href="http://www.jcp.org/en/jsr/detail?id=339">JAX RS</a> <a href=https://jax-rs-spec.java.net/nonav/2.0/apidocs/javax/ws/rs/client/package-summary.html>Client API</a> - предположим, что мы уже <a href=/blog/2013/06/28/jaxrs/>используем JAX-RS клиент</a></p>
+<p>У нас есть класс, который умеет создавать прокси для любого REST-интерфейса в проекте. Теперь мы хотим сделать так, чтобы эти интерфейсы можно было автоматически создавать в контексте Spring и связывать с другими бинами.</p>
+<p>Первое решение, которое приходит в лоб - объявить бин в конфигурации для каждого интерфейса:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=nd>@Configuration</span>
 <span class=kd>public</span> <span class=kd>class</span> <span class=nc>SpringConfiguration</span> <span class=o>{</span>
     <span class=nd>@Bean</span>
     <span class=kd>public</span> <span class=n>UserRest</span> <span class=nf>userRest</span><span class=o>(){</span>
@@ -9,9 +74,21 @@
         <span class=k>return</span> <span class=n>JAXRSClientFactory</span><span class=o>.</span><span class=na>create</span><span class=o>(</span><span class=s>&#34;http://localhost:8080&#34;</span><span class=o>,</span> <span class=n>UserRest</span><span class=o>.</span><span class=na>class</span><span class=o>,</span> <span class=n>providers</span><span class=o>);</span>
     <span class=o>}</span>
 <span class=o>}</span>
-</code></pre></div><p>Написав объявление нескольких таких бинов можно задуматься - &ldquo;Есть ли способ проще?&rdquo;.</p><p>Есть, и я вам сейчас его покажу.</p><p>Для того, чтобы добавлять собственные бины в Spring контекст, мы воспользуемся возможностью расширения Spring контекста с использованием <a href=http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/beans/factory/config/BeanFactoryPostProcessor.html><code>BeanFactoryPostProcessor</code></a>.
+</code></pre></div><p>Написав объявление нескольких таких бинов можно задуматься - &ldquo;Есть ли способ проще?&rdquo;.</p>
+<p>Есть, и я вам сейчас его покажу.</p>
+<p>Для того, чтобы добавлять собственные бины в Spring контекст, мы воспользуемся возможностью расширения Spring контекста с использованием <a href=http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/beans/factory/config/BeanFactoryPostProcessor.html><code>BeanFactoryPostProcessor</code></a>.
 Метод <code>postProcessBeanFactory</code> данного класса позволяет выполнить дополнительную обработку фабрики бинов Spring, например, удалить, добавить, переопределить бин.
-Это именно то, что нам нужно - автоматически добавить новые бины в фабрику.</p><p>Итак, что нам нужно сделать:</p><ol><li>Найти все доступные REST интерфейсы в текущем classpath.</li><li>Для каждого из них создать прокси с использованием <code>JAXRSClientFactory</code> .</li><li>Зарегистрировать каждый прокси в фабрике бинов для дальнейшего использования (например, для @Autowired).</li></ol><p>По спецификации JAX-RS, чтобы класс распознавался как REST-ресурс, у него должна быть аннотация <a href=https://jax-rs-spec.java.net/nonav/2.0/apidocs/javax/ws/rs/Path.html><code>@Path()</code></a>.</p><p>Для поиска всех возможных классов/интерфейсов воспользуемся классом <a href=http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/context/annotation/ClassPathScanningCandidateComponentProvider.html><code>ClassPathScanningCandidateComponentProvider</code></a>, который умеет сканировать классы в выбранном пакете и применять фильтры, чтобы собрать только нужные. Также нам нужно учесть, что по умолчанию <code>ClassPathScanningCandidateComponentProvider</code> пытается определить, может ли найденный класс быть и бином (например, проверяет, что это не абстрактный класс и не интерфейс), поэтому нам нужно написать подкласс, который позволит нам работать с интерфейсами.</p><p>Пишем класс:</p><div class=highlight><pre class=chroma><code class=language-java data-lang=java><span class=kd>public</span> <span class=kd>class</span> <span class=nc>RestClientPostProcessor</span> <span class=kd>implements</span> <span class=n>BeanFactoryPostProcessor</span> <span class=o>{</span>
+Это именно то, что нам нужно - автоматически добавить новые бины в фабрику.</p>
+<p>Итак, что нам нужно сделать:</p>
+<ol>
+<li>Найти все доступные REST интерфейсы в текущем classpath.</li>
+<li>Для каждого из них создать прокси с использованием <code>JAXRSClientFactory</code> .</li>
+<li>Зарегистрировать каждый прокси в фабрике бинов для дальнейшего использования (например, для @Autowired).</li>
+</ol>
+<p>По спецификации JAX-RS, чтобы класс распознавался как REST-ресурс, у него должна быть аннотация <a href=https://jax-rs-spec.java.net/nonav/2.0/apidocs/javax/ws/rs/Path.html><code>@Path()</code></a>.</p>
+<p>Для поиска всех возможных классов/интерфейсов воспользуемся классом <a href=http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/context/annotation/ClassPathScanningCandidateComponentProvider.html><code>ClassPathScanningCandidateComponentProvider</code></a>, который умеет сканировать классы в выбранном пакете и применять фильтры, чтобы собрать только нужные. Также нам нужно учесть, что по умолчанию <code>ClassPathScanningCandidateComponentProvider</code> пытается определить, может ли найденный класс быть и бином (например, проверяет, что это не абстрактный класс и не интерфейс), поэтому нам нужно написать подкласс, который позволит нам работать с интерфейсами.</p>
+<p>Пишем класс:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=kd>public</span> <span class=kd>class</span> <span class=nc>RestClientPostProcessor</span> <span class=kd>implements</span> <span class=n>BeanFactoryPostProcessor</span> <span class=o>{</span>
 
     <span class=kd>private</span> <span class=kd>static</span> <span class=kd>final</span> <span class=n>Logger</span> <span class=n>LOGGER</span> <span class=o>=</span> <span class=n>LoggerFactory</span><span class=o>.</span><span class=na>getLogger</span><span class=o>(</span><span class=n>RestClientPostProcessor</span><span class=o>.</span><span class=na>class</span><span class=o>);</span>
 
@@ -70,7 +147,8 @@
     <span class=o>}</span>
 <span class=o>}</span>
 
-</code></pre></div><p>Теперь этот процессор необходимо зарегистрировать в контексте Spring:</p><div class=highlight><pre class=chroma><code class=language-java data-lang=java><span class=nd>@Configuration</span>
+</code></pre></div><p>Теперь этот процессор необходимо зарегистрировать в контексте Spring:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=nd>@Configuration</span>
 <span class=kd>class</span> <span class=nc>TestAutowiringConfiguration</span> <span class=o>{</span>
 
     <span class=nd>@Bean</span>
@@ -78,10 +156,70 @@
         <span class=k>return</span> <span class=k>new</span> <span class=n>RestClientPostProcessor</span><span class=o>();</span>
     <span class=o>}</span>
 <span class=o>}</span>
-</code></pre></div><p>И теперь можно использовать <code>UserRest</code> как обычный бин:</p><div class=highlight><pre class=chroma><code class=language-java data-lang=java>    <span class=nd>@Autowired</span>
+</code></pre></div><p>И теперь можно использовать <code>UserRest</code> как обычный бин:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java>    <span class=nd>@Autowired</span>
     <span class=kd>private</span> <span class=n>UserShowRest</span> <span class=n>userShowRest</span><span class=o>;</span>
-</code></pre></div><p>Если есть вопросы - <a href=https://plus.google.com/112372998073079463630/posts>спрашивайте в Google+</a></p></div><footer><div class=sharing>Share:
-<a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2013%2f06%2f28%2fjaxrs-spring-autowiring%2f" target=_blank><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden=true></i></a><a href="https://twitter.com/intent/tweet?text=%40Autowired%20JAX-RS%20Client%20API&url=https%3a%2f%2futhark.github.io%2f2013%2f06%2f28%2fjaxrs-spring-autowiring%2f" target=_blank title="Post to Twitter" aria-hidden=true><i class="fa fa-twitter"></i></a></div><div><hr><p>If you have any questions, feel free to ping me on Twitter.</p></div><p class=meta>Estimated reading time: 3 minute(s)</p><p class=meta>Last update: <time datetime=2013-06-28>Jun 28, 2013</time></p><p class=meta>Categories: <a class=label href=https://uthark.github.io/categories/article/>#article</a><a class=label href=https://uthark.github.io/categories/jax-rs-client/>#jax-rs client</a><a class=label href=https://uthark.github.io/categories/spring/>#spring</a><a class=label href=https://uthark.github.io/categories/development/>#development</a><a class=label href=https://uthark.github.io/categories/autowiring/>#autowiring</a></p></p><p class=meta><a class="basic-alignment left" href=https://uthark.github.io/2013/06/28/jaxrs/ title="JAX-RS Client API">&lt;&lt;&nbsp;JAX-RS Client API</a>
-<a class="basic-alignment right" href=https://uthark.github.io/2013/06/29/spring-enable-annotation/ title="Пишем @Enable*-аннотацию для Spring">Пишем @Enable*-аннотацию для Spring&nbsp;>></a></p><div id=disqus_thread></div><script type=application/javascript>var disqus_config=function(){};(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById('disqus_thread').innerHTML='Disqus comments not available by default when the website is previewed locally.';return;}
-var d=document,s=d.createElement('script');s.async=true;s.src='//'+"uthark"+'.disqus.com/embed.js';s.setAttribute('data-timestamp',+new Date());(d.head||d.body).appendChild(s);})();</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></footer></article></div><aside class="sidebar thirds"><section class="first odd"><p></p></section><section class=even><div class=toc-header>Table of Contents</div><nav id=TableOfContents></nav></section></aside></div></div><footer><div class=center><ul class=sidebar-nav><li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a></li><li class=sidebar-nav-item><a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a></li><li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li></ul></div><p>&copy;&nbsp;2009&nbsp;—&nbsp;2021 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a></p></footer><script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];s.async='async'
-g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';s.parentNode.insertBefore(g,s)}(document,'script'));</script></body></html>
+</code></pre></div><p>Если есть вопросы - <a href=https://plus.google.com/112372998073079463630/posts>спрашивайте в Google+</a></p>
+</div>
+<footer>
+<div class=sharing>
+Share:
+<a href="https://getpocket.com/save?url=https%3a%2f%2futhark.github.io%2f2013%2f06%2f28%2fjaxrs-spring-autowiring%2f" target=_blank><i class="fa fa-get-pocket" title="Save to Pocket" aria-hidden=true></i></a>
+<a href="https://twitter.com/intent/tweet?text=%40Autowired%20JAX-RS%20Client%20API&url=https%3a%2f%2futhark.github.io%2f2013%2f06%2f28%2fjaxrs-spring-autowiring%2f" target=_blank title="Post to Twitter" aria-hidden=true><i class="fa fa-twitter"></i></a>
+</div>
+<div>
+<hr>
+<p>If you have any questions, feel free to ping me on Twitter.</p>
+</div>
+<p class=meta>
+Estimated reading time: 3 minute(s)
+</p>
+<p class=meta>
+Last update: <time datetime=2013-06-28>Jun 28, 2013</time>
+</p>
+<p class=meta>
+Categories: <a class=label href=https://uthark.github.io/categories/article/>#article</a><a class=label href=https://uthark.github.io/categories/jax-rs-client/>#jax-rs client</a><a class=label href=https://uthark.github.io/categories/spring/>#spring</a><a class=label href=https://uthark.github.io/categories/development/>#development</a><a class=label href=https://uthark.github.io/categories/autowiring/>#autowiring</a>
+</p>
+</p>
+<p class=meta>
+<a class="basic-alignment left" href=https://uthark.github.io/2013/06/28/jaxrs/ title="JAX-RS Client API">&lt;&lt;&nbsp;JAX-RS Client API</a>
+<a class="basic-alignment right" href=https://uthark.github.io/2013/06/29/spring-enable-annotation/ title="Пишем @Enable*-аннотацию для Spring">Пишем @Enable*-аннотацию для Spring&nbsp;>></a>
+</p>
+<div id=disqus_thread></div>
+<script type=application/javascript>var disqus_config=function(){};(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById('disqus_thread').innerHTML='Disqus comments not available by default when the website is previewed locally.';return}var b=document,a=b.createElement('script');a.async=!0,a.src='//uthark.disqus.com/embed.js',a.setAttribute('data-timestamp',+new Date),(b.head||b.body).appendChild(a)})()</script>
+<noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript>
+<a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a>
+</footer>
+</article>
+</div>
+<aside class="sidebar thirds">
+<section class="first odd">
+<p>
+</p>
+</section>
+<section class=even>
+<div class=toc-header>Table of Contents</div>
+<nav id=TableOfContents></nav>
+</section>
+</aside>
+</div>
+</div>
+<footer>
+<div class=center>
+<ul class=sidebar-nav>
+<li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a>
+</li>
+<li class=sidebar-nav-item> <a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a>
+<li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a>
+<li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a>
+<li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a>
+</li>
+<li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li>
+</ul>
+</div>
+<p>&copy;&nbsp;2009&nbsp;—&nbsp;2021 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a>
+</p>
+</footer>
+<script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(b,c){var d=b.createElement(c),a=b.getElementsByTagName(c)[0];a.async='async',d.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js',a.parentNode.insertBefore(d,a)})(document,'script')</script>
+</body>
+</html>
