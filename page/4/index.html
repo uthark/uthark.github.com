@@ -52,6 +52,24 @@
 <article class=list>
 <header>
 <h1 class=entry-title>
+<a href=https://uthark.github.io/2014/04/15/using-assertj/>Using AssertJ</a>
+</h1>
+</header>
+<div class=list-post-tags>
+<a class=label href=https://uthark.github.io/categories/development/>#development</a>
+<a class=label href=https://uthark.github.io/categories/article/>#article</a>
+<a class=label href=https://uthark.github.io/categories/java/>#java</a>
+</div>
+<p>AssertJ is a library which provides fluent strongly-typed assertions to use in unit tests.
+Example of assertions written with AssertJ:
+import io.github.uthark.blog.assertj.Assertions.assertThat; // ... within @Test User result = userDao.findByLogin("username"); assertThat(result). isNotNull(). isActive(). hasLogin("username"); As you can see assertions look much more readable.</p>
+<footer>
+<a href=https://uthark.github.io/2014/04/15/using-assertj/ rel=full-article>Continue Reading &rarr;</a>
+</footer>
+</article>
+<article class=list>
+<header>
+<h1 class=entry-title>
 <a href=https://uthark.github.io/2014/03/28/initializing-at-mocks-with-junit-at-rule/>Initializing Mockito @Mocks with JUnit @Rule</a>
 </h1>
 </header>
@@ -105,23 +123,6 @@ The Elegance of Scala Sensible Typing and Optional Items Cute Classes and Pure O
 <p>Found in sources:
 try { // do some business logic. } catch (Exception e) { errorBean.addError("System exception. Unable to locate life fee."); } This is just awesome!</p>
 </article>
-<article class=list>
-<header>
-<h1 class=entry-title>
-<a href=https://uthark.github.io/2014/03/06/limiting-threads-count-for-greenrobot-eventbus/>Limiting threads count for GreenRobot EventBus</a>
-</h1>
-</header>
-<div class=list-post-tags>
-<a class=label href=https://uthark.github.io/categories/development/>#development</a>
-<a class=label href=https://uthark.github.io/categories/greenrobot/>#greenrobot</a>
-<a class=label href=https://uthark.github.io/categories/android/>#android</a>
-</div>
-<p>In one of my projects I used EventBus library. The library is pretty cool and I would recommend everybody to use it.
-But I found one small issue with this library - in case you send too many events very fast (i.</p>
-<footer>
-<a href=https://uthark.github.io/2014/03/06/limiting-threads-count-for-greenrobot-eventbus/ rel=full-article>Continue Reading &rarr;</a>
-</footer>
-</article>
 <div class=pagination>
 <a href=/ aria-label=First class=label-pagination><i class="fa fa-angle-double-left fa-lg"></i></a>
 <a href=/page/3/ aria-label=Previous class=label-pagination><i class="fa fa-angle-left fa-lg"></i></a>
@@ -141,8 +142,9 @@ But I found one small issue with this library - in case you send too many events
 <a href=/page/14/ class=label-pagination>14</a>
 <a href=/page/15/ class=label-pagination>15</a>
 <a href=/page/16/ class=label-pagination>16</a>
+<a href=/page/17/ class=label-pagination>17</a>
 <a href=/page/5/ aria-label=Next class=label-pagination><i class="fa fa-angle-right fa-lg"></i></a>
-<a href=/page/16/ aria-label=Last><i class="fa fa-angle-double-right fa-lg"></i></a>
+<a href=/page/17/ aria-label=Last><i class="fa fa-angle-double-right fa-lg"></i></a>
 </div>
 </div>
 </div>

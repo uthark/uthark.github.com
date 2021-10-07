@@ -52,6 +52,24 @@
 <article class=list>
 <header>
 <h1 class=entry-title>
+<a href=https://uthark.github.io/2013/06/19/validation/>Валидация входных параметров с использованием Spring</a>
+</h1>
+</header>
+<div class=list-post-tags>
+<a class=label href=https://uthark.github.io/categories/article/>#article</a>
+<a class=label href=https://uthark.github.io/categories/development/>#development</a>
+<a class=label href=https://uthark.github.io/categories/beanvalidation/>#beanvalidation</a>
+</div>
+<p>Очень часто возникает задача проверки входных параметров в сервис на корректность с точки зрения бизнес логики.
+Эту задачу можно решить в лоб, написав вручную код валидации в каждом из методов сервиса, например, вот так:
+public User save(User user) { if(user == null) { throw new IllegalArgumentException("User is null"); } // other checks //.</p>
+<footer>
+<a href=https://uthark.github.io/2013/06/19/validation/ rel=full-article>Continue Reading &rarr;</a>
+</footer>
+</article>
+<article class=list>
+<header>
+<h1 class=entry-title>
 <a href=https://uthark.github.io/2013/06/19/spring-caching/>Использование memcached в качестве backend для Spring Caching Abstraction</a>
 </h1>
 </header>
@@ -118,25 +136,6 @@ Vagrant - это средство для управления виртуальн
 <a href=https://uthark.github.io/2012/04/28/spring-data-jpa_28/ rel=full-article>Continue Reading &rarr;</a>
 </footer>
 </article>
-<article class=list>
-<header>
-<h1 class=entry-title>
-<a href=https://uthark.github.io/2012/04/24/spring-data-jpa/>Ищем с помощью Spring Data JPA</a>
-</h1>
-</header>
-<div class=list-post-tags>
-<a class=label href=https://uthark.github.io/categories/article/>#article</a>
-<a class=label href=https://uthark.github.io/categories/development/>#development</a>
-<a class=label href=https://uthark.github.io/categories/spring-data/>#spring data</a>
-</div>
-<p>Рассмотрим подробнее одну из наиболее полезных вещей в Spring Data JPA - генерация JPQL-запросов на основе имени метода.
-Spring Data JPA умеет автоматически генерировать запросы используя для подсказки название метода.
-Например, метод User.findByLoginAndPassword сгенерирует примерно следующий код:
-FROMUseruwhereu.login=:loginandpassword=:passwordВообще Spring Data JPA пытается быть умным, поэтому реализация findBy{&mldr;} методов ищется следующим образом:</p>
-<footer>
-<a href=https://uthark.github.io/2012/04/24/spring-data-jpa/ rel=full-article>Continue Reading &rarr;</a>
-</footer>
-</article>
 <div class=pagination>
 <a href=/ aria-label=First class=label-pagination><i class="fa fa-angle-double-left fa-lg"></i></a>
 <a href=/page/7/ aria-label=Previous class=label-pagination><i class="fa fa-angle-left fa-lg"></i></a>
@@ -156,8 +155,9 @@ FROMUseruwhereu.login=:loginandpassword=:passwordВообще Spring Data JPA п
 <a href=/page/14/ class=label-pagination>14</a>
 <a href=/page/15/ class=label-pagination>15</a>
 <a href=/page/16/ class=label-pagination>16</a>
+<a href=/page/17/ class=label-pagination>17</a>
 <a href=/page/9/ aria-label=Next class=label-pagination><i class="fa fa-angle-right fa-lg"></i></a>
-<a href=/page/16/ aria-label=Last><i class="fa fa-angle-double-right fa-lg"></i></a>
+<a href=/page/17/ aria-label=Last><i class="fa fa-angle-double-right fa-lg"></i></a>
 </div>
 </div>
 </div>
