@@ -615,7 +615,7 @@ body.sidebar-footer .toggle-sidebar {
 }
 
 .no-placeholder body > nav .search {
-    background: #f2f2f2 0.3em 0.25em no-repeat;
+    /*background: #f2f2f2 0.3em 0.25em no-repeat;*/
     text-indent: 1.3em
 }
 
