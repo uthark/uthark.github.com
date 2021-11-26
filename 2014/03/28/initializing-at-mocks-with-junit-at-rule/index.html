@@ -6,6 +6,8 @@ Initializing Mockito @Mocks with JUnit @Rule &ndash; Oleg Atamanenko
 </title>
 <meta name=HandheldFriendly content="True">
 <meta name=MobileOptimized content="320">
+<meta name=theme-color content="#333" media="(prefers-color-scheme: dark)">
+<meta name=theme-color content="#777" media="(prefers-color-scheme: light)">
 <meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=1">
 <link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&family=Prata&display=swap" type=text/css>
 <link rel=stylesheet href=https://uthark.github.io/css/theme.72254bdf9ec9fc2d8b013dd5c21997b2ab476af1a37ded5995aae71c4a63d57d.css>
@@ -35,9 +37,10 @@ Initializing Mockito @Mocks with JUnit @Rule &ndash; Oleg Atamanenko
 <p>Using <a href=http://docs.mockito.googlecode.com/hg/org/mockito/Mockito.html#mock(java.lang.Class)>Mockito.mock</a></p>
 <p>Initialize mocks with Mockito.mock:</p>
 <div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=kd>public</span> <span class=kt>void</span> <span class=n>FooTest</span> <span class=o>{</span>
- 
 
+    <span class=kd>private</span> <span class=n>Foo</span> <span class=n>foo</span><span class=o>;</span>
 
+    <span class=nd>@Before</span>
     <span class=kd>public</span> <span class=kt>void</span> <span class=nf>setUp</span><span class=o>()</span> <span class=o>{</span>
         <span class=n>FooDependency</span> <span class=n>dep</span> <span class=o>=</span> <span class=n>Mockito</span><span class=o>.</span><span class=na>mock</span><span class=o>(</span><span class=n>FooDependency</span><span class=o>.</span><span class=na>class</span><span class=o>);</span>
         <span class=n>foo</span> <span class=o>=</span> <span class=k>new</span> <span class=n>Foo</span><span class=o>(</span><span class=n>dep</span><span class=o>);</span>
@@ -49,12 +52,13 @@ Initializing Mockito @Mocks with JUnit @Rule &ndash; Oleg Atamanenko
 <p>Using <a href=http://docs.mockito.googlecode.com/hg/org/mockito/MockitoAnnotations.html#initMocks(java.lang.Object)>MockitoAnnotations</a>.
 Initialize mocks with MockitoAnnotations:</p>
 <div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=kd>public</span> <span class=kt>void</span> <span class=n>FooTest</span> <span class=o>{</span>
- 
 
+    <span class=kd>private</span> <span class=n>Foo</span> <span class=n>foo</span><span class=o>;</span>
 
+    <span class=nd>@Mock</span>
     <span class=kd>private</span> <span class=n>FooDependency</span> <span class=n>dep</span><span class=o>;</span>
 
-
+    <span class=nd>@Before</span>
     <span class=kd>public</span> <span class=kt>void</span> <span class=nf>setUp</span><span class=o>()</span> <span class=o>{</span>
         <span class=n>MockitoAnnotations</span><span class=o>.</span><span class=na>initMocks</span><span class=o>(</span><span class=k>this</span><span class=o>);</span>
         <span class=n>foo</span> <span class=o>=</span> <span class=k>new</span> <span class=n>Foo</span><span class=o>(</span><span class=n>dep</span><span class=o>);</span>
@@ -67,12 +71,13 @@ Initialize mocks with MockitoAnnotations:</p>
 <p>Initialize mocks with MockitoJUnitRunner:</p>
 <div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=nd>@RunWith</span><span class=o>(</span><span class=n>MockitoJUnitRunner</span><span class=o>.</span><span class=na>class</span><span class=o>)</span>
 <span class=kd>public</span> <span class=kt>void</span> <span class=n>FooTest</span> <span class=o>{</span>
- 
 
+    <span class=kd>private</span> <span class=n>Foo</span> <span class=n>foo</span><span class=o>;</span>
 
+    <span class=nd>@Mock</span>
     <span class=kd>private</span> <span class=n>FooDependency</span> <span class=n>dep</span><span class=o>;</span>
 
-
+    <span class=nd>@Before</span>
     <span class=kd>public</span> <span class=kt>void</span> <span class=nf>setUp</span><span class=o>()</span> <span class=o>{</span>
         <span class=n>foo</span> <span class=o>=</span> <span class=k>new</span> <span class=n>Foo</span><span class=o>(</span><span class=n>dep</span><span class=o>);</span>
     <span class=o>}</span>
