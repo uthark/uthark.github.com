@@ -1,168 +1,88 @@
-<!doctype html><html>
-<head>
-<meta charset=utf-8>
-<title>
-Создание больших объёмов тестовых данных с помощью Databene Benerator &ndash; Oleg Atamanenko
-</title>
-<meta name=HandheldFriendly content="True">
-<meta name=MobileOptimized content="320">
-<meta name=theme-color content="#333" media="(prefers-color-scheme: dark)">
-<meta name=theme-color content="#777" media="(prefers-color-scheme: light)">
-<meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=1">
-<link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&family=Prata&display=swap" type=text/css>
-<link rel=stylesheet href=https://uthark.github.io/css/theme.72254bdf9ec9fc2d8b013dd5c21997b2ab476af1a37ded5995aae71c4a63d57d.css>
-<link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css>
-<link href=https://uthark.github.io/favicon.png rel=icon>
-</head>
-<body>
-<header class=site>
-<h1><a href=https://uthark.github.io/>Oleg Atamanenko</a></h1>
-<h2>thoughts about programming</h2>
-</header>
-<nav>
-<ul class=main-navigation>
-<li><a href=https://uthark.github.io/ title=Posts>Posts</a></li>
-<li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li>
-<li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li>
-<li><a href=https://uthark.github.io/about/ title="About me">About me</a></li>
-</ul>
-</nav>
-<div class=article>
-<h1>Создание больших объёмов тестовых данных с помощью Databene Benerator</h1>
-<p>Периодически необходимо решать задачу создания больших ( и не очень) объёмов тестовых данных для проведения различных видов тестирования - функционального, нагрузочного (тестирование стабильности и производительности). При этом часто получается так, что система на тестовых данных ведёт себя совсем иначе, чем на реальных данных. Причина кроется в том, что создать правдоподобные тестовые данные всегда достаточно сложно.</p>
-<p>Изучая данный вопрос я наткнулся на замечательный фреймворк - <a href=http://databene.org/databene-benerator>Databene Benerator</a>, основной целью создания которого как раз и является создание правдоподобных тестовых данных для проведения различных видов тестирования.</p>
-<h4>Установка</h4>
-<p>Установка фреймворка осуществляется двумя способами - как отдельное приложение и как плагин для Maven.</p>
-<h5>Установка под Maven</h5>
-<p>Для использования Databene benerator в проектах, использующих для сборки Apache Maven необходимо добавить в зависимости databene-benerator и сконфигурировать его.</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=ni>&amp;lt;</span>project xmlns=<span class=ni>&amp;quot;</span>http://maven.apache.org/POM/4.0.0<span class=ni>&amp;quot;</span> xmlns:xsi=<span class=ni>&amp;quot;</span>http://www.w3.org/2001/XMLSchema-instance<span class=ni>&amp;quot;</span>
-         xsi:schemaLocation=<span class=ni>&amp;quot;</span>http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd<span class=ni>&amp;quot;&amp;gt;</span>
-  <span class=ni>&amp;lt;</span>modelVersion<span class=ni>&amp;gt;</span>4.0.0<span class=ni>&amp;lt;</span>/modelVersion<span class=ni>&amp;gt;</span>
-  <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>com.myorganization<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
-  <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>databene-benerator-test<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
-  <span class=ni>&amp;lt;</span>version<span class=ni>&amp;gt;</span>1.0<span class=ni>&amp;lt;</span>/version<span class=ni>&amp;gt;</span>
-  <span class=ni>&amp;lt;</span>packaging<span class=ni>&amp;gt;</span>jar<span class=ni>&amp;lt;</span>/packaging<span class=ni>&amp;gt;</span>
-  <span class=ni>&amp;lt;</span>name<span class=ni>&amp;gt;</span>data generation project<span class=ni>&amp;lt;</span>/name<span class=ni>&amp;gt;</span>
-  <span class=ni>&amp;lt;</span>dependencies<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>dependency<span class=ni>&amp;gt;</span>
-      <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>org.databene<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
-      <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>databene-benerator<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
-      <span class=ni>&amp;lt;</span>version<span class=ni>&amp;gt;</span>0.5.9<span class=ni>&amp;lt;</span>/version<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>/dependency<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>dependency<span class=ni>&amp;gt;</span>
-      <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>org.databene<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
-      <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>databene-webdecs<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
-      <span class=ni>&amp;lt;</span>version<span class=ni>&amp;gt;</span>0.4.9<span class=ni>&amp;lt;</span>/version<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>/dependency<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>dependency<span class=ni>&amp;gt;</span>
-      <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>org.databene<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
-      <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>databene-commons<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
-      <span class=ni>&amp;lt;</span>version<span class=ni>&amp;gt;</span>0.4.9<span class=ni>&amp;lt;</span>/version<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>/dependency<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>dependency<span class=ni>&amp;gt;</span>
-      <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>mysql<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
-      <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>mysql-connector-java<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
-      <span class=ni>&amp;lt;</span>version<span class=ni>&amp;gt;</span>5.1.6<span class=ni>&amp;lt;</span>/version<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>/dependency<span class=ni>&amp;gt;</span>
-  <span class=ni>&amp;lt;</span>/dependencies<span class=ni>&amp;gt;</span>
-  <span class=ni>&amp;lt;</span>build<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>resources<span class=ni>&amp;gt;</span>
-      <span class=ni>&amp;lt;</span>resource<span class=ni>&amp;gt;</span>
-        <span class=ni>&amp;lt;</span>directory<span class=ni>&amp;gt;</span>src/main/resources<span class=ni>&amp;lt;</span>/directory<span class=ni>&amp;gt;</span>
-        <span class=ni>&amp;lt;</span>filtering<span class=ni>&amp;gt;</span>true<span class=ni>&amp;lt;</span>/filtering<span class=ni>&amp;gt;</span>
-      <span class=ni>&amp;lt;</span>/resource<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>/resources<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>plugins<span class=ni>&amp;gt;</span>
-      <span class=ni>&amp;lt;</span>plugin<span class=ni>&amp;gt;</span>
-        <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>org.apache.maven.plugins<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
-        <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>maven-compiler-plugin<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
-        <span class=ni>&amp;lt;</span>configuration<span class=ni>&amp;gt;</span>
-          <span class=ni>&amp;lt;</span>encoding<span class=ni>&amp;gt;</span>UTF-8<span class=ni>&amp;lt;</span>/encoding<span class=ni>&amp;gt;</span>
-          <span class=ni>&amp;lt;</span>source<span class=ni>&amp;gt;</span>1.5<span class=ni>&amp;lt;</span>/source<span class=ni>&amp;gt;</span>
-          <span class=ni>&amp;lt;</span>target<span class=ni>&amp;gt;</span>1.5<span class=ni>&amp;lt;</span>/target<span class=ni>&amp;gt;</span>
-        <span class=ni>&amp;lt;</span>/configuration<span class=ni>&amp;gt;</span>
-      <span class=ni>&amp;lt;</span>/plugin<span class=ni>&amp;gt;</span>
-      <span class=ni>&amp;lt;</span>plugin<span class=ni>&amp;gt;</span>
-        <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>org.databene<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
-        <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>maven-benerator-plugin<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
-        <span class=ni>&amp;lt;</span>version<span class=ni>&amp;gt;</span>0.5.9<span class=ni>&amp;lt;</span>/version<span class=ni>&amp;gt;</span>
-        <span class=ni>&amp;lt;</span>executions<span class=ni>&amp;gt;</span>
-          <span class=ni>&amp;lt;</span>execution<span class=ni>&amp;gt;</span>
-            <span class=ni>&amp;lt;</span>phase<span class=ni>&amp;gt;</span>compile<span class=ni>&amp;lt;</span>/phase<span class=ni>&amp;gt;</span>
-            <span class=ni>&amp;lt;</span>goals<span class=ni>&amp;gt;</span>
-              <span class=ni>&amp;lt;</span>goal<span class=ni>&amp;gt;</span>generate<span class=ni>&amp;lt;</span>/goal<span class=ni>&amp;gt;</span>
-            <span class=ni>&amp;lt;</span>/goals<span class=ni>&amp;gt;</span>
-          <span class=ni>&amp;lt;</span>/execution<span class=ni>&amp;gt;</span>
-        <span class=ni>&amp;lt;</span>/executions<span class=ni>&amp;gt;</span>
-        <span class=ni>&amp;lt;</span>configuration<span class=ni>&amp;gt;</span>
-          <span class=ni>&amp;lt;</span>descriptor<span class=ni>&amp;gt;</span>src/main/resources/benerator.ben.xml<span class=ni>&amp;lt;</span>/descriptor<span class=ni>&amp;gt;</span>
-          <span class=ni>&amp;lt;</span>encoding<span class=ni>&amp;gt;</span>UTF-8<span class=ni>&amp;lt;</span>/encoding<span class=ni>&amp;gt;</span>
-          <span class=ni>&amp;lt;</span>validate<span class=ni>&amp;gt;</span>true<span class=ni>&amp;lt;</span>/validate<span class=ni>&amp;gt;</span>
-          <span class=ni>&amp;lt;</span>dbUrl<span class=ni>&amp;gt;</span>jdbc:mysql://localhost:3306/hrtool?useUnicode=true<span class=ni>&amp;amp;</span>characterEncoding=UTF-8<span class=ni>&amp;lt;</span>/dbUrl<span class=ni>&amp;gt;</span>
-          <span class=ni>&amp;lt;</span>dbDriver<span class=ni>&amp;gt;</span>com.mysql.jdbc.Driver<span class=ni>&amp;lt;</span>/dbDriver<span class=ni>&amp;gt;</span>
-          <span class=ni>&amp;lt;</span>dbSchema<span class=ni>&amp;gt;</span>database<span class=ni>&amp;lt;</span>/dbSchema<span class=ni>&amp;gt;</span>
-          <span class=ni>&amp;lt;</span>dbUser<span class=ni>&amp;gt;</span>user<span class=ni>&amp;lt;</span>/dbUser<span class=ni>&amp;gt;</span>
-          <span class=ni>&amp;lt;</span>dbPassword<span class=ni>&amp;gt;</span>password<span class=ni>&amp;lt;</span>/dbPassword<span class=ni>&amp;gt;</span>
-        <span class=ni>&amp;lt;</span>/configuration<span class=ni>&amp;gt;</span>
-        <span class=ni>&amp;lt;</span>dependencies<span class=ni>&amp;gt;</span>
-        <span class=ni>&amp;lt;</span>dependency<span class=ni>&amp;gt;</span>
-            <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>log4j<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
-            <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>log4j<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
-            <span class=ni>&amp;lt;</span>version<span class=ni>&amp;gt;</span>1.2.13<span class=ni>&amp;lt;</span>/version<span class=ni>&amp;gt;</span>
-            <span class=ni>&amp;lt;</span>scope<span class=ni>&amp;gt;</span>runtime<span class=ni>&amp;lt;</span>/scope<span class=ni>&amp;gt;</span>
-          <span class=ni>&amp;lt;</span>/dependency<span class=ni>&amp;gt;</span>
-          <span class=ni>&amp;lt;</span>dependency<span class=ni>&amp;gt;</span>
-            <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>org.apache.poi<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
-            <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>poi<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
-            <span class=ni>&amp;lt;</span>version<span class=ni>&amp;gt;</span>3.5-beta5<span class=ni>&amp;lt;</span>/version<span class=ni>&amp;gt;</span>
-            <span class=ni>&amp;lt;</span>scope<span class=ni>&amp;gt;</span>runtime<span class=ni>&amp;lt;</span>/scope<span class=ni>&amp;gt;</span>
-          <span class=ni>&amp;lt;</span>/dependency<span class=ni>&amp;gt;</span>
-        <span class=ni>&amp;lt;</span>/dependencies<span class=ni>&amp;gt;</span>
-      <span class=ni>&amp;lt;</span>/plugin<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>/plugins<span class=ni>&amp;gt;</span>
-  <span class=ni>&amp;lt;</span>/build<span class=ni>&amp;gt;</span>
-<span class=ni>&amp;lt;</span>/project<span class=ni>&amp;gt;</span>
-
-</code></pre></div><p>В конфигурации необходимо указать как минимум следующие параметры:</p>
-<ol><li><span style="font-family:'courier new,courier'">dbUrl</span> - строка подключения к базе данных в формате JDBC</li>
-<li><span style="font-family:'courier new,courier'">dbDriver</span> - используемый драйвер базы данных</li>
-<li><span style="font-family:'courier new,courier'">dbSchema</span> - имя схемы базы данных</li>
-<li><span style="font-family:'courier new,courier'">dbUser</span> - имя пользователя, под которым подключаемся к базе данных</li>
-<li><span style="font-family:'courier new,courier'">dbPassword</span> - пароль пользователя для подключения к базе данных</li>
-</ol>
-<p>Кроме использования файла pom.xml databene поддерживает возможность указания параметров в файле benerator.properties, что может быть удобно.</p>
-<p>Databene benerator обладает следующими возможностями:</p>
-<ol><li>Решение проблемы создания данных в общем виде. На данный момент поддерживаются XML и реляционные базы данных, но не за горами поддержка веб-сервисов, SAP и любых других систем через механизм расширений.</li>
-<li>Юзабилити. Databene-benerator позволяет упростить создание тестовых данных для сложной модели прикладной области.</li>
-<li>Обработка больших объёмов данных.</li>
-<li>Высокая производительность.</li>
-<li>Поддержка доменных областей.</li>
-<li>Качество данных. Фреймворк поддерживает проверку ограничений модели прикладной области.</li>
-<li>Компонентная, легкорасширяемая архитектура.</li>
-<li>Широкие возможности изменения и настройки генерации тестовых данных</li>
-<li>Создание тестовых данных с нуля.</li>
-<li>Импорт и анонимизация реальных данных.</li>
-</ol>
-<p>В комплекте идёт толковая, но, к сожалению, неполная <a href=http://databene.org/download/databene-benerator-manual-0.6.0.pdf>документация</a> по возможностям.</p>
-</div>
-<footer>
-<div class=social>
-<ul>
-<li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a>
-</li>
-<li class=sidebar-nav-item> <a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a>
-</li>
-<li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li>
-</ul>
-</div>
-<p>&copy;&nbsp;2009&nbsp;—&nbsp;2021 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a>
-</p>
-</footer>
-<script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(b,c){var d=b.createElement(c),a=b.getElementsByTagName(c)[0];a.async='async',d.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js',a.parentNode.insertBefore(d,a)})(document,'script')</script>
-</body>
-</html>
-</body>
-</html>
+<!doctype html><html><head><meta charset=utf-8><title>Создание больших объёмов тестовых данных с помощью Databene Benerator &ndash; Oleg Atamanenko</title><meta name=HandheldFriendly content="True"><meta name=MobileOptimized content="320"><meta name=theme-color content="#333" media="(prefers-color-scheme: dark)"><meta name=theme-color content="#777" media="(prefers-color-scheme: light)"><meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=1"><link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&family=Prata&display=swap" type=text/css><link rel=stylesheet href=https://uthark.github.io/css/theme.72254bdf9ec9fc2d8b013dd5c21997b2ab476af1a37ded5995aae71c4a63d57d.css><link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css><link href=https://uthark.github.io/favicon.png rel=icon></head><body><header class=site><h1><a href=https://uthark.github.io/>Oleg Atamanenko</a></h1><h2>thoughts about programming</h2></header><nav><ul class=main-navigation><li><a href=https://uthark.github.io/ title=Posts>Posts</a></li><li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li><li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li><li><a href=https://uthark.github.io/about/ title="About me">About me</a></li></ul></nav><div class=article><h1>Создание больших объёмов тестовых данных с помощью Databene Benerator</h1><p>Периодически необходимо решать задачу создания больших ( и не очень) объёмов тестовых данных для проведения различных видов тестирования - функционального, нагрузочного (тестирование стабильности и производительности). При этом часто получается так, что система на тестовых данных ведёт себя совсем иначе, чем на реальных данных. Причина кроется в том, что создать правдоподобные тестовые данные всегда достаточно сложно.</p><p>Изучая данный вопрос я наткнулся на замечательный фреймворк - <a href=http://databene.org/databene-benerator>Databene Benerator</a>, основной целью создания которого как раз и является создание правдоподобных тестовых данных для проведения различных видов тестирования.</p><h4>Установка</h4><p>Установка фреймворка осуществляется двумя способами - как отдельное приложение и как плагин для Maven.</p><h5>Установка под Maven</h5><p>Для использования Databene benerator в проектах, использующих для сборки Apache Maven необходимо добавить в зависимости databene-benerator и сконфигурировать его.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=ni>&amp;lt;</span>project xmlns=<span class=ni>&amp;quot;</span>http://maven.apache.org/POM/4.0.0<span class=ni>&amp;quot;</span> xmlns:xsi=<span class=ni>&amp;quot;</span>http://www.w3.org/2001/XMLSchema-instance<span class=ni>&amp;quot;</span>
+</span></span><span class=line><span class=cl>         xsi:schemaLocation=<span class=ni>&amp;quot;</span>http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd<span class=ni>&amp;quot;&amp;gt;</span>
+</span></span><span class=line><span class=cl>  <span class=ni>&amp;lt;</span>modelVersion<span class=ni>&amp;gt;</span>4.0.0<span class=ni>&amp;lt;</span>/modelVersion<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>  <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>com.myorganization<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>  <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>databene-benerator-test<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>  <span class=ni>&amp;lt;</span>version<span class=ni>&amp;gt;</span>1.0<span class=ni>&amp;lt;</span>/version<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>  <span class=ni>&amp;lt;</span>packaging<span class=ni>&amp;gt;</span>jar<span class=ni>&amp;lt;</span>/packaging<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>  <span class=ni>&amp;lt;</span>name<span class=ni>&amp;gt;</span>data generation project<span class=ni>&amp;lt;</span>/name<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>  <span class=ni>&amp;lt;</span>dependencies<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>dependency<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>      <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>org.databene<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>      <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>databene-benerator<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>      <span class=ni>&amp;lt;</span>version<span class=ni>&amp;gt;</span>0.5.9<span class=ni>&amp;lt;</span>/version<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>/dependency<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>dependency<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>      <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>org.databene<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>      <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>databene-webdecs<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>      <span class=ni>&amp;lt;</span>version<span class=ni>&amp;gt;</span>0.4.9<span class=ni>&amp;lt;</span>/version<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>/dependency<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>dependency<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>      <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>org.databene<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>      <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>databene-commons<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>      <span class=ni>&amp;lt;</span>version<span class=ni>&amp;gt;</span>0.4.9<span class=ni>&amp;lt;</span>/version<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>/dependency<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>dependency<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>      <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>mysql<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>      <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>mysql-connector-java<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>      <span class=ni>&amp;lt;</span>version<span class=ni>&amp;gt;</span>5.1.6<span class=ni>&amp;lt;</span>/version<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>/dependency<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>  <span class=ni>&amp;lt;</span>/dependencies<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>  <span class=ni>&amp;lt;</span>build<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>resources<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>      <span class=ni>&amp;lt;</span>resource<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>        <span class=ni>&amp;lt;</span>directory<span class=ni>&amp;gt;</span>src/main/resources<span class=ni>&amp;lt;</span>/directory<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>        <span class=ni>&amp;lt;</span>filtering<span class=ni>&amp;gt;</span>true<span class=ni>&amp;lt;</span>/filtering<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>      <span class=ni>&amp;lt;</span>/resource<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>/resources<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>plugins<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>      <span class=ni>&amp;lt;</span>plugin<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>        <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>org.apache.maven.plugins<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>        <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>maven-compiler-plugin<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>        <span class=ni>&amp;lt;</span>configuration<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>          <span class=ni>&amp;lt;</span>encoding<span class=ni>&amp;gt;</span>UTF-8<span class=ni>&amp;lt;</span>/encoding<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>          <span class=ni>&amp;lt;</span>source<span class=ni>&amp;gt;</span>1.5<span class=ni>&amp;lt;</span>/source<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>          <span class=ni>&amp;lt;</span>target<span class=ni>&amp;gt;</span>1.5<span class=ni>&amp;lt;</span>/target<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>        <span class=ni>&amp;lt;</span>/configuration<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>      <span class=ni>&amp;lt;</span>/plugin<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>      <span class=ni>&amp;lt;</span>plugin<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>        <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>org.databene<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>        <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>maven-benerator-plugin<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>        <span class=ni>&amp;lt;</span>version<span class=ni>&amp;gt;</span>0.5.9<span class=ni>&amp;lt;</span>/version<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>        <span class=ni>&amp;lt;</span>executions<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>          <span class=ni>&amp;lt;</span>execution<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>            <span class=ni>&amp;lt;</span>phase<span class=ni>&amp;gt;</span>compile<span class=ni>&amp;lt;</span>/phase<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>            <span class=ni>&amp;lt;</span>goals<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>              <span class=ni>&amp;lt;</span>goal<span class=ni>&amp;gt;</span>generate<span class=ni>&amp;lt;</span>/goal<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>            <span class=ni>&amp;lt;</span>/goals<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>          <span class=ni>&amp;lt;</span>/execution<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>        <span class=ni>&amp;lt;</span>/executions<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>        <span class=ni>&amp;lt;</span>configuration<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>          <span class=ni>&amp;lt;</span>descriptor<span class=ni>&amp;gt;</span>src/main/resources/benerator.ben.xml<span class=ni>&amp;lt;</span>/descriptor<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>          <span class=ni>&amp;lt;</span>encoding<span class=ni>&amp;gt;</span>UTF-8<span class=ni>&amp;lt;</span>/encoding<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>          <span class=ni>&amp;lt;</span>validate<span class=ni>&amp;gt;</span>true<span class=ni>&amp;lt;</span>/validate<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>          <span class=ni>&amp;lt;</span>dbUrl<span class=ni>&amp;gt;</span>jdbc:mysql://localhost:3306/hrtool?useUnicode=true<span class=ni>&amp;amp;</span>characterEncoding=UTF-8<span class=ni>&amp;lt;</span>/dbUrl<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>          <span class=ni>&amp;lt;</span>dbDriver<span class=ni>&amp;gt;</span>com.mysql.jdbc.Driver<span class=ni>&amp;lt;</span>/dbDriver<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>          <span class=ni>&amp;lt;</span>dbSchema<span class=ni>&amp;gt;</span>database<span class=ni>&amp;lt;</span>/dbSchema<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>          <span class=ni>&amp;lt;</span>dbUser<span class=ni>&amp;gt;</span>user<span class=ni>&amp;lt;</span>/dbUser<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>          <span class=ni>&amp;lt;</span>dbPassword<span class=ni>&amp;gt;</span>password<span class=ni>&amp;lt;</span>/dbPassword<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>        <span class=ni>&amp;lt;</span>/configuration<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>        <span class=ni>&amp;lt;</span>dependencies<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>        <span class=ni>&amp;lt;</span>dependency<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>            <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>log4j<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>            <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>log4j<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>            <span class=ni>&amp;lt;</span>version<span class=ni>&amp;gt;</span>1.2.13<span class=ni>&amp;lt;</span>/version<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>            <span class=ni>&amp;lt;</span>scope<span class=ni>&amp;gt;</span>runtime<span class=ni>&amp;lt;</span>/scope<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>          <span class=ni>&amp;lt;</span>/dependency<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>          <span class=ni>&amp;lt;</span>dependency<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>            <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>org.apache.poi<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>            <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>poi<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>            <span class=ni>&amp;lt;</span>version<span class=ni>&amp;gt;</span>3.5-beta5<span class=ni>&amp;lt;</span>/version<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>            <span class=ni>&amp;lt;</span>scope<span class=ni>&amp;gt;</span>runtime<span class=ni>&amp;lt;</span>/scope<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>          <span class=ni>&amp;lt;</span>/dependency<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>        <span class=ni>&amp;lt;</span>/dependencies<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>      <span class=ni>&amp;lt;</span>/plugin<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>/plugins<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>  <span class=ni>&amp;lt;</span>/build<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl><span class=ni>&amp;lt;</span>/project<span class=ni>&amp;gt;</span>
+</span></span></code></pre></div><p>В конфигурации необходимо указать как минимум следующие параметры:</p><ol><li><span style="font-family:'courier new,courier'">dbUrl</span> - строка подключения к базе данных в формате JDBC</li><li><span style="font-family:'courier new,courier'">dbDriver</span> - используемый драйвер базы данных</li><li><span style="font-family:'courier new,courier'">dbSchema</span> - имя схемы базы данных</li><li><span style="font-family:'courier new,courier'">dbUser</span> - имя пользователя, под которым подключаемся к базе данных</li><li><span style="font-family:'courier new,courier'">dbPassword</span> - пароль пользователя для подключения к базе данных</li></ol><p>Кроме использования файла pom.xml databene поддерживает возможность указания параметров в файле benerator.properties, что может быть удобно.</p><p>Databene benerator обладает следующими возможностями:</p><ol><li>Решение проблемы создания данных в общем виде. На данный момент поддерживаются XML и реляционные базы данных, но не за горами поддержка веб-сервисов, SAP и любых других систем через механизм расширений.</li><li>Юзабилити. Databene-benerator позволяет упростить создание тестовых данных для сложной модели прикладной области.</li><li>Обработка больших объёмов данных.</li><li>Высокая производительность.</li><li>Поддержка доменных областей.</li><li>Качество данных. Фреймворк поддерживает проверку ограничений модели прикладной области.</li><li>Компонентная, легкорасширяемая архитектура.</li><li>Широкие возможности изменения и настройки генерации тестовых данных</li><li>Создание тестовых данных с нуля.</li><li>Импорт и анонимизация реальных данных.</li></ol><p>В комплекте идёт толковая, но, к сожалению, неполная <a href=http://databene.org/download/databene-benerator-manual-0.6.0.pdf>документация</a> по возможностям.</p></div><footer><div class=social><ul><li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a></li><li class=sidebar-nav-item><a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a></li><li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li></ul></div><p>&copy;&nbsp;2009&nbsp;—&nbsp;2022 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a></p></footer><script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(t,n){var s=t.createElement(n),e=t.getElementsByTagName(n)[0];e.async='async',s.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js',e.parentNode.insertBefore(s,e)})(document,'script')</script></body></html></body></html>

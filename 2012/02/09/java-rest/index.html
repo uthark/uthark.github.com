@@ -1,343 +1,254 @@
-<!doctype html><html>
-<head>
-<meta charset=utf-8>
-<title>
-Разработка и тестирование Java REST веб-сервисов &ndash; Oleg Atamanenko
-</title>
-<meta name=HandheldFriendly content="True">
-<meta name=MobileOptimized content="320">
-<meta name=theme-color content="#333" media="(prefers-color-scheme: dark)">
-<meta name=theme-color content="#777" media="(prefers-color-scheme: light)">
-<meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=1">
-<link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&family=Prata&display=swap" type=text/css>
-<link rel=stylesheet href=https://uthark.github.io/css/theme.72254bdf9ec9fc2d8b013dd5c21997b2ab476af1a37ded5995aae71c4a63d57d.css>
-<link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css>
-<link href=https://uthark.github.io/favicon.png rel=icon>
-</head>
-<body>
-<header class=site>
-<h1><a href=https://uthark.github.io/>Oleg Atamanenko</a></h1>
-<h2>thoughts about programming</h2>
-</header>
-<nav>
-<ul class=main-navigation>
-<li><a href=https://uthark.github.io/ title=Posts>Posts</a></li>
-<li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li>
-<li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li>
-<li><a href=https://uthark.github.io/about/ title="About me">About me</a></li>
-</ul>
-</nav>
-<div class=article>
-<h1>Разработка и тестирование Java REST веб-сервисов</h1>
-<h4>Введение</h4>
-Для разработки <a href=http://restpatterns.org/>REST</a> веб-сервисов Java предлагает <a href="http://jcp.org/en/jsr/detail?id=311">JSR-311 - JAX-RS: The Java&trade; API for RESTful Web Services</a>
-Как это обычно бывает в мире Enterprise Java, существует несколько реализаций данной спецификации:
-<ul>
-<li><a href=http://jersey.java.net/>Jersey</a> - это эталонная реализация спецификации от компании <strike>Sun</strike> Oracle</li>
-<li><a href=http://cxf.apache.org/>Apache CXF</a></li>
-<li><a href=http://www.jboss.org/resteasy>JBoss RESTEasy</a></li>
-</ul>
-На примере последней реализации, я и расскажу, каким образом можно написать REST-сервис.
-<h4>Пишем REST-сервис</h4>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java>
-<span class=kn>import</span> <span class=nn>javax.ws.rs.*</span><span class=o>;</span>
-<span class=kn>import</span> <span class=nn>javax.ws.rs.core.MediaType</span><span class=o>;</span>
-
-<span class=nd>@Path</span><span class=o>(</span><span class=s>&#34;/service/entity&#34;</span><span class=o>)</span>
-<span class=nd>@Produces</span><span class=o>({</span><span class=n>MediaType</span><span class=o>.</span><span class=na>APPLICATION_XML</span><span class=o>,</span> <span class=n>MediaType</span><span class=o>.</span><span class=na>APPLICATION_JSON</span><span class=o>})</span>
-<span class=kd>public</span> <span class=kd>interface</span> <span class=nc>EntityRestService</span> <span class=o>{</span>
-
- <span class=nd>@GET</span>
- <span class=nd>@Path</span><span class=o>(</span><span class=s>&#34;/all&#34;</span><span class=o>)</span>
- <span class=n>EntityList</span> <span class=nf>listAll</span><span class=o>();</span>
-
- <span class=nd>@GET</span>
- <span class=nd>@Path</span><span class=o>(</span><span class=s>&#34;/{id}&#34;</span><span class=o>)</span>
- <span class=n>Entity</span> <span class=nf>findById</span><span class=o>(</span><span class=nd>@PathParam</span><span class=o>(</span><span class=s>&#34;id&#34;</span><span class=o>)</span> <span class=n>Integer</span> <span class=n>id</span><span class=o>);</span>
-
-
-<span class=o>}</span>
-</code></pre></div><p>Создаём интерфейс, в котором расставляем JAX-RS аннотации. Аннотация <a href=http://jsr311.java.net/nonav/releases/1.1/javax/ws/rs/Path.html>@Path</a> указывает путь, по которому будет доступен наш сервис. Аннотация <a href=http://jsr311.java.net/nonav/releases/1.1/javax/ws/rs/GET.html>@GET</a> определяет, какой HTTP-запрос будет обрабатываться данным методом. Аннотация <a href=http://jsr311.java.net/nonav/releases/1.1/javax/ws/rs/Produces.html>@Produces</a> позволяет указать, в каком формате данный сервис предоставляет результаты.</p>
-<h4>Конфигурация JBoss RESTEasy</h4>
-<p>Конфигурация очень проста, во-первых, нам нужно добавить обновить <tt>pom.xml</tt> и добавить необходимые зависимости:</p>
-<h5>Обновляем <tt>pom.xml</tt></h5>
-<p>Добавляем compile-time зависимость на JAX-RS API</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=ni>&amp;lt;</span>dependency<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>org.jboss.resteasy<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>jaxrs-api<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
-<span class=ni>&amp;lt;</span>/dependency<span class=ni>&amp;gt;</span>
-</code></pre></div><p>и runtime зависимости на реализацию</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=ni>&amp;lt;</span>dependency<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>org.jboss.resteasy<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>resteasy-jaxrs<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>version<span class=ni>&amp;gt;</span>${resteasy-jaxrs.version}<span class=ni>&amp;lt;</span>/version<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>scope<span class=ni>&amp;gt;</span>runtime<span class=ni>&amp;lt;</span>/scope<span class=ni>&amp;gt;</span>
-<span class=ni>&amp;lt;</span>/dependency<span class=ni>&amp;gt;</span>
-<span class=ni>&amp;lt;</span>dependency<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>org.jboss.resteasy<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>resteasy-jackson-provider<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>version<span class=ni>&amp;gt;</span>${resteasy-jaxrs.version}<span class=ni>&amp;lt;</span>/version<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>scope<span class=ni>&amp;gt;</span>runtime<span class=ni>&amp;lt;</span>/scope<span class=ni>&amp;gt;</span>
-<span class=ni>&amp;lt;</span>/dependency<span class=ni>&amp;gt;</span>
-
-</code></pre></div><h5>Обновляем конфигурацию веб-приложения в <tt>web.xml</tt></h5>
-Необходимо выполнить следующую модификацию <tt>web.xml</tt>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml> <span class=ni>&amp;lt;</span>listener<span class=ni>&amp;gt;</span>
-  <span class=ni>&amp;lt;</span>listener-class<span class=ni>&amp;gt;</span>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap<span class=ni>&amp;lt;</span>/listener-class<span class=ni>&amp;gt;</span>
- <span class=ni>&amp;lt;</span>/listener<span class=ni>&amp;gt;</span>
-
- <span class=ni>&amp;lt;</span>context-param<span class=ni>&amp;gt;</span>
-  <span class=ni>&amp;lt;</span>param-name<span class=ni>&amp;gt;</span>resteasy.servlet.mapping.prefix<span class=ni>&amp;lt;</span>/param-name<span class=ni>&amp;gt;</span>
-  <span class=ni>&amp;lt;</span>param-value<span class=ni>&amp;gt;</span>/rest<span class=ni>&amp;lt;</span>/param-value<span class=ni>&amp;gt;</span>
- <span class=ni>&amp;lt;</span>/context-param<span class=ni>&amp;gt;</span>
- <span class=ni>&amp;lt;</span>servlet<span class=ni>&amp;gt;</span>
-  <span class=ni>&amp;lt;</span>servlet-name<span class=ni>&amp;gt;</span>REST Easy<span class=ni>&amp;lt;</span>/servlet-name<span class=ni>&amp;gt;</span>
-  <span class=ni>&amp;lt;</span>servlet-class<span class=ni>&amp;gt;</span>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher<span class=ni>&amp;lt;</span>/servlet-class<span class=ni>&amp;gt;</span>
- <span class=ni>&amp;lt;</span>/servlet<span class=ni>&amp;gt;</span>
- <span class=ni>&amp;lt;</span>servlet-mapping<span class=ni>&amp;gt;</span>
-  <span class=ni>&amp;lt;</span>servlet-name<span class=ni>&amp;gt;</span>REST Easy<span class=ni>&amp;lt;</span>/servlet-name<span class=ni>&amp;gt;</span>
-  <span class=ni>&amp;lt;</span>url-pattern<span class=ni>&amp;gt;</span>/rest/*<span class=ni>&amp;lt;</span>/url-pattern<span class=ni>&amp;gt;</span>
- <span class=ni>&amp;lt;</span>/servlet-mapping<span class=ni>&amp;gt;</span>
-</code></pre></div><p>Данный код объявляет <a href=http://docs.jboss.org/resteasy/docs/2.3.1.GA/javadocs/org/jboss/resteasy/plugins/server/servlet/HttpServletDispatcher.html>сервлет HttpServletDispatcher</a>, который будет обрабатывать все запросы, которые приходят на <tt>/rest/*</tt>. Слушатель <tt><a href=http://docs.jboss.org/resteasy/docs/2.3.1.GA/javadocs/org/jboss/resteasy/plugins/server/servlet/ResteasyBootstrap.html>ResteasyBootstrap</a></tt> выполняет всю необходимую инициализацию JBoss RESTEasy.</p>
-<h5>Поддержка Spring</h5>
-Для того, чтобы использовать <a href=http://www.springsource.org/spring-framework>Spring Framework</a>, нам необходимо сделать следующие изменения:
-<ol>
-<li>Добавить зависимость в <tt>pom.xml</tt></li>
-</ol>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=ni>&amp;lt;</span>dependency<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>org.jboss.resteasy<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>resteasy-spring<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>version<span class=ni>&amp;gt;</span>${resteasy-jaxrs.version}<span class=ni>&amp;lt;</span>/version<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>scope<span class=ni>&amp;gt;</span>runtime<span class=ni>&amp;lt;</span>/scope<span class=ni>&amp;gt;</span>
-<span class=ni>&amp;lt;</span>/dependency<span class=ni>&amp;gt;</span>
-</code></pre></div><ol start=2>
-<li>Добавить Spring-ового слушателя в <tt>web.xml</tt></li>
-</ol>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml> <span class=ni>&amp;lt;</span>listener<span class=ni>&amp;gt;</span>
-  <span class=ni>&amp;lt;</span>listener-class<span class=ni>&amp;gt;</span>org.jboss.resteasy.plugins.spring.SpringContextLoaderListener<span class=ni>&amp;lt;</span>/listener-class<span class=ni>&amp;gt;</span>
- <span class=ni>&amp;lt;</span>/listener<span class=ni>&amp;gt;</span>
-
-</code></pre></div><p>После этих изменений JBoss RESTEasy будет в курсе про Spring, это позволит в реализации REST-сервисов полноценно использовать все возможности, предоставляемые Spring Framework.</p>
-<h4>Пишем тесты</h4>
-Написание тестов - весьма полезная вещь, ниже я покажу пример теста для REST-сервиса.
-В рамках данного теста у нас будет подниматься <a href=http://docs.jboss.org/resteasy/docs/2.3.1.GA/javadocs/org/jboss/resteasy/plugins/server/tjws/TJWSEmbeddedJaxrsServer.html>встраиваемый веб-сервер TJWSEmbeddedJaxrsServer</a>, к которому мы будем обращаться для тестирования наших REST-сервисов.
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java>
-<span class=nd>@RunWith</span><span class=o>(</span><span class=n>SpringJUnit4ClassRunner</span><span class=o>.</span><span class=na>class</span><span class=o>)</span>
-<span class=nd>@ContextConfiguration</span><span class=o>({</span><span class=s>&#34;/applicationContext-test.xml&#34;</span><span class=o>})</span>
-<span class=nd>@TestExecutionListeners</span><span class=o>({</span><span class=n>DependencyInjectionTestExecutionListener</span><span class=o>.</span><span class=na>class</span><span class=o>,</span> <span class=n>DirtiesContextTestExecutionListener</span><span class=o>.</span><span class=na>class</span><span class=o>})</span>
-<span class=kd>public</span> <span class=kd>class</span> <span class=nc>TestEntityServiceRest</span> <span class=o>{</span>
-
- <span class=kd>private</span> <span class=kd>static</span> <span class=kd>final</span> <span class=kt>int</span> <span class=n>PORT</span> <span class=o>=</span> <span class=n>8081</span><span class=o>;</span>
- <span class=kd>private</span> <span class=kd>static</span> <span class=kd>final</span> <span class=n>String</span> <span class=n>BASE_URL</span> <span class=o>=</span> <span class=s>&#34;http://localhost:&#34;</span> <span class=o>+</span> <span class=n>PORT</span><span class=o>;</span>
-
- <span class=nd>@Autowired</span>
- <span class=n>EntityService</span> <span class=n>entityService</span><span class=o>;</span>
-
- <span class=nd>@Autowired</span>
- <span class=n>ConfigurableApplicationContext</span> <span class=n>applicationContext</span><span class=o>;</span>
-
-
- <span class=kd>protected</span> <span class=n>HttpClient</span> <span class=n>client</span><span class=o>;</span>
- <span class=kd>protected</span> <span class=n>TJWSEmbeddedJaxrsServer</span> <span class=n>server</span><span class=o>;</span>
-
-
- <span class=nd>@Before</span>
- <span class=kd>public</span> <span class=kt>void</span> <span class=nf>setUpClient</span><span class=o>()</span> <span class=kd>throws</span> <span class=n>Exception</span> <span class=o>{</span>
-  <span class=n>client</span> <span class=o>=</span> <span class=k>new</span> <span class=n>DefaultHttpClient</span><span class=o>();</span>
- <span class=o>}</span>
-
- <span class=nd>@Before</span>
- <span class=kd>public</span> <span class=kt>void</span> <span class=nf>setUpServer</span><span class=o>()</span> <span class=kd>throws</span> <span class=n>Exception</span> <span class=o>{</span>
-  <span class=n>server</span> <span class=o>=</span> <span class=k>new</span> <span class=n>TJWSEmbeddedJaxrsServer</span><span class=o>();</span>
-  <span class=n>server</span><span class=o>.</span><span class=na>setPort</span><span class=o>(</span><span class=n>PORT</span><span class=o>);</span>
-  <span class=n>ResteasyDeployment</span> <span class=n>deployment</span> <span class=o>=</span> <span class=n>server</span><span class=o>.</span><span class=na>getDeployment</span><span class=o>();</span>
-
-  <span class=n>server</span><span class=o>.</span><span class=na>start</span><span class=o>();</span>
-
-  <span class=n>Dispatcher</span> <span class=n>dispatcher</span> <span class=o>=</span> <span class=n>deployment</span><span class=o>.</span><span class=na>getDispatcher</span><span class=o>();</span>
-  <span class=n>SpringBeanProcessor</span> <span class=n>processor</span> <span class=o>=</span> <span class=k>new</span> <span class=n>SpringBeanProcessor</span><span class=o>(</span><span class=n>dispatcher</span><span class=o>,</span> <span class=n>deployment</span><span class=o>.</span><span class=na>getRegistry</span><span class=o>(),</span> <span class=n>deployment</span><span class=o>.</span><span class=na>getProviderFactory</span><span class=o>());</span>
-  <span class=n>applicationContext</span><span class=o>.</span><span class=na>addBeanFactoryPostProcessor</span><span class=o>(</span><span class=n>processor</span><span class=o>);</span>
-
-  <span class=n>SpringResourceFactory</span> <span class=n>noDefaults</span> <span class=o>=</span> <span class=k>new</span> <span class=n>SpringResourceFactory</span><span class=o>(</span>
-    <span class=s>&#34;entityServiceRestImpl&#34;</span><span class=o>,</span> <span class=n>applicationContext</span><span class=o>,</span> <span class=n>EntityRestServiceImpl</span><span class=o>.</span><span class=na>class</span><span class=o>);</span>
-  <span class=n>dispatcher</span><span class=o>.</span><span class=na>getRegistry</span><span class=o>().</span><span class=na>addResourceFactory</span><span class=o>(</span><span class=n>noDefaults</span><span class=o>);</span>
- <span class=o>}</span>
-
- <span class=nd>@After</span>
- <span class=kd>public</span> <span class=kt>void</span> <span class=nf>stop</span><span class=o>()</span> <span class=o>{</span>
-  <span class=n>server</span><span class=o>.</span><span class=na>stop</span><span class=o>();</span>
- <span class=o>}</span>
-
- <span class=nd>@Test</span>
- <span class=kd>public</span> <span class=kt>void</span> <span class=nf>testListAll</span><span class=o>()</span> <span class=kd>throws</span> <span class=n>Exception</span> <span class=o>{</span>
-
-  <span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=n>0</span><span class=o>;</span>
-  <span class=kd>final</span> <span class=n>List</span><span class=o>&amp;</span><span class=n>lt</span><span class=o>;</span><span class=n>Entity</span><span class=o>&amp;</span><span class=n>gt</span><span class=o>;</span> <span class=n>returnedList</span> <span class=o>=</span> <span class=k>new</span> <span class=n>ArrayList</span><span class=o>&amp;</span><span class=n>lt</span><span class=o>;</span><span class=n>Entity</span><span class=o>&amp;</span><span class=n>gt</span><span class=o>;();</span>
-  <span class=kt>int</span> <span class=n>EXPECTED_SIZE</span> <span class=o>=</span> <span class=n>6</span><span class=o>;</span>
-  <span class=k>while</span> <span class=o>(</span><span class=n>i</span> <span class=o>&amp;</span><span class=n>lt</span><span class=o>;</span> <span class=n>EXPECTED_SIZE</span><span class=o>)</span> <span class=o>{</span>
-   <span class=n>i</span><span class=o>++;</span>
-   <span class=kd>final</span> <span class=n>Entity</span> <span class=n>entity</span> <span class=o>=</span> <span class=k>new</span> <span class=n>Entity</span><span class=o>();</span>
-   <span class=n>entity</span><span class=o>.</span><span class=na>setId</span><span class=o>(</span><span class=n>i</span><span class=o>);</span>
-   <span class=n>entity</span><span class=o>.</span><span class=na>setName</span><span class=o>(</span><span class=s>&#34;test&#34;</span> <span class=o>+</span> <span class=n>i</span><span class=o>);</span>
-   <span class=n>returnedList</span><span class=o>.</span><span class=na>add</span><span class=o>(</span><span class=n>entity</span><span class=o>);</span>
-  <span class=o>}</span>
-  <span class=n>when</span><span class=o>(</span><span class=n>entityService</span><span class=o>.</span><span class=na>findAll</span><span class=o>()).</span><span class=na>thenReturn</span><span class=o>(</span><span class=n>returnedList</span><span class=o>);</span>
-
-
-  <span class=n>HttpGet</span> <span class=n>get</span> <span class=o>=</span> <span class=k>new</span> <span class=n>HttpGet</span><span class=o>(</span><span class=n>BASE_URL</span> <span class=o>+</span> <span class=s>&#34;/service/entity/&#34;</span><span class=o>);</span>
-
-  <span class=n>HttpResponse</span> <span class=n>response</span> <span class=o>=</span> <span class=n>client</span><span class=o>.</span><span class=na>execute</span><span class=o>(</span><span class=n>get</span><span class=o>);</span>
-  <span class=n>InputStream</span> <span class=n>content</span> <span class=o>=</span> <span class=n>response</span><span class=o>.</span><span class=na>getEntity</span><span class=o>().</span><span class=na>getContent</span><span class=o>();</span>
-
-  <span class=n>EntityList</span> <span class=n>result</span> <span class=o>=</span> <span class=n>fromString</span><span class=o>(</span><span class=n>EntityList</span><span class=o>.</span><span class=na>class</span><span class=o>,</span> <span class=n>content</span><span class=o>);</span>
-  <span class=n>content</span><span class=o>.</span><span class=na>close</span><span class=o>();</span>
-
-  <span class=n>Assert</span><span class=o>.</span><span class=na>assertNotNull</span><span class=o>(</span><span class=n>result</span><span class=o>);</span>
-  <span class=n>Assert</span><span class=o>.</span><span class=na>assertEquals</span><span class=o>(</span><span class=n>EXPECTED_SIZE</span><span class=o>,</span> <span class=n>result</span><span class=o>.</span><span class=na>getEntities</span><span class=o>().</span><span class=na>size</span><span class=o>());</span>
- <span class=o>}</span>
-
- <span class=nd>@Test</span>
- <span class=kd>public</span> <span class=kt>void</span> <span class=nf>testFindById</span><span class=o>()</span> <span class=kd>throws</span> <span class=n>Exception</span> <span class=o>{</span>
-
-  <span class=kd>final</span> <span class=n>Entity</span> <span class=n>validEntity</span> <span class=o>=</span> <span class=n>getValidEntity</span><span class=o>();</span>
-  <span class=n>validEntity</span><span class=o>.</span><span class=na>setId</span><span class=o>(</span><span class=n>2</span><span class=o>);</span>
-
-  <span class=n>when</span><span class=o>(</span><span class=n>entityService</span><span class=o>.</span><span class=na>findById</span><span class=o>(</span><span class=n>validEntity</span><span class=o>.</span><span class=na>getId</span><span class=o>())).</span><span class=na>thenAnswer</span><span class=o>(</span><span class=k>new</span> <span class=n>Answer</span><span class=o>&amp;</span><span class=n>lt</span><span class=o>;</span><span class=n>Object</span><span class=o>&amp;</span><span class=n>gt</span><span class=o>;()</span> <span class=o>{</span>
-   <span class=nd>@Override</span>
-   <span class=kd>public</span> <span class=n>Object</span> <span class=nf>answer</span><span class=o>(</span><span class=n>InvocationOnMock</span> <span class=n>invocation</span><span class=o>)</span> <span class=kd>throws</span> <span class=n>Throwable</span> <span class=o>{</span>
-    <span class=k>return</span> <span class=n>validEntity</span><span class=o>;</span>
-   <span class=o>}</span>
-  <span class=o>});</span>
-
-  <span class=n>HttpGet</span> <span class=n>get</span> <span class=o>=</span> <span class=k>new</span> <span class=n>HttpGet</span><span class=o>(</span><span class=n>BASE_URL</span> <span class=o>+</span> <span class=s>&#34;/service/entity/2&#34;</span><span class=o>);</span>
-
-  <span class=n>HttpResponse</span> <span class=n>response</span> <span class=o>=</span> <span class=n>client</span><span class=o>.</span><span class=na>execute</span><span class=o>(</span><span class=n>get</span><span class=o>);</span>
-  <span class=n>InputStream</span> <span class=n>content</span> <span class=o>=</span> <span class=n>response</span><span class=o>.</span><span class=na>getEntity</span><span class=o>().</span><span class=na>getContent</span><span class=o>();</span>
-
-  <span class=n>Entity</span> <span class=n>result</span> <span class=o>=</span> <span class=n>fromString</span><span class=o>(</span><span class=n>Entity</span><span class=o>.</span><span class=na>class</span><span class=o>,</span> <span class=n>content</span><span class=o>);</span>
-  <span class=n>content</span><span class=o>.</span><span class=na>close</span><span class=o>();</span>
-
-  <span class=n>Assert</span><span class=o>.</span><span class=na>assertNotNull</span><span class=o>(</span><span class=n>result</span><span class=o>);</span>
-
-  <span class=n>deepAssertEquals</span><span class=o>(</span><span class=n>validEntity</span><span class=o>,</span> <span class=n>result</span><span class=o>);</span>
-
- <span class=o>}</span>
-
- <span class=kd>private</span> <span class=kt>void</span> <span class=nf>deepAssertEquals</span><span class=o>(</span><span class=n>Object</span> <span class=n>expected</span><span class=o>,</span> <span class=n>Object</span> <span class=n>actual</span><span class=o>)</span> <span class=kd>throws</span> <span class=n>IllegalAccessException</span><span class=o>,</span> <span class=n>InvocationTargetException</span> <span class=o>{</span>
-  <span class=n>Assert</span><span class=o>.</span><span class=na>assertEquals</span><span class=o>(</span><span class=n>expected</span><span class=o>.</span><span class=na>getClass</span><span class=o>(),</span> <span class=n>actual</span><span class=o>.</span><span class=na>getClass</span><span class=o>());</span>
-  <span class=n>PropertyDescriptor</span><span class=o>[]</span> <span class=n>propertyDescriptors</span> <span class=o>=</span> <span class=n>BeanUtils</span><span class=o>.</span><span class=na>getPropertyDescriptors</span><span class=o>(</span><span class=n>expected</span><span class=o>.</span><span class=na>getClass</span><span class=o>());</span>
-  <span class=k>for</span> <span class=o>(</span><span class=n>PropertyDescriptor</span> <span class=n>propertyDescriptor</span> <span class=o>:</span> <span class=n>propertyDescriptors</span><span class=o>)</span> <span class=o>{</span>
-   <span class=n>Object</span> <span class=n>expectedValue</span> <span class=o>=</span> <span class=n>propertyDescriptor</span><span class=o>.</span><span class=na>getReadMethod</span><span class=o>().</span><span class=na>invoke</span><span class=o>(</span><span class=n>expected</span><span class=o>);</span>
-   <span class=n>Object</span> <span class=n>actualValue</span> <span class=o>=</span> <span class=n>propertyDescriptor</span><span class=o>.</span><span class=na>getReadMethod</span><span class=o>().</span><span class=na>invoke</span><span class=o>(</span><span class=n>actual</span><span class=o>);</span>
-   <span class=n>Assert</span><span class=o>.</span><span class=na>assertEquals</span><span class=o>(</span><span class=n>expectedValue</span><span class=o>,</span> <span class=n>actualValue</span><span class=o>);</span>
-  <span class=o>}</span>
- <span class=o>}</span>
-
-        <span class=kd>public</span> <span class=kd>static</span> <span class=o>&amp;</span><span class=n>lt</span><span class=o>;</span><span class=n>T</span><span class=o>&amp;</span><span class=n>gt</span><span class=o>;</span> <span class=n>T</span> <span class=nf>fromString</span><span class=o>(</span><span class=n>Class</span><span class=o>&amp;</span><span class=n>lt</span><span class=o>;</span><span class=n>T</span><span class=o>&amp;</span><span class=n>gt</span><span class=o>;</span> <span class=n>clazz</span><span class=o>,</span> <span class=n>String</span> <span class=n>input</span><span class=o>)</span> <span class=kd>throws</span> <span class=n>JAXBException</span> <span class=o>{</span>
-  <span class=n>JAXBContext</span> <span class=n>ctx</span> <span class=o>=</span> <span class=n>JAXBContext</span><span class=o>.</span><span class=na>newInstance</span><span class=o>(</span><span class=n>clazz</span><span class=o>);</span>
-  <span class=n>Unmarshaller</span> <span class=n>unmarshaller</span> <span class=o>=</span> <span class=n>ctx</span><span class=o>.</span><span class=na>createUnmarshaller</span><span class=o>();</span>
-  <span class=nd>@SuppressWarnings</span><span class=o>(&amp;</span><span class=n>quot</span><span class=o>;</span><span class=n>unchecked</span><span class=o>&amp;</span><span class=n>quot</span><span class=o>;)</span>
-  <span class=n>T</span> <span class=n>unmarshal</span> <span class=o>=</span> <span class=o>(</span><span class=n>T</span><span class=o>)</span> <span class=n>unmarshaller</span><span class=o>.</span><span class=na>unmarshal</span><span class=o>(</span><span class=k>new</span> <span class=n>StringReader</span><span class=o>(</span><span class=n>input</span><span class=o>));</span>
-  <span class=k>return</span> <span class=n>unmarshal</span><span class=o>;</span>
- <span class=o>}</span>
-
- <span class=kd>public</span> <span class=kd>static</span> <span class=o>&amp;</span><span class=n>lt</span><span class=o>;</span><span class=n>T</span><span class=o>&amp;</span><span class=n>gt</span><span class=o>;</span> <span class=n>T</span> <span class=nf>fromString</span><span class=o>(</span><span class=n>Class</span><span class=o>&amp;</span><span class=n>lt</span><span class=o>;</span><span class=n>T</span><span class=o>&amp;</span><span class=n>gt</span><span class=o>;</span> <span class=n>clazz</span><span class=o>,</span> <span class=n>InputStream</span> <span class=n>input</span><span class=o>)</span> <span class=kd>throws</span> <span class=n>JAXBException</span> <span class=o>{</span>
-  <span class=n>JAXBContext</span> <span class=n>ctx</span> <span class=o>=</span> <span class=n>JAXBContext</span><span class=o>.</span><span class=na>newInstance</span><span class=o>(</span><span class=n>clazz</span><span class=o>);</span>
-  <span class=nd>@SuppressWarnings</span><span class=o>(&amp;</span><span class=n>quot</span><span class=o>;</span><span class=n>unchecked</span><span class=o>&amp;</span><span class=n>quot</span><span class=o>;)</span>
-  <span class=n>T</span> <span class=n>unmarshal</span> <span class=o>=</span> <span class=o>(</span><span class=n>T</span><span class=o>)</span> <span class=n>ctx</span><span class=o>.</span><span class=na>createUnmarshaller</span><span class=o>().</span><span class=na>unmarshal</span><span class=o>(</span><span class=n>input</span><span class=o>);</span>
-  <span class=k>return</span> <span class=n>unmarshal</span><span class=o>;</span>
- <span class=o>}</span>
-<span class=o>}</span>
-
-</code></pre></div><h4>Запуск тестов</h4>
-Половина дела сделана, теперь нам необходимо настроить инфраструктуру для тестирования наших свеженаписанных REST-сервисов.
-<p>Для этого нам необходимо внести следующие модификации в <tt>pom.xml</tt>:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml>
-<span class=ni>&amp;lt;</span>plugin<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>org.apache.maven.plugins<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>maven-surefire-plugin<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>version<span class=ni>&amp;gt;</span>2.11<span class=ni>&amp;lt;</span>/version<span class=ni>&amp;gt;</span>
-
-    <span class=ni>&amp;lt;</span>executions<span class=ni>&amp;gt;</span>
-        <span class=ni>&amp;lt;</span>execution<span class=ni>&amp;gt;</span>
-     <span class=ni>&amp;lt;</span>id<span class=ni>&amp;gt;</span>Unit tests<span class=ni>&amp;lt;</span>/id<span class=ni>&amp;gt;</span>
-            <span class=ni>&amp;lt;</span>phase<span class=ni>&amp;gt;</span>test<span class=ni>&amp;lt;</span>/phase<span class=ni>&amp;gt;</span>
-            <span class=ni>&amp;lt;</span>goals<span class=ni>&amp;gt;</span>
-                <span class=ni>&amp;lt;</span>goal<span class=ni>&amp;gt;</span>test<span class=ni>&amp;lt;</span>/goal<span class=ni>&amp;gt;</span>
-            <span class=ni>&amp;lt;</span>/goals<span class=ni>&amp;gt;</span>
-            <span class=ni>&amp;lt;</span>configuration<span class=ni>&amp;gt;</span>
-                <span class=ni>&amp;lt;</span>excludes<span class=ni>&amp;gt;</span>
-                    <span class=ni>&amp;lt;</span>exclude<span class=ni>&amp;gt;</span>**/IT*.java<span class=ni>&amp;lt;</span>/exclude<span class=ni>&amp;gt;</span>
-                <span class=ni>&amp;lt;</span>/excludes<span class=ni>&amp;gt;</span>
-            <span class=ni>&amp;lt;</span>/configuration<span class=ni>&amp;gt;</span>
-        <span class=ni>&amp;lt;</span>/execution<span class=ni>&amp;gt;</span>
-        <span class=ni>&amp;lt;</span>execution<span class=ni>&amp;gt;</span>
-            <span class=ni>&amp;lt;</span>id<span class=ni>&amp;gt;</span>Integration tests<span class=ni>&amp;lt;</span>/id<span class=ni>&amp;gt;</span>
-            <span class=ni>&amp;lt;</span>phase<span class=ni>&amp;gt;</span>integration-test<span class=ni>&amp;lt;</span>/phase<span class=ni>&amp;gt;</span>
-            <span class=ni>&amp;lt;</span>goals<span class=ni>&amp;gt;</span>
-                <span class=ni>&amp;lt;</span>goal<span class=ni>&amp;gt;</span>test<span class=ni>&amp;lt;</span>/goal<span class=ni>&amp;gt;</span>
-            <span class=ni>&amp;lt;</span>/goals<span class=ni>&amp;gt;</span>
-            <span class=ni>&amp;lt;</span>configuration<span class=ni>&amp;gt;</span>
-                <span class=ni>&amp;lt;</span>includes<span class=ni>&amp;gt;</span>
-                    <span class=ni>&amp;lt;</span>include<span class=ni>&amp;gt;</span>**/IT*.java<span class=ni>&amp;lt;</span>/include<span class=ni>&amp;gt;</span>
-                <span class=ni>&amp;lt;</span>/includes<span class=ni>&amp;gt;</span>
-            <span class=ni>&amp;lt;</span>/configuration<span class=ni>&amp;gt;</span>
-        <span class=ni>&amp;lt;</span>/execution<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>/executions<span class=ni>&amp;gt;</span>
-<span class=ni>&amp;lt;</span>/plugin<span class=ni>&amp;gt;</span>
-
-<span class=ni>&amp;lt;</span>dependency<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>org.apache.httpcomponents<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>httpclient<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>version<span class=ni>&amp;gt;</span>4.1.2<span class=ni>&amp;lt;</span>/version<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>scope<span class=ni>&amp;gt;</span>test<span class=ni>&amp;lt;</span>/scope<span class=ni>&amp;gt;</span>
-<span class=ni>&amp;lt;</span>/dependency<span class=ni>&amp;gt;</span>
-<span class=ni>&amp;lt;</span>dependency<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>org.jboss.resteasy<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>resteasy-jaxrs<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>scope<span class=ni>&amp;gt;</span>test<span class=ni>&amp;lt;</span>/scope<span class=ni>&amp;gt;</span>
-<span class=ni>&amp;lt;</span>/dependency<span class=ni>&amp;gt;</span>
-<span class=ni>&amp;lt;</span>dependency<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>org.jboss.resteasy<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>resteasy-spring<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>scope<span class=ni>&amp;gt;</span>test<span class=ni>&amp;lt;</span>/scope<span class=ni>&amp;gt;</span>
-<span class=ni>&amp;lt;</span>/dependency<span class=ni>&amp;gt;</span>
-<span class=ni>&amp;lt;</span>dependency<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>org.jboss.resteasy<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>tjws<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>version<span class=ni>&amp;gt;</span>${resteasy-jaxrs.version}<span class=ni>&amp;lt;</span>/version<span class=ni>&amp;gt;</span>
-<span class=ni>&amp;lt;</span>/dependency<span class=ni>&amp;gt;</span>
-<span class=ni>&amp;lt;</span>dependency<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>javax.servlet<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>servlet-api<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>scope<span class=ni>&amp;gt;</span>test<span class=ni>&amp;lt;</span>/scope<span class=ni>&amp;gt;</span>
-<span class=ni>&amp;lt;</span>/dependency<span class=ni>&amp;gt;</span>
-<span class=ni>&amp;lt;</span>dependency<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>commons-io<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>commons-io<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>scope<span class=ni>&amp;gt;</span>test<span class=ni>&amp;lt;</span>/scope<span class=ni>&amp;gt;</span>
-<span class=ni>&amp;lt;</span>/dependency<span class=ni>&amp;gt;</span>
-</code></pre></div><h4>Заключение</h4>
-В целом, ничего сложного, главное делать всё аккуратно. Хорошего вам кода!
-</div>
-<footer>
-<div class=social>
-<ul>
-<li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a>
-</li>
-<li class=sidebar-nav-item> <a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a>
-</li>
-<li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li>
-</ul>
-</div>
-<p>&copy;&nbsp;2009&nbsp;—&nbsp;2021 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a>
-</p>
-</footer>
-<script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(b,c){var d=b.createElement(c),a=b.getElementsByTagName(c)[0];a.async='async',d.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js',a.parentNode.insertBefore(d,a)})(document,'script')</script>
-</body>
-</html>
-</body>
-</html>
+<!doctype html><html><head><meta charset=utf-8><title>Разработка и тестирование Java REST веб-сервисов &ndash; Oleg Atamanenko</title><meta name=HandheldFriendly content="True"><meta name=MobileOptimized content="320"><meta name=theme-color content="#333" media="(prefers-color-scheme: dark)"><meta name=theme-color content="#777" media="(prefers-color-scheme: light)"><meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=1"><link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&family=Prata&display=swap" type=text/css><link rel=stylesheet href=https://uthark.github.io/css/theme.72254bdf9ec9fc2d8b013dd5c21997b2ab476af1a37ded5995aae71c4a63d57d.css><link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css><link href=https://uthark.github.io/favicon.png rel=icon></head><body><header class=site><h1><a href=https://uthark.github.io/>Oleg Atamanenko</a></h1><h2>thoughts about programming</h2></header><nav><ul class=main-navigation><li><a href=https://uthark.github.io/ title=Posts>Posts</a></li><li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li><li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li><li><a href=https://uthark.github.io/about/ title="About me">About me</a></li></ul></nav><div class=article><h1>Разработка и тестирование Java REST веб-сервисов</h1><h4>Введение</h4>Для разработки <a href=http://restpatterns.org/>REST</a> веб-сервисов Java предлагает <a href="http://jcp.org/en/jsr/detail?id=311">JSR-311 - JAX-RS: The Java&trade; API for RESTful Web Services</a>
+Как это обычно бывает в мире Enterprise Java, существует несколько реализаций данной спецификации:<ul><li><a href=http://jersey.java.net/>Jersey</a> - это эталонная реализация спецификации от компании <strike>Sun</strike> Oracle</li><li><a href=http://cxf.apache.org/>Apache CXF</a></li><li><a href=http://www.jboss.org/resteasy>JBoss RESTEasy</a></li></ul>На примере последней реализации, я и расскажу, каким образом можно написать REST-сервис.<h4>Пишем REST-сервис</h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>javax.ws.rs.*</span><span class=o>;</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>javax.ws.rs.core.MediaType</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nd>@Path</span><span class=o>(</span><span class=s>&#34;/service/entity&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl><span class=nd>@Produces</span><span class=o>({</span><span class=n>MediaType</span><span class=o>.</span><span class=na>APPLICATION_XML</span><span class=o>,</span> <span class=n>MediaType</span><span class=o>.</span><span class=na>APPLICATION_JSON</span><span class=o>})</span>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=kd>interface</span> <span class=nc>EntityRestService</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl> <span class=nd>@GET</span>
+</span></span><span class=line><span class=cl> <span class=nd>@Path</span><span class=o>(</span><span class=s>&#34;/all&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl> <span class=n>EntityList</span> <span class=nf>listAll</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl> <span class=nd>@GET</span>
+</span></span><span class=line><span class=cl> <span class=nd>@Path</span><span class=o>(</span><span class=s>&#34;/{id}&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl> <span class=n>Entity</span> <span class=nf>findById</span><span class=o>(</span><span class=nd>@PathParam</span><span class=o>(</span><span class=s>&#34;id&#34;</span><span class=o>)</span> <span class=n>Integer</span> <span class=n>id</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></div><p>Создаём интерфейс, в котором расставляем JAX-RS аннотации. Аннотация <a href=http://jsr311.java.net/nonav/releases/1.1/javax/ws/rs/Path.html>@Path</a> указывает путь, по которому будет доступен наш сервис. Аннотация <a href=http://jsr311.java.net/nonav/releases/1.1/javax/ws/rs/GET.html>@GET</a> определяет, какой HTTP-запрос будет обрабатываться данным методом. Аннотация <a href=http://jsr311.java.net/nonav/releases/1.1/javax/ws/rs/Produces.html>@Produces</a> позволяет указать, в каком формате данный сервис предоставляет результаты.</p><h4>Конфигурация JBoss RESTEasy</h4><p>Конфигурация очень проста, во-первых, нам нужно добавить обновить <tt>pom.xml</tt> и добавить необходимые зависимости:</p><h5>Обновляем <tt>pom.xml</tt></h5><p>Добавляем compile-time зависимость на JAX-RS API</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=ni>&amp;lt;</span>dependency<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>org.jboss.resteasy<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>jaxrs-api<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl><span class=ni>&amp;lt;</span>/dependency<span class=ni>&amp;gt;</span>
+</span></span></code></pre></div><p>и runtime зависимости на реализацию</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=ni>&amp;lt;</span>dependency<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>org.jboss.resteasy<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>resteasy-jaxrs<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>version<span class=ni>&amp;gt;</span>${resteasy-jaxrs.version}<span class=ni>&amp;lt;</span>/version<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>scope<span class=ni>&amp;gt;</span>runtime<span class=ni>&amp;lt;</span>/scope<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl><span class=ni>&amp;lt;</span>/dependency<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl><span class=ni>&amp;lt;</span>dependency<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>org.jboss.resteasy<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>resteasy-jackson-provider<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>version<span class=ni>&amp;gt;</span>${resteasy-jaxrs.version}<span class=ni>&amp;lt;</span>/version<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>scope<span class=ni>&amp;gt;</span>runtime<span class=ni>&amp;lt;</span>/scope<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl><span class=ni>&amp;lt;</span>/dependency<span class=ni>&amp;gt;</span>
+</span></span></code></pre></div><h5>Обновляем конфигурацию веб-приложения в <tt>web.xml</tt></h5>Необходимо выполнить следующую модификацию <tt>web.xml</tt><div class=highlight><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl> <span class=ni>&amp;lt;</span>listener<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>  <span class=ni>&amp;lt;</span>listener-class<span class=ni>&amp;gt;</span>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap<span class=ni>&amp;lt;</span>/listener-class<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl> <span class=ni>&amp;lt;</span>/listener<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl> <span class=ni>&amp;lt;</span>context-param<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>  <span class=ni>&amp;lt;</span>param-name<span class=ni>&amp;gt;</span>resteasy.servlet.mapping.prefix<span class=ni>&amp;lt;</span>/param-name<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>  <span class=ni>&amp;lt;</span>param-value<span class=ni>&amp;gt;</span>/rest<span class=ni>&amp;lt;</span>/param-value<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl> <span class=ni>&amp;lt;</span>/context-param<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl> <span class=ni>&amp;lt;</span>servlet<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>  <span class=ni>&amp;lt;</span>servlet-name<span class=ni>&amp;gt;</span>REST Easy<span class=ni>&amp;lt;</span>/servlet-name<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>  <span class=ni>&amp;lt;</span>servlet-class<span class=ni>&amp;gt;</span>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher<span class=ni>&amp;lt;</span>/servlet-class<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl> <span class=ni>&amp;lt;</span>/servlet<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl> <span class=ni>&amp;lt;</span>servlet-mapping<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>  <span class=ni>&amp;lt;</span>servlet-name<span class=ni>&amp;gt;</span>REST Easy<span class=ni>&amp;lt;</span>/servlet-name<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>  <span class=ni>&amp;lt;</span>url-pattern<span class=ni>&amp;gt;</span>/rest/*<span class=ni>&amp;lt;</span>/url-pattern<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl> <span class=ni>&amp;lt;</span>/servlet-mapping<span class=ni>&amp;gt;</span>
+</span></span></code></pre></div><p>Данный код объявляет <a href=http://docs.jboss.org/resteasy/docs/2.3.1.GA/javadocs/org/jboss/resteasy/plugins/server/servlet/HttpServletDispatcher.html>сервлет HttpServletDispatcher</a>, который будет обрабатывать все запросы, которые приходят на <tt>/rest/*</tt>. Слушатель <tt><a href=http://docs.jboss.org/resteasy/docs/2.3.1.GA/javadocs/org/jboss/resteasy/plugins/server/servlet/ResteasyBootstrap.html>ResteasyBootstrap</a></tt> выполняет всю необходимую инициализацию JBoss RESTEasy.</p><h5>Поддержка Spring</h5>Для того, чтобы использовать <a href=http://www.springsource.org/spring-framework>Spring Framework</a>, нам необходимо сделать следующие изменения:<ol><li>Добавить зависимость в <tt>pom.xml</tt></li></ol><div class=highlight><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=ni>&amp;lt;</span>dependency<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>org.jboss.resteasy<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>resteasy-spring<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>version<span class=ni>&amp;gt;</span>${resteasy-jaxrs.version}<span class=ni>&amp;lt;</span>/version<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>scope<span class=ni>&amp;gt;</span>runtime<span class=ni>&amp;lt;</span>/scope<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl><span class=ni>&amp;lt;</span>/dependency<span class=ni>&amp;gt;</span>
+</span></span></code></pre></div><ol start=2><li>Добавить Spring-ового слушателя в <tt>web.xml</tt></li></ol><div class=highlight><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl> <span class=ni>&amp;lt;</span>listener<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>  <span class=ni>&amp;lt;</span>listener-class<span class=ni>&amp;gt;</span>org.jboss.resteasy.plugins.spring.SpringContextLoaderListener<span class=ni>&amp;lt;</span>/listener-class<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl> <span class=ni>&amp;lt;</span>/listener<span class=ni>&amp;gt;</span>
+</span></span></code></pre></div><p>После этих изменений JBoss RESTEasy будет в курсе про Spring, это позволит в реализации REST-сервисов полноценно использовать все возможности, предоставляемые Spring Framework.</p><h4>Пишем тесты</h4>Написание тестов - весьма полезная вещь, ниже я покажу пример теста для REST-сервиса.
+В рамках данного теста у нас будет подниматься <a href=http://docs.jboss.org/resteasy/docs/2.3.1.GA/javadocs/org/jboss/resteasy/plugins/server/tjws/TJWSEmbeddedJaxrsServer.html>встраиваемый веб-сервер TJWSEmbeddedJaxrsServer</a>, к которому мы будем обращаться для тестирования наших REST-сервисов.<div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nd>@RunWith</span><span class=o>(</span><span class=n>SpringJUnit4ClassRunner</span><span class=o>.</span><span class=na>class</span><span class=o>)</span>
+</span></span><span class=line><span class=cl><span class=nd>@ContextConfiguration</span><span class=o>({</span><span class=s>&#34;/applicationContext-test.xml&#34;</span><span class=o>})</span>
+</span></span><span class=line><span class=cl><span class=nd>@TestExecutionListeners</span><span class=o>({</span><span class=n>DependencyInjectionTestExecutionListener</span><span class=o>.</span><span class=na>class</span><span class=o>,</span> <span class=n>DirtiesContextTestExecutionListener</span><span class=o>.</span><span class=na>class</span><span class=o>})</span>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=kd>class</span> <span class=nc>TestEntityServiceRest</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl> <span class=kd>private</span> <span class=kd>static</span> <span class=kd>final</span> <span class=kt>int</span> <span class=n>PORT</span> <span class=o>=</span> <span class=n>8081</span><span class=o>;</span>
+</span></span><span class=line><span class=cl> <span class=kd>private</span> <span class=kd>static</span> <span class=kd>final</span> <span class=n>String</span> <span class=n>BASE_URL</span> <span class=o>=</span> <span class=s>&#34;http://localhost:&#34;</span> <span class=o>+</span> <span class=n>PORT</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl> <span class=nd>@Autowired</span>
+</span></span><span class=line><span class=cl> <span class=n>EntityService</span> <span class=n>entityService</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl> <span class=nd>@Autowired</span>
+</span></span><span class=line><span class=cl> <span class=n>ConfigurableApplicationContext</span> <span class=n>applicationContext</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl> <span class=kd>protected</span> <span class=n>HttpClient</span> <span class=n>client</span><span class=o>;</span>
+</span></span><span class=line><span class=cl> <span class=kd>protected</span> <span class=n>TJWSEmbeddedJaxrsServer</span> <span class=n>server</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl> <span class=nd>@Before</span>
+</span></span><span class=line><span class=cl> <span class=kd>public</span> <span class=kt>void</span> <span class=nf>setUpClient</span><span class=o>()</span> <span class=kd>throws</span> <span class=n>Exception</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=n>client</span> <span class=o>=</span> <span class=k>new</span> <span class=n>DefaultHttpClient</span><span class=o>();</span>
+</span></span><span class=line><span class=cl> <span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl> <span class=nd>@Before</span>
+</span></span><span class=line><span class=cl> <span class=kd>public</span> <span class=kt>void</span> <span class=nf>setUpServer</span><span class=o>()</span> <span class=kd>throws</span> <span class=n>Exception</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=n>server</span> <span class=o>=</span> <span class=k>new</span> <span class=n>TJWSEmbeddedJaxrsServer</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>  <span class=n>server</span><span class=o>.</span><span class=na>setPort</span><span class=o>(</span><span class=n>PORT</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>  <span class=n>ResteasyDeployment</span> <span class=n>deployment</span> <span class=o>=</span> <span class=n>server</span><span class=o>.</span><span class=na>getDeployment</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>server</span><span class=o>.</span><span class=na>start</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>Dispatcher</span> <span class=n>dispatcher</span> <span class=o>=</span> <span class=n>deployment</span><span class=o>.</span><span class=na>getDispatcher</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>  <span class=n>SpringBeanProcessor</span> <span class=n>processor</span> <span class=o>=</span> <span class=k>new</span> <span class=n>SpringBeanProcessor</span><span class=o>(</span><span class=n>dispatcher</span><span class=o>,</span> <span class=n>deployment</span><span class=o>.</span><span class=na>getRegistry</span><span class=o>(),</span> <span class=n>deployment</span><span class=o>.</span><span class=na>getProviderFactory</span><span class=o>());</span>
+</span></span><span class=line><span class=cl>  <span class=n>applicationContext</span><span class=o>.</span><span class=na>addBeanFactoryPostProcessor</span><span class=o>(</span><span class=n>processor</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>SpringResourceFactory</span> <span class=n>noDefaults</span> <span class=o>=</span> <span class=k>new</span> <span class=n>SpringResourceFactory</span><span class=o>(</span>
+</span></span><span class=line><span class=cl>    <span class=s>&#34;entityServiceRestImpl&#34;</span><span class=o>,</span> <span class=n>applicationContext</span><span class=o>,</span> <span class=n>EntityRestServiceImpl</span><span class=o>.</span><span class=na>class</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>  <span class=n>dispatcher</span><span class=o>.</span><span class=na>getRegistry</span><span class=o>().</span><span class=na>addResourceFactory</span><span class=o>(</span><span class=n>noDefaults</span><span class=o>);</span>
+</span></span><span class=line><span class=cl> <span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl> <span class=nd>@After</span>
+</span></span><span class=line><span class=cl> <span class=kd>public</span> <span class=kt>void</span> <span class=nf>stop</span><span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=n>server</span><span class=o>.</span><span class=na>stop</span><span class=o>();</span>
+</span></span><span class=line><span class=cl> <span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl> <span class=nd>@Test</span>
+</span></span><span class=line><span class=cl> <span class=kd>public</span> <span class=kt>void</span> <span class=nf>testListAll</span><span class=o>()</span> <span class=kd>throws</span> <span class=n>Exception</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=n>0</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>  <span class=kd>final</span> <span class=n>List</span><span class=o>&amp;</span><span class=n>lt</span><span class=o>;</span><span class=n>Entity</span><span class=o>&amp;</span><span class=n>gt</span><span class=o>;</span> <span class=n>returnedList</span> <span class=o>=</span> <span class=k>new</span> <span class=n>ArrayList</span><span class=o>&amp;</span><span class=n>lt</span><span class=o>;</span><span class=n>Entity</span><span class=o>&amp;</span><span class=n>gt</span><span class=o>;();</span>
+</span></span><span class=line><span class=cl>  <span class=kt>int</span> <span class=n>EXPECTED_SIZE</span> <span class=o>=</span> <span class=n>6</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>  <span class=k>while</span> <span class=o>(</span><span class=n>i</span> <span class=o>&amp;</span><span class=n>lt</span><span class=o>;</span> <span class=n>EXPECTED_SIZE</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>   <span class=n>i</span><span class=o>++;</span>
+</span></span><span class=line><span class=cl>   <span class=kd>final</span> <span class=n>Entity</span> <span class=n>entity</span> <span class=o>=</span> <span class=k>new</span> <span class=n>Entity</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>   <span class=n>entity</span><span class=o>.</span><span class=na>setId</span><span class=o>(</span><span class=n>i</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>   <span class=n>entity</span><span class=o>.</span><span class=na>setName</span><span class=o>(</span><span class=s>&#34;test&#34;</span> <span class=o>+</span> <span class=n>i</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>   <span class=n>returnedList</span><span class=o>.</span><span class=na>add</span><span class=o>(</span><span class=n>entity</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>  <span class=o>}</span>
+</span></span><span class=line><span class=cl>  <span class=n>when</span><span class=o>(</span><span class=n>entityService</span><span class=o>.</span><span class=na>findAll</span><span class=o>()).</span><span class=na>thenReturn</span><span class=o>(</span><span class=n>returnedList</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>HttpGet</span> <span class=n>get</span> <span class=o>=</span> <span class=k>new</span> <span class=n>HttpGet</span><span class=o>(</span><span class=n>BASE_URL</span> <span class=o>+</span> <span class=s>&#34;/service/entity/&#34;</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>HttpResponse</span> <span class=n>response</span> <span class=o>=</span> <span class=n>client</span><span class=o>.</span><span class=na>execute</span><span class=o>(</span><span class=n>get</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>  <span class=n>InputStream</span> <span class=n>content</span> <span class=o>=</span> <span class=n>response</span><span class=o>.</span><span class=na>getEntity</span><span class=o>().</span><span class=na>getContent</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>EntityList</span> <span class=n>result</span> <span class=o>=</span> <span class=n>fromString</span><span class=o>(</span><span class=n>EntityList</span><span class=o>.</span><span class=na>class</span><span class=o>,</span> <span class=n>content</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>  <span class=n>content</span><span class=o>.</span><span class=na>close</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>Assert</span><span class=o>.</span><span class=na>assertNotNull</span><span class=o>(</span><span class=n>result</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>  <span class=n>Assert</span><span class=o>.</span><span class=na>assertEquals</span><span class=o>(</span><span class=n>EXPECTED_SIZE</span><span class=o>,</span> <span class=n>result</span><span class=o>.</span><span class=na>getEntities</span><span class=o>().</span><span class=na>size</span><span class=o>());</span>
+</span></span><span class=line><span class=cl> <span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl> <span class=nd>@Test</span>
+</span></span><span class=line><span class=cl> <span class=kd>public</span> <span class=kt>void</span> <span class=nf>testFindById</span><span class=o>()</span> <span class=kd>throws</span> <span class=n>Exception</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=kd>final</span> <span class=n>Entity</span> <span class=n>validEntity</span> <span class=o>=</span> <span class=n>getValidEntity</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>  <span class=n>validEntity</span><span class=o>.</span><span class=na>setId</span><span class=o>(</span><span class=n>2</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>when</span><span class=o>(</span><span class=n>entityService</span><span class=o>.</span><span class=na>findById</span><span class=o>(</span><span class=n>validEntity</span><span class=o>.</span><span class=na>getId</span><span class=o>())).</span><span class=na>thenAnswer</span><span class=o>(</span><span class=k>new</span> <span class=n>Answer</span><span class=o>&amp;</span><span class=n>lt</span><span class=o>;</span><span class=n>Object</span><span class=o>&amp;</span><span class=n>gt</span><span class=o>;()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>   <span class=nd>@Override</span>
+</span></span><span class=line><span class=cl>   <span class=kd>public</span> <span class=n>Object</span> <span class=nf>answer</span><span class=o>(</span><span class=n>InvocationOnMock</span> <span class=n>invocation</span><span class=o>)</span> <span class=kd>throws</span> <span class=n>Throwable</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>validEntity</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>   <span class=o>}</span>
+</span></span><span class=line><span class=cl>  <span class=o>});</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>HttpGet</span> <span class=n>get</span> <span class=o>=</span> <span class=k>new</span> <span class=n>HttpGet</span><span class=o>(</span><span class=n>BASE_URL</span> <span class=o>+</span> <span class=s>&#34;/service/entity/2&#34;</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>HttpResponse</span> <span class=n>response</span> <span class=o>=</span> <span class=n>client</span><span class=o>.</span><span class=na>execute</span><span class=o>(</span><span class=n>get</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>  <span class=n>InputStream</span> <span class=n>content</span> <span class=o>=</span> <span class=n>response</span><span class=o>.</span><span class=na>getEntity</span><span class=o>().</span><span class=na>getContent</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>Entity</span> <span class=n>result</span> <span class=o>=</span> <span class=n>fromString</span><span class=o>(</span><span class=n>Entity</span><span class=o>.</span><span class=na>class</span><span class=o>,</span> <span class=n>content</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>  <span class=n>content</span><span class=o>.</span><span class=na>close</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>Assert</span><span class=o>.</span><span class=na>assertNotNull</span><span class=o>(</span><span class=n>result</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>deepAssertEquals</span><span class=o>(</span><span class=n>validEntity</span><span class=o>,</span> <span class=n>result</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl> <span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl> <span class=kd>private</span> <span class=kt>void</span> <span class=nf>deepAssertEquals</span><span class=o>(</span><span class=n>Object</span> <span class=n>expected</span><span class=o>,</span> <span class=n>Object</span> <span class=n>actual</span><span class=o>)</span> <span class=kd>throws</span> <span class=n>IllegalAccessException</span><span class=o>,</span> <span class=n>InvocationTargetException</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=n>Assert</span><span class=o>.</span><span class=na>assertEquals</span><span class=o>(</span><span class=n>expected</span><span class=o>.</span><span class=na>getClass</span><span class=o>(),</span> <span class=n>actual</span><span class=o>.</span><span class=na>getClass</span><span class=o>());</span>
+</span></span><span class=line><span class=cl>  <span class=n>PropertyDescriptor</span><span class=o>[]</span> <span class=n>propertyDescriptors</span> <span class=o>=</span> <span class=n>BeanUtils</span><span class=o>.</span><span class=na>getPropertyDescriptors</span><span class=o>(</span><span class=n>expected</span><span class=o>.</span><span class=na>getClass</span><span class=o>());</span>
+</span></span><span class=line><span class=cl>  <span class=k>for</span> <span class=o>(</span><span class=n>PropertyDescriptor</span> <span class=n>propertyDescriptor</span> <span class=o>:</span> <span class=n>propertyDescriptors</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>   <span class=n>Object</span> <span class=n>expectedValue</span> <span class=o>=</span> <span class=n>propertyDescriptor</span><span class=o>.</span><span class=na>getReadMethod</span><span class=o>().</span><span class=na>invoke</span><span class=o>(</span><span class=n>expected</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>   <span class=n>Object</span> <span class=n>actualValue</span> <span class=o>=</span> <span class=n>propertyDescriptor</span><span class=o>.</span><span class=na>getReadMethod</span><span class=o>().</span><span class=na>invoke</span><span class=o>(</span><span class=n>actual</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>   <span class=n>Assert</span><span class=o>.</span><span class=na>assertEquals</span><span class=o>(</span><span class=n>expectedValue</span><span class=o>,</span> <span class=n>actualValue</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>  <span class=o>}</span>
+</span></span><span class=line><span class=cl> <span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=kd>static</span> <span class=o>&amp;</span><span class=n>lt</span><span class=o>;</span><span class=n>T</span><span class=o>&amp;</span><span class=n>gt</span><span class=o>;</span> <span class=n>T</span> <span class=nf>fromString</span><span class=o>(</span><span class=n>Class</span><span class=o>&amp;</span><span class=n>lt</span><span class=o>;</span><span class=n>T</span><span class=o>&amp;</span><span class=n>gt</span><span class=o>;</span> <span class=n>clazz</span><span class=o>,</span> <span class=n>String</span> <span class=n>input</span><span class=o>)</span> <span class=kd>throws</span> <span class=n>JAXBException</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=n>JAXBContext</span> <span class=n>ctx</span> <span class=o>=</span> <span class=n>JAXBContext</span><span class=o>.</span><span class=na>newInstance</span><span class=o>(</span><span class=n>clazz</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>  <span class=n>Unmarshaller</span> <span class=n>unmarshaller</span> <span class=o>=</span> <span class=n>ctx</span><span class=o>.</span><span class=na>createUnmarshaller</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>  <span class=nd>@SuppressWarnings</span><span class=o>(&amp;</span><span class=n>quot</span><span class=o>;</span><span class=n>unchecked</span><span class=o>&amp;</span><span class=n>quot</span><span class=o>;)</span>
+</span></span><span class=line><span class=cl>  <span class=n>T</span> <span class=n>unmarshal</span> <span class=o>=</span> <span class=o>(</span><span class=n>T</span><span class=o>)</span> <span class=n>unmarshaller</span><span class=o>.</span><span class=na>unmarshal</span><span class=o>(</span><span class=k>new</span> <span class=n>StringReader</span><span class=o>(</span><span class=n>input</span><span class=o>));</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=n>unmarshal</span><span class=o>;</span>
+</span></span><span class=line><span class=cl> <span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl> <span class=kd>public</span> <span class=kd>static</span> <span class=o>&amp;</span><span class=n>lt</span><span class=o>;</span><span class=n>T</span><span class=o>&amp;</span><span class=n>gt</span><span class=o>;</span> <span class=n>T</span> <span class=nf>fromString</span><span class=o>(</span><span class=n>Class</span><span class=o>&amp;</span><span class=n>lt</span><span class=o>;</span><span class=n>T</span><span class=o>&amp;</span><span class=n>gt</span><span class=o>;</span> <span class=n>clazz</span><span class=o>,</span> <span class=n>InputStream</span> <span class=n>input</span><span class=o>)</span> <span class=kd>throws</span> <span class=n>JAXBException</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=n>JAXBContext</span> <span class=n>ctx</span> <span class=o>=</span> <span class=n>JAXBContext</span><span class=o>.</span><span class=na>newInstance</span><span class=o>(</span><span class=n>clazz</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>  <span class=nd>@SuppressWarnings</span><span class=o>(&amp;</span><span class=n>quot</span><span class=o>;</span><span class=n>unchecked</span><span class=o>&amp;</span><span class=n>quot</span><span class=o>;)</span>
+</span></span><span class=line><span class=cl>  <span class=n>T</span> <span class=n>unmarshal</span> <span class=o>=</span> <span class=o>(</span><span class=n>T</span><span class=o>)</span> <span class=n>ctx</span><span class=o>.</span><span class=na>createUnmarshaller</span><span class=o>().</span><span class=na>unmarshal</span><span class=o>(</span><span class=n>input</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=n>unmarshal</span><span class=o>;</span>
+</span></span><span class=line><span class=cl> <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></div><h4>Запуск тестов</h4>Половина дела сделана, теперь нам необходимо настроить инфраструктуру для тестирования наших свеженаписанных REST-сервисов.<p>Для этого нам необходимо внести следующие модификации в <tt>pom.xml</tt>:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=ni>&amp;lt;</span>plugin<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>org.apache.maven.plugins<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>maven-surefire-plugin<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>version<span class=ni>&amp;gt;</span>2.11<span class=ni>&amp;lt;</span>/version<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>executions<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>        <span class=ni>&amp;lt;</span>execution<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>     <span class=ni>&amp;lt;</span>id<span class=ni>&amp;gt;</span>Unit tests<span class=ni>&amp;lt;</span>/id<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>            <span class=ni>&amp;lt;</span>phase<span class=ni>&amp;gt;</span>test<span class=ni>&amp;lt;</span>/phase<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>            <span class=ni>&amp;lt;</span>goals<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>                <span class=ni>&amp;lt;</span>goal<span class=ni>&amp;gt;</span>test<span class=ni>&amp;lt;</span>/goal<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>            <span class=ni>&amp;lt;</span>/goals<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>            <span class=ni>&amp;lt;</span>configuration<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>                <span class=ni>&amp;lt;</span>excludes<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>                    <span class=ni>&amp;lt;</span>exclude<span class=ni>&amp;gt;</span>**/IT*.java<span class=ni>&amp;lt;</span>/exclude<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>                <span class=ni>&amp;lt;</span>/excludes<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>            <span class=ni>&amp;lt;</span>/configuration<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>        <span class=ni>&amp;lt;</span>/execution<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>        <span class=ni>&amp;lt;</span>execution<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>            <span class=ni>&amp;lt;</span>id<span class=ni>&amp;gt;</span>Integration tests<span class=ni>&amp;lt;</span>/id<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>            <span class=ni>&amp;lt;</span>phase<span class=ni>&amp;gt;</span>integration-test<span class=ni>&amp;lt;</span>/phase<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>            <span class=ni>&amp;lt;</span>goals<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>                <span class=ni>&amp;lt;</span>goal<span class=ni>&amp;gt;</span>test<span class=ni>&amp;lt;</span>/goal<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>            <span class=ni>&amp;lt;</span>/goals<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>            <span class=ni>&amp;lt;</span>configuration<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>                <span class=ni>&amp;lt;</span>includes<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>                    <span class=ni>&amp;lt;</span>include<span class=ni>&amp;gt;</span>**/IT*.java<span class=ni>&amp;lt;</span>/include<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>                <span class=ni>&amp;lt;</span>/includes<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>            <span class=ni>&amp;lt;</span>/configuration<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>        <span class=ni>&amp;lt;</span>/execution<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>/executions<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl><span class=ni>&amp;lt;</span>/plugin<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=ni>&amp;lt;</span>dependency<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>org.apache.httpcomponents<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>httpclient<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>version<span class=ni>&amp;gt;</span>4.1.2<span class=ni>&amp;lt;</span>/version<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>scope<span class=ni>&amp;gt;</span>test<span class=ni>&amp;lt;</span>/scope<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl><span class=ni>&amp;lt;</span>/dependency<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl><span class=ni>&amp;lt;</span>dependency<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>org.jboss.resteasy<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>resteasy-jaxrs<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>scope<span class=ni>&amp;gt;</span>test<span class=ni>&amp;lt;</span>/scope<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl><span class=ni>&amp;lt;</span>/dependency<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl><span class=ni>&amp;lt;</span>dependency<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>org.jboss.resteasy<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>resteasy-spring<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>scope<span class=ni>&amp;gt;</span>test<span class=ni>&amp;lt;</span>/scope<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl><span class=ni>&amp;lt;</span>/dependency<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl><span class=ni>&amp;lt;</span>dependency<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>org.jboss.resteasy<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>tjws<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>version<span class=ni>&amp;gt;</span>${resteasy-jaxrs.version}<span class=ni>&amp;lt;</span>/version<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl><span class=ni>&amp;lt;</span>/dependency<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl><span class=ni>&amp;lt;</span>dependency<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>javax.servlet<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>servlet-api<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>scope<span class=ni>&amp;gt;</span>test<span class=ni>&amp;lt;</span>/scope<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl><span class=ni>&amp;lt;</span>/dependency<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl><span class=ni>&amp;lt;</span>dependency<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>groupId<span class=ni>&amp;gt;</span>commons-io<span class=ni>&amp;lt;</span>/groupId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>artifactId<span class=ni>&amp;gt;</span>commons-io<span class=ni>&amp;lt;</span>/artifactId<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>scope<span class=ni>&amp;gt;</span>test<span class=ni>&amp;lt;</span>/scope<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl><span class=ni>&amp;lt;</span>/dependency<span class=ni>&amp;gt;</span>
+</span></span></code></pre></div><h4>Заключение</h4>В целом, ничего сложного, главное делать всё аккуратно. Хорошего вам кода!</div><footer><div class=social><ul><li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a></li><li class=sidebar-nav-item><a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a></li><li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li></ul></div><p>&copy;&nbsp;2009&nbsp;—&nbsp;2022 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a></p></footer><script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(t,n){var s=t.createElement(n),e=t.getElementsByTagName(n)[0];e.async='async',s.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js',e.parentNode.insertBefore(s,e)})(document,'script')</script></body></html></body></html>

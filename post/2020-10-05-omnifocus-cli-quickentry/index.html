@@ -1,91 +1,20 @@
-<!doctype html><html>
-<head>
-<meta charset=utf-8>
-<title>
-Quick Entry Task to Omnifocus from Terminal &ndash; Oleg Atamanenko
-</title>
-<meta name=HandheldFriendly content="True">
-<meta name=MobileOptimized content="320">
-<meta name=theme-color content="#333" media="(prefers-color-scheme: dark)">
-<meta name=theme-color content="#777" media="(prefers-color-scheme: light)">
-<meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=1">
-<link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&family=Prata&display=swap" type=text/css>
-<link rel=stylesheet href=https://uthark.github.io/css/theme.72254bdf9ec9fc2d8b013dd5c21997b2ab476af1a37ded5995aae71c4a63d57d.css>
-<link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css>
-<link href=https://uthark.github.io/favicon.png rel=icon>
-</head>
-<body>
-<header class=site>
-<h1><a href=https://uthark.github.io/>Oleg Atamanenko</a></h1>
-<h2>thoughts about programming</h2>
-</header>
-<nav>
-<ul class=main-navigation>
-<li><a href=https://uthark.github.io/ title=Posts>Posts</a></li>
-<li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li>
-<li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li>
-<li><a href=https://uthark.github.io/about/ title="About me">About me</a></li>
-</ul>
-</nav>
-<div class=article>
-<h1>Quick Entry Task to Omnifocus from Terminal</h1>
-<p>I use OmniFocus a lot and wanted to share with you simple automation that
-will allow to add tasks to OmniFocus without switching to the main window or
-using QuickEntry.</p>
-<p>To achieve it, we will use AppleScript that comes with macOS out of the box.</p>
-<ol>
-<li>Create new Apple Script using Script Editor with the following content:</li>
-</ol>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-applescript data-lang=applescript><span class=k>on</span> <span class=nb>run</span> <span class=nv>argv</span>
-  <span class=k>tell</span> <span class=nb>application</span> <span class=s2>&#34;OmniFocus&#34;</span>
-    <span class=k>tell</span> <span class=nv>default</span> <span class=na>document</span>
-      <span class=nv>parse</span> <span class=nv>tasks</span> <span class=nv>into</span> <span class=k>it</span> <span class=k>with</span> <span class=nv>transport</span> <span class=nb>text</span> <span class=nb>item</span> <span class=mi>1</span> <span class=k>of</span> <span class=nv>argv</span>
-    <span class=k>end</span> <span class=k>tell</span>
-  <span class=k>end</span> <span class=k>tell</span>
-<span class=k>end</span> <span class=nb>run</span>
-</code></pre></div><p>Save it to a folder like <code>~/bin</code> under the name <code>omni.scpt</code> (obviously, you can
-change it, just don&rsquo;t forget to update the shell script below).</p>
-<ol start=2>
-<li>Create a shell script <code>omni</code> and make it executable:</li>
-</ol>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=cp>#!/bin/sh
-</span><span class=cp></span>
-<span class=c1># detect current folder.</span>
-<span class=nv>script_path</span><span class=o>=</span><span class=k>$(</span>dirname <span class=s2>&#34;</span><span class=nv>$0</span><span class=s2>&#34;</span><span class=k>)</span>
-<span class=c1># join all arguments to a single line</span>
-<span class=nv>task</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$*</span><span class=s2>&#34;</span>
-<span class=c1># invoke apple script and pass entry to it.</span>
-osascript <span class=s2>&#34;</span><span class=nv>$script_path</span><span class=s2>/omni.scpt&#34;</span> <span class=s2>&#34;</span><span class=nv>$task</span><span class=s2>&#34;</span>
-</code></pre></div><ol start=3>
-<li>
-<p>Add folder with both files to your <code>$PATH</code>.</p>
-</li>
-<li>
-<p>That&rsquo;s it.</p>
-</li>
-</ol>
-<p>Example usage:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh>omni review agenda <span class=k>for</span> meeting with Super team @review
-</code></pre></div><p>Note that you can use tags when entering task.</p>
-</div>
-<footer>
-<div class=social>
-<ul>
-<li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a>
-</li>
-<li class=sidebar-nav-item> <a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a>
-</li>
-<li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li>
-</ul>
-</div>
-<p>&copy;&nbsp;2009&nbsp;—&nbsp;2021 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a>
-</p>
-</footer>
-<script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(b,c){var d=b.createElement(c),a=b.getElementsByTagName(c)[0];a.async='async',d.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js',a.parentNode.insertBefore(d,a)})(document,'script')</script>
-</body>
-</html>
-</body>
-</html>
+<!doctype html><html><head><meta charset=utf-8><title>Quick Entry Task to Omnifocus from Terminal &ndash; Oleg Atamanenko</title><meta name=HandheldFriendly content="True"><meta name=MobileOptimized content="320"><meta name=theme-color content="#333" media="(prefers-color-scheme: dark)"><meta name=theme-color content="#777" media="(prefers-color-scheme: light)"><meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=1"><link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&family=Prata&display=swap" type=text/css><link rel=stylesheet href=https://uthark.github.io/css/theme.72254bdf9ec9fc2d8b013dd5c21997b2ab476af1a37ded5995aae71c4a63d57d.css><link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css><link href=https://uthark.github.io/favicon.png rel=icon></head><body><header class=site><h1><a href=https://uthark.github.io/>Oleg Atamanenko</a></h1><h2>thoughts about programming</h2></header><nav><ul class=main-navigation><li><a href=https://uthark.github.io/ title=Posts>Posts</a></li><li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li><li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li><li><a href=https://uthark.github.io/about/ title="About me">About me</a></li></ul></nav><div class=article><h1>Quick Entry Task to Omnifocus from Terminal</h1><p>I use OmniFocus a lot and wanted to share with you simple automation that
+will allow adding tasks to OmniFocus without switching to the main window or
+using QuickEntry.</p><p>We will use AppleScript, which comes with macOS out of the box.</p><ol><li>Create a new Apple Script using Script Editor with the following content:</li></ol><div class=highlight><pre tabindex=0 class=chroma><code class=language-applescript data-lang=applescript><span class=line><span class=cl><span class=k>on</span> <span class=nb>run</span> <span class=nv>argv</span>
+</span></span><span class=line><span class=cl>  <span class=k>tell</span> <span class=nb>application</span> <span class=s2>&#34;OmniFocus&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>tell</span> <span class=nv>default</span> <span class=na>document</span>
+</span></span><span class=line><span class=cl>      <span class=nv>parse</span> <span class=nv>tasks</span> <span class=nv>into</span> <span class=k>it</span> <span class=k>with</span> <span class=nv>transport</span> <span class=nb>text</span> <span class=nb>item</span> <span class=mi>1</span> <span class=k>of</span> <span class=nv>argv</span>
+</span></span><span class=line><span class=cl>    <span class=k>end</span> <span class=k>tell</span>
+</span></span><span class=line><span class=cl>  <span class=k>end</span> <span class=k>tell</span>
+</span></span><span class=line><span class=cl><span class=k>end</span> <span class=nb>run</span>
+</span></span></code></pre></div><p>Save it to a folder like <code>~/bin</code> under the name <code>omni.scpt</code> (obviously, you can
+change it, and don&rsquo;t forget to update the shell script below).</p><ol start=2><li>Create a shell script <code>omni</code> and make it executable:</li></ol><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/bin/sh
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=c1># detect current folder.</span>
+</span></span><span class=line><span class=cl><span class=nv>script_path</span><span class=o>=</span><span class=k>$(</span>dirname <span class=s2>&#34;</span><span class=nv>$0</span><span class=s2>&#34;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl><span class=c1># join all arguments to a single line</span>
+</span></span><span class=line><span class=cl><span class=nv>task</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$*</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=c1># invoke apple script and pass entry to it.</span>
+</span></span><span class=line><span class=cl>osascript <span class=s2>&#34;</span><span class=nv>$script_path</span><span class=s2>/omni.scpt&#34;</span> <span class=s2>&#34;</span><span class=nv>$task</span><span class=s2>&#34;</span>
+</span></span></code></pre></div><ol start=3><li><p>Add the folder with both files to your <code>$PATH</code>.</p></li><li><p>That&rsquo;s it.</p></li></ol><p>Example usage:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>omni review agenda <span class=k>for</span> meeting with Super team @review
+</span></span></code></pre></div><p>Note that you can use tags when entering tasks.</p></div><footer><div class=social><ul><li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a></li><li class=sidebar-nav-item><a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a></li><li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li></ul></div><p>&copy;&nbsp;2009&nbsp;—&nbsp;2022 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a></p></footer><script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(t,n){var s=t.createElement(n),e=t.getElementsByTagName(n)[0];e.async='async',s.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js',e.parentNode.insertBefore(s,e)})(document,'script')</script></body></html></body></html>

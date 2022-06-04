@@ -1,150 +1,79 @@
-<!doctype html><html>
-<head>
-<meta charset=utf-8>
-<title>
-@Autowired JAX-RS Client API &ndash; Oleg Atamanenko
-</title>
-<meta name=HandheldFriendly content="True">
-<meta name=MobileOptimized content="320">
-<meta name=theme-color content="#333" media="(prefers-color-scheme: dark)">
-<meta name=theme-color content="#777" media="(prefers-color-scheme: light)">
-<meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=1">
-<link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&family=Prata&display=swap" type=text/css>
-<link rel=stylesheet href=https://uthark.github.io/css/theme.72254bdf9ec9fc2d8b013dd5c21997b2ab476af1a37ded5995aae71c4a63d57d.css>
-<link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css>
-<link href=https://uthark.github.io/favicon.png rel=icon>
-</head>
-<body>
-<header class=site>
-<h1><a href=https://uthark.github.io/>Oleg Atamanenko</a></h1>
-<h2>thoughts about programming</h2>
-</header>
-<nav>
-<ul class=main-navigation>
-<li><a href=https://uthark.github.io/ title=Posts>Posts</a></li>
-<li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li>
-<li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li>
-<li><a href=https://uthark.github.io/about/ title="About me">About me</a></li>
-</ul>
-</nav>
-<div class=article>
-<h1>@Autowired JAX-RS Client API</h1>
-<p>Продолжая разговор о <a href="http://www.jcp.org/en/jsr/detail?id=339">JAX RS</a> <a href=https://jax-rs-spec.java.net/nonav/2.0/apidocs/javax/ws/rs/client/package-summary.html>Client API</a> - предположим, что мы уже <a href=/blog/2013/06/28/jaxrs/>используем JAX-RS клиент</a></p>
-<p>У нас есть класс, который умеет создавать прокси для любого REST-интерфейса в проекте. Теперь мы хотим сделать так, чтобы эти интерфейсы можно было автоматически создавать в контексте Spring и связывать с другими бинами.</p>
-<p>Первое решение, которое приходит в лоб - объявить бин в конфигурации для каждого интерфейса:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=nd>@Configuration</span>
-<span class=kd>public</span> <span class=kd>class</span> <span class=nc>SpringConfiguration</span> <span class=o>{</span>
-    <span class=nd>@Bean</span>
-    <span class=kd>public</span> <span class=n>UserRest</span> <span class=nf>userRest</span><span class=o>(){</span>
-        <span class=n>List</span><span class=o>&lt;?&gt;</span> <span class=n>providers</span> <span class=o>=</span> <span class=n>Arrays</span><span class=o>.</span><span class=na>asList</span><span class=o>(</span><span class=k>new</span> <span class=n>JsonMessageHandler</span><span class=o>(</span><span class=k>new</span> <span class=n>ObjectMapper</span><span class=o>()));</span>
-        <span class=k>return</span> <span class=n>JAXRSClientFactory</span><span class=o>.</span><span class=na>create</span><span class=o>(</span><span class=s>&#34;http://localhost:8080&#34;</span><span class=o>,</span> <span class=n>UserRest</span><span class=o>.</span><span class=na>class</span><span class=o>,</span> <span class=n>providers</span><span class=o>);</span>
-    <span class=o>}</span>
-<span class=o>}</span>
-</code></pre></div><p>Написав объявление нескольких таких бинов можно задуматься - &ldquo;Есть ли способ проще?&rdquo;.</p>
-<p>Есть, и я вам сейчас его покажу.</p>
-<p>Для того, чтобы добавлять собственные бины в Spring контекст, мы воспользуемся возможностью расширения Spring контекста с использованием <a href=http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/beans/factory/config/BeanFactoryPostProcessor.html><code>BeanFactoryPostProcessor</code></a>.
+<!doctype html><html><head><meta charset=utf-8><title>@Autowired JAX-RS Client API &ndash; Oleg Atamanenko</title><meta name=HandheldFriendly content="True"><meta name=MobileOptimized content="320"><meta name=theme-color content="#333" media="(prefers-color-scheme: dark)"><meta name=theme-color content="#777" media="(prefers-color-scheme: light)"><meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=1"><link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&family=Prata&display=swap" type=text/css><link rel=stylesheet href=https://uthark.github.io/css/theme.72254bdf9ec9fc2d8b013dd5c21997b2ab476af1a37ded5995aae71c4a63d57d.css><link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css><link href=https://uthark.github.io/favicon.png rel=icon></head><body><header class=site><h1><a href=https://uthark.github.io/>Oleg Atamanenko</a></h1><h2>thoughts about programming</h2></header><nav><ul class=main-navigation><li><a href=https://uthark.github.io/ title=Posts>Posts</a></li><li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li><li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li><li><a href=https://uthark.github.io/about/ title="About me">About me</a></li></ul></nav><div class=article><h1>@Autowired JAX-RS Client API</h1><p>Продолжая разговор о <a href="http://www.jcp.org/en/jsr/detail?id=339">JAX RS</a> <a href=https://jax-rs-spec.java.net/nonav/2.0/apidocs/javax/ws/rs/client/package-summary.html>Client API</a> - предположим, что мы уже <a href=/blog/2013/06/28/jaxrs/>используем JAX-RS клиент</a></p><p>У нас есть класс, который умеет создавать прокси для любого REST-интерфейса в проекте. Теперь мы хотим сделать так, чтобы эти интерфейсы можно было автоматически создавать в контексте Spring и связывать с другими бинами.</p><p>Первое решение, которое приходит в лоб - объявить бин в конфигурации для каждого интерфейса:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Configuration</span>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=kd>class</span> <span class=nc>SpringConfiguration</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nd>@Bean</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=n>UserRest</span> <span class=nf>userRest</span><span class=o>(){</span>
+</span></span><span class=line><span class=cl>        <span class=n>List</span><span class=o>&lt;?&gt;</span> <span class=n>providers</span> <span class=o>=</span> <span class=n>Arrays</span><span class=o>.</span><span class=na>asList</span><span class=o>(</span><span class=k>new</span> <span class=n>JsonMessageHandler</span><span class=o>(</span><span class=k>new</span> <span class=n>ObjectMapper</span><span class=o>()));</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=n>JAXRSClientFactory</span><span class=o>.</span><span class=na>create</span><span class=o>(</span><span class=s>&#34;http://localhost:8080&#34;</span><span class=o>,</span> <span class=n>UserRest</span><span class=o>.</span><span class=na>class</span><span class=o>,</span> <span class=n>providers</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></div><p>Написав объявление нескольких таких бинов можно задуматься - &ldquo;Есть ли способ проще?&rdquo;.</p><p>Есть, и я вам сейчас его покажу.</p><p>Для того, чтобы добавлять собственные бины в Spring контекст, мы воспользуемся возможностью расширения Spring контекста с использованием <a href=http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/beans/factory/config/BeanFactoryPostProcessor.html><code>BeanFactoryPostProcessor</code></a>.
 Метод <code>postProcessBeanFactory</code> данного класса позволяет выполнить дополнительную обработку фабрики бинов Spring, например, удалить, добавить, переопределить бин.
-Это именно то, что нам нужно - автоматически добавить новые бины в фабрику.</p>
-<p>Итак, что нам нужно сделать:</p>
-<ol>
-<li>Найти все доступные REST интерфейсы в текущем classpath.</li>
-<li>Для каждого из них создать прокси с использованием <code>JAXRSClientFactory</code> .</li>
-<li>Зарегистрировать каждый прокси в фабрике бинов для дальнейшего использования (например, для @Autowired).</li>
-</ol>
-<p>По спецификации JAX-RS, чтобы класс распознавался как REST-ресурс, у него должна быть аннотация <a href=https://jax-rs-spec.java.net/nonav/2.0/apidocs/javax/ws/rs/Path.html><code>@Path()</code></a>.</p>
-<p>Для поиска всех возможных классов/интерфейсов воспользуемся классом <a href=http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/context/annotation/ClassPathScanningCandidateComponentProvider.html><code>ClassPathScanningCandidateComponentProvider</code></a>, который умеет сканировать классы в выбранном пакете и применять фильтры, чтобы собрать только нужные. Также нам нужно учесть, что по умолчанию <code>ClassPathScanningCandidateComponentProvider</code> пытается определить, может ли найденный класс быть и бином (например, проверяет, что это не абстрактный класс и не интерфейс), поэтому нам нужно написать подкласс, который позволит нам работать с интерфейсами.</p>
-<p>Пишем класс:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=kd>public</span> <span class=kd>class</span> <span class=nc>RestClientPostProcessor</span> <span class=kd>implements</span> <span class=n>BeanFactoryPostProcessor</span> <span class=o>{</span>
-
-    <span class=kd>private</span> <span class=kd>static</span> <span class=kd>final</span> <span class=n>Logger</span> <span class=n>LOGGER</span> <span class=o>=</span> <span class=n>LoggerFactory</span><span class=o>.</span><span class=na>getLogger</span><span class=o>(</span><span class=n>RestClientPostProcessor</span><span class=o>.</span><span class=na>class</span><span class=o>);</span>
-
-    <span class=kd>protected</span> <span class=n>String</span> <span class=n>endpoint</span> <span class=o>=</span> <span class=s>&#34;http://localhost:8080&#34;</span><span class=o>;</span>
-
-    <span class=kd>private</span> <span class=n>Class</span><span class=o>&lt;?</span> <span class=kd>extends</span> <span class=n>Annotation</span><span class=o>&gt;</span> <span class=n>requiredAnnotation</span> <span class=o>=</span> <span class=n>Path</span><span class=o>.</span><span class=na>class</span><span class=o>;</span>
-
-    <span class=kd>private</span> <span class=n>String</span> <span class=n>basePackage</span> <span class=o>=</span> <span class=s>&#34;&lt;base package&gt;&#34;</span><span class=o>;</span>
-
-    <span class=kd>private</span> <span class=n>ObjectMapper</span> <span class=n>objectMapper</span><span class=o>;</span>
-
-    <span class=c1>// getters/setters omitted.
-</span><span class=c1></span>
-    <span class=kd>protected</span> <span class=n>Object</span> <span class=nf>createBean</span><span class=o>(</span><span class=n>Class</span><span class=o>&lt;?&gt;</span> <span class=n>clazz</span><span class=o>)</span> <span class=o>{</span>
-        <span class=n>List</span><span class=o>&lt;?&gt;</span> <span class=n>providers</span> <span class=o>=</span> <span class=n>Arrays</span><span class=o>.</span><span class=na>asList</span><span class=o>(</span><span class=k>new</span> <span class=n>JsonMessageHandler</span><span class=o>(</span><span class=n>objectMapper</span><span class=o>));</span>
-        <span class=k>return</span> <span class=n>JAXRSClientFactory</span><span class=o>.</span><span class=na>create</span><span class=o>(</span><span class=n>endpoint</span><span class=o>,</span> <span class=n>clazz</span><span class=o>,</span> <span class=n>providers</span><span class=o>);</span>
-    <span class=o>}</span>
-
-    <span class=nd>@Override</span> 
-    <span class=kd>public</span> <span class=kt>void</span> <span class=nf>postProcessBeanFactory</span><span class=o>(</span><span class=n>ConfigurableListableBeanFactory</span> <span class=n>beanFactory</span><span class=o>)</span> <span class=kd>throws</span> <span class=n>BeansException</span> <span class=o>{</span>
-
-        <span class=n>ClassPathScanningCandidateComponentProvider</span> <span class=n>provider</span> <span class=o>=</span> <span class=k>new</span> <span class=n>ClasspathScanner</span><span class=o>();</span>
-        <span class=n>provider</span><span class=o>.</span><span class=na>addIncludeFilter</span><span class=o>(</span><span class=k>new</span> <span class=n>AnnotationTypeFilter</span><span class=o>(</span><span class=n>requiredAnnotation</span><span class=o>));</span>
-        <span class=n>Set</span><span class=o>&lt;</span><span class=n>BeanDefinition</span><span class=o>&gt;</span> <span class=n>components</span> <span class=o>=</span> <span class=n>provider</span><span class=o>.</span><span class=na>findCandidateComponents</span><span class=o>(</span><span class=n>basePackage</span><span class=o>);</span>
-
-        <span class=k>for</span> <span class=o>(</span><span class=n>BeanDefinition</span> <span class=n>component</span> <span class=o>:</span> <span class=n>components</span><span class=o>)</span> <span class=o>{</span>
-            <span class=n>createAndRegisterBean</span><span class=o>(</span><span class=n>beanFactory</span><span class=o>,</span> <span class=n>component</span><span class=o>);</span>
-
-        <span class=o>}</span>
-    <span class=o>}</span>
-
-    <span class=kd>protected</span> <span class=kt>void</span> <span class=nf>createAndRegisterBean</span><span class=o>(</span><span class=n>ConfigurableListableBeanFactory</span> <span class=n>beanFactory</span><span class=o>,</span> <span class=n>BeanDefinition</span> <span class=n>component</span><span class=o>)</span> <span class=o>{</span>
-        <span class=k>try</span> <span class=o>{</span>
-            <span class=n>String</span> <span class=n>beanClassName</span> <span class=o>=</span> <span class=n>component</span><span class=o>.</span><span class=na>getBeanClassName</span><span class=o>();</span>
-            <span class=n>Class</span><span class=o>&lt;?&gt;</span> <span class=n>clazz</span> <span class=o>=</span> <span class=n>Class</span><span class=o>.</span><span class=na>forName</span><span class=o>(</span><span class=n>beanClassName</span><span class=o>);</span>
-
-            <span class=n>Object</span> <span class=n>o</span> <span class=o>=</span> <span class=n>createBean</span><span class=o>(</span><span class=n>clazz</span><span class=o>);</span>
-
-            <span class=n>beanFactory</span><span class=o>.</span><span class=na>registerResolvableDependency</span><span class=o>(</span><span class=n>clazz</span><span class=o>,</span> <span class=n>o</span><span class=o>);</span>
-        <span class=o>}</span> <span class=k>catch</span> <span class=o>(</span><span class=n>ClassNotFoundException</span> <span class=n>e</span><span class=o>)</span> <span class=o>{</span>
-            <span class=n>LOGGER</span><span class=o>.</span><span class=na>warn</span><span class=o>(</span><span class=s>&#34;Unable to find class: {}&#34;</span><span class=o>,</span> <span class=n>component</span><span class=o>.</span><span class=na>getBeanClassName</span><span class=o>(),</span> <span class=n>e</span><span class=o>);</span>
-        <span class=o>}</span>
-    <span class=o>}</span>
-
-    <span class=kd>private</span> <span class=kd>static</span> <span class=kd>class</span> <span class=nc>ClasspathScanner</span> <span class=kd>extends</span> <span class=n>ClassPathScanningCandidateComponentProvider</span> <span class=o>{</span>
-
-        <span class=kd>public</span> <span class=nf>ClasspathScanner</span><span class=o>()</span> <span class=o>{</span>
-            <span class=kd>super</span><span class=o>(</span><span class=kc>false</span><span class=o>);</span>
-        <span class=o>}</span>
-
-        <span class=nd>@Override</span> <span class=kd>protected</span> <span class=kt>boolean</span> <span class=nf>isCandidateComponent</span><span class=o>(</span><span class=n>AnnotatedBeanDefinition</span> <span class=n>beanDefinition</span><span class=o>)</span> <span class=o>{</span>
-            <span class=c1>// override this method, because our classes are interfaces, by default interfaces are
-</span><span class=c1></span>            <span class=c1>// not allowed.
-</span><span class=c1></span>            <span class=k>return</span> <span class=n>beanDefinition</span><span class=o>.</span><span class=na>getMetadata</span><span class=o>().</span><span class=na>isIndependent</span><span class=o>();</span>
-        <span class=o>}</span>
-    <span class=o>}</span>
-<span class=o>}</span>
-
-</code></pre></div><p>Теперь этот процессор необходимо зарегистрировать в контексте Spring:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=nd>@Configuration</span>
-<span class=kd>class</span> <span class=nc>TestAutowiringConfiguration</span> <span class=o>{</span>
-
-    <span class=nd>@Bean</span>
-    <span class=kd>public</span> <span class=kd>static</span> <span class=n>RestClientPostProcessor</span> <span class=nf>autowiringRestApiProcessor</span><span class=o>()</span> <span class=o>{</span>
-        <span class=k>return</span> <span class=k>new</span> <span class=n>RestClientPostProcessor</span><span class=o>();</span>
-    <span class=o>}</span>
-<span class=o>}</span>
-</code></pre></div><p>И теперь можно использовать <code>UserRest</code> как обычный бин:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java>    <span class=nd>@Autowired</span>
-    <span class=kd>private</span> <span class=n>UserShowRest</span> <span class=n>userShowRest</span><span class=o>;</span>
-</code></pre></div>
-</div>
-<footer>
-<div class=social>
-<ul>
-<li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a>
-</li>
-<li class=sidebar-nav-item> <a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a>
-</li>
-<li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li>
-</ul>
-</div>
-<p>&copy;&nbsp;2009&nbsp;—&nbsp;2021 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a>
-</p>
-</footer>
-<script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(b,c){var d=b.createElement(c),a=b.getElementsByTagName(c)[0];a.async='async',d.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js',a.parentNode.insertBefore(d,a)})(document,'script')</script>
-</body>
-</html>
-</body>
-</html>
+Это именно то, что нам нужно - автоматически добавить новые бины в фабрику.</p><p>Итак, что нам нужно сделать:</p><ol><li>Найти все доступные REST интерфейсы в текущем classpath.</li><li>Для каждого из них создать прокси с использованием <code>JAXRSClientFactory</code> .</li><li>Зарегистрировать каждый прокси в фабрике бинов для дальнейшего использования (например, для @Autowired).</li></ol><p>По спецификации JAX-RS, чтобы класс распознавался как REST-ресурс, у него должна быть аннотация <a href=https://jax-rs-spec.java.net/nonav/2.0/apidocs/javax/ws/rs/Path.html><code>@Path()</code></a>.</p><p>Для поиска всех возможных классов/интерфейсов воспользуемся классом <a href=http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/context/annotation/ClassPathScanningCandidateComponentProvider.html><code>ClassPathScanningCandidateComponentProvider</code></a>, который умеет сканировать классы в выбранном пакете и применять фильтры, чтобы собрать только нужные. Также нам нужно учесть, что по умолчанию <code>ClassPathScanningCandidateComponentProvider</code> пытается определить, может ли найденный класс быть и бином (например, проверяет, что это не абстрактный класс и не интерфейс), поэтому нам нужно написать подкласс, который позволит нам работать с интерфейсами.</p><p>Пишем класс:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span> <span class=kd>class</span> <span class=nc>RestClientPostProcessor</span> <span class=kd>implements</span> <span class=n>BeanFactoryPostProcessor</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kd>private</span> <span class=kd>static</span> <span class=kd>final</span> <span class=n>Logger</span> <span class=n>LOGGER</span> <span class=o>=</span> <span class=n>LoggerFactory</span><span class=o>.</span><span class=na>getLogger</span><span class=o>(</span><span class=n>RestClientPostProcessor</span><span class=o>.</span><span class=na>class</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kd>protected</span> <span class=n>String</span> <span class=n>endpoint</span> <span class=o>=</span> <span class=s>&#34;http://localhost:8080&#34;</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kd>private</span> <span class=n>Class</span><span class=o>&lt;?</span> <span class=kd>extends</span> <span class=n>Annotation</span><span class=o>&gt;</span> <span class=n>requiredAnnotation</span> <span class=o>=</span> <span class=n>Path</span><span class=o>.</span><span class=na>class</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kd>private</span> <span class=n>String</span> <span class=n>basePackage</span> <span class=o>=</span> <span class=s>&#34;&lt;base package&gt;&#34;</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kd>private</span> <span class=n>ObjectMapper</span> <span class=n>objectMapper</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// getters/setters omitted.
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>    <span class=kd>protected</span> <span class=n>Object</span> <span class=nf>createBean</span><span class=o>(</span><span class=n>Class</span><span class=o>&lt;?&gt;</span> <span class=n>clazz</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>List</span><span class=o>&lt;?&gt;</span> <span class=n>providers</span> <span class=o>=</span> <span class=n>Arrays</span><span class=o>.</span><span class=na>asList</span><span class=o>(</span><span class=k>new</span> <span class=n>JsonMessageHandler</span><span class=o>(</span><span class=n>objectMapper</span><span class=o>));</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=n>JAXRSClientFactory</span><span class=o>.</span><span class=na>create</span><span class=o>(</span><span class=n>endpoint</span><span class=o>,</span> <span class=n>clazz</span><span class=o>,</span> <span class=n>providers</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nd>@Override</span> 
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kt>void</span> <span class=nf>postProcessBeanFactory</span><span class=o>(</span><span class=n>ConfigurableListableBeanFactory</span> <span class=n>beanFactory</span><span class=o>)</span> <span class=kd>throws</span> <span class=n>BeansException</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>ClassPathScanningCandidateComponentProvider</span> <span class=n>provider</span> <span class=o>=</span> <span class=k>new</span> <span class=n>ClasspathScanner</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>        <span class=n>provider</span><span class=o>.</span><span class=na>addIncludeFilter</span><span class=o>(</span><span class=k>new</span> <span class=n>AnnotationTypeFilter</span><span class=o>(</span><span class=n>requiredAnnotation</span><span class=o>));</span>
+</span></span><span class=line><span class=cl>        <span class=n>Set</span><span class=o>&lt;</span><span class=n>BeanDefinition</span><span class=o>&gt;</span> <span class=n>components</span> <span class=o>=</span> <span class=n>provider</span><span class=o>.</span><span class=na>findCandidateComponents</span><span class=o>(</span><span class=n>basePackage</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=k>for</span> <span class=o>(</span><span class=n>BeanDefinition</span> <span class=n>component</span> <span class=o>:</span> <span class=n>components</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>createAndRegisterBean</span><span class=o>(</span><span class=n>beanFactory</span><span class=o>,</span> <span class=n>component</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kd>protected</span> <span class=kt>void</span> <span class=nf>createAndRegisterBean</span><span class=o>(</span><span class=n>ConfigurableListableBeanFactory</span> <span class=n>beanFactory</span><span class=o>,</span> <span class=n>BeanDefinition</span> <span class=n>component</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>try</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>String</span> <span class=n>beanClassName</span> <span class=o>=</span> <span class=n>component</span><span class=o>.</span><span class=na>getBeanClassName</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>            <span class=n>Class</span><span class=o>&lt;?&gt;</span> <span class=n>clazz</span> <span class=o>=</span> <span class=n>Class</span><span class=o>.</span><span class=na>forName</span><span class=o>(</span><span class=n>beanClassName</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=n>Object</span> <span class=n>o</span> <span class=o>=</span> <span class=n>createBean</span><span class=o>(</span><span class=n>clazz</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=n>beanFactory</span><span class=o>.</span><span class=na>registerResolvableDependency</span><span class=o>(</span><span class=n>clazz</span><span class=o>,</span> <span class=n>o</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span> <span class=k>catch</span> <span class=o>(</span><span class=n>ClassNotFoundException</span> <span class=n>e</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>LOGGER</span><span class=o>.</span><span class=na>warn</span><span class=o>(</span><span class=s>&#34;Unable to find class: {}&#34;</span><span class=o>,</span> <span class=n>component</span><span class=o>.</span><span class=na>getBeanClassName</span><span class=o>(),</span> <span class=n>e</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kd>private</span> <span class=kd>static</span> <span class=kd>class</span> <span class=nc>ClasspathScanner</span> <span class=kd>extends</span> <span class=n>ClassPathScanningCandidateComponentProvider</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=nf>ClasspathScanner</span><span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=kd>super</span><span class=o>(</span><span class=kc>false</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=nd>@Override</span> <span class=kd>protected</span> <span class=kt>boolean</span> <span class=nf>isCandidateComponent</span><span class=o>(</span><span class=n>AnnotatedBeanDefinition</span> <span class=n>beanDefinition</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=c1>// override this method, because our classes are interfaces, by default interfaces are
+</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=c1>// not allowed.
+</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=k>return</span> <span class=n>beanDefinition</span><span class=o>.</span><span class=na>getMetadata</span><span class=o>().</span><span class=na>isIndependent</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></div><p>Теперь этот процессор необходимо зарегистрировать в контексте Spring:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Configuration</span>
+</span></span><span class=line><span class=cl><span class=kd>class</span> <span class=nc>TestAutowiringConfiguration</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nd>@Bean</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kd>static</span> <span class=n>RestClientPostProcessor</span> <span class=nf>autowiringRestApiProcessor</span><span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=k>new</span> <span class=n>RestClientPostProcessor</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></div><p>И теперь можно использовать <code>UserRest</code> как обычный бин:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl>    <span class=nd>@Autowired</span>
+</span></span><span class=line><span class=cl>    <span class=kd>private</span> <span class=n>UserShowRest</span> <span class=n>userShowRest</span><span class=o>;</span>
+</span></span></code></pre></div></div><footer><div class=social><ul><li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a></li><li class=sidebar-nav-item><a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a></li><li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li></ul></div><p>&copy;&nbsp;2009&nbsp;—&nbsp;2022 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a></p></footer><script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(t,n){var s=t.createElement(n),e=t.getElementsByTagName(n)[0];e.async='async',s.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js',e.parentNode.insertBefore(s,e)})(document,'script')</script></body></html></body></html>

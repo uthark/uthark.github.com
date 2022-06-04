@@ -1,205 +1,109 @@
-<!doctype html><html>
-<head>
-<meta charset=utf-8>
-<title>
-Installing Kubernetes on Raspberry Pi &ndash; Oleg Atamanenko
-</title>
-<meta name=HandheldFriendly content="True">
-<meta name=MobileOptimized content="320">
-<meta name=theme-color content="#333" media="(prefers-color-scheme: dark)">
-<meta name=theme-color content="#777" media="(prefers-color-scheme: light)">
-<meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=1">
-<link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&family=Prata&display=swap" type=text/css>
-<link rel=stylesheet href=https://uthark.github.io/css/theme.72254bdf9ec9fc2d8b013dd5c21997b2ab476af1a37ded5995aae71c4a63d57d.css>
-<link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css>
-<link href=https://uthark.github.io/favicon.png rel=icon>
-</head>
-<body>
-<header class=site>
-<h1><a href=https://uthark.github.io/>Oleg Atamanenko</a></h1>
-<h2>thoughts about programming</h2>
-</header>
-<nav>
-<ul class=main-navigation>
-<li><a href=https://uthark.github.io/ title=Posts>Posts</a></li>
-<li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li>
-<li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li>
-<li><a href=https://uthark.github.io/about/ title="About me">About me</a></li>
-</ul>
-</nav>
-<div class=article>
-<h1>Installing Kubernetes on Raspberry Pi</h1>
-<p>Installing kubernetes on Raspberry Pi is easy, but there are few caveats that you need to be aware of.</p>
-<p><code>arm64</code> is preferred, because 64-bit allows you to use > 4GB of RAM per process.</p>
-<h2 id=enable-cgroups>Enable cgroups</h2>
-<p>Kubernetes relies on cgroups for enforcing limits for the containers, so kernel needs to be booted with cgroups support.
-On Raspberry, edit <code>/boot/firmware/cmdline.txt</code> and add the following options:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>cgroup_enable=memory swapaccount=1 cgroup_memory=1 cgroup_enable=cpuset
-</code></pre></div><p>Reboot after making the changes.</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>sudo shutdown -r now
-</code></pre></div><h2 id=install-and-configure-docker>Install and configure docker</h2>
-<p>Allow to use HTTPS transport for downloading packages:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>sudo apt update
-sudo apt install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
-</code></pre></div><p>Add docker GPG key used for verifying <code>Packages</code> file used by apt.</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>curl -fsSL https://download.docker.com/linux/ubuntu/gpg <span class=p>|</span> sudo apt-key add -
-</code></pre></div><p>Add docker repository:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=nb>echo</span> <span class=s2>&#34;deb [arch=arm64] https://download.docker.com/linux/ubuntu </span><span class=k>$(</span>lsb_release -cs<span class=k>)</span><span class=s2> stable&#34;</span> <span class=p>|</span> sudo tee /etc/apt/sources.list.d/docker.list
-</code></pre></div><p>Update apt repository index and install docker</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>sudo apt update
-sudo apt install docker-ce docker-ce-cli containerd.io
-</code></pre></div><p>If you want to communicate with docker with non-root user:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>sudo usermod -aG docker <span class=s2>&#34;your user&#34;</span>
-</code></pre></div><p>To apply changes - logout and login again. If you want to reflect changes immediately run:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>newgrp docker
-</code></pre></div><p>Configure docker to use systemd as a cgroups driver, put in <code>/etc/docker/daemon.json</code>:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=p>{</span>
-  <span class=nt>&#34;exec-opts&#34;</span><span class=p>:</span> <span class=p>[</span><span class=s2>&#34;native.cgroupdriver=systemd&#34;</span><span class=p>],</span>
-  <span class=nt>&#34;log-driver&#34;</span><span class=p>:</span> <span class=s2>&#34;json-file&#34;</span><span class=p>,</span>
-  <span class=nt>&#34;log-opts&#34;</span><span class=p>:</span> <span class=p>{</span>
-    <span class=nt>&#34;max-size&#34;</span><span class=p>:</span> <span class=s2>&#34;100m&#34;</span>
-  <span class=p>},</span>
-  <span class=nt>&#34;storage-driver&#34;</span><span class=p>:</span> <span class=s2>&#34;overlay2&#34;</span>
-<span class=p>}</span>
-
-</code></pre></div><h2 id=installing-kubeadm>Installing kubeadm</h2>
-<p>Add kubernetes repository:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=nb>echo</span> <span class=s2>&#34;deb https://apt.kubernetes.io/ kubernetes-xenial main&#34;</span> <span class=p>|</span> sudo tee /etc/apt/sources.list.d/kubernetes.list
-</code></pre></div><p>To allow iptables properly work with bridged traffic:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>cat <span class=s>&lt;&lt;EOF | sudo tee /etc/sysctl.d/k8s.conf
-</span><span class=s>net.bridge.bridge-nf-call-ip6tables = 1
-</span><span class=s>net.bridge.bridge-nf-call-iptables = 1
-</span><span class=s>EOF</span>
-sudo sysctl --system
-</code></pre></div><p>Install kubeadm, kubelet and kubectl:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>sudo apt update
-sudo apt install -y kubelet kubeadm kubectl
-</code></pre></div><p>Minor updates of kubernetes may require extra steps, so we need to prevent packages from auto-updating:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>sudo apt-mark hold kubelet kubeadm kubectl
-</code></pre></div><h2 id=installing-kubernetes-control-plane>Installing Kubernetes Control Plane</h2>
-<p>Generate token for installation</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=nv>TOKEN</span><span class=o>=</span><span class=k>$(</span>sudo kubeadm token generate<span class=k>)</span>
-</code></pre></div><p>Install control plane with kubeadm:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>sudo kubeadm init --token<span class=o>=</span><span class=si>${</span><span class=nv>TOKEN</span><span class=si>}</span> --kubernetes-version<span class=o>=</span>v1.19.0
-</code></pre></div><p>If installation is successful, output will look similar to this:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>W0903 00:29:04.934934  417169 configset.go:348] WARNING: kubeadm cannot validate component configs for API groups [kubelet.config.k8s.io kubeproxy.config.k8s.io]
-[init] Using Kubernetes version: v1.19.0
-[preflight] Running pre-flight checks
-	[WARNING SystemVerification]: missing optional cgroups: hugetlb
-[preflight] Pulling images required for setting up a Kubernetes cluster
-[preflight] This might take a minute or two, depending on the speed of your internet connection
-[preflight] You can also perform this action in beforehand using &#39;kubeadm config images pull&#39;
-[certs] Using certificateDir folder &#34;/etc/kubernetes/pki&#34;
-[certs] Generating &#34;ca&#34; certificate and key
-[certs] Generating &#34;apiserver&#34; certificate and key
-[certs] apiserver serving cert is signed for DNS names [kubernetes kubernetes.default kubernetes.default.svc kubernetes.default.svc.cluster.local ubuntu] and IPs [10.96.0.1 192.168.1.153]
-[certs] Generating &#34;apiserver-kubelet-client&#34; certificate and key
-[certs] Generating &#34;front-proxy-ca&#34; certificate and key
-[certs] Generating &#34;front-proxy-client&#34; certificate and key
-[certs] Generating &#34;etcd/ca&#34; certificate and key
-[certs] Generating &#34;etcd/server&#34; certificate and key
-[certs] etcd/server serving cert is signed for DNS names [localhost ubuntu] and IPs [192.168.1.153 127.0.0.1 ::1]
-[certs] Generating &#34;etcd/peer&#34; certificate and key
-[certs] etcd/peer serving cert is signed for DNS names [localhost ubuntu] and IPs [192.168.1.153 127.0.0.1 ::1]
-[certs] Generating &#34;etcd/healthcheck-client&#34; certificate and key
-[certs] Generating &#34;apiserver-etcd-client&#34; certificate and key
-[certs] Generating &#34;sa&#34; key and public key
-[kubeconfig] Using kubeconfig folder &#34;/etc/kubernetes&#34;
-[kubeconfig] Writing &#34;admin.conf&#34; kubeconfig file
-[kubeconfig] Writing &#34;kubelet.conf&#34; kubeconfig file
-[kubeconfig] Writing &#34;controller-manager.conf&#34; kubeconfig file
-[kubeconfig] Writing &#34;scheduler.conf&#34; kubeconfig file
-[kubelet-start] Writing kubelet environment file with flags to file &#34;/var/lib/kubelet/kubeadm-flags.env&#34;
-[kubelet-start] Writing kubelet configuration to file &#34;/var/lib/kubelet/config.yaml&#34;
-[kubelet-start] Starting the kubelet
-[control-plane] Using manifest folder &#34;/etc/kubernetes/manifests&#34;
-[control-plane] Creating static Pod manifest for &#34;kube-apiserver&#34;
-[control-plane] Creating static Pod manifest for &#34;kube-controller-manager&#34;
-[control-plane] Creating static Pod manifest for &#34;kube-scheduler&#34;
-[etcd] Creating static Pod manifest for local etcd in &#34;/etc/kubernetes/manifests&#34;
-[wait-control-plane] Waiting for the kubelet to boot up the control plane as static Pods from directory &#34;/etc/kubernetes/manifests&#34;. This can take up to 4m0s
-[apiclient] All control plane components are healthy after 30.007706 seconds
-[upload-config] Storing the configuration used in ConfigMap &#34;kubeadm-config&#34; in the &#34;kube-system&#34; Namespace
-[kubelet] Creating a ConfigMap &#34;kubelet-config-1.19&#34; in namespace kube-system with the configuration for the kubelets in the cluster
-[upload-certs] Skipping phase. Please see --upload-certs
-[mark-control-plane] Marking the node ubuntu as control-plane by adding the label &#34;node-role.kubernetes.io/master=&#39;&#39;&#34;
-[mark-control-plane] Marking the node ubuntu as control-plane by adding the taints [node-role.kubernetes.io/master:NoSchedule]
-[bootstrap-token] Using token: 5p4y2w.xxivtzh1lvuukdk7
-[bootstrap-token] Configuring bootstrap tokens, cluster-info ConfigMap, RBAC Roles
-[bootstrap-token] configured RBAC rules to allow Node Bootstrap tokens to get nodes
-[bootstrap-token] configured RBAC rules to allow Node Bootstrap tokens to post CSRs in order for nodes to get long term certificate credentials
-[bootstrap-token] configured RBAC rules to allow the csrapprover controller automatically approve CSRs from a Node Bootstrap Token
-[bootstrap-token] configured RBAC rules to allow certificate rotation for all node client certificates in the cluster
-[bootstrap-token] Creating the &#34;cluster-info&#34; ConfigMap in the &#34;kube-public&#34; namespace
-[kubelet-finalize] Updating &#34;/etc/kubernetes/kubelet.conf&#34; to point to a rotatable kubelet client certificate and key
-[addons] Applied essential addon: CoreDNS
-[addons] Applied essential addon: kube-proxy
-
-Your Kubernetes control-plane has initialized successfully!
-
-To start using your cluster, you need to run the following as a regular user:
-
-  mkdir -p $HOME/.kube
-  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-  sudo chown $(id -u):$(id -g) $HOME/.kube/config
-
-You should now deploy a pod network to the cluster.
-Run &#34;kubectl apply -f [podnetwork].yaml&#34; with one of the options listed at:
-  https://kubernetes.io/docs/concepts/cluster-administration/addons/
-
-Then you can join any number of worker nodes by running the following on each as root:
-
-kubeadm join 192.168.1.153:6443 --token 5p4y2w.xxivtzh1lvuukdk7 \
-    --discovery-token-ca-cert-hash sha256:5638c83bec2b62b5f01d85bc2f4330b03b7e3c4682fe3f5e7e4189fbb63c5a17
-</code></pre></div><h2 id=configure-kubectl-to-communicate-with-the-cluster>Configure kubectl to communicate with the cluster</h2>
-<p>Put kubeconfig file in user&rsquo;s home directory:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>mkdir -p <span class=nv>$HOME</span>/.kube
-sudo cp -i /etc/kubernetes/admin.conf <span class=nv>$HOME</span>/.kube/config
-sudo chown <span class=k>$(</span>id -u<span class=k>)</span>:<span class=k>$(</span>id -g<span class=k>)</span> <span class=nv>$HOME</span>/.kube/config
-
-</code></pre></div><p>Verify it works:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>kubectl get nodes
-</code></pre></div><p>In my case output was:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>NAME     STATUS   ROLES    AGE     VERSION
-ubuntu   Ready    master   3h42m   v1.19.0
-
-</code></pre></div><p>As a CNI network provider I use Calico, but you can use any you like. <a href=https://kubernetes.io/docs/concepts/cluster-administration/networking/#how-to-implement-the-kubernetes-networking-model>List of available implementations</a></p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>curl https://docs.projectcalico.org/manifests/calico.yaml -O
-kubectl apply -f calico.yaml
-</code></pre></div><p>Now you have working single node kubernetes cluster. Next things you might need to do:</p>
-<ol>
-<li>Add worker nodes: use <code>kubeadm join</code>.</li>
-<li>Install <a href=https://metallb.universe.tf/>MetalLB</a> – Loadbalancer for bare-metal kubernetes clusters</li>
-<li>Install <a href=https://helm.sh/>Helm</a> to install kubernetes packages.</li>
-<li>If you have only single raspberry pi, you need to remove taint from your control plane node so that it regular workload can be scheduled on it:
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>kubectl taint nodes --all node-role.kubernetes.io/master-
-</code></pre></div></li>
-</ol>
-<h2 id=references>References</h2>
-<ul>
-<li><a href=https://docs.docker.com/engine/install/ubuntu/>Docker Installation</a></li>
-<li><a href=https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/>Bootstrapping clusters with kubeadm</a></li>
-<li><a href=https://kubernetes.io/docs/concepts/cluster-administration/networking/#how-to-implement-the-kubernetes-networking-model>Kubernetes Cluster Networking</a></li>
-</ul>
-</div>
-<footer>
-<div class=social>
-<ul>
-<li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a>
-</li>
-<li class=sidebar-nav-item> <a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a>
-</li>
-<li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li>
-</ul>
-</div>
-<p>&copy;&nbsp;2009&nbsp;—&nbsp;2021 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a>
-</p>
-</footer>
-<script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(b,c){var d=b.createElement(c),a=b.getElementsByTagName(c)[0];a.async='async',d.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js',a.parentNode.insertBefore(d,a)})(document,'script')</script>
-</body>
-</html>
-</body>
-</html>
+<!doctype html><html><head><meta charset=utf-8><title>Installing Kubernetes on Raspberry Pi &ndash; Oleg Atamanenko</title><meta name=HandheldFriendly content="True"><meta name=MobileOptimized content="320"><meta name=theme-color content="#333" media="(prefers-color-scheme: dark)"><meta name=theme-color content="#777" media="(prefers-color-scheme: light)"><meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=1"><link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&family=Prata&display=swap" type=text/css><link rel=stylesheet href=https://uthark.github.io/css/theme.72254bdf9ec9fc2d8b013dd5c21997b2ab476af1a37ded5995aae71c4a63d57d.css><link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css><link href=https://uthark.github.io/favicon.png rel=icon></head><body><header class=site><h1><a href=https://uthark.github.io/>Oleg Atamanenko</a></h1><h2>thoughts about programming</h2></header><nav><ul class=main-navigation><li><a href=https://uthark.github.io/ title=Posts>Posts</a></li><li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li><li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li><li><a href=https://uthark.github.io/about/ title="About me">About me</a></li></ul></nav><div class=article><h1>Installing Kubernetes on Raspberry Pi</h1><p>Installing kubernetes on Raspberry Pi is easy, but there are few caveats that you need to be aware of.</p><p><code>arm64</code> is preferred, because 64-bit allows you to use > 4GB of RAM per process.</p><h2 id=enable-cgroups>Enable cgroups</h2><p>Kubernetes relies on cgroups for enforcing limits for the containers, so kernel needs to be booted with cgroups support.
+On Raspberry, edit <code>/boot/firmware/cmdline.txt</code> and add the following options:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>cgroup_enable=memory swapaccount=1 cgroup_memory=1 cgroup_enable=cpuset
+</span></span></code></pre></div><p>Reboot after making the changes.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>sudo shutdown -r now
+</span></span></code></pre></div><h2 id=install-and-configure-docker>Install and configure docker</h2><p>Allow to use HTTPS transport for downloading packages:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>sudo apt update
+</span></span><span class=line><span class=cl>sudo apt install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+</span></span></code></pre></div><p>Add docker GPG key used for verifying <code>Packages</code> file used by apt.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>curl -fsSL https://download.docker.com/linux/ubuntu/gpg <span class=p>|</span> sudo apt-key add -
+</span></span></code></pre></div><p>Add docker repository:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;deb [arch=arm64] https://download.docker.com/linux/ubuntu </span><span class=k>$(</span>lsb_release -cs<span class=k>)</span><span class=s2> stable&#34;</span> <span class=p>|</span> sudo tee /etc/apt/sources.list.d/docker.list
+</span></span></code></pre></div><p>Update apt repository index and install docker</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>sudo apt update
+</span></span><span class=line><span class=cl>sudo apt install docker-ce docker-ce-cli containerd.io
+</span></span></code></pre></div><p>If you want to communicate with docker with non-root user:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>sudo usermod -aG docker <span class=s2>&#34;your user&#34;</span>
+</span></span></code></pre></div><p>To apply changes - logout and login again. If you want to reflect changes immediately run:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>newgrp docker
+</span></span></code></pre></div><p>Configure docker to use systemd as a cgroups driver, put in <code>/etc/docker/daemon.json</code>:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;exec-opts&#34;</span><span class=p>:</span> <span class=p>[</span><span class=s2>&#34;native.cgroupdriver=systemd&#34;</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;log-driver&#34;</span><span class=p>:</span> <span class=s2>&#34;json-file&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;log-opts&#34;</span><span class=p>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;max-size&#34;</span><span class=p>:</span> <span class=s2>&#34;100m&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=p>},</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;storage-driver&#34;</span><span class=p>:</span> <span class=s2>&#34;overlay2&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></div><h2 id=installing-kubeadm>Installing kubeadm</h2><p>Add kubernetes repository:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;deb https://apt.kubernetes.io/ kubernetes-xenial main&#34;</span> <span class=p>|</span> sudo tee /etc/apt/sources.list.d/kubernetes.list
+</span></span></code></pre></div><p>To allow iptables properly work with bridged traffic:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>cat <span class=s>&lt;&lt;EOF | sudo tee /etc/sysctl.d/k8s.conf
+</span></span></span><span class=line><span class=cl><span class=s>net.bridge.bridge-nf-call-ip6tables = 1
+</span></span></span><span class=line><span class=cl><span class=s>net.bridge.bridge-nf-call-iptables = 1
+</span></span></span><span class=line><span class=cl><span class=s>EOF</span>
+</span></span><span class=line><span class=cl>sudo sysctl --system
+</span></span></code></pre></div><p>Install kubeadm, kubelet and kubectl:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>sudo apt update
+</span></span><span class=line><span class=cl>sudo apt install -y kubelet kubeadm kubectl
+</span></span></code></pre></div><p>Minor updates of kubernetes may require extra steps, so we need to prevent packages from auto-updating:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>sudo apt-mark hold kubelet kubeadm kubectl
+</span></span></code></pre></div><h2 id=installing-kubernetes-control-plane>Installing Kubernetes Control Plane</h2><p>Generate token for installation</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nv>TOKEN</span><span class=o>=</span><span class=k>$(</span>sudo kubeadm token generate<span class=k>)</span>
+</span></span></code></pre></div><p>Install control plane with kubeadm:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>sudo kubeadm init --token<span class=o>=</span><span class=si>${</span><span class=nv>TOKEN</span><span class=si>}</span> --kubernetes-version<span class=o>=</span>v1.19.0
+</span></span></code></pre></div><p>If installation is successful, output will look similar to this:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>W0903 00:29:04.934934  417169 configset.go:348] WARNING: kubeadm cannot validate component configs for API groups [kubelet.config.k8s.io kubeproxy.config.k8s.io]
+</span></span><span class=line><span class=cl>[init] Using Kubernetes version: v1.19.0
+</span></span><span class=line><span class=cl>[preflight] Running pre-flight checks
+</span></span><span class=line><span class=cl>	[WARNING SystemVerification]: missing optional cgroups: hugetlb
+</span></span><span class=line><span class=cl>[preflight] Pulling images required for setting up a Kubernetes cluster
+</span></span><span class=line><span class=cl>[preflight] This might take a minute or two, depending on the speed of your internet connection
+</span></span><span class=line><span class=cl>[preflight] You can also perform this action in beforehand using &#39;kubeadm config images pull&#39;
+</span></span><span class=line><span class=cl>[certs] Using certificateDir folder &#34;/etc/kubernetes/pki&#34;
+</span></span><span class=line><span class=cl>[certs] Generating &#34;ca&#34; certificate and key
+</span></span><span class=line><span class=cl>[certs] Generating &#34;apiserver&#34; certificate and key
+</span></span><span class=line><span class=cl>[certs] apiserver serving cert is signed for DNS names [kubernetes kubernetes.default kubernetes.default.svc kubernetes.default.svc.cluster.local ubuntu] and IPs [10.96.0.1 192.168.1.153]
+</span></span><span class=line><span class=cl>[certs] Generating &#34;apiserver-kubelet-client&#34; certificate and key
+</span></span><span class=line><span class=cl>[certs] Generating &#34;front-proxy-ca&#34; certificate and key
+</span></span><span class=line><span class=cl>[certs] Generating &#34;front-proxy-client&#34; certificate and key
+</span></span><span class=line><span class=cl>[certs] Generating &#34;etcd/ca&#34; certificate and key
+</span></span><span class=line><span class=cl>[certs] Generating &#34;etcd/server&#34; certificate and key
+</span></span><span class=line><span class=cl>[certs] etcd/server serving cert is signed for DNS names [localhost ubuntu] and IPs [192.168.1.153 127.0.0.1 ::1]
+</span></span><span class=line><span class=cl>[certs] Generating &#34;etcd/peer&#34; certificate and key
+</span></span><span class=line><span class=cl>[certs] etcd/peer serving cert is signed for DNS names [localhost ubuntu] and IPs [192.168.1.153 127.0.0.1 ::1]
+</span></span><span class=line><span class=cl>[certs] Generating &#34;etcd/healthcheck-client&#34; certificate and key
+</span></span><span class=line><span class=cl>[certs] Generating &#34;apiserver-etcd-client&#34; certificate and key
+</span></span><span class=line><span class=cl>[certs] Generating &#34;sa&#34; key and public key
+</span></span><span class=line><span class=cl>[kubeconfig] Using kubeconfig folder &#34;/etc/kubernetes&#34;
+</span></span><span class=line><span class=cl>[kubeconfig] Writing &#34;admin.conf&#34; kubeconfig file
+</span></span><span class=line><span class=cl>[kubeconfig] Writing &#34;kubelet.conf&#34; kubeconfig file
+</span></span><span class=line><span class=cl>[kubeconfig] Writing &#34;controller-manager.conf&#34; kubeconfig file
+</span></span><span class=line><span class=cl>[kubeconfig] Writing &#34;scheduler.conf&#34; kubeconfig file
+</span></span><span class=line><span class=cl>[kubelet-start] Writing kubelet environment file with flags to file &#34;/var/lib/kubelet/kubeadm-flags.env&#34;
+</span></span><span class=line><span class=cl>[kubelet-start] Writing kubelet configuration to file &#34;/var/lib/kubelet/config.yaml&#34;
+</span></span><span class=line><span class=cl>[kubelet-start] Starting the kubelet
+</span></span><span class=line><span class=cl>[control-plane] Using manifest folder &#34;/etc/kubernetes/manifests&#34;
+</span></span><span class=line><span class=cl>[control-plane] Creating static Pod manifest for &#34;kube-apiserver&#34;
+</span></span><span class=line><span class=cl>[control-plane] Creating static Pod manifest for &#34;kube-controller-manager&#34;
+</span></span><span class=line><span class=cl>[control-plane] Creating static Pod manifest for &#34;kube-scheduler&#34;
+</span></span><span class=line><span class=cl>[etcd] Creating static Pod manifest for local etcd in &#34;/etc/kubernetes/manifests&#34;
+</span></span><span class=line><span class=cl>[wait-control-plane] Waiting for the kubelet to boot up the control plane as static Pods from directory &#34;/etc/kubernetes/manifests&#34;. This can take up to 4m0s
+</span></span><span class=line><span class=cl>[apiclient] All control plane components are healthy after 30.007706 seconds
+</span></span><span class=line><span class=cl>[upload-config] Storing the configuration used in ConfigMap &#34;kubeadm-config&#34; in the &#34;kube-system&#34; Namespace
+</span></span><span class=line><span class=cl>[kubelet] Creating a ConfigMap &#34;kubelet-config-1.19&#34; in namespace kube-system with the configuration for the kubelets in the cluster
+</span></span><span class=line><span class=cl>[upload-certs] Skipping phase. Please see --upload-certs
+</span></span><span class=line><span class=cl>[mark-control-plane] Marking the node ubuntu as control-plane by adding the label &#34;node-role.kubernetes.io/master=&#39;&#39;&#34;
+</span></span><span class=line><span class=cl>[mark-control-plane] Marking the node ubuntu as control-plane by adding the taints [node-role.kubernetes.io/master:NoSchedule]
+</span></span><span class=line><span class=cl>[bootstrap-token] Using token: 5p4y2w.xxivtzh1lvuukdk7
+</span></span><span class=line><span class=cl>[bootstrap-token] Configuring bootstrap tokens, cluster-info ConfigMap, RBAC Roles
+</span></span><span class=line><span class=cl>[bootstrap-token] configured RBAC rules to allow Node Bootstrap tokens to get nodes
+</span></span><span class=line><span class=cl>[bootstrap-token] configured RBAC rules to allow Node Bootstrap tokens to post CSRs in order for nodes to get long term certificate credentials
+</span></span><span class=line><span class=cl>[bootstrap-token] configured RBAC rules to allow the csrapprover controller automatically approve CSRs from a Node Bootstrap Token
+</span></span><span class=line><span class=cl>[bootstrap-token] configured RBAC rules to allow certificate rotation for all node client certificates in the cluster
+</span></span><span class=line><span class=cl>[bootstrap-token] Creating the &#34;cluster-info&#34; ConfigMap in the &#34;kube-public&#34; namespace
+</span></span><span class=line><span class=cl>[kubelet-finalize] Updating &#34;/etc/kubernetes/kubelet.conf&#34; to point to a rotatable kubelet client certificate and key
+</span></span><span class=line><span class=cl>[addons] Applied essential addon: CoreDNS
+</span></span><span class=line><span class=cl>[addons] Applied essential addon: kube-proxy
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Your Kubernetes control-plane has initialized successfully!
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>To start using your cluster, you need to run the following as a regular user:
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  mkdir -p $HOME/.kube
+</span></span><span class=line><span class=cl>  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+</span></span><span class=line><span class=cl>  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>You should now deploy a pod network to the cluster.
+</span></span><span class=line><span class=cl>Run &#34;kubectl apply -f [podnetwork].yaml&#34; with one of the options listed at:
+</span></span><span class=line><span class=cl>  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Then you can join any number of worker nodes by running the following on each as root:
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>kubeadm join 192.168.1.153:6443 --token 5p4y2w.xxivtzh1lvuukdk7 \
+</span></span><span class=line><span class=cl>    --discovery-token-ca-cert-hash sha256:5638c83bec2b62b5f01d85bc2f4330b03b7e3c4682fe3f5e7e4189fbb63c5a17
+</span></span></code></pre></div><h2 id=configure-kubectl-to-communicate-with-the-cluster>Configure kubectl to communicate with the cluster</h2><p>Put kubeconfig file in user&rsquo;s home directory:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>mkdir -p <span class=nv>$HOME</span>/.kube
+</span></span><span class=line><span class=cl>sudo cp -i /etc/kubernetes/admin.conf <span class=nv>$HOME</span>/.kube/config
+</span></span><span class=line><span class=cl>sudo chown <span class=k>$(</span>id -u<span class=k>)</span>:<span class=k>$(</span>id -g<span class=k>)</span> <span class=nv>$HOME</span>/.kube/config
+</span></span></code></pre></div><p>Verify it works:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>kubectl get nodes
+</span></span></code></pre></div><p>In my case output was:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>NAME     STATUS   ROLES    AGE     VERSION
+</span></span><span class=line><span class=cl>ubuntu   Ready    master   3h42m   v1.19.0
+</span></span></code></pre></div><p>As a CNI network provider I use Calico, but you can use any you like. <a href=https://kubernetes.io/docs/concepts/cluster-administration/networking/#how-to-implement-the-kubernetes-networking-model>List of available implementations</a></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>curl https://docs.projectcalico.org/manifests/calico.yaml -O
+</span></span><span class=line><span class=cl>kubectl apply -f calico.yaml
+</span></span></code></pre></div><p>Now you have working single node kubernetes cluster. Next things you might need to do:</p><ol><li>Add worker nodes: use <code>kubeadm join</code>.</li><li>Install <a href=https://metallb.universe.tf/>MetalLB</a> – Loadbalancer for bare-metal kubernetes clusters</li><li>Install <a href=https://helm.sh/>Helm</a> to install kubernetes packages.</li><li>If you have only single raspberry pi, you need to remove taint from your control plane node so that it regular workload can be scheduled on it:<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>kubectl taint nodes --all node-role.kubernetes.io/master-
+</span></span></code></pre></div></li></ol><h2 id=references>References</h2><ul><li><a href=https://docs.docker.com/engine/install/ubuntu/>Docker Installation</a></li><li><a href=https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/>Bootstrapping clusters with kubeadm</a></li><li><a href=https://kubernetes.io/docs/concepts/cluster-administration/networking/#how-to-implement-the-kubernetes-networking-model>Kubernetes Cluster Networking</a></li></ul></div><footer><div class=social><ul><li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a></li><li class=sidebar-nav-item><a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a></li><li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li></ul></div><p>&copy;&nbsp;2009&nbsp;—&nbsp;2022 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a></p></footer><script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(t,n){var s=t.createElement(n),e=t.getElementsByTagName(n)[0];e.async='async',s.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js',e.parentNode.insertBefore(s,e)})(document,'script')</script></body></html></body></html>

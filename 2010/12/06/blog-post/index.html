@@ -1,155 +1,98 @@
-<!doctype html><html>
-<head>
-<meta charset=utf-8>
-<title>
-Сокращаем ссылки на андроиде &ndash; Oleg Atamanenko
-</title>
-<meta name=HandheldFriendly content="True">
-<meta name=MobileOptimized content="320">
-<meta name=theme-color content="#333" media="(prefers-color-scheme: dark)">
-<meta name=theme-color content="#777" media="(prefers-color-scheme: light)">
-<meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=1">
-<link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&family=Prata&display=swap" type=text/css>
-<link rel=stylesheet href=https://uthark.github.io/css/theme.72254bdf9ec9fc2d8b013dd5c21997b2ab476af1a37ded5995aae71c4a63d57d.css>
-<link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css>
-<link href=https://uthark.github.io/favicon.png rel=icon>
-</head>
-<body>
-<header class=site>
-<h1><a href=https://uthark.github.io/>Oleg Atamanenko</a></h1>
-<h2>thoughts about programming</h2>
-</header>
-<nav>
-<ul class=main-navigation>
-<li><a href=https://uthark.github.io/ title=Posts>Posts</a></li>
-<li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li>
-<li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li>
-<li><a href=https://uthark.github.io/about/ title="About me">About me</a></li>
-</ul>
-</nav>
-<div class=article>
-<h1>Сокращаем ссылки на андроиде</h1>
-<h5>Вступление</h5>Встала передо мной задача - сокращать ссылки перед тем, как отправлять их в Twitter. Для решения этой задачи я решил использовать <a href=http://bit.ly>bit.ly</a>, благо, их API внятный и простой. <h5>Программируем!</h5>Решение нарисовалось в виде следующего класса: <br>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=kn>import</span> <span class=nn>org.apache.http.HttpEntity</span><span class=o>;</span>
-<span class=kn>import</span> <span class=nn>org.apache.http.HttpResponse</span><span class=o>;</span>
-<span class=kn>import</span> <span class=nn>org.apache.http.NameValuePair</span><span class=o>;</span>
-<span class=kn>import</span> <span class=nn>org.apache.http.client.ClientProtocolException</span><span class=o>;</span>
-<span class=kn>import</span> <span class=nn>org.apache.http.client.methods.HttpGet</span><span class=o>;</span>
-<span class=kn>import</span> <span class=nn>org.apache.http.client.utils.URIUtils</span><span class=o>;</span>
-<span class=kn>import</span> <span class=nn>org.apache.http.client.utils.URLEncodedUtils</span><span class=o>;</span>
-<span class=kn>import</span> <span class=nn>org.apache.http.impl.client.DefaultHttpClient</span><span class=o>;</span>
-<span class=kn>import</span> <span class=nn>org.apache.http.message.BasicNameValuePair</span><span class=o>;</span>
-<span class=kn>import</span> <span class=nn>org.apache.http.util.EntityUtils</span><span class=o>;</span>
-<span class=kn>import</span> <span class=nn>org.json.JSONException</span><span class=o>;</span>
-<span class=kn>import</span> <span class=nn>org.json.JSONObject</span><span class=o>;</span>
-
-<span class=kn>import</span> <span class=nn>android.util.Log</span><span class=o>;</span>
-
-<span class=kn>import</span> <span class=nn>java.io.IOException</span><span class=o>;</span>
-<span class=kn>import</span> <span class=nn>java.net.URI</span><span class=o>;</span>
-<span class=kn>import</span> <span class=nn>java.net.URISyntaxException</span><span class=o>;</span>
-<span class=kn>import</span> <span class=nn>java.util.ArrayList</span><span class=o>;</span>
-<span class=kn>import</span> <span class=nn>java.util.List</span><span class=o>;</span>
-
-
-<span class=cm>/**
-</span><span class=cm> * Helper class to work with bitly.
-</span><span class=cm> *
-</span><span class=cm> * @author Oleg Atamanenko
-</span><span class=cm> * @since 06-Dec-2010 12:49:36
-</span><span class=cm> */</span>
-<span class=kd>public</span> <span class=kd>class</span> <span class=nc>Bitly</span> <span class=o>{</span>
-
-    <span class=kd>private</span> <span class=kd>static</span> <span class=kd>final</span> <span class=n>String</span> <span class=n>TAG</span> <span class=o>=</span> <span class=s>&#34;Bitly&#34;</span><span class=o>;</span>
-
-    <span class=kd>private</span> <span class=kd>static</span> <span class=kd>final</span> <span class=n>String</span> <span class=n>SHORTEN</span> <span class=o>=</span> <span class=s>&#34;/v3/shorten&#34;</span><span class=o>;</span>
-    <span class=kd>private</span> <span class=kd>static</span> <span class=kd>final</span> <span class=n>String</span> <span class=n>API_URL</span> <span class=o>=</span> <span class=s>&#34;api.bit.ly&#34;</span><span class=o>;</span>
-    <span class=kd>private</span> <span class=kd>static</span> <span class=kd>final</span> <span class=n>String</span> <span class=n>RESPONSE_FORMAT</span> <span class=o>=</span> <span class=s>&#34;json&#34;</span><span class=o>;</span>
-
-    <span class=kd>private</span> <span class=n>String</span> <span class=n>username</span><span class=o>;</span>
-    <span class=kd>private</span> <span class=n>String</span> <span class=n>apiKey</span><span class=o>;</span>
-
-
-    <span class=kd>public</span> <span class=nf>Bitly</span><span class=o>(</span><span class=n>String</span> <span class=n>username</span><span class=o>,</span> <span class=n>String</span> <span class=n>apiKey</span><span class=o>)</span> <span class=o>{</span>
-        <span class=k>this</span><span class=o>.</span><span class=na>username</span> <span class=o>=</span> <span class=n>username</span><span class=o>;</span>
-        <span class=k>this</span><span class=o>.</span><span class=na>apiKey</span> <span class=o>=</span> <span class=n>apiKey</span><span class=o>;</span>
-    <span class=o>}</span>
-
-    <span class=kd>public</span> <span class=n>String</span> <span class=nf>shorten</span><span class=o>(</span><span class=n>String</span> <span class=n>longUrl</span><span class=o>)</span> <span class=kd>throws</span> <span class=n>BitlyException</span> <span class=o>{</span>
-        <span class=n>DefaultHttpClient</span> <span class=n>httpClient</span> <span class=o>=</span> <span class=k>new</span> <span class=n>DefaultHttpClient</span><span class=o>();</span>
-
-        <span class=k>try</span> <span class=o>{</span>
-            <span class=n>List</span><span class=o>&lt;</span><span class=n>NameValuePair</span><span class=o>&gt;</span> <span class=n>params</span> <span class=o>=</span> <span class=k>new</span> <span class=n>ArrayList</span><span class=o>&lt;</span><span class=n>NameValuePair</span><span class=o>&gt;();</span>
-            <span class=n>params</span><span class=o>.</span><span class=na>add</span><span class=o>(</span><span class=k>new</span> <span class=n>BasicNameValuePair</span><span class=o>(</span><span class=s>&#34;login&#34;</span><span class=o>,</span> <span class=n>username</span><span class=o>));</span>
-            <span class=n>params</span><span class=o>.</span><span class=na>add</span><span class=o>(</span><span class=k>new</span> <span class=n>BasicNameValuePair</span><span class=o>(</span><span class=s>&#34;apiKey&#34;</span><span class=o>,</span> <span class=n>apiKey</span><span class=o>));</span>
-            <span class=n>params</span><span class=o>.</span><span class=na>add</span><span class=o>(</span><span class=k>new</span> <span class=n>BasicNameValuePair</span><span class=o>(</span><span class=s>&#34;longUrl&#34;</span><span class=o>,</span> <span class=n>longUrl</span><span class=o>));</span>
-            <span class=n>params</span><span class=o>.</span><span class=na>add</span><span class=o>(</span><span class=k>new</span> <span class=n>BasicNameValuePair</span><span class=o>(</span><span class=s>&#34;format&#34;</span><span class=o>,</span> <span class=n>RESPONSE_FORMAT</span><span class=o>));</span>
-
-
-            <span class=n>URI</span> <span class=n>uri</span> <span class=o>=</span> <span class=n>URIUtils</span><span class=o>.</span><span class=na>createURI</span><span class=o>(</span><span class=s>&#34;http&#34;</span><span class=o>,</span> <span class=n>API_URL</span><span class=o>,</span> <span class=o>-</span><span class=n>1</span><span class=o>,</span> <span class=n>SHORTEN</span><span class=o>,</span> <span class=n>URLEncodedUtils</span><span class=o>.</span><span class=na>format</span><span class=o>(</span><span class=n>params</span><span class=o>,</span> <span class=s>&#34;UTF-8&#34;</span><span class=o>),</span> <span class=kc>null</span><span class=o>);</span>
-            <span class=n>HttpGet</span> <span class=n>request</span> <span class=o>=</span> <span class=k>new</span> <span class=n>HttpGet</span><span class=o>(</span><span class=n>uri</span><span class=o>);</span>
-
-            <span class=n>Log</span><span class=o>.</span><span class=na>d</span><span class=o>(</span><span class=n>TAG</span><span class=o>,</span> <span class=s>&#34;Sending request: &#34;</span> <span class=o>+</span> <span class=n>request</span><span class=o>.</span><span class=na>getURI</span><span class=o>());</span>
-
-            <span class=n>HttpResponse</span> <span class=n>httpResponse</span> <span class=o>=</span> <span class=n>httpClient</span><span class=o>.</span><span class=na>execute</span><span class=o>(</span><span class=n>request</span><span class=o>);</span>
-
-            <span class=n>HttpEntity</span> <span class=n>httpEntity</span> <span class=o>=</span> <span class=n>httpResponse</span><span class=o>.</span><span class=na>getEntity</span><span class=o>();</span>
-            <span class=n>String</span> <span class=n>response</span> <span class=o>=</span> <span class=n>EntityUtils</span><span class=o>.</span><span class=na>toString</span><span class=o>(</span><span class=n>httpEntity</span><span class=o>);</span>
-            <span class=n>Log</span><span class=o>.</span><span class=na>i</span><span class=o>(</span><span class=n>TAG</span><span class=o>,</span> <span class=s>&#34;Bitly response is: &#34;</span> <span class=o>+</span> <span class=n>response</span><span class=o>);</span>
-            <span class=n>httpResponse</span><span class=o>.</span><span class=na>getEntity</span><span class=o>().</span><span class=na>consumeContent</span><span class=o>();</span>
-
-            <span class=n>JSONObject</span> <span class=n>jsonResponse</span> <span class=o>=</span> <span class=k>new</span> <span class=n>JSONObject</span><span class=o>(</span><span class=n>response</span><span class=o>);</span>
-
-            <span class=n>checkForExceptions</span><span class=o>(</span><span class=n>jsonResponse</span><span class=o>);</span>
-
-            <span class=n>JSONObject</span> <span class=n>data</span> <span class=o>=</span> <span class=n>jsonResponse</span><span class=o>.</span><span class=na>getJSONObject</span><span class=o>(</span><span class=s>&#34;data&#34;</span><span class=o>);</span>
-            <span class=k>return</span> <span class=n>data</span><span class=o>.</span><span class=na>getString</span><span class=o>(</span><span class=s>&#34;url&#34;</span><span class=o>);</span>
-
-        <span class=o>}</span> <span class=k>catch</span> <span class=o>(</span><span class=n>ClientProtocolException</span> <span class=n>e</span><span class=o>)</span> <span class=o>{</span>
-            <span class=k>throw</span> <span class=k>new</span> <span class=n>BitlyException</span><span class=o>(</span><span class=n>e</span><span class=o>);</span>
-        <span class=o>}</span> <span class=k>catch</span> <span class=o>(</span><span class=n>IOException</span> <span class=n>e</span><span class=o>)</span> <span class=o>{</span>
-            <span class=k>throw</span> <span class=k>new</span> <span class=n>BitlyException</span><span class=o>(</span><span class=n>e</span><span class=o>);</span>
-        <span class=o>}</span> <span class=k>catch</span> <span class=o>(</span><span class=n>JSONException</span> <span class=n>e</span><span class=o>)</span> <span class=o>{</span>
-            <span class=k>throw</span> <span class=k>new</span> <span class=n>BitlyException</span><span class=o>(</span><span class=n>e</span><span class=o>);</span>
-        <span class=o>}</span> <span class=k>catch</span> <span class=o>(</span><span class=n>URISyntaxException</span> <span class=n>e</span><span class=o>)</span> <span class=o>{</span>
-            <span class=k>throw</span> <span class=k>new</span> <span class=n>BitlyException</span><span class=o>(</span><span class=n>e</span><span class=o>);</span>
-        <span class=o>}</span>
-    <span class=o>}</span>
-
-    <span class=kd>private</span> <span class=kt>void</span> <span class=nf>checkForExceptions</span><span class=o>(</span><span class=n>JSONObject</span> <span class=n>jsonResponse</span><span class=o>)</span> <span class=kd>throws</span> <span class=n>JSONException</span><span class=o>,</span> <span class=n>BitlyException</span> <span class=o>{</span>
-        <span class=kt>int</span> <span class=n>statusCode</span> <span class=o>=</span> <span class=n>jsonResponse</span><span class=o>.</span><span class=na>getInt</span><span class=o>(</span><span class=s>&#34;status_code&#34;</span><span class=o>);</span>
-        <span class=k>if</span> <span class=o>(</span><span class=n>statusCode</span> <span class=o>!=</span> <span class=n>200</span><span class=o>)</span> <span class=o>{</span>
-            <span class=n>String</span> <span class=n>message</span> <span class=o>=</span> <span class=n>jsonResponse</span><span class=o>.</span><span class=na>getString</span><span class=o>(</span><span class=s>&#34;status_txt&#34;</span><span class=o>);</span>
-            <span class=k>throw</span> <span class=k>new</span> <span class=n>BitlyException</span><span class=o>(</span><span class=n>message</span><span class=o>);</span>
-        <span class=o>}</span>
-    <span class=o>}</span>
-
-<span class=o>}</span>
-</code></pre></div><p>Конструктор класс принимает на вход следующие параметры: <ul><li><code>userName</code> - имя пользователя bit.ly.</li></p>
-<li><code>apiKey</code> - Ключ для доступа к API, его можно узнать на <a href=https://bit.ly/a/your_api_key>специальной страничке</a></li>
-</ul><a href=https://code.google.com/p/bitly-api/wiki/ApiDocumentation>Полная документация к Bit.ly API</a> расположена на отдельном проекте в Google Code <h5>Использование</h5>Единственный метод, реализованный сейчас - это метод <code>shorten()</code>. На вход требуется подать полную ссылку <code>longUrl</code>, на выходе получается укороченная версия ссылки, либо кидается исключение с сообщением от bit.ly API. <h6>Пример вызова</h6>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=n>Bitly</span> <span class=n>bitly</span> <span class=o>=</span> <span class=k>new</span> <span class=n>Bitly</span><span class=o>(</span><span class=n>BITLY_USERNAME</span><span class=o>,</span> <span class=n>BITLY_API_KEY</span><span class=o>);</span>
-<span class=n>String</span> <span class=n>shortLink</span> <span class=o>=</span> <span class=n>bitly</span><span class=o>.</span><span class=na>shorten</span><span class=o>(</span><span class=n>link</span><span class=o>);</span>
-</code></pre></div> <h6>Дальнейшие улучшения</h6>Если перед вами стоит задача быстренько сократить ссылку - то вышеприведённого кода достаточно. Но если вам нужно полноценное решение, со всеми возможностями bit.ly - то посмотрите в сторону <a href=https://code.google.com/p/bitlyj/>bitlyj</a>. Правда, я не уверен, что оно взведётся под андроидом.
-</div>
-<footer>
-<div class=social>
-<ul>
-<li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a>
-</li>
-<li class=sidebar-nav-item> <a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a>
-</li>
-<li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li>
-</ul>
-</div>
-<p>&copy;&nbsp;2009&nbsp;—&nbsp;2021 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a>
-</p>
-</footer>
-<script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(b,c){var d=b.createElement(c),a=b.getElementsByTagName(c)[0];a.async='async',d.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js',a.parentNode.insertBefore(d,a)})(document,'script')</script>
-</body>
-</html>
-</body>
-</html>
+<!doctype html><html><head><meta charset=utf-8><title>Сокращаем ссылки на андроиде &ndash; Oleg Atamanenko</title><meta name=HandheldFriendly content="True"><meta name=MobileOptimized content="320"><meta name=theme-color content="#333" media="(prefers-color-scheme: dark)"><meta name=theme-color content="#777" media="(prefers-color-scheme: light)"><meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=1"><link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&family=Prata&display=swap" type=text/css><link rel=stylesheet href=https://uthark.github.io/css/theme.72254bdf9ec9fc2d8b013dd5c21997b2ab476af1a37ded5995aae71c4a63d57d.css><link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css><link href=https://uthark.github.io/favicon.png rel=icon></head><body><header class=site><h1><a href=https://uthark.github.io/>Oleg Atamanenko</a></h1><h2>thoughts about programming</h2></header><nav><ul class=main-navigation><li><a href=https://uthark.github.io/ title=Posts>Posts</a></li><li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li><li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li><li><a href=https://uthark.github.io/about/ title="About me">About me</a></li></ul></nav><div class=article><h1>Сокращаем ссылки на андроиде</h1><h5>Вступление</h5>Встала передо мной задача - сокращать ссылки перед тем, как отправлять их в Twitter. Для решения этой задачи я решил использовать <a href=http://bit.ly>bit.ly</a>, благо, их API внятный и простой.<h5>Программируем!</h5>Решение нарисовалось в виде следующего класса:<br><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kn>import</span> <span class=nn>org.apache.http.HttpEntity</span><span class=o>;</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>org.apache.http.HttpResponse</span><span class=o>;</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>org.apache.http.NameValuePair</span><span class=o>;</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>org.apache.http.client.ClientProtocolException</span><span class=o>;</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>org.apache.http.client.methods.HttpGet</span><span class=o>;</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>org.apache.http.client.utils.URIUtils</span><span class=o>;</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>org.apache.http.client.utils.URLEncodedUtils</span><span class=o>;</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>org.apache.http.impl.client.DefaultHttpClient</span><span class=o>;</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>org.apache.http.message.BasicNameValuePair</span><span class=o>;</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>org.apache.http.util.EntityUtils</span><span class=o>;</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>org.json.JSONException</span><span class=o>;</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>org.json.JSONObject</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>android.util.Log</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>java.io.IOException</span><span class=o>;</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>java.net.URI</span><span class=o>;</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>java.net.URISyntaxException</span><span class=o>;</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>java.util.ArrayList</span><span class=o>;</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>java.util.List</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=cm>/**
+</span></span></span><span class=line><span class=cl><span class=cm> * Helper class to work with bitly.
+</span></span></span><span class=line><span class=cl><span class=cm> *
+</span></span></span><span class=line><span class=cl><span class=cm> * @author Oleg Atamanenko
+</span></span></span><span class=line><span class=cl><span class=cm> * @since 06-Dec-2010 12:49:36
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=kd>class</span> <span class=nc>Bitly</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kd>private</span> <span class=kd>static</span> <span class=kd>final</span> <span class=n>String</span> <span class=n>TAG</span> <span class=o>=</span> <span class=s>&#34;Bitly&#34;</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kd>private</span> <span class=kd>static</span> <span class=kd>final</span> <span class=n>String</span> <span class=n>SHORTEN</span> <span class=o>=</span> <span class=s>&#34;/v3/shorten&#34;</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>    <span class=kd>private</span> <span class=kd>static</span> <span class=kd>final</span> <span class=n>String</span> <span class=n>API_URL</span> <span class=o>=</span> <span class=s>&#34;api.bit.ly&#34;</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>    <span class=kd>private</span> <span class=kd>static</span> <span class=kd>final</span> <span class=n>String</span> <span class=n>RESPONSE_FORMAT</span> <span class=o>=</span> <span class=s>&#34;json&#34;</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kd>private</span> <span class=n>String</span> <span class=n>username</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>    <span class=kd>private</span> <span class=n>String</span> <span class=n>apiKey</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=nf>Bitly</span><span class=o>(</span><span class=n>String</span> <span class=n>username</span><span class=o>,</span> <span class=n>String</span> <span class=n>apiKey</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>this</span><span class=o>.</span><span class=na>username</span> <span class=o>=</span> <span class=n>username</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>        <span class=k>this</span><span class=o>.</span><span class=na>apiKey</span> <span class=o>=</span> <span class=n>apiKey</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=n>String</span> <span class=nf>shorten</span><span class=o>(</span><span class=n>String</span> <span class=n>longUrl</span><span class=o>)</span> <span class=kd>throws</span> <span class=n>BitlyException</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>DefaultHttpClient</span> <span class=n>httpClient</span> <span class=o>=</span> <span class=k>new</span> <span class=n>DefaultHttpClient</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=k>try</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>List</span><span class=o>&lt;</span><span class=n>NameValuePair</span><span class=o>&gt;</span> <span class=n>params</span> <span class=o>=</span> <span class=k>new</span> <span class=n>ArrayList</span><span class=o>&lt;</span><span class=n>NameValuePair</span><span class=o>&gt;();</span>
+</span></span><span class=line><span class=cl>            <span class=n>params</span><span class=o>.</span><span class=na>add</span><span class=o>(</span><span class=k>new</span> <span class=n>BasicNameValuePair</span><span class=o>(</span><span class=s>&#34;login&#34;</span><span class=o>,</span> <span class=n>username</span><span class=o>));</span>
+</span></span><span class=line><span class=cl>            <span class=n>params</span><span class=o>.</span><span class=na>add</span><span class=o>(</span><span class=k>new</span> <span class=n>BasicNameValuePair</span><span class=o>(</span><span class=s>&#34;apiKey&#34;</span><span class=o>,</span> <span class=n>apiKey</span><span class=o>));</span>
+</span></span><span class=line><span class=cl>            <span class=n>params</span><span class=o>.</span><span class=na>add</span><span class=o>(</span><span class=k>new</span> <span class=n>BasicNameValuePair</span><span class=o>(</span><span class=s>&#34;longUrl&#34;</span><span class=o>,</span> <span class=n>longUrl</span><span class=o>));</span>
+</span></span><span class=line><span class=cl>            <span class=n>params</span><span class=o>.</span><span class=na>add</span><span class=o>(</span><span class=k>new</span> <span class=n>BasicNameValuePair</span><span class=o>(</span><span class=s>&#34;format&#34;</span><span class=o>,</span> <span class=n>RESPONSE_FORMAT</span><span class=o>));</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=n>URI</span> <span class=n>uri</span> <span class=o>=</span> <span class=n>URIUtils</span><span class=o>.</span><span class=na>createURI</span><span class=o>(</span><span class=s>&#34;http&#34;</span><span class=o>,</span> <span class=n>API_URL</span><span class=o>,</span> <span class=o>-</span><span class=n>1</span><span class=o>,</span> <span class=n>SHORTEN</span><span class=o>,</span> <span class=n>URLEncodedUtils</span><span class=o>.</span><span class=na>format</span><span class=o>(</span><span class=n>params</span><span class=o>,</span> <span class=s>&#34;UTF-8&#34;</span><span class=o>),</span> <span class=kc>null</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>            <span class=n>HttpGet</span> <span class=n>request</span> <span class=o>=</span> <span class=k>new</span> <span class=n>HttpGet</span><span class=o>(</span><span class=n>uri</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=n>Log</span><span class=o>.</span><span class=na>d</span><span class=o>(</span><span class=n>TAG</span><span class=o>,</span> <span class=s>&#34;Sending request: &#34;</span> <span class=o>+</span> <span class=n>request</span><span class=o>.</span><span class=na>getURI</span><span class=o>());</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=n>HttpResponse</span> <span class=n>httpResponse</span> <span class=o>=</span> <span class=n>httpClient</span><span class=o>.</span><span class=na>execute</span><span class=o>(</span><span class=n>request</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=n>HttpEntity</span> <span class=n>httpEntity</span> <span class=o>=</span> <span class=n>httpResponse</span><span class=o>.</span><span class=na>getEntity</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>            <span class=n>String</span> <span class=n>response</span> <span class=o>=</span> <span class=n>EntityUtils</span><span class=o>.</span><span class=na>toString</span><span class=o>(</span><span class=n>httpEntity</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>            <span class=n>Log</span><span class=o>.</span><span class=na>i</span><span class=o>(</span><span class=n>TAG</span><span class=o>,</span> <span class=s>&#34;Bitly response is: &#34;</span> <span class=o>+</span> <span class=n>response</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>            <span class=n>httpResponse</span><span class=o>.</span><span class=na>getEntity</span><span class=o>().</span><span class=na>consumeContent</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=n>JSONObject</span> <span class=n>jsonResponse</span> <span class=o>=</span> <span class=k>new</span> <span class=n>JSONObject</span><span class=o>(</span><span class=n>response</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=n>checkForExceptions</span><span class=o>(</span><span class=n>jsonResponse</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=n>JSONObject</span> <span class=n>data</span> <span class=o>=</span> <span class=n>jsonResponse</span><span class=o>.</span><span class=na>getJSONObject</span><span class=o>(</span><span class=s>&#34;data&#34;</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=n>data</span><span class=o>.</span><span class=na>getString</span><span class=o>(</span><span class=s>&#34;url&#34;</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=o>}</span> <span class=k>catch</span> <span class=o>(</span><span class=n>ClientProtocolException</span> <span class=n>e</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>throw</span> <span class=k>new</span> <span class=n>BitlyException</span><span class=o>(</span><span class=n>e</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span> <span class=k>catch</span> <span class=o>(</span><span class=n>IOException</span> <span class=n>e</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>throw</span> <span class=k>new</span> <span class=n>BitlyException</span><span class=o>(</span><span class=n>e</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span> <span class=k>catch</span> <span class=o>(</span><span class=n>JSONException</span> <span class=n>e</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>throw</span> <span class=k>new</span> <span class=n>BitlyException</span><span class=o>(</span><span class=n>e</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span> <span class=k>catch</span> <span class=o>(</span><span class=n>URISyntaxException</span> <span class=n>e</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>throw</span> <span class=k>new</span> <span class=n>BitlyException</span><span class=o>(</span><span class=n>e</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kd>private</span> <span class=kt>void</span> <span class=nf>checkForExceptions</span><span class=o>(</span><span class=n>JSONObject</span> <span class=n>jsonResponse</span><span class=o>)</span> <span class=kd>throws</span> <span class=n>JSONException</span><span class=o>,</span> <span class=n>BitlyException</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=kt>int</span> <span class=n>statusCode</span> <span class=o>=</span> <span class=n>jsonResponse</span><span class=o>.</span><span class=na>getInt</span><span class=o>(</span><span class=s>&#34;status_code&#34;</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=o>(</span><span class=n>statusCode</span> <span class=o>!=</span> <span class=n>200</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>String</span> <span class=n>message</span> <span class=o>=</span> <span class=n>jsonResponse</span><span class=o>.</span><span class=na>getString</span><span class=o>(</span><span class=s>&#34;status_txt&#34;</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>            <span class=k>throw</span> <span class=k>new</span> <span class=n>BitlyException</span><span class=o>(</span><span class=n>message</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></div><p>Конструктор класс принимает на вход следующие параметры:<ul><li><code>userName</code> - имя пользователя bit.ly.</li></p><li><code>apiKey</code> - Ключ для доступа к API, его можно узнать на <a href=https://bit.ly/a/your_api_key>специальной страничке</a></li></ul><a href=https://code.google.com/p/bitly-api/wiki/ApiDocumentation>Полная документация к Bit.ly API</a> расположена на отдельном проекте в Google Code<h5>Использование</h5>Единственный метод, реализованный сейчас - это метод <code>shorten()</code>. На вход требуется подать полную ссылку <code>longUrl</code>, на выходе получается укороченная версия ссылки, либо кидается исключение с сообщением от bit.ly API.<h6>Пример вызова</h6><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=n>Bitly</span> <span class=n>bitly</span> <span class=o>=</span> <span class=k>new</span> <span class=n>Bitly</span><span class=o>(</span><span class=n>BITLY_USERNAME</span><span class=o>,</span> <span class=n>BITLY_API_KEY</span><span class=o>);</span>
+</span></span><span class=line><span class=cl><span class=n>String</span> <span class=n>shortLink</span> <span class=o>=</span> <span class=n>bitly</span><span class=o>.</span><span class=na>shorten</span><span class=o>(</span><span class=n>link</span><span class=o>);</span>
+</span></span></code></pre></div><h6>Дальнейшие улучшения</h6>Если перед вами стоит задача быстренько сократить ссылку - то вышеприведённого кода достаточно. Но если вам нужно полноценное решение, со всеми возможностями bit.ly - то посмотрите в сторону <a href=https://code.google.com/p/bitlyj/>bitlyj</a>. Правда, я не уверен, что оно взведётся под андроидом.</div><footer><div class=social><ul><li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a></li><li class=sidebar-nav-item><a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a></li><li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li></ul></div><p>&copy;&nbsp;2009&nbsp;—&nbsp;2022 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a></p></footer><script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(t,n){var s=t.createElement(n),e=t.getElementsByTagName(n)[0];e.async='async',s.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js',e.parentNode.insertBefore(s,e)})(document,'script')</script></body></html></body></html>

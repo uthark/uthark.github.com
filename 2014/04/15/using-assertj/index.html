@@ -1,132 +1,67 @@
-<!doctype html><html>
-<head>
-<meta charset=utf-8>
-<title>
-Using AssertJ &ndash; Oleg Atamanenko
-</title>
-<meta name=HandheldFriendly content="True">
-<meta name=MobileOptimized content="320">
-<meta name=theme-color content="#333" media="(prefers-color-scheme: dark)">
-<meta name=theme-color content="#777" media="(prefers-color-scheme: light)">
-<meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=1">
-<link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&family=Prata&display=swap" type=text/css>
-<link rel=stylesheet href=https://uthark.github.io/css/theme.72254bdf9ec9fc2d8b013dd5c21997b2ab476af1a37ded5995aae71c4a63d57d.css>
-<link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css>
-<link href=https://uthark.github.io/favicon.png rel=icon>
-</head>
-<body>
-<header class=site>
-<h1><a href=https://uthark.github.io/>Oleg Atamanenko</a></h1>
-<h2>thoughts about programming</h2>
-</header>
-<nav>
-<ul class=main-navigation>
-<li><a href=https://uthark.github.io/ title=Posts>Posts</a></li>
-<li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li>
-<li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li>
-<li><a href=https://uthark.github.io/about/ title="About me">About me</a></li>
-</ul>
-</nav>
-<div class=article>
-<h1>Using AssertJ</h1>
-<p><a href=https://github.com/joel-costigliola/assertj-core>AssertJ</a> is a library which provides fluent strongly-typed assertions to use in unit tests.</p>
-<p>Example of assertions written with <code>AssertJ</code>:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=kn>import</span> <span class=nn>io.github.uthark.blog.assertj.Assertions.assertThat</span><span class=o>;</span>
-
-<span class=c1>// ... within @Test
-</span><span class=c1></span><span class=n>User</span> <span class=n>result</span> <span class=o>=</span> <span class=n>userDao</span><span class=o>.</span><span class=na>findByLogin</span><span class=o>(</span><span class=s>&#34;username&#34;</span><span class=o>);</span>
-<span class=n>assertThat</span><span class=o>(</span><span class=n>result</span><span class=o>).</span>
-    <span class=n>isNotNull</span><span class=o>().</span>
-    <span class=n>isActive</span><span class=o>().</span>
-    <span class=n>hasLogin</span><span class=o>(</span><span class=s>&#34;username&#34;</span><span class=o>);</span>
-</code></pre></div><p>As you can see assertions look much more readable.
-The integration of assertj into Maven project is very easy:</p>
-<ol>
-<li>Update pom.xml in parent module</li>
-</ol>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=nt>&lt;properties&gt;</span>
-    <span class=nt>&lt;assertj-core.version&gt;</span>1.6.0<span class=nt>&lt;/assertj-core.version&gt;</span>
-    <span class=nt>&lt;assertj-assertions-generator-maven-plugin.version&gt;</span>1.2.0<span class=nt>&lt;/assertj-assertions-generator-maven-plugin.version&gt;</span>
-<span class=nt>&lt;/properties&gt;</span>
-
-<span class=nt>&lt;dependencyManagement&gt;</span>
-    <span class=nt>&lt;dependency&gt;</span>
-        <span class=nt>&lt;groupId&gt;</span>org.assertj<span class=nt>&lt;/groupId&gt;</span>
-        <span class=nt>&lt;artifactId&gt;</span>assertj-core<span class=nt>&lt;/artifactId&gt;</span>
-        <span class=nt>&lt;version&gt;</span>${assertj-core.version}<span class=nt>&lt;/version&gt;</span>
-        <span class=nt>&lt;scope&gt;</span>test<span class=nt>&lt;/scope&gt;</span>
-    <span class=nt>&lt;/dependency&gt;</span>
-<span class=nt>&lt;/dependencyManagement&gt;</span>
-
-<span class=nt>&lt;pluginManagement&gt;</span>
-    <span class=nt>&lt;plugin&gt;</span>
-        <span class=nt>&lt;groupId&gt;</span>org.assertj<span class=nt>&lt;/groupId&gt;</span>
-        <span class=nt>&lt;artifactId&gt;</span>assertj-assertions-generator-maven-plugin<span class=nt>&lt;/artifactId&gt;</span>
-        <span class=nt>&lt;version&gt;</span>${assertj-assertions-generator-maven-plugin.version}<span class=nt>&lt;/version&gt;</span>
-        <span class=nt>&lt;executions&gt;</span>
-            <span class=nt>&lt;execution&gt;</span>
-                <span class=nt>&lt;id&gt;</span>generate-assertions<span class=nt>&lt;/id&gt;</span>
-                <span class=nt>&lt;phase&gt;</span>generate-test-sources<span class=nt>&lt;/phase&gt;</span>
-                <span class=nt>&lt;goals&gt;</span>
-                    <span class=nt>&lt;goal&gt;</span>generate-assertions<span class=nt>&lt;/goal&gt;</span>
-                <span class=nt>&lt;/goals&gt;</span>
-            <span class=nt>&lt;/execution&gt;</span>
-        <span class=nt>&lt;/executions&gt;</span>
-    <span class=nt>&lt;/plugin&gt;</span>
-
-<span class=nt>&lt;/pluginManagement&gt;</span>
-</code></pre></div><ol start=2>
-<li>Update pom.xml in child module</li>
-</ol>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=nt>&lt;dependencies&gt;</span>
-    <span class=nt>&lt;dependency&gt;</span>
-        <span class=nt>&lt;groupId&gt;</span>org.assertj<span class=nt>&lt;/groupId&gt;</span>
-        <span class=nt>&lt;artifactId&gt;</span>assertj-core<span class=nt>&lt;/artifactId&gt;</span>
-    <span class=nt>&lt;/dependency&gt;</span>
-<span class=nt>&lt;/dependencies&gt;</span>
-<span class=nt>&lt;build&gt;</span>
-    <span class=nt>&lt;plugins&gt;</span>
-        <span class=nt>&lt;plugin&gt;</span>
-            <span class=nt>&lt;groupId&gt;</span>org.assertj<span class=nt>&lt;/groupId&gt;</span>
-            <span class=nt>&lt;artifactId&gt;</span>assertj-assertions-generator-maven-plugin<span class=nt>&lt;/artifactId&gt;</span>
-            <span class=nt>&lt;configuration&gt;</span>
-                <span class=c>&lt;!-- you can define collection packages: --&gt;</span>
-                <span class=nt>&lt;packages&gt;</span>
-                    <span class=nt>&lt;param&gt;</span>io.github.uthark.blog.assertj<span class=nt>&lt;/param&gt;</span>
-                <span class=nt>&lt;/packages&gt;</span>
-
-                <span class=c>&lt;!-- Or specify classes one by one. --&gt;</span>
-                <span class=nt>&lt;classes&gt;</span>
-                    <span class=nt>&lt;param&gt;</span>io.github.uthark.blog.assertj.User<span class=nt>&lt;/param&gt;</span>
-                <span class=nt>&lt;/classes&gt;</span>
-            <span class=nt>&lt;/configuration&gt;</span>
-        <span class=nt>&lt;/plugin&gt;</span>
-    <span class=nt>&lt;/plugins&gt;</span>
-<span class=nt>&lt;/build&gt;</span>
-</code></pre></div><p>After this changes it is possible to generate assertions for the classes you want test:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh>mvn assertj:generate-assertions
-</code></pre></div><p>By default, assertj will generate assertion classes in <code>target/generated-test-sources/assertj-assertions/</code>, it is possible to override this behaviour by passing configuration element <code>targetDir</code> to plugin.</p>
-<p>Additional documentation for Maven plugin can be <a href=http://joel-costigliola.github.io/assertj/assertj-assertions-generator-maven-plugin.html>found here</a></p>
-<p>Happy hacking!</p>
-</div>
-<footer>
-<div class=social>
-<ul>
-<li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a>
-</li>
-<li class=sidebar-nav-item> <a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a>
-</li>
-<li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li>
-</ul>
-</div>
-<p>&copy;&nbsp;2009&nbsp;—&nbsp;2021 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a>
-</p>
-</footer>
-<script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(b,c){var d=b.createElement(c),a=b.getElementsByTagName(c)[0];a.async='async',d.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js',a.parentNode.insertBefore(d,a)})(document,'script')</script>
-</body>
-</html>
-</body>
-</html>
+<!doctype html><html><head><meta charset=utf-8><title>Using AssertJ &ndash; Oleg Atamanenko</title><meta name=HandheldFriendly content="True"><meta name=MobileOptimized content="320"><meta name=theme-color content="#333" media="(prefers-color-scheme: dark)"><meta name=theme-color content="#777" media="(prefers-color-scheme: light)"><meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=1"><link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&family=Prata&display=swap" type=text/css><link rel=stylesheet href=https://uthark.github.io/css/theme.72254bdf9ec9fc2d8b013dd5c21997b2ab476af1a37ded5995aae71c4a63d57d.css><link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css><link href=https://uthark.github.io/favicon.png rel=icon></head><body><header class=site><h1><a href=https://uthark.github.io/>Oleg Atamanenko</a></h1><h2>thoughts about programming</h2></header><nav><ul class=main-navigation><li><a href=https://uthark.github.io/ title=Posts>Posts</a></li><li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li><li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li><li><a href=https://uthark.github.io/about/ title="About me">About me</a></li></ul></nav><div class=article><h1>Using AssertJ</h1><p><a href=https://github.com/joel-costigliola/assertj-core>AssertJ</a> is a library which provides fluent strongly-typed assertions to use in unit tests.</p><p>Example of assertions written with <code>AssertJ</code>:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kn>import</span> <span class=nn>io.github.uthark.blog.assertj.Assertions.assertThat</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// ... within @Test
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=n>User</span> <span class=n>result</span> <span class=o>=</span> <span class=n>userDao</span><span class=o>.</span><span class=na>findByLogin</span><span class=o>(</span><span class=s>&#34;username&#34;</span><span class=o>);</span>
+</span></span><span class=line><span class=cl><span class=n>assertThat</span><span class=o>(</span><span class=n>result</span><span class=o>).</span>
+</span></span><span class=line><span class=cl>    <span class=n>isNotNull</span><span class=o>().</span>
+</span></span><span class=line><span class=cl>    <span class=n>isActive</span><span class=o>().</span>
+</span></span><span class=line><span class=cl>    <span class=n>hasLogin</span><span class=o>(</span><span class=s>&#34;username&#34;</span><span class=o>);</span>
+</span></span></code></pre></div><p>As you can see assertions look much more readable.
+The integration of assertj into Maven project is very easy:</p><ol><li>Update pom.xml in parent module</li></ol><div class=highlight><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=nt>&lt;properties&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&lt;assertj-core.version&gt;</span>1.6.0<span class=nt>&lt;/assertj-core.version&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&lt;assertj-assertions-generator-maven-plugin.version&gt;</span>1.2.0<span class=nt>&lt;/assertj-assertions-generator-maven-plugin.version&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;/properties&gt;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nt>&lt;dependencyManagement&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&lt;dependency&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&lt;groupId&gt;</span>org.assertj<span class=nt>&lt;/groupId&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&lt;artifactId&gt;</span>assertj-core<span class=nt>&lt;/artifactId&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&lt;version&gt;</span>${assertj-core.version}<span class=nt>&lt;/version&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&lt;scope&gt;</span>test<span class=nt>&lt;/scope&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&lt;/dependency&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;/dependencyManagement&gt;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nt>&lt;pluginManagement&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&lt;plugin&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&lt;groupId&gt;</span>org.assertj<span class=nt>&lt;/groupId&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&lt;artifactId&gt;</span>assertj-assertions-generator-maven-plugin<span class=nt>&lt;/artifactId&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&lt;version&gt;</span>${assertj-assertions-generator-maven-plugin.version}<span class=nt>&lt;/version&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&lt;executions&gt;</span>
+</span></span><span class=line><span class=cl>            <span class=nt>&lt;execution&gt;</span>
+</span></span><span class=line><span class=cl>                <span class=nt>&lt;id&gt;</span>generate-assertions<span class=nt>&lt;/id&gt;</span>
+</span></span><span class=line><span class=cl>                <span class=nt>&lt;phase&gt;</span>generate-test-sources<span class=nt>&lt;/phase&gt;</span>
+</span></span><span class=line><span class=cl>                <span class=nt>&lt;goals&gt;</span>
+</span></span><span class=line><span class=cl>                    <span class=nt>&lt;goal&gt;</span>generate-assertions<span class=nt>&lt;/goal&gt;</span>
+</span></span><span class=line><span class=cl>                <span class=nt>&lt;/goals&gt;</span>
+</span></span><span class=line><span class=cl>            <span class=nt>&lt;/execution&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&lt;/executions&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&lt;/plugin&gt;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nt>&lt;/pluginManagement&gt;</span>
+</span></span></code></pre></div><ol start=2><li>Update pom.xml in child module</li></ol><div class=highlight><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=nt>&lt;dependencies&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&lt;dependency&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&lt;groupId&gt;</span>org.assertj<span class=nt>&lt;/groupId&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&lt;artifactId&gt;</span>assertj-core<span class=nt>&lt;/artifactId&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&lt;/dependency&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;/dependencies&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;build&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&lt;plugins&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&lt;plugin&gt;</span>
+</span></span><span class=line><span class=cl>            <span class=nt>&lt;groupId&gt;</span>org.assertj<span class=nt>&lt;/groupId&gt;</span>
+</span></span><span class=line><span class=cl>            <span class=nt>&lt;artifactId&gt;</span>assertj-assertions-generator-maven-plugin<span class=nt>&lt;/artifactId&gt;</span>
+</span></span><span class=line><span class=cl>            <span class=nt>&lt;configuration&gt;</span>
+</span></span><span class=line><span class=cl>                <span class=c>&lt;!-- you can define collection packages: --&gt;</span>
+</span></span><span class=line><span class=cl>                <span class=nt>&lt;packages&gt;</span>
+</span></span><span class=line><span class=cl>                    <span class=nt>&lt;param&gt;</span>io.github.uthark.blog.assertj<span class=nt>&lt;/param&gt;</span>
+</span></span><span class=line><span class=cl>                <span class=nt>&lt;/packages&gt;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>                <span class=c>&lt;!-- Or specify classes one by one. --&gt;</span>
+</span></span><span class=line><span class=cl>                <span class=nt>&lt;classes&gt;</span>
+</span></span><span class=line><span class=cl>                    <span class=nt>&lt;param&gt;</span>io.github.uthark.blog.assertj.User<span class=nt>&lt;/param&gt;</span>
+</span></span><span class=line><span class=cl>                <span class=nt>&lt;/classes&gt;</span>
+</span></span><span class=line><span class=cl>            <span class=nt>&lt;/configuration&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&lt;/plugin&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&lt;/plugins&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;/build&gt;</span>
+</span></span></code></pre></div><p>After this changes it is possible to generate assertions for the classes you want test:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>mvn assertj:generate-assertions
+</span></span></code></pre></div><p>By default, assertj will generate assertion classes in <code>target/generated-test-sources/assertj-assertions/</code>, it is possible to override this behaviour by passing configuration element <code>targetDir</code> to plugin.</p><p>Additional documentation for Maven plugin can be <a href=http://joel-costigliola.github.io/assertj/assertj-assertions-generator-maven-plugin.html>found here</a></p><p>Happy hacking!</p></div><footer><div class=social><ul><li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a></li><li class=sidebar-nav-item><a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a></li><li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li></ul></div><p>&copy;&nbsp;2009&nbsp;—&nbsp;2022 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a></p></footer><script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(t,n){var s=t.createElement(n),e=t.getElementsByTagName(n)[0];e.async='async',s.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js',e.parentNode.insertBefore(s,e)})(document,'script')</script></body></html></body></html>

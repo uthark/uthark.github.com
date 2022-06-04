@@ -1,105 +1,36 @@
-<!doctype html><html>
-<head>
-<meta charset=utf-8>
-<title>
-Limiting threads count for GreenRobot EventBus &ndash; Oleg Atamanenko
-</title>
-<meta name=HandheldFriendly content="True">
-<meta name=MobileOptimized content="320">
-<meta name=theme-color content="#333" media="(prefers-color-scheme: dark)">
-<meta name=theme-color content="#777" media="(prefers-color-scheme: light)">
-<meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=1">
-<link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&family=Prata&display=swap" type=text/css>
-<link rel=stylesheet href=https://uthark.github.io/css/theme.72254bdf9ec9fc2d8b013dd5c21997b2ab476af1a37ded5995aae71c4a63d57d.css>
-<link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css>
-<link href=https://uthark.github.io/favicon.png rel=icon>
-</head>
-<body>
-<header class=site>
-<h1><a href=https://uthark.github.io/>Oleg Atamanenko</a></h1>
-<h2>thoughts about programming</h2>
-</header>
-<nav>
-<ul class=main-navigation>
-<li><a href=https://uthark.github.io/ title=Posts>Posts</a></li>
-<li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li>
-<li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li>
-<li><a href=https://uthark.github.io/about/ title="About me">About me</a></li>
-</ul>
-</nav>
-<div class=article>
-<h1>Limiting threads count for GreenRobot EventBus</h1>
-<p>In one of my projects I used <a href=https://github.com/greenrobot/EventBus>EventBus</a> library. The library is pretty cool and I would recommend everybody to use it.</p>
-<p>But I found one small issue with this library - in case you send too many events very fast (i.e. more than 1000 per second) you may face issue with application crash due to inability to create new thread.</p>
-<p>The problem is lying in the used <code>ExecutorService</code>:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java>
-<span class=kn>package</span> <span class=nn>de.greenrobot.event</span><span class=o>;</span>
-<span class=c1>// imports
-</span><span class=c1></span><span class=kd>public</span> <span class=kd>final</span> <span class=kd>class</span> <span class=nc>EventBus</span> <span class=o>{</span>
-    <span class=kd>static</span> <span class=n>ExecutorService</span> <span class=n>executorService</span> <span class=o>=</span> <span class=n>Executors</span><span class=o>.</span><span class=na>newCachedThreadPool</span><span class=o>();</span>
-
-    <span class=c1>// class content skipped 
-</span><span class=c1></span><span class=o>}</span>
-
-</code></pre></div><p>As you can see, it calls <code>newCachedThreadPool</code> method to create thread pool.</p>
-<p>From <a href=http://developer.android.com/reference/java/util/concurrent/Executors.html#newCachedThreadPool()>javadoc</a> for this method:</p>
-<blockquote>
-<p>Creates a thread pool that creates new threads as needed, but will reuse
-previously constructed threads when they are available.</p>
-</blockquote>
-<p>This is where we hit the wall - if we send too many requests and each request is slow (i.e. saving into database or network request) then we will try to create too many threads and app will crash.</p>
-<p>Thankfully, <code>executorService</code> is <code>static</code> but not <code>final</code>. And this will allow us to solve the issue easily.</p>
-<p>Let&rsquo;s create our configurer class in package <code>de.greenrobot.event</code> so we will be able to access <code>executorService</code> property which is package-visible and override it with different thread pool:</p>
-<p>EventBusExecutorServiceConfigurer:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=kn>package</span> <span class=nn>de.greenrobot.event</span><span class=o>;</span>
-
-<span class=kn>import</span> <span class=nn>java.util.concurrent.Executors</span><span class=o>;</span>
-
-<span class=kd>public</span> <span class=kd>class</span> <span class=nc>EventBusExecutorServiceConfigurer</span> <span class=o>{</span>
-
-    <span class=kd>public</span> <span class=kt>void</span> <span class=nf>configureEventBus</span><span class=o>()</span> <span class=o>{</span>
-        <span class=n>ExecutorService</span> <span class=n>executorServiceToUse</span><span class=o>;</span>
-        <span class=k>if</span> <span class=o>(</span><span class=n>Build</span><span class=o>.</span><span class=na>VERSION</span><span class=o>.</span><span class=na>SDK_INT</span> <span class=o>&gt;=</span> <span class=n>Build</span><span class=o>.</span><span class=na>VERSION_CODES</span><span class=o>.</span><span class=na>HONEYCOMB</span><span class=o>)</span> <span class=o>{</span>
-            <span class=n>executorServiceToUse</span> <span class=o>=</span> <span class=o>(</span><span class=n>ExecutorService</span><span class=o>)</span> <span class=n>AsyncTask</span><span class=o>.</span><span class=na>THREAD_POOL_EXECUTOR</span><span class=o>;</span>
-        <span class=o>}</span> <span class=k>else</span> <span class=o>{</span>
-            <span class=n>executorServiceToUse</span> <span class=o>=</span> <span class=n>Executors</span><span class=o>.</span><span class=na>newFixedThreadPool</span><span class=o>(</span>
-                <span class=n>Runtime</span><span class=o>.</span><span class=na>getRuntime</span><span class=o>().</span><span class=na>availableProcessors</span><span class=o>());</span>
-        <span class=o>}</span>
-        <span class=n>EventBus</span><span class=o>.</span><span class=na>executorService</span> <span class=o>=</span> <span class=n>executorServiceToUse</span><span class=o>;</span>
-    <span class=o>}</span>
-<span class=o>}</span>
-</code></pre></div><p>Android 3.0+ has special <a href=http://developer.android.com/reference/android/os/AsyncTask.html#THREAD_POOL_EXECUTOR>THREAD_POOL_EXECUTOR</a> which is supposed to be used by asynchronous tasks, so we use it on newer devices. On older, pre-Honeycomb devices we create our own thread pool.</p>
-<p>And then in Android application we configure <code>executorService</code>:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=kd>public</span> <span class=kd>class</span> <span class=nc>CustomApplication</span> <span class=kd>extends</span> <span class=n>Application</span> <span class=o>{</span>
-    <span class=nd>@Override</span>
-    <span class=kd>public</span> <span class=kt>void</span> <span class=nf>onCreate</span><span class=o>()</span> <span class=o>{</span>
-        <span class=kd>super</span><span class=o>.</span><span class=na>onCreate</span><span class=o>();</span>
-        <span class=k>new</span> <span class=n>EventBusExecutorServiceConfigurer</span><span class=o>().</span><span class=na>configureEventBus</span><span class=o>();</span>
-
-        <span class=c1>// other initialization
-</span><span class=c1></span>    <span class=o>}</span>
-<span class=o>}</span>
-
-</code></pre></div>
-</div>
-<footer>
-<div class=social>
-<ul>
-<li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a>
-</li>
-<li class=sidebar-nav-item> <a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a>
-</li>
-<li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li>
-</ul>
-</div>
-<p>&copy;&nbsp;2009&nbsp;—&nbsp;2021 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a>
-</p>
-</footer>
-<script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(b,c){var d=b.createElement(c),a=b.getElementsByTagName(c)[0];a.async='async',d.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js',a.parentNode.insertBefore(d,a)})(document,'script')</script>
-</body>
-</html>
-</body>
-</html>
+<!doctype html><html><head><meta charset=utf-8><title>Limiting threads count for GreenRobot EventBus &ndash; Oleg Atamanenko</title><meta name=HandheldFriendly content="True"><meta name=MobileOptimized content="320"><meta name=theme-color content="#333" media="(prefers-color-scheme: dark)"><meta name=theme-color content="#777" media="(prefers-color-scheme: light)"><meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=1"><link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&family=Prata&display=swap" type=text/css><link rel=stylesheet href=https://uthark.github.io/css/theme.72254bdf9ec9fc2d8b013dd5c21997b2ab476af1a37ded5995aae71c4a63d57d.css><link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css><link href=https://uthark.github.io/favicon.png rel=icon></head><body><header class=site><h1><a href=https://uthark.github.io/>Oleg Atamanenko</a></h1><h2>thoughts about programming</h2></header><nav><ul class=main-navigation><li><a href=https://uthark.github.io/ title=Posts>Posts</a></li><li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li><li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li><li><a href=https://uthark.github.io/about/ title="About me">About me</a></li></ul></nav><div class=article><h1>Limiting threads count for GreenRobot EventBus</h1><p>In one of my projects I used <a href=https://github.com/greenrobot/EventBus>EventBus</a> library. The library is pretty cool and I would recommend everybody to use it.</p><p>But I found one small issue with this library - in case you send too many events very fast (i.e. more than 1000 per second) you may face issue with application crash due to inability to create new thread.</p><p>The problem is lying in the used <code>ExecutorService</code>:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>package</span> <span class=nn>de.greenrobot.event</span><span class=o>;</span>
+</span></span><span class=line><span class=cl><span class=c1>// imports
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>public</span> <span class=kd>final</span> <span class=kd>class</span> <span class=nc>EventBus</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=kd>static</span> <span class=n>ExecutorService</span> <span class=n>executorService</span> <span class=o>=</span> <span class=n>Executors</span><span class=o>.</span><span class=na>newCachedThreadPool</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// class content skipped 
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=o>}</span>
+</span></span></code></pre></div><p>As you can see, it calls <code>newCachedThreadPool</code> method to create thread pool.</p><p>From <a href=http://developer.android.com/reference/java/util/concurrent/Executors.html#newCachedThreadPool()>javadoc</a> for this method:</p><blockquote><p>Creates a thread pool that creates new threads as needed, but will reuse
+previously constructed threads when they are available.</p></blockquote><p>This is where we hit the wall - if we send too many requests and each request is slow (i.e. saving into database or network request) then we will try to create too many threads and app will crash.</p><p>Thankfully, <code>executorService</code> is <code>static</code> but not <code>final</code>. And this will allow us to solve the issue easily.</p><p>Let&rsquo;s create our configurer class in package <code>de.greenrobot.event</code> so we will be able to access <code>executorService</code> property which is package-visible and override it with different thread pool:</p><p>EventBusExecutorServiceConfigurer:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kn>package</span> <span class=nn>de.greenrobot.event</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>java.util.concurrent.Executors</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=kd>class</span> <span class=nc>EventBusExecutorServiceConfigurer</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kt>void</span> <span class=nf>configureEventBus</span><span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>ExecutorService</span> <span class=n>executorServiceToUse</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=o>(</span><span class=n>Build</span><span class=o>.</span><span class=na>VERSION</span><span class=o>.</span><span class=na>SDK_INT</span> <span class=o>&gt;=</span> <span class=n>Build</span><span class=o>.</span><span class=na>VERSION_CODES</span><span class=o>.</span><span class=na>HONEYCOMB</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>executorServiceToUse</span> <span class=o>=</span> <span class=o>(</span><span class=n>ExecutorService</span><span class=o>)</span> <span class=n>AsyncTask</span><span class=o>.</span><span class=na>THREAD_POOL_EXECUTOR</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span> <span class=k>else</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>executorServiceToUse</span> <span class=o>=</span> <span class=n>Executors</span><span class=o>.</span><span class=na>newFixedThreadPool</span><span class=o>(</span>
+</span></span><span class=line><span class=cl>                <span class=n>Runtime</span><span class=o>.</span><span class=na>getRuntime</span><span class=o>().</span><span class=na>availableProcessors</span><span class=o>());</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>        <span class=n>EventBus</span><span class=o>.</span><span class=na>executorService</span> <span class=o>=</span> <span class=n>executorServiceToUse</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></div><p>Android 3.0+ has special <a href=http://developer.android.com/reference/android/os/AsyncTask.html#THREAD_POOL_EXECUTOR>THREAD_POOL_EXECUTOR</a> which is supposed to be used by asynchronous tasks, so we use it on newer devices. On older, pre-Honeycomb devices we create our own thread pool.</p><p>And then in Android application we configure <code>executorService</code>:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span> <span class=kd>class</span> <span class=nc>CustomApplication</span> <span class=kd>extends</span> <span class=n>Application</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nd>@Override</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kt>void</span> <span class=nf>onCreate</span><span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=kd>super</span><span class=o>.</span><span class=na>onCreate</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>        <span class=k>new</span> <span class=n>EventBusExecutorServiceConfigurer</span><span class=o>().</span><span class=na>configureEventBus</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=c1>// other initialization
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></div></div><footer><div class=social><ul><li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a></li><li class=sidebar-nav-item><a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a></li><li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li></ul></div><p>&copy;&nbsp;2009&nbsp;—&nbsp;2022 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a></p></footer><script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(t,n){var s=t.createElement(n),e=t.getElementsByTagName(n)[0];e.async='async',s.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js',e.parentNode.insertBefore(s,e)})(document,'script')</script></body></html></body></html>

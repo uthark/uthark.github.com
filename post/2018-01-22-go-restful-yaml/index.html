@@ -1,173 +1,110 @@
-<!doctype html><html>
-<head>
-<meta charset=utf-8>
-<title>
-How to add YAML support to go-restful &ndash; Oleg Atamanenko
-</title>
-<meta name=HandheldFriendly content="True">
-<meta name=MobileOptimized content="320">
-<meta name=theme-color content="#333" media="(prefers-color-scheme: dark)">
-<meta name=theme-color content="#777" media="(prefers-color-scheme: light)">
-<meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=1">
-<link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&family=Prata&display=swap" type=text/css>
-<link rel=stylesheet href=https://uthark.github.io/css/theme.72254bdf9ec9fc2d8b013dd5c21997b2ab476af1a37ded5995aae71c4a63d57d.css>
-<link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css>
-<link href=https://uthark.github.io/favicon.png rel=icon>
-</head>
-<body>
-<header class=site>
-<h1><a href=https://uthark.github.io/>Oleg Atamanenko</a></h1>
-<h2>thoughts about programming</h2>
-</header>
-<nav>
-<ul class=main-navigation>
-<li><a href=https://uthark.github.io/ title=Posts>Posts</a></li>
-<li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li>
-<li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li>
-<li><a href=https://uthark.github.io/about/ title="About me">About me</a></li>
-</ul>
-</nav>
-<div class=article>
-<h1>How to add YAML support to go-restful</h1>
-<p><a href=https://github.com/emicklei/go-restful>go-restful</a> is a <a href=https://golang.org>go</a> package used for building REST-style web services.
-It is very powerful, but it supports JSON and XML out of the box only. Fortunately, go-restful allows to register custom serialization schemes.</p>
-<p>To do so, it provides a handy interface <a href=https://godoc.org/github.com/emicklei/go-restful#EntityReaderWriter>EntityReaderWriter</a>, which contains only two methods:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=c1>// EntityReaderWriter can read and write values using an encoding such as JSON,XML.
-</span><span class=c1></span><span class=kd>type</span> <span class=nx>EntityReaderWriter</span> <span class=kd>interface</span> <span class=p>{</span>
-    <span class=c1>// Read a serialized version of the value from the request.
-</span><span class=c1></span>    <span class=c1>// The Request may have a decompressing reader. Depends on Content-Encoding.
-</span><span class=c1></span>    <span class=nf>Read</span><span class=p>(</span><span class=nx>req</span> <span class=o>*</span><span class=nx>Request</span><span class=p>,</span> <span class=nx>v</span> <span class=kd>interface</span><span class=p>{})</span> <span class=kt>error</span>
-
-    <span class=c1>// Write a serialized version of the value on the response.
-</span><span class=c1></span>    <span class=c1>// The Response may have a compressing writer. Depends on Accept-Encoding.
-</span><span class=c1></span>    <span class=c1>// status should be a valid Http Status code
-</span><span class=c1></span>    <span class=nf>Write</span><span class=p>(</span><span class=nx>resp</span> <span class=o>*</span><span class=nx>Response</span><span class=p>,</span> <span class=nx>status</span> <span class=kt>int</span><span class=p>,</span> <span class=nx>v</span> <span class=kd>interface</span><span class=p>{})</span> <span class=kt>error</span>
-<span class=p>}</span>
-</code></pre></div><p>What we need to do is to implement this interface and register it in go-restful.</p>
-<p>Let’s implement the interface:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=kn>package</span> <span class=nx>restyaml</span>
-
-<span class=kn>import</span> <span class=p>(</span>
-	<span class=s>&#34;io&#34;</span>
-	<span class=s>&#34;io/ioutil&#34;</span>
-
-	<span class=s>&#34;github.com/emicklei/go-restful&#34;</span>
-	<span class=s>&#34;gopkg.in/yaml.v2&#34;</span>
-<span class=p>)</span>
-
-<span class=c1>// MediaTypeApplicationYaml is a Mime Type for YAML.
-</span><span class=c1></span><span class=kd>const</span> <span class=nx>MediaTypeApplicationYaml</span> <span class=p>=</span> <span class=s>&#34;application/x-yaml&#34;</span>
-
-<span class=c1>// YamlReaderWriter implements EntityReaderWriter for YAML objects to be used by restful.
-</span><span class=c1></span><span class=kd>type</span> <span class=nx>YamlReaderWriter</span> <span class=kd>struct</span> <span class=p>{</span>
-	<span class=nx>contentType</span> <span class=kt>string</span>
-<span class=p>}</span>
-
-<span class=c1>// NewYamlReaderWriter creates new instance.
-</span><span class=c1></span><span class=kd>func</span> <span class=nf>NewYamlReaderWriter</span><span class=p>(</span><span class=nx>contentType</span> <span class=kt>string</span><span class=p>)</span> <span class=nx>restful</span><span class=p>.</span><span class=nx>EntityReaderWriter</span> <span class=p>{</span>
-	<span class=k>return</span> <span class=nx>YamlReaderWriter</span><span class=p>{</span><span class=nx>contentType</span><span class=p>:</span> <span class=nx>contentType</span><span class=p>}</span>
-<span class=p>}</span>
-
-<span class=kd>func</span> <span class=nf>closeWithErrHandle</span><span class=p>(</span><span class=nx>c</span> <span class=nx>io</span><span class=p>.</span><span class=nx>Closer</span><span class=p>)</span> <span class=p>{</span>
-	<span class=nx>err</span> <span class=o>:=</span> <span class=nx>c</span><span class=p>.</span><span class=nf>Close</span><span class=p>()</span>
-	<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
-		<span class=nx>logger</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;Unable to close resource: &#34;</span><span class=p>,</span> <span class=nx>err</span><span class=p>)</span>
-	<span class=p>}</span>
-<span class=p>}</span>
-
-<span class=c1>// Read a serialized version of the value from the request.
-</span><span class=c1>// The Request may have a decompressing reader. Depends on Content-Encoding.
-</span><span class=c1></span><span class=kd>func</span> <span class=p>(</span><span class=nx>e</span> <span class=nx>YamlReaderWriter</span><span class=p>)</span> <span class=nf>Read</span><span class=p>(</span><span class=nx>req</span> <span class=o>*</span><span class=nx>restful</span><span class=p>.</span><span class=nx>Request</span><span class=p>,</span> <span class=nx>v</span> <span class=kd>interface</span><span class=p>{})</span> <span class=kt>error</span> <span class=p>{</span>
-	<span class=k>defer</span> <span class=nf>closeWithErrHandle</span><span class=p>(</span><span class=nx>req</span><span class=p>.</span><span class=nx>Request</span><span class=p>.</span><span class=nx>Body</span><span class=p>)</span>
-	<span class=nx>bytes</span><span class=p>,</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>ioutil</span><span class=p>.</span><span class=nf>ReadAll</span><span class=p>(</span><span class=nx>req</span><span class=p>.</span><span class=nx>Request</span><span class=p>.</span><span class=nx>Body</span><span class=p>)</span>
-	<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
-		<span class=k>return</span> <span class=nx>err</span>
-	<span class=p>}</span>
-	<span class=nx>err</span> <span class=p>=</span> <span class=nx>yaml</span><span class=p>.</span><span class=nf>Unmarshal</span><span class=p>(</span><span class=nx>bytes</span><span class=p>,</span> <span class=nx>v</span><span class=p>)</span>
-	<span class=k>return</span> <span class=nx>err</span>
-<span class=p>}</span>
-
-<span class=c1>// Write a serialized version of the value on the response.
-</span><span class=c1>// The Response may have a compressing writer. Depends on Accept-Encoding.
-</span><span class=c1>// status should be a valid Http Status code
-</span><span class=c1></span><span class=kd>func</span> <span class=p>(</span><span class=nx>e</span> <span class=nx>YamlReaderWriter</span><span class=p>)</span> <span class=nf>Write</span><span class=p>(</span><span class=nx>resp</span> <span class=o>*</span><span class=nx>restful</span><span class=p>.</span><span class=nx>Response</span><span class=p>,</span> <span class=nx>status</span> <span class=kt>int</span><span class=p>,</span> <span class=nx>v</span> <span class=kd>interface</span><span class=p>{})</span> <span class=kt>error</span> <span class=p>{</span>
-	<span class=nx>bytes</span><span class=p>,</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>yaml</span><span class=p>.</span><span class=nf>Marshal</span><span class=p>(</span><span class=nx>v</span><span class=p>)</span>
-	<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
-		<span class=k>return</span> <span class=nx>err</span>
-	<span class=p>}</span>
-
-	<span class=nx>resp</span><span class=p>.</span><span class=nf>WriteHeader</span><span class=p>(</span><span class=nx>status</span><span class=p>)</span>
-	<span class=nx>_</span><span class=p>,</span> <span class=nx>err</span> <span class=p>=</span> <span class=nx>resp</span><span class=p>.</span><span class=nf>Write</span><span class=p>(</span><span class=nx>bytes</span><span class=p>)</span>
-	<span class=k>return</span> <span class=nx>err</span>
-<span class=p>}</span>
-
-</code></pre></div><p>For implementing actual reading/writing of YAML I use library called <a href=https://github.com/go-yaml/yaml>go-yaml</a>. The implementation is straightforward, just call <a href=https://godoc.org/gopkg.in/yaml.v2#Marshal><code>Marshal</code></a> and <a href=https://godoc.org/gopkg.in/yaml.v2#Unmarshal><code>Unmarshal</code></a> methods and do an error processing.</p>
-<p>The final step is to register newly written <code>YamlReaderWriter</code> in go-restful container during application startup.</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go>
-<span class=kn>package</span> <span class=nx>rest</span>
-
-<span class=kn>import</span> <span class=p>(</span>
-	<span class=s>&#34;context&#34;</span>
-	<span class=s>&#34;fmt&#34;</span>
-	<span class=s>&#34;net/http&#34;</span>
-	<span class=s>&#34;os&#34;</span>
-	<span class=s>&#34;os/signal&#34;</span>
-	<span class=s>&#34;strconv&#34;</span>
-	<span class=s>&#34;syscall&#34;</span>
-	<span class=s>&#34;time&#34;</span>
-
-	<span class=s>&#34;bitbucket.org/uthark/yttrium/internal/config&#34;</span>
-	<span class=s>&#34;bitbucket.org/uthark/yttrium/internal/mime&#34;</span>
-	<span class=s>&#34;github.com/emicklei/go-restful&#34;</span>
-<span class=p>)</span>
-
-<span class=c1>// Init initializes server.
-</span><span class=c1></span><span class=kd>func</span> <span class=nf>init</span><span class=p>()</span> <span class=p>{</span>
-
-	<span class=nx>restful</span><span class=p>.</span><span class=nf>SetLogger</span><span class=p>(</span><span class=nx>logger</span><span class=p>)</span>
-	<span class=nx>restful</span><span class=p>.</span><span class=nf>DefaultResponseContentType</span><span class=p>(</span><span class=nx>restful</span><span class=p>.</span><span class=nx>MIME_JSON</span><span class=p>)</span>
-	<span class=nx>restful</span><span class=p>.</span><span class=nf>RegisterEntityAccessor</span><span class=p>(</span><span class=nx>restyaml</span><span class=p>.</span><span class=nx>MediaTypeApplicationYaml</span><span class=p>,</span> <span class=nx>restyaml</span><span class=p>.</span><span class=nf>NewYamlReaderWriter</span><span class=p>(</span><span class=nx>restyaml</span><span class=p>.</span><span class=nx>MediaTypeApplicationYaml</span><span class=p>))</span>
-
-	<span class=c1>// register web-services in restful and start http…
-</span><span class=c1></span>	<span class=c1>// omitted for brevity
-</span><span class=c1></span><span class=p>}</span>
-
-</code></pre></div><p>Now, we can submit requests in YAML format to our API:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh>$ curl -H <span class=s2>&#34;Accept: application/x-yaml&#34;</span> http://localhost:8080/task
-- id: dd453ac9-6e8d-4f37-88a9-4e6d5b653e8d
-  name: Another Task
-  dateAdded: 2018-01-20T20:05:09.378Z
-  dateCompleted: 0001-01-01T00:00:00Z
-</code></pre></div><p>If we don’t specify header, the output will be in JSON:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh>$ curl http://localhost:8080/task
-<span class=o>[</span>
-  <span class=o>{</span>
-   <span class=s2>&#34;id&#34;</span>: <span class=s2>&#34;dd453ac9-6e8d-4f37-88a9-4e6d5b653e8d&#34;</span>,
-   <span class=s2>&#34;name&#34;</span>: <span class=s2>&#34;Another Task&#34;</span>,
-   <span class=s2>&#34;dateAdded&#34;</span>: <span class=s2>&#34;2018-01-20T20:05:09.378Z&#34;</span>,
-   <span class=s2>&#34;dateCompleted&#34;</span>: <span class=s2>&#34;0001-01-01T00:00:00Z&#34;</span>
-  <span class=o>}</span>
- <span class=o>]</span>
-</code></pre></div>
-</div>
-<footer>
-<div class=social>
-<ul>
-<li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a>
-</li>
-<li class=sidebar-nav-item> <a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a>
-</li>
-<li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li>
-</ul>
-</div>
-<p>&copy;&nbsp;2009&nbsp;—&nbsp;2021 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a>
-</p>
-</footer>
-<script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(b,c){var d=b.createElement(c),a=b.getElementsByTagName(c)[0];a.async='async',d.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js',a.parentNode.insertBefore(d,a)})(document,'script')</script>
-</body>
-</html>
-</body>
-</html>
+<!doctype html><html><head><meta charset=utf-8><title>How to add YAML support to go-restful &ndash; Oleg Atamanenko</title><meta name=HandheldFriendly content="True"><meta name=MobileOptimized content="320"><meta name=theme-color content="#333" media="(prefers-color-scheme: dark)"><meta name=theme-color content="#777" media="(prefers-color-scheme: light)"><meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=1"><link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&family=Prata&display=swap" type=text/css><link rel=stylesheet href=https://uthark.github.io/css/theme.72254bdf9ec9fc2d8b013dd5c21997b2ab476af1a37ded5995aae71c4a63d57d.css><link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css><link href=https://uthark.github.io/favicon.png rel=icon></head><body><header class=site><h1><a href=https://uthark.github.io/>Oleg Atamanenko</a></h1><h2>thoughts about programming</h2></header><nav><ul class=main-navigation><li><a href=https://uthark.github.io/ title=Posts>Posts</a></li><li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li><li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li><li><a href=https://uthark.github.io/about/ title="About me">About me</a></li></ul></nav><div class=article><h1>How to add YAML support to go-restful</h1><p><a href=https://github.com/emicklei/go-restful>go-restful</a> is a <a href=https://golang.org>go</a> package used for building REST-style web services.
+It is very powerful, but it supports JSON and XML out of the box only. Fortunately, go-restful allows to register custom serialization schemes.</p><p>To do so, it provides a handy interface <a href=https://godoc.org/github.com/emicklei/go-restful#EntityReaderWriter>EntityReaderWriter</a>, which contains only two methods:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=c1>// EntityReaderWriter can read and write values using an encoding such as JSON,XML.
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>type</span> <span class=nx>EntityReaderWriter</span> <span class=kd>interface</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// Read a serialized version of the value from the request.
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// The Request may have a decompressing reader. Depends on Content-Encoding.
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nf>Read</span><span class=p>(</span><span class=nx>req</span> <span class=o>*</span><span class=nx>Request</span><span class=p>,</span> <span class=nx>v</span> <span class=kd>interface</span><span class=p>{})</span> <span class=kt>error</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// Write a serialized version of the value on the response.
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// The Response may have a compressing writer. Depends on Accept-Encoding.
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// status should be a valid Http Status code
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nf>Write</span><span class=p>(</span><span class=nx>resp</span> <span class=o>*</span><span class=nx>Response</span><span class=p>,</span> <span class=nx>status</span> <span class=kt>int</span><span class=p>,</span> <span class=nx>v</span> <span class=kd>interface</span><span class=p>{})</span> <span class=kt>error</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></div><p>What we need to do is to implement this interface and register it in go-restful.</p><p>Let’s implement the interface:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=kn>package</span> <span class=nx>restyaml</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;io&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;io/ioutil&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;github.com/emicklei/go-restful&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;gopkg.in/yaml.v2&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// MediaTypeApplicationYaml is a Mime Type for YAML.
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>const</span> <span class=nx>MediaTypeApplicationYaml</span> <span class=p>=</span> <span class=s>&#34;application/x-yaml&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// YamlReaderWriter implements EntityReaderWriter for YAML objects to be used by restful.
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>type</span> <span class=nx>YamlReaderWriter</span> <span class=kd>struct</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nx>contentType</span> <span class=kt>string</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// NewYamlReaderWriter creates new instance.
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>func</span> <span class=nf>NewYamlReaderWriter</span><span class=p>(</span><span class=nx>contentType</span> <span class=kt>string</span><span class=p>)</span> <span class=nx>restful</span><span class=p>.</span><span class=nx>EntityReaderWriter</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=k>return</span> <span class=nx>YamlReaderWriter</span><span class=p>{</span><span class=nx>contentType</span><span class=p>:</span> <span class=nx>contentType</span><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>func</span> <span class=nf>closeWithErrHandle</span><span class=p>(</span><span class=nx>c</span> <span class=nx>io</span><span class=p>.</span><span class=nx>Closer</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nx>err</span> <span class=o>:=</span> <span class=nx>c</span><span class=p>.</span><span class=nf>Close</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nx>logger</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;Unable to close resource: &#34;</span><span class=p>,</span> <span class=nx>err</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// Read a serialized version of the value from the request.
+</span></span></span><span class=line><span class=cl><span class=c1>// The Request may have a decompressing reader. Depends on Content-Encoding.
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>func</span> <span class=p>(</span><span class=nx>e</span> <span class=nx>YamlReaderWriter</span><span class=p>)</span> <span class=nf>Read</span><span class=p>(</span><span class=nx>req</span> <span class=o>*</span><span class=nx>restful</span><span class=p>.</span><span class=nx>Request</span><span class=p>,</span> <span class=nx>v</span> <span class=kd>interface</span><span class=p>{})</span> <span class=kt>error</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=k>defer</span> <span class=nf>closeWithErrHandle</span><span class=p>(</span><span class=nx>req</span><span class=p>.</span><span class=nx>Request</span><span class=p>.</span><span class=nx>Body</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=nx>bytes</span><span class=p>,</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>ioutil</span><span class=p>.</span><span class=nf>ReadAll</span><span class=p>(</span><span class=nx>req</span><span class=p>.</span><span class=nx>Request</span><span class=p>.</span><span class=nx>Body</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=nx>err</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>	<span class=nx>err</span> <span class=p>=</span> <span class=nx>yaml</span><span class=p>.</span><span class=nf>Unmarshal</span><span class=p>(</span><span class=nx>bytes</span><span class=p>,</span> <span class=nx>v</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=k>return</span> <span class=nx>err</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// Write a serialized version of the value on the response.
+</span></span></span><span class=line><span class=cl><span class=c1>// The Response may have a compressing writer. Depends on Accept-Encoding.
+</span></span></span><span class=line><span class=cl><span class=c1>// status should be a valid Http Status code
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>func</span> <span class=p>(</span><span class=nx>e</span> <span class=nx>YamlReaderWriter</span><span class=p>)</span> <span class=nf>Write</span><span class=p>(</span><span class=nx>resp</span> <span class=o>*</span><span class=nx>restful</span><span class=p>.</span><span class=nx>Response</span><span class=p>,</span> <span class=nx>status</span> <span class=kt>int</span><span class=p>,</span> <span class=nx>v</span> <span class=kd>interface</span><span class=p>{})</span> <span class=kt>error</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nx>bytes</span><span class=p>,</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>yaml</span><span class=p>.</span><span class=nf>Marshal</span><span class=p>(</span><span class=nx>v</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=nx>err</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>resp</span><span class=p>.</span><span class=nf>WriteHeader</span><span class=p>(</span><span class=nx>status</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=nx>_</span><span class=p>,</span> <span class=nx>err</span> <span class=p>=</span> <span class=nx>resp</span><span class=p>.</span><span class=nf>Write</span><span class=p>(</span><span class=nx>bytes</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=k>return</span> <span class=nx>err</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></div><p>For implementing actual reading/writing of YAML I use library called <a href=https://github.com/go-yaml/yaml>go-yaml</a>. The implementation is straightforward, just call <a href=https://godoc.org/gopkg.in/yaml.v2#Marshal><code>Marshal</code></a> and <a href=https://godoc.org/gopkg.in/yaml.v2#Unmarshal><code>Unmarshal</code></a> methods and do an error processing.</p><p>The final step is to register newly written <code>YamlReaderWriter</code> in go-restful container during application startup.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>package</span> <span class=nx>rest</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;context&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;fmt&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;net/http&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;os&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;os/signal&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;strconv&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;syscall&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;time&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;bitbucket.org/uthark/yttrium/internal/config&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;bitbucket.org/uthark/yttrium/internal/mime&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;github.com/emicklei/go-restful&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// Init initializes server.
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>func</span> <span class=nf>init</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>restful</span><span class=p>.</span><span class=nf>SetLogger</span><span class=p>(</span><span class=nx>logger</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=nx>restful</span><span class=p>.</span><span class=nf>DefaultResponseContentType</span><span class=p>(</span><span class=nx>restful</span><span class=p>.</span><span class=nx>MIME_JSON</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=nx>restful</span><span class=p>.</span><span class=nf>RegisterEntityAccessor</span><span class=p>(</span><span class=nx>restyaml</span><span class=p>.</span><span class=nx>MediaTypeApplicationYaml</span><span class=p>,</span> <span class=nx>restyaml</span><span class=p>.</span><span class=nf>NewYamlReaderWriter</span><span class=p>(</span><span class=nx>restyaml</span><span class=p>.</span><span class=nx>MediaTypeApplicationYaml</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// register web-services in restful and start http…
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=c1>// omitted for brevity
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>}</span>
+</span></span></code></pre></div><p>Now, we can submit requests in YAML format to our API:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>$ curl -H <span class=s2>&#34;Accept: application/x-yaml&#34;</span> http://localhost:8080/task
+</span></span><span class=line><span class=cl>- id: dd453ac9-6e8d-4f37-88a9-4e6d5b653e8d
+</span></span><span class=line><span class=cl>  name: Another Task
+</span></span><span class=line><span class=cl>  dateAdded: 2018-01-20T20:05:09.378Z
+</span></span><span class=line><span class=cl>  dateCompleted: 0001-01-01T00:00:00Z
+</span></span></code></pre></div><p>If we don’t specify header, the output will be in JSON:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>$ curl http://localhost:8080/task
+</span></span><span class=line><span class=cl><span class=o>[</span>
+</span></span><span class=line><span class=cl>  <span class=o>{</span>
+</span></span><span class=line><span class=cl>   <span class=s2>&#34;id&#34;</span>: <span class=s2>&#34;dd453ac9-6e8d-4f37-88a9-4e6d5b653e8d&#34;</span>,
+</span></span><span class=line><span class=cl>   <span class=s2>&#34;name&#34;</span>: <span class=s2>&#34;Another Task&#34;</span>,
+</span></span><span class=line><span class=cl>   <span class=s2>&#34;dateAdded&#34;</span>: <span class=s2>&#34;2018-01-20T20:05:09.378Z&#34;</span>,
+</span></span><span class=line><span class=cl>   <span class=s2>&#34;dateCompleted&#34;</span>: <span class=s2>&#34;0001-01-01T00:00:00Z&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=o>}</span>
+</span></span><span class=line><span class=cl> <span class=o>]</span>
+</span></span></code></pre></div></div><footer><div class=social><ul><li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a></li><li class=sidebar-nav-item><a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a></li><li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li></ul></div><p>&copy;&nbsp;2009&nbsp;—&nbsp;2022 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a></p></footer><script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(t,n){var s=t.createElement(n),e=t.getElementsByTagName(n)[0];e.async='async',s.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js',e.parentNode.insertBefore(s,e)})(document,'script')</script></body></html></body></html>

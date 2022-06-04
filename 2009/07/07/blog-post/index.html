@@ -1,125 +1,30 @@
-<!doctype html><html>
-<head>
-<meta charset=utf-8>
-<title>
-Двунаправленная ссылочная целостность &ndash; Oleg Atamanenko
-</title>
-<meta name=HandheldFriendly content="True">
-<meta name=MobileOptimized content="320">
-<meta name=theme-color content="#333" media="(prefers-color-scheme: dark)">
-<meta name=theme-color content="#777" media="(prefers-color-scheme: light)">
-<meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=1">
-<link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&family=Prata&display=swap" type=text/css>
-<link rel=stylesheet href=https://uthark.github.io/css/theme.72254bdf9ec9fc2d8b013dd5c21997b2ab476af1a37ded5995aae71c4a63d57d.css>
-<link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css>
-<link href=https://uthark.github.io/favicon.png rel=icon>
-</head>
-<body>
-<header class=site>
-<h1><a href=https://uthark.github.io/>Oleg Atamanenko</a></h1>
-<h2>thoughts about programming</h2>
-</header>
-<nav>
-<ul class=main-navigation>
-<li><a href=https://uthark.github.io/ title=Posts>Posts</a></li>
-<li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li>
-<li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li>
-<li><a href=https://uthark.github.io/about/ title="About me">About me</a></li>
-</ul>
-</nav>
-<div class=article>
-<h1>Двунаправленная ссылочная целостность</h1>
-<p>Здравствуйте.</p>
-<p>Я считаю, что разработчику всегда стоит иметь представление о том, как работают низлежащие абстракции. Хотя бы потому, что часто <a href=http://c2.com/cgi/wiki?LeakyAbstraction>абстракции</a> <a href=http://en.wikipedia.org/wiki/Leaky_abstraction>бывают</a> <a href=http://www.joelonsoftware.com/articles/LeakyAbstractions.html>протекающими</a>.</p>
-<p>А веду я это к тому, что когда фреймворк вываливает стектрейс с несколькими вложенными (и, часто, для непосвященных непонятными) исключениями, то бывает непонятно, что с этим делать, особенно, если не знаешь, как реализована абстракция.</p>
-<p>Иногда бывает нужно хранить двунаправленные связи между таблицами. Например, есть игрок и есть его статистика и нужно, чтобы каждая из сущностей знала про другую.</p>
-<p>Вопрос - каким образом вставлять в базу данных такие сущности?</p>
-<p>При вставке в таблицу в <code>Player</code> нам нужно уже иметь запись в таблице <code>Statistics</code>, а для вставки в таблицу <code>Statistics</code> нужно знать идентификатор игрока, к которому относится эта запись.</p>
-<p>Выглядит замкнутым кругом, но решение есть.</p>
-<p>Во-первых, вставки в обе таблицы должны происходить в рамках одной транзакции (как я <a href=http://www.blogger.com/2009/04/blog-post_24.html>уже писал</a>, транзакция обеспечивает перевод базы данных из одного непротиворечащего состояния в другое непротиворечащее состояние).</p>
-<p>К сожалению, этого недостаточно:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-sql data-lang=sql><span class=k>BEGIN</span><span class=w> </span><span class=k>TRANSACTION</span><span class=p>;</span><span class=w>
-</span><span class=w>
-</span><span class=w></span><span class=k>INSERT</span><span class=w> </span><span class=k>INTO</span><span class=w> </span><span class=s2>&#34;Player&#34;</span><span class=w>  </span><span class=k>VALUES</span><span class=w> </span><span class=p>(</span><span class=mi>10</span><span class=p>,</span><span class=w> </span><span class=mi>20</span><span class=p>);</span><span class=w>
-</span><span class=w></span><span class=k>INSERT</span><span class=w> </span><span class=k>INTO</span><span class=w> </span><span class=s2>&#34;Statistics&#34;</span><span class=w>  </span><span class=k>VALUES</span><span class=w> </span><span class=p>(</span><span class=mi>20</span><span class=p>,</span><span class=w> </span><span class=mi>10</span><span class=p>);</span><span class=w>
-</span><span class=w>
-</span><span class=w></span><span class=k>COMMIT</span><span class=p>;</span><span class=w>
-</span></code></pre></div><p>выдаёт следующую ошибку:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh>ERROR: insert or update on table <span class=s2>&#34;Player&#34;</span> violates foreign key constraint <span class=s2>&#34;statisticsId&#34;</span>
-SQL state: <span class=m>23503</span>
-Detail: Key <span class=o>(</span>statisticsId<span class=o>)=(</span>20<span class=o>)</span> is not present in table <span class=s2>&#34;Statistics&#34;</span>.
-</code></pre></div><p>И снова кажется, что замкнутый круг не разорвать</p>
-<p>Но решение всё же есть.</p>
-<p>Многие базы данных позволяют нарушать консистентность базы данных внутри транзакции. В данном случае можно &ldquo;попросить&rdquo; базу данных отложить проверку ссылочной целостности. На примере <code>PostgreSQL</code> рассмотрим, как это работает.</p>
-<h3 id=postgresql>PostgreSQL</h3>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-postgresql data-lang=postgresql><span class=k>begin</span> <span class=k>transaction</span><span class=p>;</span>
-
-<span class=k>set</span> <span class=k>constraints</span> <span class=k>all</span> <span class=k>deferred</span><span class=p>;</span> <span class=c1>-- 1
-</span><span class=c1></span>
-<span class=k>INSERT</span> <span class=k>INTO</span> <span class=s>&#34;Player&#34;</span>  <span class=k>VALUES</span> <span class=p>(</span><span class=mf>10</span><span class=p>,</span> <span class=mf>20</span><span class=p>);</span>
-<span class=k>INSERT</span> <span class=k>INTO</span> <span class=s>&#34;Statistics&#34;</span>  <span class=k>VALUES</span> <span class=p>(</span><span class=mf>20</span><span class=p>,</span> <span class=mf>10</span><span class=p>);</span>
-
-<span class=k>set</span> <span class=k>constraints</span> <span class=k>all</span> <span class=k>immediate</span><span class=p>;</span> <span class=c1>-- 2
-</span><span class=c1></span>
-<span class=k>commit</span><span class=p>;</span> <span class=c1>-- 3
-</span></code></pre></div><p>1 - Сделать все ограничения отложенными. Ограничения будут проверены в момент проведения фиксации транзакции (в строке 3)</p>
-<p>2 - Явно делаем все ограничения немедленными. В данном примере это необязательно, так как в 3) они всё равно будут проверены.</p>
-<p>После выполнения данного кода получаем:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh>Query returned successfully with no result in <span class=m>24</span> ms.
-</code></pre></div><p>Это уже полностью рабочий пример, чтобы это заработало нужно явно сделать ограничения отложенными - они должны быть объявлены как <code>DEFERRED</code>. Официальная документация к PostgreSQL гласит:</p>
-<blockquote>
-<p>Upon creation, a constraint is given one of three characteristics: DEFERRABLE INITIALLY DEFERRED, DEFERRABLE INITIALLY IMMEDIATE, or NOT DEFERRABLE. The third class is always IMMEDIATE and is not affected by the SET CONSTRAINTS command. The first two classes start every transaction in the indicated mode, but their behavior can be changed within a transaction by SET CONSTRAINTS.</p>
-</blockquote>
-<p>Так что необходимо также модифицировать объявления ограничений:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-sql data-lang=sql><span class=k>ALTER</span><span class=w> </span><span class=k>TABLE</span><span class=w> </span><span class=s2>&#34;Player&#34;</span><span class=w>
-</span><span class=w></span><span class=k>ADD</span><span class=w> </span><span class=k>CONSTRAINT</span><span class=w> </span><span class=s2>&#34;statisticsId&#34;</span><span class=w> </span><span class=k>FOREIGN</span><span class=w> </span><span class=k>KEY</span><span class=w> </span><span class=p>(</span><span class=s2>&#34;statisticsId&#34;</span><span class=p>)</span><span class=w>
-</span><span class=w></span><span class=k>REFERENCES</span><span class=w> </span><span class=s2>&#34;Statistics&#34;</span><span class=w> </span><span class=p>(</span><span class=s2>&#34;statisticsId&#34;</span><span class=p>)</span><span class=w> </span><span class=k>MATCH</span><span class=w> </span><span class=k>SIMPLE</span><span class=w>
-</span><span class=w></span><span class=k>ON</span><span class=w> </span><span class=k>UPDATE</span><span class=w> </span><span class=k>NO</span><span class=w> </span><span class=n>ACTION</span><span class=w> </span><span class=k>ON</span><span class=w> </span><span class=k>DELETE</span><span class=w> </span><span class=k>NO</span><span class=w> </span><span class=n>ACTION</span><span class=w> </span><span class=k>DEFERRABLE</span><span class=w> </span><span class=k>INITIALLY</span><span class=w> </span><span class=k>IMMEDIATE</span><span class=p>;</span><span class=w>
-</span><span class=w>
-</span></code></pre></div><p>Данный пример был приведён для PostgreSQL.</p>
-<p>Для других баз данных решения следующие:</p>
-<h3 id=sybase>Sybase</h3>
-<p>В Sybase есть переменная <a href="http://manuals.sybase.com/onlinebooks/group-sasarc/awg0600e/dbugen6/@Generic__BookTextView/26075;hf=0;pt=25811">WAIT_FOR_COMMIT</a>, которая управляет поведением проверки ограничений. По умолчанию она отключена. Кроме того, это поведение можно переопределить при объявлении можно указывать CHECK ON COMMIT. Подробнее можно посмотреть в <a href="http://manuals.sybase.com/onlinebooks/group-pbarc/conn5/sqlug/@Generic__BookTextView/39397%3Bpt=39951">официальной документации</a>.</p>
-<h3 id=oracle>Oracle</h3>
-<p>Также, как и в PostgreSQL:</p>
-<blockquote>
-<p>You can define constraints as either deferrable or not deferrable, and either initially deferred or initially immediate. These attributes can be different for each constraint. You specify them with keywords in the CONSTRAINT clause:
+<!doctype html><html><head><meta charset=utf-8><title>Двунаправленная ссылочная целостность &ndash; Oleg Atamanenko</title><meta name=HandheldFriendly content="True"><meta name=MobileOptimized content="320"><meta name=theme-color content="#333" media="(prefers-color-scheme: dark)"><meta name=theme-color content="#777" media="(prefers-color-scheme: light)"><meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=1"><link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&family=Prata&display=swap" type=text/css><link rel=stylesheet href=https://uthark.github.io/css/theme.72254bdf9ec9fc2d8b013dd5c21997b2ab476af1a37ded5995aae71c4a63d57d.css><link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css><link href=https://uthark.github.io/favicon.png rel=icon></head><body><header class=site><h1><a href=https://uthark.github.io/>Oleg Atamanenko</a></h1><h2>thoughts about programming</h2></header><nav><ul class=main-navigation><li><a href=https://uthark.github.io/ title=Posts>Posts</a></li><li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li><li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li><li><a href=https://uthark.github.io/about/ title="About me">About me</a></li></ul></nav><div class=article><h1>Двунаправленная ссылочная целостность</h1><p>Здравствуйте.</p><p>Я считаю, что разработчику всегда стоит иметь представление о том, как работают низлежащие абстракции. Хотя бы потому, что часто <a href=http://c2.com/cgi/wiki?LeakyAbstraction>абстракции</a> <a href=http://en.wikipedia.org/wiki/Leaky_abstraction>бывают</a> <a href=http://www.joelonsoftware.com/articles/LeakyAbstractions.html>протекающими</a>.</p><p>А веду я это к тому, что когда фреймворк вываливает стектрейс с несколькими вложенными (и, часто, для непосвященных непонятными) исключениями, то бывает непонятно, что с этим делать, особенно, если не знаешь, как реализована абстракция.</p><p>Иногда бывает нужно хранить двунаправленные связи между таблицами. Например, есть игрок и есть его статистика и нужно, чтобы каждая из сущностей знала про другую.</p><p>Вопрос - каким образом вставлять в базу данных такие сущности?</p><p>При вставке в таблицу в <code>Player</code> нам нужно уже иметь запись в таблице <code>Statistics</code>, а для вставки в таблицу <code>Statistics</code> нужно знать идентификатор игрока, к которому относится эта запись.</p><p>Выглядит замкнутым кругом, но решение есть.</p><p>Во-первых, вставки в обе таблицы должны происходить в рамках одной транзакции (как я <a href=http://www.blogger.com/2009/04/blog-post_24.html>уже писал</a>, транзакция обеспечивает перевод базы данных из одного непротиворечащего состояния в другое непротиворечащее состояние).</p><p>К сожалению, этого недостаточно:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-sql data-lang=sql><span class=line><span class=cl><span class=k>BEGIN</span><span class=w> </span><span class=k>TRANSACTION</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>INSERT</span><span class=w> </span><span class=k>INTO</span><span class=w> </span><span class=s2>&#34;Player&#34;</span><span class=w>  </span><span class=k>VALUES</span><span class=w> </span><span class=p>(</span><span class=mi>10</span><span class=p>,</span><span class=w> </span><span class=mi>20</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>INSERT</span><span class=w> </span><span class=k>INTO</span><span class=w> </span><span class=s2>&#34;Statistics&#34;</span><span class=w>  </span><span class=k>VALUES</span><span class=w> </span><span class=p>(</span><span class=mi>20</span><span class=p>,</span><span class=w> </span><span class=mi>10</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>COMMIT</span><span class=p>;</span><span class=w>
+</span></span></span></code></pre></div><p>выдаёт следующую ошибку:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>ERROR: insert or update on table <span class=s2>&#34;Player&#34;</span> violates foreign key constraint <span class=s2>&#34;statisticsId&#34;</span>
+</span></span><span class=line><span class=cl>SQL state: <span class=m>23503</span>
+</span></span><span class=line><span class=cl>Detail: Key <span class=o>(</span>statisticsId<span class=o>)=(</span>20<span class=o>)</span> is not present in table <span class=s2>&#34;Statistics&#34;</span>.
+</span></span></code></pre></div><p>И снова кажется, что замкнутый круг не разорвать</p><p>Но решение всё же есть.</p><p>Многие базы данных позволяют нарушать консистентность базы данных внутри транзакции. В данном случае можно &ldquo;попросить&rdquo; базу данных отложить проверку ссылочной целостности. На примере <code>PostgreSQL</code> рассмотрим, как это работает.</p><h3 id=postgresql>PostgreSQL</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-postgresql data-lang=postgresql><span class=line><span class=cl><span class=k>begin</span> <span class=k>transaction</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=k>constraints</span> <span class=k>all</span> <span class=k>deferred</span><span class=p>;</span> <span class=c1>-- 1
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl><span class=k>INSERT</span> <span class=k>INTO</span> <span class=s>&#34;Player&#34;</span>  <span class=k>VALUES</span> <span class=p>(</span><span class=mf>10</span><span class=p>,</span> <span class=mf>20</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=k>INSERT</span> <span class=k>INTO</span> <span class=s>&#34;Statistics&#34;</span>  <span class=k>VALUES</span> <span class=p>(</span><span class=mf>20</span><span class=p>,</span> <span class=mf>10</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=k>constraints</span> <span class=k>all</span> <span class=k>immediate</span><span class=p>;</span> <span class=c1>-- 2
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl><span class=k>commit</span><span class=p>;</span> <span class=c1>-- 3
+</span></span></span></code></pre></div><p>1 - Сделать все ограничения отложенными. Ограничения будут проверены в момент проведения фиксации транзакции (в строке 3)</p><p>2 - Явно делаем все ограничения немедленными. В данном примере это необязательно, так как в 3) они всё равно будут проверены.</p><p>После выполнения данного кода получаем:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>Query returned successfully with no result in <span class=m>24</span> ms.
+</span></span></code></pre></div><p>Это уже полностью рабочий пример, чтобы это заработало нужно явно сделать ограничения отложенными - они должны быть объявлены как <code>DEFERRED</code>. Официальная документация к PostgreSQL гласит:</p><blockquote><p>Upon creation, a constraint is given one of three characteristics: DEFERRABLE INITIALLY DEFERRED, DEFERRABLE INITIALLY IMMEDIATE, or NOT DEFERRABLE. The third class is always IMMEDIATE and is not affected by the SET CONSTRAINTS command. The first two classes start every transaction in the indicated mode, but their behavior can be changed within a transaction by SET CONSTRAINTS.</p></blockquote><p>Так что необходимо также модифицировать объявления ограничений:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-sql data-lang=sql><span class=line><span class=cl><span class=k>ALTER</span><span class=w> </span><span class=k>TABLE</span><span class=w> </span><span class=s2>&#34;Player&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>ADD</span><span class=w> </span><span class=k>CONSTRAINT</span><span class=w> </span><span class=s2>&#34;statisticsId&#34;</span><span class=w> </span><span class=k>FOREIGN</span><span class=w> </span><span class=k>KEY</span><span class=w> </span><span class=p>(</span><span class=s2>&#34;statisticsId&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>REFERENCES</span><span class=w> </span><span class=s2>&#34;Statistics&#34;</span><span class=w> </span><span class=p>(</span><span class=s2>&#34;statisticsId&#34;</span><span class=p>)</span><span class=w> </span><span class=k>MATCH</span><span class=w> </span><span class=k>SIMPLE</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>ON</span><span class=w> </span><span class=k>UPDATE</span><span class=w> </span><span class=k>NO</span><span class=w> </span><span class=n>ACTION</span><span class=w> </span><span class=k>ON</span><span class=w> </span><span class=k>DELETE</span><span class=w> </span><span class=k>NO</span><span class=w> </span><span class=n>ACTION</span><span class=w> </span><span class=k>DEFERRABLE</span><span class=w> </span><span class=k>INITIALLY</span><span class=w> </span><span class=k>IMMEDIATE</span><span class=p>;</span><span class=w>
+</span></span></span></code></pre></div><p>Данный пример был приведён для PostgreSQL.</p><p>Для других баз данных решения следующие:</p><h3 id=sybase>Sybase</h3><p>В Sybase есть переменная <a href="http://manuals.sybase.com/onlinebooks/group-sasarc/awg0600e/dbugen6/@Generic__BookTextView/26075;hf=0;pt=25811">WAIT_FOR_COMMIT</a>, которая управляет поведением проверки ограничений. По умолчанию она отключена. Кроме того, это поведение можно переопределить при объявлении можно указывать CHECK ON COMMIT. Подробнее можно посмотреть в <a href="http://manuals.sybase.com/onlinebooks/group-pbarc/conn5/sqlug/@Generic__BookTextView/39397%3Bpt=39951">официальной документации</a>.</p><h3 id=oracle>Oracle</h3><p>Также, как и в PostgreSQL:</p><blockquote><p>You can define constraints as either deferrable or not deferrable, and either initially deferred or initially immediate. These attributes can be different for each constraint. You specify them with keywords in the CONSTRAINT clause:
 DEFERRABLE or NOT DEFERRABLE
-INITIALLY DEFERRED or INITIALLY IMMEDIATE</p>
-</blockquote>
-<blockquote>
-<p>Constraints can be added, dropped, enabled, disabled, or validated. You can also modify a constraint&rsquo;s attributes.<br></p>
-</blockquote>
-<p>Подробнее в <a href=http://download.oracle.com/docs/cd/B10501_01/server.920/a96524/c22integ.htm#4666>официльной документации</a>.</p>
-<h2 id=mysql>MySQL</h2>
-<p>К сожалению, mySQL не имеет возможности отложенной проверки ограничении, о чём в документации и сказано:</p>
-<blockquote>
-<p>Deviation from SQL standards: Like MySQL in general, in an SQL statement that inserts, deletes, or updates many rows, InnoDB checks UNIQUE and FOREIGN KEY constraints row-by-row. According to the SQL standard, the default behavior should be deferred checking. That is, constraints are only checked after the entire SQL statement has been processed. Until InnoDB implements deferred constraint checking, some things will be impossible, such as deleting a record that refers to itself via a foreign key.</p>
-</blockquote>
-<p>Но это не конец света, так как можно отключить проверку внешних ключей:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-sql data-lang=sql><span class=k>SET</span><span class=w> </span><span class=n>foreign_key_checks</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=mi>0</span><span class=p>;</span><span class=w>
-</span><span class=w></span><span class=c1>-- code goes here
-</span><span class=c1></span><span class=k>SET</span><span class=w> </span><span class=n>foreign_key_checks</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=mi>1</span><span class=p>;</span><span class=w>
-</span></code></pre></div><p>Чем эта информация может быть полезна для разработчика? Например, в случае, если ошибки и недоработки Hibernate покажут себя в виде стектрейса в логе(например, <a href=http://opensource.atlassian.com/projects/hibernate/browse/HHH-2248>HHH-2248</a>), то разработчик будет понимать причину ошибки и то, как реализовать work-around.</p>
-</div>
-<footer>
-<div class=social>
-<ul>
-<li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a>
-</li>
-<li class=sidebar-nav-item> <a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a>
-</li>
-<li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li>
-</ul>
-</div>
-<p>&copy;&nbsp;2009&nbsp;—&nbsp;2021 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a>
-</p>
-</footer>
-<script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(b,c){var d=b.createElement(c),a=b.getElementsByTagName(c)[0];a.async='async',d.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js',a.parentNode.insertBefore(d,a)})(document,'script')</script>
-</body>
-</html>
-</body>
-</html>
+INITIALLY DEFERRED or INITIALLY IMMEDIATE</p></blockquote><blockquote><p>Constraints can be added, dropped, enabled, disabled, or validated. You can also modify a constraint&rsquo;s attributes.<br></p></blockquote><p>Подробнее в <a href=http://download.oracle.com/docs/cd/B10501_01/server.920/a96524/c22integ.htm#4666>официльной документации</a>.</p><h2 id=mysql>MySQL</h2><p>К сожалению, mySQL не имеет возможности отложенной проверки ограничении, о чём в документации и сказано:</p><blockquote><p>Deviation from SQL standards: Like MySQL in general, in an SQL statement that inserts, deletes, or updates many rows, InnoDB checks UNIQUE and FOREIGN KEY constraints row-by-row. According to the SQL standard, the default behavior should be deferred checking. That is, constraints are only checked after the entire SQL statement has been processed. Until InnoDB implements deferred constraint checking, some things will be impossible, such as deleting a record that refers to itself via a foreign key.</p></blockquote><p>Но это не конец света, так как можно отключить проверку внешних ключей:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-sql data-lang=sql><span class=line><span class=cl><span class=k>SET</span><span class=w> </span><span class=n>foreign_key_checks</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=mi>0</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=c1>-- code goes here
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=k>SET</span><span class=w> </span><span class=n>foreign_key_checks</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=mi>1</span><span class=p>;</span><span class=w>
+</span></span></span></code></pre></div><p>Чем эта информация может быть полезна для разработчика? Например, в случае, если ошибки и недоработки Hibernate покажут себя в виде стектрейса в логе(например, <a href=http://opensource.atlassian.com/projects/hibernate/browse/HHH-2248>HHH-2248</a>), то разработчик будет понимать причину ошибки и то, как реализовать work-around.</p></div><footer><div class=social><ul><li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a></li><li class=sidebar-nav-item><a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a></li><li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li></ul></div><p>&copy;&nbsp;2009&nbsp;—&nbsp;2022 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a></p></footer><script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(t,n){var s=t.createElement(n),e=t.getElementsByTagName(n)[0];e.async='async',s.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js',e.parentNode.insertBefore(s,e)})(document,'script')</script></body></html></body></html>

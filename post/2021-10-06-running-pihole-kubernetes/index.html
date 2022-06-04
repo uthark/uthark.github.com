@@ -1,124 +1,58 @@
-<!doctype html><html>
-<head>
-<meta charset=utf-8>
-<title>
-Running Pi-hole on Kubernetes &ndash; Oleg Atamanenko
-</title>
-<meta name=HandheldFriendly content="True">
-<meta name=MobileOptimized content="320">
-<meta name=theme-color content="#333" media="(prefers-color-scheme: dark)">
-<meta name=theme-color content="#777" media="(prefers-color-scheme: light)">
-<meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=1">
-<link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&family=Prata&display=swap" type=text/css>
-<link rel=stylesheet href=https://uthark.github.io/css/theme.72254bdf9ec9fc2d8b013dd5c21997b2ab476af1a37ded5995aae71c4a63d57d.css>
-<link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css>
-<link href=https://uthark.github.io/favicon.png rel=icon>
-</head>
-<body>
-<header class=site>
-<h1><a href=https://uthark.github.io/>Oleg Atamanenko</a></h1>
-<h2>thoughts about programming</h2>
-</header>
-<nav>
-<ul class=main-navigation>
-<li><a href=https://uthark.github.io/ title=Posts>Posts</a></li>
-<li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li>
-<li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li>
-<li><a href=https://uthark.github.io/about/ title="About me">About me</a></li>
-</ul>
-</nav>
-<div class=article>
-<h1>Running Pi-hole on Kubernetes</h1>
-<p>Recently I wrote how you can <a href=/post/2020-09-02-installing-kubernetes-raspberrypi/>install Kubernetes on Raspberry Pi</a>.</p>
-<p>In this post we will install Pi-Hole on Kubernetes.</p>
-<p>Up to recent versions of Pi-Hole Docker images you had to take care of the correct architecture (and as a result correct docker tag to use).</p>
-<p>Now they use multiarch docker image, so you can use docker image <code>pihole/pihole:&lt;version></code> which will work both on <code>amd64</code> and <code>arm</code> architectures.</p>
-<p>We will use Kubelet&rsquo;s ability to run <a href=https://kubernetes.io/docs/tasks/configure-pod-container/static-pod/>static pods</a>.</p>
-<p>We need to create 2 folders on the host, these folders would keep Pi-Hole data.</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>mkdir -p /data/pihole/<span class=o>{</span>etc,dnsmasq.d<span class=o>}</span>
-chmod go+r /data/pihole/<span class=o>{</span>etc,dnsmasq.d<span class=o>}</span>
-</code></pre></div><p>Copy the manifest and make the following changes:</p>
-<ol>
-<li>Set your timezone (<code>TZ</code>)</li>
-<li>Set your password to login to pihole web UI (<code>WEBPASSWORD</code>)</li>
-<li>Update the tag of the <a href=https://hub.docker.com/r/pihole/pihole/tags>pihole/pihole</a> docker image
-and save it as <code>pihole.yaml</code> in <code>/etc/kubernetes/manifests</code></li>
-</ol>
-<p>Complete manifest:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>v1</span><span class=w>
-</span><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>Pod</span><span class=w>
-</span><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
-</span><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>pihole</span><span class=w>
-</span><span class=w></span><span class=c>#  namespace: pihole</span><span class=w>
-</span><span class=w></span><span class=nt>spec</span><span class=p>:</span><span class=w>
-</span><span class=w>  </span><span class=nt>hostNetwork</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
-</span><span class=w>  </span><span class=nt>dnsPolicy</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;None&#34;</span><span class=w>
-</span><span class=w>  </span><span class=nt>dnsConfig</span><span class=p>:</span><span class=w>
-</span><span class=w>    </span><span class=nt>nameservers</span><span class=p>:</span><span class=w>
-</span><span class=w>      </span>- <span class=m>1.1.1.1</span><span class=w>
-</span><span class=w>  </span><span class=nt>containers</span><span class=p>:</span><span class=w>
-</span><span class=w>    </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>pihole</span><span class=w>
-</span><span class=w>      </span><span class=nt>image</span><span class=p>:</span><span class=w> </span><span class=l>pihole/pihole:2021.10</span><span class=w>
-</span><span class=w>      </span><span class=nt>imagePullPolicy</span><span class=p>:</span><span class=w> </span><span class=l>IfNotPresent</span><span class=w>
-</span><span class=w>      </span><span class=nt>env</span><span class=p>:</span><span class=w>
-</span><span class=w>        </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>TZ</span><span class=w>
-</span><span class=w>          </span><span class=nt>value</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;America/Los_Angeles&#34;</span><span class=w>
-</span><span class=w>        </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>WEBPASSWORD</span><span class=w>
-</span><span class=w>          </span><span class=nt>value</span><span class=p>:</span><span class=w> </span><span class=l>&lt;CUSTOMIZE&gt;</span><span class=w>
-</span><span class=w>      </span><span class=nt>securityContext</span><span class=p>:</span><span class=w>
-</span><span class=w>        </span><span class=nt>privileged</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
-</span><span class=w>      </span><span class=nt>ports</span><span class=p>:</span><span class=w>
-</span><span class=w>        </span>- <span class=nt>containerPort</span><span class=p>:</span><span class=w> </span><span class=m>53</span><span class=w>
-</span><span class=w>          </span><span class=nt>protocol</span><span class=p>:</span><span class=w> </span><span class=l>TCP</span><span class=w>
-</span><span class=w>        </span>- <span class=nt>containerPort</span><span class=p>:</span><span class=w> </span><span class=m>53</span><span class=w>
-</span><span class=w>          </span><span class=nt>protocol</span><span class=p>:</span><span class=w> </span><span class=l>UDP</span><span class=w>
-</span><span class=w>        </span>- <span class=nt>containerPort</span><span class=p>:</span><span class=w> </span><span class=m>67</span><span class=w>
-</span><span class=w>          </span><span class=nt>protocol</span><span class=p>:</span><span class=w> </span><span class=l>UDP</span><span class=w>
-</span><span class=w>        </span>- <span class=nt>containerPort</span><span class=p>:</span><span class=w> </span><span class=m>80</span><span class=w>
-</span><span class=w>          </span><span class=nt>protocol</span><span class=p>:</span><span class=w> </span><span class=l>TCP</span><span class=w>
-</span><span class=w>        </span>- <span class=nt>containerPort</span><span class=p>:</span><span class=w> </span><span class=m>443</span><span class=w>
-</span><span class=w>          </span><span class=nt>protocol</span><span class=p>:</span><span class=w> </span><span class=l>TCP</span><span class=w>
-</span><span class=w>      </span><span class=nt>volumeMounts</span><span class=p>:</span><span class=w>
-</span><span class=w>        </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>etc</span><span class=w>
-</span><span class=w>          </span><span class=nt>mountPath</span><span class=p>:</span><span class=w> </span><span class=l>/etc/pihole</span><span class=w>
-</span><span class=w>        </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>dnsmasq</span><span class=w>
-</span><span class=w>          </span><span class=nt>mountPath</span><span class=p>:</span><span class=w> </span><span class=l>/etc/dnsmasq.d</span><span class=w>
-</span><span class=w>      </span><span class=nt>resources</span><span class=p>:</span><span class=w>
-</span><span class=w>        </span><span class=nt>requests</span><span class=p>:</span><span class=w>
-</span><span class=w>          </span><span class=nt>memory</span><span class=p>:</span><span class=w> </span><span class=l>128Mi</span><span class=w>
-</span><span class=w>          </span><span class=nt>cpu</span><span class=p>:</span><span class=w> </span><span class=l>100m</span><span class=w>
-</span><span class=w>        </span><span class=nt>limits</span><span class=p>:</span><span class=w>
-</span><span class=w>          </span><span class=nt>memory</span><span class=p>:</span><span class=w> </span><span class=l>2Gi</span><span class=w>
-</span><span class=w>          </span><span class=nt>cpu</span><span class=p>:</span><span class=w> </span><span class=m>1</span><span class=w>
-</span><span class=w>  </span><span class=nt>volumes</span><span class=p>:</span><span class=w>
-</span><span class=w>    </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>etc</span><span class=w>
-</span><span class=w>      </span><span class=nt>hostPath</span><span class=p>:</span><span class=w>
-</span><span class=w>        </span><span class=nt>path</span><span class=p>:</span><span class=w> </span><span class=l>/data/pihole/etc</span><span class=w>
-</span><span class=w>      </span><span class=nt>type</span><span class=p>:</span><span class=w> </span><span class=l>Directory</span><span class=w>
-</span><span class=w>    </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>dnsmasq</span><span class=w>
-</span><span class=w>      </span><span class=nt>hostPath</span><span class=p>:</span><span class=w>
-</span><span class=w>        </span><span class=nt>path</span><span class=p>:</span><span class=w> </span><span class=l>/data/pihole/dnsmasq.d</span><span class=w>
-</span><span class=w>      </span><span class=nt>type</span><span class=p>:</span><span class=w> </span><span class=l>Directory</span><span class=w>
-</span></code></pre></div>
-</div>
-<footer>
-<div class=social>
-<ul>
-<li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a>
-</li>
-<li class=sidebar-nav-item> <a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a>
-</li>
-<li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li>
-</ul>
-</div>
-<p>&copy;&nbsp;2009&nbsp;—&nbsp;2021 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a>
-</p>
-</footer>
-<script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(b,c){var d=b.createElement(c),a=b.getElementsByTagName(c)[0];a.async='async',d.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js',a.parentNode.insertBefore(d,a)})(document,'script')</script>
-</body>
-</html>
-</body>
-</html>
+<!doctype html><html><head><meta charset=utf-8><title>Running Pi-hole on Kubernetes &ndash; Oleg Atamanenko</title><meta name=HandheldFriendly content="True"><meta name=MobileOptimized content="320"><meta name=theme-color content="#333" media="(prefers-color-scheme: dark)"><meta name=theme-color content="#777" media="(prefers-color-scheme: light)"><meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=1"><link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&family=Prata&display=swap" type=text/css><link rel=stylesheet href=https://uthark.github.io/css/theme.72254bdf9ec9fc2d8b013dd5c21997b2ab476af1a37ded5995aae71c4a63d57d.css><link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css><link href=https://uthark.github.io/favicon.png rel=icon></head><body><header class=site><h1><a href=https://uthark.github.io/>Oleg Atamanenko</a></h1><h2>thoughts about programming</h2></header><nav><ul class=main-navigation><li><a href=https://uthark.github.io/ title=Posts>Posts</a></li><li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li><li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li><li><a href=https://uthark.github.io/about/ title="About me">About me</a></li></ul></nav><div class=article><h1>Running Pi-hole on Kubernetes</h1><p>Recently I wrote how you can <a href=/post/2020-09-02-installing-kubernetes-raspberrypi/>install Kubernetes on Raspberry Pi</a>.</p><p>In this post, we will install Pi-Hole on Kubernetes.</p><p>Up to recent versions of Pi-Hole Docker images you had to take care of the correct architecture (and as a result correct docker tag to use).</p><p>Now they use multiarch docker image, so you can use docker image <code>pihole/pihole:&lt;version></code> which will work both on <code>amd64</code> and <code>arm</code> architectures.</p><p>We will use Kubelet&rsquo;s ability to run <a href=https://kubernetes.io/docs/tasks/configure-pod-container/static-pod/>static pods</a>.</p><p>We need to create 2 folders on the host, these folders would keep Pi-Hole data.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>mkdir -p /data/pihole/<span class=o>{</span>etc,dnsmasq.d<span class=o>}</span>
+</span></span><span class=line><span class=cl>chmod go+r /data/pihole/<span class=o>{</span>etc,dnsmasq.d<span class=o>}</span>
+</span></span></code></pre></div><p>Copy the manifest and make the following changes:</p><ol><li>Set your timezone (<code>TZ</code>)</li><li>Set your password to login to pihole web UI (<code>WEBPASSWORD</code>)</li><li>Update the tag of the <a href=https://hub.docker.com/r/pihole/pihole/tags>pihole/pihole</a> docker image
+and save it as <code>pihole.yaml</code> in <code>/etc/kubernetes/manifests</code></li></ol><p>Complete manifest:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>v1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>Pod</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>pihole</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=c>#  namespace: pihole</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>hostNetwork</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>dnsPolicy</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;None&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>dnsConfig</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>nameservers</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=m>1.1.1.1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>containers</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>pihole</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>image</span><span class=p>:</span><span class=w> </span><span class=l>pihole/pihole:2021.10</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>imagePullPolicy</span><span class=p>:</span><span class=w> </span><span class=l>IfNotPresent</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>env</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>TZ</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>value</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;America/Los_Angeles&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>WEBPASSWORD</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>value</span><span class=p>:</span><span class=w> </span><span class=l>&lt;CUSTOMIZE&gt;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>securityContext</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>privileged</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>ports</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span>- <span class=nt>containerPort</span><span class=p>:</span><span class=w> </span><span class=m>53</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>protocol</span><span class=p>:</span><span class=w> </span><span class=l>TCP</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span>- <span class=nt>containerPort</span><span class=p>:</span><span class=w> </span><span class=m>53</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>protocol</span><span class=p>:</span><span class=w> </span><span class=l>UDP</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span>- <span class=nt>containerPort</span><span class=p>:</span><span class=w> </span><span class=m>67</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>protocol</span><span class=p>:</span><span class=w> </span><span class=l>UDP</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span>- <span class=nt>containerPort</span><span class=p>:</span><span class=w> </span><span class=m>80</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>protocol</span><span class=p>:</span><span class=w> </span><span class=l>TCP</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span>- <span class=nt>containerPort</span><span class=p>:</span><span class=w> </span><span class=m>443</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>protocol</span><span class=p>:</span><span class=w> </span><span class=l>TCP</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>volumeMounts</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>etc</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>mountPath</span><span class=p>:</span><span class=w> </span><span class=l>/etc/pihole</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>dnsmasq</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>mountPath</span><span class=p>:</span><span class=w> </span><span class=l>/etc/dnsmasq.d</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>resources</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>requests</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>memory</span><span class=p>:</span><span class=w> </span><span class=l>128Mi</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>cpu</span><span class=p>:</span><span class=w> </span><span class=l>100m</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>limits</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>memory</span><span class=p>:</span><span class=w> </span><span class=l>2Gi</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>cpu</span><span class=p>:</span><span class=w> </span><span class=m>1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>volumes</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>etc</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>hostPath</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>path</span><span class=p>:</span><span class=w> </span><span class=l>/data/pihole/etc</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>type</span><span class=p>:</span><span class=w> </span><span class=l>Directory</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>dnsmasq</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>hostPath</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>path</span><span class=p>:</span><span class=w> </span><span class=l>/data/pihole/dnsmasq.d</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>type</span><span class=p>:</span><span class=w> </span><span class=l>Directory</span><span class=w>
+</span></span></span></code></pre></div></div><footer><div class=social><ul><li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a></li><li class=sidebar-nav-item><a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a></li><li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li></ul></div><p>&copy;&nbsp;2009&nbsp;—&nbsp;2022 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a></p></footer><script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(t,n){var s=t.createElement(n),e=t.getElementsByTagName(n)[0];e.async='async',s.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js',e.parentNode.insertBefore(s,e)})(document,'script')</script></body></html></body></html>

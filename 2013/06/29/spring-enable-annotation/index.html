@@ -1,115 +1,50 @@
-<!doctype html><html>
-<head>
-<meta charset=utf-8>
-<title>
-Пишем @Enable*-аннотацию для Spring &ndash; Oleg Atamanenko
-</title>
-<meta name=HandheldFriendly content="True">
-<meta name=MobileOptimized content="320">
-<meta name=theme-color content="#333" media="(prefers-color-scheme: dark)">
-<meta name=theme-color content="#777" media="(prefers-color-scheme: light)">
-<meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=1">
-<link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&family=Prata&display=swap" type=text/css>
-<link rel=stylesheet href=https://uthark.github.io/css/theme.72254bdf9ec9fc2d8b013dd5c21997b2ab476af1a37ded5995aae71c4a63d57d.css>
-<link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css>
-<link href=https://uthark.github.io/favicon.png rel=icon>
-</head>
-<body>
-<header class=site>
-<h1><a href=https://uthark.github.io/>Oleg Atamanenko</a></h1>
-<h2>thoughts about programming</h2>
-</header>
-<nav>
-<ul class=main-navigation>
-<li><a href=https://uthark.github.io/ title=Posts>Posts</a></li>
-<li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li>
-<li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li>
-<li><a href=https://uthark.github.io/about/ title="About me">About me</a></li>
-</ul>
-</nav>
-<div class=article>
-<h1>Пишем @Enable*-аннотацию для Spring</h1>
-<p>Начиная с версии 3.1 Spring поддерживает декларативное включение необходимой функциональности через, так называемые, <code>@Enable*</code> аннотации. Пример таких аннотаций:
-<a href=http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/web/servlet/config/annotation/EnableWebMvc.html><code>org.springframework.web.servlet.config.annotation.EnableWebMvc</code></a>, <a href=http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/cache/annotation/EnableCaching.html><code>org.springframework.cache.annotation.EnableCaching</code></a>, <a href=http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/scheduling/annotation/EnableAsync.html><code>org.springframework.scheduling.annotation.EnableAsync</code></a> и другие.</p>
-<p>В продолжение темы <a href=/blog/2013/06/28/jaxrs-spring-autowiring/>прошлого поста</a>, я хочу показать, как можно добавить собственную <code>@Enable</code> аннотацию.</p>
-<p>Для автоматического создания клиента для REST-ресурса нам необходима следующая информация:</p>
-<ol>
-<li>Пакет, в котором искать интерфейсы, проаннотированные аннотацией <a href=https://jax-rs-spec.java.net/nonav/2.0/apidocs/javax/ws/rs/Path.html><code>@Path()</code></a></li>
-<li>Базовый адрес REST-приложения.</li>
-</ol>
-<p>Для того, чтобы передать эту информацию, мы создадим два атрибута в аннотации: <code>scanPackage()</code> и <code>endpoint()</code></p>
-<p>Кроме того, для обработки аннотации необходимо указать обработчик. Это можно сделать передав подкласс <a href=http://static.springsource.org/spring-framework/docs/3.2.x/javadoc-api/org/springframework/context/annotation/ImportBeanDefinitionRegistrar.html><code>org.springframework.context.annotation.ImportBeanDefinitionRegistrar</code></a> через аннотацию <a href=http://static.springsource.org/spring-framework/docs/3.2.x/javadoc-api/org/springframework/context/annotation/Import.html><code>@Import</code></a></p>
-<p>Пишем аннотацию:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=nd>@Target</span><span class=o>(</span><span class=n>ElementType</span><span class=o>.</span><span class=na>TYPE</span><span class=o>)</span>
-<span class=nd>@Retention</span><span class=o>(</span><span class=n>RetentionPolicy</span><span class=o>.</span><span class=na>RUNTIME</span><span class=o>)</span>
-<span class=nd>@Documented</span>
-<span class=nd>@Inherited</span>
-<span class=nd>@Import</span><span class=o>(</span><span class=n>JaxRsRestClientRegistrar</span><span class=o>.</span><span class=na>class</span><span class=o>)</span>
-<span class=kd>public</span> <span class=nd>@interface</span> <span class=n>EnableJaxRsRestClient</span> <span class=o>{</span>
-
-    <span class=n>String</span> <span class=nf>scanPackage</span><span class=o>();</span>
-
-    <span class=n>String</span> <span class=nf>endpoint</span><span class=o>();</span>
-<span class=o>}</span>
-</code></pre></div><p>Теперь осталось написать реализацию интерфейса <code>org.springframework.context.annotation.ImportBeanDefinitionRegistrar</code>. Так как у нас уже есть написанный ранее <a href=http://static.springsource.org/spring-framework/docs/3.2.x/javadoc-api/org/springframework/beans/factory/config/BeanFactoryPostProcessor.html>BeanFactoryPostProcessor</a> в виде <code>RestClientPostProcessor</code>, реализация интерфейса будет простой - мы создадим описание бина для Spring и зарегистрируем его в реестре бинов.</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=kd>public</span> <span class=kd>class</span> <span class=nc>JaxRsRestClientRegistrar</span> <span class=kd>implements</span> <span class=n>ImportBeanDefinitionRegistrar</span> <span class=o>{</span>
-
-    <span class=kd>protected</span> <span class=kd>static</span> <span class=kd>final</span> <span class=n>String</span> <span class=n>PROPERTY_ENDPOINT</span> <span class=o>=</span> <span class=s>&#34;endpoint&#34;</span><span class=o>;</span>
-
-    <span class=kd>protected</span> <span class=kd>static</span> <span class=kd>final</span> <span class=n>String</span> <span class=n>PROPERTY_SCAN_PACKAGE</span> <span class=o>=</span> <span class=s>&#34;basePackage&#34;</span><span class=o>;</span>
-
-    <span class=nd>@Override</span>
-    <span class=kd>public</span> <span class=kt>void</span> <span class=nf>registerBeanDefinitions</span><span class=o>(</span><span class=n>AnnotationMetadata</span> <span class=n>importingClassMetadata</span><span class=o>,</span> <span class=n>BeanDefinitionRegistry</span> <span class=n>registry</span><span class=o>)</span> <span class=o>{</span>
-        <span class=n>EnableJaxRsRestClient</span> <span class=n>annotation</span> <span class=o>=</span>
-                <span class=o>(</span><span class=n>EnableJaxRsRestClient</span><span class=o>)</span> <span class=o>((</span><span class=n>StandardClassMetadata</span><span class=o>)</span> <span class=n>importingClassMetadata</span><span class=o>).</span><span class=na>getIntrospectedClass</span><span class=o>()</span>
-                        <span class=o>.</span><span class=na>getAnnotation</span><span class=o>(</span><span class=n>EnableJaxRsRestClient</span><span class=o>.</span><span class=na>class</span><span class=o>);</span>
-        <span class=n>String</span> <span class=n>scanPackage</span> <span class=o>=</span> <span class=n>annotation</span><span class=o>.</span><span class=na>scanPackage</span><span class=o>();</span>
-        <span class=n>String</span> <span class=n>endpoint</span> <span class=o>=</span> <span class=n>annotation</span><span class=o>.</span><span class=na>endpoint</span><span class=o>();</span>
-
-        <span class=n>GenericBeanDefinition</span> <span class=n>beanDefinition</span> <span class=o>=</span> <span class=k>new</span> <span class=n>GenericBeanDefinition</span><span class=o>();</span>
-        <span class=n>beanDefinition</span><span class=o>.</span><span class=na>setAbstract</span><span class=o>(</span><span class=kc>false</span><span class=o>);</span>
-        <span class=n>beanDefinition</span><span class=o>.</span><span class=na>setBeanClass</span><span class=o>(</span><span class=n>RestClientPostProcessor</span><span class=o>.</span><span class=na>class</span><span class=o>);</span>
-        <span class=n>MutablePropertyValues</span> <span class=n>propertyValues</span> <span class=o>=</span> <span class=k>new</span> <span class=n>MutablePropertyValues</span><span class=o>();</span>
-        <span class=n>propertyValues</span><span class=o>.</span><span class=na>add</span><span class=o>(</span><span class=n>PROPERTY_ENDPOINT</span><span class=o>,</span> <span class=n>endpoint</span><span class=o>);</span>
-        <span class=n>propertyValues</span><span class=o>.</span><span class=na>add</span><span class=o>(</span><span class=n>PROPERTY_SCAN_PACKAGE</span><span class=o>,</span> <span class=n>scanPackage</span><span class=o>);</span>
-        <span class=n>beanDefinition</span><span class=o>.</span><span class=na>setPropertyValues</span><span class=o>(</span><span class=n>propertyValues</span><span class=o>);</span>
-
-        <span class=n>registry</span><span class=o>.</span><span class=na>registerBeanDefinition</span><span class=o>(</span><span class=n>ClassUtils</span><span class=o>.</span><span class=na>getShortName</span><span class=o>(</span><span class=n>getClass</span><span class=o>()),</span> <span class=n>beanDefinition</span><span class=o>);</span>
-    <span class=o>}</span>
-<span class=o>}</span>
-</code></pre></div><p>Теперь мы можем использовать аннотацию:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=nd>@Configuration</span>
-<span class=nd>@EnableJaxRsRestClient</span><span class=o>(</span><span class=n>scanPackage</span> <span class=o>=</span> <span class=s>&#34;&lt;base package&gt;&#34;</span><span class=o>,</span> <span class=n>endpoint</span> <span class=o>=</span> <span class=s>&#34;${remote.rest.endpoint}&#34;</span><span class=o>)</span>
-<span class=kd>class</span> <span class=nc>TestAutowiringConfiguration</span> <span class=o>{</span>
-
-    <span class=nd>@Bean</span>
-    <span class=kd>public</span> <span class=kd>static</span> <span class=n>PropertyPlaceholderConfigurer</span> <span class=nf>configurer</span><span class=o>()</span> <span class=o>{</span>
-        <span class=n>PropertyPlaceholderConfigurer</span> <span class=n>pph</span> <span class=o>=</span> <span class=k>new</span> <span class=n>PropertyPlaceholderConfigurer</span><span class=o>();</span>
-        <span class=n>pph</span><span class=o>.</span><span class=na>setLocation</span><span class=o>(</span><span class=k>new</span> <span class=n>ClassPathResource</span><span class=o>(</span><span class=s>&#34;application.properties&#34;</span><span class=o>));</span>
-        <span class=k>return</span> <span class=n>pph</span><span class=o>;</span>
-    <span class=o>}</span>
-
-<span class=o>}</span>
-</code></pre></div><p>Обратите внимание, что endpoint можно передавать с использованием подстановочных свойств.</p>
-</div>
-<footer>
-<div class=social>
-<ul>
-<li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a>
-</li>
-<li class=sidebar-nav-item> <a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a>
-</li>
-<li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li>
-</ul>
-</div>
-<p>&copy;&nbsp;2009&nbsp;—&nbsp;2021 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a>
-</p>
-</footer>
-<script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(b,c){var d=b.createElement(c),a=b.getElementsByTagName(c)[0];a.async='async',d.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js',a.parentNode.insertBefore(d,a)})(document,'script')</script>
-</body>
-</html>
-</body>
-</html>
+<!doctype html><html><head><meta charset=utf-8><title>Пишем @Enable*-аннотацию для Spring &ndash; Oleg Atamanenko</title><meta name=HandheldFriendly content="True"><meta name=MobileOptimized content="320"><meta name=theme-color content="#333" media="(prefers-color-scheme: dark)"><meta name=theme-color content="#777" media="(prefers-color-scheme: light)"><meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=1"><link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&family=Prata&display=swap" type=text/css><link rel=stylesheet href=https://uthark.github.io/css/theme.72254bdf9ec9fc2d8b013dd5c21997b2ab476af1a37ded5995aae71c4a63d57d.css><link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css><link href=https://uthark.github.io/favicon.png rel=icon></head><body><header class=site><h1><a href=https://uthark.github.io/>Oleg Atamanenko</a></h1><h2>thoughts about programming</h2></header><nav><ul class=main-navigation><li><a href=https://uthark.github.io/ title=Posts>Posts</a></li><li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li><li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li><li><a href=https://uthark.github.io/about/ title="About me">About me</a></li></ul></nav><div class=article><h1>Пишем @Enable*-аннотацию для Spring</h1><p>Начиная с версии 3.1 Spring поддерживает декларативное включение необходимой функциональности через, так называемые, <code>@Enable*</code> аннотации. Пример таких аннотаций:
+<a href=http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/web/servlet/config/annotation/EnableWebMvc.html><code>org.springframework.web.servlet.config.annotation.EnableWebMvc</code></a>, <a href=http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/cache/annotation/EnableCaching.html><code>org.springframework.cache.annotation.EnableCaching</code></a>, <a href=http://static.springsource.org/spring/docs/3.2.x/javadoc-api/org/springframework/scheduling/annotation/EnableAsync.html><code>org.springframework.scheduling.annotation.EnableAsync</code></a> и другие.</p><p>В продолжение темы <a href=/blog/2013/06/28/jaxrs-spring-autowiring/>прошлого поста</a>, я хочу показать, как можно добавить собственную <code>@Enable</code> аннотацию.</p><p>Для автоматического создания клиента для REST-ресурса нам необходима следующая информация:</p><ol><li>Пакет, в котором искать интерфейсы, проаннотированные аннотацией <a href=https://jax-rs-spec.java.net/nonav/2.0/apidocs/javax/ws/rs/Path.html><code>@Path()</code></a></li><li>Базовый адрес REST-приложения.</li></ol><p>Для того, чтобы передать эту информацию, мы создадим два атрибута в аннотации: <code>scanPackage()</code> и <code>endpoint()</code></p><p>Кроме того, для обработки аннотации необходимо указать обработчик. Это можно сделать передав подкласс <a href=http://static.springsource.org/spring-framework/docs/3.2.x/javadoc-api/org/springframework/context/annotation/ImportBeanDefinitionRegistrar.html><code>org.springframework.context.annotation.ImportBeanDefinitionRegistrar</code></a> через аннотацию <a href=http://static.springsource.org/spring-framework/docs/3.2.x/javadoc-api/org/springframework/context/annotation/Import.html><code>@Import</code></a></p><p>Пишем аннотацию:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Target</span><span class=o>(</span><span class=n>ElementType</span><span class=o>.</span><span class=na>TYPE</span><span class=o>)</span>
+</span></span><span class=line><span class=cl><span class=nd>@Retention</span><span class=o>(</span><span class=n>RetentionPolicy</span><span class=o>.</span><span class=na>RUNTIME</span><span class=o>)</span>
+</span></span><span class=line><span class=cl><span class=nd>@Documented</span>
+</span></span><span class=line><span class=cl><span class=nd>@Inherited</span>
+</span></span><span class=line><span class=cl><span class=nd>@Import</span><span class=o>(</span><span class=n>JaxRsRestClientRegistrar</span><span class=o>.</span><span class=na>class</span><span class=o>)</span>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=nd>@interface</span> <span class=n>EnableJaxRsRestClient</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>String</span> <span class=nf>scanPackage</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>String</span> <span class=nf>endpoint</span><span class=o>();</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></div><p>Теперь осталось написать реализацию интерфейса <code>org.springframework.context.annotation.ImportBeanDefinitionRegistrar</code>. Так как у нас уже есть написанный ранее <a href=http://static.springsource.org/spring-framework/docs/3.2.x/javadoc-api/org/springframework/beans/factory/config/BeanFactoryPostProcessor.html>BeanFactoryPostProcessor</a> в виде <code>RestClientPostProcessor</code>, реализация интерфейса будет простой - мы создадим описание бина для Spring и зарегистрируем его в реестре бинов.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span> <span class=kd>class</span> <span class=nc>JaxRsRestClientRegistrar</span> <span class=kd>implements</span> <span class=n>ImportBeanDefinitionRegistrar</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kd>protected</span> <span class=kd>static</span> <span class=kd>final</span> <span class=n>String</span> <span class=n>PROPERTY_ENDPOINT</span> <span class=o>=</span> <span class=s>&#34;endpoint&#34;</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kd>protected</span> <span class=kd>static</span> <span class=kd>final</span> <span class=n>String</span> <span class=n>PROPERTY_SCAN_PACKAGE</span> <span class=o>=</span> <span class=s>&#34;basePackage&#34;</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nd>@Override</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kt>void</span> <span class=nf>registerBeanDefinitions</span><span class=o>(</span><span class=n>AnnotationMetadata</span> <span class=n>importingClassMetadata</span><span class=o>,</span> <span class=n>BeanDefinitionRegistry</span> <span class=n>registry</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>EnableJaxRsRestClient</span> <span class=n>annotation</span> <span class=o>=</span>
+</span></span><span class=line><span class=cl>                <span class=o>(</span><span class=n>EnableJaxRsRestClient</span><span class=o>)</span> <span class=o>((</span><span class=n>StandardClassMetadata</span><span class=o>)</span> <span class=n>importingClassMetadata</span><span class=o>).</span><span class=na>getIntrospectedClass</span><span class=o>()</span>
+</span></span><span class=line><span class=cl>                        <span class=o>.</span><span class=na>getAnnotation</span><span class=o>(</span><span class=n>EnableJaxRsRestClient</span><span class=o>.</span><span class=na>class</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>        <span class=n>String</span> <span class=n>scanPackage</span> <span class=o>=</span> <span class=n>annotation</span><span class=o>.</span><span class=na>scanPackage</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>        <span class=n>String</span> <span class=n>endpoint</span> <span class=o>=</span> <span class=n>annotation</span><span class=o>.</span><span class=na>endpoint</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>GenericBeanDefinition</span> <span class=n>beanDefinition</span> <span class=o>=</span> <span class=k>new</span> <span class=n>GenericBeanDefinition</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>        <span class=n>beanDefinition</span><span class=o>.</span><span class=na>setAbstract</span><span class=o>(</span><span class=kc>false</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>        <span class=n>beanDefinition</span><span class=o>.</span><span class=na>setBeanClass</span><span class=o>(</span><span class=n>RestClientPostProcessor</span><span class=o>.</span><span class=na>class</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>        <span class=n>MutablePropertyValues</span> <span class=n>propertyValues</span> <span class=o>=</span> <span class=k>new</span> <span class=n>MutablePropertyValues</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>        <span class=n>propertyValues</span><span class=o>.</span><span class=na>add</span><span class=o>(</span><span class=n>PROPERTY_ENDPOINT</span><span class=o>,</span> <span class=n>endpoint</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>        <span class=n>propertyValues</span><span class=o>.</span><span class=na>add</span><span class=o>(</span><span class=n>PROPERTY_SCAN_PACKAGE</span><span class=o>,</span> <span class=n>scanPackage</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>        <span class=n>beanDefinition</span><span class=o>.</span><span class=na>setPropertyValues</span><span class=o>(</span><span class=n>propertyValues</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>registry</span><span class=o>.</span><span class=na>registerBeanDefinition</span><span class=o>(</span><span class=n>ClassUtils</span><span class=o>.</span><span class=na>getShortName</span><span class=o>(</span><span class=n>getClass</span><span class=o>()),</span> <span class=n>beanDefinition</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></div><p>Теперь мы можем использовать аннотацию:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Configuration</span>
+</span></span><span class=line><span class=cl><span class=nd>@EnableJaxRsRestClient</span><span class=o>(</span><span class=n>scanPackage</span> <span class=o>=</span> <span class=s>&#34;&lt;base package&gt;&#34;</span><span class=o>,</span> <span class=n>endpoint</span> <span class=o>=</span> <span class=s>&#34;${remote.rest.endpoint}&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl><span class=kd>class</span> <span class=nc>TestAutowiringConfiguration</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nd>@Bean</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kd>static</span> <span class=n>PropertyPlaceholderConfigurer</span> <span class=nf>configurer</span><span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>PropertyPlaceholderConfigurer</span> <span class=n>pph</span> <span class=o>=</span> <span class=k>new</span> <span class=n>PropertyPlaceholderConfigurer</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>        <span class=n>pph</span><span class=o>.</span><span class=na>setLocation</span><span class=o>(</span><span class=k>new</span> <span class=n>ClassPathResource</span><span class=o>(</span><span class=s>&#34;application.properties&#34;</span><span class=o>));</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=n>pph</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></div><p>Обратите внимание, что endpoint можно передавать с использованием подстановочных свойств.</p></div><footer><div class=social><ul><li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a></li><li class=sidebar-nav-item><a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a></li><li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li></ul></div><p>&copy;&nbsp;2009&nbsp;—&nbsp;2022 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a></p></footer><script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(t,n){var s=t.createElement(n),e=t.getElementsByTagName(n)[0];e.async='async',s.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js',e.parentNode.insertBefore(s,e)})(document,'script')</script></body></html></body></html>

@@ -1,181 +1,59 @@
-<!doctype html><html>
-<head>
-<meta charset=utf-8>
-<title>
-Упрощаем работу с JPA при помощи Spring Data JPA &ndash; Oleg Atamanenko
-</title>
-<meta name=HandheldFriendly content="True">
-<meta name=MobileOptimized content="320">
-<meta name=theme-color content="#333" media="(prefers-color-scheme: dark)">
-<meta name=theme-color content="#777" media="(prefers-color-scheme: light)">
-<meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=1">
-<link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&family=Prata&display=swap" type=text/css>
-<link rel=stylesheet href=https://uthark.github.io/css/theme.72254bdf9ec9fc2d8b013dd5c21997b2ab476af1a37ded5995aae71c4a63d57d.css>
-<link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css>
-<link href=https://uthark.github.io/favicon.png rel=icon>
-</head>
-<body>
-<header class=site>
-<h1><a href=https://uthark.github.io/>Oleg Atamanenko</a></h1>
-<h2>thoughts about programming</h2>
-</header>
-<nav>
-<ul class=main-navigation>
-<li><a href=https://uthark.github.io/ title=Posts>Posts</a></li>
-<li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li>
-<li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li>
-<li><a href=https://uthark.github.io/about/ title="About me">About me</a></li>
-</ul>
-</nav>
-<div class=article>
-<h1>Упрощаем работу с JPA при помощи Spring Data JPA</h1>
-<h3>Введение</h3>
-<p>Уже прошло несколько лет с тех пор, как появился JPA. Работа с <a href=http://docs.oracle.com/javaee/5/api/javax/persistence/EntityManager.html>EntityManager</a> увлекательна, но разработчики пишут красивый API, а подробности работы с базой данных скрывают. При этом частая проблема - дублирование имплементации, когда из одного DAO в другой у нас плавно перекочёвывает один и тот же код, в лучшем случае этот код переносится в абстрактный базовый DAO. <a href=http://www.springsource.org/spring-data/jpa>Spring Data</a> коренным образом решает проблему - при его использовании остаётся только API на уровне интерфейсов, вся имплементация создаётся автоматически с использованием <a href=http://en.wikipedia.org/wiki/Aspect-oriented_programming>AOP</a>.</p>
-<h3>История Spring Data</h3>
-<p>Несмотря на то, что проект только недавно достиг версии 1.0, у него достаточно богатая история - раньше он развивался в рамках проекта <a href=http://redmine.synyx.org/projects/show/hades>Hades</a>.</p>
-<h3>Объявление DAO-интерфейса</h3>
-<p>Итак, для начала нам необходимо объявить DAO-интерфейс, в котором мы будем объявлять методы для работы с сущностью.</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=kd>public</span> <span class=kd>interface</span> <span class=nc>UserRepository</span> <span class=kd>extends</span> <span class=n>CrudRepository</span><span class=o>&amp;</span><span class=n>lt</span><span class=o>;</span><span class=n>User</span><span class=o>,</span> <span class=n>Long</span><span class=o>&amp;</span><span class=n>gt</span><span class=o>;</span> <span class=o>{</span>
-<span class=o>}</span>
-
-</code></pre></div><p>Данного кода достаточно для обычного DAO с <a href=http://en.wikipedia.org/wiki/Create,_read,_update_and_delete>CRUD</a>-методами.</p>
-<ul>
-<li><b>save</b> - сохраняет или обновляет переданную сущность.</li>
-<li><b>findOne</b> - ищет сущность по первичному ключу.</li>
-<li><b>findAll</b> - возвращает коллекцию всех сущностей</li>
-<li><b>count</b> - возвращает количество сущностей</li>
-<li><b>delete</b> - удаляет сущность</li>
-<li><b>exists</b> - проверяет, существует ли сущность с данным первичным ключом</li>
-</ul>
-<p>Полный список методов, объявленный в CrudRepository можно посмотреть в <a href=http://static.springsource.org/spring-data/data-commons/docs/current/api/org/springframework/data/repository/CrudRepository.html>javadoc</a>.</p>
-<p>В случае, если нам нужны не все методы, то есть возможность произвести наследование от интерфейса <a href=http://static.springsource.org/spring-data/data-commons/docs/current/api/org/springframework/data/repository/Repository.html>Repository</a> и перенести в наследника только те методы из интерфейса CrudRepository, которые нужны.</p>
-<h3>Поддержка сортировки и постраничного просмотра</h3>
-Очень часто требующаяся функциональность - это возможность возвращать только часть сущностей из БД, например, для реализации постраничного просмотра в пользовательском интерфейсе. Spring Data и тут хорош и предоставляет нам возможность добавить такую функциональность в наш DAO. Для этого достаточно добавить объявление следующего метода в наш DAO-интерфейс:
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java> <span class=n>Page</span><span class=o>&amp;</span><span class=n>lt</span><span class=o>;</span><span class=n>User</span><span class=o>&amp;</span><span class=n>gt</span><span class=o>;</span> <span class=n>findAll</span><span class=o>(</span><span class=n>Pageable</span> <span class=n>pageable</span><span class=o>);</span>
-
-</code></pre></div><p>Интерфейс <a href=http://static.springsource.org/spring-data/data-commons/docs/current/api/org/springframework/data/domain/Pageable.html>Pageable</a> инкапсулирует в себе сведения о номере запрашиваемой страницы, размере страницы, а также требуемой сортировке.</p>
-<h3>Ищем данные</h3>
-Как правило, на обычных CRUD-ах DAO не заканчиваются и часто требуются дополнительные методы, которые возвращают только те сущности, которые удовлетворяют заданным условиям. На мой взгляд, Spring Data сильно упрощает жизнь в данной области.
-<p>Например, нам нужен методы для поиска пользователя по логину и по его e-mail адресу:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java> <span class=n>User</span> <span class=nf>findByLogin</span><span class=o>(</span><span class=n>String</span> <span class=n>login</span><span class=o>);</span>
- <span class=n>User</span> <span class=nf>findByEmail</span><span class=o>(</span><span class=n>String</span> <span class=n>email</span><span class=o>);</span>
-</code></pre></div><p>Все просто.</p>
-<p>В случае, если нужны более сложные условия для поиска, то и это тоже реализовано.</p>
-<p>Spring Data поддерживает следующие операторы:</p>
-<ul>
-<li>Between</li>
-<li>IsNotNull</li>
-<li>NotNull</li>
-<li>IsNull</li>
-<li>Null</li>
-<li>LessThan</li>
-<li>LessThanEqual</li>
-<li>GreaterThan</li>
-<li>GreaterThanEqual</li>
-<li>NotLike</li>
-<li>Like</li>
-<li>NotIn</li>
-<li>In</li>
-<li>Near</li>
-<li>Within</li>
-<li>Regex</li>
-<li>Exists</li>
-<li>IsTrue</li>
-<li>True</li>
-<li>IsFalse</li>
-<li>False</li>
-<li>Not</li>
-</ul>
-Такой внушительный список открывает простор для фантазии, так что можно составить сколь угодно сложный запрос.
-<p>Если необходимо, чтобы в результатах поиска было несколько сущностей, то необходимо называть метод find<b>All</b></p>
-<h3>Поддержка Spring MVC</h3>
-<i>Это часть основана на официальной документации.</i>
-Представьте, что вы разрабатываете веб-приложение с использованием <a href=http://static.springsource.org/spring/docs/current/spring-framework-reference/html/mvc.html>Spring MVC</a>. Тогда вам необходимо будет загружать сущность из базы данных используя параметры HTTP-запроса. Это может выглядеть следующим образом:
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=nd>@Controller</span>
-<span class=nd>@RequestMapping</span><span class=o>(</span><span class=s>&#34;/users&#34;</span><span class=o>)</span>
-<span class=kd>public</span> <span class=kd>class</span> <span class=nc>UserController</span> <span class=o>{</span>
-
-  <span class=kd>private</span> <span class=kd>final</span> <span class=n>UserRepository</span> <span class=n>userRepository</span><span class=o>;</span>
-
-  <span class=kd>public</span> <span class=nf>UserController</span><span class=o>(</span><span class=n>UserRepository</span> <span class=n>userRepository</span><span class=o>)</span> <span class=o>{</span>
-    <span class=n>userRepository</span> <span class=o>=</span> <span class=n>userRepository</span><span class=o>;</span>
-  <span class=o>}</span>
-
-  <span class=nd>@RequestMapping</span><span class=o>(</span><span class=s>&#34;/{id}&#34;</span><span class=o>)</span>
-  <span class=kd>public</span> <span class=n>String</span> <span class=nf>showUserForm</span><span class=o>(</span><span class=nd>@PathVariable</span><span class=o>(</span><span class=s>&#34;id&#34;</span><span class=o>)</span> <span class=n>Long</span> <span class=n>id</span><span class=o>,</span> <span class=n>Model</span> <span class=n>model</span><span class=o>)</span> <span class=o>{</span>
-    
-    <span class=c1>// Do null check for id
-</span><span class=c1></span>    <span class=n>User</span> <span class=n>user</span> <span class=o>=</span> <span class=n>userRepository</span><span class=o>.</span><span class=na>findOne</span><span class=o>(</span><span class=n>id</span><span class=o>);</span>
-    <span class=c1>// Do null check for user
-</span><span class=c1></span>    <span class=c1>// Populate model
-</span><span class=c1></span>    <span class=k>return</span> <span class=s>&#34;user&#34;</span><span class=o>;</span>
-  <span class=o>}</span>
-<span class=o>}</span>
-</code></pre></div><p>Во-первых, вы объявляете зависимость на DAO, а во-вторых всегда вызываете метод <tt>findOne()</tt> для загрузки сущности. К счастью, Spring позволяет нам преобразовывать строковые значения из HTTP-запросов в любой нужный тип используя либо <tt><a href=http://docs.oracle.com/javase/6/docs/api/java/beans/PropertyEditor.html>PropertyEditor</a></tt>, либо <tt><a href=http://static.springsource.org/spring/docs/current/javadoc-api/org/springframework/core/convert/ConversionService.html>ConversionService</a></tt>.</p>
-<p>Если вы используете Spring версии 3.0 и выше, то вам необходимо добавить следующую конфигурацию:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=ni>&amp;lt;</span>mvc:annotation-driven conversion-service=&#34;conversionService&#34; /<span class=ni>&amp;gt;</span>
-<span class=ni>&amp;lt;</span>bean id=&#34;conversionService&#34; class=&#34;<span class=ni>&amp;#8230;</span>.context.support.ConversionServiceFactoryBean&#34;<span class=ni>&amp;gt;</span>
-  <span class=ni>&amp;lt;</span>property name=&#34;converters&#34;<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>list<span class=ni>&amp;gt;</span>
-      <span class=ni>&amp;lt;</span>bean class=&#34;org.springframework.data.repository.support.DomainClassConverter&#34;<span class=ni>&amp;gt;</span>
-        <span class=ni>&amp;lt;</span>constructor-arg ref=&#34;conversionService&#34; /<span class=ni>&amp;gt;</span>
-      <span class=ni>&amp;lt;</span>/bean<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>/list<span class=ni>&amp;gt;</span>
-  <span class=ni>&amp;lt;</span>/property<span class=ni>&amp;gt;</span>
-<span class=ni>&amp;lt;</span>/bean<span class=ni>&amp;gt;</span>
-</code></pre></div><p>Если же вы используете Spring более старой версии, то вам необходима вот такая конфигурация:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=ni>&amp;lt;</span>bean class=&#34;<span class=ni>&amp;#8230;</span>.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter&#34;<span class=ni>&amp;gt;</span>
-  <span class=ni>&amp;lt;</span>property name=&#34;webBindingInitializer&#34;<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>bean class=&#34;<span class=ni>&amp;#8230;</span>.web.bind.support.ConfigurableWebBindingInitializer&#34;<span class=ni>&amp;gt;</span>
-      <span class=ni>&amp;lt;</span>property name=&#34;propertyEditorRegistrars&#34;<span class=ni>&amp;gt;</span>
-        <span class=ni>&amp;lt;</span>bean class=&#34;org.springframework.data.repository.support.DomainClassPropertyEditorRegistrar&#34; /<span class=ni>&amp;gt;</span>
-      <span class=ni>&amp;lt;</span>/property<span class=ni>&amp;gt;</span>
-    <span class=ni>&amp;lt;</span>/bean<span class=ni>&amp;gt;</span>
-  <span class=ni>&amp;lt;</span>/property<span class=ni>&amp;gt;</span>
-<span class=ni>&amp;lt;</span>/bean<span class=ni>&amp;gt;</span>
-</code></pre></div><p>После данных изменений в конфигурации можно переписать контроллер следующим образом:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java>
-<span class=nd>@Controller</span>
-<span class=nd>@RequestMapping</span><span class=o>(</span><span class=s>&#34;/users&#34;</span><span class=o>)</span>
-<span class=kd>public</span> <span class=kd>class</span> <span class=nc>UserController</span> <span class=o>{</span>
-
-  <span class=nd>@RequestMapping</span><span class=o>(</span><span class=s>&#34;/{id}&#34;</span><span class=o>)</span>
-  <span class=kd>public</span> <span class=n>String</span> <span class=nf>showUserForm</span><span class=o>(</span><span class=nd>@PathVariable</span><span class=o>(</span><span class=s>&#34;id&#34;</span><span class=o>)</span> <span class=n>User</span> <span class=n>user</span><span class=o>,</span> <span class=n>Model</span> <span class=n>model</span><span class=o>)</span> <span class=o>{</span>
-
-    <span class=c1>// Do null check for user
-</span><span class=c1></span>    <span class=c1>// Populate model
-</span><span class=c1></span>    <span class=k>return</span> <span class=s>&#34;userForm&#34;</span><span class=o>;</span>
-  <span class=o>}</span>
-<span class=o>}</span>
-</code></pre></div><p>Обратите внимание на то, как упростился код и как мы красиво избавились от его дублирования.</p>
-<h3>Документация</h3>
-На данный момент документации по проекту не так уж и много, но, тем не менее, она есть:
-<ul>
-<li><a href=http://static.springsource.org/spring-data/data-jpa/docs/current/reference/html/>Spring Data JPA - Reference Documentation</a></li>
-<li><a href=http://static.springsource.org/spring-data/data-commons/docs/current/reference/html/>Spring Data Commons - Reference Documentation</a></li>
-<li><a href=https://github.com/SpringSource/spring-data-jpa>исходники на github</a></li>
-</ul>
-<h3>Заключение</h3>
-Spring Data значительно упрощает жизнь при использовании JPA. Рекомендуется к использованию в своих проектах.
-</div>
-<footer>
-<div class=social>
-<ul>
-<li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a>
-</li>
-<li class=sidebar-nav-item> <a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a>
-</li>
-<li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li>
-</ul>
-</div>
-<p>&copy;&nbsp;2009&nbsp;—&nbsp;2021 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a>
-</p>
-</footer>
-<script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(b,c){var d=b.createElement(c),a=b.getElementsByTagName(c)[0];a.async='async',d.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js',a.parentNode.insertBefore(d,a)})(document,'script')</script>
-</body>
-</html>
-</body>
-</html>
+<!doctype html><html><head><meta charset=utf-8><title>Упрощаем работу с JPA при помощи Spring Data JPA &ndash; Oleg Atamanenko</title><meta name=HandheldFriendly content="True"><meta name=MobileOptimized content="320"><meta name=theme-color content="#333" media="(prefers-color-scheme: dark)"><meta name=theme-color content="#777" media="(prefers-color-scheme: light)"><meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=1"><link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&family=Prata&display=swap" type=text/css><link rel=stylesheet href=https://uthark.github.io/css/theme.72254bdf9ec9fc2d8b013dd5c21997b2ab476af1a37ded5995aae71c4a63d57d.css><link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css><link href=https://uthark.github.io/favicon.png rel=icon></head><body><header class=site><h1><a href=https://uthark.github.io/>Oleg Atamanenko</a></h1><h2>thoughts about programming</h2></header><nav><ul class=main-navigation><li><a href=https://uthark.github.io/ title=Posts>Posts</a></li><li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li><li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li><li><a href=https://uthark.github.io/about/ title="About me">About me</a></li></ul></nav><div class=article><h1>Упрощаем работу с JPA при помощи Spring Data JPA</h1><h3>Введение</h3><p>Уже прошло несколько лет с тех пор, как появился JPA. Работа с <a href=http://docs.oracle.com/javaee/5/api/javax/persistence/EntityManager.html>EntityManager</a> увлекательна, но разработчики пишут красивый API, а подробности работы с базой данных скрывают. При этом частая проблема - дублирование имплементации, когда из одного DAO в другой у нас плавно перекочёвывает один и тот же код, в лучшем случае этот код переносится в абстрактный базовый DAO. <a href=http://www.springsource.org/spring-data/jpa>Spring Data</a> коренным образом решает проблему - при его использовании остаётся только API на уровне интерфейсов, вся имплементация создаётся автоматически с использованием <a href=http://en.wikipedia.org/wiki/Aspect-oriented_programming>AOP</a>.</p><h3>История Spring Data</h3><p>Несмотря на то, что проект только недавно достиг версии 1.0, у него достаточно богатая история - раньше он развивался в рамках проекта <a href=http://redmine.synyx.org/projects/show/hades>Hades</a>.</p><h3>Объявление DAO-интерфейса</h3><p>Итак, для начала нам необходимо объявить DAO-интерфейс, в котором мы будем объявлять методы для работы с сущностью.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span> <span class=kd>interface</span> <span class=nc>UserRepository</span> <span class=kd>extends</span> <span class=n>CrudRepository</span><span class=o>&amp;</span><span class=n>lt</span><span class=o>;</span><span class=n>User</span><span class=o>,</span> <span class=n>Long</span><span class=o>&amp;</span><span class=n>gt</span><span class=o>;</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></div><p>Данного кода достаточно для обычного DAO с <a href=http://en.wikipedia.org/wiki/Create,_read,_update_and_delete>CRUD</a>-методами.</p><ul><li><b>save</b> - сохраняет или обновляет переданную сущность.</li><li><b>findOne</b> - ищет сущность по первичному ключу.</li><li><b>findAll</b> - возвращает коллекцию всех сущностей</li><li><b>count</b> - возвращает количество сущностей</li><li><b>delete</b> - удаляет сущность</li><li><b>exists</b> - проверяет, существует ли сущность с данным первичным ключом</li></ul><p>Полный список методов, объявленный в CrudRepository можно посмотреть в <a href=http://static.springsource.org/spring-data/data-commons/docs/current/api/org/springframework/data/repository/CrudRepository.html>javadoc</a>.</p><p>В случае, если нам нужны не все методы, то есть возможность произвести наследование от интерфейса <a href=http://static.springsource.org/spring-data/data-commons/docs/current/api/org/springframework/data/repository/Repository.html>Repository</a> и перенести в наследника только те методы из интерфейса CrudRepository, которые нужны.</p><h3>Поддержка сортировки и постраничного просмотра</h3>Очень часто требующаяся функциональность - это возможность возвращать только часть сущностей из БД, например, для реализации постраничного просмотра в пользовательском интерфейсе. Spring Data и тут хорош и предоставляет нам возможность добавить такую функциональность в наш DAO. Для этого достаточно добавить объявление следующего метода в наш DAO-интерфейс:<div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl> <span class=n>Page</span><span class=o>&amp;</span><span class=n>lt</span><span class=o>;</span><span class=n>User</span><span class=o>&amp;</span><span class=n>gt</span><span class=o>;</span> <span class=n>findAll</span><span class=o>(</span><span class=n>Pageable</span> <span class=n>pageable</span><span class=o>);</span>
+</span></span></code></pre></div><p>Интерфейс <a href=http://static.springsource.org/spring-data/data-commons/docs/current/api/org/springframework/data/domain/Pageable.html>Pageable</a> инкапсулирует в себе сведения о номере запрашиваемой страницы, размере страницы, а также требуемой сортировке.</p><h3>Ищем данные</h3>Как правило, на обычных CRUD-ах DAO не заканчиваются и часто требуются дополнительные методы, которые возвращают только те сущности, которые удовлетворяют заданным условиям. На мой взгляд, Spring Data сильно упрощает жизнь в данной области.<p>Например, нам нужен методы для поиска пользователя по логину и по его e-mail адресу:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl> <span class=n>User</span> <span class=nf>findByLogin</span><span class=o>(</span><span class=n>String</span> <span class=n>login</span><span class=o>);</span>
+</span></span><span class=line><span class=cl> <span class=n>User</span> <span class=nf>findByEmail</span><span class=o>(</span><span class=n>String</span> <span class=n>email</span><span class=o>);</span>
+</span></span></code></pre></div><p>Все просто.</p><p>В случае, если нужны более сложные условия для поиска, то и это тоже реализовано.</p><p>Spring Data поддерживает следующие операторы:</p><ul><li>Between</li><li>IsNotNull</li><li>NotNull</li><li>IsNull</li><li>Null</li><li>LessThan</li><li>LessThanEqual</li><li>GreaterThan</li><li>GreaterThanEqual</li><li>NotLike</li><li>Like</li><li>NotIn</li><li>In</li><li>Near</li><li>Within</li><li>Regex</li><li>Exists</li><li>IsTrue</li><li>True</li><li>IsFalse</li><li>False</li><li>Not</li></ul>Такой внушительный список открывает простор для фантазии, так что можно составить сколь угодно сложный запрос.<p>Если необходимо, чтобы в результатах поиска было несколько сущностей, то необходимо называть метод find<b>All</b></p><h3>Поддержка Spring MVC</h3><i>Это часть основана на официальной документации.</i>
+Представьте, что вы разрабатываете веб-приложение с использованием <a href=http://static.springsource.org/spring/docs/current/spring-framework-reference/html/mvc.html>Spring MVC</a>. Тогда вам необходимо будет загружать сущность из базы данных используя параметры HTTP-запроса. Это может выглядеть следующим образом:<div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Controller</span>
+</span></span><span class=line><span class=cl><span class=nd>@RequestMapping</span><span class=o>(</span><span class=s>&#34;/users&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=kd>class</span> <span class=nc>UserController</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=kd>private</span> <span class=kd>final</span> <span class=n>UserRepository</span> <span class=n>userRepository</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=kd>public</span> <span class=nf>UserController</span><span class=o>(</span><span class=n>UserRepository</span> <span class=n>userRepository</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>userRepository</span> <span class=o>=</span> <span class=n>userRepository</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>  <span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nd>@RequestMapping</span><span class=o>(</span><span class=s>&#34;/{id}&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>  <span class=kd>public</span> <span class=n>String</span> <span class=nf>showUserForm</span><span class=o>(</span><span class=nd>@PathVariable</span><span class=o>(</span><span class=s>&#34;id&#34;</span><span class=o>)</span> <span class=n>Long</span> <span class=n>id</span><span class=o>,</span> <span class=n>Model</span> <span class=n>model</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1>// Do null check for id
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>User</span> <span class=n>user</span> <span class=o>=</span> <span class=n>userRepository</span><span class=o>.</span><span class=na>findOne</span><span class=o>(</span><span class=n>id</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// Do null check for user
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// Populate model
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>return</span> <span class=s>&#34;user&#34;</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>  <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></div><p>Во-первых, вы объявляете зависимость на DAO, а во-вторых всегда вызываете метод <tt>findOne()</tt> для загрузки сущности. К счастью, Spring позволяет нам преобразовывать строковые значения из HTTP-запросов в любой нужный тип используя либо <tt><a href=http://docs.oracle.com/javase/6/docs/api/java/beans/PropertyEditor.html>PropertyEditor</a></tt>, либо <tt><a href=http://static.springsource.org/spring/docs/current/javadoc-api/org/springframework/core/convert/ConversionService.html>ConversionService</a></tt>.</p><p>Если вы используете Spring версии 3.0 и выше, то вам необходимо добавить следующую конфигурацию:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=ni>&amp;lt;</span>mvc:annotation-driven conversion-service=&#34;conversionService&#34; /<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl><span class=ni>&amp;lt;</span>bean id=&#34;conversionService&#34; class=&#34;<span class=ni>&amp;#8230;</span>.context.support.ConversionServiceFactoryBean&#34;<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>  <span class=ni>&amp;lt;</span>property name=&#34;converters&#34;<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>list<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>      <span class=ni>&amp;lt;</span>bean class=&#34;org.springframework.data.repository.support.DomainClassConverter&#34;<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>        <span class=ni>&amp;lt;</span>constructor-arg ref=&#34;conversionService&#34; /<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>      <span class=ni>&amp;lt;</span>/bean<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>/list<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>  <span class=ni>&amp;lt;</span>/property<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl><span class=ni>&amp;lt;</span>/bean<span class=ni>&amp;gt;</span>
+</span></span></code></pre></div><p>Если же вы используете Spring более старой версии, то вам необходима вот такая конфигурация:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=ni>&amp;lt;</span>bean class=&#34;<span class=ni>&amp;#8230;</span>.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter&#34;<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>  <span class=ni>&amp;lt;</span>property name=&#34;webBindingInitializer&#34;<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>bean class=&#34;<span class=ni>&amp;#8230;</span>.web.bind.support.ConfigurableWebBindingInitializer&#34;<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>      <span class=ni>&amp;lt;</span>property name=&#34;propertyEditorRegistrars&#34;<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>        <span class=ni>&amp;lt;</span>bean class=&#34;org.springframework.data.repository.support.DomainClassPropertyEditorRegistrar&#34; /<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>      <span class=ni>&amp;lt;</span>/property<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>    <span class=ni>&amp;lt;</span>/bean<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl>  <span class=ni>&amp;lt;</span>/property<span class=ni>&amp;gt;</span>
+</span></span><span class=line><span class=cl><span class=ni>&amp;lt;</span>/bean<span class=ni>&amp;gt;</span>
+</span></span></code></pre></div><p>После данных изменений в конфигурации можно переписать контроллер следующим образом:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nd>@Controller</span>
+</span></span><span class=line><span class=cl><span class=nd>@RequestMapping</span><span class=o>(</span><span class=s>&#34;/users&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=kd>class</span> <span class=nc>UserController</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nd>@RequestMapping</span><span class=o>(</span><span class=s>&#34;/{id}&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>  <span class=kd>public</span> <span class=n>String</span> <span class=nf>showUserForm</span><span class=o>(</span><span class=nd>@PathVariable</span><span class=o>(</span><span class=s>&#34;id&#34;</span><span class=o>)</span> <span class=n>User</span> <span class=n>user</span><span class=o>,</span> <span class=n>Model</span> <span class=n>model</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// Do null check for user
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// Populate model
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>return</span> <span class=s>&#34;userForm&#34;</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>  <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></div><p>Обратите внимание на то, как упростился код и как мы красиво избавились от его дублирования.</p><h3>Документация</h3>На данный момент документации по проекту не так уж и много, но, тем не менее, она есть:<ul><li><a href=http://static.springsource.org/spring-data/data-jpa/docs/current/reference/html/>Spring Data JPA - Reference Documentation</a></li><li><a href=http://static.springsource.org/spring-data/data-commons/docs/current/reference/html/>Spring Data Commons - Reference Documentation</a></li><li><a href=https://github.com/SpringSource/spring-data-jpa>исходники на github</a></li></ul><h3>Заключение</h3>Spring Data значительно упрощает жизнь при использовании JPA. Рекомендуется к использованию в своих проектах.</div><footer><div class=social><ul><li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a></li><li class=sidebar-nav-item><a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a></li><li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li></ul></div><p>&copy;&nbsp;2009&nbsp;—&nbsp;2022 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a></p></footer><script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(t,n){var s=t.createElement(n),e=t.getElementsByTagName(n)[0];e.async='async',s.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js',e.parentNode.insertBefore(s,e)})(document,'script')</script></body></html></body></html>

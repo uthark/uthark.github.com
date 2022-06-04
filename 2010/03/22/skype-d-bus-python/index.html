@@ -1,119 +1,51 @@
-<!doctype html><html>
-<head>
-<meta charset=utf-8>
-<title>
-Общение со Skype через D-Bus на Python &ndash; Oleg Atamanenko
-</title>
-<meta name=HandheldFriendly content="True">
-<meta name=MobileOptimized content="320">
-<meta name=theme-color content="#333" media="(prefers-color-scheme: dark)">
-<meta name=theme-color content="#777" media="(prefers-color-scheme: light)">
-<meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=1">
-<link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&family=Prata&display=swap" type=text/css>
-<link rel=stylesheet href=https://uthark.github.io/css/theme.72254bdf9ec9fc2d8b013dd5c21997b2ab476af1a37ded5995aae71c4a63d57d.css>
-<link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css>
-<link href=https://uthark.github.io/favicon.png rel=icon>
-</head>
-<body>
-<header class=site>
-<h1><a href=https://uthark.github.io/>Oleg Atamanenko</a></h1>
-<h2>thoughts about programming</h2>
-</header>
-<nav>
-<ul class=main-navigation>
-<li><a href=https://uthark.github.io/ title=Posts>Posts</a></li>
-<li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li>
-<li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li>
-<li><a href=https://uthark.github.io/about/ title="About me">About me</a></li>
-</ul>
-</nav>
-<div class=article>
-<h1>Общение со Skype через D-Bus на Python</h1>
-<p><b>Summary</b>: в данной заметке описывается работа с программой Skype через D-Bus на Python.</p>
-<h4>Введение</h4>
-<p>Захотелось мне странного - когда я ухожу домой, мне нужно выключить amarok, kopete и Skype. Собственно, решено было через D-Bus отправлять вышеперечисленным приложениям релевантные сообщения.</p>
-<h4>Используем dbus-send</h4>
-<p>Сначала я использовал обычный dbus-send, что оформилось в виде следующего скрипта <tt>go2home</tt>:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=cp>#!/bin/sh
-</span><span class=cp></span>
-<span class=c1># Stop amarok</span>
-dbus-send --session --type<span class=o>=</span>method_call --dest<span class=o>=</span>org.kde.amarok /Player org.freedesktop.MediaPlayer.Stop
-
-<span class=c1># Logout from kopete</span>
-dbus-send --session --type<span class=o>=</span>method_call --dest<span class=o>=</span>org.kde.kopete /Kopete org.kde.Kopete.disconnectAll 
-
-<span class=c1># Logout from Skype</span>
-skypeapi.py <span class=s1>&#39;SET USERSTATUS OFFLINE&#39;</span>
-
-<span class=c1># Lock screen</span>
-dbus-send --session --type<span class=o>=</span>method_call --dest<span class=o>=</span>org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.Lock
-</code></pre></div><p>Детали и параметры работы команды <tt>dbus-send</tt> описаны в <a href=http://dbus.freedesktop.org/doc/dbus-send.1.html>man-странице</a></p>
-<h4>Проблема со скайпом</h4>
-<p> Со скайпом пришлось немного повозиться, так как для работы с ним необходима постоянная сессия, что нельзя сделать с помощью <tt>dbus-send</tt>. </p>
-<p>Прочитав <a href=https://developer.skype.com/Docs/ApiDoc>описание протокола</a> на сайте </p>
-<p> был создан нижеследующий скрипт: skypeapi.py</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-Python data-lang=Python><span class=ch>#!/usr/bin/env python</span>
-<span class=kn>import</span> <span class=nn>dbus</span><span class=o>,</span> <span class=nn>sys</span>
-
-<span class=k>def</span> <span class=nf>main</span><span class=p>():</span>
-    <span class=n>remote_bus</span> <span class=o>=</span> <span class=n>dbus</span><span class=o>.</span><span class=n>SessionBus</span><span class=p>()</span>
-    
-    <span class=c1># Check if skype is running.</span>
-    <span class=n>system_service_list</span> <span class=o>=</span> <span class=n>remote_bus</span><span class=o>.</span><span class=n>get_object</span><span class=p>(</span><span class=s1>&#39;org.freedesktop.DBus&#39;</span><span class=p>,</span> <span class=s1>&#39;/org/freedesktop/DBus&#39;</span><span class=p>)</span><span class=o>.</span><span class=n>ListNames</span><span class=p>()</span>
-    <span class=n>skype_api_found</span> <span class=o>=</span> <span class=mi>0</span>
-    <span class=k>for</span> <span class=n>service</span> <span class=ow>in</span> <span class=n>system_service_list</span><span class=p>:</span>
-        <span class=k>if</span> <span class=n>service</span><span class=o>==</span><span class=s1>&#39;com.Skype.API&#39;</span><span class=p>:</span>
-            <span class=n>skype_api_found</span> <span class=o>=</span> <span class=mi>1</span>
-            <span class=k>break</span>
-    <span class=k>if</span> <span class=ow>not</span> <span class=n>skype_api_found</span><span class=p>:</span>
-        <span class=n>sys</span><span class=o>.</span><span class=n>exit</span><span class=p>(</span><span class=s1>&#39;No running API-capable Skype found&#39;</span><span class=p>)</span>
-
-    <span class=c1># Get skype dbus api</span>
-    <span class=n>skype_service</span> <span class=o>=</span> <span class=n>remote_bus</span><span class=o>.</span><span class=n>get_object</span><span class=p>(</span><span class=s1>&#39;com.Skype.API&#39;</span><span class=p>,</span> <span class=s1>&#39;/com/Skype&#39;</span><span class=p>)</span>
-
-    <span class=c1># Connect to skype.</span>
-    <span class=n>answer</span> <span class=o>=</span> <span class=n>skype_service</span><span class=o>.</span><span class=n>Invoke</span><span class=p>(</span><span class=s1>&#39;NAME SkypeApiClient&#39;</span><span class=p>)</span>
-    <span class=k>if</span> <span class=n>answer</span> <span class=o>!=</span> <span class=s1>&#39;OK&#39;</span><span class=p>:</span>
-        <span class=n>sys</span><span class=o>.</span><span class=n>exit</span><span class=p>(</span><span class=s1>&#39;Could not bind to Skype client&#39;</span><span class=p>)</span>
-
-    <span class=c1># Check if protocol is supported.</span>
-    <span class=n>answer</span> <span class=o>=</span> <span class=n>skype_service</span><span class=o>.</span><span class=n>Invoke</span><span class=p>(</span><span class=s1>&#39;PROTOCOL 1&#39;</span><span class=p>)</span>
-    <span class=k>if</span> <span class=n>answer</span> <span class=o>!=</span> <span class=s1>&#39;PROTOCOL 1&#39;</span><span class=p>:</span>
-        <span class=n>sys</span><span class=o>.</span><span class=n>exit</span><span class=p>(</span><span class=s1>&#39;This test program only supports Skype API protocol version 1&#39;</span><span class=p>)</span>
-
-    <span class=c1># Invoke operations</span>
-    <span class=k>for</span> <span class=n>arg</span> <span class=ow>in</span> <span class=n>sys</span><span class=o>.</span><span class=n>argv</span><span class=p>:</span>
-        <span class=n>skype_service</span><span class=o>.</span><span class=n>Invoke</span><span class=p>(</span><span class=n>arg</span><span class=p>)</span>
-    
-    <span class=k>return</span> <span class=mi>0</span>    
-
-<span class=k>if</span> <span class=vm>__name__</span> <span class=o>==</span> <span class=o>&amp;</span><span class=n>quot</span><span class=p>;</span><span class=n>__main__</span><span class=o>&amp;</span><span class=n>quot</span><span class=p>;:</span>
-    <span class=n>main</span><span class=p>()</span>
-</code></pre></div><p> При первом запуске скрипта появится скайповский диалог с вопросом, можно ли разрешить приложению доступ к скайпу. После нажатия на "Да" Skype добавит наш скрипт в разрешённые и мы сможем управлять скайпом.</p>
-<p><a onblur=try{parent.deselectBloggerImageGracefully()}catch(a){} href=http://2.bp.blogspot.com/_y8p0_dtMJ38/S6ev4yVZkJI/AAAAAAAAA9Q/O87mz2Qnku0/s1600-h/skype.png>&lt;img style=&ldquo;display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;width: 376px; height: 185px;&rdquo; src=&ldquo;<a href=http://2.bp.blogspot.com/_y8p0_dtMJ38/S6ev4yVZkJI/AAAAAAAAA9Q/O87mz2Qnku0/s400/skype.png%22>http://2.bp.blogspot.com/_y8p0_dtMJ38/S6ev4yVZkJI/AAAAAAAAA9Q/O87mz2Qnku0/s400/skype.png"</a> border=&ldquo;0&rdquo; alt=&ldquo;&ldquo;id=&ldquo;BLOGGER_PHOTO_ID_5451519264074338450&rdquo; /></a></p>
-<p>После этого для скрипта <tt>go2home</tt> был создана иконка на панели.</p>
-<h4>Заключение</h4>
-Как видно, работа с DBus из Python проста и элегантна.
-<p>В качестве домашнего упражнения предлагаю написать скрипт, который после разблокирования экрана будет запускать все нужные приложения.</p>
-</div>
-<footer>
-<div class=social>
-<ul>
-<li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a>
-</li>
-<li class=sidebar-nav-item> <a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a>
-<li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a>
-</li>
-<li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li>
-</ul>
-</div>
-<p>&copy;&nbsp;2009&nbsp;—&nbsp;2021 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a>
-</p>
-</footer>
-<script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(b,c){var d=b.createElement(c),a=b.getElementsByTagName(c)[0];a.async='async',d.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js',a.parentNode.insertBefore(d,a)})(document,'script')</script>
-</body>
-</html>
-</body>
-</html>
+<!doctype html><html><head><meta charset=utf-8><title>Общение со Skype через D-Bus на Python &ndash; Oleg Atamanenko</title><meta name=HandheldFriendly content="True"><meta name=MobileOptimized content="320"><meta name=theme-color content="#333" media="(prefers-color-scheme: dark)"><meta name=theme-color content="#777" media="(prefers-color-scheme: light)"><meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=1"><link rel=stylesheet media=screen href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&family=Prata&display=swap" type=text/css><link rel=stylesheet href=https://uthark.github.io/css/theme.72254bdf9ec9fc2d8b013dd5c21997b2ab476af1a37ded5995aae71c4a63d57d.css><link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css><link href=https://uthark.github.io/favicon.png rel=icon></head><body><header class=site><h1><a href=https://uthark.github.io/>Oleg Atamanenko</a></h1><h2>thoughts about programming</h2></header><nav><ul class=main-navigation><li><a href=https://uthark.github.io/ title=Posts>Posts</a></li><li><a href=https://uthark.github.io/categories/ title=Categories>Categories</a></li><li><a href=https://uthark.github.io/usefularticles/ title=Links>Links</a></li><li><a href=https://uthark.github.io/about/ title="About me">About me</a></li></ul></nav><div class=article><h1>Общение со Skype через D-Bus на Python</h1><p><b>Summary</b>: в данной заметке описывается работа с программой Skype через D-Bus на Python.</p><h4>Введение</h4><p>Захотелось мне странного - когда я ухожу домой, мне нужно выключить amarok, kopete и Skype. Собственно, решено было через D-Bus отправлять вышеперечисленным приложениям релевантные сообщения.</p><h4>Используем dbus-send</h4><p>Сначала я использовал обычный dbus-send, что оформилось в виде следующего скрипта <tt>go2home</tt>:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/bin/sh
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=c1># Stop amarok</span>
+</span></span><span class=line><span class=cl>dbus-send --session --type<span class=o>=</span>method_call --dest<span class=o>=</span>org.kde.amarok /Player org.freedesktop.MediaPlayer.Stop
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Logout from kopete</span>
+</span></span><span class=line><span class=cl>dbus-send --session --type<span class=o>=</span>method_call --dest<span class=o>=</span>org.kde.kopete /Kopete org.kde.Kopete.disconnectAll 
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Logout from Skype</span>
+</span></span><span class=line><span class=cl>skypeapi.py <span class=s1>&#39;SET USERSTATUS OFFLINE&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Lock screen</span>
+</span></span><span class=line><span class=cl>dbus-send --session --type<span class=o>=</span>method_call --dest<span class=o>=</span>org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.Lock
+</span></span></code></pre></div><p>Детали и параметры работы команды <tt>dbus-send</tt> описаны в <a href=http://dbus.freedesktop.org/doc/dbus-send.1.html>man-странице</a></p><h4>Проблема со скайпом</h4><p>Со скайпом пришлось немного повозиться, так как для работы с ним необходима постоянная сессия, что нельзя сделать с помощью <tt>dbus-send</tt>.</p><p>Прочитав <a href=https://developer.skype.com/Docs/ApiDoc>описание протокола</a> на сайте</p><p>был создан нижеследующий скрипт: skypeapi.py</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-Python data-lang=Python><span class=line><span class=cl><span class=ch>#!/usr/bin/env python</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>dbus</span><span class=o>,</span> <span class=nn>sys</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>main</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>    <span class=n>remote_bus</span> <span class=o>=</span> <span class=n>dbus</span><span class=o>.</span><span class=n>SessionBus</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1># Check if skype is running.</span>
+</span></span><span class=line><span class=cl>    <span class=n>system_service_list</span> <span class=o>=</span> <span class=n>remote_bus</span><span class=o>.</span><span class=n>get_object</span><span class=p>(</span><span class=s1>&#39;org.freedesktop.DBus&#39;</span><span class=p>,</span> <span class=s1>&#39;/org/freedesktop/DBus&#39;</span><span class=p>)</span><span class=o>.</span><span class=n>ListNames</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=n>skype_api_found</span> <span class=o>=</span> <span class=mi>0</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>service</span> <span class=ow>in</span> <span class=n>system_service_list</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=n>service</span><span class=o>==</span><span class=s1>&#39;com.Skype.API&#39;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=n>skype_api_found</span> <span class=o>=</span> <span class=mi>1</span>
+</span></span><span class=line><span class=cl>            <span class=k>break</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=ow>not</span> <span class=n>skype_api_found</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>sys</span><span class=o>.</span><span class=n>exit</span><span class=p>(</span><span class=s1>&#39;No running API-capable Skype found&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Get skype dbus api</span>
+</span></span><span class=line><span class=cl>    <span class=n>skype_service</span> <span class=o>=</span> <span class=n>remote_bus</span><span class=o>.</span><span class=n>get_object</span><span class=p>(</span><span class=s1>&#39;com.Skype.API&#39;</span><span class=p>,</span> <span class=s1>&#39;/com/Skype&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Connect to skype.</span>
+</span></span><span class=line><span class=cl>    <span class=n>answer</span> <span class=o>=</span> <span class=n>skype_service</span><span class=o>.</span><span class=n>Invoke</span><span class=p>(</span><span class=s1>&#39;NAME SkypeApiClient&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=n>answer</span> <span class=o>!=</span> <span class=s1>&#39;OK&#39;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>sys</span><span class=o>.</span><span class=n>exit</span><span class=p>(</span><span class=s1>&#39;Could not bind to Skype client&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Check if protocol is supported.</span>
+</span></span><span class=line><span class=cl>    <span class=n>answer</span> <span class=o>=</span> <span class=n>skype_service</span><span class=o>.</span><span class=n>Invoke</span><span class=p>(</span><span class=s1>&#39;PROTOCOL 1&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=n>answer</span> <span class=o>!=</span> <span class=s1>&#39;PROTOCOL 1&#39;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>sys</span><span class=o>.</span><span class=n>exit</span><span class=p>(</span><span class=s1>&#39;This test program only supports Skype API protocol version 1&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Invoke operations</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>arg</span> <span class=ow>in</span> <span class=n>sys</span><span class=o>.</span><span class=n>argv</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>skype_service</span><span class=o>.</span><span class=n>Invoke</span><span class=p>(</span><span class=n>arg</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=mi>0</span>    
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=vm>__name__</span> <span class=o>==</span> <span class=o>&amp;</span><span class=n>quot</span><span class=p>;</span><span class=n>__main__</span><span class=o>&amp;</span><span class=n>quot</span><span class=p>;:</span>
+</span></span><span class=line><span class=cl>    <span class=n>main</span><span class=p>()</span>
+</span></span></code></pre></div><p>При первом запуске скрипта появится скайповский диалог с вопросом, можно ли разрешить приложению доступ к скайпу. После нажатия на "Да" Skype добавит наш скрипт в разрешённые и мы сможем управлять скайпом.</p><p><a onblur=try{parent.deselectBloggerImageGracefully()}catch(e){} href=http://2.bp.blogspot.com/_y8p0_dtMJ38/S6ev4yVZkJI/AAAAAAAAA9Q/O87mz2Qnku0/s1600-h/skype.png>&lt;img style=&ldquo;display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;width: 376px; height: 185px;&rdquo; src=&ldquo;<a href=http://2.bp.blogspot.com/_y8p0_dtMJ38/S6ev4yVZkJI/AAAAAAAAA9Q/O87mz2Qnku0/s400/skype.png%22>http://2.bp.blogspot.com/_y8p0_dtMJ38/S6ev4yVZkJI/AAAAAAAAA9Q/O87mz2Qnku0/s400/skype.png"</a> border=&ldquo;0&rdquo; alt=&ldquo;&ldquo;id=&ldquo;BLOGGER_PHOTO_ID_5451519264074338450&rdquo; /></a></p><p>После этого для скрипта <tt>go2home</tt> был создана иконка на панели.</p><h4>Заключение</h4>Как видно, работа с DBus из Python проста и элегантна.<p>В качестве домашнего упражнения предлагаю написать скрипт, который после разблокирования экрана будет запускать все нужные приложения.</p></div><footer><div class=social><ul><li class=sidebar-nav-item><a target=_blank href=https://github.com/uthark/ title=https://github.com/uthark/><i class="fa fa-github fa-2x"></i></a></li><li class=sidebar-nav-item><a target=_blank href=https://bitbucket.org/uthark/ title=https://bitbucket.org/uthark/><i class="fa fa-bitbucket fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://twitter.com/real_atamanenko title=https://twitter.com/real_atamanenko><i class="fa fa-twitter fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=https://keybase.io/uthark/ title=https://keybase.io/uthark/><i class="fa fa-key fa-2x"></i></a><li class=sidebar-nav-item><a target=_blank href=http://stackoverflow.com/users/216764/uthark title=http://stackoverflow.com/users/216764/uthark><i class="fa fa-stack-overflow fa-2x"></i></a></li><li><a href=https://feeds.feedburner.com/atamanenko target=_blank type=application/rss+xml title=RSS><i class="fa fa-rss-square fa-2x"></i></a></li></ul></div><p>&copy;&nbsp;2009&nbsp;—&nbsp;2022 Oleg Atamanenko - <a href=https://uthark.github.io/license/>CC&nbsp;BY-SA&nbsp;4.0</a></p></footer><script>var _gaq=[['_setAccount','UA-8688665-1'],['_trackPageview']];(function(t,n){var s=t.createElement(n),e=t.getElementsByTagName(n)[0];e.async='async',s.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js',e.parentNode.insertBefore(s,e)})(document,'script')</script></body></html></body></html>
